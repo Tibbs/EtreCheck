@@ -47,6 +47,7 @@
   NSImage * myMachineIcon;
   NSString * myModel;
   NSString * mySerialCode;
+  int myCoreCount;
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myLaunchdFiles;
   NSMutableSet * myProcesses;
@@ -112,6 +113,9 @@
 
 // The serial number code for Apple lookups.
 @property (retain) NSString * serialCode;
+
+// The nubmer of cores.
+@property (assign) int coreCount;
 
 // Diagnostic events.
 @property (retain) NSMutableDictionary * diagnosticEvents;

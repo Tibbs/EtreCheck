@@ -61,6 +61,9 @@
   if([self collectNVMExpress: dataFound])
     dataFound = YES;
   
+  if([self collectDiskFree: dataFound])
+    dataFound = YES;
+    
   if(!dataFound)
     [self.result appendCR];
     
@@ -86,7 +89,7 @@
   
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-     NSArray * plist =
+    NSArray * plist =
        [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
@@ -109,6 +112,9 @@
 // Perform the collection for new NVM controllers.
 - (BOOL) collectNVMExpress: (BOOL) dataFound
   {
+  // result =
+  //  [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPNVMeDataType.xml"];
+  
   NSArray * args =
     @[
       @"-xml",
@@ -140,6 +146,43 @@
         
       return YES;
       }
+    }
+
+  return NO;
+  }
+
+// Collect free disk space.
+- (BOOL) collectDiskFree: (BOOL) dataFound
+  {
+  if(![[Model model] sandboxed])
+    return NO;
+    
+  NSArray * args =
+    @[
+      @"-kl",
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/bin/df" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(int index = 1; index < [lines count]; ++index)
+      {
+      NSString * line = [lines objectAtIndex: index];
+      
+      if([line hasPrefix: @"/"])
+        {
+        [self printDiskFreeLine: line];
+        
+        dataFound = YES;
+        }
+      }
+      
+    return dataFound;
     }
 
   return NO;
@@ -511,6 +554,69 @@
     [self.result appendString: volumeInfo attributes: attributes];
   else
     [self.result appendString: volumeInfo];
+  }
+
+// Print a line from df output.
+- (void) printDiskFreeLine: (NSString *) line
+  {
+  NSScanner * scanner = [NSScanner scannerWithString: line];
+  
+  NSString * device;
+  
+  [scanner
+    scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
+    intoString: & device];
+    
+  unsigned long long blocks;
+  
+  [scanner scanUnsignedLongLong: & blocks];
+  
+  unsigned long long used;
+  
+  [scanner scanUnsignedLongLong: & used];
+  
+  [scanner scanInteger: NULL];
+  [scanner
+    scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
+    intoString: NULL];
+  [scanner scanInteger: NULL];
+  [scanner scanInteger: NULL];
+  [scanner
+    scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
+    intoString: NULL];
+  
+  unsigned long long free = blocks - used;
+  
+  NSString * mountPoint;
+  
+  [scanner
+    scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
+    intoString: & mountPoint];
+  
+  NSString * name =
+    [[NSFileManager defaultManager] displayNameAtPath: mountPoint];
+    
+  if(name == nil)
+    name = @"";
+    
+  ByteCountFormatter * formatter = [ByteCountFormatter new];
+  
+  NSDictionary * volume =
+    [NSDictionary
+      dictionaryWithObjectsAndKeys:
+        name, @"_name",
+        mountPoint, @"mount_point",
+        device, @"bsd_name",
+        [formatter stringFromByteCount: blocks * 1024], @"size",
+        [formatter stringFromByteCount: free * 1024], @"free_space",
+        [NSNumber numberWithUnsignedLongLong: free * 1024],
+          @"free_space_in_bytes",
+        nil];
+    
+  [formatter release];
+  
+  [self printVolume: volume indent: @"        "];
+  [self.result appendCR];
   }
 
 // Get the size of a volume.

@@ -49,34 +49,37 @@
     updateStatus:
       NSLocalizedString(@"Checking diagnostics information", NULL)];
 
-  [self collectDiagnostics];
-  [self collectCrashReporter];
-  [self collectDiagnosticReportCrashes];
-  [self collectUserDiagnosticReportCrashes];
-  [self collectDiagnosticReportHangs];
-  [self collectUserDiagnosticReportHangs];
-  [self collectPanics];
-  [self collectCPU];
-  
-  if([[[Model model] diagnosticEvents] count] || insufficientPermissions)
+  if(![[Model model] sandboxed])
     {
-    [self printDiagnostics];
+    [self collectDiagnostics];
+    [self collectCrashReporter];
+    [self collectDiagnosticReportCrashes];
+    [self collectUserDiagnosticReportCrashes];
+    [self collectDiagnosticReportHangs];
+    [self collectUserDiagnosticReportHangs];
+    [self collectPanics];
+    [self collectCPU];
     
-    if(insufficientPermissions)
+    if([[[Model model] diagnosticEvents] count] || insufficientPermissions)
       {
-      if(!hasOutput)
-        [self.result appendAttributedString: [self buildTitle]];
+      [self printDiagnostics];
       
-      [self.result appendString: @"\n"];
-      [self.result
-        appendString:
-          NSLocalizedString(
-            @"/Library/Logs/DiagnosticReports permissions", NULL)];
+      if(insufficientPermissions)
+        {
+        if(!hasOutput)
+          [self.result appendAttributedString: [self buildTitle]];
+        
+        [self.result appendString: @"\n"];
+        [self.result
+          appendString:
+            NSLocalizedString(
+              @"/Library/Logs/DiagnosticReports permissions", NULL)];
+        }
+      
+      [self.result appendCR];
       }
-    
-    [self.result appendCR];
     }
-  
+    
   dispatch_semaphore_signal(self.complete);
   }
 

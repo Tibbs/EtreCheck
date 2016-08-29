@@ -120,6 +120,7 @@
 "Anywhere" = "N’importe où";
 "Mac App Store and identified developers" = "Mac App Store et développeurs identifiés";
 "Mac App Store" = "Mac App Store";
+"Enabled" = "Engagé";
 "Unknown!" = "Inconnu !";
 "Unknown" = "Inconnu";
 "[unknown]" = "[inconnu]";
@@ -297,3 +298,7 @@
 "usedram" = "RAM utilisée";
 "swapused" = "Fichier d’échange utilisé";
 "filecache" = "Fichiers en cache";
+"Current system load" = "La charge du système actuelle";
+"System load for past 5 minutes" = "La charge du système pendant les dernières 5 minutes";
+"System load for past 15 minutes" = "La charge du système pendant les dernières 15 minutes";
+

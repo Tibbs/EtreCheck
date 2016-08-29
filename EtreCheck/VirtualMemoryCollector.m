@@ -62,7 +62,6 @@
   [self printVM: vminfo forKey: kFileCache];
 
   [self.result appendCR];
-  NSLog(@"RAM sampled");
 
   dispatch_semaphore_signal(self.complete);
   }

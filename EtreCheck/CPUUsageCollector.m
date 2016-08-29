@@ -6,6 +6,8 @@
 
 #import "CPUUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import <stdlib.h>
+#import "Model.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -27,21 +29,69 @@
 // Perform the collection.
 - (void) collect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Sampling processes for CPU", NULL)];
+  [self updateStatus: NSLocalizedString(@"Collecting CPU usage", NULL)];
 
-  // Collect the average CPU usage for all processes (5 times).
-  NSDictionary * avgCPU = [self collectAverageCPU];
+  [self.result appendAttributedString: [self buildTitle]];
   
-  // Sort the result by average value.
-  NSArray * processesCPU = [self sortProcesses: avgCPU by: @"cpu"];
+  [self printLoad];
   
-  // Print the top processes.
-  [self printTopProcesses: processesCPU];
-  
+  if(![[Model model] sandboxed])
+    {
+    [self.result appendString: @"\n"];
+    
+    // Collect the average CPU usage for all processes (5 times).
+    NSDictionary * avgCPU = [self collectAverageCPU];
+    
+    // Sort the result by average value.
+    NSArray * processesCPU = [self sortProcesses: avgCPU by: @"cpu"];
+    
+    // Print the top processes.
+    [self printTopProcesses: processesCPU];
+    }
+    
   [self.result appendCR];
     
   dispatch_semaphore_signal(self.complete);
+  }
+
+// Print system load.
+- (void) printLoad
+  {
+  double loads[3];
+  
+  int result = getloadavg(loads, 3);
+  
+  NSArray * labels =
+    [NSArray
+      arrayWithObjects:
+        NSLocalizedString(@"Current system load", NULL),
+        NSLocalizedString(@"System load for past 5 minutes", NULL),
+        NSLocalizedString(@"System load for past 15 minutes", NULL),
+        nil];
+    
+  if(result != -1)
+    for(int index = 0; index < 3; ++index)
+      {
+      double load = loads[index] / (double)[[Model model] coreCount] * 100;
+      
+      NSString * output =
+        [NSString
+          stringWithFormat:
+            @"    %4.0lf%%\t%@\n",
+            load,
+            [labels objectAtIndex: index]];
+        
+      if(load > 80.0)
+        [self.result
+          appendString: output
+          attributes:
+            [NSDictionary
+              dictionaryWithObjectsAndKeys:
+                [NSColor redColor], NSForegroundColorAttributeName, nil]];      
+      else
+        [self.result appendString: output];
+            
+      }
   }
 
 // Collect the average CPU usage of all processes.
@@ -88,8 +138,6 @@
 // Print top processes by CPU.
 - (void) printTopProcesses: (NSArray *) processes
   {
-  [self.result appendAttributedString: [self buildTitle]];
-  
   NSUInteger topCount = 0;
   
   for(NSDictionary * process in processes)

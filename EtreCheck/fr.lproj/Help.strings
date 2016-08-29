@@ -22,8 +22,7 @@
 "preferencepanes" = "Plug-ins du tiers pour les Panneaux de préférences.";
 "timemachine" = "Il est essentiel d'avoir une bonne sauvegarde. Tous les utilisateurs de Mac devraient être en cours d'exécution de Time Machine.";
 "cpu" = "Ce sont les tâches qui utilisent actuellement la majorité de votre capacité de traitement.";
-"memory" = "Ce sont les tâches qui utilisent actuellement la majorité de votre mémoire.";
-"vm" = "Des informations détaillées sur votre comportement de la mémoire virtuelle. La valeur la plus importante ici est mis en cache. Si cette valeur est une partie importante de la mémoire vive disponible, votre ordinateur peut fonctionner plus lentement.";
+"memory" = "Des informations détaillées sur votre comportement de la mémoire.";
 "gatekeeper" = "Vos paramètres de Gatekeeper actuelles. Cela devrait être réglé sur «Mac App Store et de développeurs identifiés»";
 "diagnostics" = "Fichiers de diagnostic récents générés par votre système. EtreCheck comprend crash, hang, et les rapports de CPU pour les trois derniers jours. Tous les rapports de panique de noyau sont également inclus, ainsi que vos plus récents résultats d‘examen de soi. Pour de meilleurs résultats, exécutez EtreCheck comme un utilisateur administrateur (c’est le réglage par défaut).";
 "adware" = "Le logiciel adware comme identifié par Apple (voir https://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck.";

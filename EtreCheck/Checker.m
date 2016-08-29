@@ -36,7 +36,6 @@
 #import "UserInternetPlugInsCollector.h"
 #import "UserLaunchAgentsCollector.h"
 #import "VideoCollector.h"
-#import "VirtualMemoryCollector.h"
 #import "DiagnosticsCollector.h"
 #import "Utilities.h"
 #import "Model.h"
@@ -232,7 +231,6 @@
   [collectors addObject: [[FontsCollector new] autorelease]];
   [collectors addObject: [[CPUUsageCollector new] autorelease]];
   [collectors addObject: [[MemoryUsageCollector new] autorelease]];
-  [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
   // Start the machine animation.
@@ -432,7 +430,6 @@
   [result appendAttributedString: [self getResult: @"timemachine"]];
   [result appendAttributedString: [self getResult: @"cpu"]];
   [result appendAttributedString: [self getResult: @"memory"]];
-  [result appendAttributedString: [self getResult: @"vm"]];
   [result appendAttributedString: [self getResult: @"diagnostics"]];
   [result
     appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];

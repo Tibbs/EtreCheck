@@ -62,39 +62,42 @@
     updateStatus:
       NSLocalizedString(@"Checking Time Machine information", NULL)];
 
-  [self.result appendAttributedString: [self buildTitle]];
+  if(![[Model model] sandboxed])
+    {
+    [self.result appendAttributedString: [self buildTitle]];
 
-  if([[Model model] majorOSVersion] < kMountainLion)
-    {
-    [self.result
-      appendString:
-        NSLocalizedString(@"timemachineneedsmountainlion", NULL)
-      attributes:
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    if([[Model model] majorOSVersion] < kMountainLion)
+      {
+      [self.result
+        appendString:
+          NSLocalizedString(@"timemachineneedsmountainlion", NULL)
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+      
+      return;
+      }
+      
+    bool tmutilExists =
+      [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/tmutil"];
     
-    return;
+    if(!tmutilExists)
+      {
+      [self.result
+        appendString:
+          NSLocalizedString(@"timemachineinformationnotavailable", NULL)
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+      
+      return;
+      }
+    
+    // Now I can continue.
+    [self collectInformation];
     }
-    
-  bool tmutilExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/tmutil"];
-  
-  if(!tmutilExists)
-    {
-    [self.result
-      appendString:
-        NSLocalizedString(@"timemachineinformationnotavailable", NULL)
-      attributes:
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            [NSColor redColor], NSForegroundColorAttributeName, nil]];
-    
-    return;
-    }
-  
-  // Now I can continue.
-  [self collectInformation];
     
   dispatch_semaphore_signal(self.complete);
   }

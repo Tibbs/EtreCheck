@@ -213,6 +213,7 @@
     setPhysicalRAM: [self parseMemory: memory]];
 
   [[Model model] setSerialCode: [serial substringFromIndex: 8]];
+  [[Model model] setCoreCount: [core_count intValue]];
 
   // Print the human readable machine name, if I can find one.
   [self printHumanReadableMacName: model];

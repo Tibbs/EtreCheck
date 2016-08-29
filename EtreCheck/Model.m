@@ -24,6 +24,7 @@
 @synthesize machineIcon = myMachineIcon;
 @synthesize model = myModel;
 @synthesize serialCode = mySerialCode;
+@synthesize coreCount = myCoreCount;
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize launchdFiles = myLaunchdFiles;
 @synthesize processes = myProcesses;

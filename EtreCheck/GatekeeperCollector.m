@@ -16,7 +16,8 @@ typedef enum
   kUnknown,
   kDisabled,
   kDeveloperID,
-  kMacAppStore
+  kMacAppStore,
+  kEnabled
   }
 GatekeeperSetting;
     
@@ -109,6 +110,8 @@ GatekeeperSetting;
         setting = kDeveloperID;
       else if([trimmedLine isEqualToString: @"developer id disabled"])
         setting = kMacAppStore;
+      else if([trimmedLine isEqualToString: @"assessments enabled"])
+          setting = kEnabled;
       }
     }
     
@@ -151,6 +154,8 @@ GatekeeperSetting;
         setting = kDeveloperID;
       else if([trimmedLine isEqualToString: @"devid disabled"])
         setting = kMacAppStore;
+      else if([trimmedLine isEqualToString: @"assessments enabled"])
+          setting = kEnabled;
       }
     }
     
@@ -164,6 +169,13 @@ GatekeeperSetting;
   {
   switch(setting)
     {
+    case kEnabled:
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"    %@\n", NSLocalizedString(@"Enabled", NULL)]];
+      break;
     case kMacAppStore:
       [self.result
         appendString:

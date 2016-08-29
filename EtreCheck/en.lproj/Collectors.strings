@@ -6,8 +6,8 @@
   Copyright (c) 2014 Etresoft. All rights reserved.
 */
 "applications" = "Applications:";
-"configurationfiles" = "Configuration files:";
-"cpu" = "Top Processes by CPU:";
+"configurationfiles" = "Configuration Files:";
+"cpu" = "CPU Usage:";
 "diagnostics" = "Diagnostics Information:";
 "disk" = "Disk Information:";
 "firewire" = "Firewire Information:";
@@ -16,7 +16,7 @@
 "hardware" = "Hardware Information:";
 "kernelextensions" = "Kernel Extensions:";
 "loginitems" = "User Login Items:";
-"memory" = "Top Processes by Memory:";
+"memory" = "Memory Usage:";
 "preferencepanes" = "3rd Party Preference Panes:";
 "safariextensions" = "Safari Extensions:";
 "startupitems" = "Startup Items:";
@@ -25,7 +25,6 @@
 "timemachine" = "Time Machine:";
 "usb" = "USB Information:";
 "video" = "Video Information:";
-"vm" = "Virtual Memory Information:";
 "audioplugins" = "Audio Plug-ins:";
 "useraudioplugins" = "User Audio Plug-ins:";
 "internetplugins" = "Internet Plug-ins:";

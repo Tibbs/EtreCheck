@@ -6,7 +6,13 @@
 
 #import "ProcessesCollector.h"
 
+@class ByteCountFormatter;
+
 // Collect information about memory usage.
 @interface MemoryUsageCollector : ProcessesCollector
+  {
+  ByteCountFormatter * formatter;
+  double pageouts;
+  }
 
 @end
