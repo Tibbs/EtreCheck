@@ -125,7 +125,7 @@
 "Unknown" = "Inconnu";
 "[unknown]" = "[inconnu]";
 "gatekeeperneedslion" = "    Informations Gatekeeper requièrent OS X 10.7.5 \"Lion\" ou ultérieur.\n\n";
-"EtreCheck version: %@ (%@)\nReport generated %@\n" = "EtreCheck version : %@ (%@)\nRapport créé le %@\n";
+"EtreCheck Lite version: %@ (%@)\nReport generated %@\n" = "EtreCheck Lite version : %@ (%@)\nRapport créé le %@\n";
 "en" = "fr";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
 "oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/French.lproj/XSMachineAttributes.plist";
@@ -199,7 +199,7 @@
 "%d pressurekilledcount (plural rule: other)" = "    %d processus interrompus par manque de mémoire\n";
 "insufficientram" = "Manque de mémoire !";
 "linkhelp" = "Cliquez sur les liens [Aide] pour l’assistance avec les produits non-Apple.\nCliquez sur les liens [Détails] pour plus d’informations sur cette ligne.\nCliquez sur les liens [Adware] pour l’assistance avec la suppression d’adware.\n\n";
-"downloadetrecheck" = "Télécharger EtreCheck chez ";
+"downloadetrecheck" = "Télécharger EtreCheck Lite chez ";
 "Display" = "Écran";
 "    Battery: Health = %@ - Cycle count = %@\n" = "    La batterie : Santé = %@ - Comptage de cycles = %@\n";
 "        Battery serial number %@ invalid\n" = "        Numéro de série de la batterie %@ invalide\n";

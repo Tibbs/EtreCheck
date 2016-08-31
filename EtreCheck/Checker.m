@@ -259,7 +259,7 @@
   
   for(NSString * name in applications)
     {
-    if([name isEqualToString: @"EtreCheck"])
+    if([name hasPrefix: @"EtreCheck"])
       continue;
      
     NSImage * icon =

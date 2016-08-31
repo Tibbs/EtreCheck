@@ -39,7 +39,7 @@
 "%d pressurekilledcount (plural rule: one)" = "    one process killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: other)" = "    %d processes killed due to insufficient RAM\n";
 "insufficientram" = "Insufficient RAM!";
-"downloadetrecheck" = "Download EtreCheck from ";
+"downloadetrecheck" = "Download EtreCheck Lite from ";
 "Good" = "Normal";
 "Fair" = "Replace Soon";
 "Poor" = "Replace Now";

@@ -41,37 +41,41 @@ GatekeeperSetting;
 // Perform the collection.
 - (void) collect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking Gatekeeper information", NULL)];
-
-  // Only check gatekeeper on Maountain Lion or later.
-  if([[Model model] majorOSVersion] < kMountainLion)
-    return;
-    
-  [self.result appendAttributedString: [self buildTitle]];
-
-  bool gatekeeperExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/sbin/spctl"];
-  
-  if(!gatekeeperExists)
+  // spctl --status always returns "assessments enabled" in the sandbox.
+  if(![[Model model] sandboxed])
     {
-    [self.result
-      appendString:
-        NSLocalizedString(@"gatekeeperneedslion", NULL)
-      attributes:
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    [self
+      updateStatus:
+        NSLocalizedString(@"Checking Gatekeeper information", NULL)];
+
+    // Only check gatekeeper on Maountain Lion or later.
+    if([[Model model] majorOSVersion] < kMountainLion)
+      return;
+      
+    [self.result appendAttributedString: [self buildTitle]];
+
+    bool gatekeeperExists =
+      [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/sbin/spctl"];
     
-    return;
+    if(!gatekeeperExists)
+      {
+      [self.result
+        appendString:
+          NSLocalizedString(@"gatekeeperneedslion", NULL)
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+      
+      return;
+      }
+
+    GatekeeperSetting setting = [self collectGatekeeperSetting];
+    
+    [self printGatekeeperSetting: setting];
+
+    [self.result appendCR];
     }
-
-  GatekeeperSetting setting = [self collectGatekeeperSetting];
-  
-  [self printGatekeeperSetting: setting];
-
-  [self.result appendCR];
     
   dispatch_semaphore_signal(self.complete);
   }

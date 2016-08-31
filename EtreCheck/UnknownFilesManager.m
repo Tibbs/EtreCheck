@@ -363,7 +363,8 @@
     NSMutableString * content = [NSMutableString string];
     
     [content
-      appendString: @"EtreCheck found the following unknown files:\n\n"];
+      appendString:
+        @"EtreCheck Lite found the following unknown files:\n\n"];
 
     for(NSDictionary * item in self.filesToRemove)
       {

@@ -135,11 +135,11 @@
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
-                <menuItem title="EtreCheck" id="1Xt-HY-uBw">
+                <menuItem title="EtreCheck Lite" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="EtreCheck" systemMenu="apple" id="uQy-DD-JDr">
+                    <menu key="submenu" title="EtreCheck Lite" systemMenu="apple" id="uQy-DD-JDr">
                         <items>
-                            <menuItem title="À propos d’EtreCheck" id="5kV-Vb-QxS">
+                            <menuItem title="À propos d’EtreCheck Lite" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
@@ -158,7 +158,7 @@
                                 <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                            <menuItem title="Masquer EtreCheck" keyEquivalent="h" id="Olw-nP-bQN">
+                            <menuItem title="Masquer EtreCheck Lite" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
                                     <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
                                 </connections>
@@ -176,7 +176,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                            <menuItem title="Quitter EtreCheck" keyEquivalent="q" id="4sb-4s-VLi">
+                            <menuItem title="Quitter EtreCheck Lite" keyEquivalent="q" id="4sb-4s-VLi">
                                 <connections>
                                     <action selector="cancel:" target="Voe-Tx-rLC" id="QVy-ZK-YSo"/>
                                 </connections>
@@ -203,6 +203,7 @@
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bXa-9h-lFc"/>
                             <menuItem title="Enregistrer…" keyEquivalent="s" id="pxx-59-PXV">
+                                <accessibility description="Enregistrer le rapport d’EtreCheck Lite"/>
                                 <connections>
                                     <action selector="saveReport:" target="Voe-Tx-rLC" id="utn-Fk-5JP"/>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="JAJ-6o-qMi"/>
@@ -217,6 +218,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem title="Imprimer…" keyEquivalent="p" id="aTl-1u-JFS">
+                                <accessibility description="Imprimer le rapport d’EtreCheck Lite"/>
                                 <connections>
                                     <action selector="print:" target="-1" id="qaZ-4w-aoO"/>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="XiZ-pU-t3G"/>
@@ -456,6 +458,7 @@
                         <items>
                             <menuItem title="Afficher le journal" id="snW-S8-Cw5">
                                 <modifierMask key="keyEquivalentModifierMask"/>
+                                <accessibility description="Afficher le journal d’EtreCheck Lite"/>
                                 <connections>
                                     <action selector="showLog:" target="Voe-Tx-rLC" id="30S-4u-cfR"/>
                                 </connections>
@@ -492,7 +495,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Aide" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="Aide EtreCheck" keyEquivalent="?" id="FKE-Sm-Kum">
+                            <menuItem title="Aide EtreCheck Lite" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
                                     <action selector="showHelp:" target="Voe-Tx-rLC" id="Q5Y-GC-2PJ"/>
                                 </connections>
@@ -555,7 +558,7 @@
                 </subviews>
             </view>
         </window>
-        <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
+        <window title="EtreCheck Lite" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="610" height="265"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
@@ -1261,9 +1264,9 @@ Gw
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
                     <button verticalHuggingPriority="750" id="pZH-z5-AKO">
-                        <rect key="frame" x="370" y="13" width="164" height="32"/>
+                        <rect key="frame" x="353" y="13" width="181" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Démarrer EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="42g-xI-tXm">
+                        <buttonCell key="cell" type="push" title="Démarrer EtreCheck Lite" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="42g-xI-tXm">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1292,7 +1295,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="crg-Ov-30Q">
                             <font key="font" metaFont="system"/>
-                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck supprime automatiquement tous renseignements personnellement nominatifs. S'il vous plaît, commencer par identifier votre problème et décrire avec autant de détails que possible.</string>
+                            <string key="title">EtreCheck Lite recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck Lite supprime automatiquement tous renseignements personnellement nominatifs. S'il vous plaît, commencer par identifier votre problème et décrire avec autant de détails que possible.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>

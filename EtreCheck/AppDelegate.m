@@ -270,7 +270,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[NSUserNotificationCenter defaultUserNotificationCenter]
     setDelegate: self];
 
-  // Handle my own "etrecheck:" URLs.
+  // Handle my own "etrechecklite:" URLs.
   NSAppleEventManager * appleEventManager =
     [NSAppleEventManager sharedAppleEventManager];
   
@@ -360,7 +360,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
       NSURL * reportsDirectory =
         [applicationSupportURL
-          URLByAppendingPathComponent: @"EtreCheck/Reports"];
+          URLByAppendingPathComponent: @"EtreCheck Lite/Reports"];
         
       [[NSFileManager defaultManager]
         createDirectoryAtURL: reportsDirectory
@@ -373,7 +373,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           URLByAppendingPathComponent:
             [NSString
               stringWithFormat:
-                @"EtreCheck %@.rtf", [self currentFilename]]];
+                @"EtreCheck Lite %@.rtf", [self currentFilename]]];
       
       [[NSUserDefaults standardUserDefaults]
         setObject: [url path] forKey: @"lastreport"];
@@ -518,7 +518,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self applicationWillBecomeActive: notification];
   }
 
-// Handle an "etrecheck:" URL.
+// Handle an "etrechecklite:" URL.
 - (void) handleGetURLEvent: (NSAppleEventDescriptor *) event
   withReplyEvent: (NSAppleEventDescriptor *) reply
   {
@@ -531,7 +531,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSURL * url = [NSURL URLWithString: urlString];
     
-  if([[url scheme] isEqualToString: @"etrecheck"])
+  if([[url scheme] isEqualToString: @"etrechecklite"])
     {
     NSString * manager = [url host];
     
@@ -643,15 +643,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
               numberFromString:
                 [attributes objectForKey: @"CFBundleVersion"]];
           
-          if([version intValue] > [appVersion intValue])
-            [self
-              presentUpdate:
-                [attributes
-                  objectForKey: NSLocalizedString(@"changes", NULL)]
-              url:
-                [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
-          else
-            [[Model model] setVerifiedEtreCheckVersion: YES];
+          if(![[Model model] sandboxed])
+            {
+            if([version intValue] > [appVersion intValue])
+              [self
+                presentUpdate:
+                  [attributes
+                    objectForKey: NSLocalizedString(@"changes", NULL)]
+                url:
+                  [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
+            else
+              [[Model model] setVerifiedEtreCheckVersion: YES];
+            }
             
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
           
@@ -757,6 +760,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   if(image)
     [self.beachballItem setImage: image];
+    
+  if([[Model model] sandboxed])
+    {
+    [self.optionsButton setEnabled: NO];
+    [self.optionsButton setHidden: YES];
+    }
   }
 
 // Collect the user message.
@@ -1184,7 +1193,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [NSString
         stringWithFormat:
           NSLocalizedString(
-            @"EtreCheck version: %@ (%@)\nReport generated %@\n", NULL),
+            @"EtreCheck Lite version: %@ (%@)\nReport generated %@\n", NULL),
             [bundle
               objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
             [bundle objectForInfoDictionaryKey: @"CFBundleVersion"],
@@ -1819,6 +1828,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Ask for a donation under certain circumstances.
 - (void) askForDonation
   {
+  if([[Model model] sandboxed])
+    return;
+    
   NSString * donationKey =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"donationkey"];
@@ -1914,7 +1926,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // Notify the user.
   NSUserNotification * notification = [[NSUserNotification alloc] init];
     
-  notification.title = @"Etrecheck";
+  notification.title = @"Etrecheck Lite";
   notification.informativeText =
     NSLocalizedString(@"Report complete", NULL);
   
@@ -2225,11 +2237,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         createTextSizeToolbar: toolbar
         itemForItemIdentifier: itemIdentifier];
 
-  else if([itemIdentifier isEqualToString: kDonateTollbarItemID])
-    return
-      [self
-        createDonateToolbar: toolbar itemForItemIdentifier: itemIdentifier];
-    
   return nil;
   }
 
@@ -2332,7 +2339,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
-        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -2342,7 +2348,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
-      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
     
@@ -2363,7 +2368,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
-        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -2373,7 +2377,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
-      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
 
