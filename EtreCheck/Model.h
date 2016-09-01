@@ -71,13 +71,11 @@
   bool myShowSignatureFailures;
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
-  bool myVerifiedEtreCheckVersion;
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
   bool mySIP;
-  bool mySandboxed;
   }
 
 // Keep track of the OS version.
@@ -192,9 +190,6 @@
 // Is this version outdated?
 @property (assign) bool oldEtreCheckVersion;
 
-// Do I have a verified EtreCheck version?
-@property (assign) bool verifiedEtreCheckVersion;
-
 // Apple software.
 @property (retain) NSDictionary * appleSoftware;
 
@@ -206,9 +201,6 @@
 
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
-
-// Am I running in the sandbox?
-@property (assign) bool sandboxed;
 
 // Return the singeton of shared values.
 + (Model *) model;

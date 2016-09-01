@@ -450,9 +450,6 @@
 // Categories the extensions into various types.
 - (void) categorizeExtensions
   {
-  // Find loaded (and unexpecteded loaded) extensions.
-  [self findLoadedExtensions];
-  
   // The rest must be unloaded.
   [self findUnloadedExtensions];
 
@@ -475,53 +472,6 @@
       
     [extensions addObject: label];
     }
-  }
-
-// Find loaded extensions.
-- (void) findLoadedExtensions
-  {
-  // TODO: Sandbox does not work.
-  NSArray * args = @[ @"-l" ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/sbin/kextstat" arguments: args])
-    {
-    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
-
-    self.loadedExtensions = [NSMutableDictionary dictionary];
-    self.unexpectedExtensions = [NSMutableDictionary dictionary];
-    
-    for(NSString * line in lines)
-      {
-      NSString * label = nil;
-      NSString * version = nil;
-
-      [self parseKext: line label: & label version: & version];
-
-      if(label && version)
-        {
-        NSDictionary * bundle = [self.extensions objectForKey: label];
-        
-        if(bundle)
-          [self.loadedExtensions setObject: bundle forKey: label];
-          
-        else
-          {
-          bundle =
-            [NSDictionary
-              dictionaryWithObjectsAndKeys:
-                version, @"CFBundleVersion",
-                label, @"CFBundleIdentifier",
-                nil];
-            
-          [self.unexpectedExtensions setObject: bundle forKey: label];
-          }
-        }
-      }
-    }
-    
-  [subProcess release];
   }
 
 // Find unloaded extensions.

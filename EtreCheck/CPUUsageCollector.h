@@ -4,9 +4,9 @@
  ** Copyright (c) 2014. All rights reserved.
  **********************************************************************/
 
-#import "ProcessesCollector.h"
+#import "Collector.h"
 
 // Collect information about CPU usage.
-@interface CPUUsageCollector : ProcessesCollector
+@interface CPUUsageCollector : Collector
 
 @end

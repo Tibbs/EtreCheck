@@ -23,9 +23,6 @@
 #import "DetailManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
-#import "AdwareManager.h"
-#import "UnknownFilesManager.h"
-#import "UpdateManager.h"
 #import "SubProcess.h"
 
 // Toolbar items.
@@ -229,8 +226,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the application.
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
   {
-  [self checkSandboxing];
-  
   [self checkForUpdates];
   
   [self setupStartMessage];
@@ -539,28 +534,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.detailManager showDetail: [[url path] substringFromIndex: 1]];
     else if([manager isEqualToString: @"help"])
       [self.helpManager showDetail: [[url path] substringFromIndex: 1]];
-    else if([manager isEqualToString: @"adware"])
-      [self.adwareManager show];
-    else if([manager isEqualToString: @"unknownfiles"])
-      [self.unknownFilesManager show];
-    }
-  }
-
-// Check for sandboxing.
-- (void) checkSandboxing
-  {
-  // TODO: Check this.
-  NSArray * URLs =
-    [[NSFileManager defaultManager]
-      URLsForDirectory: NSApplicationSupportDirectory
-      inDomains: NSUserDomainMask];
-    
-  for(NSURL * url in URLs)
-    {
-    NSRange range = [[url path] rangeOfString: @"/Containers/"];
-    
-    if(range.location != NSNotFound)
-      [[Model model] setSandboxed: true];
     }
   }
 
@@ -597,13 +570,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   // If I timed out, I'm not ready. Signal the sync semaphore to prevent
   // the update from ever being handled if it ever does happen.
-  if(timedout)
-    dispatch_async(
-      dispatch_get_main_queue(),
-      ^{
-       [self updateFailed];
-      });
-  else
+  if(!timedout)
     {
     [self handleUpdate: data];
     [data release];
@@ -621,12 +588,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSString * appBundleId = [[NSBundle mainBundle] bundleIdentifier];
   
-  NSNumber * appVersion =
-    [numberFormatter
-      numberFromString:
-        [[[NSBundle mainBundle] infoDictionary]
-          objectForKey: @"CFBundleVersion"]];
-
   NSDictionary * info = [NSDictionary readPropertyListData: data];
   
   for(NSString * key in info)
@@ -638,24 +599,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         
         if([appBundleId isEqualToString: bundleId])
           {
-          NSNumber * version =
-            [numberFormatter
-              numberFromString:
-                [attributes objectForKey: @"CFBundleVersion"]];
-          
-          if(![[Model model] sandboxed])
-            {
-            if([version intValue] > [appVersion intValue])
-              [self
-                presentUpdate:
-                  [attributes
-                    objectForKey: NSLocalizedString(@"changes", NULL)]
-                url:
-                  [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
-            else
-              [[Model model] setVerifiedEtreCheckVersion: YES];
-            }
-            
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
           
           if([whitelist respondsToSelector: @selector(addObject:)])
@@ -687,41 +630,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       }
     
   [numberFormatter release];
-  }
-
-// Show the update dialog.
-- (void) presentUpdate: (NSString *) changes url: (NSURL *) url
-  {
-  [[Model model] setOldEtreCheckVersion: YES];
-  
-  self.updateManager.content = changes;
-  self.updateManager.updateURL = url;
-  
-  [self.updateManager show];
-  }
-
-// Show the update failed dialog.
-- (void) updateFailed
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert setMessageText: NSLocalizedString(@"Update Failed", NULL)];
-    
-  [alert setAlertStyle: NSInformationalAlertStyle];
-
-  [alert setInformativeText: NSLocalizedString(@"updatefailed", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"Quit", NULL)];
-
-  [alert addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  if(result == NSAlertFirstButtonReturn)
-    [[NSApplication sharedApplication] terminate: self];
-    
-  [alert release];
   }
 
 // Setup the start message.
@@ -760,12 +668,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   if(image)
     [self.beachballItem setImage: image];
-    
-  if([[Model model] sandboxed])
-    {
-    [self.optionsButton setEnabled: NO];
-    [self.optionsButton setHidden: YES];
-    }
   }
 
 // Collect the user message.
@@ -1804,9 +1706,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView
     scrollRangeToVisible: NSMakeRange([self.log length] - 2, 1)];
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
-  
-  // Beg for money.
-  [self askForDonation];
   }
 
 // Update the run count.
@@ -1823,82 +1722,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [[NSUserDefaults standardUserDefaults]
     setObject: [NSNumber numberWithInt: runCount] forKey: @"reportcount"];
-  }
-
-// Ask for a donation under certain circumstances.
-- (void) askForDonation
-  {
-  if([[Model model] sandboxed])
-    return;
-    
-  NSString * donationKey =
-    [[NSUserDefaults standardUserDefaults]
-      objectForKey: @"donationkey"];
-    
-  if([self verifyDonationKey: donationKey])
-    return;
-    
-  NSNumber * count =
-    [[NSUserDefaults standardUserDefaults]
-      objectForKey: @"reportcount"];
-    
-  int runCount = 1;
-  
-  if([count respondsToSelector: @selector(intValue)])
-    runCount = [count intValue];
-  
-  NSUInteger justCheckingIndex =
-    (self.chooseAProblemButton.menu.itemArray.count - 1);
-    
-  bool ask = NO;
-  
-  if(self.problemIndex == justCheckingIndex)
-    ask = YES;
-    
-  if(runCount > 5)
-    ask = YES;
-    
-  if(ask)
-    [self showDonate: self];
-  }
-
-- (BOOL) verifyDonationKey: (NSString *) donationKey
-  {
-  if([donationKey length] == 0)
-    return NO;
-    
-  NSMutableString * json = [NSMutableString string];
-  
-  [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
-    
-  NSString * server = @"https://etrecheck.com/server/verifydonation.php";
-  
-  NSArray * args =
-    @[
-      @"-s",
-      @"--data",
-      json,
-      server
-    ];
-
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess autorelease];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    [status autorelease];
-    
-    if([status isEqualToString: @"OK"])
-      return YES;
-    }
-  
-  return NO;
   }
 
 // Handle a scroll change in the report view.

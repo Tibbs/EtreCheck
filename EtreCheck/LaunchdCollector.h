@@ -81,9 +81,6 @@
 // Collect the actual executable from a command.
 - (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
 
-// Update a funky new dynamic task.
-- (void) updateDynamicTask: (NSMutableDictionary *) info;
-
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) path;
 

@@ -9,7 +9,6 @@
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "UnknownFilesManager.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 

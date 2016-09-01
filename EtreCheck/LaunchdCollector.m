@@ -309,10 +309,6 @@
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
     
-    // TODO: Check this.
-    if(![[Model model] sandboxed])
-      [self checkSignature: info];
-    
     // See if this is a file I know about, either good or bad.
     [self checkForKnownFile: path info: info];
     }
@@ -970,60 +966,6 @@
   return NO;
   }
 
-// Update a funky new dynamic task.
-- (void) updateDynamicTask: (NSMutableDictionary *) info
-  {
-  // TODO: Does not work in sandbox.
-  NSString * label = [info objectForKey: kLabel];
-  
-  NSArray * args =
-    @[
-      @"list",
-      label
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/bin/launchctl" arguments: args])
-    {
-    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
-
-    for(NSString * line in lines)
-      {
-      NSString * trimmedLine =
-        [line
-          stringByTrimmingCharactersInSet:
-            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-      if([trimmedLine hasPrefix: @"\"Program\" = \""])
-        {
-        NSString * executable =
-          [trimmedLine
-            substringWithRange: NSMakeRange(13, [trimmedLine length] - 15)];
-        
-        // This might be a bundle ID.
-        if(![[NSFileManager defaultManager] fileExistsAtPath: executable])
-          {
-          executable =
-            [[NSWorkspace sharedWorkspace]
-              absolutePathForAppBundleWithIdentifier: executable];
-          }
-          
-        // TODO: What if this is adware?
-        [info setObject: executable forKey: kExecutable];
-        
-        [self updateModificationDate: info path: executable];
-        }
-      else if([trimmedLine hasPrefix: @"\"PID\" = "])
-      
-        // TODO: What if this is adware? I could use the PID to kill it.
-        [[self.launchdStatus objectForKey: label]
-          setObject: kStatusRunning forKey: label];
-      }
-    }
-    
-  [subProcess release];
-  }
 
 // Update the modification date.
 - (void) updateModificationDate: (NSMutableDictionary *) status

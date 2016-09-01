@@ -59,15 +59,6 @@
   [self printVM: vminfo forKey: kUsedRAM];
   [self printVM: vminfo forKey: kFileCache];
 
-  // Collect the average memory usage usage for all processes (5 times).
-  NSDictionary * avgMemory = [self collectAverageMemory];
-  
-  // Sort the result by average value.
-  NSArray * processesMemory = [self sortProcesses: avgMemory by: @"mem"];
-  
-  // Print the top processes.
-  [self printTopProcesses: processesMemory];
-    
   [self.result appendCR];
 
   dispatch_semaphore_signal(self.complete);
@@ -293,95 +284,6 @@
     @{
       kTotalRAM : [NSNumber numberWithDouble: (double)total]
     };
-  }
-
-// Collect the average CPU usage of all processes.
-- (NSDictionary *) collectAverageMemory
-  {
-  NSMutableDictionary * averageProcesses = [NSMutableDictionary dictionary];
-  
-  for(NSUInteger i = 0; i < 5; ++i)
-    {
-    usleep(500000);
-    
-    NSDictionary * currentProcesses = [self collectProcesses];
-    
-    for(NSString * command in currentProcesses)
-      {
-      NSMutableDictionary * currentProcess =
-        [currentProcesses objectForKey: command];
-      NSMutableDictionary * averageProcess =
-        [averageProcesses objectForKey: command];
-        
-      if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: command];
-        
-      else if(currentProcess && averageProcess)
-        {
-        double totalMemory =
-          [[averageProcess objectForKey: @"mem"] doubleValue] * i;
-        
-        double averageMemory =
-          [[averageProcess objectForKey: @"mem"] doubleValue];
-        
-        averageMemory = (totalMemory + averageMemory) / (double)(i + 1);
-        
-        [averageProcess
-          setObject: [NSNumber numberWithDouble: averageMemory]
-          forKey: @"mem"];
-        }
-      }
-    }
-  
-  return averageProcesses;
-  }
-
-// Print top processes by memory.
-- (void) printTopProcesses: (NSArray *) processes
-  {
-  NSUInteger count = 0;
-  
-  for(NSDictionary * process in processes)
-    {
-    [self printTopProcess: process];
-    
-    ++count;
-          
-    if(count >= 5)
-      break;
-    }
-  }
-
-// Print a top process.
-// Return YES if the process could be printed.
-- (void) printTopProcess: (NSDictionary *) process
-  {
-  double mem = [[process objectForKey: @"mem"] doubleValue];
-
-  int count = [[process objectForKey: @"count"] intValue];
-  
-  NSString * countString =
-    (count > 1)
-      ? [NSString stringWithFormat: @"(%d)", count]
-      : @"";
-
-  NSString * output =
-    [NSString
-      stringWithFormat:
-        @"    %-9@    %@%@\n",
-        [formatter stringFromByteCount: (unsigned long long)mem],
-        [process objectForKey: @"command"],
-        countString];
-    
-  if(mem > 1024 * 1024 * 1024 * 2.0)
-    [self.result
-      appendString: output
-      attributes:
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            [NSColor redColor], NSForegroundColorAttributeName, nil]];      
-  else
-    [self.result appendString: output];
   }
 
 @end

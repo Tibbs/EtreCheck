@@ -27,7 +27,7 @@
 			<string>com.etresoft.etrechecklite</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>etrecheck</string>
+				<string>etrechecklite</string>
 			</array>
 		</dict>
 	</array>

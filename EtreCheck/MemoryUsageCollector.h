@@ -4,12 +4,12 @@
  ** Copyright (c) 2014. All rights reserved.
  **********************************************************************/
 
-#import "ProcessesCollector.h"
+#import "Collector.h"
 
 @class ByteCountFormatter;
 
 // Collect information about memory usage.
-@interface MemoryUsageCollector : ProcessesCollector
+@interface MemoryUsageCollector : Collector
   {
   ByteCountFormatter * formatter;
   double pageouts;

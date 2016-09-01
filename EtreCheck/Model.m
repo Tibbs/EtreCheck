@@ -46,14 +46,11 @@
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize showSignatureFailures = myShowSignatureFailures;
 @synthesize hideAppleTasks = myHideAppleTasks;
-@synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
-@synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
 @synthesize appleSoftware = myAppleSoftware;
 @synthesize appleLaunchd = myAppleLaunchd;
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize sip = mySIP;
-@synthesize sandboxed = mySandboxed;
 
 - (NSDictionary *) adwareLaunchdFiles
   {

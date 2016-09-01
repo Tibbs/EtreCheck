@@ -134,21 +134,6 @@
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 
-// Query the status of a launchd task.
-+ (NSString *) launchdTaskStatus: (NSString *) label;
-
-// Query the status of a process.
-+ (NSString *) ps: (NSNumber *) pid;
-
-// Uninstall launchd tasks.
-+ (void) uninstallLaunchdTasks: (NSArray *) tasks;
-
-// Delete files.
-+ (void) deleteFiles: (NSArray *) files;
-
-// Restart the machine.
-+ (BOOL) restart;
-
 // Resolve a deep app path to the wrapper path.
 + (NSString *) resolveBundlePath: (NSString *) path;
 

@@ -154,9 +154,6 @@
 // Collect free disk space.
 - (BOOL) collectDiskFree: (BOOL) dataFound
   {
-  if(![[Model model] sandboxed])
-    return NO;
-    
   NSArray * args =
     @[
       @"-kl",
