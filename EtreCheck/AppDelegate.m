@@ -355,7 +355,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
       NSURL * reportsDirectory =
         [applicationSupportURL
-          URLByAppendingPathComponent: @"EtreCheck Lite/Reports"];
+          URLByAppendingPathComponent: @"EtreCheck/Reports"];
         
       [[NSFileManager defaultManager]
         createDirectoryAtURL: reportsDirectory
@@ -368,7 +368,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           URLByAppendingPathComponent:
             [NSString
               stringWithFormat:
-                @"EtreCheck Lite %@.rtf", [self currentFilename]]];
+                @"EtreCheck %@.rtf", [self currentFilename]]];
       
       [[NSUserDefaults standardUserDefaults]
         setObject: [url path] forKey: @"lastreport"];
@@ -1095,7 +1095,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [NSString
         stringWithFormat:
           NSLocalizedString(
-            @"EtreCheck Lite version: %@ (%@)\nReport generated %@\n", NULL),
+            @"EtreCheck version: %@ (%@)\nReport generated %@\n", NULL),
             [bundle
               objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
             [bundle objectForInfoDictionaryKey: @"CFBundleVersion"],
@@ -1749,7 +1749,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // Notify the user.
   NSUserNotification * notification = [[NSUserNotification alloc] init];
     
-  notification.title = @"Etrecheck Lite";
+  notification.title = @"Etrecheck";
   notification.informativeText =
     NSLocalizedString(@"Report complete", NULL);
   

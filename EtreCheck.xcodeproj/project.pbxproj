@@ -494,9 +494,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A55BC16815BF987D00D42EF1 /* EtreCheckLite */ = {
+		A55BC16815BF987D00D42EF1 /* EtreCheck */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheckLite" */;
+			buildConfigurationList = A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck" */;
 			buildPhases = (
 				A55BC16515BF987D00D42EF1 /* Sources */,
 				A55BC16615BF987D00D42EF1 /* Frameworks */,
@@ -507,7 +507,7 @@
 			);
 			dependencies = (
 			);
-			name = EtreCheckLite;
+			name = EtreCheck;
 			productName = EtreCheck;
 			productReference = A55BC16915BF987D00D42EF1 /* EtreCheck.app */;
 			productType = "com.apple.product-type.application";
@@ -544,7 +544,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A55BC16815BF987D00D42EF1 /* EtreCheckLite */,
+				A55BC16815BF987D00D42EF1 /* EtreCheck */,
 			);
 		};
 /* End PBXProject section */
@@ -809,7 +809,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "EtreCheck Lite";
+				PRODUCT_NAME = EtreCheck;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -838,7 +838,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				PRODUCT_NAME = "EtreCheck Lite";
+				PRODUCT_NAME = EtreCheck;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -856,7 +856,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheckLite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheck;
 			};
 			name = Debug;
 		};
@@ -873,7 +873,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheckLite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheck;
 			};
 			name = Release;
 		};
@@ -889,7 +889,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheckLite" */ = {
+		A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A55BC18815BF987D00D42EF1 /* Debug */,
