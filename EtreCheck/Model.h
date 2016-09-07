@@ -30,6 +30,25 @@
 
 #define kMinimumWhitelistSize 1000
 
+// Results keys
+#define kComputerName @"computername"
+#define kHostName @"hostname"
+#define kSupportsHandoff @"supportshandoff"
+#define kSupportsInstantHotspot @"supportsinstanthotspot"
+#define kSupportsLowEnergy @"supportslowenergy"
+#define kModel @"model"
+#define kPhysicalRAM @"physicalram"
+#define kSerialCode @"serialcode"
+#define kCPUCount @"cpucount"
+#define kCPUSpeed @"cpuspeed"
+#define kCoreCount @"corecount"
+#define kCPUType @"cputype"
+#define kMarketingName @"marketingname"
+#define kMemoryUpgradeable @"memoryupgradeable"
+#define kMemoryBanks @"memorybanks"
+#define kWirelessInterfaces @"wirelessinterfaces"
+#define kBatteryInformation @"batteryinformation"
+
 @class DiagnosticEvent;
 
 // A singleton to keep track of system information.

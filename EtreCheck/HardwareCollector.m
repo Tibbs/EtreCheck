@@ -82,6 +82,9 @@
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
+  [self.results setObject: computerName forKey: kComputerName];
+  [self.results setObject: hostName forKey: kHostName];
+  
   [computerName release];
   [hostName release];
   }
@@ -110,6 +113,14 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [self.results
+    setObject: [NSNumber numberWithBool: NO] forKey: kSupportsHandoff];
+  [self.results
+    setObject: [NSNumber numberWithBool: NO]
+    forKey: kSupportsInstantHotspot];
+  [self.results
+    setObject: [NSNumber numberWithBool: NO] forKey: kSupportsLowEnergy];
+  
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -129,22 +140,41 @@
               NSDictionary * localInfo =
                 [info objectForKey: @"local_device_title"];
               
-              NSString * generalSupportsHandoff =
+              NSString * supportsHandoff =
                 [localInfo objectForKey: @"general_supports_handoff"];
-              NSString * generalSupportsInstantHotspot =
+              NSString * supportsInstantHotspot =
                 [localInfo
                   objectForKey: @"general_supports_instantHotspot"];
-              NSString * generalSupportsLowEnergy =
+              NSString * supportsLowEnergy =
                 [localInfo objectForKey: @"general_supports_lowEnergy"];
                 
-              self.supportsHandoff =
-                [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
-              self.supportsInstantHotspot =
-                [generalSupportsInstantHotspot
-                  isEqualToString: @"attrib_Yes"];
-              self.supportsLowEnergy =
-                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
-              }
+              if([supportsHandoff isEqualToString: @"attrib_Yes"])
+                {
+                self.supportsHandoff = YES;
+                
+                [self.results
+                  setObject: [NSNumber numberWithBool: YES]
+                  forKey: kSupportsHandoff];
+                }
+                
+              if([supportsInstantHotspot isEqualToString: @"attrib_Yes"])
+                {
+                self.supportsInstantHotspot = YES;
+                
+                [self.results
+                  setObject: [NSNumber numberWithBool: YES]
+                  forKey: kSupportsInstantHotspot];
+                }
+
+              if([supportsLowEnergy isEqualToString: @"attrib_Yes"])
+                {
+                self.supportsLowEnergy = YES;
+                
+                [self.results
+                  setObject: [NSNumber numberWithBool: YES]
+                  forKey: kSupportsLowEnergy];
+                }
+               }
             }
       }
     }
@@ -205,15 +235,27 @@
   NSNumber * cpu_count = [info objectForKey: @"packages"];
   NSString * memory = [info objectForKey: @"physical_memory"];
   NSString * serial = [info objectForKey: @"serial_number"];
+  int physicalRAM = [self parseMemory: memory];
 
   [[Model model] setModel: model];
+  [self.results setObject: model forKey: kModel];
   
   // Extract the memory.
   [[Model model]
-    setPhysicalRAM: [self parseMemory: memory]];
+    setPhysicalRAM: physicalRAM];
+  [self.results
+    setObject: [NSNumber numberWithInt: physicalRAM] forKey: kPhysicalRAM];
 
-  [[Model model] setSerialCode: [serial substringFromIndex: 8]];
+  NSString * serialCode = [serial substringFromIndex: 8];
+  
+  [[Model model] setSerialCode: serialCode];
   [[Model model] setCoreCount: [core_count intValue]];
+
+  [self.results setObject: serialCode forKey: kSerialCode];
+  [self.results setObject: cpu_count forKey: kCPUCount];
+  [self.results setObject: speed forKey: kCPUSpeed];
+  [self.results setObject: core_count forKey: kCoreCount];
+  [self.results setObject: cpu_type forKey: kCPUType];
 
   // Print the human readable machine name, if I can find one.
   [self printHumanReadableMacName: model];
@@ -265,6 +307,9 @@
     {
     if(![self.marketingName length])
       self.marketingName = [machineProperties objectForKey: kMachineName];
+
+    if([self.marketingName length])
+        [self.results setObject: self.marketingName forKey: kMarketingName];
 
     [[Model model]
       setMachineIcon: [machineProperties objectForKey: kMachineIcon]];
@@ -476,6 +521,10 @@
     
     upgradeable = [isUpgradeable boolValue];
     
+    [self.results
+      setObject: [NSNumber numberWithBool: upgradeable]
+      forKey: kMemoryUpgradeable];
+    
     // Snow Leopoard doesn't seem to report this.
     if(isUpgradeable)
       upgradeableString =
@@ -566,6 +615,8 @@
   {
   NSString * lastBankID = nil;
   int bankCount = 0;
+  
+  [self.results setObject: banks forKey: kMemoryBanks];
   
   for(NSDictionary * bank in banks)
     {
@@ -732,6 +783,8 @@
                     @"    Wireless: %@",
                     TTTLocalizedPluralString(count, @"interface", nil)]];
           
+          [self.results setObject: interfaces forKey: kWirelessInterfaces];
+          
           for(NSDictionary * interface in interfaces)
             [self
               printWirelessInterface: interface
@@ -796,6 +849,8 @@
   NSString * health = nil;
   NSString * serialNumber = @"";
   BOOL serialNumberInvalid = NO;
+  
+  [self.results setObject: infos forKey: kBatteryInformation];
   
   for(NSDictionary * info in infos)
     {
