@@ -18,18 +18,17 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"applications"];
   
   if(self)
     {
-    self.name = @"applications";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     genericApplication =
       [[NSWorkspace sharedWorkspace] iconForFileType: @".app"];
+
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Perform the collection.

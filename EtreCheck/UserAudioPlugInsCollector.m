@@ -12,15 +12,14 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"useraudioplugins"];
   
   if(self)
     {
-    self.name = @"useraudioplugins";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Perform the collection.

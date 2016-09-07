@@ -23,19 +23,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"memory"];
   
   if(self)
     {
-    self.name = @"memory";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     formatter = [[ByteCountFormatter alloc] init];
 
     formatter.k1000 = 1024.0;
+
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.

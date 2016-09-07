@@ -76,6 +76,7 @@
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
   bool mySIP;
+  NSMutableDictionary * myResults;
   }
 
 // Keep track of the OS version.
@@ -201,6 +202,9 @@
 
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
+
+// EtreCheck results.
+@property (retain) NSMutableDictionary * results;
 
 // Return the singeton of shared values.
 + (Model *) model;

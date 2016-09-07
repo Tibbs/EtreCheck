@@ -39,15 +39,14 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"disk"];
   
   if(self)
     {
-    self.name = @"disk";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Perform the collection.

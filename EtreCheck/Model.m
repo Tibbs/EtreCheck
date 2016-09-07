@@ -51,6 +51,7 @@
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize sip = mySIP;
+@synthesize results = myResults;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -105,6 +106,7 @@
   
   if(self)
     {
+    myResults = [NSMutableDictionary new];
     myUnknownFiles = [NSMutableArray new];
     myLaunchdFiles = [NSMutableDictionary new];
     myVolumes = [NSMutableDictionary new];
@@ -132,6 +134,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myResults release];
   [myUnknownFiles release];
   [myAdwareFiles release];
   [myBlacklistSuffixes release];

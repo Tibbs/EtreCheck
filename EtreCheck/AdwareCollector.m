@@ -23,17 +23,16 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"adware"];
   
   if(self)
     {
-    self.name = @"adware";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-    
     [self loadSignatures];
+
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Perform the collection.

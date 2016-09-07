@@ -26,17 +26,16 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"safariextensions"];
   
   if(self)
     {
-    self.name = @"safariextensions";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     myExtensions = [NSMutableDictionary new];
+
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.

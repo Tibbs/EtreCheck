@@ -13,15 +13,14 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"userlaunchagents"];
   
   if(self)
     {
-    self.name = @"userlaunchagents";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Collect user launch agents.

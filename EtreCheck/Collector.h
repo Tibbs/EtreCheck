@@ -13,6 +13,7 @@
   NSString * myName;
   NSString * myTitle;
   NSMutableAttributedString * myResult;
+  NSMutableDictionary * myResults;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
   }
@@ -25,10 +26,14 @@
 
 // Keep track of the results of this collector.
 @property (retain) NSMutableAttributedString * result;
+@property (retain) NSMutableDictionary * results;
 
 // Allow people to know when a collection is complete.
 @property (assign) dispatch_semaphore_t complete;
 @property (readonly) bool done;
+
+// Constructor with name.
+- (instancetype) initWithName: (NSString *) name;
 
 // Perform the collection.
 - (void) collect;

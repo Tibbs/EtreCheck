@@ -13,15 +13,14 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"launchdaemons"];
   
   if(self)
     {
-    self.name = @"launchdaemons";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Collect 3rd party launch daemons.

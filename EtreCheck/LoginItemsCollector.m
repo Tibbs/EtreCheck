@@ -17,16 +17,16 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"loginitems"];
   
   if(self)
     {
-    self.name = @"loginitems";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     myLoginItems = [NSMutableArray new];
+    
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.

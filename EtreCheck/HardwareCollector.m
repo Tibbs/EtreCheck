@@ -33,19 +33,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"hardware"];
   
   if(self)
     {
-    self.name = @"hardware";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-    
     // Do this in the constructor so the data is available before
     // collection starts.
-    [self loadProperties];    
+    [self loadProperties];
+    
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.
@@ -75,7 +74,8 @@
           NSLocalizedString(@"oldmachineattributes", NULL)];
     
   // This is as good a place as any to collect this.
-  NSString * computerName = (NSString *)SCDynamicStoreCopyComputerName(NULL, NULL);
+  NSString * computerName =
+    (NSString *)SCDynamicStoreCopyComputerName(NULL, NULL);
 
   NSString * hostName = (NSString *)SCDynamicStoreCopyLocalHostName(NULL);
 

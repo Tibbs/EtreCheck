@@ -24,17 +24,16 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"kernelextensions"];
   
   if(self)
     {
     myExtensionsByLocation = [NSMutableDictionary new];
     
-    self.name = @"kernelextensions";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.

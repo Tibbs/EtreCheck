@@ -22,15 +22,14 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"configurationfiles"];
   
   if(self)
     {
-    self.name = @"configurationfiles";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.

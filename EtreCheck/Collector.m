@@ -23,16 +23,22 @@
   return !dispatch_semaphore_wait(self.complete, DISPATCH_TIME_NOW);
   }
 
-// Constructor.
-- (id) init
+// Constructor with name.
+- (instancetype) initWithName: (NSString *) name;
   {
   self = [super init];
   
   if(self)
     {
+    myResults = [NSMutableDictionary new];
     myResult = [NSMutableAttributedString new];
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
+
+    self.name = name;
+    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    
+    [[[Model model] results] setObject: myResults forKey: self.name];
     }
     
   return self;
@@ -44,6 +50,7 @@
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
+  [myResults release];
   
   [super dealloc];
   }
