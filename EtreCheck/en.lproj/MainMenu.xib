@@ -46,6 +46,7 @@
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="Gpp-rD-Etp"/>
                 <outlet property="optionsButton" destination="EBF-Wl-xZl" id="f4U-wd-G31"/>
+                <outlet property="preferencesManager" destination="ThX-aN-0qg" id="LWe-y8-he2"/>
                 <outlet property="problemDescriptionTextView" destination="78R-B9-GBa" id="USD-93-PLK"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
@@ -133,6 +134,12 @@
                 <outlet property="window" destination="gjM-qW-zLi" id="kEP-nm-w0M"/>
             </connections>
         </customObject>
+        <customObject id="ThX-aN-0qg" userLabel="Preferences Manager" customClass="PreferencesManager">
+            <connections>
+                <outlet property="popUpButton" destination="8u1-Ro-mfE" id="4q2-G3-PB8"/>
+                <outlet property="window" destination="2C0-eF-sJO" id="N3Y-32-Xfh"/>
+            </connections>
+        </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="EtreCheck" id="1Xt-HY-uBw">
@@ -146,10 +153,9 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="About Etresoft" id="BOF-NM-1cW">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Preferences..." keyEquivalent="," id="OaD-xj-Fb7">
                                 <connections>
-                                    <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
+                                    <action selector="showPreferences:" target="-1" id="z1c-ai-PBl"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
@@ -505,6 +511,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="showFAQ:" target="Voe-Tx-rLC" id="dCE-5I-qc0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="About Etresoft" id="BOF-NM-1cW">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1820,6 +1832,58 @@ Gw
                 </subviews>
             </view>
             <point key="canvasLocation" x="134" y="1873"/>
+        </window>
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <windowPositionMask key="initialPositionMask" topStrut="YES"/>
+            <rect key="contentRect" x="-1724" y="200" width="280" height="80"/>
+            <rect key="screenRect" x="-1920" y="100" width="1920" height="1057"/>
+            <view key="contentView" id="FQI-Tk-PZA">
+                <rect key="frame" x="0.0" y="0.0" width="280" height="80"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cuj-NS-YhZ">
+                        <rect key="frame" x="26" y="32" width="101" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search engine:" id="QaO-uN-qmn">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" id="8u1-Ro-mfE">
+                        <rect key="frame" x="131" y="27" width="125" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="Google" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eBD-iw-nAq" id="tl1-v8-TyQ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="hkq-3f-F5a">
+                                <items>
+                                    <menuItem title="Google" state="on" id="eBD-iw-nAq">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
+                                    <menuItem title="Yahoo" id="OcX-nC-Jl8">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
+                                    <menuItem title="Bing" id="FBr-92-e0k">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
+                                    <menuItem title="DuckDuckGo" id="3VD-zU-QX4">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                    </menuItem>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="valueChanged:" target="ThX-aN-0qg" id="CX3-lb-Kua"/>
+                        </connections>
+                    </popUpButton>
+                </subviews>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="ThX-aN-0qg" id="Nhp-Rc-VBJ"/>
+            </connections>
+            <point key="canvasLocation" x="134" y="1594"/>
         </window>
     </objects>
     <resources>

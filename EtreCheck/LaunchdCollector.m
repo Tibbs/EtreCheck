@@ -13,6 +13,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
+#import "SearchEngine.h"
 
 @implementation LaunchdCollector
 
@@ -427,8 +428,8 @@
     return
       [NSString
         stringWithFormat:
-          @"https://www.google.com/search?q=%@+support+site:%@",
-          nameParameter, host];
+          @"%@%@+support+site:%@",
+          [SearchEngine searchEngineURL], nameParameter, host];
     }
   
   // This file isn't following standard conventions. Look for uninstall
@@ -436,7 +437,7 @@
   return
     [NSString
       stringWithFormat:
-        @"https://www.google.com/search?q=%@+uninstall+support", bundleID];
+        @"%@%@+uninstall+support", [SearchEngine searchEngineURL], bundleID];
   }
 
 // Set the details URL.

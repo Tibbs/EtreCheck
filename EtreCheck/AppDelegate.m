@@ -26,6 +26,7 @@
 #import "AdwareManager.h"
 #import "UnknownFilesManager.h"
 #import "UpdateManager.h"
+#import "PreferencesManager.h"
 #import "SubProcess.h"
 
 // Toolbar items.
@@ -103,6 +104,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize unknownFilesManager = myUnknownFilesManager;
+@synthesize preferencesManager = myPreferencesManager;
 @synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
@@ -1969,6 +1971,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [[NSApplication sharedApplication]
     orderFrontStandardAboutPanelWithOptions: @{@"Version" : @""}];
+  }
+
+// Show the preferences panel.
+- (IBAction) showPreferences: (id) sender
+  {
+	  [self.preferencesManager show];
   }
 
 // Go to the Etresoft web site.
