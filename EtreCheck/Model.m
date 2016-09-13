@@ -9,6 +9,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "LaunchdCollector.h"
+#import "XMLBuilder.h"
 
 @implementation Model
 
@@ -51,7 +52,7 @@
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize sip = mySIP;
-@synthesize results = myResults;
+@synthesize XML = myXML;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -106,7 +107,7 @@
   
   if(self)
     {
-    myResults = [NSMutableDictionary new];
+    myXML = [XMLBuilder new];
     myUnknownFiles = [NSMutableArray new];
     myLaunchdFiles = [NSMutableDictionary new];
     myVolumes = [NSMutableDictionary new];
@@ -134,7 +135,7 @@
 // Destructor.
 - (void) dealloc
   {
-  [myResults release];
+  [myXML release];
   [myUnknownFiles release];
   [myAdwareFiles release];
   [myBlacklistSuffixes release];

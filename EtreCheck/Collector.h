@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class XMLBuilder;
+
 // Base class for all collector activities. Also has values like current
 // OS version that may be needed by all collectors.
 @interface Collector : NSObject
@@ -13,7 +15,6 @@
   NSString * myName;
   NSString * myTitle;
   NSMutableAttributedString * myResult;
-  NSMutableDictionary * myResults;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
   }
@@ -26,7 +27,9 @@
 
 // Keep track of the results of this collector.
 @property (retain) NSMutableAttributedString * result;
-@property (retain) NSMutableDictionary * results;
+
+// The XML output.
+@property (readonly) XMLBuilder * XML;
 
 // Allow people to know when a collection is complete.
 @property (assign) dispatch_semaphore_t complete;

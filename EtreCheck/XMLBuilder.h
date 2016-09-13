@@ -79,4 +79,117 @@
 // The stack of elements.
 @property (retain) NSMutableArray * elements;
 
+// Pop the stack and return what we have.
+- (NSString *) XML;
+  
+// Start a new element.
+- (void) startElement: (NSString *) name;
+  
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name value: (NSString *) value;
+
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name number: (NSNumber *) value;
+  
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name date: (NSDate *) date;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name boolValue: (BOOL) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name intValue: (int) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name longValue: (long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name longlongValue: (long long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name
+  unsignedIntValue: (unsigned int) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name
+  unsignedLongValue: (unsigned long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name
+  unsignedLonglongValue: (unsigned long long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name integerValue: (NSInteger) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name float: (float) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name doubleValue: (double) value;
+
+// Add an element and value with a conveneience function.
+- (void) addAttribute: (NSString *) name UTF8StringValue: (char *) value;
+
+// Add a string to the current element's contents.
+- (void) addString: (NSString *) string;
+
+// Add a CDATA string.
+- (void) addCDATA: (NSString *) cdata;
+  
+// Finish the current element.
+- (void) endElement: (NSString *) name;
+  
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name value: (NSString *) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name number: (NSNumber *) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name date: (NSDate *) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name boolValue: (BOOL) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name intValue: (int) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name longValue: (long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name longlongValue: (long long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name
+  unsignedIntValue: (unsigned int) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name
+  unsignedLongValue: (unsigned long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name
+  unsignedLonglongValue: (unsigned long long) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name integerValue: (NSInteger) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name float: (float) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name doubleValue: (double) value;
+
+// Add an element and value with a conveneience function.
+- (void) addElement: (NSString *) name UTF8StringValue: (char *) value;
+
 @end

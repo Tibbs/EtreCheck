@@ -13,6 +13,7 @@
 #import "NSDictionary+Etresoft.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -82,15 +83,15 @@
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
-  [self.results setObject: computerName forKey: kComputerName];
-  [self.results setObject: hostName forKey: kHostName];
+  [self.XML addElement: kComputerName value: computerName];
+  [self.XML addElement: kHostName value: hostName];
   
   [computerName release];
   [hostName release];
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
@@ -112,14 +113,6 @@
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [self.results
-    setObject: [NSNumber numberWithBool: NO] forKey: kSupportsHandoff];
-  [self.results
-    setObject: [NSNumber numberWithBool: NO]
-    forKey: kSupportsInstantHotspot];
-  [self.results
-    setObject: [NSNumber numberWithBool: NO] forKey: kSupportsLowEnergy];
   
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
@@ -149,36 +142,25 @@
                 [localInfo objectForKey: @"general_supports_lowEnergy"];
                 
               if([supportsHandoff isEqualToString: @"attrib_Yes"])
-                {
                 self.supportsHandoff = YES;
                 
-                [self.results
-                  setObject: [NSNumber numberWithBool: YES]
-                  forKey: kSupportsHandoff];
-                }
-                
               if([supportsInstantHotspot isEqualToString: @"attrib_Yes"])
-                {
                 self.supportsInstantHotspot = YES;
-                
-                [self.results
-                  setObject: [NSNumber numberWithBool: YES]
-                  forKey: kSupportsInstantHotspot];
-                }
 
               if([supportsLowEnergy isEqualToString: @"attrib_Yes"])
-                {
                 self.supportsLowEnergy = YES;
-                
-                [self.results
-                  setObject: [NSNumber numberWithBool: YES]
-                  forKey: kSupportsLowEnergy];
-                }
                }
             }
       }
     }
     
+  [self.XML addElement: kSupportsHandoff boolValue: self.supportsHandoff];
+  [self.XML
+    addElement: kSupportsInstantHotspot
+    boolValue: self.supportsInstantHotspot];
+  [self.XML
+    addElement: kSupportsLowEnergy boolValue: self.supportsLowEnergy];
+  
   [subProcess release];
   }
 
@@ -238,24 +220,23 @@
   int physicalRAM = [self parseMemory: memory];
 
   [[Model model] setModel: model];
-  [self.results setObject: model forKey: kModel];
+  [self.XML addElement: kModel value: model];
   
   // Extract the memory.
   [[Model model]
     setPhysicalRAM: physicalRAM];
-  [self.results
-    setObject: [NSNumber numberWithInt: physicalRAM] forKey: kPhysicalRAM];
+  [self.XML addElement: kPhysicalRAM intValue: physicalRAM];
 
   NSString * serialCode = [serial substringFromIndex: 8];
   
   [[Model model] setSerialCode: serialCode];
   [[Model model] setCoreCount: [core_count intValue]];
 
-  [self.results setObject: serialCode forKey: kSerialCode];
-  [self.results setObject: cpu_count forKey: kCPUCount];
-  [self.results setObject: speed forKey: kCPUSpeed];
-  [self.results setObject: core_count forKey: kCoreCount];
-  [self.results setObject: cpu_type forKey: kCPUType];
+  [self.XML addElement: kSerialCode value: serialCode];
+  [self.XML addElement: kCPUCount number: cpu_count];
+  [self.XML addElement: kCPUSpeed value: speed];
+  [self.XML addElement: kCoreCount number: core_count];
+  [self.XML addElement: kCPUType value: cpu_type];
 
   // Print the human readable machine name, if I can find one.
   [self printHumanReadableMacName: model];
@@ -308,8 +289,7 @@
     if(![self.marketingName length])
       self.marketingName = [machineProperties objectForKey: kMachineName];
 
-    if([self.marketingName length])
-        [self.results setObject: self.marketingName forKey: kMarketingName];
+    [self.XML addElement: kMarketingName value: self.marketingName];
 
     [[Model model]
       setMachineIcon: [machineProperties objectForKey: kMachineIcon]];
@@ -513,6 +493,8 @@
   
   bool upgradeable = NO;
   NSString * upgradeableString = @"";
+  NSString * upgradeURL = nil;
+  NSString * language = NSLocalizedString(@"en", NULL);
   
   if(details)
     {
@@ -521,9 +503,7 @@
     
     upgradeable = [isUpgradeable boolValue];
     
-    [self.results
-      setObject: [NSNumber numberWithBool: upgradeable]
-      forKey: kMemoryUpgradeable];
+    [self.XML startElement: kMemoryUpgradeable];
     
     // Snow Leopoard doesn't seem to report this.
     if(isUpgradeable)
@@ -531,10 +511,28 @@
         upgradeable
           ? NSLocalizedString(@"Upgradeable", NULL)
           : NSLocalizedString(@"Not upgradeable", NULL);
+      
+    if(upgradeable)
+      {
+      upgradeURL = [self memoryUpgradeURL: language];
+      
+      [self.XML addAttribute: kMemoryUpgradeURL value: upgradeURL];
+      }
+      
+    [self.XML addString: upgradeableString];
+    
+    [self.XML endElement: kMemoryUpgradeable];
     }
     
+  [self.XML addElement: kMemoryAmount value: memory];
+  
   if([[Model model] physicalRAM] < 4)
     {
+    [self.XML addAttribute: kSeverity value: kCritical];
+    [self.XML
+      addElement: kExplanation
+      value: NSLocalizedString(@"insufficientram", NULL)];
+    
     [self.result
       appendString:
         [NSString
@@ -554,8 +552,6 @@
         [NSString
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
-  NSString * language = NSLocalizedString(@"en", NULL);
-
   if(upgradeable)
     {
     [self.result appendString: @" - "];
@@ -563,7 +559,7 @@
     [self.result
       appendAttributedString:
         [Utilities
-          buildURL: [self memoryUpgradeURL: language]
+          buildURL: upgradeURL
           title:
             NSLocalizedString(
               @"[Instructions]\n", NULL)]];
@@ -616,15 +612,23 @@
   NSString * lastBankID = nil;
   int bankCount = 0;
   
-  [self.results setObject: banks forKey: kMemoryBanks];
+  [self.XML startElement: kMemoryBanks];
   
   for(NSDictionary * bank in banks)
     {
+    [self.XML startElement: kMemoryBank];
+    
     NSString * name = [bank objectForKey: @"_name"];
     NSString * size = [bank objectForKey: @"dimm_size"];
     NSString * type = [bank objectForKey: @"dimm_type"];
     NSString * speed = [bank objectForKey: @"dimm_speed"];
     NSString * status = [bank objectForKey: @"dimm_status"];
+    
+    [self.XML addElement: name value: kMemoryBankName];
+    [self.XML addElement: size value: kMemoryBankSize];
+    [self.XML addElement: type value: kMemoryBankType];
+    [self.XML addElement: speed value: kMemoryBankSpeed];
+    [self.XML addElement: status value: kMemoryBankStatus];
     
     NSString * currentBankID =
       [NSString stringWithFormat: @"        %@", name];
@@ -668,6 +672,8 @@
       lastBankID = currentBankID;
       }
     }
+    
+  [self.XML endElement: kMemoryBanks];
   }
 
 // Print information about bluetooth.
@@ -768,6 +774,8 @@
         
       if([infos count])
         {
+        [self.XML startElement: kWirelessInterfaces];
+        
         for(NSDictionary * info in infos)
           {
           NSArray * interfaces =
@@ -783,13 +791,13 @@
                     @"    Wireless: %@",
                     TTTLocalizedPluralString(count, @"interface", nil)]];
           
-          [self.results setObject: interfaces forKey: kWirelessInterfaces];
-          
           for(NSDictionary * interface in interfaces)
             [self
               printWirelessInterface: interface
               indent: count > 1 ? @"        " : @" "];
           }
+          
+        [self.XML endElement: kWirelessInterfaces];
         }
       }
     }
@@ -801,16 +809,25 @@
 - (void) printWirelessInterface: (NSDictionary *) interface
   indent: (NSString *) indent
   {
+  [self.XML startElement: kWirelessInterface];
+          
   NSString * name = [interface objectForKey: @"_name"];
   NSString * modes =
     [interface objectForKey: @"spairport_supported_phymodes"];
 
+  [self.XML addElement: kWirelessInterfaceName value: name];
+  
   if([modes length])
+    {
+    [self.XML addElement: kWirelessInterfaceModes value: modes];
     [self.result
       appendString:
         [NSString stringWithFormat: @"%@%@: %@\n", indent, name, modes]];
+    }
   else
     [self.result appendString: NSLocalizedString(@"Unknown", NULL)];
+
+  [self.XML endElement: kWirelessInterface];
   }
 
 // Print battery information.
@@ -850,20 +867,12 @@
   NSString * serialNumber = @"";
   BOOL serialNumberInvalid = NO;
   
-  [self.results setObject: infos forKey: kBatteryInformation];
+  [self.XML startElement: kBatteryInformation];
   
   for(NSDictionary * info in infos)
     {
-    NSDictionary * healthInfo =
-      [info objectForKey: @"sppower_battery_health_info"];
-      
-    if(healthInfo)
-      {
-      cycleCount =
-        [healthInfo objectForKey: @"sppower_battery_cycle_count"];
-      health = [healthInfo objectForKey: @"sppower_battery_health"];
-      }
-
+    [self.XML startElement: kBattery];
+    
     NSDictionary * modelInfo =
       [info objectForKey: @"sppower_battery_model_info"];
       
@@ -876,6 +885,37 @@
       //if([serialNumber isEqualToString: @"D865033Y2CXF9CPAW"])
         serialNumberInvalid = YES;
       }
+
+    NSDictionary * healthInfo =
+      [info objectForKey: @"sppower_battery_health_info"];
+      
+    BOOL needsReplacing = NO;
+    
+    if(healthInfo)
+      {
+      cycleCount =
+        [healthInfo objectForKey: @"sppower_battery_cycle_count"];
+      health = [healthInfo objectForKey: @"sppower_battery_health"];
+      
+      if([health isEqualToString: @"Poor"])
+        needsReplacing = YES;
+
+      [self.XML addElement: kBatteryCycleCount number: cycleCount];
+      [self.XML addElement: kBatteryHealth value: health];
+      }
+      
+    if(serialNumberInvalid || needsReplacing)
+      {
+      [self.XML addAttribute: kSeverity value: kWarning];
+      
+      if(needsReplacing)
+        [self.XML addAttribute: kExplanation value: @"needs replacing"];
+      else
+        [self.XML
+          addAttribute: kExplanation value: @"invalid serial number"];
+      }
+      
+    [self.XML endElement: kBattery];
     }
     
   if(cycleCount && [health length])
@@ -902,6 +942,8 @@
             dictionaryWithObjectsAndKeys:
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
     }
+    
+  [self.XML endElement: kBatteryInformation];
   }
 
 @end

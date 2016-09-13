@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "XMLBuilder.h"
 
 @implementation Collector
 
@@ -16,11 +17,18 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
+@dynamic XML;
 
 // Is this collector complete?
 - (bool) done
   {
   return !dispatch_semaphore_wait(self.complete, DISPATCH_TIME_NOW);
+  }
+
+// The model's XMLBuilder.
+- (XMLBuilder *) XML
+  {
+  return [[Model model] XML];
   }
 
 // Constructor with name.
@@ -30,15 +38,12 @@
   
   if(self)
     {
-    myResults = [NSMutableDictionary new];
     myResult = [NSMutableAttributedString new];
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
 
     self.name = name;
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-    
-    [[[Model model] results] setObject: myResults forKey: self.name];
     }
     
   return self;
@@ -50,7 +55,6 @@
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
-  [myResults release];
   
   [super dealloc];
   }
@@ -58,7 +62,17 @@
 // Perform the collection.
 - (void) collect
   {
-  // Derived classes must implement.
+  [self.XML startElement: self.name];
+  
+  [self performCollection];
+  
+  [self.XML endElement: self.name];
+  }
+
+// Perform the collection.
+- (void) performCollection
+  {
+  // Derived classes must override.
   }
 
 // Update status.

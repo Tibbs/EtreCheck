@@ -45,11 +45,33 @@
 #define kCPUType @"cputype"
 #define kMarketingName @"marketingname"
 #define kMemoryUpgradeable @"memoryupgradeable"
+#define kMemoryUpgradeURL @"src"
+#define kMemoryAmount @"total"
 #define kMemoryBanks @"memorybanks"
+#define kMemoryBank @"memorybank"
+#define kMemoryBankName @"name"
+#define kMemoryBankSize @"size"
+#define kMemoryBankType @"type"
+#define kMemoryBankSpeed @"speed"
+#define kMemoryBankStatus @"status"
 #define kWirelessInterfaces @"wirelessinterfaces"
+#define kWirelessInterface @"wirelessinterface"
+#define kWirelessInterfaceName @"name"
+#define kWirelessInterfaceModes @"modes"
 #define kBatteryInformation @"batteryinformation"
+#define kBatteryInformation @"batteryinformation"
+#define kBattery @"battery"
+#define kBatteryCycleCount @"cyclecount"
+#define kBatteryHealth @"health"
+
+#define kSeverity @"severity"
+#define kCritical @"critical"
+#define kSerious @"serious"
+#define kWarning @"warning"
+#define kExplanation @"why"
 
 @class DiagnosticEvent;
+@class XMLBuilder;
 
 // A singleton to keep track of system information.
 @interface Model : NSObject
@@ -95,7 +117,7 @@
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
   bool mySIP;
-  NSMutableDictionary * myResults;
+  XMLBuilder * myXML;
   }
 
 // Keep track of the OS version.
@@ -222,8 +244,8 @@
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
 
-// EtreCheck results.
-@property (retain) NSMutableDictionary * results;
+// EtreCheck XML results.
+@property (retain) XMLBuilder * XML;
 
 // Return the singeton of shared values.
 + (Model *) model;

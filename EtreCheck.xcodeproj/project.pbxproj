@@ -48,6 +48,7 @@
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */; };
 		A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */; };
+		A57B0D781D8117B900DAD47C /* XMLBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A53822391D5FF27200484388 /* XMLBuilder.m */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
 		A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */; };
@@ -643,6 +644,7 @@
 				A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */,
 				A5D25B2D19C4D11F006728B8 /* TTTLocalizedPluralString.m in Sources */,
 				A50C9DCB19A4065B00BA6A25 /* InternetPlugInsCollector.m in Sources */,
+				A57B0D781D8117B900DAD47C /* XMLBuilder.m in Sources */,
 				A50C9DBC19A3690F00BA6A25 /* ConfigurationCollector.m in Sources */,
 				A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */,
 				A50C9DC519A4052000BA6A25 /* LoginItemsCollector.m in Sources */,

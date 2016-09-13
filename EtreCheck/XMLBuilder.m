@@ -4,6 +4,7 @@
  **********************************************************************/
 
 #import "XMLBuilder.h"
+#import "Utilities.h"
 
 // Invalid element name.
 @interface InvalidElementName : XMLException
@@ -125,7 +126,7 @@ AttemptToCloseWrongElement *
   }
   
 // Add an attribute to the current element.
-- (void) addAttribute: (NSString *) name value: (NSObject *) value
+- (void) addAttribute: (NSString *) name value: (NSString *) value
   {
   if(value == nil)
     return;
@@ -133,299 +134,517 @@ AttemptToCloseWrongElement *
   if(![self validName: name])
     @throw InvalidAttributeNameException(name);
 
-  NSString * attributeStringValue = [value stringValue];
-  
-  if(![self validAttributeValue: attributeStringValue])
-    @throw InvalidAttributeValueException(attributeStringValue);
+  if(![self validAttributeValue: value])
+    @throw InvalidAttributeValueException(value);
 
   XMLElement * topElement = [self.elements lastObject];
   
   if(topElement != nil)
-    topElement.attributes[name] = attributeStringValue;
+    topElement.attributes[name] = value;
+  }
+
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name number: (NSNumber *) value
+  {
+  [self addAttribute: name value: [value stringValue]];
   }
   
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name date: (NSDate *) date
+  {
+  [self addAttribute: name value: [Utilities dateAsString: date]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name boolValue: (BOOL) value
+  {
+  [self addAttribute: name value: value ? @"true" : @"false"];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name intValue: (int) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%d", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name longValue: (long) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%ld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name longlongValue: (long long) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%lld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name
+  unsignedIntValue: (unsigned int) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%d", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name
+  unsignedLongValue: (unsigned long) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%lu", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name
+  unsignedLonglongValue: (unsigned long long) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%llu", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name integerValue: (NSInteger) value
+  {
+  [self
+    addAttribute: name
+    value: [NSString stringWithFormat: @"%ld", (long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value
+  {
+  [self
+    addAttribute: name
+    value: [NSString stringWithFormat: @"%lu", (unsigned long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name float: (float) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name doubleValue: (double) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addAttribute: (NSString *) name UTF8StringValue: (char *) value
+  {
+  [self
+    addAttribute: name value: [NSString stringWithFormat: @"%s", value]];
+  }
+
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string
   {
-  NSString * text = @"";
+  NSMutableString * text = [NSMutableString new];
   
   XMLElement * topElement = [self.elements lastObject];
   
   if(topElement != nil)
     {
-    for ch in string.characters
+    NSUInteger length = [string length] + 1;
+    
+    unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
+    unichar * end = characters + length;
+    
+    [string getCharacters: characters range: NSMakeRange(0, length)];
+    
+    for(unichar * ch = characters; ch < end; ++ch)
       {
-      switch(ch)
+      switch(*ch)
         {
-        case "<":
-          text += "&lt;"
-          topElement.empty = false
-          break
-        case ">":
-          text += "&gt;"
-          topElement.empty = false
-          break
-        case "&":
-          text += "&amp;"
-          topElement.empty = false
-          break
-        case "\n":
-          fallthrough
-        case "\r":
-          topElement.singleLine = false
-          fallthrough
+        case '<':
+          [text appendString: @"&lt;"];
+          topElement.empty = NO;
+          break;
+        case '>':
+          [text appendString: @"&gt;"];
+          topElement.empty = NO;
+          break;
+        case '&':
+          [text appendString: @"&amp;"];
+          topElement.empty = NO;
+          break;
+        case '\n':
+        case '\r':
+          topElement.singleLine = NO;
         default:
-          text.append(ch)
-          topElement.empty = false
-          break
+          [text
+            appendString: [NSString stringWithCharacters: ch length: 1]];
+          topElement.empty = NO;
+          break;
         }
       }
     
-    topElement.contents += text
+    [topElement.contents appendString: text];
+    
+    free(characters);
+    }
+    
+  [text release];
+  }
+
+// Add a CDATA string.
+- (void) addCDATA: (NSString *) cdata
+  {
+  [self addString: cdata];
+  
+  XMLElement * topElement = [self.elements lastObject];
+  
+  if(topElement != nil)
+    topElement.CDATARequired = YES;
+  }
+  
+// Finish the current element.
+- (void) endElement: (NSString *) name
+  {
+  // If I already have an element, I can go ahead and emit it now.
+  XMLElement * topElement = [self.elements lastObject];
+  
+  if(topElement != nil)
+    {
+    if(![name isEqualToString: topElement.name])
+      @throw AttemptToCloseWrongElementException(name);
+    
+    self.indent = self.indent - 1;
+
+    [self.document appendString: [self emitEndTag: topElement]];
+    
+    [self.elements removeLastObject];
     }
   }
   
-  // Add a CDATA string.
-  func addCDATA(cdata: String)
-    {
-    addString(cdata)
-    
-    if let topElement = elements.last
-      {
-      topElement.CDATARequired = true
-      }
-    }
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name value: (NSString *) value
+  {
+  [self startElement: name];
   
-  // Finish the current element.
-  func endElement(name: String) throws
-    {
-    // If I already have an element, I can go ahead and emit it now.
-    if let topElement = elements.last
-      {
-      if name != topElement.name
-        {
-        throw Exception.AttemptToCloseWrongElement(name: name)
-        }
-      
-      indent -= 1
+  if([value length] > 0)
+    [self addString: value];
+    
+  [self endElement: name];
+  }
 
-      document += emitEndTag(topElement)
-      
-      elements.removeLast()
-      }
-    }
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name number: (NSNumber *) value
+  {
+  if(value == nil)
+    [self addElement: name value: nil];
+  else
+    [self addElement: name value: [value stringValue]];
+  }
+
+// Add an element to the current element.
+- (void) addElement: (NSString *) name date: (NSDate *) date
+  {
+  [self addElement: name value: [Utilities dateAsString: date]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name boolValue: (BOOL) value;
+  {
+  [self addElement: name value: value ? @"true" : @"false"];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name intValue: (int) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%d", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name longValue: (long) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%ld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name longlongValue: (long long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%lld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntValue: (unsigned int) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%ud", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLongValue: (unsigned long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%lud", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLonglongValue: (unsigned long long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%llulld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name integerValue: (NSInteger) value
+  {
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ld", (long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value
+  {
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name float: (float) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name doubleValue: (double) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name UTF8StringValue: (char *) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%s", value]];
+  }
+
+// MARK: Formatting
+
+// Emit a start tag.
+- (NSMutableString *) emitStartTag: (XMLElement *) element
+  {
+  return [self emitStartTag: element autoclose: NO];
+  }
   
-  // Add an element and value with a conveneience function.
-  func addElement<T>(name: String, value: T?) throws
+// Emit a start tag.
+- (NSMutableString *) emitStartTag: (XMLElement *) element
+  autoclose: (BOOL) autoclose
+  {
+  if(!element.startTagEmitted)
     {
-    if let elementValue = value
-      {
-      try startElement(name)
-      addString("\(elementValue)")
-      try endElement(name)
-      }
-    }
-  
-  // MARK: Formatting
-  
-  // Emit a start tag.
-  func emitStartTag(element: Element, autoclose: Bool = false) -> String
-    {
-    if !element.startTagEmitted
-      {
-      element.startTagEmitted = true
-      
-      var tag = emitIndentString(element)
-      
-      tag += "<\(element.name)"
-      
-      for (name, value) in element.attributes
-        {
-        tag += " \(name)=\"\(value)\""
-        }
-        
-      // This is an end tag too and end tags always terminate a line.
-      if autoclose
-        {
-        tag += "/>\n"
-        }
-      else
-        {
-        tag += ">"
-        }
-        
-      return tag
-      }
-      
-    return ""
-    }
-  
-  // Emit contents of a tag.
-  func emitContents(element: Element) -> String
-    {
-    var fragment = ""
+    element.startTagEmitted = YES;
     
-    if element.CDATARequired
-      {
-      fragment += "<![CDATA[\(element.contents)]]>"
-      }
+    NSMutableString * tag =
+      [NSMutableString stringWithString: [self emitIndentString: element]];
+    
+    [tag appendFormat: @"<%@", element.name];
+    
+    for(NSString * name in element.attributes)
+      [tag
+        appendFormat:
+          @" %@=\"%@\"", name, [element.attributes objectForKey: name]];
+      
+    // This is an end tag too and end tags always terminate a line.
+    if(autoclose)
+      [tag appendString: @"/>\n"];
+      
     else
-      {
-      fragment += element.contents
-      }
+      [tag appendString: @">"];
       
-    element.contents = ""
-    element.CDATARequired = false
-    
-    return fragment
+    return tag;
     }
-  
-  // Emit an ending tag.
-  func emitEndTag(element: Element) -> String
-    {
-    var fragment = emitIndentString(element)
     
-    // Emit the start tag if I haven't already done so.
-    if !element.startTagEmitted
-      {
-      // If this is an empty node, emit an autoclosing note and return.
-      if element.empty
-        {
-        fragment = emitStartTag(element, autoclose: true)
-        
-        return fragment
-        }
-        
-      fragment = emitStartTag(element)
-      }
+  return [NSMutableString string];
+  }
+  
+// Emit contents of a tag.
+- (NSString *) emitContents: (XMLElement *) element
+  {
+  NSMutableString * fragment = [NSMutableString string];
+  
+  if(element.CDATARequired)
+    [fragment appendFormat: @"<![CDATA[%@]]>", element.contents];
+    
+  else
+    [fragment appendString: element.contents];
+    
+  [element.contents setString: @""];
+  element.CDATARequired = NO;
+  
+  return fragment;
+  }
+  
+// Emit an ending tag.
+- (NSString *) emitEndTag: (XMLElement *) element
+  {
+  NSMutableString * fragment = [self emitIndentString: element];
+  
+  // Emit the start tag if I haven't already done so.
+  if(!element.startTagEmitted)
+    {
+    // If this is an empty node, emit an autoclosing note and return.
+    if(element.empty)
+      return [self emitStartTag: element autoclose: YES];
       
-    fragment += element.contents
+    fragment = [self emitStartTag: element];
+    }
+    
+  [fragment appendString: element.contents];
 
-    fragment += "</\(element.name)>"
-    
-    // End tags always terminate a line.
-    if pretty
-      {
-      fragment += "\n"
-      }
-      
-    return fragment
-    }
+  [fragment appendFormat: @"</%@>", element.name];
   
-  // Emit an indent string.
-  func emitIndentString(element: Element) -> String
-    {
-    var s = ""
+  // End tags always terminate a line.
+  if(self.pretty)
+    [fragment appendString: @"\n"];
     
-    for _ in 0..<element.indent
-      {
-      s += "  "
-      }
-      
-    return s
-    }
+  return fragment;
+  }
   
-  // MARK: Validation
+// Emit an indent string.
+- (NSMutableString *) emitIndentString: (XMLElement *) element
+  {
+  NSMutableString * s = [NSMutableString string];
   
-  // Validate a name.
-  func validName(name: String) -> Bool
-    {
-    var first = true
+  for(int i = 0; i < element.indent; ++i)
+    [s appendString: @"  "];
     
-    for ch in name.characters
-      {
-      switch(ch)
-        {
-        case ":", "_":
-          break
-        case "A"..."Z", "a"..."z" :
-          break
-        case "\u{C0}"..."\u{D6}":
-          break
-        case "\u{D8}", "\u{D9}"..."\u{F6}":
-          break
-        case "\u{F8}"..."\u{2FF}":
-          break
-        case "\u{370}"..."\u{37D}":
-          break
-        case "\u{37F}"..."\u{1FFF}":
-          break
-        case "\u{200C}"..."\u{200D}":
-          break
-        case "\u{2070}"..."\u{218F}":
-          break
-        case "\u{2C00}"..."\u{2FEF}":
-          break
-        case "\u{3001}"..."\u{D7FF}":
-          break
-        case "\u{F900}"..."\u{FDCF}":
-          break
-        case "\u{FDF0}"..."\u{FFFD}":
-          break
-        case "\u{10000}"..."\u{EFFFF}":
-          break
-        default:
-          if first
-            {
-            return false
-            }
-          
-          if !validiateOtherCharacters(ch)
-            {
-            return false
-            }
-        }
+  return s;
+  }
 
-      first = false
+// MARK: Validation
+
+// Validate a name.
+- (BOOL) validName: (NSString *) name
+  {
+  BOOL first = YES;
+  
+  NSUInteger length = [name length];
+  
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
+  unichar * end = characters + length;
+  
+  [name getCharacters: characters range: NSMakeRange(0, length)];
+  
+  for(unichar * ch = characters; ch < end; ++ch)
+    {
+    if(*ch == ':' || *ch == '_')
+      continue;
+    if(((*ch >= 'A') && (*ch <= 'Z')) || ((*ch >= 'a') && (*ch <= 'z')))
+      continue;
+    if((*ch >= L'\u00C0') && (*ch <= L'\u00D6'))
+      continue;
+    if((*ch == L'\u00D8') || ((*ch >= L'\u00D9') && (*ch <= L'\u00F6')))
+      continue;
+    if((*ch >= L'\u00F8') && (*ch <= L'\u02FF'))
+      continue;
+    if((*ch >= L'\u0370') && (*ch <= L'\u037D'))
+      continue;
+    if((*ch >= L'\u037F') && (*ch <= L'\u1FFF'))
+      continue;
+    if((*ch >= L'\u200C') && (*ch <= L'\u200D'))
+      continue;
+    if((*ch >= L'\u2070') && (*ch <= L'\u218F'))
+      continue;
+    if((*ch >= L'\u2C00') && (*ch <= L'\u2FEF'))
+      continue;
+    if((*ch >= L'\u3001') && (*ch <= L'\uD7FF'))
+      continue;
+    if((*ch >= L'\uF900') && (*ch <= L'\uFDCF'))
+      continue;
+    if((*ch >= L'\uFDF0') && (*ch <= L'\uFFFD'))
+      continue;
+    //if((*ch >= L'\U00010000') && (*ch <= L'\U000EFFFF'))
+    //  continue;
+    if(first)
+      return NO;
+      
+    if(![self validiateOtherCharacters: *ch])
+      return NO;
+
+    first = NO;
+    }
+
+  free(characters);
+    
+  return YES;
+  }
+  
+// Validate other characters in a name.
+- (BOOL) validiateOtherCharacters: (unichar) ch
+  {
+  if(ch == '-')
+    return YES;
+    
+  if(ch == '.')
+    return YES;
+    
+  if((ch >= '0') && (ch <= '9'))
+    return YES;
+    
+  if(ch == L'\u00B7')
+    return YES;
+    
+  if((ch >= L'\u0300') && (ch <= L'\u036F'))
+    return YES;
+    
+  if((ch >= L'\u203F') && (ch <= L'\u2040'))
+    return YES;
+  
+  return NO;
+  }
+  
+// Validate an attribute name.
+- (BOOL) validAttributeValue: (NSString *) name
+  {
+  NSUInteger length = [name length];
+  
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
+  unichar * end = characters + length;
+  
+  [name getCharacters: characters range: NSMakeRange(0, length)];
+  
+  BOOL result = YES;
+  
+  for(unichar * ch = characters; ch < end; ++ch)
+    {
+    if(*ch == '<')
+      {
+      result = NO;
+      break;
       }
       
-    return true
-    }
-  
-  // Validate other characters in a name.
-  func validiateOtherCharacters(ch: Character) -> Bool
-    {
-    switch(ch)
+    if(*ch == '&')
       {
-      case "-":
-        break
-      case "." :
-        break
-      case "0"..."9" :
-        break
-      case "\u{B7}":
-        break
-      case "\u{0300}"..."\u{036F}":
-        break
-      case "\u{203F}"..."\u{2040}":
-        break
-      default:
-        return false
-      }
-      
-    return true
-    }
-  
-  // Validate an attribute name.
-  func validAttributeValue(name: String) -> Bool
-    {
-    for ch in name.characters
-      {
-      switch(ch)
-        {
-        case "<":
-          return false
-        case "&":
-          return false
-        case "\"":
-          return false
-        default:
-          break
-        }
+      result = NO;
+      break;
       }
 
-    return true
+    if(*ch == '"')
+      {
+      result = NO;
+      break;
+      }
     }
+
+  free(characters);
+
+  return result;
   }
 
 @end
@@ -450,3 +669,5 @@ AttemptToCloseWrongElement *
   {
   return nil;
   }
+
+
