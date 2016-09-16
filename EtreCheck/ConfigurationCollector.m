@@ -127,6 +127,9 @@
       case kElCapitan:
         expectedSize = 2299;
         break;
+      case kSierra:
+        expectedSize = 2299;
+        break;
       }
     
     // All the beta testers have an El Capitan file.
