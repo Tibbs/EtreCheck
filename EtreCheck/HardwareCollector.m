@@ -624,11 +624,11 @@
     NSString * speed = [bank objectForKey: @"dimm_speed"];
     NSString * status = [bank objectForKey: @"dimm_status"];
     
-    [self.XML addElement: name value: kMemoryBankName];
-    [self.XML addElement: size value: kMemoryBankSize];
-    [self.XML addElement: type value: kMemoryBankType];
-    [self.XML addElement: speed value: kMemoryBankSpeed];
-    [self.XML addElement: status value: kMemoryBankStatus];
+    [self.XML addElement: kMemoryBankName value: name];
+    [self.XML addElement: kMemoryBankSize value: size];
+    [self.XML addElement: kMemoryBankType value: type];
+    [self.XML addElement: kMemoryBankSpeed value: speed];
+    [self.XML addElement: kMemoryBankStatus value: status];
     
     NSString * currentBankID =
       [NSString stringWithFormat: @"        %@", name];
@@ -671,6 +671,8 @@
       
       lastBankID = currentBankID;
       }
+
+    [self.XML endElement: kMemoryBank];
     }
     
   [self.XML endElement: kMemoryBanks];

@@ -12,6 +12,7 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "LaunchdCollector.h"
+#import "XMLBuilder.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -222,6 +223,14 @@
   if(days > 0)
     hourString = @"";
     
+  NSString * humanUptime =
+    [NSString stringWithFormat: @"%@%@", dayString, hourString];
+  
+  [self.XML addElement: kSystemSoftwareVersion value: marketingName];
+  [self.XML addElement: kSystemBuild value: [[Model model] OSBuild]];
+  [self.XML addElement: kSystemUptime value: uptime];
+  [self.XML addElement: kHumanUptime value: humanUptime];
+  
   [self.result
     appendString:
       [NSString
@@ -338,6 +347,9 @@
       [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
       
       [[Model model] setMinorOSVersion: ch - 'A'];
+      [[Model model]
+        setOSBuild:
+          [NSString stringWithFormat: @"%d%@", majorVersion, minorVersion]];
       }
     }
   }

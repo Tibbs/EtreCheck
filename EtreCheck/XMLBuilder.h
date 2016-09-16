@@ -14,70 +14,51 @@
 @interface XMLElement : NSObject
   {
   NSString * myName;
+  XMLElement * myParent;
   NSMutableDictionary * myAttributes;
-  NSMutableString * myContents;
-  BOOL myCDATARequired;
-  BOOL myParent;
-  BOOL myEmpty;
   BOOL mySingleLine;
-  BOOL myStartTagEmitted;
-  int myIndent;
+  BOOL myCDATARequired;
+  NSMutableArray * myChildren;
+  NSMutableArray * myOpenChildren;
   }
 
 // The name of the element.
 @property (retain) NSString * name;
 
+// The element's parent.
+@property (assign) XMLElement * parent;
+
 // The element's attributes.
 @property (retain) NSMutableDictionary * attributes;
 
-// The element's (current) contents.
-@property (retain) NSMutableString * contents;
+// Are the contents of this element a single line string?
+@property (assign) BOOL singleLine;
 
 // Do the current contents require a CDATA?
 @property (assign) BOOL CDATARequired;
 
-// Is this element a parent of another element?
-@property (assign) BOOL parent;
+// The stack of closed children.
+@property (retain) NSMutableArray * children;
 
-// Is the current element empty?
-@property (assign) BOOL empty;
-
-// Is the current element a single-line element?
-@property (assign) BOOL singleLine;
-
-// Has the begin tag been emitted?
-@property (assign) BOOL startTagEmitted;
-
-// This element's indent level.
-@property (assign) int indent;
+// The stack of open children.
+@property (retain) NSMutableArray * openChildren;
 
 // Constructor with name and indent.
-- (instancetype) initWithName: (NSString *) name indent: (int) indent;
+- (instancetype) initWithName: (NSString *) name;
 
 @end
 
 @interface XMLBuilder : NSObject
   {
   NSMutableString * myDocument;
-  int myIndent;
-  BOOL myPretty;
-  NSMutableArray * myElements;
+  XMLElement * myRoot;
   }
 
-// The document content.
-@property (retain) NSMutableString * document;
+// The document root.
+@property (retain) XMLElement * root;
 
 // The XML content.
 @property (readonly) NSString * XML;
-
-// The current indent level.
-@property (assign) int indent;
-
-// Should the output be pretty?
-@property (assign) BOOL pretty;
-
-// The stack of elements.
-@property (retain) NSMutableArray * elements;
 
 // Pop the stack and return what we have.
 - (NSString *) XML;

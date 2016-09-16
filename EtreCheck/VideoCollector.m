@@ -11,6 +11,7 @@
 #import "Model.h"
 #import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 @implementation VideoCollector
 
@@ -67,20 +68,28 @@
   
   for(NSDictionary * info in infos)
     {
+    [self.XML startElement: kVideoCard];
+    
     NSString * name = [info objectForKey: @"sppci_model"];
     
     if(![name length])
       name = NSLocalizedString(@"Unknown", NULL);
       
+    [self.XML addElement: kVideoCardName value: name];
+    
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
     NSString * vram = @"";
     
     if(vramAmount)
+      {
+      [self.XML addElement: kVRAMAmount value: vramAmount];
+      
       vram =
         [NSString
           stringWithFormat:
             NSLocalizedString(@"VRAM: %@", NULL), vramAmount];
+      }
       
     [self.result
       appendString:
@@ -95,6 +104,8 @@
   
     for(NSDictionary * display in displays)
       [self printDisplayInfo: display];
+      
+    [self.XML endElement: kVideoCard];
     }
     
   NSNumber * errors = [[Model model] gpuErrors];
@@ -120,11 +131,15 @@
 // Print information about a display.
 - (void) printDisplayInfo: (NSDictionary *) display
   {
+  [self.XML startElement: kDisplay];
+  
   NSString * name = [display objectForKey: @"_name"];
   
   if([name isEqualToString: @"spdisplays_display"])
     name = NSLocalizedString(@"Display", NULL);
     
+  [self.XML addElement: kDisplayName value: name];
+  
   NSString * resolution = [display objectForKey: @"spdisplays_resolution"];
 
   if([resolution hasPrefix: @"spdisplays_"])
@@ -135,6 +150,9 @@
       resolution = pixels;
     }
     
+  if(resolution)
+    [self.XML addElement: kDisplayResolution value: resolution];
+    
   if(name || resolution)
     [self.result
       appendString:
@@ -143,6 +161,8 @@
             @"        %@ %@\n",
             name ? name : @"Unknown",
             resolution ? resolution : @""]];
+  
+  [self.XML endElement: kDisplay];
   }
 
 @end

@@ -31,6 +31,9 @@
 #define kMinimumWhitelistSize 1000
 
 // Results keys
+#define kEtreCheck @"etrecheck"
+#define kEtreCheckVersion @"version"
+#define kEtreCheckBuild @"build"
 #define kComputerName @"computername"
 #define kHostName @"hostname"
 #define kSupportsHandoff @"supportshandoff"
@@ -63,6 +66,16 @@
 #define kBattery @"battery"
 #define kBatteryCycleCount @"cyclecount"
 #define kBatteryHealth @"health"
+#define kVideoCard @"videocard"
+#define kVideoCardName @"name"
+#define kVRAMAmount @"VRAM"
+#define kDisplay @"display"
+#define kDisplayName @"name"
+#define kDisplayResolution @"resolution"
+#define kSystemSoftwareVersion @"version"
+#define kSystemBuild @"build"
+#define kSystemUptime @"uptime"
+#define kHumanUptime @"humanuptime"
 
 #define kSeverity @"severity"
 #define kCritical @"critical"
@@ -78,6 +91,7 @@
   {
   int myMajorOSVersion;
   int myMinorOSVersion;
+  NSString * myOSBuild;
   NSMutableDictionary * myVolumes;
   NSMutableDictionary * myCoreStorageVolumes;
   NSMutableDictionary * myDiskErrors;
@@ -123,6 +137,7 @@
 // Keep track of the OS version.
 @property (assign) int majorOSVersion;
 @property (assign) int minorOSVersion;
+@property (retain) NSString * OSBuild;
 
 // Keep track of system volumes.
 @property (retain) NSMutableDictionary * volumes;

@@ -6,6 +6,11 @@
 #import "XMLBuilder.h"
 #import "Utilities.h"
 
+// No open element.
+@interface NoOpenElement : XMLException
+
+@end
+
 // Invalid element name.
 @interface InvalidElementName : XMLException
 
@@ -26,6 +31,7 @@
 
 @end
 
+NoOpenElement * NoOpenElementException(void);
 InvalidElementName * InvalidElementNameException(NSString * name);
 InvalidAttributeName * InvalidAttributeNameException(NSString * name);
 InvalidAttributeValue * InvalidAttributeValueException(NSString * name);
@@ -36,26 +42,24 @@ AttemptToCloseWrongElement *
 @implementation XMLElement
 
 @synthesize name = myName;
-@synthesize attributes = myAttributes;
-@synthesize contents = myContents;
-@synthesize CDATARequired = myCDATARequired;
 @synthesize parent = myParent;
-@synthesize empty = myEmpty;
+@synthesize attributes = myAttributes;
 @synthesize singleLine = mySingleLine;
-@synthesize startTagEmitted = myStartTagEmitted;
-@synthesize indent = myIndent;
+@synthesize CDATARequired = myCDATARequired;
+@synthesize children = myChildren;
+@synthesize openChildren = myOpenChildren;
 
 // Constructor with name and indent.
-- (instancetype) initWithName: (NSString *) name indent: (int) indent
+- (instancetype) initWithName: (NSString *) name
   {
   self = [super init];
   
   if(self)
     {
     myName = name;
-    myIndent = indent;
-    myContents = [NSMutableString new];
     myAttributes = [NSMutableDictionary new];
+    myChildren = [NSMutableArray new];
+    myOpenChildren = [NSMutableArray new];
     }
     
   return self;
@@ -64,10 +68,88 @@ AttemptToCloseWrongElement *
 // Destructor.
 - (void) dealloc
   {
+  [myOpenChildren release];
+  [myChildren release];
   [myAttributes release];
-  [myContents release];
   
   [super dealloc];
+  }
+
+// For heterogeneous children.
+- (BOOL) isXMLElement
+  {
+  return YES;
+  }
+
+// Emit an element as an XML fragment.
+- (NSString *) XMLFragment: (NSString *) indent
+  {
+  NSMutableString * XML = [NSMutableString string];
+  
+  [XML appendFormat: @"%@<%@", indent, self.name];
+  
+  for(NSString * key in self.attributes)
+    {
+    NSString * value = [self.attributes objectForKey: key];
+    
+    [XML appendFormat: @" %@=\"%@\"", key, value];
+    }
+    
+  if(([self.children count] + [self.openChildren count]) > 0)
+    {
+    [XML appendString: @">"];
+    
+    NSString * childIndent = @"";
+    
+    if(!self.singleLine)
+      {
+      [XML appendString: @"\n"];
+      
+      childIndent = [indent stringByAppendingString: @"  "];
+      }
+      
+    [XML
+      appendString:
+        [self XMLFragment: childIndent children: self.children]];
+    [XML
+      appendString:
+        [self XMLFragment: childIndent children: self.openChildren]];
+    
+    [XML appendFormat: @"%@</%@>\n", indent, self.name];
+    }
+  else
+    [XML appendString: @"/>\n"];
+    
+  return XML;
+  }
+
+// Emit children element as an XML fragment.
+- (NSString *) XMLFragment: (NSString *) indent
+  children: (NSArray *) children
+  {
+  NSMutableString * XML = [NSMutableString string];
+
+  for(XMLElement * child in children)
+    [XML appendString: [child XMLFragment: indent]];
+    
+  return XML;
+  }
+
+// Get the last currently open child.
+- (XMLElement *) openChild
+  {
+  XMLElement * openElement = [self.openChildren lastObject];
+  
+  XMLElement * nextOpenElement = openElement;
+  
+  while(nextOpenElement)
+    {
+    openElement = nextOpenElement;
+    
+    nextOpenElement = [nextOpenElement.children lastObject];
+    }
+    
+  return openElement;
   }
 
 @end
@@ -75,56 +157,226 @@ AttemptToCloseWrongElement *
 // A class for building an XML document.
 @implementation XMLBuilder
 
-@synthesize document = myDocument;
 @synthesize XML = myXML;
-@synthesize indent = myIndent;
-@synthesize pretty = myPretty;
-@synthesize elements = myElements;
+@synthesize root = myRoot;
 
 // Pop the stack and return what we have.
 - (NSString *) XML
   {
-  XMLElement * topElement = [self.elements lastObject];
-  
-  while(topElement != nil)
-    [self endElement: topElement.name];
-    
-  return self.document;
+  return [self.root XMLFragment: @""];
   }
-  
+
 // Start a new element.
 - (void) startElement: (NSString *) name
   {
   if(![self validName: name])
     @throw InvalidElementNameException(name);
     
-  // If I already have an element, I can go ahead and emit it now.
+  XMLElement * openChild = [self.root openChild];
+  
+  if(openChild == nil)
+    openChild = self.root;
+    
+  XMLElement * newChild = [[XMLElement alloc] initWithName: name];
+  
+  newChild.parent = openChild;
+  
+  [openChild.openChildren addObject: newChild];
+  }
+  
+// Finish the current element.
+- (void) endElement: (NSString *) name
+  {
+  XMLElement * openChild = [self.root openChild];
+  
+  if(openChild == nil)
+    @throw NoOpenElementException();
+  
+  if(![name isEqualToString: openChild.name])
+    @throw AttemptToCloseWrongElementException(name);
+    
+  XMLElement * parent = openChild.parent;
+  
+  [parent.children addObject: openChild];
+  [parent.openChildren removeLastObject];
+  
+  if([openChild.children count] == 1)
+    {
+    id singleChild = [openChild.children lastObject];
+    
+    if(![singleChild respondsToSelector: @selector(isXMLElement)])
+      openChild.singleLine = YES;
+    }
+  }
+  
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name value: (NSString *) value
+  {
+  [self startElement: name];
+  
+  if([value length] > 0)
+    [self addString: value];
+    
+  [self endElement: name];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name number: (NSNumber *) value
+  {
+  if(value == nil)
+    [self addElement: name value: nil];
+  else
+    [self addElement: name value: [value stringValue]];
+  }
+
+// Add an element to the current element.
+- (void) addElement: (NSString *) name date: (NSDate *) date
+  {
+  [self addElement: name value: [Utilities dateAsString: date]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name boolValue: (BOOL) value;
+  {
+  [self addElement: name value: value ? @"true" : @"false"];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name intValue: (int) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%d", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name longValue: (long) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%ld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name longlongValue: (long long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%lld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntValue: (unsigned int) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%ud", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLongValue: (unsigned long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%lud", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLonglongValue: (unsigned long long) value
+  {
+  [self
+    addElement: name value: [NSString stringWithFormat: @"%llulld", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name integerValue: (NSInteger) value
+  {
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ld", (long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value
+  {
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name float: (float) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name doubleValue: (double) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  }
+
+// Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name UTF8StringValue: (char *) value
+  {
+  [self addElement: name value: [NSString stringWithFormat: @"%s", value]];
+  }
+
+// Add a string to the current element's contents.
+- (void) addString: (NSString *) string
+  {
+  NSMutableString * text = [NSMutableString new];
+  
+  XMLElement * openChild = [self.root openChild];
+  
+  if(openChild == nil)
+    @throw NoOpenElementException();
+
+  NSUInteger length = [string length];
+  
+  unichar * characters =
+    (unichar *)malloc(sizeof(unichar) * (length + 1));
+  unichar * end = characters + length;
+  
+  [string getCharacters: characters range: NSMakeRange(0, length)];
+  
+  for(unichar * ch = characters; ch < end; ++ch)
+    {
+    switch(*ch)
+      {
+      case '<':
+        [text appendString: @"&lt;"];
+        break;
+      case '>':
+        [text appendString: @"&gt;"];
+        break;
+      case '&':
+        [text appendString: @"&amp;"];
+        break;
+      case '\n':
+      case '\r':
+        openChild.multiLine = YES;
+      default:
+        [text
+          appendString: [NSString stringWithCharacters: ch length: 1]];
+        break;
+      }
+    }
+  
+  [openChild.contents appendString: text];
+  
+  free(characters);
+    
+  [text release];
+  }
+
+// Add a CDATA string.
+- (void) addCDATA: (NSString *) cdata
+  {
+  [self addString: cdata];
+  
   XMLElement * topElement = [self.elements lastObject];
   
   if(topElement != nil)
-    {
-    [self.document appendString: [self emitStartTag: topElement]];
-    
-    // Emit any contents that I have.
-    [self.document appendString: [self emitContents: topElement]];
-    
-    if(!topElement.parent)
-      [self.document appendString: @"\n"];
-      
-    // I know the top element has child elements now.
-    topElement.parent = YES;
-    topElement.empty = NO;
-    
-    // Reset contents in case there are more after this node.
-    [topElement.contents setString: @""];
-    }
-
-  [self.elements
-    addObject: [[XMLElement alloc] initWithName: name indent: self.indent]];
-    
-  self.indent = self.indent + 1;
+    topElement.CDATARequired = YES;
   }
-  
+
 // Add an attribute to the current element.
 - (void) addAttribute: (NSString *) name value: (NSString *) value
   {
@@ -244,196 +496,6 @@ AttemptToCloseWrongElement *
     addAttribute: name value: [NSString stringWithFormat: @"%s", value]];
   }
 
-// Add a string to the current element's contents.
-- (void) addString: (NSString *) string
-  {
-  NSMutableString * text = [NSMutableString new];
-  
-  XMLElement * topElement = [self.elements lastObject];
-  
-  if(topElement != nil)
-    {
-    NSUInteger length = [string length] + 1;
-    
-    unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
-    unichar * end = characters + length;
-    
-    [string getCharacters: characters range: NSMakeRange(0, length)];
-    
-    for(unichar * ch = characters; ch < end; ++ch)
-      {
-      switch(*ch)
-        {
-        case '<':
-          [text appendString: @"&lt;"];
-          topElement.empty = NO;
-          break;
-        case '>':
-          [text appendString: @"&gt;"];
-          topElement.empty = NO;
-          break;
-        case '&':
-          [text appendString: @"&amp;"];
-          topElement.empty = NO;
-          break;
-        case '\n':
-        case '\r':
-          topElement.singleLine = NO;
-        default:
-          [text
-            appendString: [NSString stringWithCharacters: ch length: 1]];
-          topElement.empty = NO;
-          break;
-        }
-      }
-    
-    [topElement.contents appendString: text];
-    
-    free(characters);
-    }
-    
-  [text release];
-  }
-
-// Add a CDATA string.
-- (void) addCDATA: (NSString *) cdata
-  {
-  [self addString: cdata];
-  
-  XMLElement * topElement = [self.elements lastObject];
-  
-  if(topElement != nil)
-    topElement.CDATARequired = YES;
-  }
-  
-// Finish the current element.
-- (void) endElement: (NSString *) name
-  {
-  // If I already have an element, I can go ahead and emit it now.
-  XMLElement * topElement = [self.elements lastObject];
-  
-  if(topElement != nil)
-    {
-    if(![name isEqualToString: topElement.name])
-      @throw AttemptToCloseWrongElementException(name);
-    
-    self.indent = self.indent - 1;
-
-    [self.document appendString: [self emitEndTag: topElement]];
-    
-    [self.elements removeLastObject];
-    }
-  }
-  
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name value: (NSString *) value
-  {
-  [self startElement: name];
-  
-  if([value length] > 0)
-    [self addString: value];
-    
-  [self endElement: name];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name number: (NSNumber *) value
-  {
-  if(value == nil)
-    [self addElement: name value: nil];
-  else
-    [self addElement: name value: [value stringValue]];
-  }
-
-// Add an element to the current element.
-- (void) addElement: (NSString *) name date: (NSDate *) date
-  {
-  [self addElement: name value: [Utilities dateAsString: date]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name boolValue: (BOOL) value;
-  {
-  [self addElement: name value: value ? @"true" : @"false"];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name intValue: (int) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%d", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name longValue: (long) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%ld", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name longlongValue: (long long) value
-  {
-  [self
-    addElement: name value: [NSString stringWithFormat: @"%lld", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name
-  unsignedIntValue: (unsigned int) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%ud", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name
-  unsignedLongValue: (unsigned long) value
-  {
-  [self
-    addElement: name value: [NSString stringWithFormat: @"%lud", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name
-  unsignedLonglongValue: (unsigned long long) value
-  {
-  [self
-    addElement: name value: [NSString stringWithFormat: @"%llulld", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name integerValue: (NSInteger) value
-  {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ld", (long)value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name
-  unsignedIntegerValue: (NSUInteger) value
-  {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name float: (float) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name doubleValue: (double) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
-  }
-
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name UTF8StringValue: (char *) value
-  {
-  [self addElement: name value: [NSString stringWithFormat: @"%s", value]];
-  }
-
 // MARK: Formatting
 
 // Emit a start tag.
@@ -536,7 +598,7 @@ AttemptToCloseWrongElement *
   
   NSUInteger length = [name length];
   
-  unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * (length + 1));
   unichar * end = characters + length;
   
   [name getCharacters: characters range: NSMakeRange(0, length)];
@@ -614,7 +676,7 @@ AttemptToCloseWrongElement *
   {
   NSUInteger length = [name length];
   
-  unichar * characters = (unichar *)malloc(sizeof(unichar) * length);
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * (length + 1));
   unichar * end = characters + length;
   
   [name getCharacters: characters range: NSMakeRange(0, length)];
@@ -648,6 +710,11 @@ AttemptToCloseWrongElement *
   }
 
 @end
+
+NoOpenElement * NoOpenElementException(void)
+  {
+  return nil;
+  }
 
 InvalidElementName * InvalidElementNameException(NSString * name)
   {
