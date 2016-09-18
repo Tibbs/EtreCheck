@@ -4,7 +4,6 @@
  **********************************************************************/
 
 #import "XMLBuilder.h"
-#import "Utilities.h"
 
 // No open element.
 @interface NoOpenElement : XMLException
@@ -38,31 +37,218 @@ InvalidAttributeValue * InvalidAttributeValueException(NSString * name);
 AttemptToCloseWrongElement *
   AttemptToCloseWrongElementException(NSString * name);
 
+// An XML node.
+@implementation XMLNode
+
+@synthesize parent = myParent;
+
+// Emit a node as an XML fragment.
+- (NSString *) XMLFragment
+  {
+  // This will never be called. It is just a placeholder for derived
+  // children.
+  return @"";
+  }
+
+@end
+
+// An XML text node.
+@implementation XMLTextNode
+
+@synthesize text = myText;
+@synthesize leadingWhitespace = myLeadingWhitespace;
+@synthesize trailingWhitespace = myTrailingWhitespace;
+@synthesize multiLine = myMultiLine;
+
+// Constructor.
+- (instancetype) initWithText: (NSString *) text
+  {
+  self = [super init];
+  
+  if(self != nil)
+    {
+    myText = [text copy];
+    
+    NSRange range =
+      [myText
+        rangeOfCharacterFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      
+    if(range.location == 0)
+      myLeadingWhitespace = YES;
+    
+    range =
+      [myText
+        rangeOfCharacterFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]
+        options: NSBackwardsSearch];
+
+    if(range.location != NSNotFound)
+      if(([myText length] - range.location) == range.length)
+        myTrailingWhitespace = YES;
+
+    range =
+      [myText
+        rangeOfCharacterFromSet: [NSCharacterSet newlineCharacterSet]];
+    
+    if(range.location != NSNotFound)
+      myMultiLine = YES;
+      
+    return self;
+    }
+    
+  return nil;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myText release];
+  
+  [super dealloc];
+  }
+
+// For heterogeneous children.
+- (BOOL) isXMLTextNode
+  {
+  return YES;
+  }
+
+// Emit a text node as an XML fragment. The indent is not used for
+// a text node.
+- (NSString *) XMLFragment
+  {
+  // If the text is has leading or trailing whitespace, put it in a CDATA.
+  if(self.leadingWhitespace || self.trailingWhitespace)
+    return [self XMLFragmentAsCDATA: self.text];
+    
+  // Try to escape it.
+  NSString * escaped = [self XMLFragmentEscaped: self.text];
+  
+  // If I couldn't, or shouldn't, escape it, do a CDATA instead.
+  if(!escaped)
+    return [self XMLFragmentAsCDATA: self.text];
+  
+  // Whether I escaped anything or not, return the escaped version.
+  return escaped;
+  }
+
+// Emit text as CDATA.
+- (NSString *) XMLFragmentAsCDATA: (NSString *) text
+  {
+  // First see if the text has has the CDATA ending tag. If so, that will
+  // need to be split out.
+  NSRange range = [text rangeOfString: @"]]>"];
+  
+  NSString * first = text;
+  NSString * rest = nil;
+  
+  if(range.location != NSNotFound)
+    {
+    first = [text substringToIndex: range.location + 1];
+    rest = [text substringFromIndex: range.location + 1];
+    }
+    
+  return
+    [NSString
+      stringWithFormat:
+        @"<![CDATA[%@]]>%@",
+        first,
+        rest ? [self XMLFragmentAsCDATA: rest] : @""];
+  }
+
+// Escape text.
+- (NSString *) XMLFragmentEscaped: (NSString *) text
+  {
+  // Create a new string.
+  NSMutableString * escaped = [NSMutableString string];
+  
+  NSUInteger length = [text length];
+  
+  // Allocate space for the characters.
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * (length + 1));
+  unichar * end = characters + length;
+  
+  // Extract the characters.
+  [text getCharacters: characters range: NSMakeRange(0, length)];
+  
+  // Keep track of escaping bloat. If it gets too big, bail and do CDATA.
+  NSUInteger bloat = 0;
+  
+  for(unichar * ch = characters; ch < end; ++ch)
+    {
+    switch(*ch)
+      {
+      case '\'':
+        [escaped appendString: @"&apos"];
+        bloat += 4;
+        break;
+        
+      case '"':
+        [escaped appendString: @"&quot"];
+        bloat += 4;
+        break;
+
+      case '<':
+        [escaped appendString: @"&lt"];
+        bloat += 2;
+        break;
+
+      case '>':
+        [escaped appendString: @"&gt"];
+        bloat += 2;
+        break;
+
+      case '&':
+        [escaped appendString: @"&amp"];
+        bloat += 3;
+        break;
+
+      default:
+        [escaped appendFormat: @"%c", *ch];
+        break;
+      }
+    
+    // Bail and do CDATA instead.
+    if(bloat > 12)
+      break;
+    }
+    
+  free(characters);
+  
+  // Bail.
+  if(bloat > 12)
+    return nil;
+    
+  return escaped;
+  }
+
+@end
+
 // Encapsulate each element.
 @implementation XMLElement
 
 @synthesize name = myName;
-@synthesize parent = myParent;
 @synthesize attributes = myAttributes;
-@synthesize singleLine = mySingleLine;
-@synthesize CDATARequired = myCDATARequired;
 @synthesize children = myChildren;
 @synthesize openChildren = myOpenChildren;
 
-// Constructor with name and indent.
+// Constructor with name.
 - (instancetype) initWithName: (NSString *) name
   {
   self = [super init];
   
-  if(self)
+  if(self != nil)
     {
-    myName = name;
+    myName = [name copy];
     myAttributes = [NSMutableDictionary new];
     myChildren = [NSMutableArray new];
     myOpenChildren = [NSMutableArray new];
+    
+    return self;
     }
     
-  return self;
+  return nil;
   }
 
 // Destructor.
@@ -82,55 +268,55 @@ AttemptToCloseWrongElement *
   }
 
 // Emit an element as an XML fragment.
-- (NSString *) XMLFragment: (NSString *) indent
+- (NSString *) XMLFragment
   {
   NSMutableString * XML = [NSMutableString string];
   
-  [XML appendFormat: @"%@<%@", indent, self.name];
+  // Emit the start tag but room for attributes.
+  [XML appendFormat: @"<%@", self.name];
   
+  // Add any attributes.
   for(NSString * key in self.attributes)
     {
     NSString * value = [self.attributes objectForKey: key];
     
     [XML appendFormat: @" %@=\"%@\"", key, value];
     }
-    
+  
+  // Don't close the opening tag yet. If I don't have any children, I'll
+  // just want to make a self-closing tag.
+  
+  // Emit children - closed or open.
   if(([self.children count] + [self.openChildren count]) > 0)
     {
+    // Finish the opening tag.
     [XML appendString: @">"];
     
-    NSString * childIndent = @"";
+    // Add children.
+    [XML appendString: [self XMLFragments: self.children]];
     
-    if(!self.singleLine)
-      {
-      [XML appendString: @"\n"];
-      
-      childIndent = [indent stringByAppendingString: @"  "];
-      }
-      
-    [XML
-      appendString:
-        [self XMLFragment: childIndent children: self.children]];
-    [XML
-      appendString:
-        [self XMLFragment: childIndent children: self.openChildren]];
+    // Add open children.
+    [XML appendString: [self XMLFragments: self.openChildren]];
     
-    [XML appendFormat: @"%@</%@>\n", indent, self.name];
+    // Add the closing tag.
+    [XML appendFormat: @"</%@>", self.name];
     }
+    
+  // I don't have any children, so turn the opening tag into a self-closing
+  // tag.
   else
-    [XML appendString: @"/>\n"];
+    [XML appendString: @"/>"];
     
   return XML;
   }
 
 // Emit children element as an XML fragment.
-- (NSString *) XMLFragment: (NSString *) indent
-  children: (NSArray *) children
+- (NSString *) XMLFragments: (NSArray *) children
   {
   NSMutableString * XML = [NSMutableString string];
 
-  for(XMLElement * child in children)
-    [XML appendString: [child XMLFragment: indent]];
+  for(XMLNode * child in children)
+    [XML appendString: [child XMLFragment]];
     
   return XML;
   }
@@ -138,6 +324,7 @@ AttemptToCloseWrongElement *
 // Get the last currently open child.
 - (XMLElement *) openChild
   {
+  // Walk down through the open children and find the last one.
   XMLElement * openElement = [self.openChildren lastObject];
   
   XMLElement * nextOpenElement = openElement;
@@ -146,10 +333,54 @@ AttemptToCloseWrongElement *
     {
     openElement = nextOpenElement;
     
-    nextOpenElement = [nextOpenElement.children lastObject];
+    nextOpenElement = [nextOpenElement.openChildren lastObject];
     }
     
   return openElement;
+  }
+
+@end
+
+// A root element.
+@implementation XMLRootElement
+
+// Constructor.
+- (instancetype) init
+  {
+  self = [super initWithName: nil];
+  
+  if(self != nil)
+    {
+    return self;
+    }
+    
+  return nil;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myOpenChildren release];
+  [myChildren release];
+  [myAttributes release];
+  
+  [super dealloc];
+  }
+
+// Emit an element as an XML fragment.
+- (NSString *) XMLFragment
+  {
+  NSMutableString * XML = [NSMutableString string];
+  
+  [XML appendString: @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"];
+  
+  // Add children.
+  [XML appendString: [self XMLFragments: self.children]];
+  
+  // Add open children.
+  [XML appendString: [self XMLFragments: self.openChildren]];
+    
+  return XML;
   }
 
 @end
@@ -158,27 +389,72 @@ AttemptToCloseWrongElement *
 @implementation XMLBuilder
 
 @synthesize XML = myXML;
+@synthesize dateFormatter = myDateFormatter;
 @synthesize root = myRoot;
 
-// Pop the stack and return what we have.
+// Constructor.
+- (instancetype) init
+  {
+  self = [super init];
+  
+  if(self != nil)
+    {
+    myRoot = [XMLRootElement new];
+    
+    return self;
+    }
+    
+  return nil;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myRoot release];
+  
+  [super dealloc];
+  }
+
+// Return the current state of the builder as XML.
 - (NSString *) XML
   {
-  return [self.root XMLFragment: @""];
+  return [self.root XMLFragment];
+  }
+
+// Return the date formatter, creating one, if necessary.
+- (NSDateFormatter *) dateFormatter
+  {
+  if(!myDateFormatter)
+    {
+    myDateFormatter = [[NSDateFormatter alloc] init];
+    
+    [myDateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss Z"];
+    [myDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
+    [myDateFormatter
+      setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
+    }
+    
+  return myDateFormatter;
   }
 
 // Start a new element.
 - (void) startElement: (NSString *) name
   {
+  // Validate the name.
   if(![self validName: name])
     @throw InvalidElementNameException(name);
     
+  // Add the new element onto the end of the last open child.
   XMLElement * openChild = [self.root openChild];
   
+  // If there is no open child, use root.
   if(openChild == nil)
     openChild = self.root;
     
+  // Create the element.
   XMLElement * newChild = [[XMLElement alloc] initWithName: name];
   
+  // Connect it to the parent.
   newChild.parent = openChild;
   
   [openChild.openChildren addObject: newChild];
@@ -187,26 +463,23 @@ AttemptToCloseWrongElement *
 // Finish the current element.
 - (void) endElement: (NSString *) name
   {
+  // Find the currently open child.
   XMLElement * openChild = [self.root openChild];
   
+  // There should be at least one.
   if(openChild == nil)
     @throw NoOpenElementException();
   
+  // And it should be the element beingn closed.
   if(![name isEqualToString: openChild.name])
     @throw AttemptToCloseWrongElementException(name);
     
+  // Move the element being closed from its parent's open list to its
+  // parent's closed list.
   XMLElement * parent = openChild.parent;
   
   [parent.children addObject: openChild];
   [parent.openChildren removeLastObject];
-  
-  if([openChild.children count] == 1)
-    {
-    id singleChild = [openChild.children lastObject];
-    
-    if(![singleChild respondsToSelector: @selector(isXMLElement)])
-      openChild.singleLine = YES;
-    }
   }
   
 // Add an element and value with a convenience function.
@@ -232,7 +505,7 @@ AttemptToCloseWrongElement *
 // Add an element to the current element.
 - (void) addElement: (NSString *) name date: (NSDate *) date
   {
-  [self addElement: name value: [Utilities dateAsString: date]];
+  [self addElement: name value: [self.dateFormatter stringFromDate: date]];
   }
 
 // Add an element and value with a convenience function.
@@ -321,78 +594,44 @@ AttemptToCloseWrongElement *
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string
   {
-  NSMutableString * text = [NSMutableString new];
-  
+  // Find the currently open child.
   XMLElement * openChild = [self.root openChild];
   
+  // Make sure there is an open child.
   if(openChild == nil)
     @throw NoOpenElementException();
 
-  NSUInteger length = [string length];
-  
-  unichar * characters =
-    (unichar *)malloc(sizeof(unichar) * (length + 1));
-  unichar * end = characters + length;
-  
-  [string getCharacters: characters range: NSMakeRange(0, length)];
-  
-  for(unichar * ch = characters; ch < end; ++ch)
-    {
-    switch(*ch)
-      {
-      case '<':
-        [text appendString: @"&lt;"];
-        break;
-      case '>':
-        [text appendString: @"&gt;"];
-        break;
-      case '&':
-        [text appendString: @"&amp;"];
-        break;
-      case '\n':
-      case '\r':
-        openChild.multiLine = YES;
-      default:
-        [text
-          appendString: [NSString stringWithCharacters: ch length: 1]];
-        break;
-      }
-    }
-  
-  [openChild.contents appendString: text];
-  
-  free(characters);
+  XMLTextNode * textNode = [[XMLTextNode alloc] initWithText: string];
     
-  [text release];
-  }
-
-// Add a CDATA string.
-- (void) addCDATA: (NSString *) cdata
-  {
-  [self addString: cdata];
+  [openChild.children addObject: textNode];
   
-  XMLElement * topElement = [self.elements lastObject];
-  
-  if(topElement != nil)
-    topElement.CDATARequired = YES;
+  [textNode release];
   }
 
 // Add an attribute to the current element.
 - (void) addAttribute: (NSString *) name value: (NSString *) value
   {
+  // Require a value.
   if(value == nil)
     return;
     
+  // Make sure the name is valid.
   if(![self validName: name])
     @throw InvalidAttributeNameException(name);
 
+  // Make sure the value is valid.
   if(![self validAttributeValue: value])
     @throw InvalidAttributeValueException(value);
 
-  XMLElement * topElement = [self.elements lastObject];
-  
-  if(topElement != nil)
-    topElement.attributes[name] = value;
+  // Find the currently open child.
+  XMLElement * openChild = [self.root openChild];
+
+  // Make sure there is an open child.
+  if(openChild == nil)
+    @throw NoOpenElementException();
+
+  // Set the value.
+  [openChild.attributes setObject: value forKey: name];
   }
 
 // Add an attribute to the current element.
@@ -404,7 +643,8 @@ AttemptToCloseWrongElement *
 // Add an attribute to the current element.
 - (void) addAttribute: (NSString *) name date: (NSDate *) date
   {
-  [self addAttribute: name value: [Utilities dateAsString: date]];
+  [self
+    addAttribute: name value: [self.dateFormatter stringFromDate: date]];
   }
 
 // Add an element and value with a convenience function.
@@ -494,99 +734,6 @@ AttemptToCloseWrongElement *
   {
   [self
     addAttribute: name value: [NSString stringWithFormat: @"%s", value]];
-  }
-
-// MARK: Formatting
-
-// Emit a start tag.
-- (NSMutableString *) emitStartTag: (XMLElement *) element
-  {
-  return [self emitStartTag: element autoclose: NO];
-  }
-  
-// Emit a start tag.
-- (NSMutableString *) emitStartTag: (XMLElement *) element
-  autoclose: (BOOL) autoclose
-  {
-  if(!element.startTagEmitted)
-    {
-    element.startTagEmitted = YES;
-    
-    NSMutableString * tag =
-      [NSMutableString stringWithString: [self emitIndentString: element]];
-    
-    [tag appendFormat: @"<%@", element.name];
-    
-    for(NSString * name in element.attributes)
-      [tag
-        appendFormat:
-          @" %@=\"%@\"", name, [element.attributes objectForKey: name]];
-      
-    // This is an end tag too and end tags always terminate a line.
-    if(autoclose)
-      [tag appendString: @"/>\n"];
-      
-    else
-      [tag appendString: @">"];
-      
-    return tag;
-    }
-    
-  return [NSMutableString string];
-  }
-  
-// Emit contents of a tag.
-- (NSString *) emitContents: (XMLElement *) element
-  {
-  NSMutableString * fragment = [NSMutableString string];
-  
-  if(element.CDATARequired)
-    [fragment appendFormat: @"<![CDATA[%@]]>", element.contents];
-    
-  else
-    [fragment appendString: element.contents];
-    
-  [element.contents setString: @""];
-  element.CDATARequired = NO;
-  
-  return fragment;
-  }
-  
-// Emit an ending tag.
-- (NSString *) emitEndTag: (XMLElement *) element
-  {
-  NSMutableString * fragment = [self emitIndentString: element];
-  
-  // Emit the start tag if I haven't already done so.
-  if(!element.startTagEmitted)
-    {
-    // If this is an empty node, emit an autoclosing note and return.
-    if(element.empty)
-      return [self emitStartTag: element autoclose: YES];
-      
-    fragment = [self emitStartTag: element];
-    }
-    
-  [fragment appendString: element.contents];
-
-  [fragment appendFormat: @"</%@>", element.name];
-  
-  // End tags always terminate a line.
-  if(self.pretty)
-    [fragment appendString: @"\n"];
-    
-  return fragment;
-  }
-  
-// Emit an indent string.
-- (NSMutableString *) emitIndentString: (XMLElement *) element
-  {
-  NSMutableString * s = [NSMutableString string];
-  
-  for(int i = 0; i < element.indent; ++i)
-    [s appendString: @"  "];
-    
-  return s;
   }
 
 // MARK: Validation

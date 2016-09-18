@@ -6,18 +6,49 @@
 
 #import <Foundation/Foundation.h>
 
+// XML has to be precise. We'll need exceptions.
 @interface XMLException : NSException
 
 @end
 
+@class XMLElement;
+
+// An XML node.
+@interface XMLNode : NSObject
+  {
+  XMLElement * myParent;
+  }
+
+// The node's parent.
+@property (assign) XMLElement * parent;
+
+@end
+
+// An XML text node.
+@interface XMLTextNode : XMLNode
+  {
+  NSString * myText;
+  BOOL myLeadingWhitespace;
+  BOOL myTrailingWhitespace;
+  BOOL myMultiLine;
+  }
+
+// The node's text.
+@property (assign) NSString * text;
+@property (assign) BOOL leadingWhitespace;
+@property (assign) BOOL trailingWhitespace;
+@property (assign) BOOL multiLine;
+
+// Constructor.
+- (instancetype) initWithText: (NSString *) text;
+
+@end
+
 // Encapsulate each element.
-@interface XMLElement : NSObject
+@interface XMLElement : XMLNode
   {
   NSString * myName;
-  XMLElement * myParent;
   NSMutableDictionary * myAttributes;
-  BOOL mySingleLine;
-  BOOL myCDATARequired;
   NSMutableArray * myChildren;
   NSMutableArray * myOpenChildren;
   }
@@ -25,17 +56,8 @@
 // The name of the element.
 @property (retain) NSString * name;
 
-// The element's parent.
-@property (assign) XMLElement * parent;
-
 // The element's attributes.
 @property (retain) NSMutableDictionary * attributes;
-
-// Are the contents of this element a single line string?
-@property (assign) BOOL singleLine;
-
-// Do the current contents require a CDATA?
-@property (assign) BOOL CDATARequired;
 
 // The stack of closed children.
 @property (retain) NSMutableArray * children;
@@ -48,14 +70,23 @@
 
 @end
 
+// A root element.
+@interface XMLRootElement : XMLElement
+
+@end
+
 @interface XMLBuilder : NSObject
   {
   NSMutableString * myDocument;
   XMLElement * myRoot;
+  NSDateFormatter * myDateFormatter;
   }
 
 // The document root.
 @property (retain) XMLElement * root;
+
+// The date formatter.
+@property (readonly) NSDateFormatter * dateFormatter;
 
 // The XML content.
 @property (readonly) NSString * XML;
@@ -118,9 +149,6 @@
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string;
 
-// Add a CDATA string.
-- (void) addCDATA: (NSString *) cdata;
-  
 // Finish the current element.
 - (void) endElement: (NSString *) name;
   
