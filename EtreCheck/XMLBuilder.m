@@ -273,7 +273,7 @@ AttemptToCloseWrongElement *
   NSMutableString * XML = [NSMutableString string];
   
   // Emit the start tag but room for attributes.
-  [XML appendFormat: @"<%@", self.name];
+  [XML appendFormat: @"%@<%@", [self startingIndent], self.name];
   
   // Add any attributes.
   for(NSString * key in self.attributes)
@@ -299,7 +299,7 @@ AttemptToCloseWrongElement *
     [XML appendString: [self XMLFragments: self.openChildren]];
     
     // Add the closing tag.
-    [XML appendFormat: @"</%@>", self.name];
+    [XML appendFormat: @"%@</%@>", [self endingIndent], self.name];
     }
     
   // I don't have any children, so turn the opening tag into a self-closing
@@ -308,6 +308,67 @@ AttemptToCloseWrongElement *
     [XML appendString: @"/>"];
     
   return XML;
+  }
+
+// Get the starting indent.
+- (NSString *) startingIndent
+  {
+  XMLNode * current = (XMLNode *)self;
+  
+  NSMutableString * indent = [NSMutableString string];
+  
+  int count = 0;
+  
+  while(current != nil)
+    {
+    if(count > 1)
+      {
+      if(count == 2)
+        [indent appendString: @"\n"];
+        
+      [indent appendString: @"  "];
+      }
+      
+    current = current.parent;
+    ++count;
+    }
+    
+  if(count == 2)
+    [indent appendString: @"\n"];
+
+  return indent;
+  }
+
+// Get the ending indent.
+- (NSString *) endingIndent
+  {
+  BOOL onlyTextNodes = YES;
+  
+  for(XMLNode * child in self.children)
+    if(![child respondsToSelector: @selector(isXMLTextNode)])
+      onlyTextNodes = NO;
+  
+  if(onlyTextNodes)
+    return @"";
+    
+  XMLNode * current = (XMLNode *)self;
+  
+  NSMutableString * indent = [NSMutableString string];
+  
+  [indent appendString: @"\n"];
+  
+  int count = 0;
+  
+  while(current != nil)
+    {
+    if(count > 1)
+      [indent appendString: @"  "];
+      
+    current = current.parent;
+    ++count;
+    }
+    
+  return indent;
   }
 
 // Emit children element as an XML fragment.
