@@ -584,13 +584,12 @@
   
   if([mountPoint isEqualToString: @"/"])
     {
+    type = NSLocalizedString(@" [Startup]", NULL);
+
     unsigned long long GB = 1024 * 1024 * 1024;
 
     if(free < (GB * 15))
-      {
-      type = NSLocalizedString(@" [Startup]", NULL);
       status = NSLocalizedString(@" (Low!)", NULL);
-      }
     }
     
   else if([name isEqualToString: @"Recovery HD"])
