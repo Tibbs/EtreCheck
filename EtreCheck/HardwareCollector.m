@@ -530,7 +530,7 @@
     {
     [self.XML addAttribute: kSeverity value: kCritical];
     [self.XML
-      addElement: kExplanation
+      addElement: kSeverityExplanation
       value: NSLocalizedString(@"insufficientram", NULL)];
     
     [self.result
@@ -911,10 +911,12 @@
       [self.XML addAttribute: kSeverity value: kWarning];
       
       if(needsReplacing)
-        [self.XML addAttribute: kExplanation value: @"needs replacing"];
+        [self.XML
+          addAttribute: kSeverityExplanation value: @"needs replacing"];
       else
         [self.XML
-          addAttribute: kExplanation value: @"invalid serial number"];
+          addAttribute: kSeverityExplanation
+          value: @"invalid serial number"];
       }
       
     [self.XML endElement: kBattery];

@@ -32,10 +32,13 @@
 
 // Results keys
 #define kEtreCheck @"etrecheck"
+
 #define kEtreCheckVersion @"version"
+
 #define kEtreCheckBuild @"build"
 #define kComputerName @"computername"
 #define kHostName @"hostname"
+
 #define kSupportsHandoff @"supportshandoff"
 #define kSupportsInstantHotspot @"supportsinstanthotspot"
 #define kSupportsLowEnergy @"supportslowenergy"
@@ -66,6 +69,7 @@
 #define kBattery @"battery"
 #define kBatteryCycleCount @"cyclecount"
 #define kBatteryHealth @"health"
+
 #define kVideoCard @"videocard"
 #define kVideoCardName @"name"
 #define kVRAMAmount @"VRAM"
@@ -77,11 +81,39 @@
 #define kSystemUptime @"uptime"
 #define kHumanUptime @"humanuptime"
 
+#define kController @"controller"
+#define kControllerType @"type"
+#define kDisk @"disk"
+#define kDiskName @"name"
+#define kDiskDevice @"device"
+#define kDiskType @"type"
+#define kDiskSize @"size"
+#define kDiskTRIMEnabled @"TRIM"
+#define kVolumeUUID @"UUID"
+#define kDiskVolumes @"volumes"
+#define kDiskVolume @"volume"
+#define kVolumeMountPoint @"mount_point"
+#define kDiskSMARTStatus @"SMART"
+#define kVolumeType @"type"
+#define kVolumeEncrypted @"encrypted"
+#define kVolumeEncryptionStatus @"encryption_status"
+#define kVolumeEncryptionType @"encryption_type"
+#define kVolumeEncryptionLocked @"encryption_locked"
+#define kVolumeCoreStorage @"core_storage"
+#define kVolumeCoreStorageName @"name"
+#define kVolumeCoreStorageSize @"size"
+#define kVolumeCoreStorageStatus @"status"
+#define kVolumeErrors @"errors"
+#define kVolumeName @"name"
+#define kVolumeDevice @"device"
+#define kVolumeSize @"size"
+#define kVolumeFreeSpace @"free_space"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
 #define kWarning @"warning"
-#define kExplanation @"why"
+#define kSeverityExplanation @"severity_explanation"
 
 @class DiagnosticEvent;
 @class XMLBuilder;

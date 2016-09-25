@@ -29,7 +29,7 @@
   }
 
 // Collect video information.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking video information", NULL)];

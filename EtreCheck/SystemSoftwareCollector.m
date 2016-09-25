@@ -31,7 +31,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self updateStatus: NSLocalizedString(@"Checking system software", NULL)];
     
@@ -224,7 +224,12 @@
     hourString = @"";
     
   NSString * humanUptime =
-    [NSString stringWithFormat: @"%@%@", dayString, hourString];
+    [NSString
+      stringWithFormat:
+        @"%@%@%@",
+        dayString,
+        [hourString length] > 0 ? @" " : @"",
+        hourString];
   
   [self.XML addElement: kSystemSoftwareVersion value: marketingName];
   [self.XML addElement: kSystemBuild value: [[Model model] OSBuild]];

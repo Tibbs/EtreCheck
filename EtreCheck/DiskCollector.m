@@ -12,11 +12,12 @@
 #import "NSArray+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Some keys for an internal dictionary.
-#define kDiskType @"volumetype"
-#define kDiskStatus @"volumestatus"
-#define kAttributes @"attributes"
+#define kDiskStatsType @"volumetype"
+#define kDiskStatsStatus @"volumestatus"
+#define kDiskStatsAttributes @"attributes"
 
 // Collect information about disks.
 @implementation DiskCollector
@@ -50,7 +51,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
@@ -187,10 +188,16 @@
 // Print disks attached to a single Serial ATA controller.
 - (void) printSerialATAController: (NSDictionary *) controller
   {
+  [self.XML startElement: kController];
+
+  [self.XML addAttribute: kControllerType value: @"SerialATA"];
+  
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
     {
+    [self.XML startElement: kDisk];
+    
     NSString * diskName = [disk objectForKey: @"_name"];
     NSString * diskDevice = [disk objectForKey: @"bsd_name"];
     NSString * diskSize = [disk objectForKey: @"size"];
@@ -198,6 +205,15 @@
     NSString * medium = [disk objectForKey: @"spsata_medium_type"];
     NSString * trim = [disk objectForKey: @"spsata_trim_support"];
     
+    [self.XML addElement: kDiskName value: diskName];
+    [self.XML addElement: kDiskDevice value: diskDevice];
+    [self.XML addElement: kDiskSize value: diskSize];
+    [self.XML addElement: kVolumeUUID value: UUID];
+    [self.XML addElement: kDiskType value: medium];
+    
+    if([medium isEqualToString: @"Solid State"] && [trim length])
+      [self.XML addElement: kDiskTRIMEnabled value: trim];
+    
     NSString * trimString =
       [NSString
         stringWithFormat: @" - TRIM: %@", NSLocalizedString(trim, NULL)];
@@ -236,16 +252,26 @@
     [self printDiskVolumes: disk];
     
     [self.result appendCR];
+    
+    [self.XML endElement: kDisk];
     }
+    
+  [self.XML endElement: kController];
   }
 
 // Print disks attached to a single NVMExpress controller.
 - (void) printNVMExpressController: (NSDictionary *) controller
   {
+  [self.XML startElement: kController];
+
+  [self.XML addAttribute: kControllerType value: @"NVMExpress"];
+
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
     {
+    [self.XML startElement: kDisk];
+
     NSString * diskName = [disk objectForKey: @"_name"];
     NSString * diskDevice = [disk objectForKey: @"bsd_name"];
     NSString * diskSize = [disk objectForKey: @"size"];
@@ -253,6 +279,15 @@
     NSString * medium = @"Solid State";
     NSString * trim = [disk objectForKey: @"spnvme_trim_support"];
     
+    [self.XML addElement: kDiskName value: diskName];
+    [self.XML addElement: kDiskDevice value: diskDevice];
+    [self.XML addElement: kDiskSize value: diskSize];
+    [self.XML addElement: kVolumeUUID value: UUID];
+    [self.XML addElement: kDiskType value: medium];
+    
+    if([medium isEqualToString: @"Solid State"] && [trim length])
+      [self.XML addElement: kDiskTRIMEnabled value: trim];
+
     NSString * trimString =
       [NSString
         stringWithFormat: @" - TRIM: %@", NSLocalizedString(trim, NULL)];
@@ -289,14 +324,20 @@
     [self collectSMARTStatus: disk indent: @"    "];
     
     [self printDiskVolumes: disk];
-    
+      
+    [self.XML endElement: kDisk];
+
     [self.result appendCR];
     }
+    
+  [self.XML endElement: kController];
   }
 
 // Print the volumes on a disk.
 - (void) printDiskVolumes: (NSDictionary *) disk
   {
+  [self.XML startElement: kDiskVolumes];
+  
   NSArray * volumes = [disk objectForKey: @"volumes"];
   NSMutableSet * coreStorageVolumeNames = [NSMutableSet set];
 
@@ -314,7 +355,13 @@
         }
         
       else
+        {
+        [self.XML startElement: kDiskVolume];
+
         [self printVolume: volume indent: @"        "];
+
+        [self.XML endElement: kDiskVolume];
+        }
       }
       
     for(NSDictionary * name in coreStorageVolumeNames)
@@ -327,6 +374,8 @@
           printCoreStorageVolume: coreStorageVolume indent: @"        "];
       }
     }
+
+  [self.XML endElement: kDiskVolumes];
   }
 
 // Get the SMART status for this disk.
@@ -343,6 +392,15 @@
   
   bool smart_verified =
     [smart_status isEqualToString: @"Verified"];
+
+  [self.XML addElement: kDiskSMARTStatus value: smart_status];
+
+  if(!smart_not_supported && !smart_verified)
+    {
+    [self.XML addAttribute: kSeverity value: kCritical];
+    
+    [self.XML addAttribute: kSeverityExplanation value: @"SMART failure"];
+    }
 
   if(!smart_not_supported && !smart_verified)
     [self.result
@@ -361,6 +419,8 @@
 - (void) printCoreStorageVolume: (NSDictionary *) volume
   indent: (NSString *) indent
   {
+  [self.XML startElement: kDiskVolume];
+  
   [self printVolume: volume indent: indent];
   
   indent = [indent stringByAppendingString: @"    "];
@@ -374,6 +434,8 @@
   
   if(pvs)
     [self printCoreStoragePvInformation: pvs indent: indent];
+    
+  [self.XML endElement: kDiskVolume];
   }
 
 // Print Core Storage "lv" information about a volume.
@@ -392,8 +454,13 @@
   if(!encryptionType)
     encryptionType = @"";
     
+  [self.XML addAttribute: kVolumeEncrypted value: encrypted];
+  
   if([encrypted isEqualToString: @"yes"])
     {
+    [self.XML addAttribute: kVolumeEncryptionType value: encryptionType];
+    [self.XML addAttribute: kVolumeEncryptionLocked value: locked];
+    
     [self.result
       appendString:
         [NSString
@@ -418,8 +485,15 @@
   if(!state)
     return;
     
+  [self.XML addElement: kVolumeEncryptionStatus value: state];
+  
   if([state isEqualToString: @"Failed"])
     {
+    [self.XML addAttribute: kSeverity value: kSerious];
+    
+    [self.XML
+      addAttribute: kSeverityExplanation value: @"encryption failed"];
+    
     [self.result appendString: @" "];
     
     [self.result
@@ -473,7 +547,20 @@
     
     status = [status stringByAppendingString: errors];
     
+    [self.XML startElement: kVolumeCoreStorage];
+    
+    [self.XML addElement: kVolumeCoreStorageName value: name];
+    [self.XML addElement: kVolumeCoreStorageSize value: size];
+    [self.XML addElement: kVolumeCoreStorageStatus value: status];
+    
+    [self.XML endElement: kVolumeCoreStorage];
+
     if([errors length])
+      {
+      [self.XML addAttribute: kSeverity value: kCritical];
+      [self.XML addAttribute: kSeverityExplanation value: @"disk failure"];
+      [self.XML addElement: kVolumeErrors value: errors];
+  
       [self.result
         appendString:
           [NSString
@@ -484,6 +571,7 @@
             NSForegroundColorAttributeName : [[Utilities shared] red],
             NSFontAttributeName : [[Utilities shared] boldFont]
           }];
+      }
     else
       [self.result
         appendString:
@@ -508,9 +596,16 @@
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
     
+  [self.XML addElement: kVolumeName value: volumeName];
+  [self.XML addElement: kVolumeMountPoint value: volumeMountPoint];
+  [self.XML addElement: kVolumeDevice value: volumeDevice];
+  
   if(UUID)
+    {
+    [self.XML addElement: kVolumeUUID value: UUID];
     [self.volumes setObject: volume forKey: UUID];
-
+    }
+    
   NSDictionary * stats =
     [self
       volumeStatsFor: volumeName
@@ -519,19 +614,26 @@
         [[volume objectForKey: @"free_space_in_bytes"]
           unsignedLongLongValue]];
 
-  NSDictionary * attributes = [stats objectForKey: kAttributes];
+  NSDictionary * attributes = [stats objectForKey: kDiskStatsAttributes];
   
   NSString * errors = [self errorsFor: volumeDevice];
   
   if([errors length])
+    {
+    [self.XML addAttribute: kSeverity value: kCritical];
+    [self.XML addAttribute: kSeverityExplanation value: @"disk failure"];
+    [self.XML addElement: kVolumeErrors value: errors];
+
     attributes =
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
         NSFontAttributeName : [[Utilities shared] boldFont]
       };
-
+    }
+    
   NSString * status =
-    [[stats objectForKey: kDiskStatus] stringByAppendingString: errors];
+    [[stats objectForKey: kDiskStatsStatus]
+      stringByAppendingString: errors];
 
   NSString * volumeInfo =
     [NSString
@@ -541,7 +643,7 @@
         volumeName ? [Utilities sanitizeFilename: volumeName] : @"-",
         volumeDevice,
         volumeMountPoint,
-        [stats objectForKey: kDiskType],
+        [stats objectForKey: kDiskStatsType],
         volumeSize,
         volumeFree,
         status];
@@ -611,7 +713,12 @@
     
   [formatter release];
   
+  [self.XML startElement: kDiskVolume];
+  
   [self printVolume: volume indent: @"        "];
+  
+  [self.XML endElement: kDiskVolume];
+  
   [self.result appendCR];
   }
 
@@ -625,6 +732,8 @@
   
   if(sizeInBytes)
     {
+    [self.XML addElement: kVolumeSize number: sizeInBytes];
+
     ByteCountFormatter * formatter = [ByteCountFormatter new];
     
     size =
@@ -653,6 +762,8 @@
   
   if(freeSpaceInBytes)
     {
+    [self.XML addElement: kVolumeFreeSpace number: freeSpaceInBytes];
+
     ByteCountFormatter * formatter = [ByteCountFormatter new];
     
     volumeFree =
@@ -686,18 +797,29 @@
   
   if([mountPoint isEqualToString: @"/"])
     {
+    [self.XML addElement: kVolumeType value: @"startup"];
+    
+    type = NSLocalizedString(@" [Startup]", NULL);
+    
     unsigned long long GB = 1024 * 1024 * 1024;
 
     if(free < (GB * 15))
       {
-      type = NSLocalizedString(@" [Startup]", NULL);
+      [self.XML addAttribute: kSeverity value: kSerious];
+      
+      [self.XML
+        addAttribute: kSeverityExplanation value: @"low disk space"];
+      
       status = NSLocalizedString(@" (Low!)", NULL);
       }
     }
     
   else if([name isEqualToString: @"Recovery HD"])
     {
+    [self.XML addElement: kVolumeType value: @"recovery"];
+
     type = NSLocalizedString(@" [Recovery]", NULL);
+
     attributes =
       @{
         NSForegroundColorAttributeName : [[Utilities shared] gray]
@@ -713,9 +835,9 @@
 
   return
     @{
-      kDiskType : type,
-      kDiskStatus : status,
-      kAttributes : attributes
+      kDiskStatsType : type,
+      kDiskStatsStatus : status,
+      kDiskStatsAttributes : attributes
     };
   }
 
