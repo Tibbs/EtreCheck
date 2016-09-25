@@ -303,6 +303,8 @@
         
         return info;
         }
+      else if([signature isEqualToString: kExecutableMissing])
+        return info;
       }
       
     [info
