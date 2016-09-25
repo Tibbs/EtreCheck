@@ -213,6 +213,10 @@
   [self.knownAppleFailures addObject: @"com.apple.suhelperd.plist"];
   [self.knownAppleFailures addObject: @"com.apple.Kerberos.renew.plist"];
   [self.knownAppleFailures addObject: @"org.samba.winbindd.plist"];
+  [self.knownAppleFailures
+    addObject: @"com.apple.Kerberos.digest-service.plist"];
+  [self.knownAppleFailures
+    addObject: @"com.apple.mobile.keybagd.plist"];
   }
 
 #pragma mark - Collection

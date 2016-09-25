@@ -127,7 +127,7 @@
         expectedSize = 2299;
         break;
       case kSierra:
-        expectedSize = 2299;
+        expectedSize = 1563;
         break;
       }
     
