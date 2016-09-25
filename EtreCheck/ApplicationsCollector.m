@@ -277,7 +277,7 @@
 
   NSString * version = [application objectForKey: @"version"];
 
-  if(![version length] && ![OSVersion length])
+  if(!version && !OSVersion)
     return @"";
     
   if(!version)
