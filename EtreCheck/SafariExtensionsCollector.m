@@ -197,6 +197,11 @@
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
   
+  // Uncomment this and set <target> to some extension to test an
+  // unknown extension.
+  //if([humanReadableName isEqualToString: @"<target>"])
+  //  return extension;
+    
   NSString * author = [plist objectForKey: kAuthor];
 
   if([author length] > 0)
@@ -207,9 +212,6 @@
   if([website length] > 0)
     [extension setObject: website forKey: kWebsite];
   
-  if(([author length] == 0) && ([website length] == 0))
-    [[[Model model] unknownFiles] addObject: path];
-
   return extension;
   }
 
@@ -242,6 +244,21 @@
 
   if(adwareNameArchive || adwareNameCache)
     adware = true;
+    
+  // It may be new adware.
+  else
+    {
+    NSString * author = [extension objectForKey: kAuthor];
+    NSString * website = [extension objectForKey: kWebsite];
+
+    if(([author length] == 0) && ([website length] == 0))
+      {
+      if([archivePath length] > 0)
+        [[[Model model] unknownFiles] addObject: archivePath];
+      else if([cachePath length] > 0)
+        [[[Model model] unknownFiles] addObject: cachePath];
+      }
+    }
     
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)

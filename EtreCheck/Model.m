@@ -38,7 +38,7 @@
 @synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
-@synthesize unknownFilesFound = myUnknownFilesFound;
+@dynamic unknownFilesFound;
 @synthesize terminatedTasks = myTerminatedTasks;
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
@@ -83,6 +83,11 @@
   return [[files copy] autorelease];
   }
 
+- (bool) unknownFilesFound
+  {
+  return [self.unknownFiles count] > 0;
+  }
+  
 // Return the singeton of shared values.
 + (Model *) model
   {

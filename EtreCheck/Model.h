@@ -62,7 +62,6 @@
   NSMutableSet * myBlacklistFiles;
   NSMutableSet * myBlacklistSuffixes;
   NSMutableSet * myBlacklistMatches;
-  bool myUnknownFilesFound;
   NSMutableArray * myTerminatedTasks;
   NSMutableSet * mySeriousProblems;
   bool myBackupExists;
@@ -159,7 +158,7 @@
 @property (readonly) NSMutableSet * blacklistMatches;
 
 // Did I find any unknown files?
-@property (assign) bool unknownFilesFound;
+@property (readonly) bool unknownFilesFound;
 
 // Unknown launchd files.
 @property (readonly) NSDictionary * unknownLaunchdFiles;
