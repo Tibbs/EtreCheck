@@ -280,6 +280,7 @@
   {
   NSString * fallbackMarketingName = version;
   
+  NSString * OSName = @"OS X";
   NSString * name = nil;
   int offset = 5;
   
@@ -311,6 +312,11 @@
       name = @"El Capitan";
       break;
       
+    case kSierra:
+      OSName = @"macOS";
+      name = @"Sierra";
+      break;
+
     default:
       return version;
     }
@@ -318,7 +324,7 @@
   fallbackMarketingName =
     [NSString
       stringWithFormat:
-        @"OS X %@ %@", name, [version substringFromIndex: offset]];
+        @"%@ %@ %@", OSName, name, [version substringFromIndex: offset]];
   
   return fallbackMarketingName;
   }

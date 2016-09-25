@@ -855,7 +855,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [subProcess autorelease];
   
-  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+  if([subProcess execute: @"/usr/bin/curl" arguments: args])
     {
     NSString * donationKey =
       [[NSString alloc]
@@ -931,7 +931,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [content appendString: @"\n"];
   [content appendString: NSLocalizedString(@"manualdonationlookup", NULL)];
   
-  NSString * donationKey = [Utilities UUID];
+  // Try to use an existeing donation key.
+  NSString * donationKey =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"donationkey"];
+
+  if(donationKey == nil)
+    donationKey = [Utilities UUID];
   
   [[NSUserDefaults standardUserDefaults]
     setObject: donationKey forKey: @"donationkey"];

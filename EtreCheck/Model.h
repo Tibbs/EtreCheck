@@ -13,6 +13,7 @@
 #define kMavericks    13
 #define kYosemite     14
 #define kElCapitan    15
+#define kSierra       16
 
 // Adware
 #define kAdware @"adware"
