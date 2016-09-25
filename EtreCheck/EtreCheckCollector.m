@@ -88,7 +88,7 @@
       
       if([path length] > 0)
         {
-        NSString * safePath = [Utilities sanitizeFilename: path];
+        NSString * safePath = [Utilities cleanPath: path];
         
         [self.result
           appendString:

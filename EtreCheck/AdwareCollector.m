@@ -181,7 +181,7 @@
           ++adwareCount;
           [self.result appendString: @"    "];
           [self.result
-            appendString: [Utilities sanitizeFilename: obj]
+            appendString: [Utilities prettyPath: obj]
             attributes:
               @{
                 NSFontAttributeName : [[Utilities shared] boldFont],

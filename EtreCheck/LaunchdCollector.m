@@ -273,8 +273,7 @@
   // Set attributes.
   [info setObject: path forKey: kPath];
   
-  [info
-    setObject: [Utilities sanitizeFilename: filename] forKey: kFilename];
+  [info setObject: filename forKey: kFilename];
   
   if([filename hasPrefix: @"."])
     [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
@@ -787,7 +786,7 @@
   [output appendAttributedString: [self formatPropertyListStatus: info]];
   
   // Add the name.
-  [output appendString: filename];
+  [output appendString: [Utilities prettyPath: filename]];
   
   // Add any extra content.
   [output
@@ -1259,7 +1258,7 @@
         [NSString
           stringWithFormat:
             NSLocalizedString(@" - %@: Executable not found!", NULL),
-            [Utilities sanitizeFilename: executable]];
+            [Utilities cleanPath: executable]];
     else
       message =
         [NSString

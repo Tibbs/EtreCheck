@@ -68,8 +68,7 @@
           [self.result
             appendString:
               [NSString
-                stringWithFormat:
-                  @"    %@", [Utilities sanitizeFilename: obj]]];
+                stringWithFormat: @"    %@", [Utilities cleanPath: obj]]];
 
           NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
           
@@ -92,8 +91,7 @@
           [self.result
             appendString:
               [NSString
-                stringWithFormat:
-                  @"    %@\n", [Utilities sanitizeFilename: obj]]];
+                stringWithFormat: @"    %@\n", [Utilities cleanPath: obj]]];
           }];
 
     NSString * message =

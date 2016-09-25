@@ -308,7 +308,7 @@
   if([path length] == 0)
     return NO;
     
-  NSString * safePath = [Utilities sanitizeFilename: path];
+  NSString * safePath = [Utilities cleanPath: path];
   
   if([safePath length] == 0)
     return NO;
