@@ -138,7 +138,7 @@
 "Gatekeeper:" = "Gatekeeper :";
 " [Recovery]" = " [Restauration]";
 "info" = "ⓘ";
-"startupitemsdeprecated" = "    Les éléments de démarrage sont obsolètes pour OS X Yosemite\n";
+"startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
 "Quit" = "Quitter";
 "EtreCheck Report" = "Rapport EtreCheck";
 "Problem: " = "Problème :";
