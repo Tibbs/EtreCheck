@@ -510,6 +510,7 @@
 		<string>com.C-motech.MacModem.GUI.plist</string>
 		<string>com.cadence.caspercheck.plist</string>
 		<string>com.caleido.portmap.plist</string>
+		<string>com.calibre.updater.plist</string>
 		<string>com.canon.MFManager.plist</string>
 		<string>com.canon.SPPHelper.plist</string>
 		<string>com.caphyon.almserver.plist</string>
@@ -580,6 +581,8 @@
 		<string>com.cisco.medianet.msi.msirest.plist</string>
 		<string>com.cisco.pwpolicy.plist</string>
 		<string>com.cisco.sspolicy.plist</string>
+		<string>com.ciscodrm.vgconnect.plist</string>
+		<string>com.ciscodrm.vgconnect.uninstall.plist</string>
 		<string>com.ciscosystems.ciscoconnect.daemon.plist</string>
 		<string>com.ciscosystems.ciscoconnectupgrade.daemon.plist</string>
 		<string>com.ciscosystems.extender.daemon.plist</string>
@@ -597,6 +600,7 @@
 		<string>com.citrixonline.GoToMyPC.CommAgent.plist</string>
 		<string>com.citrixonline.GoToMyPC.LaunchAgent.plist.final</string>
 		<string>com.citrixonline.GoToMyPC.LaunchAgent.plist</string>
+		<string>com.ckb.daemon.plist</string>
 		<string>com.clamxav.clamd.plist</string>
 		<string>com.clamXav.freshclam.plist</string>
 		<string>com.clearwire.cell.mac.roamingclient.connectionmanager.plist</string>
@@ -1057,6 +1061,8 @@
 		<string>com.GeoComply.AutoUpdate.plist</string>
 		<string>com.GeoComply.PlayerLocationCheck.Service.plist</string>
 		<string>com.geotate.katomount.plist</string>
+		<string>com.gfi.viprea.plist</string>
+		<string>com.gfi.vipred.plist</string>
 		<string>com.ggarmo.duti.plist</string>
 		<string>com.ggt.vm.core.procinfod.plist</string>
 		<string>com.ghughes.wifisync.root.plist</string>
@@ -1131,6 +1137,7 @@
 		<string>com.gspeed2.httpd.plist</string>
 		<string>com.gspy.koneXTD.Daemon.plist</string>
 		<string>com.gspy.Level10MDaemon.plist</string>
+		<string>com.gspy.MO3V2.Daemon.plist</string>
 		<string>com.hamachix.tuncfgd.plist</string>
 		<string>com.hanvon.hanvontablet.plist</string>
 		<string>com.hanynet.icefloor.emergingthreats.plist</string>
@@ -1438,6 +1445,7 @@
 		<string>com.landesk.rotatelog.plist</string>
 		<string>com.landesk.scheduler.plist</string>
 		<string>com.landesk.vulscan.plist</string>
+		<string>com.laravel.valetServer.plist</string>
 		<string>com.lastpass.LastPassHelper.plist</string>
 		<string>com.leapfrog.connect.authdaemon.plist</string>
 		<string>com.leapfrog.connect.monitor.plist</string>
@@ -1691,9 +1699,12 @@
 		<string>com.microsoft.sbs.SoftwareUpdate.schedule.plist</string>
 		<string>com.microsoft.scep_daemon.plist</string>
 		<string>com.microsoft.silverlight.debugproxy.plist</string>
+		<string>com.microsoft.systemsmanagement.ccmagent.plist</string>
+		<string>com.microsoft.systemsmanagement.ccm.plist</string>
 		<string>com.mindofwinner.plist</string>
 		<string>com.mine.toggleairport.plist</string>
 		<string>com.mixage.ITMTouchBridge.plist</string>
+		<string>com.mi.package02.Photon+.plist</string>
 		<string>com.mlbam.nexdef.core.NexdefLoader.plist</string>
 		<string>com.mlbam.nexdef.plist</string>
 		<string>com.mobikin.AndroidDataRecoveryHelper.plist</string>
@@ -2175,6 +2186,7 @@
 		<string>com.raynersw.netshade-ctl-2.plist</string>
 		<string>com.raynersw.nshctldo.plist</string>
 		<string>com.raynersw.nshfixer.plist</string>
+		<string>com.razer.anansidaemon.plist</string>
 		<string>com.razer.common.rzcoreengine.plist</string>
 		<string>com.razer.DeathAdder.Daemon.plist</string>
 		<string>com.razer.imperatorIIdaemon.plist</string>
@@ -2565,6 +2577,7 @@
 		<string>com.tappin.agent.plist</string>
 		<string>com.tascam.IFFWDMmkII.plist</string>
 		<string>com.tastyapps.SpiceRack.plist</string>
+		<string>com.tatasky.tataskymobile.plist</string>
 		<string>com.tclementdev.timemachineeditor.scheduler.plist</string>
 		<string>com.teamdrive.fseventsdaemon.plist</string>
 		<string>com.teamdrive.teamdrive3.plist</string>
@@ -2667,6 +2680,7 @@
 		<string>com.usbApogeeDaemon.plist</string>
 		<string>com.usenetserver.helper.openvpn.plist</string>
 		<string>com.usenetserver.helper.pppd.plist</string>
+		<string>com.user.UninstallAD.plist</string>
 		<string>com.valvesoftware.steam.ipctool.plist</string>
 		<string>com.valvesoftware.steamclean.plist</string>
 		<string>com.vandyke.SecureCRT.BindingHelper.plist</string>
@@ -2709,6 +2723,7 @@
 		<string>com.waves.daemon.SoundGrid.NetworkSetup.plist</string>
 		<string>com.waves.daemon.SoundGridProtocolService.plist</string>
 		<string>com.wdc.drivemanagerservice.plist</string>
+		<string>com.wdc.drivemanagerstatusmenu.plist</string>
 		<string>com.wdc.raidmanagerstatusmenu.plist</string>
 		<string>com.wdc.SmartwareDriveService.plist</string>
 		<string>com.wdc.WD-Sync-Service.plist</string>
@@ -2751,12 +2766,17 @@
 		<string>com.wondershare.mobilegodaemon.plist</string>
 		<string>com.wondershare.mobilegoiOSMacWatchDemo.plist</string>
 		<string>com.Wondershare.TunesGoWatchDemo.plist</string>
+		<string>com.wontok.securityapp.SecurityCore.plist</string>
+		<string>com.wontok.securityapp.SecurityCoreUpdater.plist</string>
+		<string>com.wontok.securityapp.SecurityDatabaseUpdater.plist</string>
+		<string>com.wontok.securityapp.SecurityFilter.plist</string>
 		<string>com.wowza.WowzaStreamingEngine.plist</string>
 		<string>com.wowza.WowzaStreamingEngineManager.plist</string>
 		<string>com.wrike.plugin.enable-bundles.plist</string>
 		<string>com.wrike.plugin.patch-uuid-user.plist</string>
 		<string>com.wrike.plugin.patch-uuid.plist</string>
 		<string>com.wuala.WualaFS.KextLoaderHelper.plist</string>
+		<string>com.wwusb.CBA.plist</string>
 		<string>com.wyse.MacCompanion.plist</string>
 		<string>com.wyse.PocketCloud.plist</string>
 		<string>com.x3.x3daemon.plist</string>
@@ -3745,6 +3765,7 @@
 		<string>shopy-mate.ver</string>
 		<string>SngyBb9iL.plist</string>
 		<string>yeti.notification.plist</string>
+		<string>com.MTWB.Product.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
