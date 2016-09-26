@@ -55,6 +55,7 @@
 
   [self collectArchives];
   [self collectCaches];
+  [self collectModernExtensions];
 
   // Print the extensions.
   if([self.extensions count])
@@ -143,6 +144,109 @@
         [self createExtensionsFromPlist: plist name: name path: path];
         
       [extension setObject: path forKey: kCachePath];
+      }
+    }
+    
+  [subProcess release];
+  }
+
+// Collect modern extensions.
+- (void) collectModernExtensions
+  {
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL success =
+    [subProcess
+      execute:
+        @"/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+      arguments: @[ @"-dump"]];
+    
+  if(success)
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+
+    BOOL isExtension = NO;
+    NSString * name = nil;
+    NSString * path = nil;
+    NSString * displayName = nil;
+    NSString * identifier = nil;
+    
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([trimmedLine isEqualToString: @""])
+        continue;
+
+      BOOL check =
+        [trimmedLine
+          isEqualToString:
+            @"--------------------------------------------------------------------------------"];
+        
+      if(check)
+        {
+        if(displayName && path && identifier && isExtension)
+          {
+          NSDictionary * extension =
+            [NSDictionary dictionaryWithObjectsAndKeys:
+              displayName, kHumanReadableName,
+              identifier, kIdentifier,
+              displayName, kFileName,
+              path, kArchivePath,
+              @"Mac App Store", kAuthor,
+              nil];
+            
+          [self.extensions setObject: extension forKey: identifier];
+          }
+
+        isExtension = NO;
+        displayName = nil;
+        identifier = nil;
+        name = nil;
+        path = nil;
+        }
+      else if([trimmedLine hasPrefix: @"protocol:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 9];
+        
+        NSString * protocol =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          
+        if([protocol hasPrefix: @"com.apple.Safari."])
+          isExtension = YES;
+        }
+      else if([trimmedLine hasPrefix: @"displayName:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 12];
+        
+        displayName =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      else if([trimmedLine hasPrefix: @"identifier:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 11];
+        
+        identifier =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      else if([trimmedLine hasPrefix: @"path:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 5];
+        
+        path =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
       }
     }
     
