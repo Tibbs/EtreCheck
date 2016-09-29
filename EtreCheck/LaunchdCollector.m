@@ -849,13 +849,23 @@
     // signature isn't good enough.
     if(![[Model model] ignoreKnownAppleFailures])
       {
+      // These aren't errors.
       if([signature isEqualToString: kSignatureApple])
         {
         }
       else if([signature isEqualToString: kSignatureValid])
         {
         }
-      else
+      else if([signature isEqualToString: kShell])
+        {
+        }
+        
+      // These are errors.
+      else if([signature isEqualToString: kExecutableMissing])
+        return YES;
+        
+      // Anything else will cause the item to be printed.
+      else if((signature != nil) && [[Model model] showSignatureFailures])
         return YES;
       }
       
@@ -968,6 +978,10 @@
     
     if([expectedSignature length] > 0)
       return [signature isEqualToString: expectedSignature];
+    
+    // Apple is now putting "other stuff" in launchd plist files.
+    else if([signature length] == 0)
+      return YES;
     }
     
   return NO;
@@ -1289,7 +1303,15 @@
     // Else if I am not ignoring known Apple failures, then if I'm not
     // showing signature failures, clear the failure, if any.
     else if(![[Model model] showSignatureFailures])
-      message = nil;
+      {
+      // I still want to report things that aren't actual signature
+      // failures.
+      if([signature isEqualToString: kExecutableMissing])
+        {
+        }
+      else
+        message = nil;
+      }
     }
     
   // Else if this is not an Apple file things aren't so complicated.

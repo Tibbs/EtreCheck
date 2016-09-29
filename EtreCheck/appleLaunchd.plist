@@ -32343,6 +32343,18 @@
         <key>signature</key>
         <string>signatureapple</string>
       </dict>
+      <key>/System/Library/LaunchAgents/com.apple.webdriverd.plist</key>
+      <dict>
+        <key>label</key>
+        <string>com.apple.webdriverd</string>
+        <key>program</key>
+        <string>/usr/libexec/webdriverd</string>
+        <key>programArguments</key>
+        <array>
+        </array>
+        <key>signature</key>
+        <string>signatureapple</string>
+      </dict>
     </dict>
     <key>10.12</key>
     <dict>
@@ -39920,6 +39932,8 @@
         <key>signature</key>
         <string>signatureapple</string>
       </dict>
+      <key>/System/Library/LaunchDaemons/com.apple.jetsamproperties.Mac.plist</key>
+      <dict/>
     </dict>
   </dict>
 </plist>
