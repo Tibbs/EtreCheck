@@ -720,6 +720,9 @@
   if(![path length])
     return kExecutableMissing;
     
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return kExecutableMissing;
+      
   // Get the app path.
   path = [Utilities resolveBundlePath: path];
     
@@ -791,6 +794,9 @@
   if([path length] == 0)
     return kExecutableMissing;
     
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return kExecutableMissing;
+      
   if([Utilities isShellExecutable: path])
     return kShell;
 
