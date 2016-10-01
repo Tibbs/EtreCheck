@@ -278,6 +278,11 @@
   if([filename hasPrefix: @"."])
     [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
     
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if(modificationDate)
+    [info setObject: modificationDate forKey: kModificationDate];
+
   [self setDetailsURL: info];
   [self setExecutable: info];
   
@@ -479,6 +484,7 @@
       {
       [info setObject: command forKey: kCommand];
       [info setObject: executable forKey: kExecutable];
+      [self updateModificationDate: info path: executable];
 
       [info
         setObject: [NSNumber numberWithBool: [self isAppleFile: executable]]
@@ -766,11 +772,6 @@
   info: (NSMutableDictionary *) info
   output: (NSMutableAttributedString *) output
   {
-  NSDate * modificationDate = [self modificationDate: path];
-  
-  if(modificationDate)
-    [info setObject: modificationDate forKey: kModificationDate];
-
   // Apples file get special treatment.
   if([[info objectForKey: kApple] boolValue])
     if(![self formatApplePropertyListFile: path info: info])
