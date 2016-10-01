@@ -52,6 +52,7 @@
 		<string>at.obdev.LittleSnitchNetworkMonitor.plist</string>
 		<string>at.obdev.LittleSnitchUIAgent.plist</string>
 		<string>at.sause.FolderTeint.MoveHelper.plist</string>
+		<string>automate-eGPU-agent.plist</string>
 		<string>AVerQuick.plist</string>
 		<string>AvidISISDaemon.plist</string>
 		<string>BESAgentDaemon.plist</string>
@@ -134,6 +135,11 @@
 		<string>com.actualtechnologies.odbcdriver.atsqlsrv.plist</string>
 		<string>com.actualtechnologies.odbcmanager.plist</string>
 		<string>com.addressbookserver.client.tool.plist</string>
+		<string>com.addigy.agent.plist</string>
+		<string>com.addigy.cache.plist</string>
+		<string>com.addigy.collector.plist</string>
+		<string>com.addigy.policier.plist</string>
+		<string>com.addigy.updater.plist</string>
 		<string>com.adnx.xScanSoloDaemon.plist</string>
 		<string>com.adobe.AAM.Updater-1.0.plist.lock</string>
 		<string>com.adobe.AAM.Updater-1.0.plist</string>
@@ -287,6 +293,9 @@
 		<string>com.audiofile.Backline.plist</string>
 		<string>com.audirvana.Audirvana-Plus.plist</string>
 		<string>com.aunsoft.LaunchFinalMate.plist</string>
+		<string>com.auristor.AuriStorBackgrounder.plist</string>
+		<string>com.auristor.filesystems.yfs.plist</string>
+		<string>com.auristor.XPCHelper.plist</string>
 		<string>com.autodesk.adlm.plist</string>
 		<string>com.autodesk.backburner_manager.plist</string>
 		<string>com.autodesk.backburner_server.plist</string>
@@ -496,6 +505,7 @@
 		<string>com.bresink.system.privilegedhelper-hwm.plist</string>
 		<string>com.bresink.system.privilegedhelper-nfs.plist</string>
 		<string>com.bresink.system.privilegedhelper-syck.plist</string>
+		<string>com.bresink.system.privilegedhelper-ts5.plist</string>
 		<string>com.bresink.system.privilegedhelper-tts.plist</string>
 		<string>com.bresink.system.securityagent.plist</string>
 		<string>com.bresink.system.securityagent3.plist</string>
@@ -645,6 +655,7 @@
 		<string>com.copperlan.cpvnmd.plist</string>
 		<string>com.coppertino.VoxHelper.plist</string>
 		<string>com.corastar.strataupdate.HelperTool.plist</string>
+		<string>com.cordys.np.deamon.ffi_filter.plist</string>
 		<string>com.corecode.UninstallPKGDeleteHelper.plist</string>
 		<string>com.coriolis-systems.Downloader.install.plist</string>
 		<string>com.coupons.coupond.plist</string>
@@ -747,6 +758,7 @@
 		<string>com.devguru.ssconnservice.plist</string>
 		<string>com.devialet.air.plist</string>
 		<string>com.devialet.airaudiodriver.plist</string>
+		<string>com.dexcom.agent.plist</string>
 		<string>com.dexcom.ClarityUploaderLaunch.plist</string>
 		<string>com.didsoft.mih.agent.plist</string>
 		<string>com.diebold.warsaw.plist</string>
@@ -891,6 +903,7 @@
 		<string>com.entrust.eesd.MPSI.plist</string>
 		<string>com.entrust.eesd.SP.plist</string>
 		<string>com.epiphan.FrmGrabAssistant.plist</string>
+		<string>com.epiphan.FirmwareUpgradeCheck.plist</string>
 		<string>com.epson.discproducer.ioagent.plist</string>
 		<string>com.epson.easyinteractivedriverv2.plist</string>
 		<string>com.epson.easyinteractivedriverv3.plist</string>
@@ -1729,6 +1742,7 @@
 		<string>com.motorola.motohelperUpdater.plist</string>
 		<string>com.motu.AVBHTTPServer.launchd.plist</string>
 		<string>com.motu.MOTULauncher.plist</string>
+		<string>com.motu.proaudio.HTTPServer.launchd.plist</string>
 		<string>com.movavi.maccleaner.agent.plist</string>
 		<string>com.movavi.maccleaner.trashmonitor.plist</string>
 		<string>com.movavi.maccleaner2.rammonitor.plist</string>
@@ -1855,6 +1869,7 @@
 		<string>com.nielsen.metermenu.launchagent.plist</string>
 		<string>com.nielsen.netsight.keyboardmouse.plist</string>
 		<string>com.nike.nikeplusconnect.plist</string>
+		<string>com.ninjarmm.agentd.plist</string>
 		<string>com.noatime.plist</string>
 		<string>com.noatime.root.plist</string>
 		<string>com.noiseindustries.FxFactory.AE.plist</string>
@@ -1875,6 +1890,7 @@
 		<string>com.novatelwireless.mobilink3.plist</string>
 		<string>com.novatelwireless.NvtlServer.plist</string>
 		<string>com.novation.automap.pluginhelper.plist</string>
+		<string>com.novell.filrfs.plist</string>
 		<string>com.novell.iprintstartup.plist</string>
 		<string>com.nprotect.kext.nProtectFW.plist</string>
 		<string>com.nprotect.nosintgdmn.plist</string>
@@ -2282,6 +2298,7 @@
 		<string>com.sandy.refreshwalks.plist</string>
 		<string>com.sanity.powercontrollerdaemon.plist</string>
 		<string>com.sassafras.KeyAccess.plist</string>
+		<string>com.sassafras.KeyReporter.plist</string>
 		<string>com.sassafras.KeyServer.plist</string>
 		<string>com.schomaecker.qpilot.client-gui.plist</string>
 		<string>com.schomaecker.qpilot.client-service.plist</string>
@@ -2454,6 +2471,7 @@
 		<string>com.squirrels.kextinstaller.plist</string>
 		<string>com.srib.pssddaemon.plist</string>
 		<string>com.srs.EssentialsAgent.plist</string>
+		<string>com.ssd.noatime.plist</string>
 		<string>com.starfield.backupservice.plist</string>
 		<string>com.staticz.audio.soundsiphon.input.plist</string>
 		<string>com.staticz.audio.soundsiphon.observer.plist</string>
@@ -2784,6 +2802,7 @@
 		<string>com.xamarin.mtvs.buildserver.plist</string>
 		<string>com.xbmc.SuperTV.plist</string>
 		<string>com.xerox.printbackd.plist</string>
+		<string>com.xerox.scan.phaser6128mfp.ButtonListenerAgent.plist</string>
 		<string>com.xerox.scan.phaser6180mfp.ButtonListenerAgent.plist</string>
 		<string>com.xerox.scan.workcentre6505.ButtonListenerAgent.plist</string>
 		<string>com.xerox.scan.workcentre6605.ButtonListenerAgent.plist</string>
@@ -2824,6 +2843,9 @@
 		<string>com.yourcompany.Chiavetta_Internet_Olicard_200.plist</string>
 		<string>com.yoyotta.YoYottaID.plist</string>
 		<string>com.zabbix.zabbix_agentd.plist</string>
+		<string>com.zdziarski.LittleFlockerDaemon.plist</string>
+		<string>com.zdziarski.LittleFlockerUpdater.plist</string>
+		<string>com.zdziarski.LittleFlockerUserAgent.plist</string>
 		<string>com.zenmate.charon-xpc.plist</string>
 		<string>com.zeobit.MacKeeper.AntiVirus.plist</string>
 		<string>com.zeobit.MacKeeper.AntiVirus</string>
