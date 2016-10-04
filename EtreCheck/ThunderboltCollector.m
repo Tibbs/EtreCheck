@@ -27,7 +27,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   // TODO: Sandbox does this work?
   [self

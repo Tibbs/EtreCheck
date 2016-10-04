@@ -154,6 +154,10 @@
 // Collect free disk space.
 - (BOOL) collectDiskFree: (BOOL) dataFound
   {
+  [self.XML startElement: kDiskVolumes];
+
+  dataFound = NO;
+  
   NSArray * args =
     @[
       @"-kl",
@@ -178,11 +182,11 @@
         dataFound = YES;
         }
       }
-      
-    return dataFound;
     }
 
-  return NO;
+  [self.XML endElement: kDiskVolumes];
+
+  return dataFound;
   }
 
 // Print disks attached to a single Serial ATA controller.
