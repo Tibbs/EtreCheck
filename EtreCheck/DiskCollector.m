@@ -340,13 +340,13 @@
 // Print the volumes on a disk.
 - (void) printDiskVolumes: (NSDictionary *) disk
   {
-  [self.XML startElement: kDiskVolumes];
-  
   NSArray * volumes = [disk objectForKey: @"volumes"];
   NSMutableSet * coreStorageVolumeNames = [NSMutableSet set];
 
   if(volumes && [volumes count])
     {
+    [self.XML startElement: kDiskVolumes];
+  
     for(NSDictionary * volume in volumes)
       {
       NSString * iocontent = [volume objectForKey: @"iocontent"];
@@ -377,9 +377,9 @@
         [self
           printCoreStorageVolume: coreStorageVolume indent: @"        "];
       }
-    }
 
-  [self.XML endElement: kDiskVolumes];
+    [self.XML endElement: kDiskVolumes];
+    }
   }
 
 // Get the SMART status for this disk.

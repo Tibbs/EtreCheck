@@ -9,6 +9,8 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect information about Firewire devices.
 @implementation FirewireCollector
@@ -70,6 +72,8 @@
 - (void) printFirewireDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
+  [self.XML startElement: kFireWireDevice];
+  
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"device_manufacturer"];
   NSString * size = [device objectForKey: @"size"];
@@ -86,6 +90,14 @@
   if([connected_speed hasSuffix: @"_speed"])
     connected_speed =
       [connected_speed substringToIndex: [connected_speed length] - 6];
+
+  [self.XML addElement: kFireWireDeviceName value: name];
+  
+  if([size length] > 0)
+    [self.XML addElement: kFireWireDeviceSize value: size];
+  
+  [self.XML addElement: kFireWireDeviceSpeed value: connected_speed];
+  [self.XML addElement: kFireWireMaxDeviceSpeed value: max_device_speed];
 
   NSString * speed =
     (max_device_speed && connected_speed)
@@ -108,6 +120,8 @@
           stringWithFormat:
             @"%@%@ %@ %@ %@\n", indent, manufacturer, name, speed, size]];
             
+    [self.XML addElement: kUSBDeviceManufacturer value: manufacturer];
+    
     indent = [NSString stringWithFormat: @"%@    ", indent];
     }
   
@@ -115,6 +129,8 @@
   
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
+
+  [self.XML endElement: kFireWireDevice];
   }
 
 // Print more devices.

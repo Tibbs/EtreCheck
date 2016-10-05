@@ -110,6 +110,22 @@
 #define kVolumeSize @"size"
 #define kVolumeFreeSpace @"free_space"
 
+#define kUSBDevice @"device"
+#define kUSBDeviceName @"name"
+#define kUSBDeviceManufacturer @"manufacturer"
+#define kUSBDeviceSize @"size"
+
+#define kFireWireDevice @"device"
+#define kFireWireDeviceName @"name"
+#define kFireWireDeviceManufacturer @"manufacturer"
+#define kFireWireDeviceSize @"size"
+#define kFireWireDeviceSpeed @"speed"
+#define kFireWireMaxDeviceSpeed @"maxspeed"
+
+#define kThunderboltDevice @"device"
+#define kThunderboltDeviceName @"name"
+#define kThunderboltDeviceManufacturer @"manufacturer"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
