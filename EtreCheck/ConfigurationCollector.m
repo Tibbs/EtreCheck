@@ -9,6 +9,8 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -43,7 +45,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking configuration files", NULL)];
@@ -138,6 +140,22 @@
         expectedSize = 2299;
 
     if(attributes.fileSize != expectedSize)
+      {
+      [self.XML startElement: kConfigurationFileWrongSize];
+      
+      [self.XML addAttribute: kSeverity value: kSerious];
+      [self.XML addAttribute: kSeverityExplanation value: @"Wrong size"];
+
+      [self.XML addElement: kConfigurationFileName value: @"/etc/sudoers"];
+      [self.XML
+        addElement: kConfigurationFileSize
+        unsignedLonglongValue: attributes.fileSize];
+      [self.XML
+        addElement: kConfigurationFileExpectedSize
+        unsignedLonglongValue: expectedSize];
+      
+      [self.XML endElement: kConfigurationFileWrongSize];
+      
       [files
         addObject:
           [NSString
@@ -148,6 +166,7 @@
               @"/etc/sudoers",
               attributes.fileSize,
               expectedSize]];
+      }
     }
   
   self.modifiedFiles = files;
@@ -162,11 +181,35 @@
   
   // See if /etc/sysctl.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/sysctl.conf"])
+    {
+    [self.XML startElement: kConfigurationFileUnexpected];
+    
+    [self.XML addAttribute: kSeverity value: kSerious];
+    [self.XML addAttribute: kSeverityExplanation value: @"unexpected"];
+
+    [self.XML
+      addElement: kConfigurationFileName value: @"/etc/sysctl.conf"];
+    
+    [self.XML endElement: kConfigurationFileUnexpected];
+
     [files addObject: @"/etc/sysctl.conf"];
-  
+    }
+    
   // See if /etc/launchd.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
+    {
+    [self.XML startElement: kConfigurationFileUnexpected];
+    
+    [self.XML addAttribute: kSeverity value: kSerious];
+    [self.XML addAttribute: kSeverityExplanation value: @"unexpected"];
+
+    [self.XML
+      addElement: kConfigurationFileName value: @"/etc/launchd.conf"];
+    
+    [self.XML endElement: kConfigurationFileUnexpected];
+
     [files addObject: @"/etc/launchd.conf"];
+    }
     
   self.configFiles = files;
   }
@@ -180,9 +223,23 @@
     {
     NSString * status = [self checkRootlessStatus];
   
+    [self.XML startElement: kConfigurationSetting];
+      
     if([status isEqualToString: @"enabled"])
+      {
+      [self.XML
+        addElement: kConfigurationSettingValue value: @"enabled"];
+        
       [[Model model] setSIP: YES];
+      }
     else
+      {
+      [self.XML addAttribute: kSeverity value: kSerious];
+      [self.XML addAttribute: kSeverityExplanation value: @"SIP disabled"];
+      
+      [self.XML
+        addElement: kConfigurationSettingValue value: status];
+
       [otherModificiations
         addObject:
           [[[NSMutableAttributedString alloc]
@@ -197,6 +254,12 @@
                 dictionaryWithObjectsAndKeys:
                   [NSColor redColor], NSForegroundColorAttributeName, nil]]
             autorelease]];
+      }
+
+    [self.XML
+      addElement: kConfigurationSettingName value: @"SIP"];
+
+    [self.XML endElement: kConfigurationSetting];
     }
     
   self.modifications = otherModificiations;
@@ -388,7 +451,18 @@
         stringWithFormat:
           NSLocalizedString(@" - Count: %d", NULL), count];
     
+  [self.XML startElement: kConfigurationSetting];
+    
   if((count > 10) || corrupt)
+    {
+    [self.XML addAttribute: kSeverity value: kSerious];
+    
+    if(count > 10)
+      [self.XML addAttribute: kSeverityExplanation value: @"count > 10"];
+    else if(corrupt)
+      [self.XML
+        addAttribute: kSeverityExplanation value: @"hosts file corrupt"];
+
     [self.result
       appendString:
         [NSString
@@ -399,6 +473,7 @@
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    }
   else if(count > 0)
     [self.result
       appendString:
@@ -406,6 +481,13 @@
           stringWithFormat:
             NSLocalizedString(@"    /etc/hosts%@%@\n", NULL),
             countString, corruptString]];
+
+  [self.XML
+    addElement: kConfigurationSettingName value: @"/etc/hosts"];
+  [self.XML
+    addElement: kConfigurationSettingValue integerValue: count];
+
+  [self.XML endElement: kConfigurationSetting];
   }
 
 @end

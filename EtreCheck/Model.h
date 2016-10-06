@@ -126,6 +126,15 @@
 #define kThunderboltDeviceName @"name"
 #define kThunderboltDeviceManufacturer @"manufacturer"
 
+#define kConfigurationFileUnexpected @"unexpectedfile"
+#define kConfigurationFileWrongSize @"filesizemismatch"
+#define kConfigurationFileName @"name"
+#define kConfigurationFileSize @"size"
+#define kConfigurationFileExpectedSize @"expectedsize"
+#define kConfigurationSetting @"setting"
+#define kConfigurationSettingName @"name"
+#define kConfigurationSettingValue @"value"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
