@@ -146,6 +146,11 @@
 #define kExtensionSDKVersion @"sdkversion"
 #define kExtensionDate @"date"
 
+#define kStartupItem @"startupitem"
+#define kStartupItemName @"name"
+#define kStartupItemPath @"path"
+#define kStartupItemVersion @"version"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"

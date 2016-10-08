@@ -10,6 +10,8 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -28,7 +30,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
@@ -58,6 +60,14 @@
         {
         [self.result appendAttributedString: [self buildTitle]];
         
+        if([items count] > 0)
+          {
+          [self.XML addAttribute: kSeverity value: kSerious];
+          [self.XML
+            addAttribute: kSeverityExplanation
+            value: @"Startup items deprecated"];
+          }
+          
         for(NSDictionary * item in items)
           [self printStartupItem: item];
           
@@ -112,9 +122,14 @@
 // Print a startup item.
 - (void) printStartupItem: (NSDictionary *) item
   {
+  [self.XML startElement: kStartupItem];
+  
   NSString * name = [item objectForKey: @"_name"];
   NSString * path = [item objectForKey: @"spstartupitem_location"];
 
+  [self.XML addElement: kStartupItemName value: name];
+  [self.XML addElement: kStartupItemPath value: path];
+  
   NSString * version = @"";
   
   for(NSString * infoPList in startupBundles)
@@ -142,6 +157,8 @@
             [OSVersion length] ? OSVersion : @""];
           
         version = compositeVersion;
+        
+        [self.XML addElement: kStartupItemVersion value: version];
         }
       }
     
@@ -155,6 +172,8 @@
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
       }];
+    
+  [self.XML endElement: kStartupItem];
   }
 
 @end
