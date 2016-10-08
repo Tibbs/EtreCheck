@@ -12,6 +12,8 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 @implementation KernelExtensionCollector
 
@@ -49,7 +51,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking kernel extensions", NULL)];
@@ -571,12 +573,18 @@
 // Format a directory of extensions.
 - (NSArray *) formatExtensionDirectory: (NSString *) directory
   {
+  [self.XML startElement: kExtensionBundle];
+    
+  [self.XML addElement: kExtensionBundlePath value: directory];
+    
   NSMutableArray * extensions = [NSMutableArray array];
   
   NSArray * sortedExtensions =
     [[self.extensionsByLocation objectForKey: directory]
       sortedArrayUsingSelector: @selector(compare:)];
 
+  [self.XML startElement: kExtensions];
+  
   for(NSString * label in sortedExtensions)
     {
     NSAttributedString * output = [self formatExtension: label];
@@ -586,6 +594,8 @@
       [extensions addObject: output];
     }
     
+  [self.XML endElement: kExtensions];
+
   // If I found any non-nil extensions, insert a header for the directory.
   if([extensions count])
     {
@@ -609,15 +619,43 @@
     [string release];
     }
     
+  [self.XML endElement: kExtensionBundle];
+
   return extensions;
   }
 
 // Format an extension for output.
 - (NSAttributedString *) formatExtension: (NSString *) label
   {
+  [self.XML startElement: kExtension];
+  
   NSDictionary * extension = [self.extensions objectForKey: label];
   
   NSString * obtained_from = [extension objectForKey: @"obtained_from"];
+  
+  [self.XML addElement: kExtensionLabel value: label];
+  
+  if([obtained_from length] > 0)
+    [self.XML addElement: kExtensionVendor value: obtained_from];
+    
+  NSColor * color = [[Utilities shared] blue];
+
+  NSString * status = NSLocalizedString(@"loaded", NULL);
+  
+  if([self.unloadedExtensions objectForKey: label])
+    {
+    status = NSLocalizedString(@"not loaded", NULL);
+    color = [[Utilities shared] gray];
+    }
+    
+  NSAttributedString * result =
+    [self formatBundle: label status: status color: color];
+
+  [self.XML endElement: kExtension];
+
+  if([self.unloadedExtensions objectForKey: label])
+    if([self ignoreUnloadedExtension: label])
+      return nil;
   
   if([obtained_from isEqualToString: @"apple"])
     return nil;
@@ -626,20 +664,7 @@
   if([label hasPrefix: @"com.apple."])
     return nil;
 
-  NSColor * color = [[Utilities shared] blue];
-
-  NSString * status = NSLocalizedString(@"[loaded]", NULL);
-  
-  if([self.unloadedExtensions objectForKey: label])
-    {
-    status = NSLocalizedString(@"[not loaded]", NULL);
-    color = [[Utilities shared] gray];
-
-    if([self ignoreUnloadedExtension: label])
-      return nil;
-    }
-    
-  return [self formatBundle: label status: status color: color];
+  return result;
   }
 
 // Return a formatted bundle.
@@ -660,6 +685,10 @@
   
   NSString * OSVersion = [self getOSVersion: bundle age: & age];
     
+  [self.XML addElement: kExtensionStatus value: status];
+  [self.XML addElement: kExtensionVersion value: version];
+  [self.XML addElement: kExtensionSDKVersion value: version];
+  
   [formattedOutput
     appendString:
       [NSString
@@ -688,6 +717,8 @@
   {
   NSDate * modificationDate = [Utilities modificationDate: path];
     
+  [self.XML addElement: kExtensionDate date: modificationDate];
+
   if(modificationDate)
     {
     NSString * modificationDateString =

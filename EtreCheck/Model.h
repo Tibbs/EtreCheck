@@ -135,6 +135,17 @@
 #define kConfigurationSettingName @"name"
 #define kConfigurationSettingValue @"value"
 
+#define kExtensionBundle @"bundle"
+#define kExtensionBundlePath @"path"
+#define kExtensions @"extensions"
+#define kExtension @"extension"
+#define kExtensionLabel @"label"
+#define kExtensionVendor @"vendor"
+#define kExtensionStatus @"status"
+#define kExtensionVersion @"version"
+#define kExtensionSDKVersion @"sdkversion"
+#define kExtensionDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
