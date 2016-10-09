@@ -7,6 +7,8 @@
 #import "SystemLaunchDaemonsCollector.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 @implementation SystemLaunchDaemonsCollector
 
@@ -24,14 +26,14 @@
   }
 
 // Collect system launch daemons.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
       NSLocalizedString(@"Checking system launch daemons", NULL)];
 
   // Make sure the base class is setup.
-  [super collect];
+  [super performCollection];
   
   NSArray * args =
     @[
@@ -49,7 +51,14 @@
     
     NSArray * plists = [self collectPropertyListFiles: files];
     
+    [self.XML startElement: kLaunchdTasks];
+    
+    [self.XML addAttribute: kLaunchdDomain value: @"apple"];
+    [self.XML addAttribute: kLaunchdType value: @"daemon"];
+
     [self printPropertyLists: plists];
+    
+    [self.XML endElement: kLaunchdTasks];
     }
     
   [subProcess release];

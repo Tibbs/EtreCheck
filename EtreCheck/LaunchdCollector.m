@@ -13,6 +13,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 @implementation LaunchdCollector
 
@@ -119,7 +120,7 @@
 #pragma mark - Launchd routines
 
 // Collect the status of all launchd items.
-- (void) collect
+- (void) performCollection
   {
   // Don't do this more than once.
   if([self.launchdStatus count])
@@ -770,6 +771,8 @@
   if(modificationDate)
     [info setObject: modificationDate forKey: kModificationDate];
 
+  [self emitPropertyListXML: path info: info];
+  
   // Apples file get special treatment.
   if([[info objectForKey: kApple] boolValue])
     if(![self formatApplePropertyListFile: path info: info])
@@ -1296,6 +1299,49 @@
             formatExecutable: [info objectForKey: kCommand]]]];
     
   return [extra autorelease];
+  }
+
+// Emit a property list as XML.
+- (void) emitPropertyListXML: (NSString *) path
+  info: (NSMutableDictionary *) info
+  {
+  [self.XML startElement: kLaunchdTask];
+  
+  NSString * status = [info objectForKey: kStatus];
+  
+  if([status length] == 0)
+    status = @"not loaded";
+    
+  [self.XML addAttribute: kLaunchdStatus value: status];
+
+  NSString * signature = [info objectForKey: kSignature];
+
+  if([signature isEqualToString: kShell])
+    [self.XML addAttribute: kLaunchdAnalysis value: signature];
+  else if([signature isEqualToString: kExecutableMissing])
+    [self.XML addAttribute: kLaunchdAnalysis value: signature];
+  else
+    [self.XML addAttribute: kLaunchdSignature value: signature];
+    
+  if([[info objectForKey: kApple] boolValue])
+    [self.XML addAttribute: kLaunchdAnalysis value: @"apple"];
+  else if([[info objectForKey: kUnknown] boolValue])
+    [self.XML addAttribute: kLaunchdAnalysis value: @"unknown"];
+  else if([[info objectForKey: kAdware] boolValue])
+    [self.XML addAttribute: kLaunchdAnalysis value: @"adware"];
+  
+  [self.XML addElement: kLaunchdPath value: path];
+  [self.XML addElement: kLaunchdName value: [path lastPathComponent]];
+  [self.XML addElement: kLaunchdLabel value: [info objectForKey: kLabel]];
+  [self.XML
+    addElement: kLaunchdDate date: [info objectForKey: kModificationDate]];
+  [self.XML
+    addElement: kLaunchdExecutable value: [info objectForKey: kExecutable]];
+  [self.XML
+    addElement: kLaunchdCommand
+    value: [Utilities formatExecutable: [info objectForKey: kCommand]]];
+  
+  [self.XML endElement: kLaunchdTask];
   }
 
 @end

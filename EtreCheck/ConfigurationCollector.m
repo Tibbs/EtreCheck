@@ -10,7 +10,6 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 

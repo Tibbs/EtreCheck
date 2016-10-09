@@ -41,6 +41,9 @@
 // Perform the collection.
 - (void) collect;
 
+// Perform the collection.
+- (void) performCollection;
+
 // Update status.
 - (void) updateStatus: (NSString *) status;
 

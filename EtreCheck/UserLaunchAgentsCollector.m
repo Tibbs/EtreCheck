@@ -7,6 +7,8 @@
 #import "UserLaunchAgentsCollector.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 @implementation UserLaunchAgentsCollector
 
@@ -24,14 +26,14 @@
   }
 
 // Collect user launch agents.
-- (void) collect
+- (void) performCollection
   {
   // TODO: Sandbox does this work or not?
   [self
     updateStatus: NSLocalizedString(@"Checking user launch agents", NULL)];
 
   // Make sure the base class is setup.
-  [super collect];
+  [super performCollection];
   
   NSString * launchAgentsDir =
     [NSHomeDirectory()
@@ -55,7 +57,14 @@
     
       NSArray * plists = [self collectPropertyListFiles: files];
     
+      [self.XML startElement: kLaunchdTasks];
+      
+      [self.XML addAttribute: kLaunchdDomain value: @"user"];
+      [self.XML addAttribute: kLaunchdType value: @"agent"];
+      
       [self printPropertyLists: plists];
+    
+      [self.XML endElement: kLaunchdTasks];
       }
       
     [subProcess release];

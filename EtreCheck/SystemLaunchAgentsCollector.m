@@ -7,6 +7,8 @@
 #import "SystemLaunchAgentsCollector.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 @implementation SystemLaunchAgentsCollector
 
@@ -24,14 +26,14 @@
   }
 
 // Collect system launch agents.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
       NSLocalizedString(@"Checking system launch agents", NULL)];
  
   // Make sure the base class is setup.
-  [super collect];
+  [super performCollection];
   
   NSArray * args =
     @[
@@ -49,7 +51,14 @@
     
     NSArray * plists = [self collectPropertyListFiles: files];
     
+    [self.XML startElement: kLaunchdTasks];
+    
+    [self.XML addAttribute: kLaunchdDomain value: @"apple"];
+    [self.XML addAttribute: kLaunchdType value: @"agent"];
+    
     [self printPropertyLists: plists];
+    
+    [self.XML endElement: kLaunchdTasks];
     }
     
   [subProcess release];
