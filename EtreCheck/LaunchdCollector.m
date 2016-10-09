@@ -1318,7 +1318,8 @@
   // Else if this is not an Apple file things aren't so complicated.
   // If I'm not showing signature failures, then clear the failure, if any.
   else if(![[Model model] showSignatureFailures])
-    message = nil;
+    if(![signature isEqualToString: kExecutableMissing])
+      message = nil;
     
   if([message length])
     [extra
