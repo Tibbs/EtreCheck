@@ -730,6 +730,7 @@
 		<string>com.delantis.tcbblockd.plist</string>
 		<string>com.delantis.tcbblocknke_load_kext.plist</string>
 		<string>com.delantis.tcpblock.plist</string>
+		<string>com.delantis.TCPBlock.plist</string>
 		<string>com.delicioussafari.DeliciousSafariAgent.plist</string>
 		<string>com.delicioussafari.trimcheck.plist</string>
 		<string>com.dell.bmlaunchd.plist</string>
@@ -2989,6 +2990,7 @@
 		<string>fr.caldera.calserver.plist</string>
 		<string>fr.caldera.keyserver.plist</string>
 		<string>fr.caldera.verifications.plist</string>
+		<string>fr.lcprod.reflexio.plist</string>
 		<string>fr.orange.Demon.plist</string>
 		<string>fr.orange.OrangeUpdate_Gui.plist</string>
 		<string>fr.orange.OrangeUpdate.plist</string>
@@ -3120,7 +3122,10 @@
 		<string>jp.com.ELECOM.autorun.plist</string>
 		<string>jp.monokakido.Kawasemi2.Enabler.plist</string>
 		<string>jp.monokakido.Kawasemi2.Update.helper.plist</string>
-		<string>jp.sekn.Sync!Sync!Sync!.1_RegularSchedule.plist</string>
+		<string>jp.sekn.Sync!Sync!Sync!.1_RegularSchedule.plist</string>		
+    <string>jp.sekn.Task3.statusMenuItem.plist</string>
+    <string>jp.sekn.Task3.task3runner.plist</string>
+    <string>jp.sekn.Task3.updateChecker.plist</string>
 		<string>jp.sourceforge.clamav-update.RotateClamXavScanLog.plist</string>
 		<string>jp.sourceforge.clamav-update.SentryKeeper.plist</string>
 		<string>kace.ampagent.bootup.plist</string>
@@ -3360,12 +3365,14 @@
 		<string>org.macosforge.xquartz.startx.plist</string>
 		<string>org.macosxhints.SoftwareUpdate.plist</string>
 		<string>org.macports.akonadi.plist</string>
+		<string>org.macports.Anacron.plist</string>
 		<string>org.macports.apache2.plist</string>
 		<string>org.macports.bind9.plist</string>
 		<string>org.macports.certsync.plist</string>
 		<string>org.macports.clamd.plist</string>
 		<string>org.macports.dbus.plist</string>
 		<string>org.macports.ddclient.plist</string>
+		<string>org.macports.fcron.plist</string>
 		<string>org.macports.frameworks.macports.plist</string>
 		<string>org.macports.freshclam.plist</string>
 		<string>org.macports.gpg-agent.plist</string>
