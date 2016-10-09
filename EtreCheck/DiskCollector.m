@@ -644,7 +644,7 @@
       stringWithFormat:
         NSLocalizedString(@"%@%@ (%@) %@ %@: %@ %@%@\n", NULL),
         indent,
-        volumeName ? [Utilities sanitizeFilename: volumeName] : @"-",
+        volumeName ? [Utilities cleanPath: volumeName] : @"-",
         volumeDevice,
         volumeMountPoint,
         [stats objectForKey: kDiskStatsType],

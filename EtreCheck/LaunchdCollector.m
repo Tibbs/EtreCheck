@@ -274,12 +274,16 @@
   // Set attributes.
   [info setObject: path forKey: kPath];
   
-  [info
-    setObject: [Utilities sanitizeFilename: filename] forKey: kFilename];
+  [info setObject: filename forKey: kFilename];
   
   if([filename hasPrefix: @"."])
     [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
     
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if(modificationDate)
+    [info setObject: modificationDate forKey: kModificationDate];
+
   [self setDetailsURL: info];
   [self setExecutable: info];
   
@@ -479,6 +483,7 @@
       {
       [info setObject: command forKey: kCommand];
       [info setObject: executable forKey: kExecutable];
+      [self updateModificationDate: info path: executable];
 
       [info
         setObject: [NSNumber numberWithBool: [self isAppleFile: executable]]
@@ -788,7 +793,7 @@
   [output appendAttributedString: [self formatPropertyListStatus: info]];
   
   // Add the name.
-  [output appendString: filename];
+  [output appendString: [Utilities prettyPath: filename]];
   
   // Add any extra content.
   [output
@@ -851,13 +856,23 @@
     // signature isn't good enough.
     if(![[Model model] ignoreKnownAppleFailures])
       {
+      // These aren't errors.
       if([signature isEqualToString: kSignatureApple])
         {
         }
       else if([signature isEqualToString: kSignatureValid])
         {
         }
-      else
+      else if([signature isEqualToString: kShell])
+        {
+        }
+        
+      // These are errors.
+      else if([signature isEqualToString: kExecutableMissing])
+        return YES;
+        
+      // Anything else will cause the item to be printed.
+      else if((signature != nil) && [[Model model] showSignatureFailures])
         return YES;
       }
       
@@ -970,6 +985,10 @@
     
     if([expectedSignature length] > 0)
       return [signature isEqualToString: expectedSignature];
+    
+    // Apple is now putting "other stuff" in launchd plist files.
+    else if([signature length] == 0)
+      return YES;
     }
     
   return NO;
@@ -1207,7 +1226,7 @@
         [NSString
           stringWithFormat:
             NSLocalizedString(@" - %@: Executable not found!", NULL),
-            [Utilities sanitizeFilename: executable]];
+            [Utilities cleanPath: executable]];
     else
       message =
         [NSString
@@ -1238,7 +1257,15 @@
     // Else if I am not ignoring known Apple failures, then if I'm not
     // showing signature failures, clear the failure, if any.
     else if(![[Model model] showSignatureFailures])
-      message = nil;
+      {
+      // I still want to report things that aren't actual signature
+      // failures.
+      if([signature isEqualToString: kExecutableMissing])
+        {
+        }
+      else
+        message = nil;
+      }
     }
     
   // Else if this is not an Apple file things aren't so complicated.

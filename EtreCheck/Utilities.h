@@ -93,8 +93,8 @@
 // the path.
 + (NSString *) formatExecutable: (NSArray *) parts;
 
-// Make a file name more presentable.
-+ (NSString *) sanitizeFilename: (NSString *) file;
+// Make a path more presentable.
++ (NSString *) prettyPath: (NSString *) path;
 
 // Uncompress some data.
 + (NSData *) ungzip: (NSData *) gzipData;

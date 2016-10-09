@@ -282,67 +282,87 @@
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path
   {
-  NSString * abbreviated = [path stringByAbbreviatingWithTildeInPath];
+  NSMutableArray * cleanParts = [NSMutableArray array];
   
+  // There is no guarantee this is a real path.
+  NSArray * parts =
+    [path
+      componentsSeparatedByCharactersInSet:
+        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  // See if the full user name is in the computer name.
+  NSString * computerName = [[Model model] computerName];
+  NSString * hostName = [[Model model] hostName];
+    
   NSString * username = NSUserName();
   NSString * fullname = NSFullUserName();
   
-  if([username length] < 4)
-    return abbreviated;
-    
-  NSRange range = [abbreviated rangeOfString: username];
+  for(NSString * pathPart in parts)
+    {
+    NSString * part = [pathPart stringByAbbreviatingWithTildeInPath];
   
-  if(range.location == NSNotFound)
-    {
-    if([fullname length])
-      range = [abbreviated rangeOfString: username];
-    else
-      return abbreviated;
-    }
+    NSRange range = NSMakeRange(NSNotFound, 0);
+  
+    if([username length] >= 4)
+      range = [part rangeOfString: username];
+  
+    if((range.location == NSNotFound) && [fullname length])
+      range = [part rangeOfString: username];
     
-  // Now check for a hostname version.
-  if(range.location == NSNotFound)
-    {
-    // See if the full user name is in the computer name.
-    NSString * computerName = [[Model model] computerName];
-    
-    if(!computerName)
-      return abbreviated;
-      
-    BOOL redact = NO;
-    
-    if([computerName rangeOfString: username].location != NSNotFound)
-      redact = YES;
-    else if([fullname length])
-      if([computerName rangeOfString: fullname].location != NSNotFound)
-        redact = YES;
-      
-    if(redact)
+    if((range.location == NSNotFound) && [part hasPrefix: @"/Users/"])
       {
-      range = [abbreviated rangeOfString: computerName];
-
-      if(range.location == NSNotFound)
-        {
-        NSString * hostName = [[Model model] hostName];
+      NSArray * pathParts = [part componentsSeparatedByString: @"/"];
+      
+      NSString * usernamePart = [pathParts objectAtIndex: 2];
         
-        if(hostName)
-          range = [abbreviated rangeOfString: hostName];
-        else
-          range.location = NSNotFound;
+      range.length = [usernamePart length];
+        
+      if(range.length > 0)
+        range.location = 7;
+      }
+      
+    // Now check for a hostname version.
+    if(([computerName length]) > 0 && (range.location == NSNotFound))
+      {
+      BOOL redact = NO;
+      
+      if([username length] >= 4)
+        {
+        if([computerName rangeOfString: username].location != NSNotFound)
+          redact = YES;
+        }
+      else if([fullname length])
+        if([computerName rangeOfString: fullname].location != NSNotFound)
+          redact = YES;
+        
+      if(redact)
+        {
+        range = [part rangeOfString: computerName];
+
+        if(range.location == NSNotFound)
+          {
+          if(hostName)
+            range = [part rangeOfString: hostName];
+          else
+            range.location = NSNotFound;
+          }
         }
       }
+    
+    if(range.location == NSNotFound)
+      [cleanParts addObject: part];
+    else
+      [cleanParts
+        addObject:
+          [NSString
+            stringWithFormat:
+              @"%@%@%@",
+              [part substringToIndex: range.location],
+              NSLocalizedString(@"[redacted]", NULL),
+              [part substringFromIndex: range.location + range.length]]];
     }
     
-  if(range.location == NSNotFound)
-    return abbreviated;
-    
-  return
-    [NSString
-      stringWithFormat:
-        @"%@%@%@",
-        [abbreviated substringToIndex: range.location],
-        NSLocalizedString(@"[redacted]", NULL),
-        [abbreviated substringFromIndex: range.location + range.length]];
+  return [cleanParts componentsJoinedByString: @" "];
   }
 
 // Format an exectuable array for printing, redacting any user names in
@@ -363,33 +383,33 @@
   return [mutableParts componentsJoinedByString: @" "];
   }
 
-// Make a file name more presentable.
-+ (NSString *) sanitizeFilename: (NSString *) file
+// Make a path more presentable.
++ (NSString *) prettyPath: (NSString *) path
   {
-  NSString * prettyFile = [self cleanPath: file];
+  NSString * cleanPath = [self cleanPath: path];
   
-  NSString * name = [prettyFile lastPathComponent];
+  NSString * name = [cleanPath lastPathComponent];
   
   // What are you trying to hide?
   if([name hasPrefix: @"."])
-    prettyFile =
+    cleanPath =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@ (hidden)", NULL), prettyFile];
+          NSLocalizedString(@"%@ (hidden)", NULL), cleanPath];
 
   // Silly Apple.
   else if([name hasPrefix: @"com.apple.CSConfigDotMacCert-"])
-    prettyFile = [self sanitizeMobileMe: prettyFile];
+    cleanPath = [self sanitizeMobileMe: cleanPath];
 
   // What are you trying to expose?
   else if([name hasPrefix: @"com.facebook.videochat."])
-    prettyFile = [self sanitizeFacebook: prettyFile];
+    cleanPath = [self sanitizeFacebook: cleanPath];
 
   // What are you trying to expose?
   else if([name hasPrefix: @"com.adobe.ARM."])
-    prettyFile = @"com.adobe.ARM.[...].plist";
+    cleanPath = @"com.adobe.ARM.[...].plist";
 
-  return prettyFile;
+  return cleanPath;
   }
 
 // Apple used to put the user's name into a file name.
@@ -700,6 +720,9 @@
   if(![path length])
     return kExecutableMissing;
     
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return kExecutableMissing;
+      
   // Get the app path.
   path = [Utilities resolveBundlePath: path];
     
@@ -772,6 +795,9 @@
   if([path length] == 0)
     return kExecutableMissing;
     
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return kExecutableMissing;
+      
   if([Utilities isShellExecutable: path])
     return kShell;
 

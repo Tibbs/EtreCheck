@@ -54,6 +54,7 @@
 
   [self collectArchives];
   [self collectCaches];
+  [self collectModernExtensions];
 
   // Print the extensions.
   if([self.extensions count])
@@ -150,6 +151,109 @@
   [subProcess release];
   }
 
+// Collect modern extensions.
+- (void) collectModernExtensions
+  {
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL success =
+    [subProcess
+      execute:
+        @"/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+      arguments: @[ @"-dump"]];
+    
+  if(success)
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+
+    BOOL isExtension = NO;
+    NSString * name = nil;
+    NSString * path = nil;
+    NSString * displayName = nil;
+    NSString * identifier = nil;
+    
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([trimmedLine isEqualToString: @""])
+        continue;
+
+      BOOL check =
+        [trimmedLine
+          isEqualToString:
+            @"--------------------------------------------------------------------------------"];
+        
+      if(check)
+        {
+        if(displayName && path && identifier && isExtension)
+          {
+          NSDictionary * extension =
+            [NSDictionary dictionaryWithObjectsAndKeys:
+              displayName, kHumanReadableName,
+              identifier, kIdentifier,
+              displayName, kFileName,
+              path, kArchivePath,
+              @"Mac App Store", kAuthor,
+              nil];
+            
+          [self.extensions setObject: extension forKey: identifier];
+          }
+
+        isExtension = NO;
+        displayName = nil;
+        identifier = nil;
+        name = nil;
+        path = nil;
+        }
+      else if([trimmedLine hasPrefix: @"protocol:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 9];
+        
+        NSString * protocol =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          
+        if([protocol hasPrefix: @"com.apple.Safari."])
+          isExtension = YES;
+        }
+      else if([trimmedLine hasPrefix: @"displayName:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 12];
+        
+        displayName =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      else if([trimmedLine hasPrefix: @"identifier:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 11];
+        
+        identifier =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      else if([trimmedLine hasPrefix: @"path:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 5];
+        
+        path =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      }
+    }
+    
+  [subProcess release];
+  }
+
 // Get the extension name, less the uniquifier.
 - (NSString *) extensionName: (NSString *) path
   {
@@ -198,6 +302,11 @@
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
   
+  // Uncomment this and set <target> to some extension to test an
+  // unknown extension.
+  //if([humanReadableName isEqualToString: @"<target>"])
+  //  return extension;
+    
   NSString * author = [plist objectForKey: kAuthor];
 
   if([author length] > 0)
@@ -208,9 +317,6 @@
   if([website length] > 0)
     [extension setObject: website forKey: kWebsite];
   
-  if(([author length] == 0) && ([website length] == 0))
-    [[[Model model] unknownFiles] addObject: path];
-
   return extension;
   }
 
@@ -243,6 +349,21 @@
 
   if(adwareNameArchive || adwareNameCache)
     adware = true;
+    
+  // It may be new adware.
+  else
+    {
+    NSString * author = [extension objectForKey: kAuthor];
+    NSString * website = [extension objectForKey: kWebsite];
+
+    if(([author length] == 0) && ([website length] == 0))
+      {
+      if([archivePath length] > 0)
+        [[[Model model] unknownFiles] addObject: archivePath];
+      else if([cachePath length] > 0)
+        [[[Model model] unknownFiles] addObject: cachePath];
+      }
+    }
     
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)
