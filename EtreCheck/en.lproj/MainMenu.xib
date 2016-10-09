@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1004" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
@@ -28,6 +28,7 @@
                 <outlet property="chooseAProblemPromptItem" destination="IhM-Ny-kdQ" id="Mow-Ja-7oE"/>
                 <outlet property="clipboardCopyButton" destination="q8u-Lb-y4P" id="hKX-6h-uJY"/>
                 <outlet property="clipboardCopyToolbarItemView" destination="kwV-c6-t98" id="jf2-ry-FLb"/>
+                <outlet property="closeMenuItem" destination="pxx-59-PXV" id="Gc5-HC-io8"/>
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
                 <outlet property="detailManager" destination="91K-cv-wWe" id="9WT-yE-oIo"/>
                 <outlet property="donateButton" destination="eY1-TG-MMs" id="OoP-Xa-ZsS"/>
@@ -153,6 +154,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                            <menuItem title="About Etresoft" id="tzx-9o-x1W">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="Q8B-iS-9Wm"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="11O-wM-XNW"/>
                             <menuItem title="Preferences..." keyEquivalent="," id="OaD-xj-Fb7">
                                 <connections>
                                     <action selector="showPreferences:" target="-1" id="z1c-ai-PBl"/>
@@ -208,11 +216,17 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
-                            <menuItem title="Save…" keyEquivalent="s" id="pxx-59-PXV">
+                            <menuItem title="Close" keyEquivalent="w" id="pxx-59-PXV">
                                 <accessibility description="Save EtreCheck report to RTF file"/>
                                 <connections>
-                                    <action selector="saveReport:" target="Voe-Tx-rLC" id="utn-Fk-5JP"/>
-                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="sP4-fm-ORf"/>
+                                    <action selector="closeWindow:" target="Voe-Tx-rLC" id="kAp-DT-AxE"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save…" keyEquivalent="s" id="VbJ-zK-7Yh">
+                                <accessibility description="Save EtreCheck report to RTF file"/>
+                                <connections>
+                                    <action selector="saveReport:" target="Voe-Tx-rLC" id="JIU-ZI-m68"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="ARZ-zv-tbA"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ZJ6-fv-64c"/>
@@ -1835,9 +1849,8 @@ Gw
         </window>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <windowPositionMask key="initialPositionMask" topStrut="YES"/>
-            <rect key="contentRect" x="-1724" y="200" width="280" height="80"/>
-            <rect key="screenRect" x="-1920" y="100" width="1920" height="1057"/>
+            <rect key="contentRect" x="0.0" y="0.0" width="280" height="80"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="FQI-Tk-PZA">
                 <rect key="frame" x="0.0" y="0.0" width="280" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1883,8 +1896,9 @@ Gw
             <connections>
                 <outlet property="delegate" destination="ThX-aN-0qg" id="Nhp-Rc-VBJ"/>
             </connections>
-            <point key="canvasLocation" x="134" y="1594"/>
+            <point key="canvasLocation" x="238" y="1462"/>
         </window>
+        <customObject id="Sg7-4B-SVN" userLabel="Preferences Manager" customClass="PreferencesManager"/>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>

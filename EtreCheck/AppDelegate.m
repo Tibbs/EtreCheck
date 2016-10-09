@@ -50,6 +50,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @implementation AppDelegate
 
 @synthesize window;
+@synthesize closeMenuItem = myCloseMenuItem;
 @synthesize logWindow = myLogWindow;
 @synthesize progress = myProgress;
 @synthesize spinner = mySpinner;
@@ -1033,6 +1034,17 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[NSApplication sharedApplication] endSheet: self.donationLookupPanel];
   }
 
+// Close the active window.
+- (IBAction) closeWindow: (id) sender
+  {
+  NSWindow * keyWindow = [[NSApplication sharedApplication] keyWindow];
+  
+  if(keyWindow == self.window)
+    [[NSApplication sharedApplication] terminate: sender];
+  else
+    [keyWindow performClose: sender];
+  }
+
 // Start the report.
 - (IBAction) start: (id) sender
   {
@@ -1976,7 +1988,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show the preferences panel.
 - (IBAction) showPreferences: (id) sender
   {
-	  [self.preferencesManager show];
+  [self.preferencesManager show: sender];
   }
 
 // Go to the Etresoft web site.
@@ -2498,7 +2510,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   if(anItem == self.chooseAProblemPromptItem)
     return NO;
-    
+  else if(anItem == self.closeMenuItem)
+    {
+    NSWindow * keyWindow = [[NSApplication sharedApplication] keyWindow];
+  
+    if(keyWindow == self.startPanel)
+      return NO;
+    }
+
   return YES;
   }
 

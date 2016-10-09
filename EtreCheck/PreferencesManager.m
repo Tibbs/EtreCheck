@@ -1,10 +1,8 @@
-
-//  PreferencesManager.m
-//  EtreCheck
-//
-//  Created by Kian Lim on 9/9/16.
-//  Copyright © 2016 Etresoft. All rights reserved.
-//
+/***********************************************************************
+ ** Etresoft
+ ** Created by Kian Lim on 9/9/16.
+ ** Copyright (c) 2016. All rights reserved.
+ **********************************************************************/
 
 #import "PreferencesManager.h"
 #import "SearchEngine.h"
@@ -15,21 +13,27 @@
 @synthesize popUpButton = myPopUpButton;
 
 // Show the window.
-- (void)show {
-	[self.popUpButton selectItemAtIndex:[SearchEngine currentSearchEngine]];
-	[[NSApplication sharedApplication] runModalForWindow:self.window];
-}
+- (IBAction) show: (id) sender
+  {
+	[self.popUpButton selectItemAtIndex: [SearchEngine currentSearchEngine]];
+
+  [self.window makeKeyAndOrderFront: sender];
+  }
 
 // Close the window.
-- (void)windowWillClose:(NSNotification *)notification {
-	[[NSApplication sharedApplication] stopModal];
-}
+- (void) windowWillClose: (NSNotification *) notification
+  {
+	//[[NSApplication sharedApplication] stopModal];
+  }
 
-
-- (IBAction)valueChanged:(id)sender {
-	NSPopUpButton *popUpButton = (NSPopUpButton *)sender;
-	SearchEngineType searchEngineType = (SearchEngineType)popUpButton.indexOfSelectedItem;
-	[SearchEngine setSearchEngineType:searchEngineType];
-}
+- (IBAction) valueChanged: (id) sender
+  {
+	NSPopUpButton * popUpButton = (NSPopUpButton *)sender;
+	
+  SearchEngineType searchEngineType =
+    (SearchEngineType)popUpButton.indexOfSelectedItem;
+    
+	[SearchEngine setSearchEngineType: searchEngineType];
+  }
 
 @end

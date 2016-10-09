@@ -24,6 +24,7 @@
   NSDrawerDelegate>
   {
   NSWindow * window;
+  NSMenuItem * myCloseMenuItem;
   NSWindow * myLogWindow;
   NSView * myAnimationView;
   NSView * myReportView;
@@ -100,6 +101,7 @@
   }
   
 @property (retain) IBOutlet NSWindow * window;
+@property (retain) IBOutlet NSMenuItem * closeMenuItem;
 @property (retain) IBOutlet NSWindow * logWindow;
 @property (retain) IBOutlet NSView * animationView;
 @property (retain) IBOutlet NSView * reportView;
@@ -248,5 +250,8 @@
 
 // Cancel a donation lookup.
 - (IBAction) cancelDonationLookup: (id) sender;
+
+// Close the active window.
+- (IBAction) closeWindow: (id) sender;
 
 @end
