@@ -10,7 +10,7 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
-#import "SubProcess.h"
+#import "CURLRequest.h"
 
 @implementation UninstallManager
 
@@ -337,7 +337,15 @@
       {
       NSDictionary * info = [item objectForKey: kLaunchdTask];
       
-      NSString * command = [info objectForKey: kCommand];
+      NSArray * command =
+        [path length] > 0
+          ? [info objectForKey: kCommand]
+          : nil;
+      
+      NSString * cmd =
+        [command count] > 0
+          ? [command componentsJoinedByString: @" "]
+          : @"";
         
       path =
         [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
@@ -353,7 +361,7 @@
       
       [json appendFormat: @"\"name\":\"%@\",", name];
       [json appendFormat: @"\"path\":\"%@\",", path];
-      [json appendFormat: @"\"cmd\":\"%@\"", command ? command : @""];
+      [json appendFormat: @"\"cmd\":\"%@\"", cmd];
       
       [json appendString: @"}"];
       }
@@ -361,38 +369,17 @@
     
   [json appendString: @"]}"];
   
-  NSString * server = @"https://etrecheck.com/server/adware_detection.php";
-  
-  NSArray * args =
-    @[
-      @"-s",
-      @"--data",
-      json,
-      server
-    ];
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/adware_detection.php"];
 
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    if([status isEqualToString: @"OK"])
-      {
-      //NSLog(@"adware report successful");
-      }
-    else
-      {
-      //NSLog(@"adware report failed: %@", status);
-      }
-      
-    [status release];
-    }
-    
-  [subProcess release];
+  dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];
+      });
   }
 
 // Suggest a restart.

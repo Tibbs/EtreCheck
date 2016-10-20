@@ -10,7 +10,7 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
-#import "SubProcess.h"
+#import "CURLRequest.h"
 
 #define kRemove @"remove"
 #define kWhitelist @"whitelist"
@@ -245,14 +245,16 @@
       
     NSDictionary * info = [item objectForKey: kLaunchdTask];
     
-    NSString * cmd =
+    NSArray * command =
       [path length] > 0
-        ? [info objectForKey: path]
-        : @"";
+        ? [info objectForKey: kCommand]
+        : nil;
     
-    if(!cmd)
-      cmd = @"";
-      
+    NSString * cmd =
+      [command count] > 0
+        ? [command componentsJoinedByString: @" "]
+        : @"";
+
     path =
       [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
       
@@ -286,34 +288,34 @@
       [[self.whitelistDescription string]
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"]];
   
-  NSString * server = @"https://etrecheck.com/server/adware_detection.php";
-  
-  NSArray * args =
-    @[
-      @"-s",
-      @"--data",
-      json,
-      server
-    ];
-
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    if([status isEqualToString: @"OK"])
-      [self thanksForSubmission];
-    else
-      [self submissionFallbackToEmail];
-      
-    [status release];
-    }
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/adware_detection.php"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(success)
+                if([curlRequest.responseString isEqualToString: @"OK"])
+                  {
+                  [self thanksForSubmission];
+                  
+                  return;
+                  }
     
-  [subProcess release];
+              [self submissionFallbackToEmail];
+            });
+          }];
+
+  dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];
+      });
   }
 
 // Thank the user for their submission.

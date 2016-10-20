@@ -21,6 +21,9 @@
 		A518C4661C4814740094D7CC /* Help in Resources */ = {isa = PBXBuildFile; fileRef = A518C4641C4814740094D7CC /* Help */; };
 		A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A519067A1D49B092009AA835 /* EtreCheckCollector.m */; };
 		A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */; };
+		A51ED7611DAAF9B60026833B /* CURLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A51ED7601DAAF9B60026833B /* CURLRequest.m */; };
+		A51ED7641DAB1E720026833B /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A51ED7631DAB1E720026833B /* libcurl.tbd */; };
+		A51ED7671DB090B60026833B /* NumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51ED7661DB090B60026833B /* NumberFormatter.m */; };
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */; };
 		A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */; };
@@ -129,6 +132,11 @@
 		A519067A1D49B092009AA835 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
 		A51BD14A1A7D7782000AAABA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A51BD14C1A7D7784000AAABA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
+		A51ED75F1DAAF9B60026833B /* CURLRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CURLRequest.h; sourceTree = "<group>"; };
+		A51ED7601DAAF9B60026833B /* CURLRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CURLRequest.m; sourceTree = "<group>"; };
+		A51ED7631DAB1E720026833B /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
+		A51ED7651DB090B60026833B /* NumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberFormatter.h; sourceTree = "<group>"; };
+		A51ED7661DB090B60026833B /* NumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberFormatter.m; sourceTree = "<group>"; };
 		A52006A01A292A2200644C40 /* PopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverManager.h; sourceTree = "<group>"; };
 		A52006A11A292A2200644C40 /* PopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverManager.m; sourceTree = "<group>"; };
 		A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UninstallManager.m; sourceTree = "<group>"; };
@@ -292,6 +300,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A51ED7641DAB1E720026833B /* libcurl.tbd in Frameworks */,
 				A549C6761C75198700283F7F /* Security.framework in Frameworks */,
 				A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */,
 				A55BC16E15BF987D00D42EF1 /* Cocoa.framework in Frameworks */,
@@ -459,6 +468,7 @@
 		A55BC16C15BF987D00D42EF1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A51ED7631DAB1E720026833B /* libcurl.tbd */,
 				A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */,
 				A549C6751C75198700283F7F /* Security.framework */,
 				A549C6731C7513F800283F7F /* libcommonCrypto.tbd */,
@@ -491,6 +501,8 @@
 				A51BD1471A7D7751000AAABA /* Categories */,
 				A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */,
 				A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */,
+				A51ED7651DB090B60026833B /* NumberFormatter.h */,
+				A51ED7661DB090B60026833B /* NumberFormatter.m */,
 				A5B659211A16D57800476A76 /* DiagnosticEvent.h */,
 				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
@@ -505,6 +517,8 @@
 				A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */,
 				A53822381D5FF27200484388 /* XMLBuilder.h */,
 				A53822391D5FF27200484388 /* XMLBuilder.m */,
+				A51ED75F1DAAF9B60026833B /* CURLRequest.h */,
+				A51ED7601DAAF9B60026833B /* CURLRequest.m */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
@@ -704,6 +718,7 @@
 				A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */,
 				A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */,
 				A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */,
+				A51ED7611DAAF9B60026833B /* CURLRequest.m in Sources */,
 				A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */,
 				A5FC11EE19A4BFDC00E81E9C /* AudioPlugInsCollector.m in Sources */,
 				A50C9DB019A2DFDB00BA6A25 /* DiskCollector.m in Sources */,
@@ -725,6 +740,7 @@
 				A5C292E619A039BD00464E86 /* SystemLaunchDaemonsCollector.m in Sources */,
 				A53EA3721C6E86B600F270B0 /* UpdateManager.m in Sources */,
 				A5257D3719AB53FF003084C8 /* Model.m in Sources */,
+				A51ED7671DB090B60026833B /* NumberFormatter.m in Sources */,
 				A5C292F819A2220400464E86 /* SystemSoftwareCollector.m in Sources */,
 				A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */,
 			);

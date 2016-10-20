@@ -98,6 +98,7 @@
   NSTextView * myDonateView;
   NSWindow * myDonationLookupPanel;
   NSString * myDonationLookupEmail;
+  BOOL myDonationVerified;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -169,6 +170,7 @@
 @property (retain) IBOutlet NSWindow * donationLookupPanel;
 @property (retain) NSString * donationLookupEmail;
 @property (readonly) BOOL canSubmitDonationLookup;
+@property (assign) BOOL donationVerified;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

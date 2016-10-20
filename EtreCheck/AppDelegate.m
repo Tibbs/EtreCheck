@@ -28,6 +28,7 @@
 #import "UpdateManager.h"
 #import "PreferencesManager.h"
 #import "SubProcess.h"
+#import "CURLRequest.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -117,6 +118,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donateView = myDonateView;
 @synthesize donationLookupPanel = myDonationLookupPanel;
 @synthesize donationLookupEmail = myDonationLookupEmail;
+@synthesize donationVerified = myDonationVerified;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic showSignatureFailures;
@@ -550,49 +552,29 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Check for a new version.
 - (void) checkForUpdates
   {
-  dispatch_semaphore_t ready = dispatch_semaphore_create(0);
-
-  NSURL * url =
-    [NSURL
-      URLWithString:
-        @"https://etrecheck.com/download/ApplicationUpdates.plist"];
-
-//  url =
-//    [NSURL
-//      URLWithString:
-//        @"https://etrecheck.com/download/ApplicationUpdatesTest.plist"];
-
-  __block NSData * data = nil;
-  
+  GET * request =
+    [[GET alloc]
+      init: @"https://etrecheck.com/download/ApplicationUpdates.plist"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(!success)
+                [self updateFailed];
+              else
+                [self handleUpdate: curlRequest.response];
+            });
+          }];
+    
   dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
       ^{
-      data = [[NSData alloc] initWithContentsOfURL: url];
-      
-      dispatch_semaphore_signal(ready);
+        [request send];
+        [request release];      
       });
-    
-  // Wait 5 seconds until ready.
-  dispatch_time_t soon =
-    dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 5);
-  
-  long timedout = dispatch_semaphore_wait(ready, soon);
-    
-  // If I timed out, I'm not ready. Signal the sync semaphore to prevent
-  // the update from ever being handled if it ever does happen.
-  if(timedout)
-    dispatch_async(
-      dispatch_get_main_queue(),
-      ^{
-       [self updateFailed];
-      });
-  else
-    {
-    [self handleUpdate: data];
-    [data release];
-    }
-    
-  dispatch_release(ready);
   }
 
 // Handle update data.
@@ -914,41 +896,39 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [json appendFormat: @"{\"emailkey\": \"%@\"}", emailHash];
     
-  NSString * server = @"https://etrecheck.com/server/lookupdonation.php";
-  
-  NSArray * args =
-    @[
-      @"--data",
-      json,
-      server
-    ];
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/lookupdonation.php"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(success)
+                {
+                NSString * donationKey = curlRequest.responseString;
+                  
+                if([donationKey length])
+                  {
+                  [[NSUserDefaults standardUserDefaults]
+                    setObject: donationKey forKey: @"donationkey"];
 
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess autorelease];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * donationKey =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    [donationKey autorelease];
-    
-    //NSLog(@"donation key = %@", donationKey);
-    if([donationKey length])
-      {
-      [[NSUserDefaults standardUserDefaults]
-        setObject: donationKey forKey: @"donationkey"];
+                  [self donationFound];
+                  }
+                }
+              else
+                [self donationNotFound];
+            });
+          }];
 
-      [self donationFound];
-    
-      return;
-      }
-    }
-  
-  [self donationNotFound];
+   dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];      
+      });
   }
 
 - (void) donationNotFound
@@ -1797,7 +1777,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
   
   // Beg for money.
-  [self askForDonation];
+  [self checkForDonation];
   }
 
 // Update the run count.
@@ -1817,15 +1797,64 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   }
 
 // Ask for a donation under certain circumstances.
-- (void) askForDonation
+- (void) checkForDonation
   {
   NSString * donationKey =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"donationkey"];
+   
+  [self verifyDonationKey: donationKey];
+  }
+
+- (void) verifyDonationKey: (NSString *) donationKey
+  {
+  if([donationKey length] == 0)
+    {
+    self.donationVerified = NO;
     
-  if([self verifyDonationKey: donationKey])
     return;
+    }
     
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
+    
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/verifydonation.php"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(success)
+                self.donationVerified =
+                  [curlRequest.responseString isEqualToString: @"OK"];
+              else
+                self.donationVerified = NO;
+              
+              if(!self.donationVerified)
+                dispatch_async(
+                  dispatch_get_main_queue(),
+                  ^{
+                    [self askForDonation];
+                  });
+            });
+          }];
+
+  dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];
+      });
+  }
+
+// Ask for a donation under certain circumstances.
+- (void) askForDonation
+  {
   NSNumber * count =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"reportcount"];
@@ -1848,45 +1877,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   if(ask)
     [self showDonate: self];
-  }
-
-- (BOOL) verifyDonationKey: (NSString *) donationKey
-  {
-  if([donationKey length] == 0)
-    return NO;
-    
-  NSMutableString * json = [NSMutableString string];
-  
-  [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
-    
-  NSString * server = @"https://etrecheck.com/server/verifydonation.php";
-  
-  NSArray * args =
-    @[
-      @"-s",
-      @"--data",
-      json,
-      server
-    ];
-
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess autorelease];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    [status autorelease];
-    
-    if([status isEqualToString: @"OK"])
-      return YES;
-    }
-  
-  return NO;
   }
 
 // Handle a scroll change in the report view.
