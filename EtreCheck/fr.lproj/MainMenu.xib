@@ -563,6 +563,7 @@
                                     <connections>
                                         <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.displayStatus" id="sBL-HK-800">
                                             <dictionary key="options">
+                                                <bool key="NSConditionallySetsEditable" value="NO"/>
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                             </dictionary>
                                         </binding>
