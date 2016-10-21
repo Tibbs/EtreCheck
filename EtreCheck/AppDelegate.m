@@ -292,9 +292,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [self.shareButton sendActionOn: NSLeftMouseDownMask];
 
-  self.progress.layerUsesCoreImageFilters = YES;
-  self.spinner.layerUsesCoreImageFilters = YES;
-  
+  BOOL coreImageFiltersAvailable =
+    [NSProgressIndicator
+      instancesRespondToSelector: @selector(setLayerUsesCoreImageFilters:)];
+    
+  if(coreImageFiltersAvailable)
+    {
+    self.progress.layerUsesCoreImageFilters = YES;
+    self.spinner.layerUsesCoreImageFilters = YES;
+    }
+    
   self.helpButtonImage = [NSImage imageNamed: @"Help"];
   self.helpButtonInactiveImage = [NSImage imageNamed: @"HelpInactive"];
 
@@ -366,7 +373,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           URLByAppendingPathComponent: @"EtreCheck/Reports"];
         
       [[NSFileManager defaultManager]
-        createDirectoryAtURL: reportsDirectory
+        createDirectoryAtPath: [reportsDirectory absoluteString]
         withIntermediateDirectories: YES
         attributes: [NSDictionary dictionary]
         error: NULL];

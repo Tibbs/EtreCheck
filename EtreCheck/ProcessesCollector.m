@@ -130,7 +130,7 @@
 // Record process information.
 - (void) recordKernelTaskIn: (NSMutableDictionary *) processes
   {
-  NSArray * args = @[@"-l", @"2", @"-stats", @"pid,cpu,mem"];
+  NSArray * args = @[@"-l", @"2", @"-stats", @"pid,cpu,rsize"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
