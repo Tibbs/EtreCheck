@@ -594,8 +594,6 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="68F47B6C-369C-4D9F-860C-8663D57525B2" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="em7-XY-ghW" customClass="EtreCheckToolbar">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="hU6-dI-z16"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="ugp-b4-7Cf"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="u2x-MG-hML">
                         <connections>
                             <action selector="print:" target="-1" id="zM6-dW-g0d"/>

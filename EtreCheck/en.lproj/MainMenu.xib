@@ -1088,8 +1088,6 @@ Gw
             </view>
             <toolbar key="toolbar" implicitIdentifier="0AB5B57E-5C71-4497-9F5A-E4EF139A469D" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="HAH-8D-CvP" customClass="EtreCheckToolbar">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="wHe-j3-wqi"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="dP4-6e-vXE"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="8Xu-pH-ESe">
                         <connections>
                             <action selector="print:" target="-1" id="Qe9-z1-2bW"/>
