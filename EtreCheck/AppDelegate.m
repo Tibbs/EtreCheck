@@ -915,10 +915,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
                     setObject: donationKey forKey: @"donationkey"];
 
                   [self donationFound];
+                  
+                  return;
                   }
                 }
-              else
-                [self donationNotFound];
+              
+              [self donationNotFound];
             });
           }];
 
@@ -1809,11 +1811,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) verifyDonationKey: (NSString *) donationKey
   {
   if([donationKey length] == 0)
-    {
     self.donationVerified = NO;
-    
-    return;
-    }
     
   NSMutableString * json = [NSMutableString string];
   
@@ -1835,11 +1833,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
                 self.donationVerified = NO;
               
               if(!self.donationVerified)
-                dispatch_async(
-                  dispatch_get_main_queue(),
-                  ^{
-                    [self askForDonation];
-                  });
+                [self askForDonation];
             });
           }];
 
