@@ -7,6 +7,9 @@
 #import <Foundation/Foundation.h>
 
 @interface NumberFormatter : NSObject
+  {
+  NSNumberFormatter * myFormatter;
+  }
 
 @property (readonly) NSNumberFormatter * formatter;
 

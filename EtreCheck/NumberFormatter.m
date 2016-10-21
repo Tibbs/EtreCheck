@@ -8,7 +8,7 @@
 
 @implementation NumberFormatter
 
-@synthesize formatter;
+@synthesize formatter = myFormatter;
 
 // Singleton accessor.
 + (NumberFormatter *) sharedNumberFormatter
@@ -26,9 +26,9 @@
   {
   if(self = [super init])
     {
-    formatter = [[NSNumberFormatter alloc] init];
+    myFormatter = [[NSNumberFormatter alloc] init];
     
-    [formatter setNumberStyle: NSNumberFormatterNoStyle];
+    [myFormatter setNumberStyle: NSNumberFormatterNoStyle];
     }
   
   return self;
