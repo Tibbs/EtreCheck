@@ -270,14 +270,12 @@
 "Restart later" = "Redémarrer plus tard";
 "Restart failed" = "Échec du redémarrage";
 "restartfailed" = "EtreCheck n’a pas réussi à redémarrer votre ordinateur. Faites-le redémarrer vous-même s'il vous plaît.";
-"No Time Machine backup!" = "Pas de sauvegarde Time Machine";
-"notimemachinebackup" = "EtreCheck n‘a pas pu trouver de sauvegarde Time Machine. EtreCheck requiert une sauvegarde Time Machine pour le retrait des fichiers.";
 "Password required!" = "Mot de passe exigé !";
 "passwordrequired" = "Vous devez utiliser votre mot de passe administrateur pour retirer certains de ces fichiers. Voulez-vous continuer ?";
 "Cannot verify Time Machine backup!" = "Impossible de vérifier la sauvegarde Time Machine !";
-"cannotverifytimemachinebackup" = "EtreCheck ne peut pas vérifier une sauvegarde Time Machine sur OS X 10.7 «Lion» ou inférieur. Avez-vous une sauvegarde Time Machine ?";
-"No, I don’t have a backup" = "Non. Je n’ai pas de sauvegarde";
-"Yes, I have a backup" = "Oui. J’ai une sauvegarde";
+"cannotverifytimemachinebackup" = "EtreCheck ne peut pas trouver une sauvegarde Time Machine. Etresoft vous recommande d’avoir une sauvegarde Time Machine avant d’essayer de retirés les fichiers.";
+"Cancel" = "Annuler";
+"Continue" = "Continuer";
 "thanksforadware" = "Merci pour votre proposition d’ajout à la liste noire d’adware pour EtreCheck. La vérification du rapport et la mise à jour de nos données peuvent prendre quelques jours. Merci pour votre patience.";
 "Adware upload failed" = "Échec de téléchargement";
 "adwareuploadfailed" = "Votre signalement d’adware au serveur EtreCheck a échoué. Voulez-vous utiliser le courriel à la place?";

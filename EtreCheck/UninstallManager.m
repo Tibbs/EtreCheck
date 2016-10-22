@@ -33,22 +33,8 @@
   if(![[Model model] verifiedEtreCheckVersion])
     return [self reportUnverifiedEtreCheckVersion];
 
-  if([[Model model] majorOSVersion] < kMountainLion)
-    return [self warnBackup];
-    
   if(![[Model model] backupExists])
-    {
-    NSNumber * override =
-      [[NSUserDefaults standardUserDefaults]
-        objectForKey: @"timemachineoverride"];
-      
-    if([override boolValue])
-      return YES;
-      
-    [self reportNoBackup];
-    
-    return NO;
-    }
+    return [self warnBackup];
     
   if([self needsAdministratorAuthorization])
     return [self requestAdministratorAuthorization];
@@ -205,39 +191,16 @@
       NSLocalizedString(@"cannotverifytimemachinebackup", NULL)];
 
   // This is the rightmost, first, default button.
-  [alert
-    addButtonWithTitle:
-      NSLocalizedString(@"No, I don't have a backup", NULL)];
+  [alert addButtonWithTitle: NSLocalizedString(@"Cancel", NULL)];
 
   [alert
-    addButtonWithTitle: NSLocalizedString(@"Yes, I have a backup", NULL)];
+    addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
 
   NSInteger result = [alert runModal];
 
   [alert release];
 
   return (result == NSAlertSecondButtonReturn);
-  }
-
-// Tell the user that EtreCheck won't delete files without a backup.
-- (void) reportNoBackup
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText: NSLocalizedString(@"No Time Machine backup!", NULL)];
-    
-  [alert setAlertStyle: NSWarningAlertStyle];
-
-  [alert
-    setInformativeText: NSLocalizedString(@"notimemachinebackup", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
-
-  [alert runModal];
-
-  [alert release];
   }
 
 - (BOOL) needsAdministratorAuthorization

@@ -198,6 +198,7 @@
     
     [self.filesToRemove removeAllObjects];
     [self.filesToRemove addObjectsFromArray: filesToKeep];
+    [self.filesToRemove addObjectsFromArray: filesToRemove];
     
     [self didChangeValueForKey: @"canRemoveFiles"];
 

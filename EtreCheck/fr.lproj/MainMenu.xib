@@ -1422,27 +1422,27 @@ DQ
         <window title="Les fichier inconnus" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="xrD-Uw-hrd" userLabel="Unknown files Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="457"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="475"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="X63-pi-apo">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="457"/>
+                <rect key="frame" x="0.0" y="0.0" width="568" height="475"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="33g-pq-5uP">
-                        <rect key="frame" x="20" y="283" width="528" height="154"/>
+                        <rect key="frame" x="20" y="283" width="528" height="172"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="gky-52-loU">
-                            <rect key="frame" x="1" y="1" width="526" height="152"/>
+                            <rect key="frame" x="1" y="1" width="526" height="170"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="I31-Ch-mPs">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="152"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="170"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="152"/>
+                                    <size key="minSize" width="526" height="170"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="152"/>
+                                    <size key="minSize" width="526" height="170"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1622,7 +1622,7 @@ DQ
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="167" y="2239.5"/>
+            <point key="canvasLocation" x="167" y="2248.5"/>
         </window>
         <window title="L’adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="EUw-Fv-WNg" userLabel="Adware Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
