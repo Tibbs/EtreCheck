@@ -290,6 +290,17 @@
       componentsSeparatedByCharactersInSet:
         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
+  for(NSString * pathPart in parts)
+    [cleanParts addObject: [Utilities cleanString: pathPart]];
+    
+  NSString * cleanedPath = [cleanParts componentsJoinedByString: @" "];
+  
+  return [Utilities cleanString: cleanedPath];
+  }
+
+// Redact any user names in a string.
++ (NSString *) cleanString: (NSString *) string
+  {
   // See if the full user name is in the computer name.
   NSString * computerName = [[Model model] computerName];
   NSString * hostName = [[Model model] hostName];
@@ -297,72 +308,66 @@
   NSString * username = NSUserName();
   NSString * fullname = NSFullUserName();
   
-  for(NSString * pathPart in parts)
-    {
-    NSString * part = [pathPart stringByAbbreviatingWithTildeInPath];
-  
-    NSRange range = NSMakeRange(NSNotFound, 0);
-  
-    if([username length] >= 4)
-      range = [part rangeOfString: username];
-  
-    if((range.location == NSNotFound) && [fullname length])
-      range = [part rangeOfString: username];
-    
-    if((range.location == NSNotFound) && [part hasPrefix: @"/Users/"])
-      {
-      NSArray * pathParts = [part componentsSeparatedByString: @"/"];
-      
-      NSString * usernamePart = [pathParts objectAtIndex: 2];
-        
-      range.length = [usernamePart length];
-        
-      if(range.length > 0)
-        range.location = 7;
-      }
-      
-    // Now check for a hostname version.
-    if(([computerName length]) > 0 && (range.location == NSNotFound))
-      {
-      BOOL redact = NO;
-      
-      if([username length] >= 4)
-        {
-        if([computerName rangeOfString: username].location != NSNotFound)
-          redact = YES;
-        }
-      else if([fullname length])
-        if([computerName rangeOfString: fullname].location != NSNotFound)
-          redact = YES;
-        
-      if(redact)
-        {
-        range = [part rangeOfString: computerName];
+  NSString * part = [string stringByAbbreviatingWithTildeInPath];
 
-        if(range.location == NSNotFound)
-          {
-          if(hostName)
-            range = [part rangeOfString: hostName];
-          else
-            range.location = NSNotFound;
-          }
-        }
-      }
+  NSRange range = NSMakeRange(NSNotFound, 0);
+
+  if([username length] >= 4)
+    range = [part rangeOfString: username];
+
+  if((range.location == NSNotFound) && [fullname length])
+    range = [part rangeOfString: fullname];
+  
+  if((range.location == NSNotFound) && [part hasPrefix: @"/Users/"])
+    {
+    NSArray * pathParts = [part componentsSeparatedByString: @"/"];
     
-    if(range.location == NSNotFound)
-      [cleanParts addObject: part];
-    else
-      [cleanParts
-        addObject:
-          [NSString
-            stringWithFormat:
-              @"%@%@%@",
-              [part substringToIndex: range.location],
-              NSLocalizedString(@"[redacted]", NULL),
-              [part substringFromIndex: range.location + range.length]]];
+    NSString * usernamePart = [pathParts objectAtIndex: 2];
+      
+    range.length = [usernamePart length];
+      
+    if(range.length > 0)
+      range.location = 7;
     }
     
-  return [cleanParts componentsJoinedByString: @" "];
+  // Now check for a hostname version.
+  if(([computerName length]) > 0 && (range.location == NSNotFound))
+    {
+    BOOL redact = NO;
+    
+    if([username length] >= 4)
+      {
+      if([computerName rangeOfString: username].location != NSNotFound)
+        redact = YES;
+      }
+    else if([fullname length])
+      if([computerName rangeOfString: fullname].location != NSNotFound)
+        redact = YES;
+      
+    if(redact)
+      {
+      range = [part rangeOfString: computerName];
+
+      if(range.location == NSNotFound)
+        {
+        if(hostName)
+          range = [part rangeOfString: hostName];
+        else
+          range.location = NSNotFound;
+        }
+      }
+    }
+  
+  if(range.location == NSNotFound)
+    return part;
+    
+  return
+    [NSString
+      stringWithFormat:
+        @"%@%@%@",
+        [part substringToIndex: range.location],
+        NSLocalizedString(@"[redacted]", NULL),
+        [part substringFromIndex: range.location + range.length]];
   }
 
 // Format an exectuable array for printing, redacting any user names in

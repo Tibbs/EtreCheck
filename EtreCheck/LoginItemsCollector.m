@@ -308,6 +308,11 @@
   if([path length] == 0)
     return NO;
     
+  NSString * safeName = [Utilities cleanPath: name];
+  
+  if([safeName length] == 0)
+    safeName = name;
+    
   NSString * safePath = [Utilities cleanPath: path];
   
   if([safePath length] == 0)
@@ -332,7 +337,7 @@
         [NSString
           stringWithFormat:
             @"    %@    %@ %@ (%@)%@\n",
-            name,
+            safeName,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
             safePath,
@@ -347,7 +352,7 @@
         [NSString
           stringWithFormat:
             @"    %@    %@ %@ (%@)%@\n",
-            name,
+            safeName,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
             safePath,
