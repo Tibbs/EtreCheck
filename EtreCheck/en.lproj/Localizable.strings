@@ -78,3 +78,9 @@
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
 "unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please allow EtreCheck to access its servers.";
 "donateurl" = "https://etrecheck.com/donate_en.php?invoice=%@";
+"availableram" = "Available RAM";
+"freeram" = "Free RAM";
+"usedram" = "Used RAM";
+"filecache" = "Cached files";
+"swapused" = "Swap Used";
+

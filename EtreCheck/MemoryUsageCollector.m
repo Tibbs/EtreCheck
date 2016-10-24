@@ -116,7 +116,7 @@
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {
-  double mem = [[process objectForKey: @"mem"] doubleValue];
+  double value = [[process objectForKey: @"mem"] doubleValue];
 
   int count = [[process objectForKey: @"count"] intValue];
   
@@ -125,15 +125,22 @@
       ? [NSString stringWithFormat: @"(%d)", count]
       : @"";
 
+  NSString * memoryString =
+    [formatter stringFromByteCount: (unsigned long long)value];
+  
+  NSString * printString =
+    [memoryString
+      stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+
   NSString * output =
     [NSString
       stringWithFormat:
-        @"    %-9@    %@%@\n",
-        [formatter stringFromByteCount: (unsigned long long)mem],
+        @"    %@\t%@%@\n",
+        printString,
         [process objectForKey: @"command"],
         countString];
     
-  if(mem > 1024 * 1024 * 1024 * 2.0)
+  if(value > 1024 * 1024 * 1024 * 2.0)
     [self.result
       appendString: output
       attributes:

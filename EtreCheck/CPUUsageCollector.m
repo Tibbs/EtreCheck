@@ -103,11 +103,18 @@
         ? [NSString stringWithFormat: @"(%d)", count]
         : @"";
 
+    NSString * usageString =
+      [NSString stringWithFormat: @"%6.0lf%%", cpu];
+    
+    NSString * printString =
+      [usageString
+        stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+
     NSString * output =
       [NSString
         stringWithFormat:
-          @"    %6.0lf%%    %@%@\n",
-          cpu,
+          @"    %@\t%@%@\n",
+          printString,
           [process objectForKey: @"command"],
           countString];
       

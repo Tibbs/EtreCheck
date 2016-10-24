@@ -48,7 +48,8 @@
         }
         
       displayMem =
-        [NSString stringWithFormat: @"%.*lf %@", precision, value, units];
+        [NSString
+          stringWithFormat: @"%.*lf %@", precision, value, units];
         
       break;
       }
