@@ -53,6 +53,7 @@
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
                 <outlet property="shareButton" destination="eGD-du-9Qv" id="jI4-wr-wpU"/>
                 <outlet property="shareToolbarItemView" destination="Wry-qn-NGq" id="k9F-9h-KBJ"/>
+                <outlet property="smartManager" destination="EFo-xp-MVA" id="c61-Ag-xTX"/>
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
                 <outlet property="startPanel" destination="hni-3i-hk1" id="fxa-bP-QVp"/>
                 <outlet property="startPanelAnimationView" destination="PhF-uw-q0W" id="sqN-ro-ubL"/>
@@ -88,6 +89,29 @@
         <viewController id="CD6-Ts-2gu" userLabel="Detail Popover View Controller">
             <connections>
                 <outlet property="view" destination="TdQ-Ra-PPP" id="78X-xz-HJb"/>
+            </connections>
+        </viewController>
+        <customObject id="EFo-xp-MVA" userLabel="SMART Manager" customClass="SMARTManager">
+            <connections>
+                <outlet property="contentView" destination="LrJ-81-PLR" id="bw4-k4-wxh"/>
+                <outlet property="drawer" destination="4W0-xu-mhf" id="UHF-Ku-JYA"/>
+                <outlet property="popoverViewController" destination="Snk-cw-Amx" id="ErA-1w-nUq"/>
+                <outlet property="textView" destination="A3B-Ay-068" id="1Q4-eo-nNR"/>
+                <outlet property="title" destination="GWI-bP-aAN" id="raD-QF-UqB"/>
+            </connections>
+        </customObject>
+        <drawer trailingOffset="15" id="4W0-xu-mhf" userLabel="SMART Drawer">
+            <size key="contentSize" width="100" height="100"/>
+            <size key="maxContentSize" width="10000" height="10000"/>
+            <connections>
+                <outlet property="contentView" destination="S2I-p7-4EW" id="OGo-6c-tdJ"/>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="Kgd-Oo-d8F"/>
+                <outlet property="parentWindow" destination="HCb-1A-LX1" id="Ym8-CN-HlD"/>
+            </connections>
+        </drawer>
+        <viewController id="Snk-cw-Amx" userLabel="SMART Popover View Controller">
+            <connections>
+                <outlet property="view" destination="S2I-p7-4EW" id="Lpd-1l-yt3"/>
             </connections>
         </viewController>
         <customObject id="OAP-T5-MR2" userLabel="Help Manager" customClass="HelpManager">
@@ -1163,6 +1187,64 @@ Gw
                 </textField>
             </subviews>
             <point key="canvasLocation" x="-200.5" y="-23.5"/>
+        </customView>
+        <customView id="S2I-p7-4EW" userLabel="SMART View">
+            <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="aoy-Xi-Ddc">
+                    <rect key="frame" x="1" y="45" width="240" height="181"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <clipView key="contentView" id="RsR-Sk-SLC">
+                        <rect key="frame" x="1" y="1" width="238" height="179"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="A3B-Ay-068">
+                                <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="238" height="179"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <size key="minSize" width="238" height="179"/>
+                                <size key="maxSize" width="463" height="10000000"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mIQ-nG-Nwx">
+                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7NF-zO-liR">
+                        <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <accessibility description="Detail contents"/>
+                </scrollView>
+                <button verticalHuggingPriority="750" id="WsY-1i-hra">
+                    <rect key="frame" x="82" y="5" width="76" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eeF-n5-CAq">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <accessibility description="Close the detail window"/>
+                    <connections>
+                        <action selector="closeDetail:" target="EFo-xp-MVA" id="95m-8B-tdc"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="GWI-bP-aAN">
+                    <rect key="frame" x="18" y="234" width="205" height="17"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="7zT-A9-FtT">
+                        <font key="font" metaFont="systemBold"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="-4.5" y="176.5"/>
         </customView>
         <customView id="nCU-Ry-DLu" userLabel="Help View">
             <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>

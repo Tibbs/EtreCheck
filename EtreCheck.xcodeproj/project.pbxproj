@@ -76,6 +76,8 @@
 		A5C292F219A13D0800464E86 /* HardwareCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292F119A13D0800464E86 /* HardwareCollector.m */; };
 		A5C292F519A2214E00464E86 /* VideoCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292F419A2214E00464E86 /* VideoCollector.m */; };
 		A5C292F819A2220400464E86 /* SystemSoftwareCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292F719A2220400464E86 /* SystemSoftwareCollector.m */; };
+		A5C9E07D1DBDCA670099288B /* SMARTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C9E07C1DBDCA670099288B /* SMARTManager.m */; };
+		A5C9E0811DBDD1DA0099288B /* smartctl in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5C9E0801DBDD1DA0099288B /* smartctl */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A5C9FC041A1AADA200C1EAA5 /* LogCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */; };
 		A5CC608F19B4BF9E006D7E94 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A55BC1AF15C0901800D42EF1 /* ServiceManagement.framework */; };
 		A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CF26E71A279DAD002386F0 /* AdwareCollector.m */; };
@@ -102,6 +104,19 @@
 		F7B1FDAF1D828B7C0027E122 /* PreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1FDAE1D828B7C0027E122 /* PreferencesManager.m */; };
 		F7B1FDB21D82A8860027E122 /* SearchEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1FDB11D82A8860027E122 /* SearchEngine.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A5C9E07F1DBDD1C10099288B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				A5C9E0811DBDD1DA0099288B /* smartctl in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
@@ -246,6 +261,9 @@
 		A5C292F419A2214E00464E86 /* VideoCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCollector.m; sourceTree = "<group>"; };
 		A5C292F619A2220400464E86 /* SystemSoftwareCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemSoftwareCollector.h; sourceTree = "<group>"; };
 		A5C292F719A2220400464E86 /* SystemSoftwareCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemSoftwareCollector.m; sourceTree = "<group>"; };
+		A5C9E07B1DBDCA670099288B /* SMARTManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMARTManager.h; sourceTree = "<group>"; };
+		A5C9E07C1DBDCA670099288B /* SMARTManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMARTManager.m; sourceTree = "<group>"; };
+		A5C9E0801DBDD1DA0099288B /* smartctl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = smartctl; path = ../smartctl; sourceTree = "<group>"; };
 		A5C9FC021A1AADA200C1EAA5 /* LogCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogCollector.h; sourceTree = "<group>"; };
 		A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogCollector.m; sourceTree = "<group>"; };
 		A5CC608C19B4BF52006D7E94 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -340,6 +358,8 @@
 				A54B87341A1D4F1900F25213 /* HelpManager.m */,
 				A54B87361A1D4FED00F25213 /* DetailManager.h */,
 				A54B87371A1D4FED00F25213 /* DetailManager.m */,
+				A5C9E07B1DBDCA670099288B /* SMARTManager.h */,
+				A5C9E07C1DBDCA670099288B /* SMARTManager.m */,
 				A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */,
 				A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */,
 				A5CF26E91A27FB21002386F0 /* AdwareManager.h */,
@@ -555,6 +575,7 @@
 				A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */,
 				A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */,
 				A546BFB91A5348880032C354 /* linkhelp.rtf */,
+				A5C9E0801DBDD1DA0099288B /* smartctl */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -579,6 +600,7 @@
 				A55BC16615BF987D00D42EF1 /* Frameworks */,
 				A54DA58D1A314C8C00F09B19 /* ShellScript */,
 				A55BC16715BF987D00D42EF1 /* Resources */,
+				A5C9E07F1DBDD1C10099288B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -691,6 +713,7 @@
 				A55BC18115BF987D00D42EF1 /* AppDelegate.m in Sources */,
 				A5FC11F419A4C00F00E81E9C /* ITunesPlugInsCollector.m in Sources */,
 				A5C292E019A02B2700464E86 /* Collector.m in Sources */,
+				A5C9E07D1DBDCA670099288B /* SMARTManager.m in Sources */,
 				A5C292EC19A039D900464E86 /* LaunchDaemonsCollector.m in Sources */,
 				A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */,
 				A50C9DBF19A36CC400BA6A25 /* GatekeeperCollector.m in Sources */,

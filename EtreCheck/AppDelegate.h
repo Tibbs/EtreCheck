@@ -8,6 +8,7 @@
 
 @class SlideshowView;
 @class DetailManager;
+@class SMARTManager;
 @class HelpManager;
 @class AdwareManager;
 @class UnknownFilesManager;
@@ -80,6 +81,7 @@
   NSMutableSet * appleLaunchd;
   
   DetailManager * myDetailManager;
+  SMARTManager * mySMARTManager;
   HelpManager * myHelpManager;
   AdwareManager * myAdwareManager;
   UnknownFilesManager * myUnknownFilesManager;
@@ -154,6 +156,7 @@
 @property (retain) IBOutlet NSImage * donateButtonInactiveImage;
 @property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
+@property (retain) IBOutlet SMARTManager * smartManager;
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (retain) IBOutlet UnknownFilesManager * unknownFilesManager;

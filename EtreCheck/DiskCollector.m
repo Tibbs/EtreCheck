@@ -316,6 +316,28 @@
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
+
+  NSString * device = [disk objectForKey: @"bsd_name"];
+  
+  NSMutableAttributedString * urlString =
+    [[NSMutableAttributedString alloc] initWithString: @""];
+    
+  [urlString
+    appendString:
+      [NSString stringWithFormat:
+        NSLocalizedString(@"%@[Show SMART report]", NULL), indent]
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [[Utilities shared] blue],
+        NSLinkAttributeName :
+          [NSString stringWithFormat: @"etrecheck://smart/%@", device]
+      }];
+
+  [self.result appendAttributedString: urlString];
+  [self.result appendString: @"\n"];
+  
+  [urlString release];
   }
 
 // Print information about a Core Storage volume.

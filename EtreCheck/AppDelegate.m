@@ -21,6 +21,7 @@
 #import "NSAttributedString+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "DetailManager.h"
+#import "SMARTManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
 #import "AdwareManager.h"
@@ -103,6 +104,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donateButtonInactiveImage = myDonateButtonInactiveImage;
 @synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
+@synthesize smartManager = mySMARTManager;
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize unknownFilesManager = myUnknownFilesManager;
@@ -553,6 +555,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.adwareManager show];
     else if([manager isEqualToString: @"unknownfiles"])
       [self.unknownFilesManager show];
+    else if([manager isEqualToString: @"smart"])
+      [self.smartManager showDetail: [[url path] substringFromIndex: 1]];
     }
   }
 
@@ -1883,6 +1887,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Handle a scroll change in the report view.
 - (void) didScroll: (NSNotification *) notification
   {
+  [self.smartManager closeDetail: self];
   [self.detailManager closeDetail: self];
   [self.helpManager closeDetail: self];
   }
@@ -1892,6 +1897,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   NSDrawer * drawer = [notification object];
   
+  [self.smartManager closeDrawerIfNotDrawer: drawer];
   [self.detailManager closeDrawerIfNotDrawer: drawer];
   [self.helpManager closeDrawerIfNotDrawer: drawer];
   }
