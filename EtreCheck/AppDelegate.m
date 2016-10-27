@@ -1521,16 +1521,15 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Handle a status update.
 - (void) statusUpdated: (NSNotification *) notification
   {
-  NSMutableAttributedString * newStatus = [self.displayStatus mutableCopy];
-  
-  [newStatus
-    appendString:
-      [NSString stringWithFormat: @"%@\n", [notification object]]];
-
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      NSMutableAttributedString * status = [newStatus copy];
+      NSMutableAttributedString * status = [self.displayStatus mutableCopy];
+      
+      [status
+        appendString:
+          [NSString stringWithFormat: @"%@\n", [notification object]]];
+
       self.displayStatus = status;
 
       [status release];
@@ -1538,9 +1537,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [[self.statusView animator]
         scrollRangeToVisible:
           NSMakeRange(self.statusView.string.length, 0)];
-    });
-  
-  [newStatus release];
+    });  
   }
   
 // Handle a progress update.
