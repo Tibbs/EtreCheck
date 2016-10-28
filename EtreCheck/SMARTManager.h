@@ -8,5 +8,10 @@
 #import "PopoverManager.h"
 
 @interface SMARTManager : PopoverManager
+  {
+  NSProgressIndicator * mySpinner;
+  }
+
+@property (retain) IBOutlet NSProgressIndicator * spinner;
 
 @end

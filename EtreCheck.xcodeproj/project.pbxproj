@@ -40,6 +40,9 @@
 		A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A540C7001873D5F800497BDE /* Localizable.strings */; };
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
 		A549C6761C75198700283F7F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A549C6751C75198700283F7F /* Security.framework */; };
+		A54A9EF51DC0684200F92CA3 /* INPopoverController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */; };
+		A54A9EF61DC0684200F92CA3 /* INPopoverController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A54A9EF91DC3139A00F92CA3 /* VerticalScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */; };
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
 		A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A54DF6561BD70A3C00753E87 /* TOU.rtf */; };
@@ -106,6 +109,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		A54A9EDA1DC05B9700F92CA3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A54A9EF61DC0684200F92CA3 /* INPopoverController.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A5C9E07F1DBDD1C10099288B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -187,6 +201,9 @@
 		A546BFBA1A5348890032C354 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/linkhelp.rtf; sourceTree = "<group>"; };
 		A549C6731C7513F800283F7F /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		A549C6751C75198700283F7F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = INPopoverController.framework; path = "/Users/jdaniel/Library/Developer/Xcode/DerivedData/EtreCheck-agjwxjwbzyszsxeutrwvjiefjnzd/Build/Products/Debug/INPopoverController.framework"; sourceTree = "<absolute>"; };
+		A54A9EF71DC3139A00F92CA3 /* VerticalScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScrollView.h; sourceTree = "<group>"; };
+		A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScrollView.m; sourceTree = "<group>"; };
 		A54B87331A1D4F1900F25213 /* HelpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpManager.h; sourceTree = "<group>"; };
 		A54B87341A1D4F1900F25213 /* HelpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpManager.m; sourceTree = "<group>"; };
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
@@ -324,6 +341,7 @@
 				A55BC16E15BF987D00D42EF1 /* Cocoa.framework in Frameworks */,
 				A5C1492719B88625002890F1 /* Quartz.framework in Frameworks */,
 				A5CC608F19B4BF9E006D7E94 /* ServiceManagement.framework in Frameworks */,
+				A54A9EF51DC0684200F92CA3 /* INPopoverController.framework in Frameworks */,
 				A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */,
 				A552A31D1818BDAE00829BA3 /* CoreServices.framework in Frameworks */,
 			);
@@ -360,6 +378,8 @@
 				A54B87371A1D4FED00F25213 /* DetailManager.m */,
 				A5C9E07B1DBDCA670099288B /* SMARTManager.h */,
 				A5C9E07C1DBDCA670099288B /* SMARTManager.m */,
+				A54A9EF71DC3139A00F92CA3 /* VerticalScrollView.h */,
+				A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */,
 				A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */,
 				A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */,
 				A5CF26E91A27FB21002386F0 /* AdwareManager.h */,
@@ -488,6 +508,7 @@
 		A55BC16C15BF987D00D42EF1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */,
 				A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */,
 				A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */,
 				A549C6751C75198700283F7F /* Security.framework */,
@@ -601,6 +622,7 @@
 				A54DA58D1A314C8C00F09B19 /* ShellScript */,
 				A55BC16715BF987D00D42EF1 /* Resources */,
 				A5C9E07F1DBDD1C10099288B /* CopyFiles */,
+				A54A9EDA1DC05B9700F92CA3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -738,6 +760,7 @@
 				A5257D4019AC10E3003084C8 /* Checker.m in Sources */,
 				A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */,
 				A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */,
+				A54A9EF91DC3139A00F92CA3 /* VerticalScrollView.m in Sources */,
 				A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */,
 				A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */,
 				A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */,

@@ -121,6 +121,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donationLookupPanel = myDonationLookupPanel;
 @synthesize donationLookupEmail = myDonationLookupEmail;
 @synthesize donationVerified = myDonationVerified;
+@dynamic currentTextView;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic showSignatureFailures;
@@ -224,6 +225,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   return ([email length] > 0);
   }
 
+- (NSTextView *) currentTextView
+  {
+  if(self.detailManager.visible)
+    return self.detailManager.textView;
+  else if(self.smartManager.visible)
+    return self.smartManager.textView;
+    
+  return self.logView;
+  }
+
 // Destructor.
 - (void) dealloc
   {
@@ -310,7 +321,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.donateButtonImage = [NSImage imageNamed: @"Donate"];
   self.donateButtonInactiveImage = [NSImage imageNamed: @"DonateInactive"];
   
-  [[NSNotificationCenter defaultCenter]
+  /* [[NSNotificationCenter defaultCenter]
     addObserver: self
     selector: @selector(windowDidResignKey:)
     name: NSWindowDidResignKeyNotification
@@ -320,7 +331,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     addObserver: self
     selector: @selector(windowDidBecomeKey:)
     name: NSWindowDidBecomeKeyNotification
-    object: nil];
+    object: nil]; */
 
   // Install the custom quit event handler
   [appleEventManager
@@ -1889,16 +1900,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.helpManager closeDetail: self];
   }
 
-// If a drawer is going to open, close the existing drawer, if any.
-- (void) drawerWillOpen: (NSNotification *) notification
-  {
-  NSDrawer * drawer = [notification object];
-  
-  [self.smartManager closeDrawerIfNotDrawer: drawer];
-  [self.detailManager closeDrawerIfNotDrawer: drawer];
-  [self.helpManager closeDrawerIfNotDrawer: drawer];
-  }
-
 // Notify the user that the report is done.
 - (void) notify
   {
@@ -1938,7 +1939,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [[NSApplication sharedApplication] endSheet: self.TOUPanel];
   
-  [self.logView copy: sender];
+  [self.currentTextView copy: sender];
   }
 
 // Copy the report to the clipboard.

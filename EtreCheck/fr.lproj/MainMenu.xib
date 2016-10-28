@@ -71,21 +71,11 @@
         <customObject id="HkP-LF-BHj" userLabel="Detail Manager" customClass="DetailManager">
             <connections>
                 <outlet property="contentView" destination="LrJ-81-PLR" id="Upr-Zn-SJO"/>
-                <outlet property="drawer" destination="iA4-QL-NRR" id="795-tk-ajZ"/>
                 <outlet property="popoverViewController" destination="yA1-JI-KZS" id="jJ9-jE-TIk"/>
                 <outlet property="textView" destination="Kyh-rp-y9r" id="OkX-aC-jSI"/>
                 <outlet property="title" destination="cEs-ua-dbR" id="TJB-Kr-lHJ"/>
             </connections>
         </customObject>
-        <drawer trailingOffset="15" id="iA4-QL-NRR" userLabel="Detail Drawer">
-            <size key="contentSize" width="100" height="100"/>
-            <size key="maxContentSize" width="10000" height="10000"/>
-            <connections>
-                <outlet property="contentView" destination="OLH-d1-2gB" id="dnS-Ax-enr"/>
-                <outlet property="delegate" destination="Voe-Tx-rLC" id="LOO-iR-Pde"/>
-                <outlet property="parentWindow" destination="HCb-1A-LX1" id="6pT-Xb-xKL"/>
-            </connections>
-        </drawer>
         <viewController id="yA1-JI-KZS" userLabel="Detail Popover View Controller">
             <connections>
                 <outlet property="view" destination="OLH-d1-2gB" id="pCU-Xk-3Fw"/>
@@ -94,21 +84,12 @@
         <customObject id="maw-xM-fcF" userLabel="SMART Manager" customClass="SMARTManager">
             <connections>
                 <outlet property="contentView" destination="LrJ-81-PLR" id="u8Q-5E-XOD"/>
-                <outlet property="drawer" destination="TcH-Op-LRU" id="NG9-6Y-W45"/>
                 <outlet property="popoverViewController" destination="yO5-7I-ujO" id="Blj-PD-6ZQ"/>
+                <outlet property="spinner" destination="Iwg-nc-i6B" id="7qI-7z-tzb"/>
                 <outlet property="textView" destination="4Cy-AE-40L" id="BNF-1r-r2s"/>
                 <outlet property="title" destination="WK5-Sh-SaN" id="LPZ-TY-iJY"/>
             </connections>
         </customObject>
-        <drawer trailingOffset="15" id="TcH-Op-LRU" userLabel="SMART Drawer">
-            <size key="contentSize" width="100" height="100"/>
-            <size key="maxContentSize" width="10000" height="10000"/>
-            <connections>
-                <outlet property="contentView" destination="Wzv-kL-Ngj" id="Tdo-Oh-hQp"/>
-                <outlet property="delegate" destination="Voe-Tx-rLC" id="NLS-j4-9yZ"/>
-                <outlet property="parentWindow" destination="HCb-1A-LX1" id="ozx-2L-eeO"/>
-            </connections>
-        </drawer>
         <viewController id="yO5-7I-ujO" userLabel="SMART Popover View Controller">
             <connections>
                 <outlet property="view" destination="Wzv-kL-Ngj" id="mPg-Od-uGf"/>
@@ -117,21 +98,11 @@
         <customObject id="E5E-Xh-gnk" userLabel="Help Manager" customClass="HelpManager">
             <connections>
                 <outlet property="contentView" destination="LrJ-81-PLR" id="orN-ji-4m1"/>
-                <outlet property="drawer" destination="4kW-D2-LXT" id="Gqf-EE-LlU"/>
                 <outlet property="popoverViewController" destination="wbx-Ko-BGY" id="dxE-oO-Q4z"/>
                 <outlet property="textView" destination="9XL-Yg-zMZ" id="Cfl-SL-Il5"/>
                 <outlet property="title" destination="F91-PC-1AG" id="yuA-3K-9kg"/>
             </connections>
         </customObject>
-        <drawer preferredEdge="minX" trailingOffset="15" id="4kW-D2-LXT" userLabel="Help Drawer">
-            <size key="contentSize" width="100" height="100"/>
-            <size key="maxContentSize" width="10000" height="10000"/>
-            <connections>
-                <outlet property="contentView" destination="MBn-u2-n9n" id="lFC-7D-m1I"/>
-                <outlet property="delegate" destination="Voe-Tx-rLC" id="1Xe-aX-oaX"/>
-                <outlet property="parentWindow" destination="HCb-1A-LX1" id="meS-6D-8Ci"/>
-            </connections>
-        </drawer>
         <viewController id="wbx-Ko-BGY" userLabel="Help Popover View Controller">
             <connections>
                 <outlet property="view" destination="MBn-u2-n9n" id="TQI-Cf-LEn"/>
@@ -746,7 +717,7 @@
             <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="u51-ou-cOJ">
+                <scrollView hidden="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="u51-ou-cOJ" customClass="VerticalScrollView">
                     <rect key="frame" x="1" y="45" width="240" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="NUL-vR-2ZI">
@@ -795,8 +766,12 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Iwg-nc-i6B">
+                    <rect key="frame" x="112" y="122" width="16" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </progressIndicator>
             </subviews>
-            <point key="canvasLocation" x="41.5" y="181.5"/>
+            <point key="canvasLocation" x="243.5" y="411.5"/>
         </customView>
         <customView wantsLayer="YES" id="cs1-k8-fgW" userLabel="Animation View">
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>

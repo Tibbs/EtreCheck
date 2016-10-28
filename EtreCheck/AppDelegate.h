@@ -21,8 +21,7 @@
   NSToolbarDelegate,
   NSSharingServiceDelegate,
   NSSharingServicePickerDelegate,
-  NSUserInterfaceValidations,
-  NSDrawerDelegate>
+  NSUserInterfaceValidations>
   {
   NSWindow * window;
   NSMenuItem * myCloseMenuItem;
@@ -174,6 +173,7 @@
 @property (retain) NSString * donationLookupEmail;
 @property (readonly) BOOL canSubmitDonationLookup;
 @property (assign) BOOL donationVerified;
+@property (readonly) NSTextView * currentTextView;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
