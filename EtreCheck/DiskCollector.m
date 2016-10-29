@@ -322,17 +322,18 @@
   NSMutableAttributedString * urlString =
     [[NSMutableAttributedString alloc] initWithString: @""];
     
-  [urlString
-    appendString:
-      [NSString stringWithFormat:
-        NSLocalizedString(@"%@[Show SMART report]", NULL), indent]
-    attributes:
-      @{
-        NSFontAttributeName : [[Utilities shared] boldFont],
-        NSForegroundColorAttributeName : [[Utilities shared] blue],
-        NSLinkAttributeName :
-          [NSString stringWithFormat: @"etrecheck://smart/%@", device]
-      }];
+  if(!smart_not_supported)
+    [urlString
+      appendString:
+        [NSString stringWithFormat:
+          NSLocalizedString(@"%@[Show SMART report]", NULL), indent]
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] blue],
+          NSLinkAttributeName :
+            [NSString stringWithFormat: @"etrecheck://smart/%@", device]
+        }];
 
   [self.result appendAttributedString: urlString];
   [self.result appendString: @"\n"];
