@@ -632,6 +632,11 @@
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
 
+  NSString * safeName = [Utilities cleanPath: name];
+  
+  if([safeName length] == 0)
+    safeName = name;
+    
   NSString * lastused = @"";
 
   if([last integerValue] == 1)
@@ -640,7 +645,8 @@
   [self.result
     appendString:
       [NSString
-        stringWithFormat: @"        %@ [%@] %@\n", name, kind, lastused]];
+        stringWithFormat:
+          @"        %@ [%@] %@\n", safeName, kind, lastused]];
   }
 
 // Print the total size of the backup.
