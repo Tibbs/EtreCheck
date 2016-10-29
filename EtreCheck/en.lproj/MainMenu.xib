@@ -522,10 +522,17 @@
                                     <action selector="showFAQ:" target="Voe-Tx-rLC" id="dCE-5I-qc0"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="IdS-As-sLb"/>
                             <menuItem title="About Etresoft" id="BOF-NM-1cW">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Etresoft support" id="5vd-Lu-GJt">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="gotoEtresoftSupport:" target="Voe-Tx-rLC" id="w95-rb-Rtb"/>
                                 </connections>
                             </menuItem>
                         </items>

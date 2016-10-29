@@ -199,6 +199,9 @@
 // Go to the Etresoft web site.
 - (IBAction) gotoEtresoft: (id) sender;
 
+// Go to the Etresoft support web site.
+- (IBAction) gotoEtresoftSupport: (id) sender;
+
 // Display help.
 - (IBAction) showHelp: (id) sender;
 

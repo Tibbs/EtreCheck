@@ -518,6 +518,19 @@
                                     <action selector="showFAQ:" target="Voe-Tx-rLC" id="yG1-CE-hqz"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="jON-6c-B61"/>
+                            <menuItem title="À propos d’Etresoft" id="oYY-0D-R0h">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="VAc-hq-XMy"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Aide Etresoft" id="1De-jg-Wlq">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="gotoEtresoftSupport:" target="Voe-Tx-rLC" id="GmL-YP-xBX"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

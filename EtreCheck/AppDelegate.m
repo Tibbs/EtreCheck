@@ -1993,6 +1993,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     openURL: [NSURL URLWithString: @"https://www.etresoft.com"]];
   }
 
+// Go to the Etresoft web support site.
+- (IBAction) gotoEtresoftSupport: (id) sender
+  {
+  [[NSWorkspace sharedWorkspace]
+    openURL: [NSURL URLWithString: @"https://www.etresoft.com/#support"]];
+  }
+
 // Display help.
 - (IBAction) showHelp: (id) sender
   {
