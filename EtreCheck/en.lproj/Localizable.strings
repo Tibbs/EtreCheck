@@ -14,6 +14,7 @@
 "oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
 "info" = "ⓘ";
 "startupitemsdeprecated" = "    Startup items no longer function in OS X Yosemite or later\n";
+"machinitdeprecated" = "    Mach Init items are deprecated\n";
 "%d day (plural rule: zero)" = "";
 "%d day (plural rule: one)" = "about one day ";
 "%d day (plural rule: other)" = "about %d days ";

@@ -38,6 +38,15 @@
   // Get startup item bundles on disk.
   startupBundles = [self getStartupItemBundles];
   
+  [self printStartupItems];
+  [self printMachInitFiles];
+  
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Print Startup Items.
+- (void) printStartupItems
+  {
   NSArray * args =
     @[
       @"-xml",
@@ -57,8 +66,12 @@
         
       if([items count])
         {
-        [self.result appendAttributedString: [self buildTitle]];
-        
+        if(!startupItemsFound)
+          {
+          [self.result appendAttributedString: [self buildTitle]];
+          startupItemsFound = YES;
+          }
+          
         for(NSDictionary * item in items)
           [self printStartupItem: item];
           
@@ -75,8 +88,39 @@
     }
     
   [subProcess release];
+  }
+
+// Print Mach init files.
+- (void) printMachInitFiles
+  {
+  if(!startupItemsFound)
+    {
+    [self.result appendAttributedString: [self buildTitle]];
+    startupItemsFound = YES;
+    }
+
+  NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
+  
+  for(NSString * file in machInitFiles)
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"    %@\n", NULL),
+            [Utilities cleanPath: file]]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
     
-  dispatch_semaphore_signal(self.complete);
+  [self.result
+    appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+      }];
+
+  [self.result appendCR];
   }
 
 // Get startup item bundles.

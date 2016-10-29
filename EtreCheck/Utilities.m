@@ -1781,4 +1781,21 @@
   return @"";
   }
 
+// Find files inside an /etc/mach_init* directory.
++ (NSArray *) checkMachInit: (NSString *) path
+  {
+  NSMutableArray * files = [NSMutableArray array];
+  
+  // Check the old /etc/mach_init* directories.
+  NSArray * mach_init =
+    [[NSFileManager defaultManager]
+      contentsOfDirectoryAtPath: path error: NULL];
+    
+  if([mach_init count] > 0)
+    for(NSString * file in mach_init)
+      [files addObject: [path stringByAppendingPathComponent: file]];
+    
+  return files;
+  }
+
 @end

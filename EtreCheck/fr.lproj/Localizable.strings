@@ -138,6 +138,7 @@
 " [Recovery]" = " [Restauration]";
 "info" = "ⓘ";
 "startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
+"machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
 "Quit" = "Quitter";
 "EtreCheck Report" = "Rapport EtreCheck";
 "Problem: " = "Problème :";

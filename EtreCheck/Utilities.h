@@ -183,4 +183,7 @@
 // Generate a UUID.
 + (NSString *) UUID;
 
+// Find files inside an /etc/mach_init* directory.
++ (NSArray *) checkMachInit: (NSString *) path;
+
 @end

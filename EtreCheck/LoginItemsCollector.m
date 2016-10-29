@@ -45,16 +45,56 @@
   [self collectOldLoginItems];
   [self collectModernLoginItems];
   
+  NSUInteger machItemCount = 0;
+  
+  machItemCount +=
+    [self collectMachInitFiles: @"/etc/mach_init_per_login_session.d"];
+  machItemCount +=
+    [self collectMachInitFiles: @"/etc/mach_init_per_user.d"];
+
   NSUInteger count = 0;
   
   for(NSDictionary * loginItem in self.loginItems)
     if([self printLoginItem: loginItem count: count])
       ++count;
     
+  if(machItemCount > 0)
+    {
+    [self.result
+      appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+    }
+    
   if(count > 0)
     [self.result appendCR];
 
   dispatch_semaphore_signal(self.complete);
+  }
+
+// Collect Mach init files.
+- (NSUInteger) collectMachInitFiles: (NSString *) path
+  {
+  NSArray * machInitFiles = [Utilities checkMachInit: path];
+  
+  for(NSString * file in machInitFiles)
+    {
+    NSString * name = [file lastPathComponent];
+    
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        name, @"name",
+        file, @"path",
+        @"MachInit", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    }
+    
+  return [machInitFiles count];
   }
 
 // Collect old login items.
@@ -328,10 +368,13 @@
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
     
-  BOOL trashed = [path rangeOfString: @"/.Trash/"].location != NSNotFound;
+  BOOL highlight = NO;
+  
+  if([path rangeOfString: @"/.Trash/"].location != NSNotFound)
+    highlight = YES;
   
   // Flag a login item if it is in the trash.
-  if(trashed)
+  if(highlight)
     [self.result
       appendString:
         [NSString

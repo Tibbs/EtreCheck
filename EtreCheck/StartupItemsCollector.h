@@ -10,6 +10,7 @@
 @interface StartupItemsCollector : Collector
   {
   NSDictionary * startupBundles;
+  BOOL startupItemsFound;
   }
 
 @end
