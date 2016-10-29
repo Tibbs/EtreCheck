@@ -216,4 +216,26 @@
     [self.popover close];
   }
 
+// Copy the report to the clipboard.
+- (IBAction) copyToClipboard: (id) sender
+  {
+  NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
+ 
+  [pasteboard clearContents];
+ 
+  NSError * error = nil;
+  
+  NSData * rtfData =
+    [self.details
+      dataFromRange: NSMakeRange(0, [self.details length])
+      documentAttributes:
+        @
+          {
+          NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType
+          }
+      error: & error];
+
+  [pasteboard setData: rtfData forType: NSPasteboardTypeRTF];
+  }
+
 @end

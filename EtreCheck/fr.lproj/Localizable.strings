@@ -296,3 +296,4 @@
 "donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";
 "Remove" = "Enlever";
 "Report" = "Envoyer";
+"%@[Show SMART report]" = "%@[Afficher le rapport SMART]";

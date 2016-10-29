@@ -557,17 +557,27 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if([[url scheme] isEqualToString: @"etrecheck"])
     {
     NSString * manager = [url host];
+    NSString * relativePath = [[url path] substringFromIndex: 1];
     
     if([manager isEqualToString: @"detail"])
-      [self.detailManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.detailManager showDetail: relativePath];
     else if([manager isEqualToString: @"help"])
-      [self.helpManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.helpManager showDetail: relativePath];
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager show];
     else if([manager isEqualToString: @"unknownfiles"])
       [self.unknownFilesManager show];
     else if([manager isEqualToString: @"smart"])
-      [self.smartManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.smartManager showDetail: relativePath];
+    else if([manager isEqualToString: @"license"])
+      {
+      NSString * licensePath =
+        [[NSBundle mainBundle] pathForResource: relativePath ofType: NULL];
+
+      NSURL * url = [NSURL fileURLWithPath: licensePath];
+    
+      [[NSWorkspace sharedWorkspace] openURL: url];
+      }
     }
   }
 

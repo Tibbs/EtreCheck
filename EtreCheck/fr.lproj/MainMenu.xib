@@ -671,24 +671,24 @@
             <point key="canvasLocation" x="-244.5" y="234.5"/>
         </customView>
         <customView id="OLH-d1-2gB" userLabel="Detail View">
-            <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
+            <rect key="frame" x="0.0" y="0.0" width="341" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="FSR-WK-imk">
-                    <rect key="frame" x="1" y="45" width="240" height="181"/>
+                    <rect key="frame" x="1" y="45" width="340" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="zTw-Y8-0ZG">
-                        <rect key="frame" x="1" y="1" width="238" height="179"/>
+                        <rect key="frame" x="1" y="1" width="338" height="179"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="Kyh-rp-y9r">
-                                <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
+                                <rect key="frame" x="0.0" y="0.0" width="338" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="338" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="338" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
@@ -704,8 +704,8 @@
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="1xu-wk-6Yf">
-                    <rect key="frame" x="78" y="5" width="84" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="251" y="4" width="84" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ofe-M7-2VM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -714,8 +714,20 @@
                         <action selector="closeDetail:" target="HkP-LF-BHj" id="uPb-IN-nMD"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" id="aXG-Eg-MXO">
+                    <rect key="frame" x="5" y="4" width="222" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Copier dans le presse-papiers" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Hw-ya-Xne">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <accessibility description="Close the detail window"/>
+                    <connections>
+                        <action selector="copyToClipboard:" target="HkP-LF-BHj" id="r7Z-KC-ve1"/>
+                    </connections>
+                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cEs-ua-dbR">
-                    <rect key="frame" x="18" y="234" width="205" height="17"/>
+                    <rect key="frame" x="68" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="ORi-4z-LxQ">
                         <font key="font" metaFont="systemBold"/>
@@ -724,27 +736,27 @@
                     </textFieldCell>
                 </textField>
             </subviews>
-            <point key="canvasLocation" x="-200.5" y="-23.5"/>
+            <point key="canvasLocation" x="-150.5" y="-23.5"/>
         </customView>
         <customView id="Wzv-kL-Ngj" userLabel="SMART View">
-            <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
+            <rect key="frame" x="0.0" y="0.0" width="334" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <scrollView hidden="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="u51-ou-cOJ" customClass="VerticalScrollView">
-                    <rect key="frame" x="1" y="45" width="240" height="181"/>
+                    <rect key="frame" x="1" y="45" width="333" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="NUL-vR-2ZI">
-                        <rect key="frame" x="1" y="1" width="238" height="179"/>
+                        <rect key="frame" x="1" y="1" width="331" height="179"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="4Cy-AE-40L">
-                                <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
+                                <rect key="frame" x="0.0" y="0.0" width="331" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="331" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="331" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
@@ -760,8 +772,8 @@
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="kcX-zh-496">
-                    <rect key="frame" x="78" y="5" width="84" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="244" y="5" width="84" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ffT-6d-oZ0">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -770,8 +782,24 @@
                         <action selector="closeDetail:" target="maw-xM-fcF" id="2V2-QE-W4s"/>
                     </connections>
                 </button>
+                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Iwg-nc-i6B">
+                    <rect key="frame" x="159" y="122" width="16" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                </progressIndicator>
+                <button verticalHuggingPriority="750" id="AAy-tU-uYI">
+                    <rect key="frame" x="5" y="5" width="222" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Copier dans le presse-papiers" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9TA-oy-rsX">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <accessibility description="Close the detail window"/>
+                    <connections>
+                        <action selector="copyToClipboard:" target="maw-xM-fcF" id="eKm-12-JO1"/>
+                    </connections>
+                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WK5-Sh-SaN">
-                    <rect key="frame" x="18" y="234" width="205" height="17"/>
+                    <rect key="frame" x="64" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="ocT-eL-86I">
                         <font key="font" metaFont="systemBold"/>
@@ -779,12 +807,8 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Iwg-nc-i6B">
-                    <rect key="frame" x="112" y="122" width="16" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                </progressIndicator>
             </subviews>
-            <point key="canvasLocation" x="243.5" y="411.5"/>
+            <point key="canvasLocation" x="290" y="411.5"/>
         </customView>
         <customView wantsLayer="YES" id="cs1-k8-fgW" userLabel="Animation View">
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>

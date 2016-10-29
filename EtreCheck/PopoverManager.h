@@ -52,4 +52,7 @@
 // Resize the detail pane to match the content.
 - (void) resizeDetail: (NSTextStorage *) storage;
 
+// Copy the detail to the clipboard.
+- (IBAction) copyToClipboard: (id) sender;
+
 @end

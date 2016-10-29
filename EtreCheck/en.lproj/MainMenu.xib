@@ -1143,8 +1143,8 @@ Gw
                     <accessibility description="Detail contents"/>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="PKc-FO-wiI">
-                    <rect key="frame" x="82" y="5" width="76" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="159" y="5" width="76" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hx1-1F-S0i">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1163,6 +1163,18 @@ Gw
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" id="wZa-OJ-ggR">
+                    <rect key="frame" x="4" y="5" width="150" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Copy to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zgM-pE-DVl">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <accessibility description="Close the detail window"/>
+                    <connections>
+                        <action selector="copyToClipboard:" target="91K-cv-wWe" id="xMz-qW-JdE"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="-200.5" y="-23.5"/>
         </customView>
@@ -1201,8 +1213,8 @@ Gw
                     <accessibility description="Detail contents"/>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="WsY-1i-hra">
-                    <rect key="frame" x="82" y="5" width="76" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="159" y="5" width="76" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eeF-n5-CAq">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1225,6 +1237,18 @@ Gw
                     <rect key="frame" x="112" y="122" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </progressIndicator>
+                <button verticalHuggingPriority="750" id="qv1-fV-26H">
+                    <rect key="frame" x="5" y="5" width="150" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="push" title="Copy to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F4c-Qt-bUL">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <accessibility description="Close the detail window"/>
+                    <connections>
+                        <action selector="copyToClipboard:" target="EFo-xp-MVA" id="tHD-7f-y2L"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="-4.5" y="176.5"/>
         </customView>
