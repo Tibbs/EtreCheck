@@ -46,7 +46,7 @@
     myMinPopoverSize = NSMakeSize(400, 100);
     myMaxPopoverSize = NSMakeSize(400, 600);
     
-    if([NSPopover class])
+    if(NO) // [NSPopover class])
       {
       NSPopover * popover = [[NSPopover alloc] init];
       
@@ -119,14 +119,10 @@
 
   [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
 
+  [self resizeDetail: [self.textView textStorage]];
+
+  // This needs to be moved up for INPopover.
   [self showDetailWindow];
-
-  NSTextStorage * storage =
-    [[NSTextStorage alloc] initWithAttributedString: self.details];
-
-  [self resizeDetail: storage];
-
-  [storage release];
   }
 
 // Show the detail window.

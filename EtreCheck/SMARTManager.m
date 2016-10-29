@@ -27,6 +27,8 @@
 // Show detail.
 - (void) showDetail: (NSString *) name
   {
+  [[self.textView enclosingScrollView] setHidden: YES];
+  [self.spinner setHidden: NO];
   [self.spinner startAnimation: self];
   
   NSString * title =
@@ -36,10 +38,19 @@
     
   [self.title setStringValue: title];
   
-  [super showDetailWindow];
-
   [self resizeDetail];
 
+  [super showDetailWindow];
+  
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+    ^{
+      [self updateDetail: name];
+    });
+  }
+
+- (void) updateDetail: (NSString *) name
+  {
   NSString * smartctlPath =
     [[NSBundle mainBundle] pathForResource: @"smartctl" ofType: nil];
 
@@ -52,44 +63,46 @@
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   if([subProcess execute: smartctlPath arguments: args])
-    {
-    NSString * contentString =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    NSAttributedString * content =
-      [[NSAttributedString alloc] initWithString: contentString];
-      
-    self.details = content;
-    
-    NSData * rtfData =
-      [self.details
-        RTFFromRange: NSMakeRange(0, [self.details length])
-        documentAttributes: @{}];
+    dispatch_async(
+      dispatch_get_main_queue(),
+      ^{
+        NSString * contentString =
+          [[NSString alloc]
+            initWithData: subProcess.standardOutput
+            encoding: NSUTF8StringEncoding];
+          
+        NSAttributedString * content =
+          [[NSAttributedString alloc] initWithString: contentString];
+          
+        self.details = content;
+        
+        NSData * rtfData =
+          [self.details
+            RTFFromRange: NSMakeRange(0, [self.details length])
+            documentAttributes: @{}];
 
-    NSRange range = NSMakeRange(0, [[self.textView textStorage] length]);
-    
-    [self.textView replaceCharactersInRange: range withRTF: rtfData];
-    [self.textView setFont: [NSFont systemFontOfSize: 13]];
-    
-    [self.spinner stopAnimation: self];
-    [self.spinner setHidden: YES];
-    [[self.textView enclosingScrollView] setHidden: NO];
-    [self.textView setEditable: YES];
-    [self.textView setEnabledTextCheckingTypes: NSTextCheckingTypeLink];
-    [self.textView checkTextInDocument: nil];
-    [self.textView setEditable: NO];
+        NSRange range = NSMakeRange(0, [[self.textView textStorage] length]);
+        
+        [self.textView replaceCharactersInRange: range withRTF: rtfData];
+        [self.textView setFont: [NSFont systemFontOfSize: 13]];
+        
+        [self.spinner stopAnimation: self];
+        [self.spinner setHidden: YES];
+        [[self.textView enclosingScrollView] setHidden: NO];
+        [self.textView setEditable: YES];
+        [self.textView setEnabledTextCheckingTypes: NSTextCheckingTypeLink];
+        [self.textView checkTextInDocument: nil];
+        [self.textView setEditable: NO];
 
-    [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
-    
-    [self.textView
-      setFont: [NSFont fontWithName: @"Courier" size: 10]
-      range: NSMakeRange(0, [self.details length])];
+        [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
+        
+        [self.textView
+          setFont: [NSFont fontWithName: @"Courier" size: 10]
+          range: NSMakeRange(0, [self.details length])];
 
-    [content release];
-    [contentString release];
-    }
+        [content release];
+        [contentString release];
+      });
     
   [subProcess release];
   }
