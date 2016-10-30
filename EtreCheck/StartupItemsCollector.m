@@ -93,14 +93,17 @@
 // Print Mach init files.
 - (void) printMachInitFiles
   {
+  NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
+  
+  if([machInitFiles count] == 0)
+    return;
+    
   if(!startupItemsFound)
     {
     [self.result appendAttributedString: [self buildTitle]];
     startupItemsFound = YES;
     }
 
-  NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
-  
   for(NSString * file in machInitFiles)
     [self.result
       appendString:

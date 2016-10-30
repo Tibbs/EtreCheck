@@ -139,9 +139,10 @@
 "info" = "ⓘ";
 "startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
 "machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
+"loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
 "Quit" = "Quitter";
 "EtreCheck Report" = "Rapport EtreCheck";
-"Problem: " = "Problème :";
+"Problem: " = "Problème : ";
 "Description:\n" = "Description :\n";
 "Confirm cancellation" = "Confirmer l’annulation";
 "Are you sure you want to cancel this EtreCheck report?" = "Êtes-vous sûr de vouloir annuler ce rapport EtreCheck ?";
