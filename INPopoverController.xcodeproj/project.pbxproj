@@ -19,6 +19,8 @@
 		A54A9EEC1DC05EF500F92CA3 /* INPopover.h in Headers */ = {isa = PBXBuildFile; fileRef = A54A9EEA1DC05EF500F92CA3 /* INPopover.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A54A9EED1DC05EF500F92CA3 /* INPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9EEB1DC05EF500F92CA3 /* INPopover.m */; };
 		A54A9EEF1DC05F3F00F92CA3 /* INPopoverDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A54A9EEE1DC05F3F00F92CA3 /* INPopoverDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A54A9EFF1DC5D2EC00F92CA3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98BA893A143EA04A006F744E /* Cocoa.framework */; };
+		A54A9F001DC5D6C700F92CA3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98BA893D143EA04A006F744E /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A54A9F001DC5D6C700F92CA3 /* AppKit.framework in Frameworks */,
+				A54A9EFF1DC5D2EC00F92CA3 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +231,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -262,7 +265,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -289,6 +291,7 @@
 		A54A9ED41DC05A7E00F92CA3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -313,7 +316,7 @@
 				INFOPLIST_FILE = INPopoverController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.INPopoverController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -326,6 +329,7 @@
 		A54A9ED51DC05A7E00F92CA3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -350,7 +354,7 @@
 				INFOPLIST_FILE = INPopoverController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.INPopoverController;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -15,10 +15,11 @@
 // A lot of this code was adapted from the following article:
 // <http://cocoawithlove.com/2008/12/drawing-custom-window-on-mac-os-x.html>
 
-@implementation INPopoverWindow {
-	NSView *_popoverContentView;
-	NSWindow *_zoomWindow;
-}
+@implementation INPopoverWindow
+
+@synthesize popoverContentView = _popoverContentView;
+@synthesize frameView = _frameView;
+@synthesize popover = _popover;
 
 // Borderless, transparent window
 - (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
@@ -77,14 +78,17 @@
 	NSRect bounds = [self frame];
 	bounds.origin = NSZeroPoint;
 	INPopoverWindowFrame *frameView = [self frameView];
-	if (!frameView) {
+	if (!frameView)
+    {
 		frameView = [[INPopoverWindowFrame alloc] initWithFrame:bounds];
 		[super setContentView:frameView]; // Call on super or there will be infinite loop
-	}
-	if (_popoverContentView) {
+    [frameView release];
+	  }
+	
+  if (_popoverContentView)
 		[_popoverContentView removeFromSuperview];
-	}
-	_popoverContentView = aView;
+	
+  _popoverContentView = aView;
 	[_popoverContentView setFrame:[self contentRectForFrameRect:bounds]];
 	[_popoverContentView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[frameView addSubview:_popoverContentView];
@@ -207,6 +211,8 @@
 	[imageView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 
 	[zoomWindow setContentView:imageView];
+  [imageView release];
+  [image release];
 
 	// reset one shot flag
 	[self setOneShot:isOneShot];

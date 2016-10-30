@@ -10,11 +10,26 @@
 #import "INPopoverParentWindow.h"
 #include <QuartzCore/QuartzCore.h>
 
-@implementation INPopover {
-	INPopoverWindow *_popoverWindow;
-	NSRect _screenRect;
-	NSRect _viewRect;
-}
+@implementation INPopover 
+
+@synthesize delegate = _delegate;
+@synthesize color = _color;
+@synthesize borderColor = _borderColor;
+@synthesize topHighlightColor = _topHighlightColor;
+@synthesize borderWidth = _borderWidth;
+@synthesize cornerRadius = _cornerRadius;
+@synthesize arrowSize = _arrowSize;
+@synthesize edge = _edge;
+@synthesize contentSize = _contentSize;
+@synthesize closesWhenEscapeKeyPressed = _closesWhenEscapeKeyPressed;
+@synthesize closesWhenPopoverResignsKey = _closesWhenPopoverResignsKey;
+@synthesize closesWhenApplicationBecomesInactive = _closesWhenApplicationBecomesInactive;
+@synthesize animates = _animates;
+@synthesize animationType =  _animationType;
+@synthesize contentViewController =  _contentViewController;
+@synthesize positionView = _positionView;
+@synthesize popoverWindow = _popoverWindow;
+@synthesize popoverIsVisible = _popoverIsVisible;
 
 #pragma mark -
 #pragma mark Initialization
@@ -38,7 +53,11 @@
 
 - (void)dealloc
 {
-	_popoverWindow.popover = nil;
+  [_color release];
+  [_borderColor release];
+  [_topHighlightColor release];
+	[_popoverWindow.popover release];
+  [super dealloc];
 }
 
 #pragma mark -
@@ -60,8 +79,7 @@
 	_positionView = positionView;
 	_viewRect = rect;
 	_screenRect = [positionView convertRect:rect toView:nil]; // Convert the rect to window coordinates
-		NSRect originRect = [[self.positionView window] convertRectToScreen: _screenRect];
-  _screenRect.origin = originRect.origin;
+	_screenRect.origin = [mainWindow convertBaseToScreen:_screenRect.origin]; // Convert window coordinates to screen coordinates
 	NSRectEdge calculatedEdge = [self _edgeWithPreferredEdge:edge]; // Calculate the best arrow direction
 	[self _setEdge:calculatedEdge]; // Change the arrow direction of the popover
 	NSRect windowFrame = [self popoverFrameWithSize:self.contentSize andEdge:calculatedEdge]; // Calculate the window frame based on the arrow direction
@@ -304,8 +322,8 @@
 	_popoverWindow.popover = self;
 
 	// set defaults like iCal popover
-	self.color = [NSColor colorWithCalibratedWhite:0.94 alpha:0.92];
-	self.borderColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.92];
+	self.color = [[NSColor colorWithCalibratedWhite:0.94 alpha:0.92] retain];
+	self.borderColor = [[NSColor colorWithCalibratedWhite:1.0 alpha:0.92] retain];
 	self.borderWidth = 1.0;
 	self.closesWhenEscapeKeyPressed = YES;
 	self.closesWhenPopoverResignsKey = YES;
@@ -362,6 +380,7 @@
 		case NSRectEdgeMinY:
 		case NSRectEdgeMaxY:
 			newEdge = arrowLeft ? NSRectEdgeMinX : NSRectEdgeMaxX;
+      break;
 		case NSRectEdgeMinX:
 		case NSRectEdgeMaxX:
 			newEdge = arrowUp ? NSRectEdgeMaxY : NSRectEdgeMinY;
@@ -386,9 +405,8 @@
 		return;
 	}
 	NSRect newFrame = [_popoverWindow frame];
-  _screenRect = [self.positionView convertRect:_viewRect toView:nil]; // Convert the rect to window coordinates
-	NSRect originRect = [[self.positionView window] convertRectToScreen: _screenRect];
-  _screenRect.origin = originRect.origin;
+	_screenRect = [self.positionView convertRect:_viewRect toView:nil]; // Convert the rect to window coordinates
+	_screenRect.origin = [[self.positionView window] convertBaseToScreen:_screenRect.origin]; // Convert window coordinates to screen coordinates
 	NSRect calculatedFrame = [self popoverFrameWithSize:self.contentSize andEdge:self.edge]; // Calculate the window frame based on the arrow direction
 	newFrame.origin = calculatedFrame.origin;
 	[_popoverWindow setFrame:newFrame display:YES animate:NO]; // Set the frame of the window

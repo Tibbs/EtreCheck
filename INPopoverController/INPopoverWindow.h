@@ -14,8 +14,15 @@
 @class INPopover;
 
 @interface INPopoverWindow : NSPanel
+{
+	NSView * _popoverContentView;
+	NSWindow * _zoomWindow;
+  INPopoverWindowFrame * _frameView;
+  INPopover * _popover;
+}
+
 @property (nonatomic, readonly) INPopoverWindowFrame *frameView; // Equivalent to contentView
-@property (nonatomic, assign) INPopover *popover;
+@property (nonatomic, strong) INPopover *popover;
 @property (nonatomic, strong) NSView *popoverContentView;
 
 - (void)presentAnimated;

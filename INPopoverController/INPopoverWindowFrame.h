@@ -11,6 +11,16 @@
  The NSView subclass responsible for drawing the frame of the popover
  */
 @interface INPopoverWindowFrame : NSView
+  {
+  NSColor * _color;
+  NSColor * _borderColor;
+  NSColor * _topHighlightColor;
+  CGFloat _borderWidth;
+  CGFloat _cornerRadius;
+  NSSize _arrowSize;
+  NSRectEdge _edge;
+  }
+
 @property (nonatomic, strong) NSColor *color;
 @property (nonatomic, strong) NSColor *borderColor;
 @property (nonatomic, strong) NSColor *topHighlightColor;

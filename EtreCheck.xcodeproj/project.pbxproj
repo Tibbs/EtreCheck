@@ -205,7 +205,7 @@
 		A546BFBA1A5348890032C354 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/linkhelp.rtf; sourceTree = "<group>"; };
 		A549C6731C7513F800283F7F /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		A549C6751C75198700283F7F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = INPopoverController.framework; path = "/Users/jdaniel/Library/Developer/Xcode/DerivedData/EtreCheck-agjwxjwbzyszsxeutrwvjiefjnzd/Build/Products/Debug/INPopoverController.framework"; sourceTree = "<absolute>"; };
+		A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = INPopoverController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A54A9EF71DC3139A00F92CA3 /* VerticalScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScrollView.h; sourceTree = "<group>"; };
 		A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScrollView.m; sourceTree = "<group>"; };
 		A54A9EFA1DC5535400F92CA3 /* inpopover.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = inpopover.txt; path = licenses/inpopover.txt; sourceTree = "<group>"; };

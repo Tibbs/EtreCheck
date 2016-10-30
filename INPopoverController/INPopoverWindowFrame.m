@@ -7,16 +7,31 @@
 
 @implementation INPopoverWindowFrame
 
+@synthesize color = _color;
+@synthesize borderColor = _borderColor;
+@synthesize topHighlightColor = _topHighlightColor;
+@synthesize borderWidth = _borderWidth;
+@synthesize cornerRadius = _cornerRadius;
+@synthesize arrowSize = _arrowSize;
+@synthesize edge = _edge;
+
 - (id)initWithFrame:(NSRect)frame
 {
 	if ((self = [super initWithFrame:frame])) {
-		_color = [NSColor colorWithCalibratedWhite:0.0 alpha:0.8];
+		_color = [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] retain];
 		_cornerRadius = 4.0;
 		_arrowSize = NSMakeSize(23.0, 12.0);
 		_edge = NSRectEdgeMinX;
 	}
 	return self;
 }
+
+- (void) dealloc
+  {
+  [_color release];
+  
+  [super dealloc];
+  }
 
 - (void)drawRect:(NSRect)dirtyRect
 {

@@ -6,10 +6,34 @@
 #import <Cocoa/Cocoa.h>
 #import "INPopoverDefines.h"
 
+@class INPopoverWindow;
 @protocol INPopoverDelegate;
 
 @interface INPopover : NSObject
+  {
+  id <INPopoverDelegate> _delegate;
+  NSColor * _color;
+  NSColor * _borderColor;
+  NSColor * _topHighlightColor;
+  CGFloat _borderWidth;
+  CGFloat _cornerRadius;
+  NSSize _arrowSize;
+  NSRectEdge _edge;
+  NSSize _contentSize;
+  BOOL _closesWhenEscapeKeyPressed;
+  BOOL _closesWhenPopoverResignsKey;
+  BOOL _closesWhenApplicationBecomesInactive;
+  BOOL _animates;
+  INPopoverAnimationType _animationType;
+  NSViewController * _contentViewController;
+  NSView * _positionView;
+  INPopoverWindow * _popoverWindow;
+  BOOL _popoverIsVisible;
 
+  NSRect _screenRect;
+	NSRect _viewRect;
+  }
+  
 #pragma mark -
 #pragma mark Properties
 

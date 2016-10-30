@@ -323,6 +323,7 @@
     [[NSMutableAttributedString alloc] initWithString: @""];
     
   if(!smart_not_supported)
+    {
     [urlString
       appendString:
         [NSString stringWithFormat:
@@ -335,9 +336,10 @@
             [NSString stringWithFormat: @"etrecheck://smart/%@", device]
         }];
 
-  [self.result appendAttributedString: urlString];
-  [self.result appendString: @"\n"];
-  
+    [self.result appendAttributedString: urlString];
+    [self.result appendString: @"\n"];
+    }
+    
   [urlString release];
   }
 
