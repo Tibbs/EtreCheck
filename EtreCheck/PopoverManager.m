@@ -119,10 +119,13 @@
 
   [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
 
+  if([NSPopover class])
+    [self showDetailWindow];
+
   [self resizeDetail: [self.textView textStorage]];
 
-  // This needs to be moved up for INPopover.
-  [self showDetailWindow];
+  if(![NSPopover class])
+    [self showDetailWindow];
   }
 
 // Show the detail window.
