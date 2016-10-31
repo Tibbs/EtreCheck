@@ -386,7 +386,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           URLByAppendingPathComponent: @"EtreCheck/Reports"];
         
       [[NSFileManager defaultManager]
-        createDirectoryAtPath: [reportsDirectory absoluteString]
+        createDirectoryAtPath: [reportsDirectory path]
         withIntermediateDirectories: YES
         attributes: [NSDictionary dictionary]
         error: NULL];
