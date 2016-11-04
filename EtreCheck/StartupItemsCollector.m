@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "Model.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -93,6 +94,10 @@
 // Print Mach init files.
 - (void) printMachInitFiles
   {
+  // Deprecated in 10.3, still in use by Apple in 10.6.
+  if([[Model model] majorOSVersion] == kSnowLeopard)
+    return;
+
   NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
   
   if([machInitFiles count] == 0)

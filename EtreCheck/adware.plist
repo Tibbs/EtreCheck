@@ -464,8 +464,6 @@
     <string>com.bitdefender.FirstRun_avod.18.fullsystem.plist</string>
     <string>com.bitdefender.upgrade.plist</string>
     <string>com.bitmaki.textcast.httpd.plist</string>
-    <string>com.bittorrent.BitTorrent.plist</string>
-    <string>com.bittorrent.uTorrent.plist</string>
     <string>com.bjango.istatlocal.plist</string>
     <string>com.bjango.istatlocaldaemon.plist</string>
     <string>com.bjango.istatmenusagent.plist</string>
@@ -519,6 +517,7 @@
     <string>com.bresink.system.securityagent3.plist</string>
     <string>com.bresink.system.securityagent3a.plist</string>
     <string>com.bresink.system.tinkertoolstartupsound.plist</string>
+    <string>com.brettterpstra.nvremind.plist</string>
     <string>com.broadsoft.joinerAgent.plist</string>
     <string>com.broadsoft.joinerDaemon.plist</string>
     <string>com.brother.LOGINserver.plist</string>
@@ -3845,6 +3844,8 @@
 		<string>com.MTWB.Product.plist</string>
 		<string>com.ebonmedia.appswell.helper.plist</string>
 		<string>com.mentmac.service.update.plist</string>
+    <string>com.bittorrent.BitTorrent.plist</string>
+    <string>com.bittorrent.uTorrent.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
