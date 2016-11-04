@@ -1766,7 +1766,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[[self.logView enclosingScrollView] contentView]
     setPostsBoundsChangedNotifications: YES];
 
-  [self.window makeFirstResponder: self.logView];
+  //[self.window makeFirstResponder: self.logView];
   
   NSRect frame = [self.window frame];
   
