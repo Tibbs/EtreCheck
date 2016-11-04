@@ -790,7 +790,38 @@
     if([Utilities isShellScript: path])
       result = kShell;
 
+  if(result == nil || [result isEqualToString: kCodesignFailed])
+    if([Utilities isSIP: path])
+      result = kSignatureApple;
+
   return result;
+  }
+
+// Is this an SIP executable?
++ (BOOL) isSIP: (NSString *) path
+  {
+  if([[Model model] majorOSVersion] < kElCapitan)
+    return NO;
+    
+  if([path hasPrefix: @"/usr/libexec/"])
+    return YES;
+    
+  if([path hasPrefix: @"/usr/bin/"])
+    return YES;
+
+  if([path hasPrefix: @"/usr/sbin/"])
+    return YES;
+
+  if([path hasPrefix: @"/bin/"])
+    return YES;
+
+  if([path hasPrefix: @"/sbin/"])
+    return YES;
+
+  if([path hasPrefix: @"/System/"])
+    return YES;
+
+  return NO;
   }
 
 // Check the signature of an executable.
