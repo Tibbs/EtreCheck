@@ -776,7 +776,9 @@
     if([result isEqualToString: kSignatureValid])
       result = kSignatureApple;
     
-    [[[Utilities shared] signatureCache] setObject: result forKey: path];
+    // Only cache a valid signature.
+    if([result isEqualToString: kSignatureApple])
+      [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
   else
     {
@@ -786,13 +788,21 @@
     
   [subProcess release];
   
+  // Return valid signatures.
   if([result isEqualToString: kNotSigned])
     if([Utilities isShellScript: path])
-      result = kShell;
+      return kShell;
 
-  if(result == nil || [result isEqualToString: kCodesignFailed])
-    if([Utilities isSIP: path])
-      result = kSignatureApple;
+  if([result isEqualToString: kSignatureApple])
+    return result;
+
+  if([result isEqualToString: kSignatureValid])
+    return result;
+
+  // The signature is invalid. If it is in an SIP folder, go ahead
+  // and accept it anyway. <sigh>
+  if([Utilities isSIP: path])
+    return kSignatureApple;
 
   return result;
   }
