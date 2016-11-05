@@ -7,7 +7,7 @@
 */
 "applications" = "Les applications :";
 "configurationfiles" = "Les fichiers de configuration :";
-"cpu" = "L’utilisation du CPU par processus :";
+"cpu" = "L’utilisation du CPU :";
 "diagnostics" = "Les informations du diagnostic :";
 "disk" = "Les informations des disques :";
 "firewire" = "Les informations Firewire :";

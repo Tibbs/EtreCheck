@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import "PopoverManager.h"
+#import <INPopoverController/INPopoverController.h>
 
 @implementation PopoverManager
 
@@ -13,12 +14,25 @@
 @synthesize minPopoverSize = myMinPopoverSize;
 @synthesize maxPopoverSize = myMaxPopoverSize;
 @synthesize contentView = myContentView;
-@synthesize drawer = myDrawer;
 @synthesize popoverViewController = myPopoverViewController;
 @synthesize title = myTitle;
 @synthesize popover = myPopover;
 @synthesize textView = myTextView;
 @synthesize details = myDetails;
+@dynamic visible;
+
+- (BOOL) visible
+  {
+  if(myPopover)
+    {
+    if([myPopover respondsToSelector: @selector(popoverIsVisible)])
+      return [(INPopover *)myPopover popoverIsVisible];
+    else if([myPopover respondsToSelector: @selector(isShown)])
+      return [(NSPopover *)myPopover isShown];
+    }
+    
+  return NO;
+  }
 
 // Constructor.
 - (id) init
@@ -41,7 +55,13 @@
       myPopover = popover;
       }
     else
-      myPopoverViewController = nil;
+      {
+      INPopover * popover = [[INPopover alloc] init];
+      
+      popover.delegate = (id<INPopoverDelegate>)self;
+      
+      myPopover = popover;
+      }
     }
   
   return self;
@@ -65,7 +85,9 @@
     {
     [self.popover setContentViewController: self.popoverViewController];
     [self.popover setContentSize: self.minPopoverSize];
-    [self.popover setBehavior: NSPopoverBehaviorApplicationDefined];
+    
+    if([NSPopover class])
+      [(NSPopover *)self.popover setBehavior: NSPopoverBehaviorApplicationDefined];
     }
   }
 
@@ -78,19 +100,10 @@
 - (void) showDetail: (NSString *) title
   content: (NSAttributedString *) content
   {
-  [self showDetailWindow];
-  
   [self.title setStringValue: title];
   
   self.details = content;
   
-  NSTextStorage * storage =
-    [[NSTextStorage alloc] initWithAttributedString: self.details];
-
-  [self resizeDetail: storage];
-  
-  [storage release];
-
   NSData * rtfData =
     [self.details
       RTFFromRange: NSMakeRange(0, [self.details length])
@@ -107,6 +120,14 @@
   [self.textView setEditable: NO];
 
   [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
+
+  if([NSPopover class])
+    [self showDetailWindow];
+
+  [self resizeDetail: [self.textView textStorage]];
+
+  if(![NSPopover class])
+    [self showDetailWindow];
   }
 
 // Show the detail window.
@@ -126,22 +147,6 @@
       showRelativeToRect: rect
       ofView: self.contentView
       preferredEdge: NSMinXEdge];
-    }
-  else
-    {
-    NSDrawerState currentState = [self.drawer state];
-    
-    switch(currentState)
-      {
-      case NSDrawerClosedState:
-        [self.drawer setMinContentSize: self.minDrawerSize];
-        [self.drawer setContentSize: self.minDrawerSize];
-        [self.drawer openOnEdge: [self.drawer preferredEdge]];
-        break;
-        
-      default:
-        break;
-      }
     }
   }
 
@@ -177,13 +182,6 @@
       size.height = self.minPopoverSize.height;
       
     [self.popover setContentSize: size];
-    }
-  else
-    {
-    if(size.height < self.minPopoverSize.height)
-      size.height = self.minPopoverSize.height;
-
-    [self.drawer setContentSize: size];
     }
   }
 
@@ -221,26 +219,28 @@
   {
   if(self.popover)
     [self.popover close];
-  else
-    [self.drawer close];
   }
 
-// Close a drawer if it is not the new drawer.
-- (void) closeDrawerIfNotDrawer: (NSDrawer *) drawer
+// Copy the report to the clipboard.
+- (IBAction) copyToClipboard: (id) sender
   {
-  NSDrawerState currentState = [self.drawer state];
+  NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
+ 
+  [pasteboard clearContents];
+ 
+  NSError * error = nil;
   
-  switch(currentState)
-    {
-    case NSDrawerOpenState:
-    case NSDrawerOpeningState:
-      if(self.drawer != drawer)
-        [self.drawer close];
-      break;
-      
-    default:
-      break;
-    }
+  NSData * rtfData =
+    [self.details
+      dataFromRange: NSMakeRange(0, [self.details length])
+      documentAttributes:
+        @
+          {
+          NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType
+          }
+      error: & error];
+
+  [pasteboard setData: rtfData forType: NSPasteboardTypeRTF];
   }
 
 @end

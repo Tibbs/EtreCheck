@@ -13,6 +13,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
+#import "SearchEngine.h"
 
 @implementation LaunchdCollector
 
@@ -273,12 +274,16 @@
   // Set attributes.
   [info setObject: path forKey: kPath];
   
-  [info
-    setObject: [Utilities sanitizeFilename: filename] forKey: kFilename];
+  [info setObject: filename forKey: kFilename];
   
   if([filename hasPrefix: @"."])
     [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
     
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if(modificationDate)
+    [info setObject: modificationDate forKey: kModificationDate];
+
   [self setDetailsURL: info];
   [self setExecutable: info];
   
@@ -314,6 +319,8 @@
     [info
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
+    
+    [self checkSignature: info];
     
     // See if this is a file I know about, either good or bad.
     [self checkForKnownFile: path info: info];
@@ -431,8 +438,8 @@
     return
       [NSString
         stringWithFormat:
-          @"https://www.google.com/search?q=%@+support+site:%@",
-          nameParameter, host];
+          @"%@%@+support+site:%@",
+          [SearchEngine searchEngineURL], nameParameter, host];
     }
   
   // This file isn't following standard conventions. Look for uninstall
@@ -440,7 +447,7 @@
   return
     [NSString
       stringWithFormat:
-        @"https://www.google.com/search?q=%@+uninstall+support", bundleID];
+        @"%@%@+uninstall+support", [SearchEngine searchEngineURL], bundleID];
   }
 
 // Set the details URL.
@@ -478,6 +485,7 @@
       {
       [info setObject: command forKey: kCommand];
       [info setObject: executable forKey: kExecutable];
+      [self updateModificationDate: info path: executable];
 
       [info
         setObject: [NSNumber numberWithBool: [self isAppleFile: executable]]
@@ -765,11 +773,6 @@
   info: (NSMutableDictionary *) info
   output: (NSMutableAttributedString *) output
   {
-  NSDate * modificationDate = [self modificationDate: path];
-  
-  if(modificationDate)
-    [info setObject: modificationDate forKey: kModificationDate];
-
   // Apples file get special treatment.
   if([[info objectForKey: kApple] boolValue])
     if(![self formatApplePropertyListFile: path info: info])
@@ -785,7 +788,7 @@
   [output appendAttributedString: [self formatPropertyListStatus: info]];
   
   // Add the name.
-  [output appendString: filename];
+  [output appendString: [Utilities prettyPath: filename]];
   
   // Add any extra content.
   [output
@@ -848,13 +851,23 @@
     // signature isn't good enough.
     if(![[Model model] ignoreKnownAppleFailures])
       {
+      // These aren't errors.
       if([signature isEqualToString: kSignatureApple])
         {
         }
       else if([signature isEqualToString: kSignatureValid])
         {
         }
-      else
+      else if([signature isEqualToString: kShell])
+        {
+        }
+        
+      // These are errors.
+      else if([signature isEqualToString: kExecutableMissing])
+        return YES;
+        
+      // Anything else will cause the item to be printed.
+      else if((signature != nil) && [[Model model] showSignatureFailures])
         return YES;
       }
       
@@ -967,6 +980,10 @@
     
     if([expectedSignature length] > 0)
       return [signature isEqualToString: expectedSignature];
+    
+    // Apple is now putting "other stuff" in launchd plist files.
+    else if([signature length] == 0)
+      return YES;
     }
     
   return NO;
@@ -1204,7 +1221,7 @@
         [NSString
           stringWithFormat:
             NSLocalizedString(@" - %@: Executable not found!", NULL),
-            [Utilities sanitizeFilename: executable]];
+            [Utilities cleanPath: executable]];
     else
       message =
         [NSString
@@ -1235,13 +1252,22 @@
     // Else if I am not ignoring known Apple failures, then if I'm not
     // showing signature failures, clear the failure, if any.
     else if(![[Model model] showSignatureFailures])
-      message = nil;
+      {
+      // I still want to report things that aren't actual signature
+      // failures.
+      if([signature isEqualToString: kExecutableMissing])
+        {
+        }
+      else
+        message = nil;
+      }
     }
     
   // Else if this is not an Apple file things aren't so complicated.
   // If I'm not showing signature failures, then clear the failure, if any.
   else if(![[Model model] showSignatureFailures])
-    message = nil;
+    if(![signature isEqualToString: kExecutableMissing])
+      message = nil;
     
   if([message length])
     [extra

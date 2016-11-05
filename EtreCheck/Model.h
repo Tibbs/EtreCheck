@@ -51,6 +51,7 @@
 #define kCoreCount @"corecount"
 #define kCPUType @"cputype"
 #define kMarketingName @"marketingname"
+#define kMemoryUpgradeability @"memoryupgradeability"
 #define kMemoryUpgradeable @"memoryupgradeable"
 #define kMemoryUpgradeURL @"src"
 #define kMemoryAmount @"total"
@@ -191,7 +192,6 @@
   NSMutableSet * myBlacklistFiles;
   NSMutableSet * myBlacklistSuffixes;
   NSMutableSet * myBlacklistMatches;
-  bool myUnknownFilesFound;
   NSMutableArray * myTerminatedTasks;
   NSMutableSet * mySeriousProblems;
   bool myBackupExists;
@@ -200,6 +200,7 @@
   bool myShowSignatureFailures;
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
+  bool myVerifiedEtreCheckVersion;
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
@@ -292,7 +293,7 @@
 @property (readonly) NSMutableSet * blacklistMatches;
 
 // Did I find any unknown files?
-@property (assign) bool unknownFilesFound;
+@property (readonly) bool unknownFilesFound;
 
 // Unknown launchd files.
 @property (readonly) NSDictionary * unknownLaunchdFiles;
@@ -320,6 +321,9 @@
 
 // Is this version outdated?
 @property (assign) bool oldEtreCheckVersion;
+
+// Do I have a verified EtreCheck version?
+@property (assign) bool verifiedEtreCheckVersion;
 
 // Apple software.
 @property (retain) NSDictionary * appleSoftware;

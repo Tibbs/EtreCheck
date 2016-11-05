@@ -13,7 +13,9 @@
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
 "oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
 "info" = "ⓘ";
-"startupitemsdeprecated" = "    Startup items are obsolete in OS X Yosemite\n";
+"startupitemsdeprecated" = "    Startup items no longer function in OS X Yosemite or later\n";
+"machinitdeprecated" = "    Mach Init items are deprecated\n";
+"loginhookdeprecated" = "    Login hooks are deprecated\n";
 "%d day (plural rule: zero)" = "";
 "%d day (plural rule: one)" = "about one day";
 "%d day (plural rule: other)" = "about %d days";
@@ -65,9 +67,8 @@
 "nofilesdeleted" = "No files could be deleted. They must be deleted manually.";
 "restartrecommended" = "Some files were deleted. Etresoft recommends you restart and run another EtreCheck report to verify that these files remain deleted.";
 "restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
-"notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
 "passwordrequired" = "An administrator password will be requires to remove these files. Do you want to proceed?";
-"cannotverifytimemachinebackup" = "EtreCheck cannot verify a Time Machine backup on OS X 10.7 “Lion” and earlier. Do you have a Time Machine backup?";
+"cannotverifytimemachinebackup" = "EtreCheck could not find a Time Machine backup. Etresoft recommends you have a Time Machine backup before attempting to remove files.";
 "thanksforadware" = "Thank you for your submission to the EtreCheck adware blacklist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "adwareuploadfailed" = "Your adware upload to the EtreCheck server failed. Would you like to use e-mail instead?";
 "nocontenthtml" = "<strong>No update information available.</strong>";
@@ -77,9 +78,10 @@
 "Donation not found" = "Donation not found";
 "donationnotfound" = "Sorry, your donation could not be found. Please use the Manual lookup option.";
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
+"unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please allow EtreCheck to access its servers.";
 "donateurl" = "https://etrecheck.com/donate_en.php?invoice=%@";
-"freeram" = "Available RAM";
+"availableram" = "Available RAM";
+"freeram" = "Free RAM";
 "usedram" = "Used RAM";
+"filecache" = "Cached files";
 "swapused" = "Swap Used";
-"filecache" = "File cache";
-

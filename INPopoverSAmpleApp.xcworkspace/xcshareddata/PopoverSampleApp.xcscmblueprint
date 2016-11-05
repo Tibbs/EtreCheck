@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DDA364F7425C5EEC6931333EC36D4269BB3DCDE5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1C75288BC4357CA31C0D3CF0AC136B920D1CCABB" : 0,
+    "DDA364F7425C5EEC6931333EC36D4269BB3DCDE5" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4F1A6E7F-EED3-4502-8319-099D6C92A4FE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1C75288BC4357CA31C0D3CF0AC136B920D1CCABB" : "",
+    "DDA364F7425C5EEC6931333EC36D4269BB3DCDE5" : "INPopoverController\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PopoverSampleApp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PopoverSampleApp\/PopoverSampleApp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/etresoft\/EtreCheck.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1C75288BC4357CA31C0D3CF0AC136B920D1CCABB"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/etresoft\/INPopoverController.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DDA364F7425C5EEC6931333EC36D4269BB3DCDE5"
+    }
+  ]
+}

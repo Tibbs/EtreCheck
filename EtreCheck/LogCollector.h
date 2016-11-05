@@ -6,13 +6,7 @@
 
 #import "Collector.h"
 
-@class ByteCountFormatter;
-
-// Collect virtual memory information.
-@interface VirtualMemoryCollector : Collector
-  {
-  ByteCountFormatter * formatter;
-  double pageouts;
-  }
+// Collect information from log files.
+@interface LogCollector : Collector
 
 @end

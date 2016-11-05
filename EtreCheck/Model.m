@@ -41,13 +41,15 @@
 @synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
-@synthesize unknownFilesFound = myUnknownFilesFound;
+@dynamic unknownFilesFound;
 @synthesize terminatedTasks = myTerminatedTasks;
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize showSignatureFailures = myShowSignatureFailures;
 @synthesize hideAppleTasks = myHideAppleTasks;
+@synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
+@synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
 @synthesize appleSoftware = myAppleSoftware;
 @synthesize appleLaunchd = myAppleLaunchd;
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
@@ -85,6 +87,11 @@
   return [[files copy] autorelease];
   }
 
+- (bool) unknownFilesFound
+  {
+  return [self.unknownFiles count] > 0;
+  }
+  
 // Return the singeton of shared values.
 + (Model *) model
   {

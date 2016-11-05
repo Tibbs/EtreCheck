@@ -45,16 +45,206 @@
   [self collectOldLoginItems];
   [self collectModernLoginItems];
   
+  NSUInteger machItemCount = 0;
+  
+  machItemCount +=
+    [self collectMachInitFiles: @"/etc/mach_init_per_login_session.d"];
+  machItemCount +=
+    [self collectMachInitFiles: @"/etc/mach_init_per_user.d"];
+
+  NSUInteger loginHookCount = 0;
+  
+  //loginHookCount += [self collectLoginHooks];
+  loginHookCount += [self collectOldLoginHooks];
+
   NSUInteger count = 0;
   
   for(NSDictionary * loginItem in self.loginItems)
     if([self printLoginItem: loginItem count: count])
       ++count;
     
+  if(machItemCount > 0)
+    {
+    [self.result
+      appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+    }
+    
+  if(loginHookCount > 0)
+    {
+    [self.result
+      appendString: NSLocalizedString(@"loginhookdeprecated", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+    }
+    
   if(count > 0)
     [self.result appendCR];
 
   dispatch_semaphore_signal(self.complete);
+  }
+
+// Collect Mach init files.
+- (NSUInteger) collectMachInitFiles: (NSString *) path
+  {
+  NSArray * machInitFiles = [Utilities checkMachInit: path];
+  
+  for(NSString * file in machInitFiles)
+    {
+    NSString * name = [file lastPathComponent];
+    
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        name, @"name",
+        file, @"path",
+        @"MachInit", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    }
+    
+  return [machInitFiles count];
+  }
+
+// Collect Login hooks.
+- (NSUInteger) collectLoginHooks
+  {
+  NSUInteger hooks = 0;
+  
+  NSUserDefaults * defaults = [[NSUserDefaults alloc] init];
+  
+  // Bummer. This needs root.
+  NSDictionary * settings =
+    [defaults
+      persistentDomainForName:
+        @"/var/root/Library/Preferences/com.apple.loginwindow.plist"];
+
+  [defaults release];
+
+  NSString * loginHook = [settings objectForKey: @"LoginHook"];
+  NSString * logoutHook = [settings objectForKey: @"LogoutHook"];
+  
+  if([loginHook length])
+    {
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        @"com.apple.loginwindow", @"name",
+        loginHook, @"path",
+        @"LoginHook", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    
+    ++hooks;
+    }
+    
+  if([logoutHook length])
+    {
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        @"com.apple.loginwindow", @"name",
+        logoutHook, @"path",
+        @"LogoutHook", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    
+    ++hooks;
+    }
+
+  return hooks;
+  }
+
+// Collect old Login hooks.
+- (NSUInteger) collectOldLoginHooks
+  {
+  NSUInteger hooks = 0;
+
+  NSData * tty = [NSData dataWithContentsOfFile: @"/etc/ttys"];
+   
+  NSArray * lines = [Utilities formatLines: tty];
+
+  NSString * loginHook = nil;
+  NSString * logoutHook = nil;
+  
+  for(NSString * line in lines)
+    {
+    NSRange tagRange = [line rangeOfString: @"-LoginHook"];
+    
+    if(tagRange.location != NSNotFound)
+      {
+      NSString * script = [line substringFromIndex: tagRange.location];
+      
+      NSScanner * scanner = [NSScanner scannerWithString: script];
+      
+      [scanner scanString: @"-LoginHook" intoString: NULL];
+      [scanner
+        scanUpToCharactersFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]
+        intoString: & loginHook];
+        
+      if([loginHook length] > 0)
+        loginHook = [loginHook substringToIndex: [loginHook length] - 1];
+      }
+      
+    tagRange = [line rangeOfString: @"-LogoutHook"];
+    
+    if(tagRange.location != NSNotFound)
+      {
+      NSString * script = [line substringFromIndex: tagRange.location];
+      
+      NSScanner * scanner = [NSScanner scannerWithString: script];
+      
+      [scanner scanString: @"-LogoutHook" intoString: NULL];
+      [scanner
+        scanUpToCharactersFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]
+        intoString: & logoutHook];
+        
+      if([logoutHook length] > 0)
+        logoutHook = [logoutHook substringToIndex: [logoutHook length] - 1];
+      }
+    }
+    
+  if([loginHook length])
+    {
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        @"/etc/ttys", @"name",
+        loginHook, @"path",
+        @"LoginHook", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    
+    ++hooks;
+    }
+    
+  if([logoutHook length])
+    {
+    NSDictionary * item =
+      [NSDictionary dictionaryWithObjectsAndKeys:
+        @"/etc/ttys", @"name",
+        logoutHook, @"path",
+        @"LogoutHook", @"kind",
+        @"Hidden", @"hidden",
+        nil];
+      
+    [self.loginItems addObject: item];
+    
+    ++hooks;
+    }
+
+  return hooks;
   }
 
 // Collect old login items.
@@ -309,7 +499,12 @@
   if([path length] == 0)
     return NO;
     
-  NSString * safePath = [Utilities sanitizeFilename: path];
+  NSString * safeName = [Utilities cleanPath: name];
+  
+  if([safeName length] == 0)
+    safeName = name;
+    
+  NSString * safePath = [Utilities cleanPath: path];
   
   if([safePath length] == 0)
     return NO;
@@ -324,16 +519,28 @@
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
     
-  BOOL trashed = [path rangeOfString: @"/.Trash/"].location != NSNotFound;
+  BOOL highlight = NO;
   
+  if([path rangeOfString: @"/.Trash/"].location != NSNotFound)
+    highlight = YES;
+    
+  if([kind isEqualToString: @"MachInit"])
+    highlight = YES;
+  
+  if([kind isEqualToString: @"LoginHook"])
+    highlight = YES;
+
+  if([kind isEqualToString: @"LogoutHook"])
+    highlight = YES;
+
   // Flag a login item if it is in the trash.
-  if(trashed)
+  if(highlight)
     [self.result
       appendString:
         [NSString
           stringWithFormat:
             @"    %@    %@ %@ (%@)%@\n",
-            name,
+            safeName,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
             safePath,
@@ -348,7 +555,7 @@
         [NSString
           stringWithFormat:
             @"    %@    %@ %@ (%@)%@\n",
-            name,
+            safeName,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
             safePath,

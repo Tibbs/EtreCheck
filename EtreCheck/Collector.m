@@ -9,6 +9,8 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "XMLBuilder.h"
+#import "AdwareManager.h"
+#import "SearchEngine.h"
 
 @implementation Collector
 
@@ -139,8 +141,8 @@
     NSString * query =
       [NSString
         stringWithFormat:
-          @"https://www.google.com/search?q=%@support+site:%@",
-          nameParameter, host];
+          @"%@%@support+site:%@",
+          [SearchEngine searchEngineURL], nameParameter, host];
     
     [url appendString: @" "];
 

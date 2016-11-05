@@ -14,6 +14,7 @@
   NSImage * myGenericDocumentIcon;
   NSString * myMarketingName;
   NSString * myEnglishMarketingName;
+  NSString * myCPUCode;
   BOOL mySupportsHandoff;
   BOOL mySupportsInstantHotspot;
   BOOL mySupportsLowEnergy;
@@ -34,6 +35,9 @@
 // English version of Apple Marketing name for the technical specifications
 // fallback.
 @property (retain) NSString * EnglishMarketingName;
+
+// The CPU code.
+@property (retain) NSString * CPUCode;
 
 // Does the machine support handoff?
 @property (assign) BOOL supportsHandoff;

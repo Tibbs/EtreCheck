@@ -6,8 +6,6 @@
 
 #import "CPUUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
-#import <stdlib.h>
-#import "Model.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -26,57 +24,115 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
-  [self updateStatus: NSLocalizedString(@"Collecting CPU usage", NULL)];
+  [self
+    updateStatus: NSLocalizedString(@"Sampling processes for CPU", NULL)];
 
-  [self.result appendAttributedString: [self buildTitle]];
+  // Collect the average CPU usage for all processes (5 times).
+  NSDictionary * avgCPU = [self collectAverageCPU];
   
-  [self printLoad];
+  // Sort the result by average value.
+  NSArray * processesCPU = [self sortProcesses: avgCPU by: @"cpu"];
+  
+  // Print the top processes.
+  [self printTopProcesses: processesCPU];
   
   [self.result appendCR];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
-// Print system load.
-- (void) printLoad
+// Collect the average CPU usage of all processes.
+- (NSDictionary *) collectAverageCPU
   {
-  double loads[3];
+  NSMutableDictionary * averageProcesses = [NSMutableDictionary dictionary];
   
-  int result = getloadavg(loads, 3);
-  
-  NSArray * labels =
-    [NSArray
-      arrayWithObjects:
-        NSLocalizedString(@"Current system load", NULL),
-        NSLocalizedString(@"System load for past 5 minutes", NULL),
-        NSLocalizedString(@"System load for past 15 minutes", NULL),
-        nil];
+  for(NSUInteger i = 0; i < 5; ++i)
+    {
+    usleep(500000);
     
-  if(result != -1)
-    for(int index = 0; index < 3; ++index)
+    NSDictionary * currentProcesses = [self collectProcesses];
+    
+    for(NSString * command in currentProcesses)
       {
-      double load = loads[index] / (double)[[Model model] coreCount] * 100;
-      
-      NSString * output =
-        [NSString
-          stringWithFormat:
-            @"    %4.0lf%%\t%@\n",
-            load,
-            [labels objectAtIndex: index]];
+      NSMutableDictionary * currentProcess =
+        [currentProcesses objectForKey: command];
+      NSMutableDictionary * averageProcess =
+        [averageProcesses objectForKey: command];
         
-      if(load > 80.0)
-        [self.result
-          appendString: output
-          attributes:
-            [NSDictionary
-              dictionaryWithObjectsAndKeys:
-                [NSColor redColor], NSForegroundColorAttributeName, nil]];      
-      else
-        [self.result appendString: output];
-            
+      if(!averageProcess)
+        [averageProcesses setObject: currentProcess forKey: command];
+        
+      else if(currentProcess && averageProcess)
+        {
+        double totalCPU =
+          [[averageProcess objectForKey: @"cpu"] doubleValue] * i;
+        
+        double averageCPU =
+          [[averageProcess objectForKey: @"cpu"] doubleValue];
+        
+        averageCPU = (totalCPU + averageCPU) / (double)(i + 1);
+        
+        [averageProcess
+          setObject: [NSNumber numberWithDouble: averageCPU]
+          forKey: @"cpu"];
+        }
       }
+    }
+  
+  return averageProcesses;
+  }
+
+// Print top processes by CPU.
+- (void) printTopProcesses: (NSArray *) processes
+  {
+  [self.result appendAttributedString: [self buildTitle]];
+  
+  NSUInteger topCount = 0;
+  
+  for(NSDictionary * process in processes)
+    {
+    double cpu = [[process objectForKey: @"cpu"] doubleValue];
+
+    int count = [[process objectForKey: @"count"] intValue];
+    
+    NSString * countString =
+      (count > 1)
+        ? [NSString stringWithFormat: @"(%d)", count]
+        : @"";
+
+    NSString * usageString =
+      [NSString stringWithFormat: @"%6.0lf%%", cpu];
+    
+    NSString * printString =
+      [usageString
+        stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+
+    NSString * output =
+      [NSString
+        stringWithFormat:
+          @"    %@\t%@%@\n",
+          printString,
+          [process objectForKey: @"command"],
+          countString];
+      
+    if(cpu > 50.0)
+      [self.result
+        appendString: output
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];      
+    else
+      [self.result appendString: output];
+          
+    ++topCount;
+          
+    if(cpu == 0.0)
+      topCount = 10;
+    
+    if(topCount >= 5)
+      break;
+    }
   }
 
 @end

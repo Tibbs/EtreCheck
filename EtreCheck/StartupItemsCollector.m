@@ -39,6 +39,15 @@
   // Get startup item bundles on disk.
   startupBundles = [self getStartupItemBundles];
   
+  [self printStartupItems];
+  [self printMachInitFiles];
+  
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Print Startup Items.
+- (void) printStartupItems
+  {
   NSArray * args =
     @[
       @"-xml",
@@ -84,8 +93,46 @@
     }
     
   [subProcess release];
+  }
+
+// Print Mach init files.
+- (void) printMachInitFiles
+  {
+  // Deprecated in 10.3, still in use by Apple in 10.6.
+  if([[Model model] majorOSVersion] == kSnowLeopard)
+    return;
+
+  NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
+  
+  if([machInitFiles count] == 0)
+    return;
     
-  dispatch_semaphore_signal(self.complete);
+  if(!startupItemsFound)
+    {
+    [self.result appendAttributedString: [self buildTitle]];
+    startupItemsFound = YES;
+    }
+
+  for(NSString * file in machInitFiles)
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"    %@\n", NULL),
+            [Utilities cleanPath: file]]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+    
+  [self.result
+    appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+      }];
+
+  [self.result appendCR];
   }
 
 // Get startup item bundles.

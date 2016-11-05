@@ -9,9 +9,11 @@
 #import "AudioPlugInsCollector.h"
 #import "CPUUsageCollector.h"
 #import "ConfigurationCollector.h"
+#import "CoreStorageCollector.h"
 #import "DiskCollector.h"
 #import "FirewireCollector.h"
 #import "FontsCollector.h"
+#import "GatekeeperCollector.h"
 #import "HardwareCollector.h"
 #import "ITunesPlugInsCollector.h"
 #import "InternetPlugInsCollector.h"
@@ -27,14 +29,18 @@
 #import "SystemLaunchDaemonsCollector.h"
 #import "SystemSoftwareCollector.h"
 #import "ThunderboltCollector.h"
+#import "TimeMachineCollector.h"
 #import "USBCollector.h"
 #import "UserAudioPlugInsCollector.h"
 #import "UserITunesPlugInsCollector.h"
 #import "UserInternetPlugInsCollector.h"
 #import "UserLaunchAgentsCollector.h"
 #import "VideoCollector.h"
+#import "MemoryUsageCollector.h"
+#import "DiagnosticsCollector.h"
 #import "Utilities.h"
 #import "Model.h"
+#import "LogCollector.h"
 #import "AdwareCollector.h"
 #import "UnknownFilesCollector.h"
 #import "EtreCheckCollector.h"
@@ -123,12 +129,15 @@
   // Collect items that will be needed by other collectors.
   [collectors addObject: hardwareCollector];
   [collectors addObject: [[SystemSoftwareCollector new] autorelease]];
+  [collectors addObject: [[CoreStorageCollector new] autorelease]];
+  [collectors addObject: [[LogCollector new] autorelease]];
   [collectors addObject: [[DiskCollector new] autorelease]];
   [collectors addObject: [[ApplicationsCollector new] autorelease]];
   [collectors addObject: [[VideoCollector new] autorelease]];
   [collectors addObject: [[USBCollector new] autorelease]];
   [collectors addObject: [[FirewireCollector new] autorelease]];
   [collectors addObject: [[ThunderboltCollector new] autorelease]];
+  [collectors addObject: [[TimeMachineCollector new] autorelease]];
   
   // Start the machine animation.
   [self runMachineAnimation: hardwareCollector];
@@ -234,15 +243,18 @@
   
   // Start the application animation.
   
-  Collector * lastCollector = [[MemoryUsageCollector new] autorelease];
+  Collector * lastCollector = [[DiagnosticsCollector new] autorelease];
     
   // This searches through applications, and takes some time, so it is
   // somewhat related to applications.
   [collectors addObject: [[KernelExtensionCollector new] autorelease]];
   [collectors addObject: [[ConfigurationCollector new] autorelease]];
+  [collectors addObject: [[GatekeeperCollector new] autorelease]];
   [collectors addObject: [[PreferencePanesCollector new] autorelease]];
   [collectors addObject: [[FontsCollector new] autorelease]];
   [collectors addObject: [[CPUUsageCollector new] autorelease]];
+  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
+  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
   // Start the machine animation.
@@ -394,7 +406,8 @@
     
     [collector collect];
     
-    [results setObject: collector.result forKey: collector.name];
+    if(collector.result != nil)
+      [results setObject: collector.result forKey: collector.name];
     
     // Keep a reference to the collector in case it is needed later.
     [completed setObject: collector forKey: collector.name];
@@ -418,6 +431,7 @@
   [result
     appendAttributedString: [self getResult: @"thunderbolt"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];
+  [result appendAttributedString: [self getResult: @"gatekeeper"]];
   [result appendAttributedString: [self getResult: @"applications"]];
   [result appendAttributedString: [self getResult: @"adware"]];
   [result appendAttributedString: [self getResult: @"unknownfiles"]];
@@ -438,8 +452,12 @@
   [result appendAttributedString: [self getResult: @"useritunesplugins"]];
   [result appendAttributedString: [self getResult: @"preferencepanes"]];
   [result appendAttributedString: [self getResult: @"fonts"]];
+  [result appendAttributedString: [self getResult: @"timemachine"]];
   [result appendAttributedString: [self getResult: @"cpu"]];
   [result appendAttributedString: [self getResult: @"memory"]];
+  [result appendAttributedString: [self getResult: @"diagnostics"]];
+  [result
+    appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];
   
   return [result autorelease];
   }

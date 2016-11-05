@@ -8,7 +8,7 @@
 
 @class ByteCountFormatter;
 
-// Collect information about memory usage.
+// Collect memory usage information.
 @interface MemoryUsageCollector : Collector
   {
   ByteCountFormatter * formatter;

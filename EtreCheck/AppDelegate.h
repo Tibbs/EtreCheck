@@ -8,10 +8,12 @@
 
 @class SlideshowView;
 @class DetailManager;
+@class SMARTManager;
 @class HelpManager;
 @class AdwareManager;
 @class UnknownFilesManager;
 @class UpdateManager;
+@class PreferencesManager;
 
 @interface AppDelegate : NSObject
   <NSApplicationDelegate,
@@ -19,10 +21,10 @@
   NSToolbarDelegate,
   NSSharingServiceDelegate,
   NSSharingServicePickerDelegate,
-  NSUserInterfaceValidations,
-  NSDrawerDelegate>
+  NSUserInterfaceValidations>
   {
   NSWindow * window;
+  NSMenuItem * myCloseMenuItem;
   NSWindow * myLogWindow;
   NSView * myAnimationView;
   NSView * myReportView;
@@ -78,10 +80,12 @@
   NSMutableSet * appleLaunchd;
   
   DetailManager * myDetailManager;
+  SMARTManager * mySMARTManager;
   HelpManager * myHelpManager;
   AdwareManager * myAdwareManager;
   UnknownFilesManager * myUnknownFilesManager;
   UpdateManager * myUpdateManager;
+  PreferencesManager *myPreferencesManager;
   
   BOOL myReportAvailable;
   NSDate * myReportStartTime;
@@ -95,9 +99,11 @@
   NSTextView * myDonateView;
   NSWindow * myDonationLookupPanel;
   NSString * myDonationLookupEmail;
+  BOOL myDonationVerified;
   }
   
 @property (retain) IBOutlet NSWindow * window;
+@property (retain) IBOutlet NSMenuItem * closeMenuItem;
 @property (retain) IBOutlet NSWindow * logWindow;
 @property (retain) IBOutlet NSView * animationView;
 @property (retain) IBOutlet NSView * reportView;
@@ -149,10 +155,12 @@
 @property (retain) IBOutlet NSImage * donateButtonInactiveImage;
 @property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
+@property (retain) IBOutlet SMARTManager * smartManager;
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (retain) IBOutlet UnknownFilesManager * unknownFilesManager;
 @property (retain) IBOutlet UpdateManager * updateManager;
+@property (retain) IBOutlet PreferencesManager * preferencesManager;
 @property (assign) BOOL reportAvailable;
 @property (retain) NSDate * reportStartTime;
 @property (retain) IBOutlet NSWindow * TOUPanel;
@@ -164,6 +172,8 @@
 @property (retain) IBOutlet NSWindow * donationLookupPanel;
 @property (retain) NSString * donationLookupEmail;
 @property (readonly) BOOL canSubmitDonationLookup;
+@property (assign) BOOL donationVerified;
+@property (readonly) NSTextView * currentTextView;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -188,6 +198,9 @@
 
 // Go to the Etresoft web site.
 - (IBAction) gotoEtresoft: (id) sender;
+
+// Go to the Etresoft support web site.
+- (IBAction) gotoEtresoftSupport: (id) sender;
 
 // Display help.
 - (IBAction) showHelp: (id) sender;
@@ -245,5 +258,8 @@
 
 // Cancel a donation lookup.
 - (IBAction) cancelDonationLookup: (id) sender;
+
+// Close the active window.
+- (IBAction) closeWindow: (id) sender;
 
 @end
