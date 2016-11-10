@@ -12,6 +12,7 @@
 #import "NSArray+Etresoft.h"
 #import "Model.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
@@ -69,8 +70,12 @@
       [self.result appendString: @"\n"];
       [self.result
         appendString:
-          NSLocalizedString(
-            @"/Library/Logs/DiagnosticReports permissions", NULL)];
+          NSLocalizedString(@"diagnoticreport_permissions", NULL)];
+        
+      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML
+        addElement: kSeverityExplanation
+        value: NSLocalizedString(@"diagnoticreport_permissions", NULL)];
       }
     
     [self.result appendCR];
@@ -448,7 +453,10 @@
   if(!hasOutput)
     [self.result appendAttributedString: [self buildTitle]];
   
+  [self.XML startElement: kDiagnosticEvent];
+  
   if(event.type == kSelfTestFail)
+    {
     [self.result
       appendString:
         [NSString
@@ -463,6 +471,12 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
     
+    [self.XML addAttribute: kSeverity value: kCritical];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"selftestfail", NULL)];
+
+    }
   else
     [self.result
       appendString:
@@ -473,8 +487,13 @@
               dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
             event.name]];
   
+  [self.XML addElement: kDiagnosticDate date: event.date];
+  [self.XML addElement: kDiagnosticName value: event.name];
+
   if([event.details length])
     {
+    [self.XML addElement: kDiagnosticDetails value: event.details];
+    
     NSAttributedString * detailsURL =
       [[Model model] getDetailsURLFor: name];
 
@@ -487,26 +506,35 @@
 
   [self.result appendString: @"\n"];
   
-  if([event.path length] && ![self.paths containsObject: event.path])
+  if([event.path length])
     {
-    [self.paths addObject: event.path];
-    
-    [self.result appendString: @"        "];
-    
-    if([event.identifier length])
-      [self.result appendString: event.identifier];
-      
-    if([event.path length])
+    [self.XML
+      addElement: kDiagnosticPath
+      value: [Utilities cleanPath: event.path]];
+
+    if(![self.paths containsObject: event.path])
       {
+      [self.paths addObject: event.path];
+      
+      [self.result appendString: @"        "];
+      
       if([event.identifier length])
-        [self.result appendString: @" - "];
-      
-      [self.result appendString: [Utilities cleanPath: event.path]];
+        [self.result appendString: event.identifier];
+        
+      if([event.path length])
+        {
+        if([event.identifier length])
+          [self.result appendString: @" - "];
+        
+        [self.result appendString: [Utilities cleanPath: event.path]];
+        }
+        
+      [self.result appendString: @"\n"];
       }
-      
-    [self.result appendString: @"\n"];
     }
     
+  [self.XML endElement: kDiagnosticEvent];
+  
   hasOutput = YES;
   }
 

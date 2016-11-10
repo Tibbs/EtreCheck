@@ -179,7 +179,7 @@
 "    Skip System Files: " = "    Ignorer les fichiers du système : ";
 "NO\n" = "NON\n";
 "YES - System files not being backed up\n" = "OUI - Les fichiers du système ne sont pas sauvegardés\n";
-"/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.";
+"diagnoticreport_permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.";
 "[Details]" = "[Les détails]";
 "Checking information from log files" = "Vérification des informations des fichiers journaux";
 "Self test - passed" = "Auto-examen - succès";

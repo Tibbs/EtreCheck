@@ -152,6 +152,12 @@
 #define kStartupItemPath @"path"
 #define kStartupItemVersion @"version"
 
+#define kDiagnosticEvent @"event"
+#define kDiagnosticDate @"date"
+#define kDiagnosticName @"name"
+#define kDiagnosticDetails @"details"
+#define kDiagnosticPath @"path"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
