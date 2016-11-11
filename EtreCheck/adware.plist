@@ -862,6 +862,7 @@
     <string>com.edb.launchd.xdbpubserver.plist</string>
     <string>com.edb.launchd.xdbsubserver.plist</string>
     <string>com.edovia.screensconnect.daemon.plist</string>
+    <string>com.edovia.screens.connect.plist</string>
     <string>com.efi.analytic.wxCPS.plist</string>
     <string>com.efi.analytic.wxDMT.plist</string>
     <string>com.efi.analytic.wxwidgets.plist</string>
