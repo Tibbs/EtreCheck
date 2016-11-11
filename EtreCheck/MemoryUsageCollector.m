@@ -11,13 +11,15 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 
-#define kTotalRAM @"totalram"
-#define kSwapUsed @"swapused"
+#define kAvailableRAM @"availableram"
 #define kFreeRAM @"freeram"
 #define kUsedRAM @"usedram"
 #define kFileCache @"filecache"
+#define kSwapUsed @"swapused"
 
-// Collect information about memory usage.
+#define kTotalRAM @"totalram"
+
+// Collect memory usage information.
 @implementation MemoryUsageCollector
 
 // Constructor.
@@ -48,15 +50,19 @@
 // Perform the collection.
 - (void) collect
   {
-  [self updateStatus: NSLocalizedString(@"Checking memory usage", NULL)];
+  [self
+    updateStatus:
+      NSLocalizedString(@"Checking virtual memory information", NULL)];
 
   NSDictionary * vminfo = [self collectVirtualMemoryInformation];
     
   [self.result appendAttributedString: [self buildTitle]];
 
+  [self printVM: vminfo forKey: kAvailableRAM];
   [self printVM: vminfo forKey: kFreeRAM];
   [self printVM: vminfo forKey: kUsedRAM];
   [self printVM: vminfo forKey: kFileCache];
+  [self printVM: vminfo forKey: kSwapUsed];
 
   [self.result appendCR];
 
@@ -73,9 +79,10 @@
   
   double totalRAM = [[vminfo objectForKey: kTotalRAM] doubleValue];
   double freeRAM = [[vminfo objectForKey: kFreeRAM] doubleValue];
+  double fileCache = [[vminfo objectForKey: kFileCache] doubleValue];
 
   [vminfo
-    setObject: [NSNumber numberWithDouble: totalRAM - freeRAM]
+    setObject: [NSNumber numberWithDouble: totalRAM - freeRAM - fileCache]
     forKey: kUsedRAM];
   
   return vminfo;
@@ -138,34 +145,24 @@
   [subProcess release];
   }
 
-// Print the swap VM value.
-- (void) printSwapVM: (NSDictionary *) vminfo
-  {
-  NSUInteger GB = 1024 * 1024 * 1024;
-
-  if(pageouts > (GB * 1))
-    [self
-      printVM: vminfo
-      forKey: kSwapUsed
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red]
-        }];
-  else
-    [self printVM: vminfo forKey: kSwapUsed];
-  }
-
 // Print a VM value.
 - (void) printVM: (NSDictionary *) vminfo forKey: (NSString *) key
   {
   double value = [[vminfo objectForKey: key] doubleValue];
+  
+  NSString * memoryString =
+    [formatter stringFromByteCount: (unsigned long long)value];
+  
+  NSString * printString =
+    [memoryString
+      stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
   
   [self.result
     appendString:
       [NSString
         stringWithFormat:
           @"    %@\t%@\n",
-          [formatter stringFromByteCount: (unsigned long long)value],
+          printString,
           NSLocalizedString(key, NULL)]];
   }
 
@@ -176,12 +173,19 @@
   {
   double value = [[vminfo objectForKey: key] doubleValue];
   
+  NSString * memoryString =
+    [formatter stringFromByteCount: (unsigned long long)value];
+  
+  NSString * printString =
+    [memoryString
+      stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+  
   [self.result
     appendString:
       [NSString
         stringWithFormat:
           @"    %@\t%@\n",
-          [formatter stringFromByteCount: (unsigned long long)value],
+          printString,
           NSLocalizedString(key, NULL)]
     attributes: attributes];
   }
@@ -216,8 +220,6 @@
   NSString * cachedValue = [vm_stats objectForKey: @"File-backed pages"];
   NSString * freeValue =
     [vm_stats objectForKey: @"Pages free"];
-  NSString * speculativeValue =
-    [vm_stats objectForKey: @"Pages speculative"];
   NSString * purgeableValue =
     [vm_stats objectForKey: @"Pages purgeable"];
 
@@ -225,13 +227,14 @@
   
   double cached = [cachedValue doubleValue] * pageSize;
   double free = [freeValue doubleValue] * pageSize;
-  double speculative = [speculativeValue doubleValue] * pageSize;
   double purgeable = [purgeableValue doubleValue] * pageSize;
   
   return
     @{
       kFileCache : [NSNumber numberWithDouble: cached + purgeable],
-      kFreeRAM : [NSNumber numberWithDouble: free + speculative]
+      kAvailableRAM :
+        [NSNumber numberWithDouble: free + cached + purgeable],
+      kFreeRAM : [NSNumber numberWithDouble: free]
     };
   }
   

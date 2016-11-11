@@ -27,6 +27,7 @@
 @synthesize genericDocumentIcon = myGenericDocumentIcon;
 @synthesize marketingName = myMarketingName;
 @synthesize EnglishMarketingName = myEnglishMarketingName;
+@synthesize CPUCode = myCPUCode;
 @synthesize supportsHandoff = mySupportsHandoff;
 @synthesize supportsInstantHotspot = mySupportsInstantHotspot;
 @synthesize supportsLowEnergy = mySupportsLowEnergy;
@@ -98,6 +99,7 @@
       NSLocalizedString(@"Checking hardware information", NULL)];
 
   [self collectBluetooth];
+  [self collectSysctl];
   [self collectHardware];
     
   dispatch_semaphore_signal(self.complete);
@@ -162,6 +164,45 @@
     addElement: kSupportsLowEnergy boolValue: self.supportsLowEnergy];
   
   [subProcess release];
+  }
+
+// Collect sysctl information.
+- (void) collectSysctl
+  {
+  NSString * code = nil;
+  
+  NSArray * args = @[@"machdep.cpu.brand_string"];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      if([line hasPrefix: @"machdep.cpu.brand_string:"])
+        if([line length] > 26)
+          {
+          NSString * description = [line substringFromIndex: 26];
+          NSArray * parts = [description componentsSeparatedByString: @" "];
+          
+          NSUInteger count = [parts count];
+          
+          for(NSUInteger i = 0; i < count; ++i)
+            {
+            NSString * part = [parts objectAtIndex: i];
+            
+            if([part isEqualToString: @"CPU"])
+              if(i > 0)
+                code = [parts objectAtIndex: i - 1];
+            }
+          }
+    }
+    
+  [subProcess release];
+  
+  if([code length] > 0)
+    self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
   }
 
 // Collect hardware information.
@@ -253,10 +294,11 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(
-            @"    %@ %@ %@ CPU: %@-core\n", NULL),
+            @"    %@ %@ %@%@ CPU: %@-core\n", NULL),
           cpu_count,
           speed,
           cpu_type ? cpu_type : @"",
+          self.CPUCode ? self.CPUCode : @"",
           core_count]];
     
   [self printMemory: memory];
@@ -503,25 +545,20 @@
     
     upgradeable = [isUpgradeable boolValue];
     
-    [self.XML startElement: kMemoryUpgradeable];
+    [self.XML startElement: kMemoryUpgradeability];
     
-    // Snow Leopoard doesn't seem to report this.
-    if(isUpgradeable)
-      upgradeableString =
-        upgradeable
-          ? NSLocalizedString(@"Upgradeable", NULL)
-          : NSLocalizedString(@"Not upgradeable", NULL);
-      
+    // TODO: Snow Leopoard doesn't seem to report this?
+    [self.XML addElement: kMemoryUpgradeable boolValue: upgradeable];
+    
     if(upgradeable)
       {
       upgradeURL = [self memoryUpgradeURL: language];
       
-      [self.XML addAttribute: kMemoryUpgradeURL value: upgradeURL];
+      if([upgradeURL length] > 0)
+        [self.XML addElement: kMemoryUpgradeURL value: upgradeURL];
       }
       
-    [self.XML addString: upgradeableString];
-    
-    [self.XML endElement: kMemoryUpgradeable];
+    [self.XML endElement: kMemoryUpgradeability];
     }
     
   [self.XML addElement: kMemoryAmount value: memory];

@@ -21,9 +21,15 @@
 #import "NSAttributedString+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "DetailManager.h"
+#import "SMARTManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
+#import "AdwareManager.h"
+#import "UnknownFilesManager.h"
+#import "UpdateManager.h"
+#import "PreferencesManager.h"
 #import "SubProcess.h"
+#import "CURLRequest.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -46,6 +52,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @implementation AppDelegate
 
 @synthesize window;
+@synthesize closeMenuItem = myCloseMenuItem;
 @synthesize logWindow = myLogWindow;
 @synthesize progress = myProgress;
 @synthesize spinner = mySpinner;
@@ -97,9 +104,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donateButtonInactiveImage = myDonateButtonInactiveImage;
 @synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
+@synthesize smartManager = mySMARTManager;
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize unknownFilesManager = myUnknownFilesManager;
+@synthesize preferencesManager = myPreferencesManager;
 @synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
@@ -111,6 +120,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donateView = myDonateView;
 @synthesize donationLookupPanel = myDonationLookupPanel;
 @synthesize donationLookupEmail = myDonationLookupEmail;
+@synthesize donationVerified = myDonationVerified;
+@dynamic currentTextView;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic showSignatureFailures;
@@ -214,6 +225,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   return ([email length] > 0);
   }
 
+- (NSTextView *) currentTextView
+  {
+  if(self.detailManager.visible)
+    return self.detailManager.textView;
+  else if(self.smartManager.visible)
+    return self.smartManager.textView;
+    
+  return self.logView;
+  }
+
 // Destructor.
 - (void) dealloc
   {
@@ -265,7 +286,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[NSUserNotificationCenter defaultUserNotificationCenter]
     setDelegate: self];
 
-  // Handle my own "etrechecklite:" URLs.
+  // Handle my own "etrecheck:" URLs.
   NSAppleEventManager * appleEventManager =
     [NSAppleEventManager sharedAppleEventManager];
   
@@ -284,16 +305,23 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [self.shareButton sendActionOn: NSLeftMouseDownMask];
 
-  self.progress.layerUsesCoreImageFilters = YES;
-  self.spinner.layerUsesCoreImageFilters = YES;
-  
+  BOOL coreImageFiltersAvailable =
+    [NSProgressIndicator
+      instancesRespondToSelector: @selector(setLayerUsesCoreImageFilters:)];
+    
+  if(coreImageFiltersAvailable)
+    {
+    self.progress.layerUsesCoreImageFilters = YES;
+    self.spinner.layerUsesCoreImageFilters = YES;
+    }
+    
   self.helpButtonImage = [NSImage imageNamed: @"Help"];
   self.helpButtonInactiveImage = [NSImage imageNamed: @"HelpInactive"];
 
   self.donateButtonImage = [NSImage imageNamed: @"Donate"];
   self.donateButtonInactiveImage = [NSImage imageNamed: @"DonateInactive"];
   
-  [[NSNotificationCenter defaultCenter]
+  /* [[NSNotificationCenter defaultCenter]
     addObserver: self
     selector: @selector(windowDidResignKey:)
     name: NSWindowDidResignKeyNotification
@@ -303,7 +331,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     addObserver: self
     selector: @selector(windowDidBecomeKey:)
     name: NSWindowDidBecomeKeyNotification
-    object: nil];
+    object: nil]; */
 
   // Install the custom quit event handler
   [appleEventManager
@@ -358,7 +386,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           URLByAppendingPathComponent: @"EtreCheck/Reports"];
         
       [[NSFileManager defaultManager]
-        createDirectoryAtURL: reportsDirectory
+        createDirectoryAtPath: [reportsDirectory path]
         withIntermediateDirectories: YES
         attributes: [NSDictionary dictionary]
         error: NULL];
@@ -513,7 +541,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self applicationWillBecomeActive: notification];
   }
 
-// Handle an "etrechecklite:" URL.
+// Handle an "etrecheck:" URL.
 - (void) handleGetURLEvent: (NSAppleEventDescriptor *) event
   withReplyEvent: (NSAppleEventDescriptor *) reply
   {
@@ -526,57 +554,59 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSURL * url = [NSURL URLWithString: urlString];
     
-  if([[url scheme] isEqualToString: @"etrechecklite"])
+  if([[url scheme] isEqualToString: @"etrecheck"])
     {
     NSString * manager = [url host];
+    NSString * relativePath = [[url path] substringFromIndex: 1];
     
     if([manager isEqualToString: @"detail"])
-      [self.detailManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.detailManager showDetail: relativePath];
     else if([manager isEqualToString: @"help"])
-      [self.helpManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.helpManager showDetail: relativePath];
+    else if([manager isEqualToString: @"adware"])
+      [self.adwareManager show];
+    else if([manager isEqualToString: @"unknownfiles"])
+      [self.unknownFilesManager show];
+    else if([manager isEqualToString: @"smart"])
+      [self.smartManager showDetail: relativePath];
+    else if([manager isEqualToString: @"license"])
+      {
+      NSString * licensePath =
+        [[NSBundle mainBundle] pathForResource: relativePath ofType: NULL];
+
+      NSURL * url = [NSURL fileURLWithPath: licensePath];
+    
+      [[NSWorkspace sharedWorkspace] openURL: url];
+      }
     }
   }
 
 // Check for a new version.
 - (void) checkForUpdates
   {
-  dispatch_semaphore_t ready = dispatch_semaphore_create(0);
-
-  NSURL * url =
-    [NSURL
-      URLWithString:
-        @"https://etrecheck.com/download/ApplicationUpdates.plist"];
-
-//  url =
-//    [NSURL
-//      URLWithString:
-//        @"https://etrecheck.com/download/ApplicationUpdatesTest.plist"];
-
-  __block NSData * data = nil;
-  
+  GET * request =
+    [[GET alloc]
+      init: @"https://etrecheck.com/download/ApplicationUpdates.plist"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(!success)
+                [self updateFailed];
+              else
+                [self handleUpdate: curlRequest.response];
+            });
+          }];
+    
   dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
       ^{
-      data = [[NSData alloc] initWithContentsOfURL: url];
-      
-      dispatch_semaphore_signal(ready);
+        [request send];
+        [request release];      
       });
-    
-  // Wait 5 seconds until ready.
-  dispatch_time_t soon =
-    dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 5);
-  
-  long timedout = dispatch_semaphore_wait(ready, soon);
-    
-  // If I timed out, I'm not ready. Signal the sync semaphore to prevent
-  // the update from ever being handled if it ever does happen.
-  if(!timedout)
-    {
-    [self handleUpdate: data];
-    [data release];
-    }
-    
-  dispatch_release(ready);
   }
 
 // Handle update data.
@@ -588,6 +618,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSString * appBundleId = [[NSBundle mainBundle] bundleIdentifier];
   
+  NSNumber * appVersion =
+    [numberFormatter
+      numberFromString:
+        [[[NSBundle mainBundle] infoDictionary]
+          objectForKey: @"CFBundleVersion"]];
+
   NSDictionary * info = [NSDictionary readPropertyListData: data];
   
   for(NSString * key in info)
@@ -599,6 +635,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         
         if([appBundleId isEqualToString: bundleId])
           {
+          NSNumber * version =
+            [numberFormatter
+              numberFromString:
+                [attributes objectForKey: @"CFBundleVersion"]];
+          
+          if([version intValue] > [appVersion intValue])
+            [self
+              presentUpdate:
+                [attributes
+                  objectForKey: NSLocalizedString(@"changes", NULL)]
+              url:
+                [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
+          else
+            [[Model model] setVerifiedEtreCheckVersion: YES];
+            
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
           
           if([whitelist respondsToSelector: @selector(addObject:)])
@@ -630,6 +681,41 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       }
     
   [numberFormatter release];
+  }
+
+// Show the update dialog.
+- (void) presentUpdate: (NSString *) changes url: (NSURL *) url
+  {
+  [[Model model] setOldEtreCheckVersion: YES];
+  
+  self.updateManager.content = changes;
+  self.updateManager.updateURL = url;
+  
+  [self.updateManager show];
+  }
+
+// Show the update failed dialog.
+- (void) updateFailed
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Update Failed", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"updatefailed", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Quit", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  if(result == NSAlertFirstButtonReturn)
+    [[NSApplication sharedApplication] terminate: self];
+    
+  [alert release];
   }
 
 // Setup the start message.
@@ -842,41 +928,41 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [json appendFormat: @"{\"emailkey\": \"%@\"}", emailHash];
     
-  NSString * server = @"https://etrecheck.com/server/lookupdonation.php";
-  
-  NSArray * args =
-    @[
-      @"--data",
-      json,
-      server
-    ];
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/lookupdonation.php"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(success)
+                {
+                NSString * donationKey = curlRequest.responseString;
+                  
+                if([donationKey length])
+                  {
+                  [[NSUserDefaults standardUserDefaults]
+                    setObject: donationKey forKey: @"donationkey"];
 
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess autorelease];
-  
-  if([subProcess execute: @"/usr/bin/curl" arguments: args])
-    {
-    NSString * donationKey =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-      
-    [donationKey autorelease];
-    
-    //NSLog(@"donation key = %@", donationKey);
-    if([donationKey length])
-      {
-      [[NSUserDefaults standardUserDefaults]
-        setObject: donationKey forKey: @"donationkey"];
+                  [self donationFound];
+                  
+                  return;
+                  }
+                }
+              
+              [self donationNotFound];
+            });
+          }];
 
-      [self donationFound];
-    
-      return;
-      }
-    }
-  
-  [self donationNotFound];
+   dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];      
+      });
   }
 
 - (void) donationNotFound
@@ -960,6 +1046,17 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.donationLookupEmail = nil;
   
   [[NSApplication sharedApplication] endSheet: self.donationLookupPanel];
+  }
+
+// Close the active window.
+- (IBAction) closeWindow: (id) sender
+  {
+  NSWindow * keyWindow = [[NSApplication sharedApplication] keyWindow];
+  
+  if(keyWindow == self.window)
+    [[NSApplication sharedApplication] terminate: sender];
+  else
+    [keyWindow performClose: sender];
   }
 
 // Start the report.
@@ -1445,16 +1542,15 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Handle a status update.
 - (void) statusUpdated: (NSNotification *) notification
   {
-  NSMutableAttributedString * newStatus = [self.displayStatus mutableCopy];
-  
-  [newStatus
-    appendString:
-      [NSString stringWithFormat: @"%@\n", [notification object]]];
-
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      NSMutableAttributedString * status = [newStatus copy];
+      NSMutableAttributedString * status = [self.displayStatus mutableCopy];
+      
+      [status
+        appendString:
+          [NSString stringWithFormat: @"%@\n", [notification object]]];
+
       self.displayStatus = status;
 
       [status release];
@@ -1462,9 +1558,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [[self.statusView animator]
         scrollRangeToVisible:
           NSMakeRange(self.statusView.string.length, 0)];
-    });
-  
-  [newStatus release];
+    });  
   }
   
 // Handle a progress update.
@@ -1672,7 +1766,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[[self.logView enclosingScrollView] contentView]
     setPostsBoundsChangedNotifications: YES];
 
-  [self.window makeFirstResponder: self.logView];
+  //[self.window makeFirstResponder: self.logView];
   
   NSRect frame = [self.window frame];
   
@@ -1712,6 +1806,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView
     scrollRangeToVisible: NSMakeRange([self.log length] - 2, 1)];
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
+  
+  // Beg for money.
+  [self checkForDonation];
   }
 
 // Update the run count.
@@ -1730,20 +1827,87 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     setObject: [NSNumber numberWithInt: runCount] forKey: @"reportcount"];
   }
 
+// Ask for a donation under certain circumstances.
+- (void) checkForDonation
+  {
+  NSString * donationKey =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"donationkey"];
+   
+  [self verifyDonationKey: donationKey];
+  }
+
+- (void) verifyDonationKey: (NSString *) donationKey
+  {
+  if([donationKey length] == 0)
+    self.donationVerified = NO;
+    
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
+    
+  POST * request =
+    [[POST alloc]
+      init: @"https://etrecheck.com/server/verifydonation.php"
+      callback:
+        ^(CURLRequest * curlRequest, BOOL success)
+          {
+          dispatch_async(
+            dispatch_get_main_queue(),
+            ^{
+              if(success)
+                self.donationVerified =
+                  [curlRequest.responseString isEqualToString: @"OK"];
+              else
+                self.donationVerified = NO;
+              
+              if(!self.donationVerified)
+                [self askForDonation];
+            });
+          }];
+
+  dispatch_async(
+    dispatch_get_global_queue(
+      DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [request send: json];
+        [request release];
+      });
+  }
+
+// Ask for a donation under certain circumstances.
+- (void) askForDonation
+  {
+  NSNumber * count =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"reportcount"];
+    
+  int runCount = 1;
+  
+  if([count respondsToSelector: @selector(intValue)])
+    runCount = [count intValue];
+  
+  NSUInteger justCheckingIndex =
+    (self.chooseAProblemButton.menu.itemArray.count - 1);
+    
+  bool ask = NO;
+  
+  if(self.problemIndex == justCheckingIndex)
+    ask = YES;
+    
+  if(runCount > 5)
+    ask = YES;
+    
+  if(ask)
+    [self showDonate: self];
+  }
+
 // Handle a scroll change in the report view.
 - (void) didScroll: (NSNotification *) notification
   {
+  [self.smartManager closeDetail: self];
   [self.detailManager closeDetail: self];
   [self.helpManager closeDetail: self];
-  }
-
-// If a drawer is going to open, close the existing drawer, if any.
-- (void) drawerWillOpen: (NSNotification *) notification
-  {
-  NSDrawer * drawer = [notification object];
-  
-  [self.detailManager closeDrawerIfNotDrawer: drawer];
-  [self.helpManager closeDrawerIfNotDrawer: drawer];
   }
 
 // Notify the user that the report is done.
@@ -1785,7 +1949,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [[NSApplication sharedApplication] endSheet: self.TOUPanel];
   
-  [self.logView copy: sender];
+  [self.currentTextView copy: sender];
   }
 
 // Copy the report to the clipboard.
@@ -1826,11 +1990,24 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     orderFrontStandardAboutPanelWithOptions: @{@"Version" : @""}];
   }
 
+// Show the preferences panel.
+- (IBAction) showPreferences: (id) sender
+  {
+  [self.preferencesManager show: sender];
+  }
+
 // Go to the Etresoft web site.
 - (IBAction) gotoEtresoft: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
     openURL: [NSURL URLWithString: @"https://www.etresoft.com"]];
+  }
+
+// Go to the Etresoft web support site.
+- (IBAction) gotoEtresoftSupport: (id) sender
+  {
+  [[NSWorkspace sharedWorkspace]
+    openURL: [NSURL URLWithString: @"https://www.etresoft.com/#support"]];
   }
 
 // Display help.
@@ -2066,6 +2243,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         createTextSizeToolbar: toolbar
         itemForItemIdentifier: itemIdentifier];
 
+  else if([itemIdentifier isEqualToString: kDonateTollbarItemID])
+    return
+      [self
+        createDonateToolbar: toolbar itemForItemIdentifier: itemIdentifier];
+    
   return nil;
   }
 
@@ -2168,6 +2350,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
+        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -2177,6 +2360,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
+      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
     
@@ -2197,6 +2381,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
+        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -2206,6 +2391,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
+      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
 
@@ -2336,7 +2522,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   if(anItem == self.chooseAProblemPromptItem)
     return NO;
-    
+  else if(anItem == self.closeMenuItem)
+    {
+    NSWindow * keyWindow = [[NSApplication sharedApplication] keyWindow];
+  
+    if(keyWindow == self.startPanel)
+      return NO;
+    }
+
   return YES;
   }
 

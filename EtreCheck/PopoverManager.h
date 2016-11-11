@@ -15,9 +15,6 @@
   
   NSView * myContentView;
   
-  // My detail drawer.
-  NSDrawer * myDrawer;
-  
   // My popover view controller.
   NSViewController * myPopoverViewController;
   
@@ -39,12 +36,12 @@
 @property (assign) NSSize minPopoverSize;
 @property (assign) NSSize maxPopoverSize;
 @property (retain) IBOutlet NSView * contentView;
-@property (retain) IBOutlet NSDrawer * drawer;
 @property (retain) IBOutlet NSViewController * popoverViewController;
 @property (retain) IBOutlet NSTextField * title;
 @property (retain) id popover;
 @property (retain) IBOutlet NSTextView * textView;
 @property (retain) NSAttributedString * details;
+@property (readonly) BOOL visible;
 
 // Show detail.
 - (void) showDetail: (NSString *) content;
@@ -55,7 +52,7 @@
 // Resize the detail pane to match the content.
 - (void) resizeDetail: (NSTextStorage *) storage;
 
-// Close a drawer if it is not the new drawer.
-- (void) closeDrawerIfNotDrawer: (NSDrawer *) drawer;
+// Copy the detail to the clipboard.
+- (IBAction) copyToClipboard: (id) sender;
 
 @end

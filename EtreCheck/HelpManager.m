@@ -39,8 +39,10 @@
   if(![helpText length])
     helpText = NSLocalizedString(@"No help available", NULL);
     
+  NSString * adjustText = [helpText stringByAppendingString: @"\n"];
+  
   NSAttributedString * content =
-    [[NSAttributedString alloc] initWithString: helpText];
+    [[NSAttributedString alloc] initWithString: adjustText];
     
   [super
     showDetail: NSLocalizedStringFromTable(name, @"Collectors", NULL)

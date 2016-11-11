@@ -56,13 +56,16 @@
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
 
+  // These two will not work in the andbox.
   BOOL dataFound = [self collectSerialATA];
   
   if([self collectNVMExpress: dataFound])
     dataFound = YES;
   
-  if([self collectDiskFree: dataFound])
-    dataFound = YES;
+  // This will work in the sandbox.
+  // Also provides information about mounted disk images.
+  //if([self collectDiskVolumes: dataFound])
+  //  dataFound = YES;
     
   if(!dataFound)
     [self.result appendCR];
@@ -149,44 +152,6 @@
     }
 
   return NO;
-  }
-
-// Collect free disk space.
-- (BOOL) collectDiskFree: (BOOL) dataFound
-  {
-  [self.XML startElement: kDiskVolumes];
-
-  dataFound = NO;
-  
-  NSArray * args =
-    @[
-      @"-kl",
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess autorelease];
-  
-  if([subProcess execute: @"/bin/df" arguments: args])
-    {
-    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
-    
-    for(int index = 1; index < [lines count]; ++index)
-      {
-      NSString * line = [lines objectAtIndex: index];
-      
-      if([line hasPrefix: @"/"])
-        {
-        [self printDiskFreeLine: line];
-        
-        dataFound = YES;
-        }
-      }
-    }
-
-  [self.XML endElement: kDiskVolumes];
-
-  return dataFound;
   }
 
 // Print disks attached to a single Serial ATA controller.
@@ -337,6 +302,44 @@
   [self.XML endElement: kController];
   }
 
+// Collect disk volume.
+- (BOOL) collectDiskVolumes: (BOOL) dataFound
+  {
+  [self.XML startElement: kDiskVolumes];
+
+  dataFound = NO;
+  
+  NSArray * args =
+    @[
+      @"-kl",
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/bin/df" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(int index = 1; index < [lines count]; ++index)
+      {
+      NSString * line = [lines objectAtIndex: index];
+      
+      if([line hasPrefix: @"/"])
+        {
+        [self printDiskVolume: line];
+        
+        dataFound = YES;
+        }
+      }
+    }
+
+  [self.XML endElement: kDiskVolumes];
+
+  return dataFound;
+  }
+
 // Print the volumes on a disk.
 - (void) printDiskVolumes: (NSDictionary *) disk
   {
@@ -417,6 +420,31 @@
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
+
+  NSString * device = [disk objectForKey: @"bsd_name"];
+  
+  NSMutableAttributedString * urlString =
+    [[NSMutableAttributedString alloc] initWithString: @""];
+    
+  if(!smart_not_supported)
+    {
+    [urlString
+      appendString:
+        [NSString stringWithFormat:
+          NSLocalizedString(@"%@[Show SMART report]", NULL), indent]
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] blue],
+          NSLinkAttributeName :
+            [NSString stringWithFormat: @"etrecheck://smart/%@", device]
+        }];
+
+    [self.result appendAttributedString: urlString];
+    [self.result appendString: @"\n"];
+    }
+    
+  [urlString release];
   }
 
 // Print information about a Core Storage volume.
@@ -659,7 +687,7 @@
   }
 
 // Print a line from df output.
-- (void) printDiskFreeLine: (NSString *) line
+- (void) printDiskVolume: (NSString *) line
   {
   NSScanner * scanner = [NSScanner scannerWithString: line];
   
@@ -722,8 +750,6 @@
   [self printVolume: volume indent: @"        "];
   
   [self.XML endElement: kDiskVolume];
-  
-  [self.result appendCR];
   }
 
 // Get the size of a volume.

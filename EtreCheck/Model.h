@@ -51,6 +51,7 @@
 #define kCoreCount @"corecount"
 #define kCPUType @"cputype"
 #define kMarketingName @"marketingname"
+#define kMemoryUpgradeability @"memoryupgradeability"
 #define kMemoryUpgradeable @"memoryupgradeable"
 #define kMemoryUpgradeURL @"src"
 #define kMemoryAmount @"total"
@@ -165,6 +166,12 @@
 #define kLaunchdDate @"date"
 #define kLaunchdSignature @"signature"
 
+#define kDiagnosticEvent @"event"
+#define kDiagnosticDate @"date"
+#define kDiagnosticName @"name"
+#define kDiagnosticDetails @"details"
+#define kDiagnosticPath @"path"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
@@ -213,6 +220,7 @@
   bool myShowSignatureFailures;
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
+  bool myVerifiedEtreCheckVersion;
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
@@ -333,6 +341,9 @@
 
 // Is this version outdated?
 @property (assign) bool oldEtreCheckVersion;
+
+// Do I have a verified EtreCheck version?
+@property (assign) bool verifiedEtreCheckVersion;
 
 // Apple software.
 @property (retain) NSDictionary * appleSoftware;
