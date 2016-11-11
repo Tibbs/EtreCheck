@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Gatekeeper settings.
 typedef enum
@@ -62,6 +63,11 @@ GatekeeperSetting;
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
     
+    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"gatekeeperrequireslion", NULL)];
+
     return;
     }
 
@@ -161,6 +167,7 @@ GatekeeperSetting;
   switch(setting)
     {
     case kMacAppStore:
+      [self.XML addString: NSLocalizedString(@"Mac App Store", NULL)];
       [self.result
         appendString:
           [NSString
@@ -168,6 +175,10 @@ GatekeeperSetting;
               @"    %@\n", NSLocalizedString(@"Mac App Store", NULL)]];
       break;
     case kDeveloperID:
+      [self.XML
+        addString:
+          NSLocalizedString(
+            @"Mac App Store and identified developers", NULL)];
       [self.result
         appendString:
           [NSString
@@ -177,6 +188,11 @@ GatekeeperSetting;
                 @"Mac App Store and identified developers", NULL)]];
       break;
     case kDisabled:
+      [self.XML addAttribute: kSeverity value: kCritical];
+      [self.XML
+        addElement: kSeverityExplanation
+        value: NSLocalizedString(@"gatekeeperdisabled", NULL)];
+      [self.XML addString: NSLocalizedString(@"Anywhere", NULL)];
       [self.result
         appendString:
           [NSString
@@ -190,6 +206,11 @@ GatekeeperSetting;
       
     case kUnknown:
     default:
+      [self.XML addAttribute: kSeverity value: kCritical];
+      [self.XML
+        addElement: kSeverityExplanation
+        value: NSLocalizedString(@"gatekeeperunknown", NULL)];
+      [self.XML addString: NSLocalizedString(@"Unknown!", NULL)];
       [self.result
         appendString:
           [NSString

@@ -10,6 +10,9 @@
 "timemachineinformationnotavailable" = "    Time Machine information is not available\n\n";
 "linkstyle" = "<head><style>a { font-family: sans-serif; } a:active { color: blue; } a:hover { color: blue; } </style></head>";
 "gatekeeperneedslion" = "    Gatekeeper information requires OS X 10.7.5 \"Lion\" or later.\n\n";
+"gatekeeperrequireslion" = "Gatekeeper information requires OS X 10.7.5 \"Lion\" or later.";
+"gatekeeperdisabled" = "Gatekeeper is diabled!";
+"gatekeeperunknown" = "Gatekeeper is in an unknown state!";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
 "oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
 "info" = "ⓘ";

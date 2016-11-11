@@ -130,6 +130,9 @@
 "Unknown" = "Inconnu";
 "[unknown]" = "[inconnu]";
 "gatekeeperneedslion" = "    Informations Gatekeeper requièrent OS X 10.7.5 \"Lion\" ou ultérieur.\n\n";
+"gatekeeperrequireslion" = "Informations Gatekeeper requièrent OS X 10.7.5 \"Lion\" ou ultérieur.";
+"gatekeeperdisabled" = "Gatekeeper est désactivé !";
+"gatekeeperunknown" = "Gatekeeper est dans un état inconnu !";
 "EtreCheck version: %@ (%@)\nReport generated %@\n" = "EtreCheck version : %@ (%@)\nRapport créé le %@\n";
 "en" = "fr";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
