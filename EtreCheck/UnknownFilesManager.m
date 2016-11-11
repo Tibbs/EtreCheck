@@ -164,6 +164,26 @@
   
   [filesToRemove release];
   
+  for(NSMutableDictionary * item in self.filesToRemove)
+    {
+    NSDictionary * info = [item objectForKey: kLaunchdTask];
+      
+    NSString * signature = [info objectForKey: kSignature];
+
+    BOOL isSigned = NO;
+    
+    if([signature isEqualToString: kSignatureApple])
+      isSigned = YES;
+    else if([signature isEqualToString: kSignatureValid])
+      isSigned = YES;
+
+    if(isSigned)
+      {
+      [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
+      }
+    }
+
   [self.tableView reloadData];
 
   [self didChangeValueForKey: @"canReportFiles"];
@@ -230,6 +250,15 @@
 // Contact Etresoft to add to whitelist.
 - (IBAction) report: (id) sender
   {
+  NSString * description = [self.whitelistDescription string];
+  
+  if([description length] < 10)
+    {
+    [self requireDescription];
+    
+    return;
+    }
+  
   NSMutableString * json = [NSMutableString string];
   
   [json appendString: @"{\"action\":\"report\","];
@@ -286,7 +315,7 @@
   [json
     appendFormat:
       @"\"description\":\"%@\"}",
-      [[self.whitelistDescription string]
+      [description
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"]];
   
   POST * request =
@@ -317,6 +346,27 @@
         [request send: json];
         [request release];
       });
+  }
+
+// Require a description for reporting.
+- (void) requireDescription
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Description required", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"descriptionrequired", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
   }
 
 // Thank the user for their submission.
@@ -429,9 +479,6 @@
     
     [cell setEnabled: !isSigned];
 
-    if(isSigned)
-      [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
-      
     return [item objectForKey: kWhitelist];
     }
     
@@ -440,9 +487,6 @@
     NSButtonCell * cell = [tableColumn dataCellForRow: row];
     
     [cell setEnabled: !isSigned];
-      
-    if(isSigned)
-      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
       
     return [item objectForKey: kRemove];
     }

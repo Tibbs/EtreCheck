@@ -85,4 +85,4 @@
 "usedram" = "Used RAM";
 "filecache" = "Cached files";
 "swapused" = "Swap Used";
-
+"descriptionrequired" = "Please provide a description of why these files should be added to the whitelist.";

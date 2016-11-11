@@ -299,3 +299,5 @@
 "Remove" = "Enlever";
 "Report" = "Envoyer";
 "%@[Show SMART report]" = "%@[Afficher le rapport SMART]";
+"Description required" = "Une explication est requise";
+"descriptionrequired" = "S’il vous plaît, donnez-nous une explication pourquoi ces fichier doivent être ajouté à la liste blanche.";
