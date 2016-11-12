@@ -8,6 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -38,7 +40,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self updateStatus: NSLocalizedString(@"Checking login items", NULL)];
 
@@ -59,6 +61,22 @@
 
   NSUInteger count = 0;
   
+  if(machItemCount > 0)
+    {
+    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"machinitdeprecated2", NULL)];
+    }
+    
+  if(loginHookCount > 0)
+    {
+    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"loginhookdeprecated2", NULL)];
+    }
+
   for(NSDictionary * loginItem in self.loginItems)
     if([self printLoginItem: loginItem count: count])
       ++count;
@@ -85,8 +103,6 @@
     
   if(count > 0)
     [self.result appendCR];
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect Mach init files.
@@ -521,8 +537,16 @@
     
   BOOL highlight = NO;
   
+  [self.XML startElement: kLoginItem];
+  
   if([path rangeOfString: @"/.Trash/"].location != NSNotFound)
+    {
+    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"loginitemtrashed", NULL)];
     highlight = YES;
+    }
     
   if([kind isEqualToString: @"MachInit"])
     highlight = YES;
@@ -533,6 +557,17 @@
   if([kind isEqualToString: @"LogoutHook"])
     highlight = YES;
 
+  [self.XML addAttribute: kLoginItemHidden boolValue: isHidden];
+  
+  [self.XML addElement: kLoginItemName value: safeName];
+  [self.XML addElement: kLoginItemType value: kind];
+  [self.XML addElement: kLoginItemPath value: safePath];
+   
+   NSDate * modificationDate = [self modificationDate: path];
+
+  if(modificationDate)
+    [self.XML addElement: kLoginItemDate date: modificationDate];
+  
   // Flag a login item if it is in the trash.
   if(highlight)
     [self.result
@@ -561,6 +596,8 @@
             safePath,
             modificationDateString]];
     
+  [self.XML endElement: kLoginItem];
+  
   return YES;
   }
 

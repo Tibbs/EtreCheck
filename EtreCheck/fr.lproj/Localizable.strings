@@ -143,7 +143,10 @@
 "info" = "ⓘ";
 "startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
 "machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
+"machinitdeprecated2" = "Les éléments Mach Init sont obsolètes";
 "loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
+"loginhookdeprecated2" = "Les login hooks sont obsolètes";
+"loginitemtrashed" = "Cet éléments de démarrage se trouve dans la corbeille";
 "Quit" = "Quitter";
 "EtreCheck Report" = "Rapport EtreCheck";
 "Problem: " = "Problème : ";

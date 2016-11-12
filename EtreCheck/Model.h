@@ -172,6 +172,13 @@
 #define kDiagnosticDetails @"details"
 #define kDiagnosticPath @"path"
 
+#define kLoginItem @"loginitem"
+#define kLoginItemName @"name"
+#define kLoginItemType @"type"
+#define kLoginItemPath @"path"
+#define kLoginItemHidden @"hidden"
+#define kLoginItemDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
