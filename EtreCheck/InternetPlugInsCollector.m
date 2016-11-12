@@ -23,14 +23,12 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking internet plug-ins", NULL)];
 
   [self parsePlugins: @"/Library/Internet Plug-Ins"];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 @end

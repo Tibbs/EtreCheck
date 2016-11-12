@@ -179,6 +179,11 @@
 #define kLoginItemHidden @"hidden"
 #define kLoginItemDate @"date"
 
+#define kPlugin @"plugin"
+#define kPluginName @"name"
+#define kPluginVersion @"version"
+#define kPluginDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"

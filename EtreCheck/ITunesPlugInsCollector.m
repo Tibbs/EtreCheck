@@ -23,14 +23,12 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking iTunes plug-ins", NULL)];
 
   [self parsePlugins: @"/Library/iTunes/iTunes Plug-ins"];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 @end

@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -26,6 +27,8 @@
 
     for(NSString * filename in bundles)
       {
+      [self.XML startElement: kPlugin];
+      
       NSDictionary * plugin = [bundles objectForKey: filename];
 
       NSString * path = [plugin objectForKey: @"path"];
@@ -41,6 +44,8 @@
       int age = 0;
       
       NSString * OSVersion = [self getOSVersion: plugin age: & age];
+      
+      NSDate * modificationDate = [Utilities modificationDate: path];
       
       NSString * date = [self modificationDate: path];
       
@@ -59,13 +64,25 @@
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
       else if([[Model model] checkForAdware: path])
+        {
+        [self.XML addAttribute: kSeverity value: kSerious];
+        [self.XML
+          addElement: kSeverityExplanation
+          value: NSLocalizedString(@"adware", NULL)];
         [self.result
           appendAttributedString: [self getAdwareLink: plugin]];
+        }
       else
         [self.result
           appendAttributedString: [self getSupportLink: plugin]];
       
+      [self.XML addElement: kPluginName value: name];
+      [self.XML addElement: kPluginVersion value: version];
+      [self.XML addElement: kPluginDate date: modificationDate];
+
       [self.result appendString: @"\n"];
+      
+      [self.XML endElement: kPlugin];
       }
 
     [self.result appendString: @"\n"];
@@ -227,6 +244,11 @@
 // Return an outdated Flash version.
 - (NSAttributedString *) outdatedFlash
   {
+  [self.XML addAttribute: kSeverity value: kSerious];
+  [self.XML
+    addElement: kSeverityExplanation
+    value: NSLocalizedString(@"outdated", NULL)];
+
   NSMutableAttributedString * string =
     [[NSMutableAttributedString alloc] initWithString: @""];
   
