@@ -267,7 +267,7 @@
                                     <action selector="showTOUAgreementCopy:" target="Voe-Tx-rLC" id="qGT-Sg-XHi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Copy entire report to clipboard" keyEquivalent="r" id="Q89-SN-OIs">
+                            <menuItem title="Copy Report" keyEquivalent="r" id="Q89-SN-OIs">
                                 <connections>
                                     <action selector="showTOUAgreementCopyAll:" target="Voe-Tx-rLC" id="USW-I3-MgD"/>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="7IU-0U-nXk"/>

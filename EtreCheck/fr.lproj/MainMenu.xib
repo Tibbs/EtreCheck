@@ -264,7 +264,7 @@
                                     <action selector="showTOUAgreementCopy:" target="Voe-Tx-rLC" id="aSt-R2-i3h"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Copiez tout le rapport au presse-papiers" keyEquivalent="r" id="Q89-SN-OIs">
+                            <menuItem title="Copier le rapport" keyEquivalent="r" id="Q89-SN-OIs">
                                 <connections>
                                     <action selector="showTOUAgreementCopyAll:" target="Voe-Tx-rLC" id="cJ3-3G-Khp"/>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="Fhn-RU-sMh"/>
