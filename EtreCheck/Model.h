@@ -218,6 +218,17 @@
 #define kTimeMachineDestinationOldestBackupDate @"oldestbackupdate"
 #define kTimeMachineDestinationLastBackupDate @"lastbackupdate"
 
+#define kApplicationDirectory @"directory"
+#define kApplicationDirectoryPath @"path"
+#define kApplication @"application"
+#define kApplicationName @"name"
+#define kApplicationPath @"path"
+#define kApplicationBundleID @"bundleid"
+#define kApplicationVersion @"version"
+#define kApplicationBuild @"build"
+#define kApplicationSource @"source"
+#define kApplicationDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"

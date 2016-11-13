@@ -11,6 +11,8 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect installed applications.
 @implementation ApplicationsCollector
@@ -32,7 +34,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self updateStatus: NSLocalizedString(@"Checking applications", NULL)];
 
@@ -53,8 +55,6 @@
   [self.result appendCR];
   [self.result
     deleteCharactersInRange: NSMakeRange(0, [self.result length])];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect applications.
@@ -185,6 +185,10 @@
   // Print each parent and its children.
   for(NSString * parent in sortedParents)
     {
+    [self.XML startElement: kApplicationDirectory];
+    
+    [self.XML addElement: kApplicationDirectoryPath value: parent];
+    
     int count = 0;
     
     // Sort the applications and print each.
@@ -200,6 +204,8 @@
     
     for(NSDictionary * application in sortedApplications)
       {
+      [self.XML startElement: kApplication];
+      
       NSAttributedString * output = [self applicationDetails: application];
       
       if(output)
@@ -216,7 +222,11 @@
         
         [self.result appendAttributedString: output];
         }
+        
+      [self.XML endElement: kApplication];
       }
+      
+    [self.XML endElement: kApplicationDirectory];
     }
   }
 
@@ -224,15 +234,32 @@
 - (NSAttributedString *) applicationDetails: (NSDictionary *) application
   {
   NSString * name = [application objectForKey: @"_name"];
+  NSString * path = [application objectForKey: @"path"];
 
   NSAttributedString * supportLink =
     [[[NSAttributedString alloc] initWithString: @""] autorelease];
 
   NSString * bundleID = [application objectForKey: @"CFBundleIdentifier"];
 
+  NSString * version = [application objectForKey: @"CFBundleShortVersionString"];
+  NSString * build = [application objectForKey: @"CFBundleVersion"];
+
+  NSDate * date = [Utilities modificationDate: path];
+  
+  [self.XML addElement: kApplicationName value: name];
+  [self.XML
+    addElement: kApplicationPath value: [Utilities cleanPath: path]];
+  [self.XML addElement: kApplicationBundleID value: bundleID];
+  [self.XML addElement: kApplicationVersion value: version];
+  [self.XML addElement: kApplicationBuild value: build];
+  [self.XML addElement: kApplicationDate date: date];
+  
   if(bundleID)
     {
     NSString * obtained_from = [application objectForKey: @"obtained_from"];
+
+    if([obtained_from length] > 0)
+      [self.XML addElement: kApplicationSource value: obtained_from];
     
     if([obtained_from isEqualToString: @"apple"])
       return nil;
