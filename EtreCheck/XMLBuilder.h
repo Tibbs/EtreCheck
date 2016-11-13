@@ -146,6 +146,9 @@
 // Add an element and value with a conveneience function.
 - (void) addAttribute: (NSString *) name UTF8StringValue: (char *) value;
 
+// Add a boolean to the current element's contents.
+- (void) addBool: (BOOL) value;
+
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string;
 

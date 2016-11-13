@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -335,7 +336,7 @@
       NSString * kind = [destinationInfo objectForKey: @"Kind"];
       NSString * name = [destinationInfo objectForKey: @"Name"];
       NSNumber * lastDestination =
-        [destination objectForKey: @"LastDestination"];
+        [destinationInfo objectForKey: @"LastDestination"];
       
       if(!kind)
         kind = NSLocalizedString(@"Unknown", NULL);
@@ -401,6 +402,15 @@
     spaceRequired = [formatter stringFromByteCount: used];
     }
 
+  [self.XML startElement: kTimeMachineVolume];
+  
+  [self.XML addElement: kTimeMachineVolumeName value: name];
+  [self.XML addElement: kTimeMachineVolumeSize number: size];
+  [self.XML
+    addElement: kTimeMachineVolumeSizeRequired unsignedLonglongValue: used];
+  
+  [self.XML endElement: kTimeMachineVolume];
+  
   [self.result
     appendString:
       [NSString
@@ -459,12 +469,21 @@
     {
     bool skip = [skipSystemFiles boolValue];
 
+    [self.XML startElement: kTimeMachineSkipSystemFiles];
+    
     [self.result
       appendString: NSLocalizedString(@"    Skip System Files: ", NULL)];
 
     if(!skip)
       [self.result appendString: NSLocalizedString(@"NO\n", NULL)];
     else
+      {
+      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML
+        addElement: kSeverityExplanation
+        value:
+          NSLocalizedString(@"System files not being backed up", NULL)];
+
       [self.result
         appendString:
           NSLocalizedString(
@@ -474,6 +493,11 @@
             dictionaryWithObjectsAndKeys:
               [NSColor redColor],
               NSForegroundColorAttributeName, nil]];
+      }
+      
+    [self.XML addBool: skip];
+    
+    [self.XML endElement: kTimeMachineSkipSystemFiles];
     }
   }
 
@@ -487,6 +511,8 @@
     {
     bool mobile = [mobileBackups boolValue];
 
+    [self.XML addElement: kTimeMachineMobileBackups boolValue: mobile];
+    
     [self.result
       appendString: NSLocalizedString(@"    Mobile backups: ", NULL)];
 
@@ -509,12 +535,20 @@
     {
     bool backup = [autoBackup boolValue];
 
+    [self.XML startElement: kTimeMachineAutoBackup];
+    
     [self.result
       appendString: NSLocalizedString(@"    Auto backup: ", NULL)];
 
     if(backup)
       [self.result appendString: NSLocalizedString(@"YES\n", NULL)];
     else
+      {
+      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML
+        addElement: kSeverityExplanation
+        value: NSLocalizedString(@"Auto backup turned off", NULL)];
+
       [self.result
         appendString:
           NSLocalizedString(@"NO - Auto backup turned off\n", NULL)
@@ -523,6 +557,11 @@
             dictionaryWithObjectsAndKeys:
               [NSColor redColor],
               NSForegroundColorAttributeName, nil]];
+      }
+      
+    [self.XML addBool: backup];
+    
+    [self.XML endElement: kTimeMachineAutoBackup];
     }
   }
 
@@ -568,6 +607,8 @@
       appendString:
         NSLocalizedString(@"    Volumes being backed up:\n", NULL)];
 
+    [self.XML startElement: kTimeMachineBackedupVolumes];
+    
     for(NSString * UUID in backedupVolumeUUIDs)
       {
       // See if this disk is excluded. If so, skip it.
@@ -576,12 +617,16 @@
         
       [self printBackedupVolume: UUID];
       }
+
+    [self.XML endElement: kTimeMachineBackedupVolumes];
     }
   }
 
 // Print Time Machine destinations.
 - (void) printDestinations: (NSDictionary *) settings
   {
+  [self.XML startElement: kTimeMachineDestinations];
+  
   [self.result
     appendString: NSLocalizedString(@"    Destinations:\n", NULL)];
 
@@ -596,13 +641,14 @@
     
     first = NO;
     }
+    
+  [self.XML endElement: kTimeMachineDestinations];
   }
 
 // Print a Time Machine destination.
 - (void) printDestination: (NSDictionary *) destination
   {
-  // Print the destination description.
-  [self printDestinationDescription: destination];
+  [self.XML startElement: kTimeMachineDestination];
   
   // Calculate some size values.
   NSNumber * bytesAvailable = [destination objectForKey: @"BytesAvailable"];
@@ -612,6 +658,21 @@
     [bytesAvailable unsignedLongLongValue] +
     [bytesUsed unsignedLongLongValue];
 
+  if(totalSizeValue <= (minimumBackupSize * 3))
+    {
+    [self.XML addAttribute: kSeverity value: kSerious];
+    [self.XML
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"timemachinedestinationtoosmall", NULL)];
+    }
+    
+  // Print the destination description.
+  [self printDestinationDescription: destination];
+  
+  [self.XML
+    addElement: kTimeMachineDestinationSize
+    unsignedLonglongValue: totalSizeValue];
+  
   // Print the total size.
   [self printTotalSize: totalSizeValue];
   
@@ -620,6 +681,8 @@
 
   // Print an overall analysis of the Time Machine size differential.
   [self printDestinationSizeAnalysis: totalSizeValue];
+
+  [self.XML endElement: kTimeMachineDestination];
   }
 
 // Print the destination description.
@@ -628,6 +691,10 @@
   NSString * kind = [destination objectForKey: @"Kind"];
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
+
+  [self.XML
+    addAttribute: kTimeMachineDestinationLastUsed
+    boolValue: [last boolValue]];
 
   NSString * safeName = [Utilities cleanPath: name];
   
@@ -639,6 +706,9 @@
   if([last integerValue] == 1)
     lastused = NSLocalizedString(@"(Last used)", NULL);
 
+  [self.XML addElement: kTimeMachineDestinationName value: safeName];
+  [self.XML addElement: kTimeMachineDestinationType value: kind];
+  
   [self.result
     appendString:
       [NSString
@@ -663,6 +733,10 @@
 // Print information about snapshots.
 - (void) printSnapshotInformation: (NSDictionary *) destination
   {
+  [self.XML
+    addElement: kTimeMachineDestinationBackupCount
+    number: [destination objectForKey: kSnapshotcount]];
+    
   [self.result
     appendString:
       [NSString
@@ -671,8 +745,16 @@
             @"        Total number of backups: %@ \n", NULL),
           [destination objectForKey: kSnapshotcount]]];
   
-  NSDate * oldestBackup = [destination objectForKey: kOldestBackup];
-  NSDate * lastBackup = [destination objectForKey: kLastbackup];
+  NSString * oldestBackup = [destination objectForKey: kOldestBackup];
+  NSString * lastBackup = [destination objectForKey: kLastbackup];
+
+  [self.XML
+    addElement: kTimeMachineDestinationOldestBackupDate
+    value: oldestBackup];
+
+  [self.XML
+    addElement: kTimeMachineDestinationLastBackupDate
+    value: lastBackup];
 
   [self.result
     appendString:
@@ -777,6 +859,8 @@
   NSCountedSet * excludedItems =
     [self collectImportantExclusions: importantPaths];
   
+  // TODO: Report all exclusions and flag important ones.
+  // This will need to be re-written.
   for(NSString * importantPath in excludedItems)
     if([excludedItems countForObject: importantPath] == 3)
       {

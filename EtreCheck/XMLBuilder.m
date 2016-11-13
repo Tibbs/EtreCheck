@@ -652,6 +652,12 @@ AttemptToCloseWrongElement *
   [self addElement: name value: [NSString stringWithFormat: @"%s", value]];
   }
 
+// Add a boolean to the current element's contents.
+- (void) addBool: (BOOL) value
+  {
+  [self addString: value ? @"true" : @"false"];
+  }
+
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string
   {
