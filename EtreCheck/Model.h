@@ -184,6 +184,13 @@
 #define kPluginVersion @"version"
 #define kPluginDate @"date"
 
+#define kSafariExtension @"extension"
+#define kSafariExtensionCached @"cached"
+#define kSafariExtensionName @"name"
+#define kSafariExtensionAuthor @"author"
+#define kSafariExtensionURL @"url"
+#define kSafariExtensionDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"

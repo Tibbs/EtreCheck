@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
@@ -47,7 +48,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking Safari extensions", NULL)];
@@ -74,8 +75,6 @@
     
     [self.result appendCR];
     }
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect extension archives.
@@ -368,12 +367,19 @@
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)
     {
+    [self.XML startElement: kSafariExtension];
+  
+    if(([archivePath length] == 0) && ([cachePath length] > 0))
+      [self.XML addAttribute: kSafariExtensionCached boolValue: YES];
+    
     [self printExtensionDetails: extension];
     
     if(([archivePath length] == 0) && ([cachePath length] > 0))
       [self.result appendString: NSLocalizedString(@" (cache only)", NULL)];
       
     [self appendModificationDate: extension];
+    
+    [self.XML endElement: kSafariExtension];
     
     if(adware)
       {
@@ -433,6 +439,10 @@
 
   NSString * website = [extension objectForKey: kWebsite];
 
+  [self.XML addElement: kSafariExtensionName value: humanReadableName];
+  [self.XML addElement: kSafariExtensionAuthor value: author];
+  [self.XML addElement: kSafariExtensionURL value: website];
+  
   [self.result
     appendString:
       [NSString stringWithFormat: @"    %@", humanReadableName]];
@@ -469,6 +479,8 @@
 
   if(modificationDate)
     {
+    [self.XML addElement: kSafariExtensionDate date: modificationDate];
+    
     NSString * modificationDateString =
       [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
     
