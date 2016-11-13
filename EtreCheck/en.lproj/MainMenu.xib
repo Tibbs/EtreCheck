@@ -148,15 +148,14 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="About Etresoft" id="tzx-9o-x1W">
+                            <menuItem title="About Etresoft…" id="tzx-9o-x1W">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="Q8B-iS-9Wm"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="11O-wM-XNW"/>
-                            <menuItem title="Preferences..." keyEquivalent="," id="OaD-xj-Fb7">
+                            <menuItem title="Preferences…" keyEquivalent="," id="OaD-xj-Fb7">
                                 <connections>
                                     <action selector="showPreferences:" target="-1" id="z1c-ai-PBl"/>
                                 </connections>
@@ -516,7 +515,8 @@
                                     <action selector="showHelp:" target="Voe-Tx-rLC" id="DPO-a4-fui"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Frequently asked questions" id="3MB-7M-aZi">
+                            <menuItem isSeparatorItem="YES" id="WIL-Jp-RKJ"/>
+                            <menuItem title="Frequently Asked Questions" id="3MB-7M-aZi">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="showFAQ:" target="Voe-Tx-rLC" id="dCE-5I-qc0"/>
@@ -529,7 +529,7 @@
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Etresoft support" id="5vd-Lu-GJt">
+                            <menuItem title="Etresoft Support" id="5vd-Lu-GJt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoftSupport:" target="Voe-Tx-rLC" id="w95-rb-Rtb"/>

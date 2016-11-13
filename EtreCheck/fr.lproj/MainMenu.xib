@@ -148,15 +148,14 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="À propos d’Etresoft" id="BOF-NM-1cW">
+                            <menuItem title="À propos d’Etresoft…" id="BOF-NM-1cW">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                            <menuItem title="Préférences..." keyEquivalent="," id="W7S-GA-gbM">
+                            <menuItem title="Préférences…" keyEquivalent="," id="W7S-GA-gbM">
                                 <connections>
                                     <action selector="showPreferences:" target="-1" id="caq-3t-e7N"/>
                                 </connections>
@@ -512,6 +511,7 @@
                                     <action selector="showHelp:" target="Voe-Tx-rLC" id="Q5Y-GC-2PJ"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="7Kp-Gh-MQP"/>
                             <menuItem title="Les questions fréquemment posées" id="kBj-Bl-PBU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
