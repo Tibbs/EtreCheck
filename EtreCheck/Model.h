@@ -191,6 +191,11 @@
 #define kSafariExtensionURL @"url"
 #define kSafariExtensionDate @"date"
 
+#define kPreferencePane @"preferencepane"
+#define kPreferencePaneName @"name"
+#define kPreferencePaneBundleID @"bundleid"
+#define kPreferencePaneDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
