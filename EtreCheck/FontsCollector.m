@@ -9,6 +9,8 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -27,7 +29,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self updateStatus: NSLocalizedString(@"Checking fonts", NULL)];
 
@@ -45,6 +47,14 @@
 
       if(![valid boolValue])
         {
+        [self.XML startElement: kBadFont];
+        
+        [self.XML addElement: kBadFontName value: name];
+        [self.XML
+          addElement: kBadFontPath value: [Utilities cleanPath: path]];
+
+        [self.XML endElement: kBadFont];
+        
         [self.result
           appendString:
             [NSString
@@ -58,8 +68,6 @@
       
     [self.result appendCR];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect bad fonts.

@@ -196,6 +196,10 @@
 #define kPreferencePaneBundleID @"bundleid"
 #define kPreferencePaneDate @"date"
 
+#define kBadFont @"badfont"
+#define kBadFontName @"name"
+#define kBadFontPath @"path"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
