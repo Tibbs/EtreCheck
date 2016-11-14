@@ -7,6 +7,8 @@
 #import "EtreCheckCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -25,15 +27,13 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
       NSLocalizedString(@"Checking information from EtreCheck", NULL)];
 
   [self collectEtreCheck];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect information from log files.
@@ -88,6 +88,9 @@
       if([path length] > 0)
         {
         NSString * safePath = [Utilities cleanPath: path];
+        
+        [self.XML addElement: kDeletedFilePath value: safePath];
+        [self.XML addElement: kDeletedFilePath date: date];
         
         [self.result
           appendString:

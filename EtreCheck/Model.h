@@ -246,6 +246,9 @@
 #define kUnknownFilePath @"path"
 #define kUnknownFileCommand @"command"
 
+#define kDeletedFilePath @"path"
+#define kDeletedFileDate @"date"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
