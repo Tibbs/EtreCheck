@@ -180,32 +180,32 @@ AttemptToCloseWrongElement *
     switch(*ch)
       {
       case '\'':
-        [escaped appendString: @"&apos"];
+        [escaped appendString: @"&apos;"];
         bloat += 4;
         break;
         
       case '"':
-        [escaped appendString: @"&quot"];
+        [escaped appendString: @"&quot;"];
         bloat += 4;
         break;
 
       case '<':
-        [escaped appendString: @"&lt"];
+        [escaped appendString: @"&lt;"];
         bloat += 2;
         break;
 
       case '>':
-        [escaped appendString: @"&gt"];
+        [escaped appendString: @"&gt;"];
         bloat += 2;
         break;
 
       case '&':
-        [escaped appendString: @"&amp"];
+        [escaped appendString: @"&amp;"];
         bloat += 3;
         break;
 
       default:
-        [escaped appendFormat: @"%c", *ch];
+        [escaped appendFormat: @"%C", *ch];
         break;
       }
     
