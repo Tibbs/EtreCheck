@@ -1361,13 +1361,17 @@
   else if([[info objectForKey: kAdware] boolValue])
     [self.XML addAttribute: kLaunchdAnalysis value: @"adware"];
   
-  [self.XML addElement: kLaunchdPath value: path];
-  [self.XML addElement: kLaunchdName value: [path lastPathComponent]];
+  NSString * safePath = [Utilities cleanPath: path];
+  NSString * safeExecutable =
+    [Utilities cleanPath: [info objectForKey: kExecutable]];
+  
+  [self.XML addElement: kLaunchdPath value: safePath];
+  [self.XML addElement: kLaunchdName value: [safePath lastPathComponent]];
   [self.XML addElement: kLaunchdLabel value: [info objectForKey: kLabel]];
   [self.XML
     addElement: kLaunchdDate date: [info objectForKey: kModificationDate]];
   [self.XML
-    addElement: kLaunchdExecutable value: [info objectForKey: kExecutable]];
+    addElement: kLaunchdExecutable value: safeExecutable];
   [self.XML
     addElement: kLaunchdCommand
     value: [Utilities formatExecutable: [info objectForKey: kCommand]]];
