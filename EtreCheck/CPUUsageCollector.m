@@ -6,6 +6,8 @@
 
 #import "CPUUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "XMLBuilder.h"
+#import "Model.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -107,6 +109,28 @@
       [usageString
         stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
+    [self.XML startElement: kCPUProcess];
+    
+    if(cpu > 50.0)
+      {
+      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML
+        addElement: kSeverityExplanation
+        value: NSLocalizedString(@"highcpuusage", NULL)];
+      }
+      
+    [self.XML
+      addElement: kCPUProcessName
+      value: [process objectForKey: @"command"]];
+    [self.XML
+      addElement: kCPUProcessCPU
+      doubleValue: cpu];
+    [self.XML
+      addElement: kCPUProcessCount
+      intValue: count];
+    
+    [self.XML endElement: kCPUProcess];
+    
     NSString * output =
       [NSString
         stringWithFormat:

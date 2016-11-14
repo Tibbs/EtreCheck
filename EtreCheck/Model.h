@@ -229,6 +229,16 @@
 #define kApplicationSource @"source"
 #define kApplicationDate @"date"
 
+#define kCPUProcess @"process"
+#define kCPUProcessName @"name"
+#define kCPUProcessCPU @"cpu"
+#define kCPUProcessCount @"count"
+
+#define kMemoryProcess @"process"
+#define kMemoryProcessName @"name"
+#define kMemoryProcessMemory @"memory"
+#define kMemoryProcessCount @"count"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"
