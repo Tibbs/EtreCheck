@@ -625,13 +625,15 @@
   NSString * volumeFree = [self volumeFreeSpace: volume];
   NSString * UUID = [volume objectForKey: @"volume_uuid"];
 
+  [self.XML addElement: kVolumeName value: volumeName];
+  [self.XML addElement: kVolumeDevice value: volumeDevice];
+  
+  if([volumeMountPoint length] > 0)
+    [self.XML addElement: kVolumeMountPoint value: volumeMountPoint];
+
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
     
-  [self.XML addElement: kVolumeName value: volumeName];
-  [self.XML addElement: kVolumeMountPoint value: volumeMountPoint];
-  [self.XML addElement: kVolumeDevice value: volumeDevice];
-  
   if(UUID)
     {
     [self.XML addElement: kVolumeUUID value: UUID];
