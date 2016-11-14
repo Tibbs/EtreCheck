@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A50740BC1DD93E7E00B62124 /* MemoryUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50740BB1DD93E7E00B62124 /* MemoryUsageCollector.m */; };
 		A50C9DAD19A2ACB600BA6A25 /* StartupItemsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */; };
 		A50C9DB019A2DFDB00BA6A25 /* DiskCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DAF19A2DFDB00BA6A25 /* DiskCollector.m */; };
 		A50C9DB319A2E68C00BA6A25 /* USBCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DB219A2E68C00BA6A25 /* USBCollector.m */; };
@@ -136,6 +137,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A50740BA1DD93E7E00B62124 /* MemoryUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUsageCollector.h; sourceTree = "<group>"; };
+		A50740BB1DD93E7E00B62124 /* MemoryUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryUsageCollector.m; sourceTree = "<group>"; };
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
 		A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupItemsCollector.m; sourceTree = "<group>"; };
 		A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCollector.h; sourceTree = "<group>"; };
@@ -473,6 +476,8 @@
 				A5FC120519A5443500E81E9C /* ApplicationsCollector.m */,
 				A5257D2F19AB5251003084C8 /* CPUUsageCollector.h */,
 				A5257D3019AB5251003084C8 /* CPUUsageCollector.m */,
+				A50740BA1DD93E7E00B62124 /* MemoryUsageCollector.h */,
+				A50740BB1DD93E7E00B62124 /* MemoryUsageCollector.m */,
 				A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */,
 				A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */,
 				A5CF26E61A279DAD002386F0 /* AdwareCollector.h */,
@@ -780,6 +785,7 @@
 				A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */,
 				A50C9DB919A2E6AB00BA6A25 /* ThunderboltCollector.m in Sources */,
 				A5C292E319A039AB00464E86 /* SystemLaunchAgentsCollector.m in Sources */,
+				A50740BC1DD93E7E00B62124 /* MemoryUsageCollector.m in Sources */,
 				A5D0877C19ECAD4E004F52C2 /* NSDictionary+Etresoft.m in Sources */,
 				A5C00A2819BFF2D500140404 /* NSAttributedString+Etresoft.m in Sources */,
 				A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */,

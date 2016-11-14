@@ -124,10 +124,10 @@
       value: [process objectForKey: @"command"]];
     [self.XML
       addElement: kCPUProcessCPU
-      doubleValue: cpu];
+      number: [process objectForKey: @"cpu"]];
     [self.XML
       addElement: kCPUProcessCount
-      intValue: count];
+      number: [process objectForKey: @"count"]];
     
     [self.XML endElement: kCPUProcess];
     

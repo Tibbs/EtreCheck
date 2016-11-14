@@ -17,6 +17,7 @@
 "kernelextensions" = "Les extensions du noyau :";
 "loginitems" = "Les éléments Ouverture :";
 "memory" = "L’utilisation de la RAM par processus :";
+"vm" = "Les informations de la mémoire virtuelle :";
 "preferencepanes" = "Les panneaux de préférences tiers :";
 "safariextensions" = "Les extensions de Safari :";
 "startupitems" = "Les éléments de démarrage :";

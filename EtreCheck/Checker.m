@@ -455,6 +455,7 @@
   [result appendAttributedString: [self getResult: @"timemachine"]];
   [result appendAttributedString: [self getResult: @"cpu"]];
   [result appendAttributedString: [self getResult: @"memory"]];
+  [result appendAttributedString: [self getResult: @"vm"]];
   [result appendAttributedString: [self getResult: @"diagnostics"]];
   [result
     appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];
