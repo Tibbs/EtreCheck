@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
+#import "XMLBuilder.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -32,14 +33,12 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus: NSLocalizedString(@"Checking for unknown files", NULL)];
 
   [self printUnknownFiles];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print any unknown files.
@@ -77,6 +76,19 @@
                   @"\n        %@\n",
                   [Utilities
                     formatExecutable: [info objectForKey: kCommand]]]];
+            
+          [self.XML startElement: kUnknownFile];
+
+          [self.XML
+            addElement: kUnknownFilePath
+            value: [Utilities prettyPath: obj]];
+          
+          [self.XML
+            addElement: kUnknownFileCommand
+            value:
+              [Utilities formatExecutable: [info objectForKey: kCommand]]];
+
+          [self.XML endElement: kUnknownFile];
           }];
       
     NSArray * sortedUnknownFiles =

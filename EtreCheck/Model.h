@@ -239,6 +239,13 @@
 #define kMemoryProcessMemory @"memory"
 #define kMemoryProcessCount @"count"
 
+#define kAdware @"adware"
+#define kAdwarePath @"path"
+
+#define kUnknownFile @"unknownfile"
+#define kUnknownFilePath @"path"
+#define kUnknownFileCommand @"command"
+
 #define kSeverity @"severity"
 #define kCritical @"critical"
 #define kSerious @"serious"

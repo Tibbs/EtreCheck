@@ -9,6 +9,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
+#import "XMLBuilder.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -36,13 +37,11 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self updateStatus: NSLocalizedString(@"Checking for adware", NULL)];
 
   [self printAdware];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Load signatures from an obfuscated list of signatures.
@@ -178,6 +177,13 @@
         ^(id obj, NSUInteger idx, BOOL * stop)
           {
           ++adwareCount;
+          
+          [self.XML startElement: kAdware];
+          [self.XML
+            addElement: kAdwarePath value: [Utilities prettyPath: obj]];
+          
+          [self.XML endElement: kAdware];
+          
           [self.result appendString: @"    "];
           [self.result
             appendString: [Utilities prettyPath: obj]
