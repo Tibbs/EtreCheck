@@ -84,9 +84,6 @@
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
-  [self.XML addElement: kComputerName value: computerName];
-  [self.XML addElement: kHostName value: hostName];
-  
   [computerName release];
   [hostName release];
   }

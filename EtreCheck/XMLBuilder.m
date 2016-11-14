@@ -543,6 +543,14 @@ AttemptToCloseWrongElement *
   [parent.openChildren removeLastObject];
   }
   
+// Add an empty element.
+- (void) addElement: (NSString *) name
+  {
+  [self startElement: name];
+  
+  [self endElement: name];
+  }
+
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name value: (NSString *) value
   {

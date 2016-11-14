@@ -44,7 +44,6 @@
 #import "AdwareCollector.h"
 #import "UnknownFilesCollector.h"
 #import "EtreCheckCollector.h"
-#import "XMLBuilder.h"
 
 // Perform the check.
 @implementation Checker
@@ -52,18 +51,6 @@
 // Do the check.
 - (NSAttributedString *) check
   {
-  [[[Model model] XML] startElement: kEtreCheck];
-  
-  NSBundle * bundle = [NSBundle mainBundle];
-  
-  [[[Model model] XML]
-    addAttribute: kEtreCheckVersion
-    value:
-      [bundle objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
-  [[[Model model] XML]
-    addAttribute: kEtreCheckBuild
-    value: [bundle objectForInfoDictionaryKey: @"CFBundleVersion"]];
-
   NSString * label = @"CheckQ";
   
   queue =
@@ -105,15 +92,6 @@
   [self checkStage3To: 100.0];
   
   dispatch_release(queue);
-  
-  [[[Model model] XML] endElement: kEtreCheck];
-
-  NSString * tempDir = NSTemporaryDirectory();
-  NSString * outName = [tempDir stringByAppendingPathComponent: @"out.xml"];
-  
-  [[[[Model model] XML] XML] writeToFile: outName atomically: YES encoding: NSUTF8StringEncoding error: NULL];
-  
-  NSLog(@"output to %@", outName);
   
   return [self collectResults];
   }

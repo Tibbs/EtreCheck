@@ -30,6 +30,7 @@
 #import "PreferencesManager.h"
 #import "SubProcess.h"
 #import "CURLRequest.h"
+#import "XMLBuilder.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -1170,6 +1171,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   Checker * checker = [Checker new];
   
+  [[[Model model] XML] startElement: kEtreCheck];
+  
+  NSBundle * bundle = [NSBundle mainBundle];
+  
+  [[[Model model] XML]
+    addAttribute: kEtreCheckVersion
+    value:
+      [bundle objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
+  [[[Model model] XML]
+    addAttribute: kEtreCheckBuild
+    value: [bundle objectForInfoDictionaryKey: @"CFBundleVersion"]];
+
   NSAttributedString * results = [checker check];
   
   dispatch_async(
@@ -1178,6 +1191,15 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self printEtreCheckHeader];
   
       [self.log appendAttributedString: results];
+  
+      [[[Model model] XML] endElement: kEtreCheck];
+
+      NSString * tempDir = NSTemporaryDirectory();
+      NSString * outName = [tempDir stringByAppendingPathComponent: @"out.xml"];
+      
+      [[[[Model model] XML] XML] writeToFile: outName atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+      
+      NSLog(@"output to %@", outName);
   
       [self displayOutput];
     });
@@ -1191,6 +1213,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Print the EtreCheck header.
 - (void) printEtreCheckHeader
   {
+  NSDate * date = [NSDate date];
+  
+  NSString * currentDate = [Utilities dateAsString: date];
+
   NSBundle * bundle = [NSBundle mainBundle];
   
   [self.log
@@ -1202,7 +1228,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             [bundle
               objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
             [bundle objectForInfoDictionaryKey: @"CFBundleVersion"],
-            [self currentDate]]
+            currentDate]
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -1233,6 +1259,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
        dictionaryWithObjectsAndKeys:
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
 
+  [[[Model model] XML] startElement: kEtreCheckStats];
+  
+  [[[Model model] XML] addElement: kEtreCheckDate date: date];
+
+  [[[Model model] XML]
+    addElement: kEtreCheckRuntime value: [self elapsedTime]];
+  
   [self printPerformance];
     
   [self.log appendString: @"\n"];
@@ -1240,7 +1273,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self printLinkInstructions];
   [self printOptions];
   [self printErrors];
+
+  [[[Model model] XML] endElement: kEtreCheckStats];
+
+  [[[Model model] XML] startElement: kEtreCheckProblem];
+
   [self printProblem];
+
+  [[[Model model] XML] endElement: kEtreCheckProblem];
   }
 
 // Print performance.
@@ -1257,6 +1297,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(interval > (60 * 10))
     {
+    [[[Model model] XML] addAttribute: kSeverity value: kCritical];
+    [[[Model model] XML]
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"poorperformance", NULL)];
+
+    [[[Model model] XML]
+      addElement: kEtreCheckPerformance value: @"poorperformance"];
+
     [self.log
       appendString: NSLocalizedString(@"poorperformance", NULL)
       attributes:
@@ -1267,6 +1315,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 5))
     {
+    [[[Model model] XML] addAttribute: kSeverity value: kSerious];
+    [[[Model model] XML]
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"belowaverageperformance", NULL)];
+
+    [[[Model model] XML]
+      addElement: kEtreCheckPerformance value: @"belowaverageperformance"];
+
     [self.log
       appendString: NSLocalizedString(@"belowaverageperformance", NULL)
       attributes:
@@ -1277,6 +1333,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 3))
     {
+    [[[Model model] XML]
+      addElement: kEtreCheckPerformance value: @"goodperformance"];
+
     [self.log
       appendString: NSLocalizedString(@"goodperformance", NULL)
       attributes:
@@ -1286,6 +1345,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else
     {
+    [[[Model model] XML]
+      addElement: kEtreCheckPerformance value: @"excellentperformance"];
+
     [self.log
       appendString: NSLocalizedString(@"excellentperformance", NULL)
       attributes:
@@ -1382,52 +1444,76 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   NSArray * terminatedTasks = [[Model model] terminatedTasks];
   
-  if(terminatedTasks.count > 0)
+  BOOL errors = terminatedTasks.count > 0;
+  
+  if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
+    errors = YES;
+    
+  if(errors)
     {
-    [self.log
-      appendString:
-        NSLocalizedString(
-          @"The following internal tasks failed to complete:\n", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
+    [[[Model model] XML] addAttribute: kSeverity value: kCritical];
+    [[[Model model] XML]
+      addElement: kSeverityExplanation
+      value: NSLocalizedString(@"errors", NULL)];
 
-    for(NSString * task in terminatedTasks)
+    if(terminatedTasks.count > 0)
       {
+      [[[Model model] XML] startElement: kEtreCheckErrors];
+
       [self.log
-        appendString: task
+        appendString:
+          NSLocalizedString(
+            @"The following internal tasks failed to complete:\n", NULL)
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+
+      for(NSString * task in terminatedTasks)
+        {
+        [[[Model model] XML]
+          addElement: kEtreCheckErrorTerminatedTask value: task];
+        
+        [self.log
+          appendString: task
+          attributes:
+            @{
+              NSForegroundColorAttributeName : [[Utilities shared] red],
+              NSFontAttributeName : [[Utilities shared] boldFont]
+            }];
+        
+        [self.log appendString: @"\n"];
+        }
+
+      [self.log appendString: @"\n"];
+      }
+    
+    if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
+      {
+      [[[Model model] XML] addElement: kEtreCheckErrorWhitelistUpdate];
+      
+      [self.log
+        appendString:
+          NSLocalizedString(@"Failed to read adware signatures!", NULL)
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
             NSFontAttributeName : [[Utilities shared] boldFont]
           }];
       
-      [self.log appendString: @"\n"];
+      [self.log appendString: @"\n\n"];
       }
 
-    [self.log appendString: @"\n"];
-    }
-    
-  if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
-    {
-    [self.log
-      appendString:
-        NSLocalizedString(@"Failed to read adware signatures!", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-    
-    [self.log appendString: @"\n\n"];
+    [[[Model model] XML] endElement: kEtreCheckErrors];
     }
   }
 
 // Print the problem from the user.
 - (void) printProblem
   {
+  [[[Model model] XML] startElement: kEtreCheckProblem];
+
   [self.log
     appendString: NSLocalizedString(@"Problem: ", NULL)
     attributes:
@@ -1442,29 +1528,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         [self.chooseAProblemButton.menu.itemArray
           objectAtIndex: self.problemIndex];
       
+      [[[Model model] XML]
+        addElement: kEtreCheckProblemType value: selectedItem.title];
+        
       [self.log appendString: selectedItem.title];
       [self.log appendString: @"\n"];
       }
     
   if(self.problemDescription)
     {
+    [[[Model model] XML]
+      addElement: kEtreCheckProblemDescription
+      value: [self.problemDescription string]];
+
     [self.log
       appendString: NSLocalizedString(@"Description:\n", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
+      
     [self.log appendAttributedString: self.problemDescription];
     [self.log appendString: @"\n"];
     }
     
-  [self.log appendString: @"\n"];
-  }
+  [[[Model model] XML] endElement: kEtreCheckProblem];
 
-// Get the current date as a string.
-- (NSString *) currentDate
-  {
-  return [Utilities dateAsString: [NSDate date]];
+  [self.log appendString: @"\n"];
   }
 
 // Get the current file name as a string.

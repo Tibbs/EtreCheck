@@ -35,10 +35,18 @@
 #define kEtreCheck @"etrecheck"
 
 #define kEtreCheckVersion @"version"
-
 #define kEtreCheckBuild @"build"
-#define kComputerName @"computername"
-#define kHostName @"hostname"
+#define kEtreCheckStats @"stats"
+#define kEtreCheckDate @"date"
+#define kEtreCheckRuntime @"runtime"
+#define kEtreCheckPerformance @"performance"
+#define kEtreCheckErrors @"errors"
+#define kEtreCheckErrorTerminatedTask @"terminatedtask"
+#define kEtreCheckErrorWhitelistUpdate @"whitelistupdate"
+
+#define kEtreCheckProblem @"problem"
+#define kEtreCheckProblemType @"type"
+#define kEtreCheckProblemDescription @"description"
 
 #define kSupportsHandoff @"supportshandoff"
 #define kSupportsInstantHotspot @"supportsinstanthotspot"

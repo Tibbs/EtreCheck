@@ -155,6 +155,9 @@
 // Finish the current element.
 - (void) endElement: (NSString *) name;
   
+// Add an empty element.
+- (void) addElement: (NSString *) name;
+
 // Add an element and value with a conveneience function.
 - (void) addElement: (NSString *) name value: (NSString *) value;
 
