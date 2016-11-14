@@ -4,12 +4,13 @@
  ** Copyright (c) 2014. All rights reserved.
  **********************************************************************/
 
-#import "MemoryUsageCollector.h"
+#import "VirtualMemoryCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "ByteCountFormatter.h"
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kAvailableRAM @"availableram"
 #define kFreeRAM @"freeram"
@@ -20,12 +21,12 @@
 #define kTotalRAM @"totalram"
 
 // Collect memory usage information.
-@implementation MemoryUsageCollector
+@implementation VirtualMemoryCollector
 
 // Constructor.
 - (id) init
   {
-  self = [super initWithName: @"memory"];
+  self = [super initWithName: @"vm"];
   
   if(self)
     {
@@ -48,7 +49,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollection
   {
   [self
     updateStatus:
@@ -65,8 +66,6 @@
   [self printVM: vminfo forKey: kSwapUsed];
 
   [self.result appendCR];
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect virtual memory information.
@@ -156,6 +155,8 @@
   NSString * printString =
     [memoryString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+  
+  [self.XML addElement: key number: [vminfo objectForKey: key]];
   
   [self.result
     appendString:

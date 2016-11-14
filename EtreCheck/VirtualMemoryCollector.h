@@ -8,8 +8,8 @@
 
 @class ByteCountFormatter;
 
-// Collect memory usage information.
-@interface MemoryUsageCollector : Collector
+// Collect virtual memory information.
+@interface VirtualMemoryCollector : Collector
   {
   ByteCountFormatter * formatter;
   double pageouts;

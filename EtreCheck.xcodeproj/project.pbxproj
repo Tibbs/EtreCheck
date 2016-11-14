@@ -25,7 +25,7 @@
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3019AB5251003084C8 /* CPUUsageCollector.m */; };
 		A5257D3719AB53FF003084C8 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3619AB53FF003084C8 /* Model.m */; };
-		A5257D3A19ABE02A003084C8 /* MemoryUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3919ABE02A003084C8 /* MemoryUsageCollector.m */; };
+		A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */; };
 		A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3C19AC0AA3003084C8 /* Utilities.m */; };
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
 		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
@@ -172,8 +172,8 @@
 		A5257D3019AB5251003084C8 /* CPUUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPUUsageCollector.m; sourceTree = "<group>"; };
 		A5257D3519AB53FF003084C8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		A5257D3619AB53FF003084C8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
-		A5257D3819ABE02A003084C8 /* MemoryUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUsageCollector.h; sourceTree = "<group>"; };
-		A5257D3919ABE02A003084C8 /* MemoryUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryUsageCollector.m; sourceTree = "<group>"; };
+		A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMemoryCollector.h; sourceTree = "<group>"; };
+		A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMemoryCollector.m; sourceTree = "<group>"; };
 		A5257D3B19AC0AA3003084C8 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		A5257D3C19AC0AA3003084C8 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		A5257D3E19AC10E3003084C8 /* Checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checker.h; sourceTree = "<group>"; };
@@ -473,8 +473,8 @@
 				A5FC120519A5443500E81E9C /* ApplicationsCollector.m */,
 				A5257D2F19AB5251003084C8 /* CPUUsageCollector.h */,
 				A5257D3019AB5251003084C8 /* CPUUsageCollector.m */,
-				A5257D3819ABE02A003084C8 /* MemoryUsageCollector.h */,
-				A5257D3919ABE02A003084C8 /* MemoryUsageCollector.m */,
+				A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */,
+				A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */,
 				A5CF26E61A279DAD002386F0 /* AdwareCollector.h */,
 				A5CF26E71A279DAD002386F0 /* AdwareCollector.m */,
 				A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */,
@@ -788,7 +788,7 @@
 				A57B0D781D8117B900DAD47C /* XMLBuilder.m in Sources */,
 				A5BB20BA1DCD9BFF004456E2 /* ProcessesCollector.m in Sources */,
 				A50C9DBC19A3690F00BA6A25 /* ConfigurationCollector.m in Sources */,
-				A5257D3A19ABE02A003084C8 /* MemoryUsageCollector.m in Sources */,
+				A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */,
 				A50C9DC519A4052000BA6A25 /* LoginItemsCollector.m in Sources */,
 				F7B1FDAF1D828B7C0027E122 /* PreferencesManager.m in Sources */,
 				A5FC11FD19A4C30600E81E9C /* SafariExtensionsCollector.m in Sources */,

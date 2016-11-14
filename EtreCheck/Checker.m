@@ -21,7 +21,7 @@
 #import "LaunchAgentsCollector.h"
 #import "LaunchDaemonsCollector.h"
 #import "LoginItemsCollector.h"
-#import "MemoryUsageCollector.h"
+#import "VirtualMemoryCollector.h"
 #import "PreferencePanesCollector.h"
 #import "SafariExtensionsCollector.h"
 #import "StartupItemsCollector.h"
@@ -254,7 +254,7 @@
   [collectors addObject: [[FontsCollector new] autorelease]];
   [collectors addObject: [[CPUUsageCollector new] autorelease]];
   [collectors addObject: [[MemoryUsageCollector new] autorelease]];
-  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
+  [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
   // Start the machine animation.
