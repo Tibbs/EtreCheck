@@ -78,13 +78,67 @@
 
   <xsl:template match="problem">
   
-    <div class="problem">
-      <p>Problem: <xsl:value-of select="problem/type"/></p>
-      <p><xsl:value-of select="problem/description"/></p>
-    </div>
+    <dl class="problem">
+      <dt>Problem:</dt>
+      <dd><xsl:value-of select="problem/type"/></dd>
+      
+      <xsl:if test="problem/description">
+        <dt>Description:</dt>
+        <dd><xsl:value-of select="problem/description"/></dd>
+      </xsl:if>
+    </dl>
       
   </xsl:template>
 
+  <xsl:template match="hardware">
+  
+    <h1>Hardware Information: ⓘ</h1>
+    <p><xsl:value-of select="marketingname"/></p>
+    <dl>
+      <dt>Class - model:</dt>
+      <dd><xsl:value-of select="model"/></dd>
+    </dl>
+    <p><xsl:value-of select="cpucount"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="cpuspeed"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="cputype"/>
+      <xsl:text> </xsl:text>(part #) CPU:<xsl:text> </xsl:text>
+      <xsl:value-of select="corecount"/>-core</p>
+    <p><xsl:value-of select="total"/> RAM</p>
+    <ul>
+    <xsl:for-each select="memorybanks/memorybank">
+      <li>
+        <dl>
+          <dt><xsl:value-of select="name"/></dt>
+          <dd>
+            <xsl:value-of select="size"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="type"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="speed"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="status"/>
+          </dd>
+        </dl>
+      </li>
+    </xsl:for-each>
+    </ul>
+    <dl class="hardware">
+      <dt>Handoff:</dt>
+      <dd><xsl:value-of select="supportshandoff"/></dd>
+      <dt>Instant Hotspot:</dt>
+      <dd><xsl:value-of select="supportsinstanthotspot"/></dd>
+      <dt>Low energy:</dt>
+      <dd><xsl:value-of select="supportslowenergy"/></dd>
+      <dt>Wireless:</dt>
+      <dd><xsl:value-of select="wirelessinterfaces/wirelessinterface/name"/></dd>
+      <dd><xsl:value-of select="wirelessinterfaces/wirelessinterface/modes"/></dd>
+      <dt>Battery:</dt>
+      <dd>Health = <xsl:value-of select="batteryinformation/battery/health"/> - Cycle count = <xsl:value-of select="batteryinformation/battery/cyclecount"/></dd>
+    </dl>
+  </xsl:template>
+ 
   <xsl:template match="*">
   
     <div class="section">
