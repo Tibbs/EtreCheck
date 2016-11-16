@@ -92,7 +92,7 @@
 
   <xsl:template match="hardware">
   
-    <h1>Hardware Information: ⓘ</h1>
+    <h1>Hardware Information:</h1>
     <p><xsl:value-of select="marketingname"/></p>
     <dl>
       <dt>Class - model:</dt>
@@ -139,6 +139,117 @@
     </dl>
   </xsl:template>
  
+  <xsl:template match="video">
+  
+    <h1>Video Information:</h1>
+    <ul>
+      <xsl:for-each select="videocard">
+        <p><xsl:value-of select="name"/></p>
+        <xsl:if test="count(display) &gt; 0">
+          <li>
+            <ul>
+              <xsl:for-each select="display">
+                <li>
+                  <xsl:value-of select="name"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="resolution"/>
+                </li>
+              </xsl:for-each>
+            </ul>
+          </li>
+        </xsl:if>
+      </xsl:for-each>
+    </ul>   
+  </xsl:template>
+
+  <xsl:template match="systemsoftware">
+  
+    <h1>System Software:</h1>
+    <p>
+      <xsl:value-of select="version"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="concat('(', build,')')"/>
+      <xsl:text> - Time since boot: </xsl:text>
+      <xsl:value-of select="humanuptime"/>
+    </p>
+
+  </xsl:template>
+
+  <xsl:template match="disk">
+  
+    <h1>Disk Information:</h1>
+    <ul>
+      <xsl:for-each select="controller">
+        <xsl:for-each select="disk">
+          <p>
+            <xsl:value-of select="name"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="device"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="concat('(', size, ')')"/>
+            <xsl:value-of select="concat('(', type, ' - TRIM: ', TRIM,')')"/>
+            <xsl:if test="SMART != 'Verified'">
+              <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
+            </xsl:if>
+          </p>
+          <xsl:if test="count(volumes/volume) &gt; 0">
+            <li>
+              <ul>
+                <xsl:for-each select="volumes/volume">
+                  <li>
+                    <xsl:value-of select="name"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="concat('(', device, ')')"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="mount_point">
+                        <xsl:value-of select="mount_point"/>
+                      </xsl:when>
+                      <xsl:default>
+                        <xsl:text> &lt;not mounted&gt; </xsl:text>
+                      </xsl:default>
+                    </xsl:choose>
+                    <xsl:text> </xsl:text>
+                    <xsl:if test="type">
+                      <xsl:value-of select="concat('[', type, ']')"/>
+                    </xsl:if>
+                    <xsl:text>: </xsl:text>
+                    <xsl:value-of select="size"/>
+                    <xsl:if test="type">
+                      <xsl:value-of select="concat(' (', free_space, ' free)')"/>
+                    </xsl:if>
+                    <xsl:if test="@encrypted = 'yes'">
+                      <br/>
+                      <xsl:text>Encrypted </xsl:text>
+                      <xsl:value-of select="@encryption_type"/>
+                      <xsl:choose>
+                        <xsl:when test="@encryption_locked = 'no'">
+                          <xsl:text> Unlocked</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="@encryption_locked = 'yes'">
+                          <xsl:text> Locked</xsl:text>
+                        </xsl:when>
+                      </xsl:choose>
+                    </xsl:if>
+                    <xsl:if test="core_storage">
+                      <br/>
+                      <xsl:text>Core Storage: </xsl:text>
+                      <xsl:value-of select="core_storage/name"/>
+                      <xsl:text> </xsl:text>
+                      <xsl:value-of select="core_storage/size"/>
+                      <xsl:text> </xsl:text>
+                      <xsl:value-of select="core_storage/status"/>
+                    </xsl:if>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </li>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:for-each>
+    </ul>   
+  </xsl:template>
+
   <xsl:template match="*">
   
     <div class="section">
