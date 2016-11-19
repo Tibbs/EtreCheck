@@ -215,7 +215,7 @@
                     </xsl:if>
                     <xsl:text>: </xsl:text>
                     <xsl:value-of select="size"/>
-                    <xsl:if test="type">
+                    <xsl:if test="free_space">
                       <xsl:value-of select="concat(' (', free_space, ' free)')"/>
                     </xsl:if>
                     <xsl:if test="@encrypted = 'yes'">
@@ -248,6 +248,75 @@
         </xsl:for-each>
       </xsl:for-each>
     </ul>   
+  </xsl:template>
+
+  <xsl:template match="usb">
+  
+    <h1>USB Information:</h1>
+    <ul>
+      <xsl:apply-templates mode="device"/>
+    </ul>
+  
+  </xsl:template>
+  
+  <xsl:template match="firewire">
+  
+    <h1>Firewire Information:</h1>
+    <ul>
+      <xsl:apply-templates mode="device"/>
+    </ul>
+  
+  </xsl:template>
+  
+  <xsl:template match="thunderbolt">
+  
+    <h1>Thunderbolt Information:</h1>
+    <ul>
+      <xsl:apply-templates mode="device"/>
+    </ul>
+  
+  </xsl:template>
+  
+  <xsl:template match="*" mode="device">
+  
+    <li>
+      <p><xsl:value-of select="name"/></p>
+      <xsl:if test="manufacturer">
+        <p><xsl:value-of select="manufacturer"/></p>
+      </xsl:if>
+      <xsl:if test="device">
+        <ul>
+          <xsl:apply-templates select="device" mode="device"/>
+        </ul>
+      </xsl:if>
+    </li>
+    
+  </xsl:template>
+
+  <xsl:template match="configurationfiles">
+  
+    <h1>Configuration Files:</h1>
+    <dl>
+      <xsl:for-each select="filesizemismatch">
+        <dt><xsl:value-of select="name"/></dt>
+        <dd><xsl:value-of select="concat(', File size ', size, ' but expected ', expectedsize)"/></dd>
+      </xsl:for-each>
+      <xsl:for-each select="unexpectedfile">
+        <dt><xsl:value-of select="name"/></dt>
+        <dd><xsl:text> - File exists but not expected</xsl:text></dd>
+      </xsl:for-each>
+    </dl>
+    
+  #define kConfigurationFileUnexpected @"unexpectedfile"
+#define kConfigurationFileWrongSize @"filesizemismatch"
+#define kConfigurationFileName @"name"
+#define kConfigurationFileSize @"size"
+#define kConfigurationFileExpectedSize @"expectedsize"
+#define kConfigurationSetting @"setting"
+#define kConfigurationSettingName @"name"
+#define kConfigurationSettingValue @"value"
+
+
   </xsl:template>
 
   <xsl:template match="*">
