@@ -868,7 +868,9 @@
       break;
     }
     
-  [args addObject: [Utilities resolveBundlePath: path]];
+  NSString * appPath = [Utilities resolveBundlePath: path];
+  
+  [args addObject: appPath];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -877,9 +879,9 @@
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     result =
-      [Utilities parseSignature: subProcess.standardError forPath: path];
-        
-    [[[Utilities shared] signatureCache] setObject: result forKey: path];
+      [Utilities parseSignature: subProcess.standardError forPath: appPath];
+      
+    [[[Utilities shared] signatureCache] setObject: result forKey: appPath];
     }
   else
     {
@@ -890,7 +892,7 @@
   [subProcess release];
   
   if([result isEqualToString: kNotSigned])
-    if([Utilities isShellScript: path])
+    if([Utilities isShellScript: appPath])
       result = kShell;
     
   return result;
