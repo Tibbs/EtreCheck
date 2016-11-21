@@ -339,6 +339,20 @@
         
   </xsl:template>
 
+  <xsl:template match="unknownfiles">
+  
+    <xsl:if test="unknownfile">
+      <h1>Unknown Files:</h1>
+      <dl>
+        <xsl:for-each select="unknownfile">
+          <dt><xsl:value-of select="path"/></dt>
+          <dd><xsl:value-of select="command"/></dd>
+        </xsl:for-each>
+      </dl>
+    </xsl:if>
+        
+  </xsl:template>
+
   <xsl:template match="*">
   
     <div class="section">
