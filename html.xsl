@@ -353,6 +353,30 @@
         
   </xsl:template>
 
+  <xsl:template match="kernelextensions">
+  
+    <h1>Kernel Extensions:</h1>
+    <dl>
+      <xsl:for-each select="bundle">
+        <xsl:call-template name="printExtensionBundle"/>
+      </xsl:for-each>
+    </dl>
+        
+  </xsl:template>
+
+  <xsl:template name="printExtensionBundle">
+  
+    <xsl:if test="count(extensions/extension[ignore = 'true']) != count(extensions/extension)">
+      <dt><xsl:value-of select="path"/></dt>
+      <xsl:for-each select="extensions/extension">
+        <dd>
+          <xsl:value-of select="concat('[', status, '] ', label, ' (', version, ' - ', date, ')')"/>
+        </dd>
+      </xsl:for-each>
+    </xsl:if>
+    
+  </xsl:template>
+
   <xsl:template match="*">
   
     <div class="section">

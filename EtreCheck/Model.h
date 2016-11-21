@@ -156,6 +156,7 @@
 #define kExtensionVersion @"version"
 #define kExtensionSDKVersion @"sdkversion"
 #define kExtensionDate @"date"
+#define kExtensionIgnore @"ignore"
 
 #define kStartupItem @"startupitem"
 #define kStartupItemName @"name"

@@ -516,6 +516,8 @@
   {
   if([label hasPrefix: @"com.huawei.driver."])
     return YES;
+  else if([label hasPrefix: @"com.intel.kext.intelhaxm"])
+    return YES;
   else if([label hasPrefix: @"com.hp."])
     return YES;
   else if([label hasPrefix: @"com.epson."])
@@ -651,18 +653,28 @@
   NSAttributedString * result =
     [self formatBundle: label status: status color: color];
 
-  [self.XML endElement: kExtension];
 
   if([self.unloadedExtensions objectForKey: label])
     if([self ignoreUnloadedExtension: label])
-      return nil;
-  
+      {
+      [self.XML addElement: kExtensionIgnore boolValue: YES];
+      result = nil;
+      }
+    
   if([obtained_from isEqualToString: @"apple"])
-    return nil;
+    {
+    [self.XML addElement: kExtensionIgnore boolValue: YES];
+    result = nil;
+    }
 
   // The obtained_from indicator isn't quite good enough.
   if([label hasPrefix: @"com.apple."])
-    return nil;
+    {
+    [self.XML addElement: kExtensionIgnore boolValue: YES];
+    result = nil;
+    }
+
+  [self.XML endElement: kExtension];
 
   return result;
   }
