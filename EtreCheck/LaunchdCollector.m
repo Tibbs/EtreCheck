@@ -219,6 +219,8 @@
     addObject: @"com.apple.Kerberos.digest-service.plist"];
   [self.knownAppleFailures
     addObject: @"com.apple.mobile.keybagd.plist"];
+  [self.knownAppleFailures
+    addObject: @"com.apple.SafariBookmarksSyncer.plist"];
   }
 
 #pragma mark - Collection

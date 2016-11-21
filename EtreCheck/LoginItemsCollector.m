@@ -529,8 +529,9 @@
   
   NSString * modificationDateString = @"";
   
-  if([kind isEqualToString: @"Application"])
-    [self modificationDateString: path];
+  if([path length] > 0)
+    if([[NSFileManager defaultManager] fileExistsAtPath: path])
+      modificationDateString = [self modificationDateString: path];
     
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
@@ -574,12 +575,12 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@    %@ %@ (%@)%@\n",
+            @"    %@    %@ %@%@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-            safePath,
-            modificationDateString]
+            isHidden ? NSLocalizedString(@"Hidden ", NULL) : @" ",
+            modificationDateString,
+            safePath]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -589,12 +590,12 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@    %@ %@ (%@)%@\n",
+            @"    %@    %@ %@%@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-            safePath,
-            modificationDateString]];
+            isHidden ? NSLocalizedString(@"Hidden ", NULL) : @" ",
+            modificationDateString,
+            safePath]];
     
   [self.XML endElement: kLoginItem];
   

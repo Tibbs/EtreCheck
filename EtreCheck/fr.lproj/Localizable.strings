@@ -94,7 +94,7 @@
 "[Unknown]" = "[Inconnu]";
 "[System]" = "[Système]";
 "%@ (hidden)" = "%@ (masqué)";
-"Hidden" = "Masqué";
+"Hidden" = "Masqué ";
 "    There was a problem retrieving launchd job status.\n" = "    Impossible de trouver le status des taches launchd\n";
 "[Support]" = "[Aide]";
 "    %@ - %@: %@\n" = "    %@ - %@ : %@\n";
@@ -314,3 +314,5 @@
 "System load for past 5 minutes" = "La charge du système pendant les dernières 5 minutes";
 "System load for past 15 minutes" = "La charge du système pendant les dernières 15 minutes";
 "%@[Show SMART report]" = "%@[Afficher le rapport SMART]";
+"Description required" = "Une explication est requise";
+"descriptionrequired" = "S’il vous plaît, donnez-nous une explication pourquoi ces fichier doivent être ajouté à la liste blanche.";
