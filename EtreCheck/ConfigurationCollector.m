@@ -222,12 +222,12 @@
     {
     NSString * status = [self checkRootlessStatus];
   
-    [self.XML startElement: kConfigurationSetting];
+    [self.XML startElement: kConfigurationSIP];
       
     if([status isEqualToString: @"enabled"])
       {
       [self.XML
-        addElement: kConfigurationSettingValue value: @"enabled"];
+        addElement: kConfigurationSIPValue value: @"enabled"];
         
       [[Model model] setSIP: YES];
       }
@@ -237,7 +237,7 @@
       [self.XML addAttribute: kSeverityExplanation value: @"SIP disabled"];
       
       [self.XML
-        addElement: kConfigurationSettingValue value: status];
+        addElement: kConfigurationSIPValue value: status];
 
       [otherModificiations
         addObject:
@@ -255,10 +255,7 @@
             autorelease]];
       }
 
-    [self.XML
-      addElement: kConfigurationSettingName value: @"SIP"];
-
-    [self.XML endElement: kConfigurationSetting];
+    [self.XML endElement: kConfigurationSIP];
     }
     
   self.modifications = otherModificiations;
@@ -450,18 +447,26 @@
         stringWithFormat:
           NSLocalizedString(@" - Count: %d", NULL), count];
     
-  [self.XML startElement: kConfigurationSetting];
+  [self.XML startElement: kConfigurationHostsFile];
     
+  NSString * status = @"valid";
+  
   if((count > 10) || corrupt)
     {
     [self.XML addAttribute: kSeverity value: kSerious];
     
     if(count > 10)
+      {
+      status = @"count > 10";
       [self.XML addAttribute: kSeverityExplanation value: @"count > 10"];
+      }
     else if(corrupt)
+      {
+      status = @"corrupt";
       [self.XML
         addAttribute: kSeverityExplanation value: @"hosts file corrupt"];
-
+      }
+      
     [self.result
       appendString:
         [NSString
@@ -482,11 +487,11 @@
             countString, corruptString]];
 
   [self.XML
-    addElement: kConfigurationSettingName value: @"/etc/hosts"];
+    addElement: kConfigurationHostsFileCount integerValue: count];
   [self.XML
-    addElement: kConfigurationSettingValue integerValue: count];
+    addElement: kConfigurationHostsFileStatus value: status];
 
-  [self.XML endElement: kConfigurationSetting];
+  [self.XML endElement: kConfigurationHostsFile];
   }
 
 @end

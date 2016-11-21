@@ -167,7 +167,7 @@ GatekeeperSetting;
   switch(setting)
     {
     case kMacAppStore:
-      [self.XML addString: NSLocalizedString(@"Mac App Store", NULL)];
+      [self.XML addString: @"Mac App Store"];
       [self.result
         appendString:
           [NSString
@@ -175,10 +175,7 @@ GatekeeperSetting;
               @"    %@\n", NSLocalizedString(@"Mac App Store", NULL)]];
       break;
     case kDeveloperID:
-      [self.XML
-        addString:
-          NSLocalizedString(
-            @"Mac App Store and identified developers", NULL)];
+      [self.XML addString: @"Mac App Store and identified developers"];
       [self.result
         appendString:
           [NSString
@@ -190,9 +187,8 @@ GatekeeperSetting;
     case kDisabled:
       [self.XML addAttribute: kSeverity value: kCritical];
       [self.XML
-        addElement: kSeverityExplanation
-        value: NSLocalizedString(@"gatekeeperdisabled", NULL)];
-      [self.XML addString: NSLocalizedString(@"Anywhere", NULL)];
+        addElement: kSeverityExplanation value: @"gatekeeperdisabled"];
+      [self.XML addString: @"anywhere"];
       [self.result
         appendString:
           [NSString
@@ -208,9 +204,8 @@ GatekeeperSetting;
     default:
       [self.XML addAttribute: kSeverity value: kCritical];
       [self.XML
-        addElement: kSeverityExplanation
-        value: NSLocalizedString(@"gatekeeperunknown", NULL)];
-      [self.XML addString: NSLocalizedString(@"Unknown!", NULL)];
+        addElement: kSeverityExplanation value: @"gatekeeperunknown"];
+      [self.XML addString: @"unknown"];
       [self.result
         appendString:
           [NSString

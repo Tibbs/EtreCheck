@@ -295,28 +295,35 @@
 
   <xsl:template match="configurationfiles">
   
-    <h1>Configuration Files:</h1>
-    <dl>
-      <xsl:for-each select="filesizemismatch">
-        <dt><xsl:value-of select="name"/></dt>
-        <dd><xsl:value-of select="concat(', File size ', size, ' but expected ', expectedsize)"/></dd>
-      </xsl:for-each>
-      <xsl:for-each select="unexpectedfile">
-        <dt><xsl:value-of select="name"/></dt>
-        <dd><xsl:text> - File exists but not expected</xsl:text></dd>
-      </xsl:for-each>
-    </dl>
-    
-  #define kConfigurationFileUnexpected @"unexpectedfile"
-#define kConfigurationFileWrongSize @"filesizemismatch"
-#define kConfigurationFileName @"name"
-#define kConfigurationFileSize @"size"
-#define kConfigurationFileExpectedSize @"expectedsize"
-#define kConfigurationSetting @"setting"
-#define kConfigurationSettingName @"name"
-#define kConfigurationSettingValue @"value"
+    <xsl:if test="filesizemismatch or unexpectedfile or SIP/value != 'enabled' or hostsfile/status != 'valid'">
+      <h1>Configuration Files:</h1>
+      <dl>
+        <xsl:for-each select="filesizemismatch">
+          <dt><xsl:value-of select="name"/></dt>
+          <dd><xsl:value-of select="concat(', File size ', size, ' but expected ', expectedsize)"/></dd>
+        </xsl:for-each>
+        <xsl:for-each select="unexpectedfile">
+          <dt><xsl:value-of select="name"/></dt>
+          <dd><xsl:text> - File exists but not expected</xsl:text></dd>
+        </xsl:for-each>
+        <xsl:if test="SIP/value != 'enabled'">
+          <dt>SIP:</dt>
+          <dd><xsl:value-of select="SIP/value"/></dd>
+        </xsl:if>
+        <xsl:if test="hostsfile/status != 'valid'">
+          <dt>/etc/hosts file:</dt>
+          <dd><xsl:value-of select="hostsfile/status"/></dd>
+        </xsl:if>
+      </dl>
+    </xsl:if>
+        
+  </xsl:template>
 
-
+  <xsl:template match="gatekeeper">
+  
+    <h1>Gatekeeper:</h1>
+    <p><xsl:value-of select="."/></p>
+      
   </xsl:template>
 
   <xsl:template match="*">
