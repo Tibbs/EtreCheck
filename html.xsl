@@ -326,6 +326,19 @@
       
   </xsl:template>
 
+  <xsl:template match="adware">
+  
+    <xsl:if test="adwarepath">
+      <h1>Adware:</h1>
+      <ul>
+        <xsl:for-each select="adwarepath">
+          <li><xsl:value-of select="."/></li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
   <xsl:template match="*">
   
     <div class="section">
