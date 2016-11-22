@@ -1858,30 +1858,30 @@ Gw
             </view>
             <point key="canvasLocation" x="178" y="1988"/>
         </window>
-        <window title="Update available" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="gjM-qW-zLi" userLabel="Update Window">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="alertPanel" frameAutosaveName="" id="gjM-qW-zLi" userLabel="Update Window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="250"/>
+            <rect key="contentRect" x="152" y="158" width="450" height="264"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="Qyl-m9-O1R">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="250"/>
+                <rect key="frame" x="0.0" y="0.0" width="450" height="264"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="JmD-TL-KmC">
-                        <rect key="frame" x="20" y="61" width="528" height="124"/>
+                        <rect key="frame" x="20" y="61" width="410" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="aA3-fg-DCT">
-                            <rect key="frame" x="1" y="1" width="526" height="122"/>
+                            <rect key="frame" x="1" y="1" width="408" height="98"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="122"/>
+                                <textView editable="NO" importsGraphics="NO" baseWritingDirection="leftToRight" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
+                                    <rect key="frame" x="0.0" y="0.0" width="408" height="98"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1891,15 +1891,15 @@ Gw
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="O1a-D6-VFw">
-                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="O1a-D6-VFw">
+                            <rect key="frame" x="363" y="1" width="16" height="81"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="uHS-SL-O9E">
-                        <rect key="frame" x="382" y="13" width="172" height="32"/>
+                        <rect key="frame" x="255" y="13" width="181" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Quit and go to update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
+                        <buttonCell key="cell" type="push" title="Quit and Open Website" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1912,9 +1912,9 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="Ngx-vF-efn">
-                        <rect key="frame" x="14" y="13" width="67" height="32"/>
+                        <rect key="frame" x="14" y="13" width="79" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Skip" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
+                        <buttonCell key="cell" type="push" title="Ignore" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1926,17 +1926,22 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="nUF-9K-mgf">
-                        <rect key="frame" x="18" y="187" width="532" height="43"/>
+                        <rect key="frame" x="104" y="180" width="318" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and download the new version?" id="EHD-pu-5o0">
-                            <font key="font" metaFont="system"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and open the website to download the new version?" id="EHD-pu-5o0">
+                            <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ru2-44-hOI">
+                        <rect key="frame" x="20" y="180" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="sxh-Ky-eB6"/>
+                    </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="134" y="1873"/>
+            <point key="canvasLocation" x="75" y="1880"/>
         </window>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
@@ -1990,7 +1995,6 @@ Gw
             </connections>
             <point key="canvasLocation" x="238" y="1462"/>
         </window>
-        <customObject id="Sg7-4B-SVN" userLabel="Preferences Manager" customClass="PreferencesManager"/>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>
@@ -2000,6 +2004,7 @@ Gw
         <image name="Help" width="1024" height="1024"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>
+        <image name="NSApplicationIcon" width="128" height="128"/>
         <image name="NSShareTemplate" width="11" height="16"/>
     </resources>
 </document>

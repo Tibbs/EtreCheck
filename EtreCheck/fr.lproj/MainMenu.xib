@@ -1834,30 +1834,30 @@ DQ
             </view>
             <point key="canvasLocation" x="183" y="2787"/>
         </window>
-        <window title="Mise à jour disponible" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="NOA-VB-1Ir" userLabel="Update Window">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="alertPanel" frameAutosaveName="" id="NOA-VB-1Ir" userLabel="Update Window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="250"/>
+            <rect key="contentRect" x="152" y="158" width="450" height="264"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="Dtt-VM-7UJ">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="250"/>
+                <rect key="frame" x="0.0" y="0.0" width="450" height="264"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="dnF-hE-nmm">
-                        <rect key="frame" x="20" y="61" width="528" height="124"/>
+                        <rect key="frame" x="20" y="61" width="410" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="QNC-U9-pbW">
-                            <rect key="frame" x="1" y="1" width="526" height="122"/>
+                            <rect key="frame" x="1" y="1" width="408" height="98"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="XPC-kr-qJS">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="122"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="408" height="98"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1873,9 +1873,9 @@ DQ
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="aGD-sk-MQd">
-                        <rect key="frame" x="375" y="13" width="179" height="32"/>
+                        <rect key="frame" x="231" y="13" width="205" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Quitter et mettre à jour" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yTd-gn-pAz">
+                        <buttonCell key="cell" type="push" title="Quitter et ouvrir le site web" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yTd-gn-pAz">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1888,10 +1888,11 @@ DQ
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="tNy-fi-tA5">
-                        <rect key="frame" x="18" y="187" width="532" height="43"/>
+                        <rect key="frame" x="104" y="169" width="328" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Une nouvelle version d’EtreCheck est maintenant disponible. Voulez-vous quitter maintenant et télécharger la nouvelle version ?" id="6UX-Nr-CjQ">
-                            <font key="font" metaFont="system"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="6UX-Nr-CjQ">
+                            <font key="font" metaFont="systemBold"/>
+                            <string key="title">Une nouvelle version d’EtreCheck est maintenant disponible. Voulez-vous quitter maintenant et ouvrir le site web pour télécharger la nouvelle version ?</string>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1910,9 +1911,14 @@ Gw
                             <action selector="continueWithoutUpdate:" target="HDE-zp-fvw" id="7o9-en-ppL"/>
                         </connections>
                     </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TbJ-9B-pND">
+                        <rect key="frame" x="20" y="180" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="y0L-bG-QCf"/>
+                    </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="80" y="1708"/>
+            <point key="canvasLocation" x="67" y="1715"/>
         </window>
         <window title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="vgE-5p-8hO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
@@ -1975,6 +1981,7 @@ Gw
         <image name="Help" width="1024" height="1024"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>
+        <image name="NSApplicationIcon" width="128" height="128"/>
         <image name="NSShareTemplate" width="11" height="16"/>
     </resources>
 </document>
