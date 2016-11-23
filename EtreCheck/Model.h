@@ -204,6 +204,7 @@
 
 #define kPreferencePane @"preferencepane"
 #define kPreferencePaneName @"name"
+#define kPreferencePanePath @"path"
 #define kPreferencePaneBundleID @"bundleid"
 #define kPreferencePaneDate @"date"
 

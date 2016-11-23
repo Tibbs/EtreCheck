@@ -4,6 +4,8 @@
   xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <!-- Convert an EtreCheck report into an HTML representation. -->
+  <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
   <xsl:output method="html" indent="yes" encoding="UTF-8"/> 
  
   <xsl:template match='/etrecheck'>
@@ -16,6 +18,7 @@
 
       <body>
       
+        <!-- TODO: Break this out. -->
         <xsl:apply-templates select="stats"/>
         <xsl:apply-templates select="problem"/>
         <xsl:apply-templates select="hardware"/>
@@ -59,16 +62,19 @@
 
   </xsl:template>
 
+  <!-- EtreCheck stats. -->
   <xsl:template match="stats">
   
     <div class="header">
       <p>EtreCheck version: <xsl:value-of select="/etrecheck/@version"/> (<xsl:value-of select="/etrecheck/@build"/>)</p>
+      <!-- TODO: Add date formatter. -->
       <p>Report generated <xsl:value-of select="date"/></p>
       <p>Download EtreCheck from https://etrecheck.com</p>
       <p>Runtime <xsl:value-of select="runtime"/></p>
       <p>Performance: <xsl:value-of select="performance"/></p>
     </div>
     
+    <!-- TODO: This needs to go when the links to. -->
     <div class="instructions">
       <p>Click the [Support] links for help with non-Apple products.</p>
       <p>Click the [Details] links for more information about that line.</p>
@@ -76,12 +82,14 @@
 
   </xsl:template>
 
+  <!-- User-specified problem. -->
   <xsl:template match="problem">
   
     <dl class="problem">
       <dt>Problem:</dt>
       <dd><xsl:value-of select="problem/type"/></dd>
       
+      <!-- Description is optional. -->
       <xsl:if test="problem/description">
         <dt>Description:</dt>
         <dd><xsl:value-of select="problem/description"/></dd>
@@ -90,6 +98,8 @@
       
   </xsl:template>
 
+  <!-- Hardware information. -->
+  <!-- TODO: Split this up. -->
   <xsl:template match="hardware">
   
     <h1>Hardware Information:</h1>
@@ -107,22 +117,23 @@
       <xsl:value-of select="corecount"/>-core</p>
     <p><xsl:value-of select="total"/> RAM</p>
     <ul>
-    <xsl:for-each select="memorybanks/memorybank">
-      <li>
-        <dl>
-          <dt><xsl:value-of select="name"/></dt>
-          <dd>
-            <xsl:value-of select="size"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="type"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="speed"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="status"/>
-          </dd>
-        </dl>
-      </li>
-    </xsl:for-each>
+      <!-- TODO: Handle the edge case of VMWare. -->
+      <xsl:for-each select="memorybanks/memorybank">
+        <li>
+          <dl>
+            <dt><xsl:value-of select="name"/></dt>
+            <dd>
+              <xsl:value-of select="size"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="type"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="speed"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="status"/>
+            </dd>
+          </dl>
+        </li>
+      </xsl:for-each>
     </ul>
     <dl class="hardware">
       <dt>Handoff:</dt>
@@ -137,14 +148,18 @@
       <dt>Battery:</dt>
       <dd>Health = <xsl:value-of select="batteryinformation/battery/health"/> - Cycle count = <xsl:value-of select="batteryinformation/battery/cyclecount"/></dd>
     </dl>
+    
   </xsl:template>
  
+  <!-- Video information. -->
   <xsl:template match="video">
   
     <h1>Video Information:</h1>
     <ul>
       <xsl:for-each select="videocard">
         <p><xsl:value-of select="name"/></p>
+        
+        <!-- Report displays, if any. -->
         <xsl:if test="count(display) &gt; 0">
           <li>
             <ul>
@@ -159,9 +174,11 @@
           </li>
         </xsl:if>
       </xsl:for-each>
-    </ul>   
+    </ul> 
+      
   </xsl:template>
 
+  <!-- System software. -->
   <xsl:template match="systemsoftware">
   
     <h1>System Software:</h1>
@@ -170,11 +187,14 @@
       <xsl:text> </xsl:text>
       <xsl:value-of select="concat('(', build,')')"/>
       <xsl:text> - Time since boot: </xsl:text>
+      
+      <!-- TODO: This looks like a localization problem. -->
       <xsl:value-of select="humanuptime"/>
     </p>
 
   </xsl:template>
 
+  <!-- Disk information. -->
   <xsl:template match="disk">
   
     <h1>Disk Information:</h1>
@@ -192,6 +212,9 @@
               <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
             </xsl:if>
           </p>
+          
+          <!-- Report volumes if there are any. -->
+          <!-- TODO: Split this up. -->
           <xsl:if test="count(volumes/volume) &gt; 0">
             <li>
               <ul>
@@ -248,8 +271,10 @@
         </xsl:for-each>
       </xsl:for-each>
     </ul>   
+    
   </xsl:template>
 
+  <!-- USB information. -->
   <xsl:template match="usb">
   
     <h1>USB Information:</h1>
@@ -259,6 +284,7 @@
   
   </xsl:template>
   
+  <!-- Firewire information. -->
   <xsl:template match="firewire">
   
     <h1>Firewire Information:</h1>
@@ -268,6 +294,7 @@
   
   </xsl:template>
   
+  <!-- Thunderbolt information. -->
   <xsl:template match="thunderbolt">
   
     <h1>Thunderbolt Information:</h1>
@@ -277,6 +304,7 @@
   
   </xsl:template>
   
+  <!-- TODO: This is wrong. Specify the devices to be matched. Don't use mode. -->
   <xsl:template match="*" mode="device">
   
     <li>
@@ -293,6 +321,7 @@
     
   </xsl:template>
 
+  <!-- Configuration files. -->
   <xsl:template match="configurationfiles">
   
     <xsl:if test="filesizemismatch or unexpectedfile or SIP/value != 'enabled' or hostsfile/status != 'valid'">
@@ -319,6 +348,7 @@
         
   </xsl:template>
 
+  <!-- Gatekeeper information. -->
   <xsl:template match="gatekeeper">
   
     <h1>Gatekeeper:</h1>
@@ -326,6 +356,7 @@
       
   </xsl:template>
 
+  <!-- Adware information. -->
   <xsl:template match="adware">
   
     <xsl:if test="adwarepath">
@@ -338,7 +369,8 @@
     </xsl:if>
         
   </xsl:template>
-
+  
+  <!-- Unknown files. -->
   <xsl:template match="unknownfiles">
   
     <xsl:if test="unknownfile">
@@ -353,6 +385,7 @@
         
   </xsl:template>
 
+  <!-- Kernel extensions. -->
   <xsl:template match="kernelextensions">
   
     <h1>Kernel Extensions:</h1>
@@ -364,6 +397,8 @@
         
   </xsl:template>
 
+  <!-- Print an extension bundle. -->
+  <!-- TODO: Use a match instead of a name. -->
   <xsl:template name="printExtensionBundle">
   
     <xsl:if test="count(extensions/extension[ignore = 'true']) != count(extensions/extension)">
@@ -375,6 +410,349 @@
       </xsl:for-each>
     </xsl:if>
     
+  </xsl:template>
+
+  <!-- Print startup items. -->
+  <xsl:template match="startupitems">
+  
+    <xsl:if test="startupitem">
+      <h1>Startup Items:</h1>
+      <dl>
+        <xsl:for-each select="startupitem">
+          <dt><xsl:value-of select="name"/></dt>
+          <dd><xsl:value-of select="path"/></dd>
+          <dd><xsl:value-of select="version"/></dd>
+        </xsl:for-each>
+      </dl>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- TODO: These can all be done more intelligently. -->
+  
+  <!-- Print system launch agents. -->
+  <xsl:template match="systemlaunchagents">
+  
+    <xsl:if test="count(tasks[@analysis != 'apple']) &gt; 0">
+      <h1>System Launch Agents:</h1>
+      <xsl:apply-templates select="tasks"/>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print system launch daemons. -->
+  <xsl:template match="systemlaunchdaemons">
+  
+    <xsl:if test="count(tasks[@analysis != 'apple']) &gt; 0">
+      <h1>System Launch Daemons:</h1>
+      <xsl:apply-templates select="tasks"/>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print launch agents. -->
+  <xsl:template match="launchagents">
+  
+    <xsl:if test="count(tasks) &gt; 0">
+      <h1>Launch Agents:</h1>
+      <xsl:apply-templates select="tasks"/>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print launch daemons. -->
+  <xsl:template match="launchdaemons">
+  
+    <xsl:if test="count(tasks) &gt; 0">
+      <h1>Launch Daemons:</h1>
+      <xsl:apply-templates select="tasks"/>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print user launch agents. -->
+  <xsl:template match="userlaunchagents">
+  
+    <xsl:if test="count(tasks) &gt; 0">
+      <h1>User Launch Agents:</h1>
+      <xsl:apply-templates select="tasks"/>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print a launchd task. -->
+  <xsl:template match="tasks">
+  
+    <ul>
+      <xsl:for-each select="task">
+        <li>
+          <xsl:text>[</xsl:text>
+          <xsl:value-of select="@status"/>
+          <xsl:text>] </xsl:text>
+          <xsl:value-of select="name"/>
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="date"/>
+          <xsl:text>)</xsl:text>
+        </li>
+      </xsl:for-each>
+    </ul>
+        
+  </xsl:template>
+
+  <!-- Print login items. -->
+  <xsl:template match="loginitems">
+  
+    <xsl:if test="count(loginitem) &gt; 0">
+      <h1>Login Items:</h1>
+      <ul>
+        <xsl:apply-templates select="loginitem"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print a single login item. -->
+  <xsl:template match="loginitem">
+  
+    <li>
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="type"/>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="path"/>
+      <xsl:text>)</xsl:text>
+    </li>
+        
+  </xsl:template>
+
+  <!-- Print internet plugins. -->
+  <xsl:template match="internetplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>Internet Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print user internet plugins. -->
+  <xsl:template match="userinternetplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>User Internet Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print audio plugins. -->
+  <xsl:template match="audioplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>Audio Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print user audio plugins. -->
+  <xsl:template match="useraudioplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>User Audio Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print iTunes plugins. -->
+  <xsl:template match="itunesplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>iTunes Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print user iTunes plugins. -->
+  <xsl:template match="useritunesplugins">
+  
+    <xsl:if test="count(plugin) &gt; 0">
+      <h1>User iTunes Plug-ins:</h1>
+      <ul>
+        <xsl:apply-templates select="plugin"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+
+  <!-- Print a single plugin. -->
+  <xsl:template match="plugin">
+  
+    <li>
+      <xsl:value-of select="name"/>
+      <xsl:text>: </xsl:text>
+      <xsl:value-of select="version"/>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="date"/>
+      <xsl:text>)</xsl:text>
+    </li>
+        
+  </xsl:template>
+
+  <!-- Print Safari extensions. -->
+  <xsl:template match="safariextensions">
+  
+    <xsl:if test="count(extension) &gt; 0">
+      <h1>Safari Extensions:</h1>
+      <ul>
+        <xsl:apply-templates select="extension"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+  
+  <!-- Print a single Safari extension. -->
+  <xsl:template match="extension">
+  
+    <li>
+      <xsl:value-of select="name"/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="author"/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="url"/>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="date"/>
+      <xsl:text>)</xsl:text>
+    </li>
+        
+  </xsl:template>
+
+  <!-- Print Preference panes. -->
+  <xsl:template match="preferencepanes">
+  
+    <xsl:if test="count(preferencepane) &gt; 0">
+      <h1>Preference Panes:</h1>
+      <ul>
+        <xsl:apply-templates select="preferencepane"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+  
+  <!-- Print a single Preference pane. -->
+  <xsl:template match="preferencepane">
+  
+    <li>
+      <xsl:value-of select="name"/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="bundleid"/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="date"/>
+      <xsl:text>)</xsl:text>
+    </li>
+        
+  </xsl:template>
+
+  <!-- Print Fonts. -->
+  <xsl:template match="fonts">
+  
+    <xsl:if test="count(fonts) &gt; 0">
+      <h1>Fonts:</h1>
+      <ul>
+        <xsl:apply-templates select="font"/>
+      </ul>
+    </xsl:if>
+        
+  </xsl:template>
+  
+  <!-- Print a single font. -->
+  <xsl:template match="font">
+  
+    <li>
+      <xsl:text>[</xsl:text>
+      <xsl:value-of select="@status"/>
+      <xsl:text>] </xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="date"/>
+      <xsl:text>)</xsl:text>
+    </li>
+        
+  </xsl:template>
+
+  <!-- Print Time Machine information. -->
+  <xsl:template match="timemachine">
+  
+    <h1>Time Machine:</h1>
+    <dl>
+      <dt>Skip System Files:</dt>
+      <dd><xsl:value-of select="skipsystemfiles"/></dd>
+      <dt>Mobile backups:</dt>
+      <dd><xsl:value-of select="mobilebackups"/></dd>
+      <dt>Auto backup:</dt>
+      <dd><xsl:value-of select="autobackup"/></dd>
+      <dt>Volumes being backed up:</dt>
+      <dd>
+        <ul>
+          <xsl:apply-templates select="backedupvolumes/volume"/>
+        </ul>
+      </dd>
+      <dt>Destinations:</dt>
+      <dd>
+        <ul>
+          <xsl:apply-templates select="destinations/destination"/>
+        </ul>
+      </dd>
+    </dl>
+      
+  </xsl:template>
+
+  <!-- Print a Time Machine volume. -->
+  <xsl:template match="volume">
+  
+    <dl>
+      <dt></dt>
+      <dd><xsl:value-of select="name"/></dd>
+      <dt>Disk size:</dt>
+      <dd><xsl:value-of select="size"/></dd>
+      <dt>Space required:</dt>
+      <dd><xsl:value-of select="sizerequired"/></dd>
+    </dl>
+      
+  </xsl:template>
+
+  <!-- Print a Time Machine destination. -->
+  <xsl:template match="destination">
+  
+    <dl>
+      <dt></dt>
+      <dd><xsl:value-of select="name"/></dd>
+      <dd><xsl:value-of select="concat('[', type, ']')"/></dd>
+      <dt>Total size:</dt>
+      <dd><xsl:value-of select="size"/></dd>
+      <dt>Total number of backups:</dt>
+      <dd><xsl:value-of select="backupcount"/></dd>
+      <dt>Oldest backup:</dt>
+      <dd><xsl:value-of select="oldestbackupdate"/></dd>
+      <dt>Last backup:</dt>
+      <dd><xsl:value-of select="lastbackupdate"/></dd>
+      <dt>Size of backup disk:</dt>
+      <!-- TODO: Add backup analysis. -->
+      <dd></dd>
+    </dl>
+      
   </xsl:template>
 
   <xsl:template match="*">

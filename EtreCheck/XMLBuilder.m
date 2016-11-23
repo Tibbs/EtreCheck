@@ -622,7 +622,7 @@ AttemptToCloseWrongElement *
   unsignedLonglongValue: (unsigned long long) value
   {
   [self
-    addElement: name value: [NSString stringWithFormat: @"%llulld", value]];
+    addElement: name value: [NSString stringWithFormat: @"%llu", value]];
   }
 
 // Add an element and value with a convenience function.

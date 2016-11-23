@@ -90,7 +90,8 @@
     
     [self.XML addElement: kPreferencePaneName value: name];
     [self.XML addElement: kPreferencePaneBundleID value: bundleID];
-    [self.XML addElement: kPreferencePaneName value: name];
+    [self.XML
+      addElement: kPreferencePanePath value: [Utilities cleanPath: path]];
 
     NSDate * modificationDate = [Utilities modificationDate: path];
 
