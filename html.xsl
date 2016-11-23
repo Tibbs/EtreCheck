@@ -755,6 +755,97 @@
       
   </xsl:template>
 
+  <!-- Print a CPU usage information. -->
+  <xsl:template match="cpu">
+  
+    <xsl:if test="count(process) &gt; 0">
+      <h1>Top Processes by CPU:</h1>
+      <table>
+        <xsl:for-each select="process">
+          <tr>
+            <td><xsl:value-of select="cpu"/>%</td>
+            <td>
+              <xsl:value-of select="name"/>
+              <xsl:if test="count &gt; 1">
+                <xsl:value-of select="concat('(', count, ')')"/>
+              </xsl:if>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </xsl:if>
+      
+  </xsl:template>
+
+  <!-- Print a memory usage information. -->
+  <xsl:template match="memory">
+  
+    <xsl:if test="count(process) &gt; 0">
+      <h1>Top Processes by Memory:</h1>
+      <table>
+        <xsl:for-each select="process">
+          <tr>
+            <td><xsl:value-of select="memory"/></td>
+            <td>
+              <xsl:value-of select="name"/>
+              <xsl:if test="count &gt; 1">
+                <xsl:value-of select="concat('(', count, ')')"/>
+              </xsl:if>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </xsl:if>
+      
+  </xsl:template>
+
+  <!-- Print a virtual memory usage information. -->
+  <xsl:template match="vm">
+  
+    <h1>Virtual Memory Information:</h1>
+    <table>
+      <tr>
+        <td><xsl:value-of select="availableram"/></td>
+        <td>Available RAM</td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="freeram"/></td>
+        <td>Free RAM</td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="usedram"/></td>
+        <td>Used RAM</td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="filecache"/></td>
+        <td>Cached files</td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="swapused"/></td>
+        <td>Swap Used:</td>
+      </tr>
+    </table>
+      
+  </xsl:template>
+
+  <!-- Print diagnostics information. -->
+  <xsl:template match="diagnostics">
+  
+    <xsl:if test="count(diagnostic) &gt; 0">
+      <h1>Diagnostics Information:</h1>
+    </xsl:if>
+      
+  </xsl:template>
+
+  <!-- Print a EtreCheck deleted files. -->
+  <xsl:template match="etrecheckdeletedfiles">
+  
+    <xsl:if test="count(deletedfile) &gt; 0">
+      <h1>EtreCheck Deleted Files:</h1>
+    </xsl:if>
+      
+  </xsl:template>
+
   <xsl:template match="*">
   
     <div class="section">
