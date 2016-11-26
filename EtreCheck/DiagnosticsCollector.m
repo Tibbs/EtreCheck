@@ -72,9 +72,9 @@
         appendString:
           NSLocalizedString(@"diagnoticreport_permissions", NULL)];
         
-      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: kSeverityExplanation
+        addElement: @"severity_explanation"
         value: NSLocalizedString(@"diagnoticreport_standardpermissions", NULL)];
       }
     
@@ -453,7 +453,7 @@
   if(!hasOutput)
     [self.result appendAttributedString: [self buildTitle]];
   
-  [self.XML startElement: kDiagnosticEvent];
+  [self.XML startElement: @"event"];
   
   if(event.type == kSelfTestFail)
     {
@@ -471,9 +471,9 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
     
-    [self.XML addAttribute: kSeverity value: kCritical];
+    [self.XML addAttribute: @"severity" value: @"critical"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"selftestfail", NULL)];
 
     }
@@ -487,12 +487,12 @@
               dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
             event.name]];
   
-  [self.XML addElement: kDiagnosticDate date: event.date];
-  [self.XML addElement: kDiagnosticName value: event.name];
+  [self.XML addElement: @"date" date: event.date];
+  [self.XML addElement: @"name" value: event.name];
 
   if([event.details length])
     {
-    [self.XML addElement: kDiagnosticDetails value: event.details];
+    [self.XML addElement: @"details" value: event.details];
     
     NSAttributedString * detailsURL =
       [[Model model] getDetailsURLFor: name];
@@ -509,7 +509,7 @@
   if([event.path length])
     {
     [self.XML
-      addElement: kDiagnosticPath
+      addElement: @"path"
       value: [Utilities cleanPath: event.path]];
 
     if(![self.paths containsObject: event.path])
@@ -533,7 +533,7 @@
       }
     }
     
-  [self.XML endElement: kDiagnosticEvent];
+  [self.XML endElement: @"event"];
   
   hasOutput = YES;
   }

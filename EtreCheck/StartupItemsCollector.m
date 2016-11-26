@@ -71,9 +71,9 @@
         
         if([items count] > 0)
           {
-          [self.XML addAttribute: kSeverity value: kSerious];
+          [self.XML addAttribute: @"severity" value: @"serious"];
           [self.XML
-            addAttribute: kSeverityExplanation
+            addAttribute: @"severity_explanation"
             value: @"Startup items deprecated"];
           }
           
@@ -169,13 +169,13 @@
 // Print a startup item.
 - (void) printStartupItem: (NSDictionary *) item
   {
-  [self.XML startElement: kStartupItem];
+  [self.XML startElement: @"startupitem"];
   
   NSString * name = [item objectForKey: @"_name"];
   NSString * path = [item objectForKey: @"spstartupitem_location"];
 
-  [self.XML addElement: kStartupItemName value: name];
-  [self.XML addElement: kStartupItemPath value: path];
+  [self.XML addElement: @"name" value: name];
+  [self.XML addElement: @"path" value: path];
   
   NSString * version = @"";
   
@@ -205,7 +205,7 @@
           
         version = compositeVersion;
         
-        [self.XML addElement: kStartupItemVersion value: version];
+        [self.XML addElement: @"version" value: version];
         }
       }
     
@@ -220,7 +220,7 @@
         NSForegroundColorAttributeName : [[Utilities shared] red],
       }];
     
-  [self.XML endElement: kStartupItem];
+  [self.XML endElement: @"startupitem"];
   }
 
 @end

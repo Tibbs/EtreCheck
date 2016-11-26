@@ -27,7 +27,7 @@
 
     for(NSString * filename in bundles)
       {
-      [self.XML startElement: kPlugin];
+      [self.XML startElement: @"plugin"];
       
       NSDictionary * plugin = [bundles objectForKey: filename];
 
@@ -65,9 +65,9 @@
           appendAttributedString: [self getFlashSupportLink: plugin]];
       else if([[Model model] checkForAdware: path])
         {
-        [self.XML addAttribute: kSeverity value: kSerious];
+        [self.XML addAttribute: @"severity" value: @"serious"];
         [self.XML
-          addElement: kSeverityExplanation
+          addElement: @"severity_explanation"
           value: NSLocalizedString(@"adware", NULL)];
         [self.result
           appendAttributedString: [self getAdwareLink: plugin]];
@@ -76,13 +76,13 @@
         [self.result
           appendAttributedString: [self getSupportLink: plugin]];
       
-      [self.XML addElement: kPluginName value: name];
-      [self.XML addElement: kPluginVersion value: version];
-      [self.XML addElement: kPluginDate date: modificationDate];
+      [self.XML addElement: @"name" value: name];
+      [self.XML addElement: @"version" value: version];
+      [self.XML addElement: @"date" date: modificationDate];
 
       [self.result appendString: @"\n"];
       
-      [self.XML endElement: kPlugin];
+      [self.XML endElement: @"plugin"];
       }
 
     [self.result appendString: @"\n"];
@@ -244,9 +244,9 @@
 // Return an outdated Flash version.
 - (NSAttributedString *) outdatedFlash
   {
-  [self.XML addAttribute: kSeverity value: kSerious];
+  [self.XML addAttribute: @"severity" value: @"serious"];
   [self.XML
-    addElement: kSeverityExplanation
+    addElement: @"severity_explanation"
     value: NSLocalizedString(@"outdated", NULL)];
 
   NSMutableAttributedString * string =

@@ -8,6 +8,8 @@
 #import "PopoverManager.h"
 
 #define kFileDeleted @"filedeleted"
+#define kPath @"path"
+#define kLaunchdTask @"task"
 
 @interface UninstallManager : NSObject
   {

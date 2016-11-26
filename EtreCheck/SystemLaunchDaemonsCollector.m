@@ -8,7 +8,6 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 @implementation SystemLaunchDaemonsCollector
 
@@ -51,14 +50,14 @@
     
     NSArray * plists = [self collectPropertyListFiles: files];
     
-    [self.XML startElement: kLaunchdTasks];
+    [self.XML startElement: @"tasks"];
     
-    [self.XML addAttribute: kLaunchdDomain value: @"apple"];
-    [self.XML addAttribute: kLaunchdType value: @"daemon"];
+    [self.XML addAttribute: @"domain" value: @"apple"];
+    [self.XML addAttribute: @"type" value: @"daemon"];
 
     [self printPropertyLists: plists];
     
-    [self.XML endElement: kLaunchdTasks];
+    [self.XML endElement: @"tasks"];
     }
     
   [subProcess release];

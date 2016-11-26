@@ -8,7 +8,6 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "ByteCountFormatter.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -131,27 +130,27 @@
     [memoryString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
-  [self.XML startElement: kMemoryProcess];
+  [self.XML startElement: @"process"];
   
   if(value > 1024 * 1024 * 1024 * 2.0)
     {
-    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"highmemoryusage", NULL)];
     }
     
   [self.XML
-    addElement: kMemoryProcessName
+    addElement: @"name"
     value: [process objectForKey: @"command"]];
   [self.XML
-    addElement: kMemoryProcessMemory
+    addElement: @"memory"
     number: [process objectForKey: @"mem"]];
   [self.XML
-    addElement: kMemoryProcessCount
+    addElement: @"count"
     number: [process objectForKey: @"count"]];
   
-  [self.XML endElement: kMemoryProcess];
+  [self.XML endElement: @"process"];
 
   NSString * output =
     [NSString

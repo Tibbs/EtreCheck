@@ -10,7 +10,6 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect 3rd party preference panes.
 @implementation PreferencePanesCollector
@@ -86,18 +85,18 @@
 
   if([support isEqualToString: @"spprefpane_support_3rdParty"])
     {
-    [self.XML startElement: kPreferencePane];
+    [self.XML startElement: @"preferencepane"];
     
-    [self.XML addElement: kPreferencePaneName value: name];
-    [self.XML addElement: kPreferencePaneBundleID value: bundleID];
+    [self.XML addElement: @"name" value: name];
+    [self.XML addElement: @"bundleid" value: bundleID];
     [self.XML
-      addElement: kPreferencePanePath value: [Utilities cleanPath: path]];
+      addElement: @"path" value: [Utilities cleanPath: path]];
 
     NSDate * modificationDate = [Utilities modificationDate: path];
 
-    [self.XML addElement: kPreferencePaneDate date: modificationDate];
+    [self.XML addElement: @"date" date: modificationDate];
 
-    [self.XML endElement: kPreferencePane];
+    [self.XML endElement: @"preferencepane"];
 
     [self.result
       appendString: [NSString stringWithFormat: @"    %@ ", name]];

@@ -8,7 +8,6 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -89,8 +88,8 @@
         {
         NSString * safePath = [Utilities cleanPath: path];
         
-        [self.XML addElement: kDeletedFilePath value: safePath];
-        [self.XML addElement: kDeletedFilePath date: date];
+        [self.XML addElement: @"path" value: safePath];
+        [self.XML addElement: @"path" date: date];
         
         [self.result
           appendString:

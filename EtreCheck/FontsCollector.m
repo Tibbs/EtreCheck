@@ -10,7 +10,6 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -47,13 +46,13 @@
 
       if(![valid boolValue])
         {
-        [self.XML startElement: kBadFont];
+        [self.XML startElement: @"badfont"];
         
-        [self.XML addElement: kBadFontName value: name];
+        [self.XML addElement: @"name" value: name];
         [self.XML
-          addElement: kBadFontPath value: [Utilities cleanPath: path]];
+          addElement: @"path" value: [Utilities cleanPath: path]];
 
-        [self.XML endElement: kBadFont];
+        [self.XML endElement: @"badfont"];
         
         [self.result
           appendString:

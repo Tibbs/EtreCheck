@@ -295,7 +295,7 @@
     // adware trio.
     [[Model model] checkForAdware: path];
     
-    if([[info objectForKey: kAdware] boolValue])
+    if([[info objectForKey: @"adware"] boolValue])
       {
       [extra appendAttributedString: [self formatAdware: info for: path]];
       

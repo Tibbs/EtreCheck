@@ -1171,16 +1171,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   Checker * checker = [Checker new];
   
-  [[[Model model] XML] startElement: kEtreCheck];
+  [[[Model model] XML] startElement: @"etrecheck"];
   
   NSBundle * bundle = [NSBundle mainBundle];
   
   [[[Model model] XML]
-    addAttribute: kEtreCheckVersion
+    addAttribute: @"version"
     value:
       [bundle objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
   [[[Model model] XML]
-    addAttribute: kEtreCheckBuild
+    addAttribute: @"build"
     value: [bundle objectForInfoDictionaryKey: @"CFBundleVersion"]];
 
   NSAttributedString * results = [checker check];
@@ -1192,7 +1192,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
       [self.log appendAttributedString: results];
   
-      [[[Model model] XML] endElement: kEtreCheck];
+      [[[Model model] XML] endElement: @"etrecheck"];
 
       NSString * tempDir = NSTemporaryDirectory();
       NSString * outName = [tempDir stringByAppendingPathComponent: @"out.xml"];
@@ -1259,12 +1259,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
        dictionaryWithObjectsAndKeys:
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
 
-  [[[Model model] XML] startElement: kEtreCheckStats];
+  [[[Model model] XML] startElement: @"stats"];
   
-  [[[Model model] XML] addElement: kEtreCheckDate date: date];
+  [[[Model model] XML] addElement: @"date" date: date];
 
   [[[Model model] XML]
-    addElement: kEtreCheckRuntime value: [self elapsedTime]];
+    addElement: @"runtime" value: [self elapsedTime]];
   
   [self printPerformance];
     
@@ -1274,13 +1274,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self printOptions];
   [self printErrors];
 
-  [[[Model model] XML] endElement: kEtreCheckStats];
+  [[[Model model] XML] endElement: @"stats"];
 
-  [[[Model model] XML] startElement: kEtreCheckProblem];
+  [[[Model model] XML] startElement: @"problem"];
 
   [self printProblem];
 
-  [[[Model model] XML] endElement: kEtreCheckProblem];
+  [[[Model model] XML] endElement: @"problem"];
   }
 
 // Print performance.
@@ -1297,13 +1297,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(interval > (60 * 10))
     {
-    [[[Model model] XML] addAttribute: kSeverity value: kCritical];
+    [[[Model model] XML] addAttribute: @"severity" value: @"critical"];
     [[[Model model] XML]
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"poorperformance", NULL)];
 
     [[[Model model] XML]
-      addElement: kEtreCheckPerformance value: @"poorperformance"];
+      addElement: @"performance" value: @"poorperformance"];
 
     [self.log
       appendString: NSLocalizedString(@"poorperformance", NULL)
@@ -1315,13 +1315,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 5))
     {
-    [[[Model model] XML] addAttribute: kSeverity value: kSerious];
+    [[[Model model] XML] addAttribute: @"severity" value: @"serious"];
     [[[Model model] XML]
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"belowaverageperformance", NULL)];
 
     [[[Model model] XML]
-      addElement: kEtreCheckPerformance value: @"belowaverageperformance"];
+      addElement: @"performance" value: @"belowaverageperformance"];
 
     [self.log
       appendString: NSLocalizedString(@"belowaverageperformance", NULL)
@@ -1334,7 +1334,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else if(interval > (60 * 3))
     {
     [[[Model model] XML]
-      addElement: kEtreCheckPerformance value: @"goodperformance"];
+      addElement: @"performance" value: @"goodperformance"];
 
     [self.log
       appendString: NSLocalizedString(@"goodperformance", NULL)
@@ -1346,7 +1346,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else
     {
     [[[Model model] XML]
-      addElement: kEtreCheckPerformance value: @"excellentperformance"];
+      addElement: @"performance" value: @"excellentperformance"];
 
     [self.log
       appendString: NSLocalizedString(@"excellentperformance", NULL)
@@ -1451,14 +1451,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   if(errors)
     {
-    [[[Model model] XML] addAttribute: kSeverity value: kCritical];
+    [[[Model model] XML] addAttribute: @"severity" value: @"critical"];
     [[[Model model] XML]
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"errors", NULL)];
 
     if(terminatedTasks.count > 0)
       {
-      [[[Model model] XML] startElement: kEtreCheckErrors];
+      [[[Model model] XML] startElement: @"errors"];
 
       [self.log
         appendString:
@@ -1473,7 +1473,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       for(NSString * task in terminatedTasks)
         {
         [[[Model model] XML]
-          addElement: kEtreCheckErrorTerminatedTask value: task];
+          addElement: @"terminatedtask" value: task];
         
         [self.log
           appendString: task
@@ -1491,7 +1491,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
       {
-      [[[Model model] XML] addElement: kEtreCheckErrorWhitelistUpdate];
+      [[[Model model] XML] addElement: @"whitelistupdate"];
       
       [self.log
         appendString:
@@ -1505,14 +1505,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.log appendString: @"\n\n"];
       }
 
-    [[[Model model] XML] endElement: kEtreCheckErrors];
+    [[[Model model] XML] endElement: @"errors"];
     }
   }
 
 // Print the problem from the user.
 - (void) printProblem
   {
-  [[[Model model] XML] startElement: kEtreCheckProblem];
+  [[[Model model] XML] startElement: @"problem"];
 
   [self.log
     appendString: NSLocalizedString(@"Problem: ", NULL)
@@ -1529,7 +1529,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           objectAtIndex: self.problemIndex];
       
       [[[Model model] XML]
-        addElement: kEtreCheckProblemType value: selectedItem.title];
+        addElement: @"type" value: selectedItem.title];
         
       [self.log appendString: selectedItem.title];
       [self.log appendString: @"\n"];
@@ -1538,7 +1538,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if(self.problemDescription)
     {
     [[[Model model] XML]
-      addElement: kEtreCheckProblemDescription
+      addElement: @"description"
       value: [self.problemDescription string]];
 
     [self.log
@@ -1552,7 +1552,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.log appendString: @"\n"];
     }
     
-  [[[Model model] XML] endElement: kEtreCheckProblem];
+  [[[Model model] XML] endElement: @"problem"];
 
   [self.log appendString: @"\n"];
   }

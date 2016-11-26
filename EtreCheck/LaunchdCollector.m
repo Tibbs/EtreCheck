@@ -1338,47 +1338,47 @@
 - (void) emitPropertyListXML: (NSString *) path
   info: (NSMutableDictionary *) info
   {
-  [self.XML startElement: kLaunchdTask];
+  [self.XML startElement: @"task"];
   
   NSString * status = [info objectForKey: kStatus];
   
   if([status length] == 0)
     status = @"not loaded";
     
-  [self.XML addAttribute: kLaunchdStatus value: status];
+  [self.XML addAttribute: @"status" value: status];
 
   NSString * signature = [info objectForKey: kSignature];
 
   if([signature isEqualToString: kShell])
-    [self.XML addAttribute: kLaunchdAnalysis value: signature];
+    [self.XML addAttribute: @"analysis" value: signature];
   else if([signature isEqualToString: kExecutableMissing])
-    [self.XML addAttribute: kLaunchdAnalysis value: signature];
+    [self.XML addAttribute: @"analysis" value: signature];
   else
-    [self.XML addAttribute: kLaunchdSignature value: signature];
+    [self.XML addAttribute: @"signature" value: signature];
     
   if([[info objectForKey: kApple] boolValue])
-    [self.XML addAttribute: kLaunchdAnalysis value: @"apple"];
+    [self.XML addAttribute: @"analysis" value: @"apple"];
   else if([[info objectForKey: kUnknown] boolValue])
-    [self.XML addAttribute: kLaunchdAnalysis value: @"unknown"];
-  else if([[info objectForKey: kAdware] boolValue])
-    [self.XML addAttribute: kLaunchdAnalysis value: @"adware"];
+    [self.XML addAttribute: @"analysis" value: @"unknown"];
+  else if([[info objectForKey: @"adware"] boolValue])
+    [self.XML addAttribute: @"analysis" value: @"adware"];
   
   NSString * safePath = [Utilities cleanPath: path];
   NSString * safeExecutable =
     [Utilities cleanPath: [info objectForKey: kExecutable]];
   
-  [self.XML addElement: kLaunchdPath value: safePath];
-  [self.XML addElement: kLaunchdName value: [safePath lastPathComponent]];
-  [self.XML addElement: kLaunchdLabel value: [info objectForKey: kLabel]];
+  [self.XML addElement: @"path" value: safePath];
+  [self.XML addElement: @"name" value: [safePath lastPathComponent]];
+  [self.XML addElement: @"label" value: [info objectForKey: kLabel]];
   [self.XML
-    addElement: kLaunchdDate date: [info objectForKey: kModificationDate]];
+    addElement: @"date" date: [info objectForKey: kModificationDate]];
   [self.XML
-    addElement: kLaunchdExecutable value: safeExecutable];
+    addElement: @"executable" value: safeExecutable];
   [self.XML
-    addElement: kLaunchdCommand
+    addElement: @"command"
     value: [Utilities formatExecutable: [info objectForKey: kCommand]]];
   
-  [self.XML endElement: kLaunchdTask];
+  [self.XML endElement: @"task"];
   }
 
 @end

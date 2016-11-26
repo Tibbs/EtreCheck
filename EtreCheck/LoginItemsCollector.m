@@ -9,7 +9,6 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -63,17 +62,17 @@
   
   if(machItemCount > 0)
     {
-    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"machinitdeprecated2", NULL)];
     }
     
   if(loginHookCount > 0)
     {
-    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"loginhookdeprecated2", NULL)];
     }
 
@@ -538,13 +537,13 @@
     
   BOOL highlight = NO;
   
-  [self.XML startElement: kLoginItem];
+  [self.XML startElement: @"loginitem"];
   
   if([path rangeOfString: @"/.Trash/"].location != NSNotFound)
     {
-    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"loginitemtrashed", NULL)];
     highlight = YES;
     }
@@ -558,16 +557,16 @@
   if([kind isEqualToString: @"LogoutHook"])
     highlight = YES;
 
-  [self.XML addAttribute: kLoginItemHidden boolValue: isHidden];
+  [self.XML addAttribute: @"hidden" boolValue: isHidden];
   
-  [self.XML addElement: kLoginItemName value: safeName];
-  [self.XML addElement: kLoginItemType value: kind];
-  [self.XML addElement: kLoginItemPath value: safePath];
+  [self.XML addElement: @"name" value: safeName];
+  [self.XML addElement: @"type" value: kind];
+  [self.XML addElement: @"path" value: safePath];
    
    NSDate * modificationDate = [self modificationDate: path];
 
   if(modificationDate)
-    [self.XML addElement: kLoginItemDate date: modificationDate];
+    [self.XML addElement: @"date" date: modificationDate];
   
   // Flag a login item if it is in the trash.
   if(highlight)
@@ -597,7 +596,7 @@
             modificationDateString,
             safePath]];
     
-  [self.XML endElement: kLoginItem];
+  [self.XML endElement: @"loginitem"];
   
   return YES;
   }

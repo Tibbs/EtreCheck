@@ -140,20 +140,20 @@
 
     if(attributes.fileSize != expectedSize)
       {
-      [self.XML startElement: kConfigurationFileWrongSize];
+      [self.XML startElement: @"filesizemismatch"];
       
-      [self.XML addAttribute: kSeverity value: kSerious];
-      [self.XML addAttribute: kSeverityExplanation value: @"Wrong size"];
+      [self.XML addAttribute: @"severity" value: @"serious"];
+      [self.XML addAttribute: @"severity_explanation" value: @"Wrong size"];
 
-      [self.XML addElement: kConfigurationFileName value: @"/etc/sudoers"];
+      [self.XML addElement: @"name" value: @"/etc/sudoers"];
       [self.XML
-        addElement: kConfigurationFileSize
+        addElement: @"size"
         unsignedLonglongValue: attributes.fileSize];
       [self.XML
-        addElement: kConfigurationFileExpectedSize
+        addElement: @"expectedsize"
         unsignedLonglongValue: expectedSize];
       
-      [self.XML endElement: kConfigurationFileWrongSize];
+      [self.XML endElement: @"filesizemismatch"];
       
       [files
         addObject:
@@ -181,15 +181,15 @@
   // See if /etc/sysctl.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/sysctl.conf"])
     {
-    [self.XML startElement: kConfigurationFileUnexpected];
+    [self.XML startElement: @"unexpectedfile"];
     
-    [self.XML addAttribute: kSeverity value: kSerious];
-    [self.XML addAttribute: kSeverityExplanation value: @"unexpected"];
+    [self.XML addAttribute: @"severity" value: @"serious"];
+    [self.XML addAttribute: @"severity_explanation" value: @"unexpected"];
 
     [self.XML
-      addElement: kConfigurationFileName value: @"/etc/sysctl.conf"];
+      addElement: @"name" value: @"/etc/sysctl.conf"];
     
-    [self.XML endElement: kConfigurationFileUnexpected];
+    [self.XML endElement: @"unexpectedfile"];
 
     [files addObject: @"/etc/sysctl.conf"];
     }
@@ -197,15 +197,15 @@
   // See if /etc/launchd.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
     {
-    [self.XML startElement: kConfigurationFileUnexpected];
+    [self.XML startElement: @"unexpectedfile"];
     
-    [self.XML addAttribute: kSeverity value: kSerious];
-    [self.XML addAttribute: kSeverityExplanation value: @"unexpected"];
+    [self.XML addAttribute: @"severity" value: @"serious"];
+    [self.XML addAttribute: @"severity_explanation" value: @"unexpected"];
 
     [self.XML
-      addElement: kConfigurationFileName value: @"/etc/launchd.conf"];
+      addElement: @"name" value: @"/etc/launchd.conf"];
     
-    [self.XML endElement: kConfigurationFileUnexpected];
+    [self.XML endElement: @"unexpectedfile"];
 
     [files addObject: @"/etc/launchd.conf"];
     }
@@ -222,22 +222,22 @@
     {
     NSString * status = [self checkRootlessStatus];
   
-    [self.XML startElement: kConfigurationSIP];
+    [self.XML startElement: @"SIP"];
       
     if([status isEqualToString: @"enabled"])
       {
       [self.XML
-        addElement: kConfigurationSIPValue value: @"enabled"];
+        addElement: @"value" value: @"enabled"];
         
       [[Model model] setSIP: YES];
       }
     else
       {
-      [self.XML addAttribute: kSeverity value: kSerious];
-      [self.XML addAttribute: kSeverityExplanation value: @"SIP disabled"];
+      [self.XML addAttribute: @"severity" value: @"serious"];
+      [self.XML addAttribute: @"severity_explanation" value: @"SIP disabled"];
       
       [self.XML
-        addElement: kConfigurationSIPValue value: status];
+        addElement: @"value" value: status];
 
       [otherModificiations
         addObject:
@@ -255,7 +255,7 @@
             autorelease]];
       }
 
-    [self.XML endElement: kConfigurationSIP];
+    [self.XML endElement: @"SIP"];
     }
     
   self.modifications = otherModificiations;
@@ -447,24 +447,24 @@
         stringWithFormat:
           NSLocalizedString(@" - Count: %d", NULL), count];
     
-  [self.XML startElement: kConfigurationHostsFile];
+  [self.XML startElement: @"hostsfile"];
     
   NSString * status = @"valid";
   
   if((count > 10) || corrupt)
     {
-    [self.XML addAttribute: kSeverity value: kSerious];
+    [self.XML addAttribute: @"severity" value: @"serious"];
     
     if(count > 10)
       {
       status = @"count > 10";
-      [self.XML addAttribute: kSeverityExplanation value: @"count > 10"];
+      [self.XML addAttribute: @"severity_explanation" value: @"count > 10"];
       }
     else if(corrupt)
       {
       status = @"corrupt";
       [self.XML
-        addAttribute: kSeverityExplanation value: @"hosts file corrupt"];
+        addAttribute: @"severity_explanation" value: @"hosts file corrupt"];
       }
       
     [self.result
@@ -487,11 +487,11 @@
             countString, corruptString]];
 
   [self.XML
-    addElement: kConfigurationHostsFileCount integerValue: count];
+    addElement: @"count" integerValue: count];
   [self.XML
-    addElement: kConfigurationHostsFileStatus value: status];
+    addElement: @"status" value: status];
 
-  [self.XML endElement: kConfigurationHostsFile];
+  [self.XML endElement: @"hostsfile"];
   }
 
 @end

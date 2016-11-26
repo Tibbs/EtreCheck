@@ -367,10 +367,10 @@
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)
     {
-    [self.XML startElement: kSafariExtension];
+    [self.XML startElement: @"extension"];
   
     if(([archivePath length] == 0) && ([cachePath length] > 0))
-      [self.XML addAttribute: kSafariExtensionCached boolValue: YES];
+      [self.XML addAttribute: @"cached" boolValue: YES];
     
     [self printExtensionDetails: extension];
     
@@ -379,7 +379,7 @@
       
     [self appendModificationDate: extension];
     
-    [self.XML endElement: kSafariExtension];
+    [self.XML endElement: @"extension"];
     
     if(adware)
       {
@@ -439,9 +439,9 @@
 
   NSString * website = [extension objectForKey: kWebsite];
 
-  [self.XML addElement: kSafariExtensionName value: humanReadableName];
-  [self.XML addElement: kSafariExtensionAuthor value: author];
-  [self.XML addElement: kSafariExtensionURL value: website];
+  [self.XML addElement: @"name" value: humanReadableName];
+  [self.XML addElement: @"author" value: author];
+  [self.XML addElement: @"url" value: website];
   
   [self.result
     appendString:
@@ -479,7 +479,7 @@
 
   if(modificationDate)
     {
-    [self.XML addElement: kSafariExtensionDate date: modificationDate];
+    [self.XML addElement: @"date" date: modificationDate];
     
     NSString * modificationDateString =
       [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];

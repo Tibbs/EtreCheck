@@ -63,9 +63,9 @@ GatekeeperSetting;
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
     
-    [self.XML addAttribute: kSeverity value: kWarning];
+    [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"gatekeeperrequireslion", NULL)];
 
     return;
@@ -185,9 +185,9 @@ GatekeeperSetting;
                 @"Mac App Store and identified developers", NULL)]];
       break;
     case kDisabled:
-      [self.XML addAttribute: kSeverity value: kCritical];
+      [self.XML addAttribute: @"severity" value: @"critical"];
       [self.XML
-        addElement: kSeverityExplanation value: @"gatekeeperdisabled"];
+        addElement: @"severity_explanation" value: @"gatekeeperdisabled"];
       [self.XML addString: @"anywhere"];
       [self.result
         appendString:
@@ -202,9 +202,9 @@ GatekeeperSetting;
       
     case kUnknown:
     default:
-      [self.XML addAttribute: kSeverity value: kCritical];
+      [self.XML addAttribute: @"severity" value: @"critical"];
       [self.XML
-        addElement: kSeverityExplanation value: @"gatekeeperunknown"];
+        addElement: @"severity_explanation" value: @"gatekeeperunknown"];
       [self.XML addString: @"unknown"];
       [self.result
         appendString:

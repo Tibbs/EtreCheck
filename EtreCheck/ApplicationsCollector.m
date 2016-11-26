@@ -12,7 +12,6 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect installed applications.
 @implementation ApplicationsCollector
@@ -185,9 +184,9 @@
   // Print each parent and its children.
   for(NSString * parent in sortedParents)
     {
-    [self.XML startElement: kApplicationDirectory];
+    [self.XML startElement: @"directory"];
     
-    [self.XML addElement: kApplicationDirectoryPath value: parent];
+    [self.XML addElement: @"path" value: parent];
     
     int count = 0;
     
@@ -204,7 +203,7 @@
     
     for(NSDictionary * application in sortedApplications)
       {
-      [self.XML startElement: kApplication];
+      [self.XML startElement: @"application"];
       
       NSAttributedString * output = [self applicationDetails: application];
       
@@ -223,10 +222,10 @@
         [self.result appendAttributedString: output];
         }
         
-      [self.XML endElement: kApplication];
+      [self.XML endElement: @"application"];
       }
       
-    [self.XML endElement: kApplicationDirectory];
+    [self.XML endElement: @"directory"];
     }
   }
 
@@ -246,20 +245,20 @@
 
   NSDate * date = [Utilities modificationDate: path];
   
-  [self.XML addElement: kApplicationName value: name];
+  [self.XML addElement: @"name" value: name];
   [self.XML
-    addElement: kApplicationPath value: [Utilities cleanPath: path]];
-  [self.XML addElement: kApplicationBundleID value: bundleID];
-  [self.XML addElement: kApplicationVersion value: version];
-  [self.XML addElement: kApplicationBuild value: build];
-  [self.XML addElement: kApplicationDate date: date];
+    addElement: @"path" value: [Utilities cleanPath: path]];
+  [self.XML addElement: @"bundleid" value: bundleID];
+  [self.XML addElement: @"version" value: version];
+  [self.XML addElement: @"build" value: build];
+  [self.XML addElement: @"date" date: date];
   
   if(bundleID)
     {
     NSString * obtained_from = [application objectForKey: @"obtained_from"];
 
     if([obtained_from length] > 0)
-      [self.XML addElement: kApplicationSource value: obtained_from];
+      [self.XML addElement: @"source" value: obtained_from];
     
     if([obtained_from isEqualToString: @"apple"])
       return nil;

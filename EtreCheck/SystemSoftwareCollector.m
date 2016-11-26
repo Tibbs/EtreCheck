@@ -237,10 +237,10 @@
         [hourString length] > 0 ? @" " : @"",
         hourString];
   
-  [self.XML addElement: kSystemSoftwareVersion value: marketingName];
-  [self.XML addElement: kSystemBuild value: [[Model model] OSBuild]];
-  [self.XML addElement: kSystemUptime value: uptime];
-  [self.XML addElement: kHumanUptime value: humanUptime];
+  [self.XML addElement: @"version" value: marketingName];
+  [self.XML addElement: @"build" value: [[Model model] OSBuild]];
+  [self.XML addElement: @"uptime" value: uptime];
+  [self.XML addElement: @"humanuptime" value: humanUptime];
   
   [self.result
     appendString:

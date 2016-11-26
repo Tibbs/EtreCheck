@@ -402,14 +402,14 @@
     spaceRequired = [formatter stringFromByteCount: used];
     }
 
-  [self.XML startElement: kTimeMachineVolume];
+  [self.XML startElement: @"volume"];
   
-  [self.XML addElement: kTimeMachineVolumeName value: name];
-  [self.XML addElement: kTimeMachineVolumeSize number: size];
+  [self.XML addElement: @"name" value: name];
+  [self.XML addElement: @"size" number: size];
   [self.XML
-    addElement: kTimeMachineVolumeSizeRequired unsignedLonglongValue: used];
+    addElement: @"sizerequired" unsignedLonglongValue: used];
   
-  [self.XML endElement: kTimeMachineVolume];
+  [self.XML endElement: @"volume"];
   
   [self.result
     appendString:
@@ -469,7 +469,7 @@
     {
     bool skip = [skipSystemFiles boolValue];
 
-    [self.XML startElement: kTimeMachineSkipSystemFiles];
+    [self.XML startElement: @"skipsystemfiles"];
     
     [self.result
       appendString: NSLocalizedString(@"    Skip System Files: ", NULL)];
@@ -478,9 +478,9 @@
       [self.result appendString: NSLocalizedString(@"NO\n", NULL)];
     else
       {
-      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: kSeverityExplanation
+        addElement: @"severity_explanation"
         value:
           NSLocalizedString(@"System files not being backed up", NULL)];
 
@@ -497,7 +497,7 @@
       
     [self.XML addBool: skip];
     
-    [self.XML endElement: kTimeMachineSkipSystemFiles];
+    [self.XML endElement: @"skipsystemfiles"];
     }
   }
 
@@ -511,7 +511,7 @@
     {
     bool mobile = [mobileBackups boolValue];
 
-    [self.XML addElement: kTimeMachineMobileBackups boolValue: mobile];
+    [self.XML addElement: @"mobilebackups" boolValue: mobile];
     
     [self.result
       appendString: NSLocalizedString(@"    Mobile backups: ", NULL)];
@@ -535,7 +535,7 @@
     {
     bool backup = [autoBackup boolValue];
 
-    [self.XML startElement: kTimeMachineAutoBackup];
+    [self.XML startElement: @"autobackup"];
     
     [self.result
       appendString: NSLocalizedString(@"    Auto backup: ", NULL)];
@@ -544,9 +544,9 @@
       [self.result appendString: NSLocalizedString(@"YES\n", NULL)];
     else
       {
-      [self.XML addAttribute: kSeverity value: kWarning];
+      [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: kSeverityExplanation
+        addElement: @"severity_explanation"
         value: NSLocalizedString(@"Auto backup turned off", NULL)];
 
       [self.result
@@ -561,7 +561,7 @@
       
     [self.XML addBool: backup];
     
-    [self.XML endElement: kTimeMachineAutoBackup];
+    [self.XML endElement: @"autobackup"];
     }
   }
 
@@ -607,7 +607,7 @@
       appendString:
         NSLocalizedString(@"    Volumes being backed up:\n", NULL)];
 
-    [self.XML startElement: kTimeMachineBackedupVolumes];
+    [self.XML startElement: @"backedupvolumes"];
     
     for(NSString * UUID in backedupVolumeUUIDs)
       {
@@ -618,14 +618,14 @@
       [self printBackedupVolume: UUID];
       }
 
-    [self.XML endElement: kTimeMachineBackedupVolumes];
+    [self.XML endElement: @"backedupvolumes"];
     }
   }
 
 // Print Time Machine destinations.
 - (void) printDestinations: (NSDictionary *) settings
   {
-  [self.XML startElement: kTimeMachineDestinations];
+  [self.XML startElement: @"destinations"];
   
   [self.result
     appendString: NSLocalizedString(@"    Destinations:\n", NULL)];
@@ -642,13 +642,13 @@
     first = NO;
     }
     
-  [self.XML endElement: kTimeMachineDestinations];
+  [self.XML endElement: @"destinations"];
   }
 
 // Print a Time Machine destination.
 - (void) printDestination: (NSDictionary *) destination
   {
-  [self.XML startElement: kTimeMachineDestination];
+  [self.XML startElement: @"destination"];
   
   // Calculate some size values.
   NSNumber * bytesAvailable = [destination objectForKey: @"BytesAvailable"];
@@ -660,9 +660,9 @@
 
   if(totalSizeValue <= (minimumBackupSize * 3))
     {
-    [self.XML addAttribute: kSeverity value: kSerious];
+    [self.XML addAttribute: @"severity" value: @"serious"];
     [self.XML
-      addElement: kSeverityExplanation
+      addElement: @"severity_explanation"
       value: NSLocalizedString(@"timemachinedestinationtoosmall", NULL)];
     }
     
@@ -670,7 +670,7 @@
   [self printDestinationDescription: destination];
   
   [self.XML
-    addElement: kTimeMachineDestinationSize
+    addElement: @"size"
     unsignedLonglongValue: totalSizeValue];
   
   // Print the total size.
@@ -682,7 +682,7 @@
   // Print an overall analysis of the Time Machine size differential.
   [self printDestinationSizeAnalysis: totalSizeValue];
 
-  [self.XML endElement: kTimeMachineDestination];
+  [self.XML endElement: @"destination"];
   }
 
 // Print the destination description.
@@ -693,7 +693,7 @@
   NSNumber * last = [destination objectForKey: @"LastDestination"];
 
   [self.XML
-    addAttribute: kTimeMachineDestinationLastUsed
+    addAttribute: @"lastused"
     boolValue: [last boolValue]];
 
   NSString * safeName = [Utilities cleanPath: name];
@@ -706,8 +706,8 @@
   if([last integerValue] == 1)
     lastused = NSLocalizedString(@"(Last used)", NULL);
 
-  [self.XML addElement: kTimeMachineDestinationName value: safeName];
-  [self.XML addElement: kTimeMachineDestinationType value: kind];
+  [self.XML addElement: @"name" value: safeName];
+  [self.XML addElement: @"type" value: kind];
   
   [self.result
     appendString:
@@ -734,7 +734,7 @@
 - (void) printSnapshotInformation: (NSDictionary *) destination
   {
   [self.XML
-    addElement: kTimeMachineDestinationBackupCount
+    addElement: @"backupcount"
     number: [destination objectForKey: kSnapshotcount]];
     
   [self.result
@@ -749,11 +749,11 @@
   NSString * lastBackup = [destination objectForKey: kLastbackup];
 
   [self.XML
-    addElement: kTimeMachineDestinationOldestBackupDate
+    addElement: @"oldestbackupdate"
     value: oldestBackup];
 
   [self.XML
-    addElement: kTimeMachineDestinationLastBackupDate
+    addElement: @"lastbackupdate"
     value: lastBackup];
 
   [self.result

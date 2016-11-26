@@ -179,7 +179,7 @@
           ++adwareCount;
           
           [self.XML
-            addElement: kAdwarePath value: [Utilities prettyPath: obj]];
+            addElement: @"path" value: [Utilities prettyPath: obj]];
           
           [self.result appendString: @"    "];
           [self.result

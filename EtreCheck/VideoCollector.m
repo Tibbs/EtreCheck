@@ -68,14 +68,14 @@
   
   for(NSDictionary * info in infos)
     {
-    [self.XML startElement: kVideoCard];
+    [self.XML startElement: @"videocard"];
     
     NSString * name = [info objectForKey: @"sppci_model"];
     
     if(![name length])
       name = NSLocalizedString(@"Unknown", NULL);
       
-    [self.XML addElement: kVideoCardName value: name];
+    [self.XML addElement: @"name" value: name];
     
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
@@ -83,7 +83,7 @@
     
     if(vramAmount)
       {
-      [self.XML addElement: kVRAMAmount value: vramAmount];
+      [self.XML addElement: @"VRAM" value: vramAmount];
       
       vram =
         [NSString
@@ -105,7 +105,7 @@
     for(NSDictionary * display in displays)
       [self printDisplayInfo: display];
       
-    [self.XML endElement: kVideoCard];
+    [self.XML endElement: @"videocard"];
     }
     
   NSNumber * errors = [[Model model] gpuErrors];
@@ -131,14 +131,14 @@
 // Print information about a display.
 - (void) printDisplayInfo: (NSDictionary *) display
   {
-  [self.XML startElement: kDisplay];
+  [self.XML startElement: @"display"];
   
   NSString * name = [display objectForKey: @"_name"];
   
   if([name isEqualToString: @"spdisplays_display"])
     name = NSLocalizedString(@"Display", NULL);
     
-  [self.XML addElement: kDisplayName value: name];
+  [self.XML addElement: @"name" value: name];
   
   NSString * resolution = [display objectForKey: @"spdisplays_resolution"];
 
@@ -151,7 +151,7 @@
     }
     
   if(resolution)
-    [self.XML addElement: kDisplayResolution value: resolution];
+    [self.XML addElement: @"resolution" value: resolution];
     
   if(name || resolution)
     [self.result
@@ -162,7 +162,7 @@
             name ? name : @"Unknown",
             resolution ? resolution : @""]];
   
-  [self.XML endElement: kDisplay];
+  [self.XML endElement: @"display"];
   }
 
 @end

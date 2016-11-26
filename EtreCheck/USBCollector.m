@@ -10,7 +10,6 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "Model.h"
 
 // Collect information about USB devices.
 @implementation USBCollector
@@ -75,7 +74,7 @@
 - (void) printUSBDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
-  [self.XML startElement: kUSBDevice];
+  [self.XML startElement: @"device"];
   
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"manufacturer"];
@@ -87,10 +86,10 @@
   if(!size)
     size = @"";
     
-  [self.XML addElement: kUSBDeviceName value: name];
+  [self.XML addElement: @"name" value: name];
   
   if([size length] > 0)
-    [self.XML addElement: kUSBDeviceSize value: size];
+    [self.XML addElement: @"size" value: size];
   
   if(manufacturer)
     {
@@ -107,7 +106,7 @@
           stringWithFormat:
             @"%@%@ %@ %@\n", indent, manufacturer, name, size]];
             
-    [self.XML addElement: kUSBDeviceManufacturer value: manufacturer];
+    [self.XML addElement: @"manufacturer" value: manufacturer];
     
     indent = [NSString stringWithFormat: @"%@    ", indent];
     }
@@ -117,7 +116,7 @@
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
   
-  [self.XML endElement: kUSBDevice];
+  [self.XML endElement: @"device"];
   }
   
 // Print more devices.

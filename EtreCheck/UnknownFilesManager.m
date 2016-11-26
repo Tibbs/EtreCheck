@@ -15,7 +15,6 @@
 #define kRemove @"remove"
 #define kWhitelist @"whitelist"
 #define kSigned @"signed"
-#define kPath @"path"
 
 #define kRemoveColumnIndex 0
 #define kWhitelistColumnIndex 1

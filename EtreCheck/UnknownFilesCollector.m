@@ -77,18 +77,18 @@
                   [Utilities
                     formatExecutable: [info objectForKey: kCommand]]]];
             
-          [self.XML startElement: kUnknownFile];
+          [self.XML startElement: @"unknownfile"];
 
           [self.XML
-            addElement: kUnknownFilePath
+            addElement: @"path"
             value: [Utilities prettyPath: obj]];
           
           [self.XML
-            addElement: kUnknownFileCommand
+            addElement: @"command"
             value:
               [Utilities formatExecutable: [info objectForKey: kCommand]]];
 
-          [self.XML endElement: kUnknownFile];
+          [self.XML endElement: @"unknownfile"];
           }];
       
     NSArray * sortedUnknownFiles =
