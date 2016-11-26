@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet 
-  version = '1.0' 
-  xmlns="http://www.w3.org/1999/xhtml" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  version='1.0' xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- Convert an EtreCheck report into an HTML representation. -->
   <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
@@ -228,9 +226,9 @@
                       <xsl:when test="mount_point">
                         <xsl:value-of select="mount_point"/>
                       </xsl:when>
-                      <xsl:default>
+                      <xsl:otherwise>
                         <xsl:text> &lt;not mounted&gt; </xsl:text>
-                      </xsl:default>
+                      </xsl:otherwise>
                     </xsl:choose>
                     <xsl:text> </xsl:text>
                     <xsl:if test="type">
