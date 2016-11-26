@@ -74,7 +74,7 @@
           [self.XML addAttribute: @"severity" value: @"serious"];
           [self.XML
             addAttribute: @"severity_explanation"
-            value: @"Startup items deprecated"];
+            value: @"startupitemsdeprecated"];
           }
           
         for(NSDictionary * item in items)

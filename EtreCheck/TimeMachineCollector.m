@@ -481,8 +481,7 @@
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
         addElement: @"severity_explanation"
-        value:
-          NSLocalizedString(@"System files not being backed up", NULL)];
+        value: @"systemfilesnotbeingbackedup"];
 
       [self.result
         appendString:
@@ -546,8 +545,7 @@
       {
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: @"severity_explanation"
-        value: NSLocalizedString(@"Auto backup turned off", NULL)];
+        addElement: @"severity_explanation" value: @"autobackupturnedoff"];
 
       [self.result
         appendString:
@@ -663,7 +661,7 @@
     [self.XML addAttribute: @"severity" value: @"serious"];
     [self.XML
       addElement: @"severity_explanation"
-      value: NSLocalizedString(@"timemachinedestinationtoosmall", NULL)];
+      value: @"timemachinedestinationtoosmall"];
     }
     
   // Print the destination description.

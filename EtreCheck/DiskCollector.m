@@ -406,7 +406,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"critical"];
     
-    [self.XML addAttribute: @"severity_explanation" value: @"SMART failure"];
+    [self.XML addAttribute: @"severity_explanation" value: @"smartfailure"];
     }
 
   if(!smart_not_supported && !smart_verified)
@@ -524,7 +524,7 @@
     [self.XML addAttribute: @"severity" value: @"serious"];
     
     [self.XML
-      addAttribute: @"severity_explanation" value: @"encryption failed"];
+      addAttribute: @"severity_explanation" value: @"encryptionfailed"];
     
     [self.result appendString: @" "];
     
@@ -590,7 +590,8 @@
     if([errors length])
       {
       [self.XML addAttribute: @"severity" value: @"critical"];
-      [self.XML addAttribute: @"severity_explanation" value: @"disk failure"];
+      [self.XML
+        addAttribute: @"severity_explanation" value: @"diskfailure"];
       [self.XML addElement: @"errors" value: errors];
   
       [self.result
@@ -655,7 +656,7 @@
   if([errors length])
     {
     [self.XML addAttribute: @"severity" value: @"critical"];
-    [self.XML addAttribute: @"severity_explanation" value: @"disk failure"];
+    [self.XML addAttribute: @"severity_explanation" value: @"diskfailure"];
     [self.XML addElement: @"errors" value: errors];
 
     attributes =
@@ -840,7 +841,7 @@
       [self.XML addAttribute: @"severity" value: @"serious"];
       
       [self.XML
-        addAttribute: @"severity_explanation" value: @"low disk space"];
+        addAttribute: @"severity_explanation" value: @"lowdiskspace"];
       
       status = NSLocalizedString(@" (Low!)", NULL);
       }

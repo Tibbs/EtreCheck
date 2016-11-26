@@ -66,9 +66,7 @@
       else if([[Model model] checkForAdware: path])
         {
         [self.XML addAttribute: @"severity" value: @"serious"];
-        [self.XML
-          addElement: @"severity_explanation"
-          value: NSLocalizedString(@"adware", NULL)];
+        [self.XML addElement: @"severity_explanation" value: @"adware"];
         [self.result
           appendAttributedString: [self getAdwareLink: plugin]];
         }
@@ -245,9 +243,7 @@
 - (NSAttributedString *) outdatedFlash
   {
   [self.XML addAttribute: @"severity" value: @"serious"];
-  [self.XML
-    addElement: @"severity_explanation"
-    value: NSLocalizedString(@"outdated", NULL)];
+  [self.XML addElement: @"severity_explanation" value: @"outdated"];
 
   NSMutableAttributedString * string =
     [[NSMutableAttributedString alloc] initWithString: @""];

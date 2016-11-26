@@ -143,7 +143,7 @@
       [self.XML startElement: @"filesizemismatch"];
       
       [self.XML addAttribute: @"severity" value: @"serious"];
-      [self.XML addAttribute: @"severity_explanation" value: @"Wrong size"];
+      [self.XML addAttribute: @"severity_explanation" value: @"wrongsize"];
 
       [self.XML addElement: @"name" value: @"/etc/sudoers"];
       [self.XML
@@ -184,7 +184,8 @@
     [self.XML startElement: @"unexpectedfile"];
     
     [self.XML addAttribute: @"severity" value: @"serious"];
-    [self.XML addAttribute: @"severity_explanation" value: @"unexpected"];
+    [self.XML
+      addAttribute: @"severity_explanation" value: @"unexpectedfile"];
 
     [self.XML
       addElement: @"name" value: @"/etc/sysctl.conf"];
@@ -200,7 +201,8 @@
     [self.XML startElement: @"unexpectedfile"];
     
     [self.XML addAttribute: @"severity" value: @"serious"];
-    [self.XML addAttribute: @"severity_explanation" value: @"unexpected"];
+    [self.XML
+      addAttribute: @"severity_explanation" value: @"unexpectedfile"];
 
     [self.XML
       addElement: @"name" value: @"/etc/launchd.conf"];
@@ -234,7 +236,8 @@
     else
       {
       [self.XML addAttribute: @"severity" value: @"serious"];
-      [self.XML addAttribute: @"severity_explanation" value: @"SIP disabled"];
+      [self.XML
+        addAttribute: @"severity_explanation" value: @"sipdisabled"];
       
       [self.XML
         addElement: @"value" value: status];
@@ -458,13 +461,14 @@
     if(count > 10)
       {
       status = @"count > 10";
-      [self.XML addAttribute: @"severity_explanation" value: @"count > 10"];
+      [self.XML
+        addAttribute: @"severity_explanation" value: @"countover10"];
       }
     else if(corrupt)
       {
       status = @"corrupt";
       [self.XML
-        addAttribute: @"severity_explanation" value: @"hosts file corrupt"];
+        addAttribute: @"severity_explanation" value: @"hostsfilecorrupt"];
       }
       
     [self.result

@@ -136,8 +136,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"highmemoryusage", NULL)];
+      addElement: @"severity_explanation" value: @"highmemoryusage"];
     }
     
   [self.XML

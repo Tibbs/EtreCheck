@@ -75,7 +75,7 @@
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
         addElement: @"severity_explanation"
-        value: NSLocalizedString(@"diagnoticreport_standardpermissions", NULL)];
+        value: @"diagnoticreport_standardpermissions"];
       }
     
     [self.result appendCR];
@@ -472,10 +472,7 @@
         }];
     
     [self.XML addAttribute: @"severity" value: @"critical"];
-    [self.XML
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"selftestfail", NULL)];
-
+    [self.XML addElement: @"severity_explanation" value: @"selftestfail"];
     }
   else
     [self.result

@@ -564,8 +564,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"critical"];
     [self.XML
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"insufficientram", NULL)];
+      addElement: @"severity_explanation" value: @"insufficientram"];
     
     [self.result
       appendString:
@@ -946,11 +945,11 @@
       
       if(needsReplacing)
         [self.XML
-          addAttribute: @"severity_explanation" value: @"needs replacing"];
+          addAttribute: @"severity_explanation" value: @"needsreplacing"];
       else
         [self.XML
           addAttribute: @"severity_explanation"
-          value: @"invalid serial number"];
+          value: @"invalidserialnumber"];
       }
       
     [self.XML endElement: @"battery"];

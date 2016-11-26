@@ -113,9 +113,7 @@
     if(cpu > 50.0)
       {
       [self.XML addAttribute: @"severity" value: @"warning"];
-      [self.XML
-        addElement: @"severity_explanation"
-        value: NSLocalizedString(@"highcpuusage", NULL)];
+      [self.XML addElement: @"severity_explanation" value: @"highcpuusage"];
       }
       
     [self.XML

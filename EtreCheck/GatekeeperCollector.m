@@ -65,8 +65,7 @@ GatekeeperSetting;
     
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"gatekeeperrequireslion", NULL)];
+      addElement: @"severity_explanation" value: @"gatekeeperrequireslion"];
 
     return;
     }

@@ -1299,8 +1299,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     {
     [[[Model model] XML] addAttribute: @"severity" value: @"critical"];
     [[[Model model] XML]
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"poorperformance", NULL)];
+      addElement: @"severity_explanation" value: @"poorperformance"];
 
     [[[Model model] XML]
       addElement: @"performance" value: @"poorperformance"];
@@ -1318,7 +1317,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [[[Model model] XML] addAttribute: @"severity" value: @"serious"];
     [[[Model model] XML]
       addElement: @"severity_explanation"
-      value: NSLocalizedString(@"belowaverageperformance", NULL)];
+      value: @"belowaverageperformance"];
 
     [[[Model model] XML]
       addElement: @"performance" value: @"belowaverageperformance"];
@@ -1453,8 +1452,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     {
     [[[Model model] XML] addAttribute: @"severity" value: @"critical"];
     [[[Model model] XML]
-      addElement: @"severity_explanation"
-      value: NSLocalizedString(@"errors", NULL)];
+      addElement: @"severity_explanation" value: @"internaltaskerrors"];
 
     if(terminatedTasks.count > 0)
       {
