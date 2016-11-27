@@ -2268,8 +2268,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else
     {
-    [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
-    [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+    [item setLabel: NSLocalizedString(@"Copy Report", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Copy Report", nil)];
     [item setView: self.clipboardCopyToolbarItemView];
     item.control = self.clipboardCopyButton;
     }
@@ -2451,7 +2451,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
    
    NSSharingService * customService =
      [[[NSSharingService alloc]
-       initWithTitle: NSLocalizedString(@"Copy to clipboard", NULL)
+       initWithTitle: NSLocalizedString(@"Copy Report", NULL)
        image: [NSImage imageNamed: @"Copy"]
        alternateImage: nil
        handler:

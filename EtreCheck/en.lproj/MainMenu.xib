@@ -148,15 +148,14 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="About Etresoft" id="tzx-9o-x1W">
+                            <menuItem title="About Etresoft…" id="tzx-9o-x1W">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="Q8B-iS-9Wm"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="11O-wM-XNW"/>
-                            <menuItem title="Preferences..." keyEquivalent="," id="OaD-xj-Fb7">
+                            <menuItem title="Preferences…" keyEquivalent="," id="OaD-xj-Fb7">
                                 <connections>
                                     <action selector="showPreferences:" target="-1" id="z1c-ai-PBl"/>
                                 </connections>
@@ -268,7 +267,7 @@
                                     <action selector="showTOUAgreementCopy:" target="Voe-Tx-rLC" id="qGT-Sg-XHi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Copy entire report to clipboard" keyEquivalent="r" id="Q89-SN-OIs">
+                            <menuItem title="Copy Report" keyEquivalent="r" id="Q89-SN-OIs">
                                 <connections>
                                     <action selector="showTOUAgreementCopyAll:" target="Voe-Tx-rLC" id="USW-I3-MgD"/>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="7IU-0U-nXk"/>
@@ -516,7 +515,8 @@
                                     <action selector="showHelp:" target="Voe-Tx-rLC" id="DPO-a4-fui"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Frequently asked questions" id="3MB-7M-aZi">
+                            <menuItem isSeparatorItem="YES" id="WIL-Jp-RKJ"/>
+                            <menuItem title="Frequently Asked Questions" id="3MB-7M-aZi">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="showFAQ:" target="Voe-Tx-rLC" id="dCE-5I-qc0"/>
@@ -529,7 +529,7 @@
                                     <action selector="gotoEtresoft:" target="Voe-Tx-rLC" id="NN5-9b-eBT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Etresoft support" id="5vd-Lu-GJt">
+                            <menuItem title="Etresoft Support" id="5vd-Lu-GJt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="gotoEtresoftSupport:" target="Voe-Tx-rLC" id="w95-rb-Rtb"/>
@@ -542,31 +542,33 @@
         </menu>
         <window title="Log" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="8G9-V1-dBM">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="5au-ZC-dUi">
+                    <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="5au-ZC-dUi">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="jQH-15-ZHt">
-                            <rect key="frame" x="1" y="1" width="478" height="268"/>
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="jBT-e2-hx3">
-                                    <rect key="frame" x="0.0" y="0.0" width="478" height="268"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="478" height="268"/>
+                                    <size key="minSize" width="480" height="270"/>
                                     <size key="maxSize" width="492" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="478" height="268"/>
+                                    <size key="minSize" width="480" height="270"/>
                                     <size key="maxSize" width="492" height="10000000"/>
                                     <connections>
                                         <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.displayStatus" id="sBL-HK-800">
                                             <dictionary key="options">
+                                                <bool key="NSConditionallySetsEditable" value="NO"/>
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                             </dictionary>
                                         </binding>
@@ -580,12 +582,15 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="zZL-lq-vZd">
-                            <rect key="frame" x="463" y="1" width="16" height="268"/>
+                            <rect key="frame" x="464" y="0.0" width="16" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                 </subviews>
             </view>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="string" keyPath="miniwindowTitle" value="EtreCheck Log"/>
+            </userDefinedRuntimeAttributes>
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - Start">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
@@ -926,20 +931,20 @@ Gw
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="wh0-Hs-Dza">
-                        <rect key="frame" x="-1" y="61" width="487" height="222"/>
+                        <rect key="frame" x="-1" y="61" width="488" height="222"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="cOn-KS-6rq">
-                            <rect key="frame" x="1" y="1" width="485" height="220"/>
+                            <rect key="frame" x="1" y="1" width="486" height="220"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="VAZ-3F-fRB">
-                                    <rect key="frame" x="0.0" y="0.0" width="485" height="220"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="486" height="220"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="485" height="220"/>
+                                    <size key="minSize" width="486" height="220"/>
                                     <size key="maxSize" width="565" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="485" height="220"/>
+                                    <size key="minSize" width="486" height="220"/>
                                     <size key="maxSize" width="565" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1088,8 +1093,6 @@ Gw
             </view>
             <toolbar key="toolbar" implicitIdentifier="0AB5B57E-5C71-4497-9F5A-E4EF139A469D" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="HAH-8D-CvP" customClass="EtreCheckToolbar">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="wHe-j3-wqi"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="dP4-6e-vXE"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="8Xu-pH-ESe">
                         <connections>
                             <action selector="print:" target="-1" id="Qe9-z1-2bW"/>
@@ -1113,20 +1116,20 @@ Gw
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="TSS-HM-CJH">
-                    <rect key="frame" x="1" y="45" width="240" height="181"/>
+                    <rect key="frame" x="-1" y="45" width="243" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="8lt-UL-p23">
-                        <rect key="frame" x="1" y="1" width="238" height="179"/>
+                        <rect key="frame" x="1" y="1" width="241" height="179"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" id="9wF-Yp-vPY">
-                                <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
+                                <rect key="frame" x="0.0" y="0.0" width="241" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="241" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="241" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
@@ -1182,21 +1185,21 @@ Gw
             <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView hidden="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" id="aoy-Xi-Ddc" customClass="VerticalScrollView">
-                    <rect key="frame" x="1" y="45" width="240" height="181"/>
+                <scrollView hidden="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="aoy-Xi-Ddc" customClass="VerticalScrollView">
+                    <rect key="frame" x="-1" y="45" width="243" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="RsR-Sk-SLC">
-                        <rect key="frame" x="1" y="1" width="238" height="179"/>
+                        <rect key="frame" x="1" y="1" width="241" height="179"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="A3B-Ay-068">
-                                <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
+                                <rect key="frame" x="0.0" y="0.0" width="241" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="241" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="238" height="179"/>
+                                <size key="minSize" width="241" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
@@ -1398,21 +1401,21 @@ Gw
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView borderType="groove" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="hwZ-jL-7ud">
-                    <rect key="frame" x="0.0" y="-1" width="612" height="266"/>
+                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="hwZ-jL-7ud">
+                    <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" copiesOnScroll="NO" id="b89-E1-VpO">
-                        <rect key="frame" x="2" y="2" width="608" height="262"/>
+                        <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" id="rRU-vM-wce">
-                                <rect key="frame" x="0.0" y="0.0" width="608" height="262"/>
+                                <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="608" height="262"/>
+                                <size key="minSize" width="610" height="265"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
                                 <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="608" height="262"/>
+                                <size key="minSize" width="610" height="265"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
                                 <connections>
                                     <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.log" id="qbH-eg-dBA">
@@ -1668,7 +1671,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="370.1796875" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
+                                        <tableColumn identifier="path" editable="NO" width="369.1796875" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Unknown file">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1855,30 +1858,30 @@ Gw
             </view>
             <point key="canvasLocation" x="178" y="1988"/>
         </window>
-        <window title="Update available" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="gjM-qW-zLi" userLabel="Update Window">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="alertPanel" frameAutosaveName="" id="gjM-qW-zLi" userLabel="Update Window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="250"/>
+            <rect key="contentRect" x="152" y="158" width="450" height="264"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="Qyl-m9-O1R">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="250"/>
+                <rect key="frame" x="0.0" y="0.0" width="450" height="264"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="JmD-TL-KmC">
-                        <rect key="frame" x="20" y="61" width="528" height="124"/>
+                        <rect key="frame" x="20" y="61" width="410" height="100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="aA3-fg-DCT">
-                            <rect key="frame" x="1" y="1" width="526" height="122"/>
+                            <rect key="frame" x="1" y="1" width="408" height="98"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="122"/>
+                                <textView editable="NO" importsGraphics="NO" baseWritingDirection="leftToRight" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
+                                    <rect key="frame" x="0.0" y="0.0" width="408" height="98"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="minSize" width="408" height="98"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1888,15 +1891,15 @@ Gw
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="O1a-D6-VFw">
-                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="O1a-D6-VFw">
+                            <rect key="frame" x="363" y="1" width="16" height="81"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="uHS-SL-O9E">
-                        <rect key="frame" x="382" y="13" width="172" height="32"/>
+                        <rect key="frame" x="255" y="13" width="181" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Quit and go to update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
+                        <buttonCell key="cell" type="push" title="Quit and Open Website" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1909,9 +1912,9 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="Ngx-vF-efn">
-                        <rect key="frame" x="14" y="13" width="67" height="32"/>
+                        <rect key="frame" x="14" y="13" width="79" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Skip" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
+                        <buttonCell key="cell" type="push" title="Ignore" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1923,20 +1926,26 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="nUF-9K-mgf">
-                        <rect key="frame" x="18" y="187" width="532" height="43"/>
+                        <rect key="frame" x="104" y="180" width="318" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and download the new version?" id="EHD-pu-5o0">
-                            <font key="font" metaFont="system"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and open the website to download the new version?" id="EHD-pu-5o0">
+                            <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ru2-44-hOI">
+                        <rect key="frame" x="20" y="180" width="64" height="64"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="sxh-Ky-eB6"/>
+                    </imageView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="134" y="1873"/>
+            <point key="canvasLocation" x="75" y="1880"/>
         </window>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="280" height="80"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="FQI-Tk-PZA">
@@ -1986,7 +1995,6 @@ Gw
             </connections>
             <point key="canvasLocation" x="238" y="1462"/>
         </window>
-        <customObject id="Sg7-4B-SVN" userLabel="Preferences Manager" customClass="PreferencesManager"/>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>
@@ -1996,6 +2004,7 @@ Gw
         <image name="Help" width="1024" height="1024"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>
+        <image name="NSApplicationIcon" width="128" height="128"/>
         <image name="NSShareTemplate" width="11" height="16"/>
     </resources>
 </document>
