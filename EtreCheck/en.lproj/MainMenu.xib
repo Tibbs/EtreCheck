@@ -1539,7 +1539,7 @@ Gw
             </subviews>
             <point key="canvasLocation" x="61" y="702"/>
         </customView>
-        <window title="Unkown files" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="F5c-hN-DcS" userLabel="Unknown files Window">
+        <window title="Unknown files" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="F5c-hN-DcS" userLabel="Unknown files Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="466"/>
