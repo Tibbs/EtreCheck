@@ -537,7 +537,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="Journal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
+        <window title="Journal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Log" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="480" height="270"/>
@@ -589,7 +589,7 @@
                 <userDefinedRuntimeAttribute type="string" keyPath="miniwindowTitle" value="Journal d’EtreCheck"/>
             </userDefinedRuntimeAttributes>
         </window>
-        <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
+        <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" frameAutosaveName="EtreCheck" animationBehavior="default" id="HCb-1A-LX1" customClass="EtreCheckWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="610" height="265"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
@@ -1921,7 +1921,7 @@ Gw
             </view>
             <point key="canvasLocation" x="67" y="1715"/>
         </window>
-        <window title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="vgE-5p-8hO" userLabel="Preferences Window">
+        <window title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Preferences" animationBehavior="default" id="vgE-5p-8hO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="302" height="80"/>

@@ -32,6 +32,7 @@
 		A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */; };
 		A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3C19AC0AA3003084C8 /* Utilities.m */; };
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
+		A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A52820951DEB8750000B8EAA /* EtreCheckWindow.m */; };
 		A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A52986A71BB89C160040C63D /* HiddenAppsCollector.m */; };
 		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
 		A53EA3721C6E86B600F270B0 /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3711C6E86B600F270B0 /* UpdateManager.m */; };
@@ -188,6 +189,8 @@
 		A5257D3E19AC10E3003084C8 /* Checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Checker.h; sourceTree = "<group>"; };
 		A5257D3F19AC10E3003084C8 /* Checker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Checker.m; sourceTree = "<group>"; };
 		A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		A52820941DEB8750000B8EAA /* EtreCheckWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckWindow.h; sourceTree = "<group>"; };
+		A52820951DEB8750000B8EAA /* EtreCheckWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckWindow.m; sourceTree = "<group>"; };
 		A52986A61BB89C160040C63D /* HiddenAppsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiddenAppsCollector.h; sourceTree = "<group>"; };
 		A52986A71BB89C160040C63D /* HiddenAppsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HiddenAppsCollector.m; sourceTree = "<group>"; };
 		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
@@ -584,6 +587,8 @@
 				A51BD1481A7D776A000AAABA /* Managers */,
 				A55BC17F15BF987D00D42EF1 /* AppDelegate.h */,
 				A55BC18015BF987D00D42EF1 /* AppDelegate.m */,
+				A52820941DEB8750000B8EAA /* EtreCheckWindow.h */,
+				A52820951DEB8750000B8EAA /* EtreCheckWindow.m */,
 				A55BC18215BF987D00D42EF1 /* MainMenu.xib */,
 				A55BC17415BF987D00D42EF1 /* Supporting Files */,
 			);
@@ -737,6 +742,7 @@
 				A5B659231A16D57800476A76 /* DiagnosticEvent.m in Sources */,
 				A53EA3771C6FCF0200F270B0 /* NSDate+Etresoft.m in Sources */,
 				A5E33C3F184CEBDF00ED59A0 /* ByteCountFormatter.m in Sources */,
+				A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */,
 				A5C292F519A2214E00464E86 /* VideoCollector.m in Sources */,
 				A5C292EF19A039E700464E86 /* UserLaunchAgentsCollector.m in Sources */,
 				A55BC17A15BF987D00D42EF1 /* main.m in Sources */,
