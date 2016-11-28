@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2012-2014. All rights reserved.
+ ** Copyright (c) 2016. All rights reserved.
  **********************************************************************/
 
 #import <Cocoa/Cocoa.h>
