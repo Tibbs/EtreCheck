@@ -513,8 +513,7 @@
   NSString * modificationDateString = @"";
   
   if([path length] > 0)
-    if([[NSFileManager defaultManager] fileExistsAtPath: path])
-      modificationDateString = [self modificationDateString: path];
+    modificationDateString = [self modificationDateString: path];
     
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
@@ -584,10 +583,17 @@
   {
   NSRange appRange = [path rangeOfString: @".app/Contents/MacOS/"];
   
+  if(appRange.location == NSNotFound)
+    appRange = [path rangeOfString: @".app/Contents/Library/LoginItems/"];
+
   if(appRange.location != NSNotFound)
+    {
     path = [path substringToIndex: appRange.location + 4];
 
-  return [Utilities modificationDate: path];
+    return [Utilities modificationDate: path];
+    }
+    
+  return nil;
   }
 
 // Parse a key/value from a login item result.
