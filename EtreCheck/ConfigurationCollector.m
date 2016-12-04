@@ -280,8 +280,12 @@
     [NSString
       stringWithContentsOfFile:
         @"/etc/hosts" encoding: NSUTF8StringEncoding error: nil];
+        //@"/Users/jdaniel/Downloads/hosts.wrong.txt" encoding: NSUTF8StringEncoding error: nil];
   
   NSArray * lines = [hosts componentsSeparatedByString: @"\n"];
+  
+  int localhostCount = 0;
+  int broadcasthostCount = 0;
   
   for(NSString * line in lines)
     {
@@ -300,13 +304,25 @@
       continue;
       
     if([hostname isEqualToString: @"localhost"])
+      {
+      ++localhostCount;
       continue;
-
+      }
+      
     if([hostname isEqualToString: @"broadcasthost"])
+      {
+      ++broadcasthostCount;
       continue;
-            
+      }
+      
     ++count;
     }
+    
+  if(localhostCount != 2)
+    *corrupt = YES;
+    
+  if(broadcasthostCount != 1)
+    *corrupt = YES;
     
   return count;
   }
