@@ -31,6 +31,7 @@
 #import "SubProcess.h"
 #import "CURLRequest.h"
 #import "XMLBuilder.h"
+#import "EtreCheckWindow.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -248,6 +249,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the application.
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
   {
+  self.window.status = kSetup;
+  
   [self checkForUpdates];
   
   [self setupStartMessage];
@@ -760,6 +763,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Collect the user message.
 - (void) collectUserParameters
   {
+  self.window.status = kIntroduction;
+
   [[NSUserDefaults standardUserDefaults]
     removeObjectForKey: @"dontshowusermessage"];
 
@@ -1076,6 +1081,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     ^{
       [self collectInfo];
     });
+    
+  self.window.status = kRunning;
   }
 
 // Start the progress timer.
@@ -1820,6 +1827,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.dockProgress removeFromSuperview];
   [[[NSApplication sharedApplication] dockTile] display];
 
+  self.window.status = kReportTransition;
+
   NSData * rtfData =
     [self.log
       RTFFromRange: NSMakeRange(0, [self.log length])
@@ -1860,8 +1869,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(frame.size.height < 512)
     {
-    frame.size.height += 256;
-    frame.origin.y -= 128;
+    frame.size.height += (kHeightOffset * 2);
+    frame.origin.y -= kHeightOffset;
     }
     
   double duration = [window animationResizeTime: frame];
@@ -1895,6 +1904,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     scrollRangeToVisible: NSMakeRange([self.log length] - 2, 1)];
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
   
+  self.window.status = kReport;
+
   // Beg for money.
   [self checkForDonation];
   }
@@ -2356,8 +2367,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else
     {
-    [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
-    [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+    [item setLabel: NSLocalizedString(@"Copy Report", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Copy Report", nil)];
     [item setView: self.clipboardCopyToolbarItemView];
     item.control = self.clipboardCopyButton;
     }
@@ -2539,7 +2550,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
    
    NSSharingService * customService =
      [[[NSSharingService alloc]
-       initWithTitle: NSLocalizedString(@"Copy to clipboard", NULL)
+       initWithTitle: NSLocalizedString(@"Copy Report", NULL)
        image: [NSImage imageNamed: @"Copy"]
        alternateImage: nil
        handler:

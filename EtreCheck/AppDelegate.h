@@ -14,6 +14,7 @@
 @class UnknownFilesManager;
 @class UpdateManager;
 @class PreferencesManager;
+@class EtreCheckWindow;
 
 @interface AppDelegate : NSObject
   <NSApplicationDelegate,
@@ -23,7 +24,7 @@
   NSSharingServicePickerDelegate,
   NSUserInterfaceValidations>
   {
-  NSWindow * window;
+  EtreCheckWindow * window;
   NSMenuItem * myCloseMenuItem;
   NSWindow * myLogWindow;
   NSView * myAnimationView;
@@ -102,7 +103,7 @@
   BOOL myDonationVerified;
   }
   
-@property (retain) IBOutlet NSWindow * window;
+@property (retain) IBOutlet EtreCheckWindow * window;
 @property (retain) IBOutlet NSMenuItem * closeMenuItem;
 @property (retain) IBOutlet NSWindow * logWindow;
 @property (retain) IBOutlet NSView * animationView;

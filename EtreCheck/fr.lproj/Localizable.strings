@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   EtreCheck
 
@@ -113,7 +113,7 @@
 "Update Failed" = "Échec de la mise à jour";
 "updatefailed" = "La mise à jour d’EtreCheck a échoué. Vous pouvez continuer, mais une nouvelle version d’EtreCheck est peut—être disponible.";
 "Invalid" = "Non-valide";
-"EtreCheck Report" = "Rapport d’EtreCheck"; 
+"EtreCheck Report" = "Rapport d’EtreCheck";
 "Continue" = "Continuer";
 " - Corrupt!" = " - Corrompu !";
 " - Count: %d" = " - Nombre : %d";
@@ -241,7 +241,7 @@
 "Print Report" = "Imprimer le rapport";
 "Share Report" = "Partager le rapport";
 "Copy" = "Copier";
-"Copy to clipboard" = "Copier dans le presse-papiers";
+"Copy Report" = "Copier le rapport";
 "Checking for hidden apps" = "Vérification des apps cachées";
 "Check Apple signatures: Enabled\n" = "Vérifiez les signatures numériques des tâches d’Apple: Activé\n";
 "Ignore known Apple failures: Disabled\n" = "Ignorez les échecs d’Apple connus : Désactivé\n";

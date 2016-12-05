@@ -135,8 +135,28 @@
     // All the beta testers have an El Capitan file.
     // I guess this is permanently broken.
     if([[Model model] ignoreKnownAppleFailures])
-      if((version >= kYosemite) && (attributes.fileSize == 2299))
-        expectedSize = 2299;
+      if((version >= kYosemite) && (attributes.fileSize != expectedSize))
+        switch(version)
+          {
+          case kYosemite:
+            if(attributes.fileSize == 1242)
+              expectedSize = attributes.fileSize;
+            break;
+          case kElCapitan:
+            if(attributes.fileSize == 1242)
+              expectedSize = attributes.fileSize;
+            else if(attributes.fileSize == 1275)
+              expectedSize = attributes.fileSize;
+            break;
+          case kSierra:
+            if(attributes.fileSize == 1242)
+              expectedSize = attributes.fileSize;
+            else if(attributes.fileSize == 1275)
+              expectedSize = attributes.fileSize;
+            else if(attributes.fileSize == 2299)
+              expectedSize = attributes.fileSize;
+            break;
+          }
 
     if(attributes.fileSize != expectedSize)
       {
@@ -321,8 +341,12 @@
     [NSString
       stringWithContentsOfFile:
         @"/etc/hosts" encoding: NSUTF8StringEncoding error: nil];
+        //@"/Users/jdaniel/Downloads/hosts.wrong.txt" encoding: NSUTF8StringEncoding error: nil];
   
   NSArray * lines = [hosts componentsSeparatedByString: @"\n"];
+  
+  int localhostCount = 0;
+  int broadcasthostCount = 0;
   
   for(NSString * line in lines)
     {
@@ -341,13 +365,25 @@
       continue;
       
     if([hostname isEqualToString: @"localhost"])
+      {
+      ++localhostCount;
       continue;
-
+      }
+      
     if([hostname isEqualToString: @"broadcasthost"])
+      {
+      ++broadcasthostCount;
       continue;
-            
+      }
+      
     ++count;
     }
+    
+  if(localhostCount != 2)
+    *corrupt = YES;
+    
+  if(broadcasthostCount != 1)
+    *corrupt = YES;
     
   return count;
   }
