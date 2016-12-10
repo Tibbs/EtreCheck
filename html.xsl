@@ -1,11 +1,25 @@
 <?xml version="1.0"?>
 <xsl:stylesheet 
-  version='1.0' xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  version='1.0' 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:my="http://etresoft.com/etrecheck/byte_units"
+  exclude-result-prefixes="my">
 
   <!-- Convert an EtreCheck report into an HTML representation. -->
   <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
   <xsl:output method="html" indent="yes" encoding="UTF-8"/> 
  
+  <my:units>
+    <unit>B</unit>
+    <unit>KB</unit>
+    <unit>MB</unit>
+    <unit>GB</unit>
+    <unit>TB</unit>
+    <unit>PB</unit>
+  </my:units>
+  
+  <xsl:variable name="byte_units" select="document('')//my:units/unit"/>
+
   <xsl:template match='/etrecheck'>
   
     <html>
@@ -63,20 +77,30 @@
   <!-- EtreCheck stats. -->
   <xsl:template match="stats">
   
-    <div class="header">
-      <p>EtreCheck version: <xsl:value-of select="/etrecheck/@version"/> (<xsl:value-of select="/etrecheck/@build"/>)</p>
-      <!-- TODO: Add date formatter. -->
-      <p>Report generated <xsl:value-of select="date"/></p>
-      <p>Download EtreCheck from https://etrecheck.com</p>
-      <p>Runtime <xsl:value-of select="runtime"/></p>
-      <p>Performance: <xsl:value-of select="performance"/></p>
-    </div>
+    <dl class="header">
+      <dt>EtreCheck version:</dt>
+      <dd>
+        <xsl:value-of 
+          select="/etrecheck/@version"/>
+        <xsl:text> (</xsl:text>
+        <xsl:value-of select="/etrecheck/@build"/>
+        <xsl:text>)</xsl:text>
+      </dd>
+      <dt>Report generated:</dt>
+      <dd><xsl:value-of select="date"/></dd>
+      <dt>Download EtreCheck from</dt>
+      <dd>https://etrecheck.com</dd>
+      <dt>Runtime:</dt>
+      <dd><xsl:value-of select="runtime"/></dd>
+      <dt>Performance:</dt>
+      <dd><xsl:value-of select="performance"/></dd>
+    </dl>
     
-    <!-- TODO: This needs to go when the links to. -->
-    <div class="instructions">
-      <p>Click the [Support] links for help with non-Apple products.</p>
-      <p>Click the [Details] links for more information about that line.</p>
-    </div>
+    <!-- TODO: This needs to go when the links do. -->
+    <ul class="instructions">
+      <li>Click the [Support] links for help with non-Apple products.</li>
+      <li>Click the [Details] links for more information about that line.</li>
+    </ul>
 
   </xsl:template>
 
@@ -164,11 +188,11 @@
       <h1>Video Information:</h1>
       <ul>
         <xsl:for-each select="videocard">
-          <p><xsl:value-of select="name"/></p>
+          <li>
+            <p><xsl:value-of select="name"/></p>
         
-          <!-- Report displays, if any. -->
-          <xsl:if test="count(display) &gt; 0">
-            <li>
+            <!-- Report displays, if any. -->
+            <xsl:if test="count(display) &gt; 0">
               <ul>
                 <xsl:for-each select="display">
                   <li>
@@ -178,8 +202,8 @@
                   </li>
                 </xsl:for-each>
               </ul>
-            </li>
-          </xsl:if>
+            </xsl:if>
+          </li>
         </xsl:for-each>
       </ul> 
     </div>
@@ -218,22 +242,23 @@
       <ul>
         <xsl:for-each select="controller">
           <xsl:for-each select="disk">
-            <p>
-              <xsl:value-of select="name"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="device"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="concat('(', size, ')')"/>
-              <xsl:value-of select="concat('(', type, ' - TRIM: ', TRIM,')')"/>
-              <xsl:if test="SMART != 'Verified'">
-                <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
-              </xsl:if>
-            </p>
+            <li>
+              <p>
+                <xsl:value-of select="name"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="device"/>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="size"/>
+                <xsl:text>)</xsl:text>
+                <xsl:value-of select="concat('(', type, ' - TRIM: ', TRIM,')')"/>
+                <xsl:if test="SMART != 'Verified'">
+                  <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
+                </xsl:if>
+              </p>
           
-            <!-- Report volumes if there are any. -->
-            <!-- TODO: Split this up. -->
-            <xsl:if test="count(volumes/volume) &gt; 0">
-              <li>
+              <!-- Report volumes if there are any. -->
+              <!-- TODO: Split this up. -->
+              <xsl:if test="count(volumes/volume) &gt; 0">
                 <ul>
                   <xsl:for-each select="volumes/volume">
                     <li>
@@ -254,9 +279,15 @@
                         <xsl:value-of select="concat('[', type, ']')"/>
                       </xsl:if>
                       <xsl:text>: </xsl:text>
-                      <xsl:value-of select="size"/>
+                      <xsl:call-template name="bytes">
+                        <xsl:with-param name="value" select="size"/>
+                      </xsl:call-template>
                       <xsl:if test="free_space">
-                        <xsl:value-of select="concat(' (', free_space, ' free)')"/>
+                        <xsl:text> (</xsl:text>
+                        <xsl:call-template name="bytes">
+                          <xsl:with-param name="value" select="free_space"/>
+                        </xsl:call-template>
+                        <xsl:text> free)</xsl:text>
                       </xsl:if>
                       <xsl:if test="@encrypted = 'yes'">
                         <br/>
@@ -283,8 +314,8 @@
                     </li>
                   </xsl:for-each>
                 </ul>
-              </li>
-            </xsl:if>
+              </xsl:if>
+            </li>
           </xsl:for-each>
         </xsl:for-each>
       </ul>   
@@ -579,7 +610,7 @@
           <xsl:text>] </xsl:text>
           <xsl:value-of select="name"/>
           <xsl:text> (</xsl:text>
-          <xsl:value-of select="date"/>
+          <xsl:apply-templates select="date"/>
           <xsl:text>)</xsl:text>
         </li>
       </xsl:for-each>
@@ -728,7 +759,7 @@
       <xsl:text>: </xsl:text>
       <xsl:value-of select="version"/>
       <xsl:text> (</xsl:text>
-      <xsl:value-of select="date"/>
+      <xsl:apply-templates select="date"/>
       <xsl:text>)</xsl:text>
     </li>
         
@@ -761,7 +792,7 @@
       <xsl:text> - </xsl:text>
       <xsl:value-of select="url"/>
       <xsl:text> (</xsl:text>
-      <xsl:value-of select="date"/>
+      <xsl:apply-templates select="date"/>
       <xsl:text>)</xsl:text>
     </li>
         
@@ -792,7 +823,7 @@
       <xsl:text> - </xsl:text>
       <xsl:value-of select="bundleid"/>
       <xsl:text> - </xsl:text>
-      <xsl:value-of select="date"/>
+      <xsl:apply-templates select="date"/>
       <xsl:text>)</xsl:text>
     </li>
         
@@ -824,7 +855,7 @@
       <xsl:text>] </xsl:text>
       <xsl:value-of select="name"/>
       <xsl:text> - </xsl:text>
-      <xsl:value-of select="date"/>
+      <xsl:apply-templates select="date"/>
       <xsl:text>)</xsl:text>
     </li>
         
@@ -869,9 +900,17 @@
       <dt></dt>
       <dd><xsl:value-of select="name"/></dd>
       <dt>Disk size:</dt>
-      <dd><xsl:value-of select="size"/></dd>
+      <dd>
+        <xsl:call-template name="bytes">
+          <xsl:with-param name="value" select="size"/>
+        </xsl:call-template>
+      </dd>
       <dt>Space required:</dt>
-      <dd><xsl:value-of select="sizerequired"/></dd>
+      <dd>
+        <xsl:call-template name="bytes">
+          <xsl:with-param name="value" select="sizerequired"/>
+        </xsl:call-template>
+      </dd>
     </dl>
       
   </xsl:template>
@@ -884,7 +923,11 @@
       <dd><xsl:value-of select="name"/></dd>
       <dd><xsl:value-of select="concat('[', type, ']')"/></dd>
       <dt>Total size:</dt>
-      <dd><xsl:value-of select="size"/></dd>
+      <dd>
+        <xsl:call-template name="bytes">
+          <xsl:with-param name="value" select="size"/>
+        </xsl:call-template>
+      </dd>
       <dt>Total number of backups:</dt>
       <dd><xsl:value-of select="backupcount"/></dd>
       <dt>Oldest backup:</dt>
@@ -910,7 +953,13 @@
         <table>
           <xsl:for-each select="process">
             <tr>
-              <td><xsl:value-of select="cpu"/>%</td>
+              <td>
+                <xsl:call-template name="percentage">
+                  <xsl:with-param name="value">
+                    <xsl:value-of select="cpu"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </td>
               <td>
                 <xsl:value-of select="name"/>
                 <xsl:if test="count &gt; 1">
@@ -937,7 +986,11 @@
         <table>
           <xsl:for-each select="process">
             <tr>
-              <td><xsl:value-of select="memory"/></td>
+              <td>
+                <xsl:call-template name="bytes">
+                  <xsl:with-param name="value" select="memory"/>
+                </xsl:call-template>
+              </td>
               <td>
                 <xsl:value-of select="name"/>
                 <xsl:if test="count &gt; 1">
@@ -962,23 +1015,43 @@
       <h1>Virtual Memory Information:</h1>
       <table>
         <tr>
-          <td><xsl:value-of select="availableram"/></td>
+          <td>
+            <xsl:call-template name="bytes">
+              <xsl:with-param name="value" select="availableram"/>
+            </xsl:call-template>
+          </td>
           <td>Available RAM</td>
         </tr>
         <tr>
-          <td><xsl:value-of select="freeram"/></td>
+          <td>
+            <xsl:call-template name="bytes">
+              <xsl:with-param name="value" select="freeram"/>
+            </xsl:call-template>
+          </td>
           <td>Free RAM</td>
         </tr>
         <tr>
-          <td><xsl:value-of select="usedram"/></td>
+          <td>
+            <xsl:call-template name="bytes">
+              <xsl:with-param name="value" select="usedram"/>
+            </xsl:call-template>
+          </td>
           <td>Used RAM</td>
         </tr>
         <tr>
-          <td><xsl:value-of select="filecache"/></td>
+          <td>
+            <xsl:call-template name="bytes">
+              <xsl:with-param name="value" select="filecache"/>
+            </xsl:call-template>
+          </td>
           <td>Cached files</td>
         </tr>
         <tr>
-          <td><xsl:value-of select="swapused"/></td>
+          <td>
+            <xsl:call-template name="bytes">
+              <xsl:with-param name="value" select="swapused"/>
+            </xsl:call-template>
+          </td>
           <td>Swap Used:</td>
         </tr>
       </table>
@@ -1014,6 +1087,36 @@
       
   </xsl:template>
 
+  <xsl:template name="percentage">
+    <xsl:param name="value"/>
+    
+    <xsl:value-of select="format-number($value div 100.0, '#.#%')"/>
+  </xsl:template>
+
+  <xsl:template name="bytes">
+    <xsl:param name="value"/>
+    <xsl:param name="units">1</xsl:param>
+    
+    <xsl:choose>
+      <xsl:when test="$value &gt; 1024">
+        <xsl:call-template name="bytes">
+          <xsl:with-param name="value" select="$value div 1024"/>
+          <xsl:with-param name="units" select="$units + 1"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="format-number($value, '#.##')"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$byte_units[position() = $units]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>
+
+  <xsl:template match="date|*[@date]">
+    <xsl:value-of select="substring-before(., ' ')"/>
+  </xsl:template>
+  
   <xsl:template match="*">
   
     <div class="section">

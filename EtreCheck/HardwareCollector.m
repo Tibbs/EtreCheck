@@ -199,7 +199,11 @@
   [subProcess release];
   
   if([code length] > 0)
+    {
     self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
+
+    [self.XML addElement: @"cpu_brand" value: code];
+    }
   }
 
 // Collect hardware information.
