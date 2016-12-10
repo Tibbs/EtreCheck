@@ -551,62 +551,84 @@ AttemptToCloseWrongElement *
   [self endElement: name];
   }
 
-// Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name value: (NSString *) value
+// Add an element, value, and type.
+- (void) addElement: (NSString *) name
+  value: (NSString *) value type: (NSString *) type
   {
   [self startElement: name];
   
   if([value length] > 0)
+    {
+    [self addAttribute: @"type" value: type];
     [self addString: value];
+    }
     
   [self endElement: name];
   }
 
 // Add an element and value with a convenience function.
+- (void) addElement: (NSString *) name value: (NSString *) value
+  {
+  [self addElement: name value: value type: @"string"];
+  }
+
+// Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name number: (NSNumber *) value
   {
-  if(value == nil)
-    [self addElement: name value: nil];
-  else
-    [self addElement: name value: [value stringValue]];
+  [self addElement: name value: [value stringValue] type: @"number"];
   }
 
 // Add an element to the current element.
 - (void) addElement: (NSString *) name date: (NSDate *) date
   {
-  [self addElement: name value: [self.dateFormatter stringFromDate: date]];
+  [self
+    addElement: name
+    value: [self.dateFormatter stringFromDate: date]
+    type: @"date"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name boolValue: (BOOL) value;
   {
-  [self addElement: name value: value ? @"true" : @"false"];
+  [self
+    addElement: name value: value ? @"true" : @"false" type: @"boolean"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name intValue: (int) value
   {
-  [self addElement: name value: [NSString stringWithFormat: @"%d", value]];
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%d", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name longValue: (long) value
   {
-  [self addElement: name value: [NSString stringWithFormat: @"%ld", value]];
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ld", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name longlongValue: (long long) value
   {
   [self
-    addElement: name value: [NSString stringWithFormat: @"%lld", value]];
+    addElement: name
+    value: [NSString stringWithFormat: @"%lld", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name
   unsignedIntValue: (unsigned int) value
   {
-  [self addElement: name value: [NSString stringWithFormat: @"%ud", value]];
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%ud", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
@@ -614,7 +636,9 @@ AttemptToCloseWrongElement *
   unsignedLongValue: (unsigned long) value
   {
   [self
-    addElement: name value: [NSString stringWithFormat: @"%lud", value]];
+    addElement: name
+    value: [NSString stringWithFormat: @"%lud", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
@@ -622,7 +646,9 @@ AttemptToCloseWrongElement *
   unsignedLonglongValue: (unsigned long long) value
   {
   [self
-    addElement: name value: [NSString stringWithFormat: @"%llu", value]];
+    addElement: name
+    value: [NSString stringWithFormat: @"%llu", value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
@@ -630,7 +656,8 @@ AttemptToCloseWrongElement *
   {
   [self
     addElement: name
-    value: [NSString stringWithFormat: @"%ld", (long)value]];
+    value: [NSString stringWithFormat: @"%ld", (long)value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
@@ -639,19 +666,26 @@ AttemptToCloseWrongElement *
   {
   [self
     addElement: name
-    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]];
+    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]
+    type: @"integer"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name float: (float) value
   {
-  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%f", value]
+    type: @"real"];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name doubleValue: (double) value
   {
-  [self addElement: name value: [NSString stringWithFormat: @"%f", value]];
+  [self
+    addElement: name
+    value: [NSString stringWithFormat: @"%f", value]
+    type: @"real"];
   }
 
 // Add an element and value with a convenience function.
