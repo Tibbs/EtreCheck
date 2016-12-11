@@ -91,7 +91,7 @@
   NSMutableAttributedString * string = [NSMutableAttributedString new];
     
   NSString * url =
-    [NSString stringWithFormat: @"etrechecklite://help/%@", self.name];
+    [NSString stringWithFormat: @"etrecheck://help/%@", self.name];
 
   [string
     appendString: NSLocalizedString(self.title, NULL)
@@ -400,7 +400,7 @@
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
         NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : @"etrechecklite://adware/remove"
+        NSLinkAttributeName : @"etrecheck://adware/remove"
       }];
     
   return [urlString autorelease];
@@ -420,7 +420,7 @@
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
         NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : @"etrechecklite://unknownfiles/check"
+        NSLinkAttributeName : @"etrecheck://unknownfiles/check"
       }];
     
   return [urlString autorelease];
