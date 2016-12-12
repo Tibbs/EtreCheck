@@ -704,7 +704,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"    %@    ", status]
+          @"    [%@]    ", status]
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:

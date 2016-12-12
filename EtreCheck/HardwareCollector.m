@@ -261,6 +261,8 @@
   NSString * serial = [info objectForKey: @"serial_number"];
   int physicalRAM = [self parseMemory: memory];
 
+  [self.XML addElement: @"name" value: name];
+
   [[Model model] setModel: model];
   [self.XML addElement: @"model" value: model];
   

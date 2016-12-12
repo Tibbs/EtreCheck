@@ -1309,7 +1309,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       addElement: @"severity_explanation" value: @"poorperformance"];
 
     [[[Model model] XML]
-      addElement: @"performance" value: @"poorperformance"];
+      addElement: @"performance" value: @"poor"];
 
     [self.log
       appendString: NSLocalizedString(@"poorperformance", NULL)
@@ -1326,8 +1326,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       addElement: @"severity_explanation"
       value: @"belowaverageperformance"];
 
-    [[[Model model] XML]
-      addElement: @"performance" value: @"belowaverageperformance"];
+    [[[Model model] XML] addElement: @"performance" value: @"belowaverage"];
 
     [self.log
       appendString: NSLocalizedString(@"belowaverageperformance", NULL)
@@ -1339,8 +1338,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 3))
     {
-    [[[Model model] XML]
-      addElement: @"performance" value: @"goodperformance"];
+    [[[Model model] XML] addElement: @"performance" value: @"good"];
 
     [self.log
       appendString: NSLocalizedString(@"goodperformance", NULL)
@@ -1351,8 +1349,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else
     {
-    [[[Model model] XML]
-      addElement: @"performance" value: @"excellentperformance"];
+    [[[Model model] XML] addElement: @"performance" value: @"excellent"];
 
     [self.log
       appendString: NSLocalizedString(@"excellentperformance", NULL)
@@ -2076,6 +2073,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   [pasteboard setData: rtfData forType: NSPasteboardTypeRTF];
   
+  NSData * htmlData =
+    [self.log
+      dataFromRange: NSMakeRange(0, [self.log length])
+      documentAttributes:
+        @
+          {
+          NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType
+          }
+      error: & error];
+
+  [pasteboard setData: htmlData forType: NSPasteboardTypeHTML];
+
   /* Poison pill
   
   [self.logView
