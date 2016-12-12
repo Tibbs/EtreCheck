@@ -75,8 +75,6 @@
       [self.result appendString: @"\n"];
       }
     }
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect all extensions on the system.

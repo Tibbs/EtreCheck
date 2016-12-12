@@ -68,6 +68,8 @@
   
   [self performCollection];
   
+  dispatch_semaphore_signal(self.complete);
+  
   [self.XML endElement: self.name];
   }
 

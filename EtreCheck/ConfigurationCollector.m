@@ -87,8 +87,6 @@
       
     [self.result appendCR];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Find modified configuration files.

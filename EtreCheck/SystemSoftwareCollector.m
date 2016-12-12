@@ -71,8 +71,6 @@
   [self loadAppleLaunchd];
   
   [subProcess release];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Load Apple software.

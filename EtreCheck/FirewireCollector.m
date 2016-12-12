@@ -63,8 +63,6 @@
     }
     
   [subProcess release];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print a single Firewire device.

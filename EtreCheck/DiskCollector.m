@@ -69,8 +69,6 @@
     
   if(!dataFound)
     [self.result appendCR];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Perform the collection for old Serial ATA controllers.

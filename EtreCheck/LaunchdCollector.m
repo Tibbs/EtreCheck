@@ -137,8 +137,6 @@
   
   // Add expected items that ship with the OS.
   [self setupExpectedItems];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect launchd status for a particular domain.

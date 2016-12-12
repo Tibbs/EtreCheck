@@ -41,8 +41,6 @@
   
   [self printStartupItems];
   [self printMachInitFiles];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print Startup Items.

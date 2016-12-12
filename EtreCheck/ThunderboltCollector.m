@@ -65,8 +65,6 @@
     }
     
   [subProcess release];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect information about a single Thunderbolt device.

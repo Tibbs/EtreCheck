@@ -57,8 +57,6 @@
     }
     
   [subProcess release];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print video information.

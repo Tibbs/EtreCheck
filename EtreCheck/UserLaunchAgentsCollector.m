@@ -68,8 +68,6 @@
       
     [subProcess release];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Should I hide Apple tasks?

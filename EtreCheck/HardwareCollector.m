@@ -98,8 +98,6 @@
   [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect bluetooth information.

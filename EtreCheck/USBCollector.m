@@ -66,8 +66,6 @@
     [self.result appendCR];
     
   [subProcess release];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print a single USB device.
