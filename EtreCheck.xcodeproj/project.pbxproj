@@ -30,7 +30,6 @@
 		A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3C19AC0AA3003084C8 /* Utilities.m */; };
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
 		A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A52820951DEB8750000B8EAA /* EtreCheckWindow.m */; };
-		A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A52986A71BB89C160040C63D /* HiddenAppsCollector.m */; };
 		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
 		A53EA3771C6FCF0200F270B0 /* NSDate+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3761C6FCF0200F270B0 /* NSDate+Etresoft.m */; };
 		A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5409E9A186F271500B1727E /* SystemConfiguration.framework */; };
@@ -186,8 +185,6 @@
 		A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		A52820941DEB8750000B8EAA /* EtreCheckWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckWindow.h; sourceTree = "<group>"; };
 		A52820951DEB8750000B8EAA /* EtreCheckWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckWindow.m; sourceTree = "<group>"; };
-		A52986A61BB89C160040C63D /* HiddenAppsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiddenAppsCollector.h; sourceTree = "<group>"; };
-		A52986A71BB89C160040C63D /* HiddenAppsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HiddenAppsCollector.m; sourceTree = "<group>"; };
 		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLBuilder.h; sourceTree = "<group>"; };

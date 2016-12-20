@@ -643,13 +643,12 @@
   
   if([self.unloadedExtensions objectForKey: label])
     {
-    status = NSLocalizedString(@"not loaded", NULL);
+    status = @"notloaded";
     color = [[Utilities shared] gray];
     }
     
   NSAttributedString * result =
     [self formatBundle: label status: status color: color];
-
 
   if([self.unloadedExtensions objectForKey: label])
     if([self ignoreUnloadedExtension: label])
@@ -702,7 +701,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"    [%@]    ", status]
+          @"    [%@]    ", NSLocalizedString(status, NULL)]
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:

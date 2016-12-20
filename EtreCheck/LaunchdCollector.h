@@ -36,6 +36,7 @@
 #define kStatusInvalid @"invalid"
 #define kStatusKilled @"killed"
 #define kStatusDuplicate @"duplicate"
+#define kKnownFailure @"knownfailure"
 
 @interface LaunchdCollector : Collector
   {

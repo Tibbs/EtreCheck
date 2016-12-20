@@ -9,6 +9,9 @@
   <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
   <xsl:output method="html" indent="yes" encoding="UTF-8"/> 
  
+  <xsl:param name="showapple" select="false()"/>
+  <xsl:param name="hideknownapplefailures" select="false()"/>
+  
   <my:units>
     <unit>B</unit>
     <unit>KB</unit>
@@ -37,6 +40,15 @@
   
   <xsl:variable name="batteryhealth" select="document('')//my:batteryhealth"/>
 
+  <my:status>
+    <status status="notloaded">Not loaded</status>
+    <status status="loaded">Loaded</status>
+    <status status="running">Running</status> 
+    <status status="failed">Failed</status>
+  </my:status>
+
+  <xsl:variable name="statusattributes" select="document('')//my:status"/>
+  
   <xsl:template match='/etrecheck'>
   
     <html>
@@ -328,13 +340,7 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Battery: </xsl:text>
-    </p>
-    <p>
-      <xsl:call-template name="style">
-        <xsl:with-param name="indent">20</xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>Health = </xsl:text>
+      <xsl:text>Battery: Health = </xsl:text>
       <xsl:value-of select="$batteryhealth/value[@key = $health]"/>
       <xsl:text> - Cycle count = </xsl:text>
       <xsl:value-of select="batteryinformation/battery/cyclecount"/>
@@ -355,8 +361,10 @@
           <xsl:with-param name="indent">10</xsl:with-param>
         </xsl:call-template>
         <xsl:value-of select="name"/>
-        <xsl:text> - VRAM: </xsl:text>
-        <xsl:value-of select="VRAM"/>
+        <xsl:if test="VRAM">
+          <xsl:text> - VRAM: </xsl:text>
+          <xsl:value-of select="VRAM"/>
+        </xsl:if>
       </p>
     
       <!-- Report displays, if any. -->
@@ -422,6 +430,20 @@
           <xsl:if test="SMART != 'Verified'">
             <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
           </xsl:if>
+        </p>
+        <p>
+          <xsl:call-template name="style">
+            <xsl:with-param name="indent">10</xsl:with-param>
+          </xsl:call-template>
+          <strong>
+            <a>
+              <xsl:attribute name="href">
+                <xsl:text>etrecheck://smart/</xsl:text>
+                <xsl:value-of select="device"/>
+              </xsl:attribute>
+              <xsl:text>[Show SMART report]</xsl:text>
+            </a>
+          </strong>
         </p>
         <xsl:if test="count(volumes/volume) &gt; 0">
           <xsl:for-each select="volumes/volume">
@@ -502,33 +524,39 @@
   <!-- USB information. -->
   <xsl:template match="usb">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">USB Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="device">
+      <xsl:call-template name="header">
+        <xsl:with-param name="text">USB Information:</xsl:with-param>
+      </xsl:call-template>
     
-    <!-- TODO: Fix this in EtreCheck and here. -->
-  
+      <xsl:apply-templates select="device" mode="device"/>
+    </xsl:if>
+      
   </xsl:template>
   
   <!-- Firewire information. -->
   <xsl:template match="firewire">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Firewire Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="device">
+      <xsl:call-template name="header">
+        <xsl:with-param name="text">Firewire Information:</xsl:with-param>
+      </xsl:call-template>
     
-    <!-- TODO: Fix this in EtreCheck and here. -->
+      <xsl:apply-templates select="device" mode="device"/>
+    </xsl:if>
   
   </xsl:template>
   
   <!-- Thunderbolt information. -->
   <xsl:template match="thunderbolt">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Thunderbolt Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="device">
+      <xsl:call-template name="header">
+        <xsl:with-param name="text">Thunderbolt Information:</xsl:with-param>
+      </xsl:call-template>
     
-    <!-- TODO: Fix this in EtreCheck and here. -->
+      <xsl:apply-templates select="device" mode="device"/>
+    </xsl:if>
   
   </xsl:template>
   
@@ -719,26 +747,101 @@
   <!-- Print system launch agents. -->
   <xsl:template match="systemlaunchagents">
   
-    <xsl:if test="count(tasks[@analysis != 'apple']) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">System Launch Agents:</xsl:with-param>
-      </xsl:call-template>
-      
-      <xsl:apply-templates select="tasks"/>
-    </xsl:if>
-        
+    <xsl:call-template name="header">
+      <xsl:with-param name="text">System Launch Agents:</xsl:with-param>
+    </xsl:call-template>
+    
+    <xsl:apply-templates select="tasks" mode="apple"/>
+    
   </xsl:template>
-
+  
   <!-- Print system launch daemons. -->
   <xsl:template match="systemlaunchdaemons">
   
-    <xsl:if test="count(tasks[@analysis != 'apple']) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">System Launch Daemons:</xsl:with-param>
-      </xsl:call-template>
-      
-      <xsl:apply-templates select="tasks"/>
-    </xsl:if>
+    <xsl:call-template name="header">
+      <xsl:with-param name="text">System Launch Daemons:</xsl:with-param>
+    </xsl:call-template>
+    
+    <xsl:apply-templates select="tasks" mode="apple"/>
+        
+  </xsl:template>
+
+  <!-- Print Apple tasks. -->
+  <xsl:template match="tasks" mode="apple">
+  
+    <xsl:choose>
+      <xsl:when test="$showapple">
+        <xsl:apply-templates select="task"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$showapple or count(task[@analysis != 'apple']) &gt; 0 or count(task[@status = 'failed']) &gt; 0">
+          <xsl:apply-templates select="task[@analysis != 'apple']"/>
+          
+          <xsl:choose>
+            <xsl:when test="$hideknownapplefailures">
+              <xsl:apply-templates select="task[@analysis = 'apple' and @status = 'failed' and @knownfailure != true()]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="task[@analysis = 'apple' and @status = 'failed']"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+                  
+        <xsl:variable name="notloaded">
+          <xsl:value-of select="count(task[@analysis = 'apple' and @status = 'notloaded'])"/>
+        </xsl:variable>
+        <xsl:variable name="loaded">
+          <xsl:value-of select="count(task[@analysis = 'apple' and @status = 'loaded'])"/>
+        </xsl:variable>
+        <xsl:variable name="running">
+          <xsl:value-of select="count(task[@analysis = 'apple' and @status = 'running'])"/>
+        </xsl:variable>
+
+        <xsl:if test="$notloaded &gt; 0">
+          <p>
+            <xsl:call-template name="style">
+              <xsl:with-param name="indent">10</xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="$statusattributes/status[@status = 'notloaded']/@status"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$notloaded"/>
+            <xsl:text> Apple task</xsl:text>
+            <xsl:if test="$notloaded &gt; 1">
+              <xsl:text>s</xsl:text>
+            </xsl:if>
+          </p>
+        </xsl:if>
+        <xsl:if test="$loaded &gt; 0">
+          <p>
+            <xsl:call-template name="style">
+              <xsl:with-param name="indent">10</xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="$statusattributes/status[@status = 'loaded']/@status"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$loaded"/>
+            <xsl:text> Apple task</xsl:text>
+            <xsl:if test="$loaded &gt; 1">
+              <xsl:text>s</xsl:text>
+            </xsl:if>
+          </p>
+        </xsl:if>
+        <xsl:if test="$running &gt; 0">
+          <p>
+            <xsl:call-template name="style">
+              <xsl:with-param name="indent">10</xsl:with-param>
+            </xsl:call-template>
+            <xsl:apply-templates select="@status"/>
+            <xsl:apply-templates select="$statusattributes/status[@status = 'running']/@status"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$running"/>
+            <xsl:text> Apple task</xsl:text>
+            <xsl:if test="$running &gt; 1">
+              <xsl:text>s</xsl:text>
+            </xsl:if>
+          </p>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
         
   </xsl:template>
 
@@ -781,23 +884,30 @@
         
   </xsl:template>
 
-  <!-- Print a launchd task. -->
+  <!-- Print launchd tasks. -->
   <xsl:template match="tasks">
   
     <xsl:for-each select="task">
-      <p>
-        <xsl:call-template name="style">
-          <xsl:with-param name="indent">10</xsl:with-param>
-        </xsl:call-template>
-        <xsl:text></xsl:text>
-        <xsl:apply-templates select="@status"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="name"/>
-        <xsl:text> (</xsl:text>
-        <xsl:apply-templates select="date"/>
-        <xsl:text>)</xsl:text>
-      </p>
+      <xsl:apply-templates select="."/>
     </xsl:for-each>
+        
+  </xsl:template>
+
+  <!-- Print a launchd task. -->
+  <xsl:template match="task">
+  
+    <p>
+      <xsl:call-template name="style">
+        <xsl:with-param name="indent">10</xsl:with-param>
+      </xsl:call-template>
+      <xsl:text></xsl:text>
+      <xsl:apply-templates select="@status"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text> (</xsl:text>
+      <xsl:apply-templates select="date"/>
+      <xsl:text>)</xsl:text>
+    </p>
         
   </xsl:template>
 
@@ -1353,6 +1463,34 @@
     <xsl:value-of select="substring-before(., ' ')"/>
   </xsl:template>
   
+  <xsl:template match="device" mode="device">
+    <xsl:param name="indent">10</xsl:param>
+
+    <p>
+      <xsl:call-template name="style">
+        <xsl:with-param name="indent">
+          <xsl:value-of select="$indent"/>
+        </xsl:with-param>
+      </xsl:call-template>
+      
+      <xsl:if test="manufacturer">
+        <xsl:value-of select="manufacturer"/>
+        <xsl:text> </xsl:text>
+      </xsl:if>
+      
+      <xsl:if test="name">
+        <xsl:value-of select="name"/>
+      </xsl:if>
+    </p>
+
+    <xsl:apply-templates select="device" mode="device">
+      <xsl:with-param name="indent">
+        <xsl:value-of select="$indent + 10"/>
+      </xsl:with-param>
+    </xsl:apply-templates>
+    
+  </xsl:template>
+  
   <xsl:template name="style">
     <xsl:param name="indent">0</xsl:param>
   
@@ -1387,6 +1525,8 @@
   
   <xsl:template match="status|@status">
   
+    <xsl:variable name="status" select="."/>
+    
     <span>
       <xsl:attribute name="style">
         <xsl:choose>
@@ -1406,18 +1546,10 @@
       </xsl:attribute>
    
       <xsl:text>[</xsl:text>
-      <xsl:value-of select="."/>
+      <xsl:value-of select="$statusattributes/status[@status = $status]"/>
       <xsl:text>]</xsl:text>
     </span>
     
   </xsl:template>
   
-  <xsl:template match="*">
-  
-    <div class="section">
-      <h1><xsl:value-of select="name(.)"/></h1>
-    </div>
-    
-  </xsl:template>
-
 </xsl:stylesheet>

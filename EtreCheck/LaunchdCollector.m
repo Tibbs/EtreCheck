@@ -779,6 +779,12 @@
   if(modificationDate)
     [info setObject: modificationDate forKey: kModificationDate];
 
+  bool knownFailure =
+    [self.knownAppleFailures containsObject: [path lastPathComponent]];
+  
+  if(knownFailure)
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kKnownFailure];
+
   [self emitPropertyListXML: path info: info];
   
   // Apples file get special treatment.
@@ -818,8 +824,6 @@
 - (bool) formatApplePropertyListFile: (NSString *) path
   info: (NSMutableDictionary *) info
   {
-  NSString * file = [path lastPathComponent];
-
   // Does the user want to hide Apple tasks? 3rd party and user domains
   // always return NO.
   bool hideAppleTasks = [self hideAppleTasks];
@@ -833,8 +837,10 @@
   // I may want to report a failure.
   if([[info objectForKey: kStatus] isEqualToString: kStatusFailed])
     {
+    bool knownFailure = [[info objectForKey: kKnownFailure] boolValue];
+    
     // Should I ignore this failure?
-    if([self ignoreFailuresOnFile: file])
+    if(knownFailure || [[Model model] ignoreKnownAppleFailures])
       {
       [status setObject: ignore forKey: kIgnored];
 
@@ -962,15 +968,6 @@
     self.AppleRunningCount = self.AppleRunningCount + 1;
   else if([[info objectForKey: kStatus] isEqualToString: kStatusKilled])
     self.AppleKilledCount = self.AppleKilledCount + 1;
-  }
-
-// Should I ignore failures?
-- (bool) ignoreFailuresOnFile: (NSString *) file
-  {
-  if(![[Model model] ignoreKnownAppleFailures])
-    return NO;
-    
-  return [self.knownAppleFailures containsObject: file];
   }
 
 // Does this file have the expected signature?
@@ -1341,9 +1338,12 @@
   NSString * status = [info objectForKey: kStatus];
   
   if([status length] == 0)
-    status = @"not loaded";
+    status = @"notloaded";
     
   [self.XML addAttribute: @"status" value: status];
+  
+  if([[info objectForKey: kKnownFailure] boolValue])
+    [self.XML addAttribute: @"knownfailure" boolValue: YES];
 
   NSString * signature = [info objectForKey: kSignature];
 
