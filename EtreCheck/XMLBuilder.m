@@ -559,8 +559,8 @@ AttemptToCloseWrongElement *
   
   if([value length] > 0)
     {
-    if(![name isEqualToString: type])
-      [self addAttribute: @"type" value: type];
+    //if(![name isEqualToString: type])
+    //  [self addAttribute: @"type" value: type];
     
     [self addString: value];
     }

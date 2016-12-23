@@ -65,7 +65,8 @@ GatekeeperSetting;
     
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation" value: @"gatekeeperrequireslion"];
+      addAttribute: @"severity_explanation"
+      value: @"gatekeeperrequireslion"];
 
     return;
     }
@@ -186,7 +187,7 @@ GatekeeperSetting;
     case kDisabled:
       [self.XML addAttribute: @"severity" value: @"critical"];
       [self.XML
-        addElement: @"severity_explanation" value: @"gatekeeperdisabled"];
+        addAttribute: @"severity_explanation" value: @"gatekeeperdisabled"];
       [self.XML addString: @"anywhere"];
       [self.result
         appendString:
@@ -203,7 +204,7 @@ GatekeeperSetting;
     default:
       [self.XML addAttribute: @"severity" value: @"critical"];
       [self.XML
-        addElement: @"severity_explanation" value: @"gatekeeperunknown"];
+        addAttribute: @"severity_explanation" value: @"gatekeeperunknown"];
       [self.XML addString: @"unknown"];
       [self.result
         appendString:

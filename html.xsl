@@ -9,9 +9,15 @@
   <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
   <xsl:output method="html" indent="yes" encoding="UTF-8"/> 
  
+  <!-- Show Apple tasks that are normally hidden? Or just show counts? -->
+  
+  <!-- Hide known Apple failures? -->
   <xsl:param name="showapple" select="false()"/>
   <xsl:param name="hideknownapplefailures" select="false()"/>
   
+  <!-- TODO: Move all of these into a language-specific XML file. -->
+  
+  <!-- Disk and memory sizes. -->
   <my:units>
     <unit>B</unit>
     <unit>KB</unit>
@@ -23,6 +29,7 @@
   
   <xsl:variable name="byte_units" select="document('')//my:units/unit"/>
 
+  <!-- Performance values. -->
   <my:performance>
     <value key="poor">Poor</value>
     <value key="belowaverage">Below Average</value>
@@ -32,6 +39,7 @@
   
   <xsl:variable name="performance" select="document('')//my:performance"/>
 
+  <!-- Battery health values. -->
   <my:batteryhealth>
     <value key="Good">Normal</value>
     <value key="Fair">Replace Soon</value>
@@ -40,6 +48,7 @@
   
   <xsl:variable name="batteryhealth" select="document('')//my:batteryhealth"/>
 
+  <!-- Task status. -->
   <my:status>
     <status status="notloaded">Not loaded</status>
     <status status="loaded">Loaded</status>
@@ -49,6 +58,43 @@
 
   <xsl:variable name="statusattributes" select="document('')//my:status"/>
   
+  <!-- Severity explanations. -->
+  <my:severity_explanation>
+    <status status="poorperformance">Performance very poor - EtreCheck report time greater than 10 minutes</status>
+    <status status="belowaverageperformance">Performance below average - Etrecheck report time greater than 5 minutes</status>
+    <status status="internaltaskerrors">Some internal EtreCheck tasks failed to complete</status> 
+    <status status="wrongsize">File has an invalid size</status>
+    <status status="unexpectedfile">File is not expected to exist</status>
+    <status status="sipdisabled">System Integrity Protection is disabled</status>
+    <status status="hostscountover10">Hosts file has more than 10 items</status>
+    <status status="hostsfilecorrupt">Hosts file appears to be corrupt</status>
+    <status status="highcpuusage">Unusually high CPU usage</status>
+    <status status="diagnoticreport_standardpermissions">EtreCheck cannot access diagnostic reports when run as a standard user</status>
+    <status status="selftestfail">Self-test failed</status>
+    <status status="smartfailure">SMART Disk check failure</status>
+    <status status="encryptionfailed">FileVault disk encryption failed</status>
+    <status status="diskfailure">Disk drive appears to be failing</status>
+    <status status="lowdiskspace">Free disk space is low</status>
+    <status status="gatekeeperrequireslion">EtreCheck requires MacOS X 10.7 “Lion” or later to check Gatekeeper status</status>
+    <status status="gatekeeperdisabled">Gatekeeper is disabled</status>
+    <status status="gatekeeperunknown">EtreCheck failed to determine Gatekeeper status</status>
+    <status status="insufficientram">System has run out of RAM</status>
+    <status status="batteryneedsreplacing">Battery needs to be replaced</status>
+    <status status="invalidbatteryserialnumber">Invalid battery serial number - dangerous counterfeit or “grey market” battery</status>
+    <status status="machinitdeprecated">Mach init items are deprecated</status>
+    <status status="loginhookdeprecated">Login hooks are deprecated</status>
+    <status status="loginitemtrashed">Login item found in the trash</status>
+    <status status="highmemoryusage">Unusually high memory usage</status>
+    <status status="adware">This item is known adware</status>
+    <status status="outdatedstartupitemsdeprecated">Startup items are obsolete and will not function in OS X 10.10 “Yosemite” or later</status>
+    <status status="systemfilesnotbeingbackedup">System files are not being backed up</status>
+    <status status="autobackupturnedoff">Time Machine is turned off</status>
+    <status status="timemachinedestinationtoosmall">Time Machine destination drive is too small</status>
+    <status status="executablemissing">Executable file is missing</status>
+  </my:severity_explanation>
+
+  <xsl:variable name="severity_explanation" select="document('')//my:severity_explanation"/>
+
   <xsl:template match='/etrecheck'>
   
     <html>
@@ -123,7 +169,7 @@
       <xsl:call-template name="style"/>
       <strong>
         <xsl:text>Report generated: </xsl:text>
-        <xsl:value-of select="date"/>
+        <xsl:apply-templates select="date" mode="full"/>
       </strong>
     </p>
     <p>
@@ -143,6 +189,7 @@
       <xsl:call-template name="style"/>
       <strong>
         <xsl:text>Performance: </xsl:text>
+        <!-- TODO: Flag poor performance. -->
         <xsl:value-of select="$performance/value[@key = $performancekey]"/>
       </strong>
     </p>
@@ -908,6 +955,18 @@
       <xsl:apply-templates select="date"/>
       <xsl:text>)</xsl:text>
     </p>
+    
+    <xsl:if test="@analysis = 'executablemissing'">
+      <p>
+        <xsl:call-template name="style">
+          <xsl:with-param name="indent">20</xsl:with-param>
+          <xsl:with-param name="color">red</xsl:with-param>          
+          <xsl:with-param name="style">bold</xsl:with-param>          
+        </xsl:call-template>
+        <xsl:text>Executable not found! - </xsl:text>
+        <xsl:value-of select="executable"/>
+      </p>
+    </xsl:if>
         
   </xsl:template>
 
@@ -1412,14 +1471,35 @@
   <!-- Print diagnostics information. -->
   <xsl:template match="diagnostics">
   
-    <xsl:if test="count(diagnostic) &gt; 0">
+    <xsl:if test="count(event) &gt; 0">
       <xsl:call-template name="header">
         <xsl:with-param name="text">Diagnostics Information:</xsl:with-param>
       </xsl:call-template>
+
+      <table>
+        <xsl:call-template name="tablestyle"/>
+        <xsl:apply-templates select="event"/>
+      </table>
     </xsl:if>
       
   </xsl:template>
 
+  <!-- Print a diagnostics event. -->
+  <xsl:template match="event">
+  
+    <tr>
+      <td>
+        <xsl:call-template name="style"/>
+        <xsl:apply-templates select="date" mode="full"/>
+      </td>
+      <td>
+        <xsl:call-template name="style"/>
+        <xsl:apply-templates select="name"/>
+      </td>
+    </tr>
+    
+  </xsl:template>
+  
   <!-- Print a EtreCheck deleted files. -->
   <xsl:template match="etrecheckdeletedfiles">
   
@@ -1463,6 +1543,10 @@
     <xsl:value-of select="substring-before(., ' ')"/>
   </xsl:template>
   
+  <xsl:template match="date|*[@date]" mode="full">
+    <xsl:value-of select="substring-before(., ' -')"/>
+  </xsl:template>
+
   <xsl:template match="device" mode="device">
     <xsl:param name="indent">10</xsl:param>
 
@@ -1493,15 +1577,33 @@
   
   <xsl:template name="style">
     <xsl:param name="indent">0</xsl:param>
+    <xsl:param name="color"/>
+    <xsl:param name="style"/>
   
     <xsl:attribute name="style">
+    
       <xsl:if test="$indent &gt; 0">
         <xsl:text>text-indent: </xsl:text>
         <xsl:value-of select="$indent"/>
         <xsl:text>px;</xsl:text>
       </xsl:if>
       
+      <xsl:if test="$color">
+        <xsl:text>color: </xsl:text>
+        <xsl:value-of select="$color"/>
+        <xsl:text>;</xsl:text>
+      </xsl:if>
+      
+      <xsl:if test="$style = 'bold'">
+        <xsl:text>font-weight: bold;</xsl:text>
+      </xsl:if>
+
+      <xsl:if test="$style = 'italic'">
+        <xsl:text>font-style: italic;</xsl:text>
+      </xsl:if>
+
       <xsl:text>font-size: 12px; font-family: Helvetica, Arial, sans-serif; margin:0;</xsl:text>
+      
     </xsl:attribute>
 
   </xsl:template>

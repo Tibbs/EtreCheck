@@ -1350,7 +1350,11 @@
   if([signature isEqualToString: kShell])
     [self.XML addAttribute: @"analysis" value: signature];
   else if([signature isEqualToString: kExecutableMissing])
+    {
     [self.XML addAttribute: @"analysis" value: signature];
+    [self.XML
+      addAttribute: @"severity_explanation" value: @"executablemissing"];
+    }
   else
     [self.XML addAttribute: @"signature" value: signature];
     

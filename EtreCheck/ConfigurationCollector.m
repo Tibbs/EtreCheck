@@ -496,7 +496,7 @@
       {
       status = @"count > 10";
       [self.XML
-        addAttribute: @"severity_explanation" value: @"countover10"];
+        addAttribute: @"severity_explanation" value: @"hostscountover10"];
       }
     else if(corrupt)
       {

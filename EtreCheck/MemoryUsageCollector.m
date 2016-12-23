@@ -136,7 +136,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation" value: @"highmemoryusage"];
+      addAttribute: @"severity_explanation" value: @"highmemoryusage"];
     }
     
   [self.XML

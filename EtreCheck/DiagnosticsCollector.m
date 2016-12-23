@@ -74,7 +74,7 @@
         
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: @"severity_explanation"
+        addAttribute: @"severity_explanation"
         value: @"diagnoticreport_standardpermissions"];
       }
     
@@ -472,7 +472,7 @@
         }];
     
     [self.XML addAttribute: @"severity" value: @"critical"];
-    [self.XML addElement: @"severity_explanation" value: @"selftestfail"];
+    [self.XML addAttribute: @"severity_explanation" value: @"selftestfail"];
     }
   else
     [self.result

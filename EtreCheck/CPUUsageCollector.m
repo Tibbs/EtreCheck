@@ -113,7 +113,8 @@
     if(cpu > 50.0)
       {
       [self.XML addAttribute: @"severity" value: @"warning"];
-      [self.XML addElement: @"severity_explanation" value: @"highcpuusage"];
+      [self.XML
+        addAttribute: @"severity_explanation" value: @"highcpuusage"];
       }
       
     [self.XML

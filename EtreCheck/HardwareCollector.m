@@ -568,7 +568,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"critical"];
     [self.XML
-      addElement: @"severity_explanation" value: @"insufficientram"];
+      addAttribute: @"severity_explanation" value: @"insufficientram"];
     
     [self.result
       appendString:
@@ -949,11 +949,12 @@
       
       if(needsReplacing)
         [self.XML
-          addAttribute: @"severity_explanation" value: @"needsreplacing"];
+          addAttribute: @"severity_explanation"
+          value: @"batteryneedsreplacing"];
       else
         [self.XML
           addAttribute: @"severity_explanation"
-          value: @"invalidserialnumber"];
+          value: @"invalidbatteryserialnumber"];
       }
       
     [self.XML endElement: @"battery"];

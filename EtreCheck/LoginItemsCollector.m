@@ -64,14 +64,14 @@
     {
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation" value: @"machinitdeprecated"];
+      addAttribute: @"severity_explanation" value: @"machinitdeprecated"];
     }
     
   if(loginHookCount > 0)
     {
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation" value: @"loginhookdeprecated"];
+      addAttribute: @"severity_explanation" value: @"loginhookdeprecated"];
     }
 
   for(NSDictionary * loginItem in self.loginItems)
@@ -540,7 +540,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"warning"];
     [self.XML
-      addElement: @"severity_explanation" value: @"loginitemtrashed"];
+      addAttribute: @"severity_explanation" value: @"loginitemtrashed"];
     highlight = YES;
     }
     

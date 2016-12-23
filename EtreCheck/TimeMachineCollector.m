@@ -480,7 +480,7 @@
       {
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: @"severity_explanation"
+        addAttribute: @"severity_explanation"
         value: @"systemfilesnotbeingbackedup"];
 
       [self.result
@@ -545,7 +545,8 @@
       {
       [self.XML addAttribute: @"severity" value: @"warning"];
       [self.XML
-        addElement: @"severity_explanation" value: @"autobackupturnedoff"];
+        addAttribute: @"severity_explanation"
+        value: @"autobackupturnedoff"];
 
       [self.result
         appendString:
@@ -660,7 +661,7 @@
     {
     [self.XML addAttribute: @"severity" value: @"serious"];
     [self.XML
-      addElement: @"severity_explanation"
+      addAttribute: @"severity_explanation"
       value: @"timemachinedestinationtoosmall"];
     }
     
