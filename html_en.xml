@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<strings>
+
+  <!-- Disk and memory sizes. -->
+  <byte_units>
+    <byte_unit>B</byte_unit>
+    <byte_unit>KB</byte_unit>
+    <byte_unit>MB</byte_unit>
+    <byte_unit>GB</byte_unit>
+    <byte_unit>TB</byte_unit>
+    <byte_unit>PB</byte_unit>
+  </byte_units>
+  
+  <!-- Performance values. -->
+  <performance_rating>
+    <value key="poor">Poor</value>
+    <value key="belowaverage">Below Average</value>
+    <value key="good">Good</value>
+    <value key="excellent">Excellent</value>
+  </performance_rating>
+  
+  <!-- Battery health values. -->
+  <batteryhealth>
+    <value key="Good">Normal</value>
+    <value key="Fair">Replace Soon</value>
+    <value key="Poor">Replace Now</value>
+  </batteryhealth>
+  
+  <!-- Task status. -->
+  <status>
+    <value key="notloaded">Not loaded</value>
+    <value key="loaded">Loaded</value>
+    <value key="running">Running</value> 
+    <value key="failed">Failed</value>
+  </status>
+
+  <!-- Severity explanations. -->
+  <severity_explanation>
+    <value key="poorperformance">Performance very poor - EtreCheck report time greater than 10 minutes</value>
+    <value key="belowaverageperformance">Performance below average - Etrecheck report time greater than 5 minutes</value>
+    <value key="internaltaskerrors">Some internal EtreCheck tasks failed to complete</value> 
+    <value key="wrongsize">File has an invalid size</value>
+    <value key="unexpectedfile">File is not expected to exist</value>
+    <value key="sipdisabled">System Integrity Protection is disabled</value>
+    <value key="hostscountover10">Hosts file has more than 10 items</value>
+    <value key="hostsfilecorrupt">Hosts file appears to be corrupt</value>
+    <value key="highcpuusage">Unusually high CPU usage</value>
+    <value key="diagnoticreport_standardpermissions">EtreCheck cannot access diagnostic reports when run as a standard user</value>
+    <value key="selftestfail">Self-test failed</value>
+    <value key="smartfailure">SMART Disk check failure</value>
+    <value key="encryptionfailed">FileVault disk encryption failed</value>
+    <value key="diskfailure">Disk drive appears to be failing</value>
+    <value key="lowdiskspace">Free disk space is low</value>
+    <value key="gatekeeperrequireslion">EtreCheck requires MacOS X 10.7 “Lion” or later to check Gatekeeper status</value>
+    <value key="gatekeeperdisabled">Gatekeeper is disabled</value>
+    <value key="gatekeeperunknown">EtreCheck failed to determine Gatekeeper status</value>
+    <value key="insufficientram">System has run out of RAM</value>
+    <value key="batteryneedsreplacing">Battery needs to be replaced</value>
+    <value key="invalidbatteryserialnumber">Invalid battery serial number - dangerous counterfeit or “grey market” battery</value>
+    <value key="machinitdeprecated">Mach init items are deprecated</value>
+    <value key="loginhookdeprecated">Login hooks are deprecated</value>
+    <value key="loginitemtrashed">Login item found in the trash</value>
+    <value key="highmemoryusage">Unusually high memory usage</value>
+    <value key="adware">This item is known adware</value>
+    <value key="outdatedstartupitemsdeprecated">Startup items are obsolete and will not function in OS X 10.10 “Yosemite” or later</value>
+    <value key="systemfilesnotbeingbackedup">System files are not being backed up</value>
+    <value key="autobackupturnedoff">Time Machine is turned off</value>
+    <value key="timemachinedestinationtoosmall">Time Machine destination drive is too small</value>
+    <value key="executablemissing">Executable file is missing</value>
+  </severity_explanation>
+
+  <headers>
+    <value key="hardware">Hardware Information:</value>
+    <value key="video">Video Information:</value>
+    <value key="systemsoftware">System Software:</value>
+    <value key="disk">Disk Information:</value>
+    <value key="usb">USB Information:</value>
+    <value key="firewire">Firewire Information:</value>
+    <value key="thunderbolt">Thunderbolt Information:</value>
+    <value key="configurationfiles">Configuration Files:</value>
+    <value key="gatekeeper">Gatekeeper:</value>
+    <value key="adware">Adware:</value>
+    <value key="unknownfiles">Unknown Files:</value>
+    <value key="kernelextensions">Kernel Extensions:</value>
+    <value key="startupitems">Startup Items:</value>
+    <value key="systemlaunchagents">System Launch Agents:</value>
+    <value key="systemlaunchdaemons">System Launch Daemons:</value>
+    <value key="launchagents">Launch Agents:</value>
+    <value key="launchdaemons">Launch Daemons:</value>
+    <value key="userlaunchagents">User Launch Agents:</value>
+    <value key="loginitems">User Login Items:</value>
+    <value key="internetplugins">Internet Plug-ins:</value>
+    <value key="userinternetplugins">User Internet Plug-ins:</value>
+    <value key="safariextensions">Safari Extensions:</value>
+    <value key="audioplugins">Audio Plug-ins:</value>
+    <value key="useraudioplugins">User Audio Plug-ins:</value>
+    <value key="itunesplugins">iTunes Plug-ins:</value>
+    <value key="useritunesplugins">User iTunes Plug-ins:</value>
+    <value key="preferencepanes">Preference Panes:</value>
+    <value key="fonts">Fonts:</value>
+    <value key="timemachine">Time Machine:</value>
+    <value key="cpu">Top Processes by CPU:</value>
+    <value key="memory">Top Processes by Memory:</value>
+    <value key="vm">Virtual Memory Information:</value>
+    <value key="diagnostics">Diagnostics Information:</value>
+    <value key="etrecheckdeletedfiles">EtreCheck Deleted Files:</value>
+  </headers>
+
+  <title>EtreCheck Report</title>
+  <version>EtreCheck version:</version>
+  <report_generated>Report generated:</report_generated>
+  <download>Download EtreCheck from</download>
+  <runtime>Runtime:</runtime>
+  <performance>Performance:</performance>
+  <support_help>
+    Click the <span style="color: blue;"><strong>[Support]</strong></span> links for help with non-Apple products.
+  </support_help>
+  <details_help>
+    Click the <span style="color: blue;"><strong>[Details]</strong></span> links for more information about that line.
+  </details_help>
+  <problem>Problem:</problem>
+  <description>Description:</description>
+  <technical_specifications>[Technical Specifications]</technical_specifications>
+  <user_guide>[User Guide]</user_guide>
+  <warranty_service>[Warranty &amp; Service]</warranty_service>
+  <model>model:</model>
+  <handoff>Handoff:</handoff>
+  <instant_hotspot>Instant Hotspot:</instant_hotspot>
+  <low_energy>Low energy:</low_energy>
+  <wireless>Wireless:</wireless>
+  <battery>Battery:</battery>
+  <health>Health</health>
+  <cycle_count>cycle count</cycle_count>
+  <time_since_boot>Time since boot:</time_since_boot>
+  <show_smart_report>[Show SMART report]</show_smart_report>
+  <not_mounted>&lt;not mounted&gt;</not_mounted>
+  <free>free</free>
+  <encrypted>Encrypted</encrypted>
+  <unlocked>Unlocked</unlocked>
+  <locked>Locked</locked>
+  <core_storage>Core Storage:</core_storage>
+  <file_size>File size</file_size>
+  <but_expected>but expected</but_expected>
+  <file_exists>File exists but not expected</file_exists>
+  <sip>SIP:</sip>
+  <hosts_file>/etc/hosts file:</hosts_file>
+  <apple_task>Apple task</apple_task>
+  <executable_not_found>Executable not found!</executable_not_found>
+  <skip_system_files>Skip System Files:</skip_system_files>
+  <mobile_backups>Mobile backups:</mobile_backups>
+  <auto_backup>Auto backup:</auto_backup>
+  <volumes_backed_up>Volumes being backed up:</volumes_backed_up>
+  <destinations>Destinations:</destinations>
+  <disk_size>Disk size:</disk_size>
+  <space_required>Space required:</space_required>
+  <last_used>(Last used)</last_used>
+  <total_size>Total size:</total_size>
+  <number_of_backups>Total number of backups:</number_of_backups>
+  <oldest_backup>Oldest backup:</oldest_backup>
+  <last_backup>Last backup:</last_backup>
+  <size_of_backup_disk>Size of backup disk:</size_of_backup_disk>
+  <available_ram>Available RAM</available_ram>
+  <free_ram>Free RAM</free_ram>
+  <used_ram>Used RAM</used_ram>
+  <cached_files>Cached files</cached_files>
+  <swap_used>Swap Used</swap_used>
+
+</strings>

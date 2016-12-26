@@ -14,93 +14,27 @@
   <!-- Hide known Apple failures? -->
   <xsl:param name="showapple" select="false()"/>
   <xsl:param name="hideknownapplefailures" select="false()"/>
+  <xsl:param name="language">fr</xsl:param>
   
-  <!-- TODO: Move all of these into a language-specific XML file. -->
+  <!-- Language-specific data. -->
+  <xsl:variable name="strings" select="document(concat('html_', $language, '.xml'))/strings"/>
   
-  <!-- Disk and memory sizes. -->
-  <my:units>
-    <unit>B</unit>
-    <unit>KB</unit>
-    <unit>MB</unit>
-    <unit>GB</unit>
-    <unit>TB</unit>
-    <unit>PB</unit>
-  </my:units>
-  
-  <xsl:variable name="byte_units" select="document('')//my:units/unit"/>
+  <xsl:variable name="byte_units" select="$strings/byte_units/byte_unit"/>
 
-  <!-- Performance values. -->
-  <my:performance>
-    <value key="poor">Poor</value>
-    <value key="belowaverage">Below Average</value>
-    <value key="good">Good</value>
-    <value key="excellent">Excellent</value>
-  </my:performance>
+  <xsl:variable name="performance" select="$strings/performance_rating"/>
+
+  <xsl:variable name="batteryhealth" select="$strings/batteryhealth"/>
+
+  <xsl:variable name="statusattributes" select="$strings/status"/>
   
-  <xsl:variable name="performance" select="document('')//my:performance"/>
-
-  <!-- Battery health values. -->
-  <my:batteryhealth>
-    <value key="Good">Normal</value>
-    <value key="Fair">Replace Soon</value>
-    <value key="Poor">Replace Now</value>
-  </my:batteryhealth>
-  
-  <xsl:variable name="batteryhealth" select="document('')//my:batteryhealth"/>
-
-  <!-- Task status. -->
-  <my:status>
-    <status status="notloaded">Not loaded</status>
-    <status status="loaded">Loaded</status>
-    <status status="running">Running</status> 
-    <status status="failed">Failed</status>
-  </my:status>
-
-  <xsl:variable name="statusattributes" select="document('')//my:status"/>
-  
-  <!-- Severity explanations. -->
-  <my:severity_explanation>
-    <status status="poorperformance">Performance very poor - EtreCheck report time greater than 10 minutes</status>
-    <status status="belowaverageperformance">Performance below average - Etrecheck report time greater than 5 minutes</status>
-    <status status="internaltaskerrors">Some internal EtreCheck tasks failed to complete</status> 
-    <status status="wrongsize">File has an invalid size</status>
-    <status status="unexpectedfile">File is not expected to exist</status>
-    <status status="sipdisabled">System Integrity Protection is disabled</status>
-    <status status="hostscountover10">Hosts file has more than 10 items</status>
-    <status status="hostsfilecorrupt">Hosts file appears to be corrupt</status>
-    <status status="highcpuusage">Unusually high CPU usage</status>
-    <status status="diagnoticreport_standardpermissions">EtreCheck cannot access diagnostic reports when run as a standard user</status>
-    <status status="selftestfail">Self-test failed</status>
-    <status status="smartfailure">SMART Disk check failure</status>
-    <status status="encryptionfailed">FileVault disk encryption failed</status>
-    <status status="diskfailure">Disk drive appears to be failing</status>
-    <status status="lowdiskspace">Free disk space is low</status>
-    <status status="gatekeeperrequireslion">EtreCheck requires MacOS X 10.7 “Lion” or later to check Gatekeeper status</status>
-    <status status="gatekeeperdisabled">Gatekeeper is disabled</status>
-    <status status="gatekeeperunknown">EtreCheck failed to determine Gatekeeper status</status>
-    <status status="insufficientram">System has run out of RAM</status>
-    <status status="batteryneedsreplacing">Battery needs to be replaced</status>
-    <status status="invalidbatteryserialnumber">Invalid battery serial number - dangerous counterfeit or “grey market” battery</status>
-    <status status="machinitdeprecated">Mach init items are deprecated</status>
-    <status status="loginhookdeprecated">Login hooks are deprecated</status>
-    <status status="loginitemtrashed">Login item found in the trash</status>
-    <status status="highmemoryusage">Unusually high memory usage</status>
-    <status status="adware">This item is known adware</status>
-    <status status="outdatedstartupitemsdeprecated">Startup items are obsolete and will not function in OS X 10.10 “Yosemite” or later</status>
-    <status status="systemfilesnotbeingbackedup">System files are not being backed up</status>
-    <status status="autobackupturnedoff">Time Machine is turned off</status>
-    <status status="timemachinedestinationtoosmall">Time Machine destination drive is too small</status>
-    <status status="executablemissing">Executable file is missing</status>
-  </my:severity_explanation>
-
-  <xsl:variable name="severity_explanation" select="document('')//my:severity_explanation"/>
+  <xsl:variable name="severity_explanation" select="$strings/severity_explanation"/>
 
   <xsl:template match='/etrecheck'>
   
     <html>
     
       <head>
-        <title>EtreCheck Report</title>
+        <title><xsl:value-of select="$strings/title"/></title>
       </head>
 
       <body>
@@ -157,7 +91,8 @@
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        <xsl:text>EtreCheck version: </xsl:text>
+        <xsl:value-of select="$strings/version"/>
+        <xsl:text> </xsl:text>
         <xsl:value-of 
           select="/etrecheck/@version"/>
         <xsl:text> (</xsl:text>
@@ -168,27 +103,32 @@
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        <xsl:text>Report generated: </xsl:text>
+        <xsl:value-of select="$strings/report_generated"/>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="date" mode="full"/>
       </strong>
     </p>
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        Download EtreCheck from <a href="https://etrecheck.com" target="_blank">https://etrecheck.com</a>
+        <xsl:value-of select="$strings/download"/>
+        <xsl:text> </xsl:text>
+        <a href="https://etrecheck.com" target="_blank">https://etrecheck.com</a>
       </strong>
     </p>
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        <xsl:text>Runtime: </xsl:text>
+        <xsl:value-of select="$strings/runtime"/>
+        <xsl:text> </xsl:text>
         <xsl:value-of select="runtime"/>
       </strong>
     </p>
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        <xsl:text>Performance: </xsl:text>
+        <xsl:value-of select="$strings/performance"/>
+        <xsl:text> </xsl:text>
         <!-- TODO: Flag poor performance. -->
         <xsl:value-of select="$performance/value[@key = $performancekey]"/>
       </strong>
@@ -199,11 +139,11 @@
     <!-- TODO: This needs to go when the links do. -->
     <p>
       <xsl:call-template name="style"/>
-      Click the <span style="color: blue;"><strong>[Support]</strong></span> links for help with non-Apple products.
+      <xsl:copy-of select="$strings/support_help/*|$strings/support_help/text()"/>
     </p>
     <p>
       <xsl:call-template name="style"/>
-      Click the <span style="color: blue;"><strong>[Details]</strong></span> links for more information about that line.
+      <xsl:copy-of select="$strings/details_help/*|$strings/details_help/text()"/>
     </p>
 
     <p/>
@@ -216,7 +156,8 @@
     <p>
       <xsl:call-template name="style"/>
       <strong>
-        <xsl:text>Problem: </xsl:text>
+        <xsl:value-of select="$strings/problem"/>
+        <xsl:text> </xsl:text>
       </strong>
       <xsl:value-of select="problem/type"/>
     </p>
@@ -226,7 +167,8 @@
       <p>
         <xsl:call-template name="style"/>
         <strong>
-          <xsl:text>Description: </xsl:text>
+          <xsl:value-of select="$strings/description"/>
+          <xsl:text> </xsl:text>
         </strong>
       </p>
       <p>
@@ -255,9 +197,7 @@
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Hardware Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <p>
       <xsl:call-template name="style">
@@ -276,7 +216,7 @@
             <xsl:value-of
               select="concat('http://support-sp.apple.com/sp/index?page=cpuspec&amp;cc=',serialcode,'&amp;lang=en')"/>
           </xsl:attribute>
-          <xsl:text>[Technical Specifications]</xsl:text>
+          <xsl:value-of select="$strings/technical_specifications"/>
         </a>
         <xsl:text> - </xsl:text>
         <a target="_blank">
@@ -284,7 +224,7 @@
             <xsl:value-of
               select="concat('http://support-sp.apple.com/sp/index?page=cpuuserguides&amp;cc=',serialcode,'&amp;lang=en')"/>
           </xsl:attribute>
-          <xsl:text>[User Guide]</xsl:text>
+          <xsl:value-of select="$strings/user_guide"/>
         </a>
         <xsl:text> - </xsl:text>
         <a target="_blank">
@@ -292,7 +232,7 @@
             <xsl:value-of
               select="concat('https://support.apple.com/kb/index?page=servicefaq&amp;geo=United_States&amp;product=',$producttype)"/>
           </xsl:attribute>
-          <xsl:text>[Warranty &amp; Service]</xsl:text>
+          <xsl:value-of select="$strings/warranty_service"/>
         </a>
       </strong>
     </p>
@@ -302,7 +242,9 @@
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="name"/>
-      <xsl:text> - model: </xsl:text>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="$strings/model"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="model"/>
     </p>
 
@@ -357,28 +299,32 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Handoff: </xsl:text>
+      <xsl:value-of select="$strings/handoff"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="supportshandoff"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Instant Hotspot: </xsl:text>
+      <xsl:value-of select="$strings/instant_hotspot"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="supportsinstanthotspot"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Low energy: </xsl:text>
+      <xsl:value-of select="$strings/low_energy"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="supportslowenergy"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Wireless: </xsl:text>
+      <xsl:value-of select="$strings/wireless"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="wirelessinterfaces/wirelessinterface/name"/>
       <xsl:text>: </xsl:text>
       <xsl:value-of select="wirelessinterfaces/wirelessinterface/modes"/>
@@ -387,9 +333,14 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Battery: Health = </xsl:text>
+      <xsl:value-of select="$strings/battery"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="$strings/health"/>
+      <xsl:text> = </xsl:text>
       <xsl:value-of select="$batteryhealth/value[@key = $health]"/>
-      <xsl:text> - Cycle count = </xsl:text>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="$strings/cyle_clount"/>
+      <xsl:text> = </xsl:text>
       <xsl:value-of select="batteryinformation/battery/cyclecount"/>
     </p>
       
@@ -398,9 +349,7 @@
   <!-- Video information. -->
   <xsl:template match="video">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Video Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <xsl:for-each select="videocard">
       <p>
@@ -435,16 +384,16 @@
   <xsl:template match="systemsoftware">
   
     <!-- TODO: Flag old OS version. -->
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">System Software:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="version"/>
-      <xsl:text> - Time since boot: </xsl:text>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="$strings/time_since_boot"/>
+      <xsl:text> </xsl:text>
     
       <!-- TODO: This looks like a localization problem. -->
       <xsl:value-of select="humanuptime"/>
@@ -455,9 +404,7 @@
   <!-- Disk information. -->
   <xsl:template match="disk">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Disk Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <xsl:for-each select="controller">
       <xsl:for-each select="disk">
@@ -488,7 +435,7 @@
                 <xsl:text>etrecheck://smart/</xsl:text>
                 <xsl:value-of select="device"/>
               </xsl:attribute>
-              <xsl:text>[Show SMART report]</xsl:text>
+              <xsl:value-of select="$strings/show_smart_report"/>
             </a>
           </strong>
         </p>
@@ -507,7 +454,7 @@
                   <xsl:value-of select="mount_point"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:text>&lt;not mounted&gt;</xsl:text>
+                  <xsl:value-of select="$strings/not_mounted"/>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:text> </xsl:text>
@@ -528,7 +475,9 @@
                   <xsl:with-param name="value" select="free_space"/>
                   <xsl:with-param name="k" select="1000"/>
                 </xsl:call-template>
-                <xsl:text> free)</xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$strings/free"/>
+                <xsl:text>)</xsl:text>
               </xsl:if>
             </p>
             <xsl:if test="@encrypted = 'yes'">
@@ -536,14 +485,17 @@
                 <xsl:call-template name="style">
                   <xsl:with-param name="indent">30</xsl:with-param>
                 </xsl:call-template>
-                <xsl:text>Encrypted </xsl:text>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$strings/encrypted"/>
                 <xsl:value-of select="@encryption_type"/>
                 <xsl:choose>
                   <xsl:when test="@encryption_locked = 'no'">
-                    <xsl:text> Unlocked</xsl:text>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$strings/unlocked"/>
                   </xsl:when>
                   <xsl:when test="@encryption_locked = 'yes'">
-                    <xsl:text> Locked</xsl:text>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$strings/locked"/>
                   </xsl:when>
                 </xsl:choose>
               </p>
@@ -553,7 +505,8 @@
                 <xsl:call-template name="style">
                   <xsl:with-param name="indent">30</xsl:with-param>
                 </xsl:call-template>
-                <xsl:text>Core Storage: </xsl:text>
+                <xsl:value-of select="$strings/core_storage"/>
+                <xsl:text> </xsl:text>
                 <xsl:value-of select="core_storage/name"/>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="core_storage/size"/>
@@ -572,9 +525,7 @@
   <xsl:template match="usb">
   
     <xsl:if test="device">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">USB Information:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
     
       <xsl:apply-templates select="device" mode="device"/>
     </xsl:if>
@@ -585,9 +536,7 @@
   <xsl:template match="firewire">
   
     <xsl:if test="device">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Firewire Information:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
     
       <xsl:apply-templates select="device" mode="device"/>
     </xsl:if>
@@ -598,9 +547,7 @@
   <xsl:template match="thunderbolt">
   
     <xsl:if test="device">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Thunderbolt Information:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
     
       <xsl:apply-templates select="device" mode="device"/>
     </xsl:if>
@@ -611,9 +558,7 @@
   <xsl:template match="configurationfiles">
   
     <xsl:if test="filesizemismatch or unexpectedfile or SIP/value != 'enabled' or hostsfile/status != 'valid'">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Configuration Files:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:for-each select="filesizemismatch">
         <!-- TODO: Flag these. -->
@@ -622,9 +567,13 @@
             <xsl:with-param name="indent">10</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="name"/>
-          <xsl:text>, File size </xsl:text>
+          <xsl:text>, </xsl:text>
+          <xsl:value-of select="$strings/file_size"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="size"/>
-          <xsl:text> but expected </xsl:text>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="$strings/but_expected"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="expectedsize"/>
         </p>
       </xsl:for-each>
@@ -635,7 +584,8 @@
             <xsl:with-param name="indent">10</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="name"/>
-          <xsl:text> - File exists but not expected</xsl:text>
+          <xsl:text> - </xsl:text>
+          <xsl:value-of select="$strings/file_exists"/>
         </p>
       </xsl:for-each>
       <!-- TODO: Flag this. -->
@@ -644,7 +594,8 @@
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
           </xsl:call-template>
-          <xsl:text>SIP: </xsl:text>
+          <xsl:value-of select="$strings/sip"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="SIP/value"/>
         </p>
       </xsl:if>
@@ -653,7 +604,8 @@
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
           </xsl:call-template>
-          <xsl:text>/etc/hosts file: </xsl:text>
+          <xsl:value-of select="$strings/hosts_file"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="hostsfile/status"/>
         </p>
       </xsl:if>
@@ -664,9 +616,7 @@
   <!-- Gatekeeper information. -->
   <xsl:template match="gatekeeper">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Gatekeeper:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
     
     <!-- TODO: Flag this if necessary. -->
     <p>
@@ -682,9 +632,7 @@
   <xsl:template match="adware">
   
     <xsl:if test="adwarepath">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Adware:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:for-each select="adwarepath">
         <!-- TODO: Flag these. -->
@@ -703,9 +651,7 @@
   <xsl:template match="unknownfiles">
   
     <xsl:if test="unknownfile">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Unknown Files:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:for-each select="unknownfile">
         <!-- TODO: Flag these. -->
@@ -730,9 +676,7 @@
   <xsl:template match="kernelextensions">
   
     <xsl:if test="count(bundle//extensions/extension[ignore = 'true']) != count(bundle//extensions/extension)">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Kernel Extensions:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:for-each select="bundle">
         <xsl:if test="count(extensions/extension[ignore = 'true']) != count(extensions/extension)">
@@ -769,9 +713,7 @@
   <xsl:template match="startupitems">
   
     <xsl:if test="count(startupitem) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Startup Items:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:for-each select="startupitem">
         <p>
@@ -794,9 +736,7 @@
   <!-- Print system launch agents. -->
   <xsl:template match="systemlaunchagents">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">System Launch Agents:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
     
     <xsl:apply-templates select="tasks" mode="apple"/>
     
@@ -805,9 +745,7 @@
   <!-- Print system launch daemons. -->
   <xsl:template match="systemlaunchdaemons">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">System Launch Daemons:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
     
     <xsl:apply-templates select="tasks" mode="apple"/>
         
@@ -852,7 +790,8 @@
             <xsl:apply-templates select="$statusattributes/status[@status = 'notloaded']/@status"/>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$notloaded"/>
-            <xsl:text> Apple task</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$strings/apple_task"/>
             <xsl:if test="$notloaded &gt; 1">
               <xsl:text>s</xsl:text>
             </xsl:if>
@@ -866,7 +805,8 @@
             <xsl:apply-templates select="$statusattributes/status[@status = 'loaded']/@status"/>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$loaded"/>
-            <xsl:text> Apple task</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$strings/apple_task"/>
             <xsl:if test="$loaded &gt; 1">
               <xsl:text>s</xsl:text>
             </xsl:if>
@@ -881,7 +821,8 @@
             <xsl:apply-templates select="$statusattributes/status[@status = 'running']/@status"/>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$running"/>
-            <xsl:text> Apple task</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$strings/apple_task"/>
             <xsl:if test="$running &gt; 1">
               <xsl:text>s</xsl:text>
             </xsl:if>
@@ -896,9 +837,7 @@
   <xsl:template match="launchagents">
   
     <xsl:if test="count(tasks) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Launch Agents:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:apply-templates select="tasks"/>
     </xsl:if>
@@ -909,9 +848,7 @@
   <xsl:template match="launchdaemons">
   
     <xsl:if test="count(tasks) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Launch Daemons:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:apply-templates select="tasks"/>
     </xsl:if>
@@ -922,9 +859,7 @@
   <xsl:template match="userlaunchagents">
   
     <xsl:if test="count(tasks) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">User Launch Agents:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:apply-templates select="tasks"/>
     </xsl:if>
@@ -963,7 +898,8 @@
           <xsl:with-param name="color">red</xsl:with-param>          
           <xsl:with-param name="style">bold</xsl:with-param>          
         </xsl:call-template>
-        <xsl:text>Executable not found! - </xsl:text>
+        <xsl:value-of select="$strings/executable_not_found"/>
+        <xsl:text> - </xsl:text>
         <xsl:value-of select="executable"/>
       </p>
     </xsl:if>
@@ -974,9 +910,7 @@
   <xsl:template match="loginitems">
   
     <xsl:if test="count(loginitem) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">User Login Items:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
       
       <xsl:apply-templates select="loginitem"/>
     </xsl:if>
@@ -1005,9 +939,7 @@
   <xsl:template match="internetplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Internet Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1018,9 +950,7 @@
   <xsl:template match="userinternetplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">User Internet Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1031,9 +961,7 @@
   <xsl:template match="audioplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Audio Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1044,9 +972,7 @@
   <xsl:template match="useraudioplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">User Audio Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1057,9 +983,7 @@
   <xsl:template match="itunesplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">iTunes Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1070,9 +994,7 @@
   <xsl:template match="useritunesplugins">
   
     <xsl:if test="count(plugin) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">User iTunes Plug-ins:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="plugin"/>
     </xsl:if>
@@ -1100,9 +1022,7 @@
   <xsl:template match="safariextensions">
   
     <xsl:if test="count(extension) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Safari Extensions:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="extension"/>
     </xsl:if>
@@ -1139,9 +1059,7 @@
   <xsl:template match="preferencepanes">
   
     <xsl:if test="count(preferencepane) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Preference Panes:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="preferencepane"/>
     </xsl:if>
@@ -1170,9 +1088,7 @@
   
     <!-- TODO: This should only be bad fonts. -->
     <xsl:if test="count(fonts) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Fonts:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <xsl:apply-templates select="font"/>
     </xsl:if>
@@ -1200,29 +1116,30 @@
   <!-- Print Time Machine information. -->
   <xsl:template match="timemachine">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Time Machine:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Skip System Files: </xsl:text>
+      <xsl:value-of select="$strings/skip_system_files"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="skipsystemfiles"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Mobile backups: </xsl:text>
+      <xsl:value-of select="$strings/mobile_backups"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="mobilebackups"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Auto backup: </xsl:text>
+      <xsl:value-of select="$strings/auto_backup"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="autobackup"/>
     </p>
     
@@ -1232,7 +1149,8 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Volumes being backed up: </xsl:text>
+      <xsl:value-of select="$strings/volumes_backed_up"/>
+      <xsl:text> </xsl:text>
     </p>
     <xsl:apply-templates select="backedupvolumes/volume" mode="timemachine"/>
     
@@ -1242,7 +1160,8 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Destinations: </xsl:text>
+      <xsl:value-of select="$strings/destinations"/>
+      <xsl:text> </xsl:text>
     </p>
     <xsl:apply-templates select="destinations/destination" mode="timemachine"/>
       
@@ -1256,12 +1175,16 @@
         <xsl:with-param name="indent">20</xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="name"/>
-      <xsl:text>: Disk size: </xsl:text>
+      <xsl:text>: </xsl:text>
+      <xsl:value-of select="$strings/disk_size"/>
+      <xsl:text> </xsl:text>
       <xsl:call-template name="bytes">
         <xsl:with-param name="value" select="size"/>
         <xsl:with-param name="k" select="1000"/>
       </xsl:call-template>
-      <xsl:text> Space required: </xsl:text>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="$strings/space_required"/>
+      <xsl:text> </xsl:text>
       <xsl:call-template name="bytes">
         <xsl:with-param name="value" select="sizerequired"/>
         <xsl:with-param name="k" select="1000"/>
@@ -1283,14 +1206,16 @@
       <xsl:text>]</xsl:text>
       
       <xsl:if test="@lastused">
-        <xsl:text> (Last used)</xsl:text>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$strings/last_used"/>
       </xsl:if>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">30</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Total size: </xsl:text>
+      <xsl:value-of select="$strings/total_size"/>
+      <xsl:text> </xsl:text>
       <xsl:call-template name="bytes">
         <xsl:with-param name="value" select="size"/>
         <xsl:with-param name="k" select="1000"/>
@@ -1300,28 +1225,32 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">30</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Total number of backups: </xsl:text>
+      <xsl:value-of select="$strings/number_of_backups"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="backupcount"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">30</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Oldest backup: </xsl:text>
+      <xsl:value-of select="$strings/oldest_backup"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="oldestbackupdate"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">30</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Last backup: </xsl:text>
+      <xsl:value-of select="$strings/last_backup"/>
+      <xsl:text> </xsl:text>
       <xsl:value-of select="lastbackupdate"/>
     </p>
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">30</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>Size of backup disk: </xsl:text>
+      <xsl:value-of select="$strings/size_of_backup_disk"/>
+      <xsl:text> </xsl:text>
       <!-- TODO: Add backup analysis. -->
     </p>
     
@@ -1333,9 +1262,7 @@
   <xsl:template match="cpu">
   
     <xsl:if test="count(process) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Top Processes by CPU:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <table>
         <xsl:call-template name="tablestyle"/>
@@ -1367,9 +1294,7 @@
   <xsl:template match="memory">
   
     <xsl:if test="count(process) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Top Processes by Memory:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <table>
         <xsl:call-template name="tablestyle"/>
@@ -1398,9 +1323,7 @@
   <!-- Print a virtual memory usage information. -->
   <xsl:template match="vm">
   
-    <xsl:call-template name="header">
-      <xsl:with-param name="text">Virtual Memory Information:</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="header"/>
 
     <table>
       <xsl:call-template name="tablestyle"/>
@@ -1413,7 +1336,7 @@
         </td>
         <td>
           <xsl:call-template name="style"/>
-          Available RAM
+          <xsl:value-of select="$strings/available_ram"/>
         </td>
       </tr>
       <tr>
@@ -1425,8 +1348,8 @@
         </td>
         <td>
           <xsl:call-template name="style"/>
-          Free RAM
-          </td>
+          <xsl:value-of select="$strings/free_ram"/>
+        </td>
       </tr>
       <tr>
         <td>
@@ -1437,7 +1360,7 @@
         </td>
         <td>
           <xsl:call-template name="style"/>
-          Used RAM
+          <xsl:value-of select="$strings/used_ram"/>
         </td>
       </tr>
       <tr>
@@ -1449,7 +1372,7 @@
         </td>
         <td>
           <xsl:call-template name="style"/>
-          Cached files
+          <xsl:value-of select="$strings/cached_files"/>
         </td>
       </tr>
       <tr>
@@ -1461,7 +1384,7 @@
         </td>
         <td>
           <xsl:call-template name="style"/>
-          Swap Used:
+          <xsl:value-of select="$strings/swap_used"/>
         </td>
       </tr>
     </table>
@@ -1472,9 +1395,7 @@
   <xsl:template match="diagnostics">
   
     <xsl:if test="count(event) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">Diagnostics Information:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
 
       <table>
         <xsl:call-template name="tablestyle"/>
@@ -1504,9 +1425,7 @@
   <xsl:template match="etrecheckdeletedfiles">
   
     <xsl:if test="count(deletedfile) &gt; 0">
-      <xsl:call-template name="header">
-        <xsl:with-param name="text">EtreCheck Deleted Files:</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="header"/>
     </xsl:if>
       
   </xsl:template>
@@ -1617,10 +1536,11 @@
   </xsl:template>
 
   <xsl:template name="header">
-    <xsl:param name="text"/>
+    
+    <xsl:variable name="key" select="local-name(.)"/>
     
     <p style="font-size: 12px; font-family: Helvetica, Arial, sans-serif; margin: 0; margin-top: 10px;">
-      <strong><xsl:value-of select="$text"/></strong>
+      <strong><xsl:value-of select="$strings/headers/value[@key = $key]"/></strong>
     </p>
     
   </xsl:template>
@@ -1648,9 +1568,16 @@
       </xsl:attribute>
    
       <xsl:text>[</xsl:text>
-      <xsl:value-of select="$statusattributes/status[@status = $status]"/>
+      <xsl:value-of select="$statusattributes/value[@key = $status]"/>
       <xsl:text>]</xsl:text>
     </span>
+    
+  </xsl:template>
+  
+  <xsl:template name="localized_string">
+    <xsl:param name="key"/>
+    
+    <xsl:copy-of select="$string/*[local-name() = $key]"/>
     
   </xsl:template>
   
