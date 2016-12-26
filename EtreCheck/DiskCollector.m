@@ -589,8 +589,10 @@
       {
       [self.XML addAttribute: @"severity" value: @"critical"];
       [self.XML
-        addAttribute: @"severity_explanation" value: @"diskfailure"];
-      [self.XML addElement: @"errors" value: errors];
+        addAttribute: @"severity_explanation" value: @"drivefailure"];
+      [self.XML
+        addElement: @"errors"
+        number: [[[Model model] diskErrors] objectForKey: name]];
   
       [self.result
         appendString:
@@ -654,8 +656,10 @@
   if([errors length])
     {
     [self.XML addAttribute: @"severity" value: @"critical"];
-    [self.XML addAttribute: @"severity_explanation" value: @"diskfailure"];
-    [self.XML addElement: @"errors" value: errors];
+    [self.XML addAttribute: @"severity_explanation" value: @"drivefailure"];
+    [self.XML
+      addElement: @"errors"
+      number: [[[Model model] diskErrors] objectForKey: volumeDevice]];
 
     attributes =
       @{

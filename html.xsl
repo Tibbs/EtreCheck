@@ -6,15 +6,14 @@
   exclude-result-prefixes="my">
 
   <!-- Convert an EtreCheck report into an HTML representation. -->
-  <!-- TODO: Add a parameter for localization and localize with language-specific XML files. -->
   <xsl:output method="html" indent="yes" encoding="UTF-8"/> 
  
   <!-- Show Apple tasks that are normally hidden? Or just show counts? -->
   
   <!-- Hide known Apple failures? -->
   <xsl:param name="showapple" select="false()"/>
-  <xsl:param name="hideknownapplefailures" select="false()"/>
-  <xsl:param name="language">fr</xsl:param>
+  <xsl:param name="hideknownapplefailures" select="true()"/>
+  <xsl:param name="language">en</xsl:param>
   
   <!-- Language-specific data. -->
   <xsl:variable name="strings" select="document(concat('html_', $language, '.xml'))/strings"/>
@@ -39,7 +38,6 @@
 
       <body>
       
-        <!-- TODO: Break this out. -->
         <xsl:apply-templates select="stats"/>
         <xsl:apply-templates select="problem"/>
         <xsl:apply-templates select="hardware"/>
@@ -93,8 +91,7 @@
       <strong>
         <xsl:value-of select="$strings/version"/>
         <xsl:text> </xsl:text>
-        <xsl:value-of 
-          select="/etrecheck/@version"/>
+        <xsl:value-of select="/etrecheck/@version"/>
         <xsl:text> (</xsl:text>
         <xsl:value-of select="/etrecheck/@build"/>
         <xsl:text>)</xsl:text>
@@ -129,8 +126,18 @@
       <strong>
         <xsl:value-of select="$strings/performance"/>
         <xsl:text> </xsl:text>
-        <!-- TODO: Flag poor performance. -->
-        <xsl:value-of select="$performance/value[@key = $performancekey]"/>
+        
+        <!-- Flag bad performance. -->
+        <span>
+          <xsl:call-template name="style">
+            <xsl:with-param name="css">
+              <xsl:if test="$performancekey/@severity">          
+                <xsl:text>color: red;</xsl:text>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:value-of select="$performance/value[@key = $performancekey]"/>
+        </span>
       </strong>
     </p>
     
@@ -264,10 +271,15 @@
       <xsl:text>-core</xsl:text>
     </p>
 
-    <!-- TODO: Flag low RAM. -->
+    <!-- Flag low RAM. -->
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
+        <xsl:with-param name="css">
+          <xsl:if test="total/@severity">          
+            <xsl:text>color: red; font-weight: bold;</xsl:text>
+          </xsl:if>
+        </xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="total"/>
       <xsl:text> RAM</xsl:text>
@@ -329,9 +341,16 @@
       <xsl:text>: </xsl:text>
       <xsl:value-of select="wirelessinterfaces/wirelessinterface/modes"/>
     </p>
+    
+    <!-- Flag poor battery health. -->
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
+        <xsl:with-param name="css">
+          <xsl:if test="batteryinformation/battery/@severity">          
+            <xsl:text>color: red; font-weight: bold;</xsl:text>
+          </xsl:if>
+        </xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="$strings/battery"/>
       <xsl:text> </xsl:text>
@@ -339,7 +358,7 @@
       <xsl:text> = </xsl:text>
       <xsl:value-of select="$batteryhealth/value[@key = $health]"/>
       <xsl:text> - </xsl:text>
-      <xsl:value-of select="$strings/cyle_clount"/>
+      <xsl:value-of select="$strings/cycle_count"/>
       <xsl:text> = </xsl:text>
       <xsl:value-of select="batteryinformation/battery/cyclecount"/>
     </p>
@@ -411,6 +430,12 @@
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
+            <!-- Flag disk failure. -->
+            <xsl:with-param name="css">
+              <xsl:if test="@severity and @severity_explanation = 'drivefailure'">
+                <xsl:text>color: red; font-weight: bold;</xsl:text>
+              </xsl:if>
+            </xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="name"/>
           <xsl:text> </xsl:text>
@@ -420,16 +445,29 @@
           <xsl:text>) </xsl:text>
           <xsl:value-of select="concat('(', type, ' - TRIM: ', TRIM,')')"/>
           
-          <!-- TODO: Flag non-Verified SMART result. -->
-          <xsl:if test="SMART != 'Verified'">
-            <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART)"/>
+          <!-- Report disk errors. -->
+          <xsl:if test="errors &gt; 0">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$strings/drive_failure"/>
+            <xsl:text> - </xsl:text>
+            <xsl:value-of select="$strings/error_count"/>
+            <xsl:value-of select="errors"/>
           </xsl:if>
         </p>
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
+            <!-- Flag SMART failure. -->
+            <xsl:with-param name="css">
+              <xsl:if test="@severity and @severity_explanation = 'smartfailure'">
+                <xsl:text>color: red; font-weight: bold;</xsl:text>
+              </xsl:if>
+            </xsl:with-param>
           </xsl:call-template>
           <strong>
+            <xsl:if test="@severity">
+              <xsl:value-of select="concat('S.M.A.R.T. Status: ', SMART, ' ')"/>
+            </xsl:if>
             <a>
               <xsl:attribute name="href">
                 <xsl:text>etrecheck://smart/</xsl:text>
@@ -444,6 +482,12 @@
             <p>
               <xsl:call-template name="style">
                 <xsl:with-param name="indent">20</xsl:with-param>
+                <!-- Flag disk failure. -->
+                <xsl:with-param name="css">
+                  <xsl:if test="@severity and @severity_explanation = 'drivefailure'">
+                    <xsl:text>color: red; font-weight: bold;</xsl:text>
+                  </xsl:if>
+                </xsl:with-param>
               </xsl:call-template>
               <xsl:value-of select="name"/>
               <xsl:text> (</xsl:text>
@@ -468,16 +512,42 @@
                 <xsl:with-param name="value" select="size"/>
                 <xsl:with-param name="k" select="1000"/>
               </xsl:call-template>
+              
               <!-- TODO: Flag low free disk space. -->
               <xsl:if test="free_space">
-                <xsl:text> (</xsl:text>
-                <xsl:call-template name="bytes">
-                  <xsl:with-param name="value" select="free_space"/>
-                  <xsl:with-param name="k" select="1000"/>
-                </xsl:call-template>
+                <span>
+                  <xsl:call-template name="style">
+                    <!-- Flag low free space. -->
+                    <xsl:with-param name="css">
+                      <xsl:if test="@severity and @severity_explanation = 'lowdiskspace'">
+                        <xsl:text>color: red; font-weight: bold;</xsl:text>
+                      </xsl:if>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                  <xsl:text> (</xsl:text>
+                  <xsl:call-template name="bytes">
+                    <xsl:with-param name="value" select="free_space"/>
+                    <xsl:with-param name="k" select="1000"/>
+                  </xsl:call-template>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="$strings/free"/>
+                  <xsl:text>)</xsl:text>
+
+                  <!-- Flag low free space. -->
+                  <xsl:if test="@severity and @severity_explanation = 'lowdiskspace'">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$strings/low"/>
+                  </xsl:if>
+                </span>
+              </xsl:if>
+              
+              <!-- Report disk errors. -->
+              <xsl:if test="errors &gt; 0">
                 <xsl:text> </xsl:text>
-                <xsl:value-of select="$strings/free"/>
-                <xsl:text>)</xsl:text>
+                <xsl:value-of select="$strings/drive_failure"/>
+                <xsl:text> - </xsl:text>
+                <xsl:value-of select="$strings/error_count"/>
+                <xsl:value-of select="errors"/>
               </xsl:if>
             </p>
             <xsl:if test="@encrypted = 'yes'">
@@ -512,6 +582,7 @@
                 <xsl:value-of select="core_storage/size"/>
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="core_storage/status"/>
+                <!-- TODO: Flag failed encryption status. -->
               </p>
             </xsl:if>
           </xsl:for-each>
@@ -618,10 +689,15 @@
   
     <xsl:call-template name="header"/>
     
-    <!-- TODO: Flag this if necessary. -->
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
+        <!-- Flag Anywhere. -->
+        <xsl:with-param name="css">
+          <xsl:if test="@severity">
+            <xsl:text>color: red; font-weight: bold;</xsl:text>
+          </xsl:if>
+        </xsl:with-param>
       </xsl:call-template>
       <xsl:value-of select="."/>
     </p>
@@ -635,10 +711,10 @@
       <xsl:call-template name="header"/>
       
       <xsl:for-each select="adwarepath">
-        <!-- TODO: Flag these. -->
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
+            <xsl:with-param name="css">color: red; font-weight: bold;</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="."/>
         </p>
@@ -658,12 +734,14 @@
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
+            <xsl:with-param name="css">color: red; font-weight: bold;</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="path"/>
         </p>
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">20</xsl:with-param>
+            <xsl:with-param name="css">color: red; font-weight: bold;</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="command"/>
         </p>
@@ -719,6 +797,7 @@
         <p>
           <xsl:call-template name="style">
             <xsl:with-param name="indent">10</xsl:with-param>
+            <xsl:with-param name="css">color: red; font-weight: bold;</xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="name"/>
           <xsl:text> </xsl:text>
@@ -727,6 +806,15 @@
           <xsl:value-of select="version"/>
         </p>
       </xsl:for-each>
+      
+      <p>
+        <xsl:call-template name="style">
+          <xsl:with-param name="css">margin-left: 10px; color: red; font-weight: bold;</xsl:with-param>
+        </xsl:call-template>
+        <br/>
+        <xsl:value-of select="$strings/severity_explanation/value[@key = 'startupitems_deprecated']"/>
+      </p>
+      
     </xsl:if>
         
   </xsl:template>
@@ -1402,6 +1490,19 @@
         <xsl:apply-templates select="event"/>
       </table>
     </xsl:if>
+    
+    <xsl:if test="@severity_explanation = 'diagnoticreport_standardpermissions'">
+    
+      <xsl:variable name="explanation" select="$strings/severity_explanation/value[@key = 'diagnoticreport_standardpermissions']"/>
+
+      <p>
+        <xsl:call-template name="style">
+          <xsl:with-param name="css">margin-left: 10px;</xsl:with-param>
+        </xsl:call-template>
+        <br/>
+        <xsl:copy-of select="$explanation/*|$explanation/text()"/>
+      </p>
+    </xsl:if>
       
   </xsl:template>
 
@@ -1433,7 +1534,7 @@
   <xsl:template name="percentage">
     <xsl:param name="value"/>
     
-    <xsl:value-of select="format-number($value div 100.0, '#.#%')"/>
+    <xsl:value-of select="format-number($value div 100.0, '0.0%')"/>
   </xsl:template>
 
   <xsl:template name="bytes">
@@ -1449,8 +1550,13 @@
           <xsl:with-param name="k" select="$k"/>
         </xsl:call-template>
       </xsl:when>
+      <xsl:when test="$value = 0">
+        <xsl:value-of select="format-number($value, '#')"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$byte_units[position() = $units]"/>
+      </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="format-number($value, '#.##')"/>
+        <xsl:value-of select="format-number($value, '0.00')"/>
         <xsl:text> </xsl:text>
         <xsl:value-of select="$byte_units[position() = $units]"/>
       </xsl:otherwise>
@@ -1498,6 +1604,7 @@
     <xsl:param name="indent">0</xsl:param>
     <xsl:param name="color"/>
     <xsl:param name="style"/>
+    <xsl:param name="css"/>
   
     <xsl:attribute name="style">
     
@@ -1522,6 +1629,7 @@
       </xsl:if>
 
       <xsl:text>font-size: 12px; font-family: Helvetica, Arial, sans-serif; margin:0;</xsl:text>
+      <xsl:value-of select="$css"/>
       
     </xsl:attribute>
 
@@ -1540,7 +1648,16 @@
     <xsl:variable name="key" select="local-name(.)"/>
     
     <p style="font-size: 12px; font-family: Helvetica, Arial, sans-serif; margin: 0; margin-top: 10px;">
-      <strong><xsl:value-of select="$strings/headers/value[@key = $key]"/></strong>
+      <strong>
+        <a style="color: black; text-decoration: none;">
+          <xsl:attribute name="href">
+            <xsl:text>etrecheck://help/</xsl:text>
+            <xsl:value-of select="$key"/>
+          </xsl:attribute>
+          <xsl:value-of select="$strings/headers/value[@key = $key]"/>
+          <xsl:text> ⓘ</xsl:text>
+        </a>
+      </strong>
     </p>
     
   </xsl:template>

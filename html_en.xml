@@ -45,7 +45,8 @@
     <value key="hostscountover10">Hosts file has more than 10 items</value>
     <value key="hostsfilecorrupt">Hosts file appears to be corrupt</value>
     <value key="highcpuusage">Unusually high CPU usage</value>
-    <value key="diagnoticreport_standardpermissions">EtreCheck cannot access diagnostic reports when run as a standard user</value>
+    <value key="diagnoticreport_standardpermissions">Standard users cannot read /Library/Logs/DiagnosticReports.<br/>Run as an administrator account to see more information.</value>
+    <value key="startupitems_deprecated">Startup items no longer function in OS X Yosemite or later</value>
     <value key="selftestfail">Self-test failed</value>
     <value key="smartfailure">SMART Disk check failure</value>
     <value key="encryptionfailed">FileVault disk encryption failed</value>
@@ -135,6 +136,9 @@
   <show_smart_report>[Show SMART report]</show_smart_report>
   <not_mounted>&lt;not mounted&gt;</not_mounted>
   <free>free</free>
+  <low>Low!</low>
+  <drive_failure>Drive failure!</drive_failure>
+  <error_count>Error count = </error_count>
   <encrypted>Encrypted</encrypted>
   <unlocked>Unlocked</unlocked>
   <locked>Locked</locked>

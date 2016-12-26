@@ -562,7 +562,7 @@
     [self.XML endElement: @"memoryupgradeability"];
     }
     
-  [self.XML addElement: @"total" value: memory];
+  [self.XML startElement: @"total"];
   
   if([[Model model] physicalRAM] < 4)
     {
@@ -588,6 +588,10 @@
       appendString:
         [NSString
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
+
+  [self.XML addString: memory];
+  
+  [self.XML endElement: @"total"];
 
   if(upgradeable)
     {
