@@ -559,8 +559,7 @@
   NSDictionary * details = [self collectMemoryDetails];
   
   bool upgradeable = NO;
-  NSString * upgradeableString =
-    NSLocalizedString(@"Not upgradeable", NULL);
+  NSString * upgradeableString = @"";
   NSString * upgradeURL = nil;
   NSString * language = NSLocalizedString(@"en", NULL);
   
@@ -576,12 +575,18 @@
       
     [self.XML startElement: @"memoryupgradeability"];
     
-    // TODO: Snow Leopoard doesn't seem to report this?
+    // TODO: Check this.
+    // Snow Leopoard doesn't seem to report this.
+    if(isUpgradeable)
+      upgradeableString =
+        upgradeable
+          ? NSLocalizedString(@"Upgradeable", NULL)
+          : NSLocalizedString(@"Not upgradeable", NULL);
+
     [self.XML addElement: @"memoryupgradeable" boolValue: upgradeable];
     
     if(upgradeable)
       {
-      upgradeableString = NSLocalizedString(@"Upgradeable", NULL);
       upgradeURL = [self memoryUpgradeURL: language];
       
       if([upgradeURL length] > 0)
