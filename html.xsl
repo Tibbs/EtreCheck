@@ -193,17 +193,6 @@
   
     <xsl:variable name="health" select="batteryinformation/battery/health"/>
 
-    <xsl:variable name="producttype">
-      <xsl:choose>
-        <xsl:when test="substring(model,1,7) = 'MacBook'">
-          <xsl:text>Macnotebooks</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>Macdesktops</xsl:text>
-        </xsl:otherwise> 
-      </xsl:choose>
-    </xsl:variable>
-    
     <xsl:call-template name="header"/>
 
     <p>
@@ -220,24 +209,21 @@
       <strong>
         <a target="_blank">
           <xsl:attribute name="href">
-            <xsl:value-of
-              select="concat('http://support-sp.apple.com/sp/index?page=cpuspec&amp;cc=',serialcode,'&amp;lang=en')"/>
+            <xsl:value-of select="technicalspecificationsurl"/>
           </xsl:attribute>
           <xsl:value-of select="$strings/technical_specifications"/>
         </a>
         <xsl:text> - </xsl:text>
         <a target="_blank">
           <xsl:attribute name="href">
-            <xsl:value-of
-              select="concat('http://support-sp.apple.com/sp/index?page=cpuuserguides&amp;cc=',serialcode,'&amp;lang=en')"/>
+            <xsl:value-of select="userguideurl"/>
           </xsl:attribute>
           <xsl:value-of select="$strings/user_guide"/>
         </a>
         <xsl:text> - </xsl:text>
         <a target="_blank">
           <xsl:attribute name="href">
-            <xsl:value-of
-              select="concat('https://support.apple.com/kb/index?page=servicefaq&amp;geo=United_States&amp;product=',$producttype)"/>
+            <xsl:value-of select="serviceurl"/>
           </xsl:attribute>
           <xsl:value-of select="$strings/warranty_service"/>
         </a>
@@ -275,14 +261,49 @@
     <p>
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
-        <xsl:with-param name="css">
-          <xsl:if test="total/@severity">          
-            <xsl:text>color: red; font-weight: bold;</xsl:text>
-          </xsl:if>
-        </xsl:with-param>
       </xsl:call-template>
-      <xsl:value-of select="total"/>
-      <xsl:text> RAM</xsl:text>
+      <span>
+        <xsl:call-template name="style">
+          <xsl:with-param name="css">
+            <xsl:if test="total/@severity">          
+              <xsl:text>color: red; font-weight: bold;</xsl:text>
+            </xsl:if>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:value-of select="total"/>
+        <xsl:text> RAM</xsl:text>
+
+        <xsl:if test="total/@severity">  
+          <xsl:variable name="severity_explanation" select="total/@severity_explanation"/>
+               
+          <xsl:text> - </xsl:text>   
+          <xsl:value-of select="$strings/severity_explanation/value[@key = $severity_explanation]"/>
+        </xsl:if>
+      </span>      
+       
+      <xsl:text> </xsl:text>
+      
+      <xsl:choose> 
+      
+        <xsl:when test="memoryupgradeability/memoryupgradeable = 'true'">     
+          <xsl:value-of select="$strings/upgradeable"/>
+          <xsl:text> - </xsl:text>
+          <strong>
+            <a target="_blank">
+              <xsl:attribute name="href">
+                <xsl:value-of select="memoryupgradeability/memoryupgradeurl"/>
+              </xsl:attribute>
+              <xsl:value-of select="$strings/memory_upgrade_instructions"/>
+            </a>
+          </strong>
+        </xsl:when>
+        
+        <xsl:otherwise>
+          <xsl:value-of select="$strings/not_upgradeable"/>
+        </xsl:otherwise>
+        
+      </xsl:choose>
+      
     </p>
 
     <!-- TODO: Handle the edge case of VMWare. -->
@@ -347,7 +368,7 @@
       <xsl:call-template name="style">
         <xsl:with-param name="indent">10</xsl:with-param>
         <xsl:with-param name="css">
-          <xsl:if test="batteryinformation/battery/@severity">          
+          <xsl:if test="batteryinformation/battery/health/@severity">          
             <xsl:text>color: red; font-weight: bold;</xsl:text>
           </xsl:if>
         </xsl:with-param>
@@ -363,6 +384,22 @@
       <xsl:value-of select="batteryinformation/battery/cyclecount"/>
     </p>
       
+    <xsl:if test="batteryinformation/battery/serialnumber/@severity">          
+      <xsl:variable name="severity_explanation" select="batteryinformation/battery/serialnumber/@severity_explanation"/>
+
+      <p>
+        <xsl:call-template name="style">
+          <xsl:with-param name="indent">20</xsl:with-param>
+          <xsl:with-param name="css">
+            <xsl:text>color: red; font-weight: bold;</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:value-of select="batteryinformation/battery/serialnumber"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="$strings/severity_explanation/value[@key = $severity_explanation]"/>
+      </p>
+    </xsl:if>
+    
   </xsl:template>
  
   <!-- Video information. -->

@@ -378,11 +378,19 @@
     postNotificationName: kProgressUpdate
     object: [NSNumber numberWithDouble: to]];
   
+  NSDictionary * environment = [[NSProcessInfo processInfo] environment];
+  
+  bool simulate =
+    [[environment objectForKey: @"ETRECHECK_SIMULATE"] boolValue];
+    
   for(Collector * collector in collectors)
     {
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
     
-    [collector collect];
+    if(simulate)
+      [collector simulate];
+    else
+      [collector collect];
     
     if(collector.result != nil)
       [results setObject: collector.result forKey: collector.name];

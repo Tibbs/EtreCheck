@@ -55,7 +55,7 @@
     <value key="gatekeeperrequireslion">EtreCheck requires MacOS X 10.7 “Lion” or later to check Gatekeeper status</value>
     <value key="gatekeeperdisabled">Gatekeeper is disabled</value>
     <value key="gatekeeperunknown">EtreCheck failed to determine Gatekeeper status</value>
-    <value key="insufficientram">System has run out of RAM</value>
+    <value key="insufficientram">Manque de mémoire !</value>
     <value key="batteryneedsreplacing">Battery needs to be replaced</value>
     <value key="invalidbatteryserialnumber">Invalid battery serial number - dangerous counterfeit or “grey market” battery</value>
     <value key="machinitdeprecated">Mach init items are deprecated</value>
@@ -125,6 +125,9 @@
   <user_guide>[Le guide de l’utilisateur]</user_guide>
   <warranty_service>[Garantie &amp; service]</warranty_service>
   <model>modèle :</model>
+  <not_upgradeable>Pas extensible</not_upgradeable>
+  <upgradeable>Extensible</upgradeable>
+  <memory_upgrade_instructions>[Instructions]</memory_upgrade_instructions>
   <handoff>Handoff:</handoff>
   <instant_hotspot>Instant Hotspot:</instant_hotspot>
   <low_energy>Faible intensité :</low_energy>

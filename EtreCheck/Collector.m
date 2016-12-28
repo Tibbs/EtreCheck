@@ -86,6 +86,14 @@
     postNotificationName: kStatusUpdate object: status];
   }
 
+// Perform a simulation appropriate for this collector.
+- (void) simulate
+  {
+  NSLog(@"Simulating %@", self.name);
+  self.simulating = YES;
+  [self collect];
+  }
+
 // Construct a title with a bold, blue font using a given anchor into
 // the online help.
 - (NSAttributedString *) buildTitle

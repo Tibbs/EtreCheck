@@ -12,12 +12,16 @@
 // OS version that may be needed by all collectors.
 @interface Collector : NSObject
   {
+  BOOL mySimulating;
   NSString * myName;
   NSString * myTitle;
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
   }
+
+// Am I simulating?
+@property (assign) BOOL simulating;
 
 // The name of this collector.
 @property (retain) NSString * name;
@@ -46,6 +50,9 @@
 
 // Update status.
 - (void) updateStatus: (NSString *) status;
+
+// Perform a simulation appropriate for this collector.
+- (void) simulate;
 
 // Construct a title with a bold, blue font using a given anchor into
 // the online help.

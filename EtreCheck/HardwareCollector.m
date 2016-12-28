@@ -259,6 +259,9 @@
   NSString * serial = [info objectForKey: @"serial_number"];
   int physicalRAM = [self parseMemory: memory];
 
+  if(self.simulating)
+    memory = @"2 GB";
+    
   [self.XML addElement: @"name" value: name];
 
   [[Model model] setModel: model];
@@ -315,6 +318,9 @@
   if(![scanner scanInt: & physicalMemory])
     physicalMemory = 0;
 
+  if(self.simulating)
+    physicalMemory = 2;
+    
   return physicalMemory;
   }
 
@@ -334,6 +340,8 @@
 
     [self.XML addElement: @"marketingname" value: self.marketingName];
 
+    // TODO: Store machine image data in XML.
+    
     [[Model model]
       setMachineIcon: [machineProperties objectForKey: kMachineIcon]];
     }
@@ -406,40 +414,56 @@
 // Construct a technical specifications URL.
 - (NSString *) technicalSpecificationsURL: (NSString *) language
   {
-  return
+  NSString * url =
     [Utilities
       AppleSupportSPQueryURL: [[Model model] serialCode]
       language: language
       type: @"index?page=cpuspec"];
+
+  [self.XML addElement: @"technicalspecificationsurl" value: url];
+
+  return url;
   }
 
 // Construct a user guide URL.
 - (NSString *) userGuideURL: (NSString *) language
   {
-  return
+  NSString * url =
     [Utilities
       AppleSupportSPQueryURL: [[Model model] serialCode]
       language: language
       type: @"index?page=cpuuserguides"];
+
+  [self.XML addElement: @"userguideurl" value: url];
+
+  return url;
   }
 
 // Construct a memory upgrade URL.
 - (NSString *) memoryUpgradeURL: (NSString *) language
   {
-  return
+  NSString * url =
     [Utilities
       AppleSupportSPQueryURL: [[Model model] serialCode]
       language: language
       type: @"index?page=cpumemory"]; 
+
+  [self.XML addElement: @"memoryupgradeurl" value: url];
+
+  return url;
   }
 
 // Construct a user guide URL.
 - (NSString *) serviceURL
   {
+  NSString * url = NSLocalizedString(@"service_desktop", NULL);
+
   if([[[Model model] model] hasPrefix: @"MacBook"])
-    return NSLocalizedString(@"service_notebook", NULL);
+    url = NSLocalizedString(@"service_notebook", NULL);
   
-    return NSLocalizedString(@"service_desktop", NULL);
+  [self.XML addElement: @"serviceurl" value: url];
+
+  return url;
   }
 
 // Try to get information about the machine from system resources.
@@ -535,7 +559,8 @@
   NSDictionary * details = [self collectMemoryDetails];
   
   bool upgradeable = NO;
-  NSString * upgradeableString = @"";
+  NSString * upgradeableString =
+    NSLocalizedString(@"Not upgradeable", NULL);
   NSString * upgradeURL = nil;
   NSString * language = NSLocalizedString(@"en", NULL);
   
@@ -546,6 +571,9 @@
     
     upgradeable = [isUpgradeable boolValue];
     
+    if(self.simulating)
+      upgradeable = YES;
+      
     [self.XML startElement: @"memoryupgradeability"];
     
     // TODO: Snow Leopoard doesn't seem to report this?
@@ -553,6 +581,7 @@
     
     if(upgradeable)
       {
+      upgradeableString = NSLocalizedString(@"Upgradeable", NULL);
       upgradeURL = [self memoryUpgradeURL: language];
       
       if([upgradeURL length] > 0)
@@ -574,21 +603,21 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@ RAM - %@ %@",
+            @"    %@ RAM - %@ ",
             memory,
-            NSLocalizedString(@"insufficientram", NULL),
-            upgradeableString]
+            NSLocalizedString(@"insufficientram", NULL)]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
+            [[Utilities shared] boldFont], NSFontAttributeName,
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
     }
   else
     [self.result
-      appendString:
-        [NSString
-          stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
+      appendString: [NSString stringWithFormat: @"    %@ RAM ", memory]];
 
+  [self.result appendString: upgradeableString];
+  
   [self.XML addString: memory];
   
   [self.XML endElement: @"total"];
@@ -909,7 +938,8 @@
   NSString * health = nil;
   NSString * serialNumber = @"";
   BOOL serialNumberInvalid = NO;
-  
+  BOOL needsReplacing = NO;
+    
   [self.XML startElement: @"batteryinformation"];
   
   for(NSDictionary * info in infos)
@@ -924,41 +954,61 @@
       serialNumber =
         [modelInfo objectForKey: @"sppower_battery_serial_number"];
       
+      if(self.simulating)
+        serialNumber = @"0123456789ABC";
+        
       if([serialNumber isEqualToString: @"0123456789ABC"])
       //if([serialNumber isEqualToString: @"D865033Y2CXF9CPAW"])
         serialNumberInvalid = YES;
+        
+      [self.XML startElement: @"serialnumber"];
+      
+      if(serialNumberInvalid)
+        {
+        [self.XML addAttribute: @"severity" value: @"warning"];
+
+        [self.XML
+          addAttribute: @"severity_explanation"
+          value: @"invalidbatteryserialnumber"];
+        }
+        
+      [self.XML addString: serialNumber];
+      
+      [self.XML endElement: @"serialnumber"];
       }
 
     NSDictionary * healthInfo =
       [info objectForKey: @"sppower_battery_health_info"];
       
-    BOOL needsReplacing = NO;
-    
     if(healthInfo)
       {
       cycleCount =
         [healthInfo objectForKey: @"sppower_battery_cycle_count"];
+        
       health = [healthInfo objectForKey: @"sppower_battery_health"];
       
+      if(self.simulating)
+        health = @"Poor";
+        
       if([health isEqualToString: @"Poor"])
         needsReplacing = YES;
 
       [self.XML addElement: @"cyclecount" number: cycleCount];
-      [self.XML addElement: @"health" value: health];
-      }
       
-    if(serialNumberInvalid || needsReplacing)
-      {
-      [self.XML addAttribute: @"severity" value: @"warning"];
+      [self.XML startElement: @"health"];
       
       if(needsReplacing)
+        {
+        [self.XML addAttribute: @"severity" value: @"warning"];
+        
         [self.XML
           addAttribute: @"severity_explanation"
           value: @"batteryneedsreplacing"];
-      else
-        [self.XML
-          addAttribute: @"severity_explanation"
-          value: @"invalidbatteryserialnumber"];
+        }
+        
+      [self.XML addString: health];
+      
+      [self.XML endElement: @"health"];
       }
       
     [self.XML endElement: @"battery"];
@@ -966,14 +1016,29 @@
     
   if(cycleCount && [health length])
     {
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            NSLocalizedString(
-              @"    Battery: Health = %@ - Cycle count = %@\n",
-              NULL),
-            NSLocalizedString(health, NULL), cycleCount]];
+    if(needsReplacing)
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"    Battery: Health = %@ - Cycle count = %@\n",
+                NULL),
+              NSLocalizedString(health, NULL), cycleCount]
+          attributes:
+            [NSDictionary
+              dictionaryWithObjectsAndKeys:
+                [[Utilities shared] boldFont], NSFontAttributeName,
+                [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    else
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"    Battery: Health = %@ - Cycle count = %@\n",
+                NULL),
+              NSLocalizedString(health, NULL), cycleCount]];
       
     if(serialNumberInvalid)
       [self.result
@@ -986,6 +1051,7 @@
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
+              [[Utilities shared] boldFont], NSFontAttributeName,
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
     }
     
