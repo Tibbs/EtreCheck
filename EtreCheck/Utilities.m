@@ -315,7 +315,7 @@
   if([username length] >= 4)
     range = [part rangeOfString: username];
 
-  if((range.location == NSNotFound) && [fullname length])
+  if((range.location == NSNotFound) && ([fullname length] >= 4))
     range = [part rangeOfString: fullname];
   
   if((range.location == NSNotFound) && [part hasPrefix: @"/Users/"])
@@ -326,12 +326,12 @@
       
     range.length = [usernamePart length];
       
-    if(range.length > 0)
+    if(range.length >= 4)
       range.location = 7;
     }
     
   // Now check for a hostname version.
-  if(([computerName length]) > 0 && (range.location == NSNotFound))
+  if(([computerName length] >= 4) && (range.location == NSNotFound))
     {
     BOOL redact = NO;
     
@@ -340,7 +340,7 @@
       if([computerName rangeOfString: username].location != NSNotFound)
         redact = YES;
       }
-    else if([fullname length])
+    else if([fullname length] >= 4)
       if([computerName rangeOfString: fullname].location != NSNotFound)
         redact = YES;
       
