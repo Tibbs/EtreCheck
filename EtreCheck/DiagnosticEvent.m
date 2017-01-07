@@ -16,5 +16,6 @@
 @synthesize file = myFile;
 @synthesize path = myPath;
 @synthesize identifier = myIdentifier;
+@synthesize information = myInformation;
 
 @end

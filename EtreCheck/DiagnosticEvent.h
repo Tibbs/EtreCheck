@@ -31,6 +31,7 @@ EventType;
   NSString * myDetails;
   NSString * myPath;
   NSString * myIdentifier;
+  NSString * myInformation;
   }
 
 @property (assign) EventType type;
@@ -40,5 +41,6 @@ EventType;
 @property (strong) NSString * details;
 @property (strong) NSString * path;
 @property (strong) NSString * identifier;
+@property (strong) NSString * information;
 
 @end

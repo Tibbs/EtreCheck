@@ -365,6 +365,9 @@
   
   __block NSMutableString * path = [NSMutableString string];
   __block NSMutableString * identifier = [NSMutableString string];
+  __block NSMutableString * information = [NSMutableString string];
+  
+  __block BOOL capturingInformation = NO;
   
   [lines
     enumerateObjectsUsingBlock:
@@ -372,11 +375,11 @@
         {
         NSString * line = (NSString *)obj;
         
-        [result appendString: line];
-        [result appendString: @"\n"];
-        
-        if(lineCount++ > 20)
-          *stop = YES;
+        if(lineCount++ < 20)
+          {
+          [result appendString: line];
+          [result appendString: @"\n"];
+          }
           
         if([line hasPrefix: @"Path:"])
           [path
@@ -390,6 +393,27 @@
               [[line substringFromIndex: 11]
                 stringByTrimmingCharactersInSet:
                   [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        else if([line hasPrefix: @"Application Specific Information:"])
+          {
+          capturingInformation = YES;
+          
+          [information appendFormat: @"        %@\n", line];
+          }
+        else if(capturingInformation)
+          {
+          NSString * trimmedLine =
+            [line stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+          if([trimmedLine length] > 0)
+            [information appendFormat: @"        %@\n", trimmedLine];
+          else
+            {
+            capturingInformation = NO;
+            
+            *stop = YES;
+            }
+          }
         }];
     
   if(event.type == kPanic)
@@ -405,6 +429,9 @@
   if([path length] && [identifier length])
     if(![[path lastPathComponent] isEqualToString: identifier])
       event.identifier = identifier;
+    
+  if([information length])
+    event.information = information;
   }
 
 // Print crash logs.
@@ -438,7 +465,7 @@
         break;
         
       default:
-        if([then compare: event.date] == NSOrderedAscending)
+        //if([then compare: event.date] == NSOrderedAscending)
           [self printDiagnosticEvent: event name: name];
       }
     }
@@ -510,6 +537,9 @@
     [self.result appendString: @"\n"];
     }
     
+  if([event.information length] > 0)
+    [self.result appendString: event.information];
+
   hasOutput = YES;
   }
 
