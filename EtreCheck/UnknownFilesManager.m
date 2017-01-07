@@ -166,12 +166,16 @@
   
   for(NSMutableDictionary * item in self.filesToRemove)
     {
+    NSString * path = [item objectForKey: kPath];
+    NSString * name = [path lastPathComponent];
+    
     NSDictionary * info = [item objectForKey: kLaunchdTask];
       
     NSString * signature = [info objectForKey: kSignature];
 
     BOOL isSigned = NO;
     BOOL missingExecutable = NO;
+    BOOL datFile = NO;
     
     if([signature isEqualToString: kSignatureApple])
       isSigned = YES;
@@ -179,16 +183,19 @@
       isSigned = YES;
     else if([signature isEqualToString: kExecutableMissing])
       missingExecutable = YES;
+      
+    if([name hasPrefix: @"."])
+      datFile = YES;
 
-    if(isSigned)
-      {
-      [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
-      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
-      }
-    else if(missingExecutable)
+    if(datFile || missingExecutable)
       {
       [item setObject: [NSNumber numberWithBool: NO] forKey: kWhitelist];
       [item setObject: [NSNumber numberWithBool: YES] forKey: kRemove];
+      }
+    else if(isSigned)
+      {
+      [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
       }
     }
 
@@ -470,31 +477,42 @@
 
   NSMutableDictionary * item = [self.filesToRemove objectAtIndex: row];
   
+  NSString * path = [item objectForKey: kPath];
+  NSString * name = [path lastPathComponent];
+  
   NSDictionary * info = [item objectForKey: kLaunchdTask];
     
   NSString * signature = [info objectForKey: kSignature];
 
   BOOL isSigned = NO;
+  BOOL isDatFile = NO;
   
   if([signature isEqualToString: kSignatureApple])
     isSigned = YES;
   else if([signature isEqualToString: kSignatureValid])
     isSigned = YES;
 
+  if([name hasPrefix: @"."])
+    isDatFile = YES;
+    
+  // Signed files can only be whitelisted.
+  // .dat files can only be removed.
   if([[tableColumn identifier] isEqualToString: kWhitelist])
     {
     NSButtonCell * cell = [tableColumn dataCellForRow: row];
     
-    [cell setEnabled: !isSigned];
+    [cell setEnabled: (!isDatFile || !isSigned)];
 
     return [item objectForKey: kWhitelist];
     }
     
+  // Signed files can only be whitelisted.
+  // .dat files can only be removed.
   if([[tableColumn identifier] isEqualToString: kRemove])
     {
     NSButtonCell * cell = [tableColumn dataCellForRow: row];
     
-    [cell setEnabled: !isSigned];
+    [cell setEnabled: (!isDatFile || !isSigned)];
       
     return [item objectForKey: kRemove];
     }
