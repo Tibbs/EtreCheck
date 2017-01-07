@@ -72,6 +72,8 @@
 
           NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
           
+          NSString * signature = [info objectForKey: kSignature];
+          
           [self.result
             appendString:
               [NSString
@@ -79,6 +81,20 @@
                   @"\n        %@\n",
                   [Utilities
                     formatExecutable: [info objectForKey: kCommand]]]];
+
+          // Report a missing executable.
+          if([signature isEqualToString: kExecutableMissing])
+            {
+            [self.result
+              appendString:
+                [NSString
+                  stringWithFormat: @"        Executable not found!\n"]
+              attributes:
+                @{
+                  NSForegroundColorAttributeName : [[Utilities shared] red],
+                  NSFontAttributeName : [[Utilities shared] boldFont]
+                }];
+            }
           }];
       
     NSArray * sortedUnknownFiles =

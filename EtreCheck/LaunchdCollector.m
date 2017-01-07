@@ -314,8 +314,15 @@
         
         return info;
         }
+        
+      // Flag items with missing executables as unknown so they can be
+      // deleted.
       else if([signature isEqualToString: kExecutableMissing])
+        {
+        [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
+
         return info;
+        }
       }
       
     [info
@@ -1271,7 +1278,7 @@
     {
     NSString * executable = [info objectForKey: kExecutable];
   
-    if([path length])
+    if([executable length])
       message =
         [NSString
           stringWithFormat:

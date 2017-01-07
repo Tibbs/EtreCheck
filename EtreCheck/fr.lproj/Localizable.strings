@@ -229,6 +229,7 @@
 " - %@: Executable not found!" = " - %@ : Logiciel non trouvé";
 " - Executable not found!" = " - Logiciel non trouvé";
 " - codesign failed!" = " - Échec de codesign !";
+"        Executable not found!\n" = "        Logiciel non trouvé !\n";
 "Help" = "Aide";
 "Print Report" = "Imprimer le rapport";
 "Share Report" = "Partager le rapport";

@@ -171,16 +171,24 @@
     NSString * signature = [info objectForKey: kSignature];
 
     BOOL isSigned = NO;
+    BOOL missingExecutable = NO;
     
     if([signature isEqualToString: kSignatureApple])
       isSigned = YES;
     else if([signature isEqualToString: kSignatureValid])
       isSigned = YES;
+    else if([signature isEqualToString: kExecutableMissing])
+      missingExecutable = YES;
 
     if(isSigned)
       {
       [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
       [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
+      }
+    else if(missingExecutable)
+      {
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kWhitelist];
+      [item setObject: [NSNumber numberWithBool: YES] forKey: kRemove];
       }
     }
 
