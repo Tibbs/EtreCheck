@@ -103,7 +103,7 @@
         name, @"name",
         file, @"path",
         @"MachInit", @"kind",
-        @"Hidden", @"hidden",
+        [NSNumber numberWithBool: YES], @"hidden",
         nil];
       
     [self.loginItems addObject: item];
@@ -137,7 +137,7 @@
         @"com.apple.loginwindow", @"name",
         loginHook, @"path",
         @"LoginHook", @"kind",
-        @"Hidden", @"hidden",
+        [NSNumber numberWithBool: YES], @"hidden",
         nil];
       
     [self.loginItems addObject: item];
@@ -152,7 +152,7 @@
         @"com.apple.loginwindow", @"name",
         logoutHook, @"path",
         @"LogoutHook", @"kind",
-        @"Hidden", @"hidden",
+        [NSNumber numberWithBool: YES], @"hidden",
         nil];
       
     [self.loginItems addObject: item];
@@ -221,7 +221,7 @@
         @"/etc/ttys", @"name",
         loginHook, @"path",
         @"LoginHook", @"kind",
-        @"Hidden", @"hidden",
+        [NSNumber numberWithBool: YES], @"hidden",
         nil];
       
     [self.loginItems addObject: item];
@@ -236,7 +236,7 @@
         @"/etc/ttys", @"name",
         logoutHook, @"path",
         @"LogoutHook", @"kind",
-        @"Hidden", @"hidden",
+        [NSNumber numberWithBool: YES], @"hidden",
         nil];
       
     [self.loginItems addObject: item];
@@ -313,7 +313,7 @@
                 name, @"name",
                 path, @"path",
                 @"SMLoginItem", @"kind",
-                @"Hidden", @"hidden",
+                [NSNumber numberWithBool: YES], @"hidden",
                 nil];
               
             [loginItems setObject: item forKey: path];
@@ -480,7 +480,7 @@
   NSString * name = [loginItem objectForKey: @"name"];
   NSString * path = [loginItem objectForKey: @"path"];
   NSString * kind = [loginItem objectForKey: @"kind"];
-  NSString * hidden = [loginItem objectForKey: @"hidden"];
+  NSNumber * hidden = [loginItem objectForKey: @"hidden"];
   
   if(![name length])
     name = @"-";
@@ -508,7 +508,7 @@
   if([safePath length] == 0)
     return NO;
     
-  bool isHidden = [hidden isEqualToString: @"true"];
+  bool isHidden = [hidden boolValue];
   
   NSString * modificationDateString = @"";
   
@@ -538,10 +538,10 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@    %@ %@%@\n        (%@)\n",
+            @"    %@    %@%@ %@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@"Hidden ", NULL) : @" ",
+            isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
             modificationDateString,
             safePath]
       attributes:
@@ -553,10 +553,10 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@    %@ %@%@\n        (%@)\n",
+            @"    %@    %@%@ %@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@"Hidden ", NULL) : @" ",
+            isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
             modificationDateString,
             safePath]];
     

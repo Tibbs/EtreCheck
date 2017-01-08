@@ -465,7 +465,7 @@
         break;
         
       default:
-        //if([then compare: event.date] == NSOrderedAscending)
+        if([then compare: event.date] == NSOrderedAscending)
           [self printDiagnosticEvent: event name: name];
       }
     }
