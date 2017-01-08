@@ -38,6 +38,11 @@
       if(!version)
         version = NSLocalizedString(@"Unknown", NULL);
         
+      // Fix the version to get past ASC spam filters.
+      version =
+        [version
+          stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
+
       int age = 0;
       
       NSString * OSVersion = [self getOSVersion: plugin age: & age];

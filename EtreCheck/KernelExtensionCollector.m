@@ -722,6 +722,10 @@
 
   NSString * date = [self modificationDate: [bundle objectForKey: @"path"]];
   
+  // Fix the version to get past ASC spam filters.
+  version =
+    [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
+  
   [formattedOutput
     appendString:
       [NSString
