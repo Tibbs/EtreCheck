@@ -281,6 +281,7 @@
     <string>com.apple.ReclaimSpaceAgent.plist</string>
     <string>com.apple.RFBRegisterMDNS_RemoteManagement.plist</string>
     <string>com.apple.SafariBookmarksSyncer.plist</string>
+    <string>com.apple.SafeView.app.SafeViewAgent.plist</string>
     <string>com.apple.sbd.plist</string>
     <string>com.apple.security.agentMain.plist</string>
     <string>com.apple.security.agentStub.plist</string>
