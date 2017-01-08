@@ -1408,7 +1408,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="crg-Ov-30Q">
                             <font key="font" metaFont="system"/>
-                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck supprime automatiquement tous renseignements personnellement nominatifs. S'il vous plaît, commencer par identifier votre problème et décrire avec autant de détails que possible.</string>
+                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck supprime automatiquement tous renseignements personnellement nominatifs. Veuillez commencer par identifier votre problème et décrivez-le avec le maxime possible de détails.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1470,9 +1470,9 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="smB-EH-NNJ">
-                        <rect key="frame" x="21" y="110" width="240" height="17"/>
+                        <rect key="frame" x="21" y="110" width="247" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="S'il vous plaît choisir un problème" id="qTG-GJ-mZP">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sélectionnez un problème, s‘il vous plaît" id="qTG-GJ-mZP">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
