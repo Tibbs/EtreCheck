@@ -928,6 +928,7 @@
     <string>com.DollyDrive.tunnel.plist</string>
     <string>com.domoticz.server.plist</string>
     <string>com.dropboxforums.mduagent.plist</string>
+    <string>com.dropbox.DropboxMacUpdate.agent.plist</string>
     <string>com.dropsend.direct.plist</string>
     <string>com.drweb.drwebd.plist</string>
     <string>com.drweb.FileD.plist</string>
@@ -1470,6 +1471,8 @@
     <string>com.intego.VirusBarrierX6.daemon.plist</string>
     <string>com.intego.VirusBarrierX6.scanner.daemon.plist</string>
     <string>com.intego.VirusBarrierX6.statusitem.plist</string>
+    <string>com.intego.VirusBarrier.alert.plist</string>
+    <string>com.intego.VirusBarrier.daemon.plist</string>
     <string>com.intego.washingmachine.daemon.plist</string>
     <string>com.intego.WashingMachine.service.plist</string>
     <string>com.intel.haxm.plist</string>
