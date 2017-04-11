@@ -59,7 +59,7 @@
 // Generate a "remove adware" link.
 - (NSAttributedString *) generateRemoveAdwareLink;
 
-// Generate a "check files" link.
-- (NSAttributedString *) generateCheckFilesLink: (NSString *) name;
+// Generate a "remove orphans" link.
+- (NSAttributedString *) generateRemoveOrphanFilesLink: (NSString *) name;
 
 @end

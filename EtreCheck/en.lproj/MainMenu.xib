@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1108" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1421" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
@@ -18,7 +18,7 @@
                 <outlet property="TOUPanel" destination="eqA-WK-Xkh" id="ZbR-Ag-8Jd"/>
                 <outlet property="TOUView" destination="1GW-8d-S16" id="YRQ-dd-jqC"/>
                 <outlet property="acceptTOUButton" destination="6Wg-kO-rHz" id="32j-1H-C0k"/>
-                <outlet property="adwareManager" destination="Vj9-lq-jPe" id="XjW-t1-OHr"/>
+                <outlet property="adwareManager" destination="iUq-Rw-Zgh" id="sKg-R9-ErG"/>
                 <outlet property="agentImage" destination="X6k-bh-0bO" id="029-YW-2tT"/>
                 <outlet property="animationView" destination="cs1-k8-fgW" id="UaA-Y7-kiB"/>
                 <outlet property="applicationIcon" destination="24p-7h-cH3" id="8z3-r1-Kkm"/>
@@ -26,6 +26,7 @@
                 <outlet property="cancelButton" destination="mIX-Fq-FhE" id="s9D-m6-no7"/>
                 <outlet property="chooseAProblemButton" destination="fuC-gb-f3l" id="CE2-gH-5My"/>
                 <outlet property="chooseAProblemPromptItem" destination="IhM-Ny-kdQ" id="Mow-Ja-7oE"/>
+                <outlet property="cleanupManager" destination="Vj9-lq-jPe" id="gDZ-HN-lJC"/>
                 <outlet property="clipboardCopyButton" destination="q8u-Lb-y4P" id="hKX-6h-uJY"/>
                 <outlet property="clipboardCopyToolbarItemView" destination="kwV-c6-t98" id="jf2-ry-FLb"/>
                 <outlet property="closeMenuItem" destination="pxx-59-PXV" id="Gc5-HC-io8"/>
@@ -61,7 +62,6 @@
                 <outlet property="textSizeButton" destination="Q7d-pz-eK5" id="D5j-0D-76z"/>
                 <outlet property="textSizeToolbarItemView" destination="JdO-Ik-I8L" id="zv3-iV-4oP"/>
                 <outlet property="toolbar" destination="HAH-8D-CvP" id="Spo-sd-EYf"/>
-                <outlet property="unknownFilesManager" destination="iUq-Rw-Zgh" id="vhI-kN-mpN"/>
                 <outlet property="updateManager" destination="bfz-hP-xHF" id="O74-PC-PeG"/>
                 <outlet property="userParametersPanel" destination="J2g-N6-sDu" id="TNU-ac-Cz5"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
@@ -108,14 +108,14 @@
                 <outlet property="view" destination="nCU-Ry-DLu" id="atU-qN-wlc"/>
             </connections>
         </viewController>
-        <customObject id="Vj9-lq-jPe" userLabel="Adware Manager" customClass="AdwareManager">
+        <customObject id="Vj9-lq-jPe" userLabel="Adware Manager" customClass="CleanupManager">
             <connections>
                 <outlet property="tableView" destination="bhT-PM-Mux" id="Lu2-Ic-Qve"/>
                 <outlet property="textView" destination="AJQ-PD-fXE" id="2EX-zD-Tg7"/>
                 <outlet property="window" destination="zLb-Mx-zP0" id="HEs-Hy-7az"/>
             </connections>
         </customObject>
-        <customObject id="iUq-Rw-Zgh" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
+        <customObject id="iUq-Rw-Zgh" userLabel="Unknown files Manager" customClass="AdwareManager">
             <connections>
                 <outlet property="removeButton" destination="Tnm-72-P6l" id="6GU-e9-4RN"/>
                 <outlet property="reportButton" destination="zTe-eC-fao" id="8PS-sq-VlY"/>
@@ -543,7 +543,6 @@
         </menu>
         <window title="Log" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Log" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="8G9-V1-dBM">
@@ -1447,9 +1446,9 @@ Gw
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="eGD-du-9Qv">
-                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                    <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="AYY-x5-aZ5">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" id="AYY-x5-aZ5">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -1539,7 +1538,7 @@ Gw
             </subviews>
             <point key="canvasLocation" x="61" y="702"/>
         </customView>
-        <window title="Unknown files" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="F5c-hN-DcS" userLabel="Unknown files Window">
+        <window title="Possible adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="F5c-hN-DcS" userLabel="Adware Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="466"/>
@@ -1633,7 +1632,7 @@ Gw
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="oNX-Lf-msj" id="TNz-uC-Z0v">
-                                    <rect key="frame" x="0.0" y="0.0" width="525" height="22"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1661,18 +1660,7 @@ Gw
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </tableColumn>
-                                        <tableColumn identifier="signed" editable="NO" width="47.5390625" minWidth="10" maxWidth="3.4028234663852886e+38" id="Azc-ch-lYX">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Signed?">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" enabled="NO" inset="2" id="YWI-ke-l4U">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                        </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="369.1796875" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
+                                        <tableColumn identifier="path" editable="NO" width="420.6796875" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Unknown file">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1703,7 +1691,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="oNX-Lf-msj">
-                            <rect key="frame" x="0.0" y="0.0" width="527" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="527.5" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -1744,7 +1732,7 @@ Gw
             </view>
             <point key="canvasLocation" x="296" y="2239"/>
         </window>
-        <window title="Adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zLb-Mx-zP0" userLabel="Adware Window">
+        <window title="Cleanup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zLb-Mx-zP0" userLabel="Cleanup Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="328"/>
@@ -1809,7 +1797,7 @@ Gw
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="path" editable="NO" width="523" minWidth="40" maxWidth="1000" id="Y49-vH-Fpu">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Adware files">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Orphaned files">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1946,7 +1934,6 @@ Gw
         </window>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Preferences" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="280" height="80"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="FQI-Tk-PZA">

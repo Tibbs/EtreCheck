@@ -1,14 +1,13 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "Collector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
-#import "AdwareManager.h"
 #import "SearchEngine.h"
 
 @implementation Collector
@@ -374,7 +373,7 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Remove]", NULL)
+    appendString: NSLocalizedString(@"[Remove/Report]", NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -386,7 +385,7 @@
   }
 
 // Generate a "check files" link.
-- (NSAttributedString *) generateCheckFilesLink: (NSString *) name
+- (NSAttributedString *) generateRemoveOrphanFilesLink: (NSString *) name
   {
   NSMutableAttributedString * urlString =
     [[NSMutableAttributedString alloc] initWithString: @""];
@@ -394,12 +393,12 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Check files]", NULL)
+    appendString: NSLocalizedString(@"[Clean up]", NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
         NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : @"etrecheck://unknownfiles/check"
+        NSLinkAttributeName : @"etrecheck://cleanup/cleanup"
       }];
     
   return [urlString autorelease];

@@ -10,8 +10,8 @@
 @class DetailManager;
 @class SMARTManager;
 @class HelpManager;
+@class CleanupManager;
 @class AdwareManager;
-@class UnknownFilesManager;
 @class UpdateManager;
 @class PreferencesManager;
 @class EtreCheckWindow;
@@ -83,8 +83,8 @@
   DetailManager * myDetailManager;
   SMARTManager * mySMARTManager;
   HelpManager * myHelpManager;
+  CleanupManager * myCleanupManager;
   AdwareManager * myAdwareManager;
-  UnknownFilesManager * myUnknownFilesManager;
   UpdateManager * myUpdateManager;
   PreferencesManager *myPreferencesManager;
   
@@ -158,8 +158,8 @@
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet SMARTManager * smartManager;
 @property (retain) IBOutlet HelpManager * helpManager;
+@property (retain) IBOutlet CleanupManager * cleanupManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
-@property (retain) IBOutlet UnknownFilesManager * unknownFilesManager;
 @property (retain) IBOutlet UpdateManager * updateManager;
 @property (retain) IBOutlet PreferencesManager * preferencesManager;
 @property (assign) BOOL reportAvailable;

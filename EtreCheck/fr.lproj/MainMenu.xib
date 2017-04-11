@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1108" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1421" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
@@ -18,7 +18,7 @@
                 <outlet property="TOUPanel" destination="wFy-Tx-jaS" id="OQp-vI-E3a"/>
                 <outlet property="TOUView" destination="F9C-fa-au5" id="MrO-fL-7PW"/>
                 <outlet property="acceptTOUButton" destination="DKy-nR-Lfl" id="VJO-0j-Zug"/>
-                <outlet property="adwareManager" destination="PIp-F1-rtQ" id="U8z-eZ-DIq"/>
+                <outlet property="adwareManager" destination="co3-N1-xdH" id="9wR-Jr-i8y"/>
                 <outlet property="agentImage" destination="X6k-bh-0bO" id="029-YW-2tT"/>
                 <outlet property="animationView" destination="cs1-k8-fgW" id="UaA-Y7-kiB"/>
                 <outlet property="applicationIcon" destination="24p-7h-cH3" id="8z3-r1-Kkm"/>
@@ -26,6 +26,7 @@
                 <outlet property="cancelButton" destination="mIX-Fq-FhE" id="78h-jv-kTM"/>
                 <outlet property="chooseAProblemButton" destination="hoP-da-eTO" id="lRE-D4-6cd"/>
                 <outlet property="chooseAProblemPromptItem" destination="VZL-H4-tQX" id="Mzg-uk-dlR"/>
+                <outlet property="cleanupManager" destination="PIp-F1-rtQ" id="Kad-Hi-diM"/>
                 <outlet property="clipboardCopyButton" destination="VXK-UK-iGc" id="0Cu-4e-3CV"/>
                 <outlet property="clipboardCopyToolbarItemView" destination="rsP-Zh-fiv" id="lNz-Ga-w52"/>
                 <outlet property="closeMenuItem" destination="dCA-cE-5O5" id="nwQ-u7-70q"/>
@@ -61,7 +62,6 @@
                 <outlet property="textSizeButton" destination="jsW-vt-mGu" id="LkE-WY-385"/>
                 <outlet property="textSizeToolbarItemView" destination="YS5-4a-2MZ" id="5d7-vU-BSR"/>
                 <outlet property="toolbar" destination="em7-XY-ghW" id="kS5-WD-SLt"/>
-                <outlet property="unknownFilesManager" destination="co3-N1-xdH" id="eQ2-YC-Gna"/>
                 <outlet property="updateManager" destination="HDE-zp-fvw" id="T7J-ic-Ove"/>
                 <outlet property="userParametersPanel" destination="2ST-Xw-QIL" id="ccY-Yj-EP9"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
@@ -108,14 +108,14 @@
                 <outlet property="view" destination="MBn-u2-n9n" id="TQI-Cf-LEn"/>
             </connections>
         </viewController>
-        <customObject id="PIp-F1-rtQ" userLabel="Adware Manager" customClass="AdwareManager">
+        <customObject id="PIp-F1-rtQ" userLabel="Adware Manager" customClass="CleanupManager">
             <connections>
                 <outlet property="tableView" destination="Clg-wI-oR5" id="Lq9-El-HtZ"/>
                 <outlet property="textView" destination="BtD-0T-27q" id="2qS-0q-m72"/>
                 <outlet property="window" destination="EUw-Fv-WNg" id="2Yh-Xi-4zb"/>
             </connections>
         </customObject>
-        <customObject id="co3-N1-xdH" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
+        <customObject id="co3-N1-xdH" userLabel="Unknown files Manager" customClass="AdwareManager">
             <connections>
                 <outlet property="removeButton" destination="928-Rk-LBh" id="xgS-mZ-4nm"/>
                 <outlet property="reportButton" destination="Bxa-zN-cv6" id="5Go-cq-myy"/>
@@ -539,7 +539,6 @@
         </menu>
         <window title="Journal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Log" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="8G9-V1-dBM">
@@ -934,9 +933,9 @@ Gw
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="g85-q5-HAV">
-                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                    <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="QP3-19-cio">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" id="QP3-19-cio">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -1515,7 +1514,7 @@ DQ
             </view>
             <point key="canvasLocation" x="316" y="92.5"/>
         </window>
-        <window title="Les fichier inconnus" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="xrD-Uw-hrd" userLabel="Unknown files Window">
+        <window title="Les fichiers adwares" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="xrD-Uw-hrd" userLabel="Adware Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="475"/>
@@ -1576,10 +1575,10 @@ DQ
                                     <rect key="frame" x="0.0" y="0.0" width="510" height="53"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="510" height="53"/>
+                                    <size key="minSize" width="526" height="53"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="510" height="53"/>
+                                    <size key="minSize" width="526" height="53"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <connections>
                                         <binding destination="co3-N1-xdH" name="attributedString" keyPath="self.whitelistDescription" id="84z-H0-0Cu">
@@ -1646,18 +1645,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </tableColumn>
-                                        <tableColumn identifier="signed" editable="NO" width="49.49609375" minWidth="10" maxWidth="3.4028234663852886e+38" id="Mn5-cn-dt1">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Vérifié ?">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" enabled="NO" inset="2" id="sbU-iL-dHD">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                        </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="356.88671875" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
+                                        <tableColumn identifier="path" editable="NO" width="409.38671875" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Le fichier inconnu">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1688,7 +1676,7 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="qrf-DP-hp6">
-                            <rect key="frame" x="0.0" y="0.0" width="528" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="526.5" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -1720,7 +1708,7 @@ DQ
             </view>
             <point key="canvasLocation" x="167" y="2248.5"/>
         </window>
-        <window title="L’adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="EUw-Fv-WNg" userLabel="Adware Window">
+        <window title="Le nettoyage" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="EUw-Fv-WNg" userLabel="Cleanup Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="324"/>
@@ -1785,7 +1773,7 @@ DQ
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="path" editable="NO" width="522.8515625" minWidth="40" maxWidth="1000" id="KkZ-kd-4Kz">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Les fichiers adwares">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Les fichiers orphelins">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1923,7 +1911,6 @@ Gw
         </window>
         <window title="Préférences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Preferences" animationBehavior="default" id="vgE-5p-8hO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
-            <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="302" height="80"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="HOk-dd-OrA">

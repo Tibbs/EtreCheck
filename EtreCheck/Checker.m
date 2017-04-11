@@ -42,7 +42,7 @@
 #import "Model.h"
 #import "LogCollector.h"
 #import "AdwareCollector.h"
-#import "UnknownFilesCollector.h"
+#import "CleanupCollector.h"
 #import "EtreCheckCollector.h"
 
 // Perform the check.
@@ -337,7 +337,7 @@
   [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
 
   [collectors addObject: adwareCollector];
-  [collectors addObject: [[UnknownFilesCollector new] autorelease]];
+  [collectors addObject: [[CleanupCollector new] autorelease]];
   [collectors addObject: [[EtreCheckCollector new] autorelease]];
 
   // Start the agents and daemons animation.
@@ -411,7 +411,7 @@
   [result appendAttributedString: [self getResult: @"gatekeeper"]];
   [result appendAttributedString: [self getResult: @"applications"]];
   [result appendAttributedString: [self getResult: @"adware"]];
-  [result appendAttributedString: [self getResult: @"unknownfiles"]];
+  [result appendAttributedString: [self getResult: @"cleanup"]];
   [result appendAttributedString: [self getResult: @"kernelextensions"]];
   [result appendAttributedString: [self getResult: @"startupitems"]];
   [result appendAttributedString: [self getResult: @"systemlaunchagents"]];

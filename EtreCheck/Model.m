@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "Model.h"
@@ -27,7 +27,7 @@
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize launchdFiles = myLaunchdFiles;
 @synthesize processes = myProcesses;
-@synthesize adwareFound = myAdwareFound;
+@synthesize possibleAdwareFound = myPossibleAdwareFound;
 @synthesize adwareFiles = myAdwareFiles;
 @synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
@@ -52,6 +52,7 @@
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize sip = mySIP;
+@synthesize cleanupRequired = myCleanupRequired;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -68,6 +69,45 @@
   return [[files copy] autorelease];
   }
 
+- (bool) possibleAdwareFound
+  {
+  if([self.adwareLaunchdFiles count] > 0)
+    return YES;
+    
+  if([self.adwareFiles count] > 0)
+    return YES;
+    
+  if([self.unknownLaunchdFiles count] > 0)
+    return YES;
+
+  if([self.unknownFiles count] > 0)
+    return YES;
+
+  return NO;
+  }
+
+- (NSDictionary *) orphanLaunchdFiles
+  {
+  NSMutableDictionary * files = [NSMutableDictionary dictionary];
+  
+  for(NSString * path in self.launchdFiles)
+    {
+    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    
+    // Skip Apple files.
+    if([[info objectForKey: kApple] boolValue])
+      continue;
+      
+    // Check for a missing executable.
+    NSString * signature = [info objectForKey: kSignature];
+    
+    if([signature isEqualToString: kExecutableMissing])
+      [files setObject: info forKey: path];
+    }
+    
+  return [[files copy] autorelease];
+  }
+
 - (NSDictionary *) unknownLaunchdFiles
   {
   NSMutableDictionary * files = [NSMutableDictionary dictionary];
@@ -77,7 +117,18 @@
     NSDictionary * info = [self.launchdFiles objectForKey: path];
     
     if([[info objectForKey: kUnknown] boolValue])
+      {
+      // Check for a valid executable.
+      NSString * signature = [info objectForKey: kSignature];
+      
+      if([signature isEqualToString: kSignatureApple])
+        continue;
+
+      if([signature isEqualToString: kSignatureValid])
+        continue;
+
       [files setObject: info forKey: path];
+      }
     }
     
   return [[files copy] autorelease];
@@ -311,8 +362,6 @@
     
       [info setObject: launchdInfo forKey: kAdwareLaunchdInfo];
       }
-    
-    self.adwareFound = YES;
     }
     
   [info release];

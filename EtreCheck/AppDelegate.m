@@ -24,8 +24,8 @@
 #import "SMARTManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
+#import "CleanupManager.h"
 #import "AdwareManager.h"
-#import "UnknownFilesManager.h"
 #import "UpdateManager.h"
 #import "PreferencesManager.h"
 #import "SubProcess.h"
@@ -107,8 +107,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize detailManager = myDetailManager;
 @synthesize smartManager = mySMARTManager;
 @synthesize helpManager = myHelpManager;
+@synthesize cleanupManager = myCleanupManager;
 @synthesize adwareManager = myAdwareManager;
-@synthesize unknownFilesManager = myUnknownFilesManager;
 @synthesize preferencesManager = myPreferencesManager;
 @synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
@@ -566,10 +566,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.detailManager showDetail: relativePath];
     else if([manager isEqualToString: @"help"])
       [self.helpManager showDetail: relativePath];
+    else if([manager isEqualToString: @"cleanup"])
+      [self.cleanupManager show];
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager show];
-    else if([manager isEqualToString: @"unknownfiles"])
-      [self.unknownFilesManager show];
     else if([manager isEqualToString: @"smart"])
       [self.smartManager showDetail: relativePath];
     else if([manager isEqualToString: @"license"])
@@ -1314,7 +1314,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           [[NSBundle mainBundle]
             pathForResource: @"linkhelp" ofType: @"rtf"]]];
 
-  if([[Model model] adwareFound])
+  if([[Model model] possibleAdwareFound])
     [self.log
       appendRTFData:
         [NSData
@@ -1322,13 +1322,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
     
-  if([[Model model] unknownFilesFound])
+  if([[Model model] cleanupRequired])
     [self.log
       appendRTFData:
         [NSData
           dataWithContentsOfFile:
             [[NSBundle mainBundle]
-              pathForResource: @"unknownhelp" ofType: @"rtf"]]];
+              pathForResource: @"cleanuphelp" ofType: @"rtf"]]];
 
   [self.log appendString: @"\n"];
   }

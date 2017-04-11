@@ -1,23 +1,22 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
-#import "UnknownFilesCollector.h"
+#import "CleanupCollector.h"
 #import "Model.h"
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "UnknownFilesManager.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
 
-// Collect information about unknown files.
-@implementation UnknownFilesCollector
+// Collect information about clean up opportuntities.
+@implementation CleanupCollector
 
 // Constructor.
 - (id) init
@@ -26,7 +25,7 @@
   
   if(self)
     {
-    self.name = @"unknownfiles";
+    self.name = @"cleanup";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
@@ -37,28 +36,25 @@
 - (void) collect
   {
   [self
-    updateStatus: NSLocalizedString(@"Checking for unknown files", NULL)];
+    updateStatus:
+      NSLocalizedString(@"Checking for clean up opportuntities", NULL)];
 
-  [self printUnknownFiles];
+  [self printMissingExecutables];
   
   dispatch_semaphore_signal(self.complete);
   }
 
-// Print any unknown files.
-- (void) printUnknownFiles
+// Print any missing executables.
+- (void) printMissingExecutables
   {
-  NSDictionary * unknownLaunchdFiles = [[Model model] unknownLaunchdFiles];
-  NSArray * unknownFiles = [[Model model] unknownFiles];
+  NSDictionary * orphanLaunchdFiles = [[Model model] orphanLaunchdFiles];
   
-  NSUInteger unknownFileCount =
-    [unknownLaunchdFiles count] + [unknownFiles count];
-  
-  if(unknownFileCount > 0)
+  if([orphanLaunchdFiles count] > 0)
     {
     [self.result appendAttributedString: [self buildTitle]];
     
     NSArray * sortedUnknownLaunchdFiles =
-      [[unknownLaunchdFiles allKeys]
+      [[orphanLaunchdFiles allKeys]
         sortedArrayUsingSelector: @selector(compare:)];
       
     [sortedUnknownLaunchdFiles
@@ -70,7 +66,7 @@
               [NSString
                 stringWithFormat: @"    %@", [Utilities cleanPath: obj]]];
 
-          NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
+          NSDictionary * info = [orphanLaunchdFiles objectForKey: obj];
           
           NSString * signature = [info objectForKey: kSignature];
           
@@ -97,21 +93,9 @@
             }
           }];
       
-    NSArray * sortedUnknownFiles =
-      [unknownFiles sortedArrayUsingSelector: @selector(compare:)];
-      
-    [sortedUnknownFiles
-      enumerateObjectsUsingBlock:
-        ^(id obj, NSUInteger idx, BOOL * stop)
-          {
-          [self.result
-            appendString:
-              [NSString
-                stringWithFormat: @"    %@\n", [Utilities cleanPath: obj]]];
-          }];
-
     NSString * message =
-      TTTLocalizedPluralString(unknownFileCount, @"unknown file", NULL);
+      TTTLocalizedPluralString(
+        [orphanLaunchdFiles count], @"orphan file", NULL);
 
     [self.result appendString: @"    "];
     
@@ -123,16 +107,18 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
     
-    NSAttributedString * checkLink =
-      [self generateCheckFilesLink: @"files"];
+    NSAttributedString * cleanupLink =
+      [self generateRemoveOrphanFilesLink: @"files"];
 
-    if(checkLink)
+    if(cleanupLink)
       {
-      [self.result appendAttributedString: checkLink];
+      [self.result appendAttributedString: cleanupLink];
       [self.result appendString: @"\n"];
       }
     
     [self.result appendCR];
+    
+    [[Model model] setCleanupRequired: YES];
     }
   }
 

@@ -60,9 +60,9 @@
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
 		A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */; };
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
-		A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */; };
-		A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */; };
-		A5716E161C4C5A6E00297727 /* UnknownFilesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */; };
+		A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */; };
+		A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* CleanupCollector.m */; };
+		A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* AdwareManager.m */; };
 		A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
@@ -87,7 +87,7 @@
 		A5C9FC041A1AADA200C1EAA5 /* LogCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */; };
 		A5CC608F19B4BF9E006D7E94 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A55BC1AF15C0901800D42EF1 /* ServiceManagement.framework */; };
 		A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CF26E71A279DAD002386F0 /* AdwareCollector.m */; };
-		A5CF26EB1A27FB21002386F0 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CF26EA1A27FB21002386F0 /* AdwareManager.m */; };
+		A5CF26EB1A27FB21002386F0 /* CleanupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CF26EA1A27FB21002386F0 /* CleanupManager.m */; };
 		A5D0877919ECACF6004F52C2 /* NSArray+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D0877819ECACF6004F52C2 /* NSArray+Etresoft.m */; };
 		A5D0877C19ECAD4E004F52C2 /* NSDictionary+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D0877B19ECAD4E004F52C2 /* NSDictionary+Etresoft.m */; };
 		A5D25B2D19C4D11F006728B8 /* TTTLocalizedPluralString.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D25B2C19C4D11F006728B8 /* TTTLocalizedPluralString.m */; };
@@ -246,12 +246,12 @@
 		A55BC1CA15C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcurl.4.dylib; sourceTree = "<group>"; };
 		A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
-		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
-		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
-		A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnknownFilesCollector.h; sourceTree = "<group>"; };
-		A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnknownFilesCollector.m; sourceTree = "<group>"; };
-		A5716E131C4C5A6E00297727 /* UnknownFilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnknownFilesManager.h; sourceTree = "<group>"; };
-		A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnknownFilesManager.m; sourceTree = "<group>"; };
+		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
+		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
+		A5716E111C4C5A6E00297727 /* CleanupCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CleanupCollector.h; sourceTree = "<group>"; };
+		A5716E121C4C5A6E00297727 /* CleanupCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanupCollector.m; sourceTree = "<group>"; };
+		A5716E131C4C5A6E00297727 /* AdwareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdwareManager.h; sourceTree = "<group>"; };
+		A5716E141C4C5A6E00297727 /* AdwareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdwareManager.m; sourceTree = "<group>"; };
 		A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsCollector.h; sourceTree = "<group>"; };
 		A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsCollector.m; sourceTree = "<group>"; };
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
@@ -295,8 +295,8 @@
 		A5CC608C19B4BF52006D7E94 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		A5CF26E61A279DAD002386F0 /* AdwareCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdwareCollector.h; sourceTree = "<group>"; };
 		A5CF26E71A279DAD002386F0 /* AdwareCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdwareCollector.m; sourceTree = "<group>"; };
-		A5CF26E91A27FB21002386F0 /* AdwareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdwareManager.h; sourceTree = "<group>"; };
-		A5CF26EA1A27FB21002386F0 /* AdwareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdwareManager.m; sourceTree = "<group>"; };
+		A5CF26E91A27FB21002386F0 /* CleanupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CleanupManager.h; sourceTree = "<group>"; };
+		A5CF26EA1A27FB21002386F0 /* CleanupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanupManager.m; sourceTree = "<group>"; };
 		A5D0877719ECACF6004F52C2 /* NSArray+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Etresoft.h"; sourceTree = "<group>"; };
 		A5D0877819ECACF6004F52C2 /* NSArray+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Etresoft.m"; sourceTree = "<group>"; };
 		A5D0877A19ECAD4E004F52C2 /* NSDictionary+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Etresoft.h"; sourceTree = "<group>"; };
@@ -391,10 +391,10 @@
 				A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */,
 				A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */,
 				A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */,
-				A5CF26E91A27FB21002386F0 /* AdwareManager.h */,
-				A5CF26EA1A27FB21002386F0 /* AdwareManager.m */,
-				A5716E131C4C5A6E00297727 /* UnknownFilesManager.h */,
-				A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */,
+				A5CF26E91A27FB21002386F0 /* CleanupManager.h */,
+				A5CF26EA1A27FB21002386F0 /* CleanupManager.m */,
+				A5716E131C4C5A6E00297727 /* AdwareManager.h */,
+				A5716E141C4C5A6E00297727 /* AdwareManager.m */,
 				A53EA3701C6E86B600F270B0 /* UpdateManager.h */,
 				A53EA3711C6E86B600F270B0 /* UpdateManager.m */,
 				F7B1FDAD1D828B7C0027E122 /* PreferencesManager.h */,
@@ -488,8 +488,8 @@
 				A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */,
 				A5CF26E61A279DAD002386F0 /* AdwareCollector.h */,
 				A5CF26E71A279DAD002386F0 /* AdwareCollector.m */,
-				A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */,
-				A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */,
+				A5716E111C4C5A6E00297727 /* CleanupCollector.h */,
+				A5716E121C4C5A6E00297727 /* CleanupCollector.m */,
 				A51906791D49B092009AA835 /* EtreCheckCollector.h */,
 				A519067A1D49B092009AA835 /* EtreCheckCollector.m */,
 			);
@@ -615,7 +615,7 @@
 				A54DF6561BD70A3C00753E87 /* TOU.rtf */,
 				A55BC17C15BF987D00D42EF1 /* Credits.rtf */,
 				A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */,
-				A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */,
+				A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */,
 				A546BFB91A5348880032C354 /* linkhelp.rtf */,
 				A5C9E0801DBDD1DA0099288B /* smartctl */,
 			);
@@ -660,7 +660,7 @@
 		A55BC16015BF987D00D42EF1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Etresoft;
 				TargetAttributes = {
 					A55BC16815BF987D00D42EF1 = {
@@ -703,7 +703,7 @@
 				A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */,
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
-				A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */,
+				A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
 				A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */,
 				A518C4661C4814740094D7CC /* Help in Resources */,
@@ -749,7 +749,7 @@
 				A5C292F219A13D0800464E86 /* HardwareCollector.m in Sources */,
 				A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */,
 				A5FC11FA19A4C03E00E81E9C /* UserInternetPlugInsCollector.m in Sources */,
-				A5716E161C4C5A6E00297727 /* UnknownFilesManager.m in Sources */,
+				A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */,
 				A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */,
 				A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */,
 				A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */,
@@ -774,7 +774,7 @@
 				A52006A21A292A2200644C40 /* PopoverManager.m in Sources */,
 				A50C9DAD19A2ACB600BA6A25 /* StartupItemsCollector.m in Sources */,
 				A5C292E919A039CB00464E86 /* LaunchAgentsCollector.m in Sources */,
-				A5CF26EB1A27FB21002386F0 /* AdwareManager.m in Sources */,
+				A5CF26EB1A27FB21002386F0 /* CleanupManager.m in Sources */,
 				A5FC120019A4C4E900E81E9C /* PreferencePanesCollector.m in Sources */,
 				A50C9DC819A4063E00BA6A25 /* PlugInsCollector.m in Sources */,
 				A5C9FC041A1AADA200C1EAA5 /* LogCollector.m in Sources */,
@@ -787,7 +787,7 @@
 				A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */,
 				A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */,
 				A51ED7611DAAF9B60026833B /* CURLRequest.m in Sources */,
-				A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */,
+				A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */,
 				A5FC11EE19A4BFDC00E81E9C /* AudioPlugInsCollector.m in Sources */,
 				A50C9DB019A2DFDB00BA6A25 /* DiskCollector.m in Sources */,
 				A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */,
@@ -898,13 +898,13 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */ = {
+		A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A5716E0E1C4C41BB00297727 /* en */,
 				A5716E101C4C41C700297727 /* fr */,
 			);
-			name = unknownhelp.rtf;
+			name = cleanuphelp.rtf;
 			sourceTree = "<group>";
 		};
 		A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */ = {
@@ -941,13 +941,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_LIBRARY_DIR)/Frameworks/CoreServices.framework/Versions/A/Frameworks",
@@ -978,7 +978,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -1007,7 +1006,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = U87NE528LC;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -1018,6 +1017,8 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.etresoft.${PRODUCT_NAME:rfc1034identifier}";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1025,7 +1026,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = U87NE528LC;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -1036,6 +1037,8 @@
 					"$(SDKROOT)/usr/lib/system",
 					"$(PROJECT_DIR)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.etresoft.${PRODUCT_NAME:rfc1034identifier}";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

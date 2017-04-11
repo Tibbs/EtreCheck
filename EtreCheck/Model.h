@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
@@ -53,7 +53,7 @@
   NSMutableSet * myProcesses;
   NSString * myComputerName;
   NSString * myHostName;
-  bool myAdwareFound;
+  bool myPossibleAdwareFound;
   NSMutableDictionary * myAdwareFiles;
   NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;
@@ -76,6 +76,7 @@
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
   bool mySIP;
+  bool myCleanupRequired;
   }
 
 // Keep track of the OS version.
@@ -127,14 +128,17 @@
 // Host name.
 @property (retain) NSString * hostName;
 
-// Did I find any adware?
-@property (assign) bool adwareFound;
+// Did I find any possible adware?
+@property (readonly) bool possibleAdwareFound;
 
 // Adware files, whether launchd-based or not.
 @property (readonly) NSMutableDictionary * adwareFiles;
 
 // Adware launchd files.
 @property (readonly) NSDictionary * adwareLaunchdFiles;
+
+// Orphan launchd files.
+@property (readonly) NSDictionary * orphanLaunchdFiles;
 
 // Potential adware files.
 @property (retain) NSMutableDictionary * potentialAdwareTrioFiles;
@@ -201,6 +205,9 @@
 
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
+
+// Is clean up required?
+@property (assign) bool cleanupRequired;
 
 // Return the singeton of shared values.
 + (Model *) model;

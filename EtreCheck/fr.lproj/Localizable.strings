@@ -42,7 +42,7 @@
 "Checking Gatekeeper information" = "Vérification des informations Gatekeeper";
 "Checking software" = "Vérification du logiciel";
 "Checking daemons and agents" = "Vérification des daemons et des agents";
-"Checking for unknown files" = "Vérification des fichiers inconnus";
+"Checking for clean up opportuntities" = "Vérification des opportunités de nettoyage";
 "model" = "modèle";
 "%@S.M.A.R.T. Status: %@\n" = "%@Statut S.M.A.R.T. : %@\n";
 "<not mounted>" = "<non monté>";
@@ -189,14 +189,14 @@
 "%d error (plural rule: one)" = "une erreur";
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
-"adware" = "EtreCheck a détecté que votre Macintosh est infecté par un adware identifié comme tel par les recherches propres d’Etresoft et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la vérification.";
-"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas repris sur la liste blanche des logiciels sûrs. C’est peut-être un adware ou un malware. Mais il est aussi possible que ce soit un tout nouvel élément qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Identifiez tous les fichiers que vous voulez enlever et ceux que vous voulez garder. Cliquez sur le bouton désiré pour enlever les fichiers marqués pour l’enlèvement ou signaler les fichiers légitimes à Etresoft. Si vous gardez un fichier, s’il vous plaît décrire pourquoi il devrait être ajouté à la liste blanche. Si vous ne savez pas quoi faire, garder les fichiers et les signaler à Etresoft pour la recherche. EtreCheck n’enlèvera pas un fichier qui porte une signature numérique publiée par Apple.";
+"adware" = "EtreCheck a détecté que votre Macintosh est peut-être infecté par l’adware.\n\nEtreCheck a deviné les fichiers qui ont l’air d’être l’adware et ceux qui sont peut-être légitimes. Veuillez vérifier chaque fichier et choisir «Enlever» ou «Garder». Puis, cliquez sur le bouton «Enlever» pour supprimer l'adware, ou cliquer sur le bouton «Signaler» pour ajouter le fichier à la liste blanche des fichiers légitimes.\n\nVos décisions seront automatiquement envoyer à Etresoft afin de mettre à jour nos bases de données d'adwares et de fichiers légitimes.";
+"orphan" = "EtreCheck a trouvé des fichiers launchd qui peuvent être retirés car ils font référence à des logiciels qui ne sont plus installés. Cliquez sur le bouton «Retirer» pour retirés ces fichiers orphelins.";
 "%d adware file (plural rule: zero)" = "";
-"%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
-"%d adware file (plural rule: other)" = "%d fichiers adware trouvés.";
-"%d unknown file (plural rule: zero)" = "";
-"%d unknown file (plural rule: one)" = "Un fichier inconnu trouvé.";
-"%d unknown file (plural rule: other)" = "%d fichiers inconnus trouvés.";
+"%d adware file (plural rule: one)" = "Un fichier trouvé qui peut-être adware.";
+"%d adware file (plural rule: other)" = "%d fichiers trouvés qui peuvent-être adware.";
+"%d orphan file (plural rule: zero)" = "";
+"%d orphan file (plural rule: one)" = "Un fichier orphelin trouvé.";
+"%d orphan file (plural rule: other)" = "%d fichiers orphelins trouvés.";
 "Adware!" = "Adware !";
 "[Installed]" = "[Installé]";
 "[Cache]" = "[En cache]";
@@ -214,8 +214,8 @@
 "Poor" = "À remplacer de suite";
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
-"[Remove]" = "[Retirer]";
-"[Check files]" = "[Vérifier ces fichiers]";
+"[Remove/Report]" = "[Retirer/Signaler]";
+"[Clean up]" = "[Nettoyer]";
 "More adware files" = "Davantage de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous n’ont pas été finalisées.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";
@@ -302,3 +302,5 @@
 "%@[Show SMART report]" = "%@[Afficher le rapport SMART]";
 "Description required" = "Une explication est requise";
 "descriptionrequired" = "S’il vous plaît, donnez-nous une explication pourquoi ces fichier doivent être ajouté à la liste blanche.";
+"adwarefile" = "L’adware : ";
+"unknownfile" = "Fichier inconnu : ";

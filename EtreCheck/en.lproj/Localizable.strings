@@ -29,14 +29,14 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Etresoft’s own research and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft for verification.";
-"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify the files you would like to remove and the ones you would like to keep. Click the desired button to delete files marked for deletion or report legitimate files to Etresoft. If you are keeping any files, please describe why they should be added to the whitelist. When in doubt, keep the files and report them to Etresoft for investigation.\n\nEtreCheck will not delete any files with a valid digital signature from Apple.";
+"adware" = "EtreCheck has detected that your Macintosh may be infected with adware.\n\nEtreCheck has made an educated guess about which files are truly adware and which files may be legitimate. Please review each file and choose to either “Remove” or “Keep” it. Then, click the “Remove” button to remove the adware. Click the “Report” button to add the file to the whitelist of legitimate files.\n\nYour descisions will be automatically reported to Etresoft to update our adware and whitelist databases.";
+"orphan" = "EtreCheck has found launchd scripts that can be removed because they refer to software that is no longer installed. Click the “Remove” button to remove these orphaned files.";
 "%d adware file (plural rule: zero)" = "";
-"%d adware file (plural rule: one)" = "One adware file found.";
-"%d adware file (plural rule: other)" = "%d adware files found.";
-"%d unknown file (plural rule: zero)" = "";
-"%d unknown file (plural rule: one)" = "One unknown file found.";
-"%d unknown file (plural rule: other)" = "%d unknown files found.";
+"%d adware file (plural rule: one)" = "One possible adware file found.";
+"%d adware file (plural rule: other)" = "%d possible adware files found.";
+"%d orphan file (plural rule: zero)" = "";
+"%d orphan file (plural rule: one)" = "One orphan file found.";
+"%d orphan file (plural rule: other)" = "%d orphan files found.";
 "%d pressurekilledcount (plural rule: zero)" = "    no processes killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: one)" = "    one process killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: other)" = "    %d processes killed due to insufficient RAM\n";
@@ -86,3 +86,5 @@
 "filecache" = "Cached files";
 "swapused" = "Swap Used";
 "descriptionrequired" = "Please provide a description of why these files should be added to the whitelist.";
+"adwarefile" = "Adware: ";
+"unknownfile" = "Unknown file: ";

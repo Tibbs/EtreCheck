@@ -485,7 +485,7 @@
   // Get the command.
   NSArray * command = [self collectLaunchdItemCommand: info];
   
-  if([command count])
+  if([command count] > 0)
     {
     // Get the executable.
     NSString * executable = [self collectLaunchdItemExecutable: command];
@@ -512,8 +512,9 @@
     {
     NSString * program = [info objectForKey: @"Program"];
     
-    if(program)
-      [command addObject: program];
+    if([program respondsToSelector: @selector(hasPrefix:)])
+      if([program length])
+        [command addObject: program];
       
     NSArray * arguments = [info objectForKey: @"ProgramArguments"];
     

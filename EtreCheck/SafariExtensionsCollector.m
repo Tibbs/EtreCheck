@@ -394,8 +394,6 @@
 
       [info release];
       
-      [[Model model] setAdwareFound: YES];
-
       [self.result
         appendString: NSLocalizedString(@"Adware!", NULL)
         attributes:
