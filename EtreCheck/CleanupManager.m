@@ -35,7 +35,6 @@
 - (BOOL) canRemoveFiles
   {
   return [self.filesToRemove count] > 0;
-    return NO;
   }
 
 // Show the window.
