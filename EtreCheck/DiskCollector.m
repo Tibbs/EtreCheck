@@ -56,13 +56,27 @@
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
 
-  BOOL dataFound = [self collectSerialATA];
+  BOOL dataFound = NO; //[self collectSerialATA];
   
-  if([self collectNVMExpress: dataFound])
-    dataFound = YES;
+  //if([self collectNVMExpress: dataFound])
+  //  dataFound = YES;
   
+  // There should always be data found.
   if(!dataFound)
+    {
+    [self.result appendAttributedString: [self buildTitle]];
+
+    [self.result
+      appendString:
+        NSLocalizedString(@"    Disk information not found!\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red]
+        }];
+
     [self.result appendCR];
+    }
     
   dispatch_semaphore_signal(self.complete);
   }

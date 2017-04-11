@@ -127,6 +127,10 @@
       if([signature isEqualToString: kSignatureValid])
         continue;
 
+      // This will be handled by the new clean up option.
+      if([signature isEqualToString: kExecutableMissing])
+        continue;
+        
       [files setObject: info forKey: path];
       }
     }

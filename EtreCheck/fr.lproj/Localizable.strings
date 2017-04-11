@@ -304,3 +304,4 @@
 "descriptionrequired" = "S’il vous plaît, donnez-nous une explication pourquoi ces fichier doivent être ajouté à la liste blanche.";
 "adwarefile" = "L’adware : ";
 "unknownfile" = "Fichier inconnu : ";
+"    Disk information not found!\n" = "    Informations des disques non trouvés !";
