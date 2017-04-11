@@ -43,7 +43,7 @@
 		<true/>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2013-2016 Etresoft. All rights reserved.</string>
+	<string>Copyright © 2013-2017 Etresoft. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
