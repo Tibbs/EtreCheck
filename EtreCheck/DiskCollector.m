@@ -56,10 +56,10 @@
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
 
-  BOOL dataFound = NO; //[self collectSerialATA];
+  BOOL dataFound = [self collectSerialATA];
   
-  //if([self collectNVMExpress: dataFound])
-  //  dataFound = YES;
+  if([self collectNVMExpress: dataFound])
+    dataFound = YES;
   
   // There should always be data found.
   if(!dataFound)

@@ -84,7 +84,9 @@
             [self.result
               appendString:
                 [NSString
-                  stringWithFormat: @"        Executable not found!\n"]
+                  stringWithFormat:
+                    NSLocalizedString(
+                      @"        Executable not found!\n", NULL)]
               attributes:
                 @{
                   NSForegroundColorAttributeName : [[Utilities shared] red],
