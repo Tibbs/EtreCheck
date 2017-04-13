@@ -222,7 +222,8 @@
 - (NSAttributedString *) getDetailsURLFor: (NSString *) query;
 
 // Is this file an adware file?
-- (bool) checkForAdware: (NSString *) path;
+- (bool) checkForAdware: (NSString *) path
+  info: (NSMutableDictionary *) info;
 
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) name path: (NSString *) path;

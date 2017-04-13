@@ -326,6 +326,7 @@
 
 // Is this file an adware file?
 - (bool) checkForAdware: (NSString *) path
+  info: (NSMutableDictionary *) info
   {
   if([path length] == 0)
     return NO;
@@ -335,25 +336,27 @@
 
   bool adware = NO;
   
-  NSMutableDictionary * info = [self.adwareFiles objectForKey: path];
+  NSMutableDictionary * fileInfo = [self.adwareFiles objectForKey: path];
   
-  if(info)
+  if(fileInfo)
     adware = YES;
     
-  if(!info)
-    info = [NSMutableDictionary new];
+  if(!fileInfo)
+    fileInfo = [NSMutableDictionary new];
     
-  if([self isAdwareSuffix: path info: info])
+  if([self isAdwareSuffix: path info: fileInfo])
     adware = YES;
-  else if([self isAdwareMatch: path info: info])
+  else if([self isAdwarePattern: info])
     adware = YES;
-  else if([self isAdwareTrio: path info: info])
+  else if([self isAdwareMatch: path info: fileInfo])
+    adware = YES;
+  else if([self isAdwareTrio: path info: fileInfo])
     adware = YES;
     
   if(adware)
     {
     if([self.adwareFiles objectForKey: path] == nil)
-      [self.adwareFiles setObject: info forKey: path];
+      [self.adwareFiles setObject: fileInfo forKey: path];
       
     NSMutableDictionary * launchdInfo =
       [self.launchdFiles objectForKey: path];
@@ -364,11 +367,11 @@
       [launchdInfo
         setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
     
-      [info setObject: launchdInfo forKey: kAdwareLaunchdInfo];
+      [fileInfo setObject: launchdInfo forKey: kAdwareLaunchdInfo];
       }
     }
     
-  [info release];
+  [fileInfo release];
   
   return adware;
   }
@@ -390,6 +393,24 @@
       return YES;
       }
     
+  return NO;
+  }
+
+// Do the plist file contents look like adware?
+- (bool) isAdwarePattern: (NSMutableDictionary *) info
+  {
+  // First check for /etc/*.sh files.
+  NSString * executable = [info objectForKey: kExecutable];
+  
+  if([executable hasPrefix: @"/etc/"] && [executable hasSuffix: @".sh"])
+    return YES;
+    
+  // Now check for /Library/*.
+  if([executable hasPrefix: @"/Library/"])
+    if([[executable pathExtension] length] == 0)
+      return YES;
+    
+  // This is good enough for now.
   return NO;
   }
 
@@ -573,11 +594,11 @@
   if([self isWhitelistFile: name])
     return YES;
     
-  if([self checkForAdware: path])
-    return YES;
-    
   NSMutableDictionary * info = [self.launchdFiles objectForKey: path];
   
+  if([self checkForAdware: path info: info])
+    return YES;
+    
   if(info)
     [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
 

@@ -1195,7 +1195,7 @@
     {
     // I need to check again for adware due to the agent/daemon/helper
     // adware trio.
-    [[Model model] checkForAdware: path];
+    [[Model model] checkForAdware: path info: info];
     
     if([[info objectForKey: kAdware] boolValue])
       {

@@ -200,12 +200,18 @@
       
       if(!executable)
         executable = @"";
+      
+      // Try to guess if this is adware.
+      NSString * type = @"unknownfile";
+      
+      if([[info objectForKey: kProbableAdware] boolValue])
+        type = @"probableadware";
         
       NSDictionary * possibleAdware =
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             unknownFile, @"key",
-            @"unknownfile", @"type",
+            type, @"type",
             executable, @"executable",
             nil];
         
