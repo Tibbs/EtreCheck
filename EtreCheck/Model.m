@@ -413,6 +413,38 @@
       if([[executable pathExtension] length] == 0)
         return YES;
     
+  NSArray * command = [info objectForKey: kCommand];
+
+  if([command count] >= 5)
+    {
+    NSString * arg1 =
+      [[[command objectAtIndex: 0] lowercaseString] lastPathComponent];
+    
+    NSString * commandString =
+      [NSString
+        stringWithFormat:
+          @"%@ %@ %@ %@ %@",
+          arg1,
+          [[command objectAtIndex: 1] lowercaseString],
+          [[command objectAtIndex: 2] lowercaseString],
+          [[command objectAtIndex: 3] lowercaseString],
+          [[command objectAtIndex: 4] lowercaseString]];
+    
+    if([commandString hasPrefix: @"installer -evnt agnt -oprid "])
+      return YES;
+    }
+    
+  NSString * app = [executable lastPathComponent];
+  
+  if([app hasPrefix: @"App"] && ([app length] == 5))
+    if([command count] >= 2)
+      {
+      NSString * trigger = [command objectAtIndex: 1];
+      
+      if([trigger isEqualToString: @"-trigger"])
+        return YES;
+      }
+
   // This is good enough for now.
   return NO;
   }
