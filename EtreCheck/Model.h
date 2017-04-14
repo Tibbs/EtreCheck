@@ -30,6 +30,7 @@
 #define kHighCache @"highcache"
 
 #define kMinimumWhitelistSize 1000
+#define kWhitelistDisabled NO
 
 @class DiagnosticEvent;
 

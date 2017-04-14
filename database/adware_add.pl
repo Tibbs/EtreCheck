@@ -17,10 +17,10 @@ GetOptions(
   );
 
 my $category = shift;
-my $path = shift;
+my @paths = @ARGV;
 
 die usage()
-  if not $category and not $path;
+  if not $category and not @paths;
 
 my $db = DBI->connect($connection, $user, $password, { RaiseError => 1 });
 
@@ -31,7 +31,13 @@ my $insert =
 die "Category $category not found\n"
   if not verifyCategory($category);
 
-$insert->execute($category, basename($path));
+foreach my $path (@paths)
+  {
+  $path =~ s/^"(.+)"^/$1/
+    if $path =~ /^".+"$/;
+
+  $insert->execute($category, basename($path));
+  }
 
 $db->disconnect;
 
@@ -55,7 +61,7 @@ sub verifyCategory
 sub usage
   {
   return << 'EOS';
-Usage: adware_add.pl [options...] <category> <path>
+Usage: adware_add.pl [options...] <category> <path(s)>
   where [options...] are:
     db = DBI database connection string
     user = Database user 
@@ -69,7 +75,7 @@ Usage: adware_add.pl [options...] <category> <path>
     whitelist
     whitelist_prefix
     
-  and <path> is the path to a file
+  and <path(s)> is the path to one or more files
 
 Example usage: perl adware_add.pl --db=dbi:SQLite:adware.db blacklist /path/to/malware
 EOS

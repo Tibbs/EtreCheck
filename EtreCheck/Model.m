@@ -406,9 +406,12 @@
     return YES;
     
   // Now check for /Library/*.
+  NSString * dirname = [executable stringByDeletingLastPathComponent];
+  
   if([executable hasPrefix: @"/Library/"])
-    if([[executable pathExtension] length] == 0)
-      return YES;
+    if([dirname isEqualToString: @"/Library"])
+      if([[executable pathExtension] length] == 0)
+        return YES;
     
   // This is good enough for now.
   return NO;
@@ -608,8 +611,9 @@
 // Is this file in the whitelist?
 - (bool) isWhitelistFile: (NSString *) name
   {
-  if([self.whitelistFiles count] < kMinimumWhitelistSize)
-    return YES;
+  if(!kWhitelistDisabled)
+    if([self.whitelistFiles count] < kMinimumWhitelistSize)
+      return YES;
     
   if([self.whitelistFiles containsObject: name])
     return YES;
