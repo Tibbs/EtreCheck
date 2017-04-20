@@ -107,7 +107,6 @@
 		A5FC120319A5431D00E81E9C /* FontsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC120219A5431D00E81E9C /* FontsCollector.m */; };
 		A5FC120619A5443500E81E9C /* ApplicationsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC120519A5443500E81E9C /* ApplicationsCollector.m */; };
 		A5FC120919A5509700E81E9C /* TimeMachineCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC120819A5509700E81E9C /* TimeMachineCollector.m */; };
-		F7B1FDAF1D828B7C0027E122 /* PreferencesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1FDAE1D828B7C0027E122 /* PreferencesManager.m */; };
 		F7B1FDB21D82A8860027E122 /* SearchEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1FDB11D82A8860027E122 /* SearchEngine.m */; };
 /* End PBXBuildFile section */
 
@@ -333,8 +332,6 @@
 		A5FC120519A5443500E81E9C /* ApplicationsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationsCollector.m; sourceTree = "<group>"; };
 		A5FC120719A5509700E81E9C /* TimeMachineCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeMachineCollector.h; sourceTree = "<group>"; };
 		A5FC120819A5509700E81E9C /* TimeMachineCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeMachineCollector.m; sourceTree = "<group>"; };
-		F7B1FDAD1D828B7C0027E122 /* PreferencesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesManager.h; sourceTree = "<group>"; };
-		F7B1FDAE1D828B7C0027E122 /* PreferencesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesManager.m; sourceTree = "<group>"; };
 		F7B1FDB01D82A8860027E122 /* SearchEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchEngine.h; sourceTree = "<group>"; };
 		F7B1FDB11D82A8860027E122 /* SearchEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchEngine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -397,8 +394,6 @@
 				A5716E141C4C5A6E00297727 /* AdwareManager.m */,
 				A53EA3701C6E86B600F270B0 /* UpdateManager.h */,
 				A53EA3711C6E86B600F270B0 /* UpdateManager.m */,
-				F7B1FDAD1D828B7C0027E122 /* PreferencesManager.h */,
-				F7B1FDAE1D828B7C0027E122 /* PreferencesManager.m */,
 				F7B1FDB01D82A8860027E122 /* SearchEngine.h */,
 				F7B1FDB11D82A8860027E122 /* SearchEngine.m */,
 			);
@@ -802,7 +797,6 @@
 				A50C9DBC19A3690F00BA6A25 /* ConfigurationCollector.m in Sources */,
 				A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */,
 				A50C9DC519A4052000BA6A25 /* LoginItemsCollector.m in Sources */,
-				F7B1FDAF1D828B7C0027E122 /* PreferencesManager.m in Sources */,
 				A5FC11FD19A4C30600E81E9C /* SafariExtensionsCollector.m in Sources */,
 				A5D0877919ECACF6004F52C2 /* NSArray+Etresoft.m in Sources */,
 				A5C292E619A039BD00464E86 /* SystemLaunchDaemonsCollector.m in Sources */,

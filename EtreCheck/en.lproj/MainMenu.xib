@@ -48,7 +48,6 @@
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="Gpp-rD-Etp"/>
                 <outlet property="optionsButton" destination="EBF-Wl-xZl" id="f4U-wd-G31"/>
-                <outlet property="preferencesManager" destination="ThX-aN-0qg" id="LWe-y8-he2"/>
                 <outlet property="problemDescriptionTextView" destination="78R-B9-GBa" id="USD-93-PLK"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
@@ -130,12 +129,6 @@
                 <outlet property="window" destination="gjM-qW-zLi" id="kEP-nm-w0M"/>
             </connections>
         </customObject>
-        <customObject id="ThX-aN-0qg" userLabel="Preferences Manager" customClass="PreferencesManager">
-            <connections>
-                <outlet property="popUpButton" destination="8u1-Ro-mfE" id="4q2-G3-PB8"/>
-                <outlet property="window" destination="2C0-eF-sJO" id="N3Y-32-Xfh"/>
-            </connections>
-        </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="EtreCheck" id="1Xt-HY-uBw">
@@ -156,11 +149,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="11O-wM-XNW"/>
-                            <menuItem title="Preferences…" keyEquivalent="," id="OaD-xj-Fb7">
-                                <connections>
-                                    <action selector="showPreferences:" target="-1" id="z1c-ai-PBl"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Preferences…" keyEquivalent="," id="OaD-xj-Fb7"/>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1972,15 +1961,9 @@ Gw
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <connections>
-                            <action selector="valueChanged:" target="ThX-aN-0qg" id="CX3-lb-Kua"/>
-                        </connections>
                     </popUpButton>
                 </subviews>
             </view>
-            <connections>
-                <outlet property="delegate" destination="ThX-aN-0qg" id="Nhp-Rc-VBJ"/>
-            </connections>
             <point key="canvasLocation" x="238" y="1462"/>
         </window>
     </objects>

@@ -13,7 +13,6 @@
 @class CleanupManager;
 @class AdwareManager;
 @class UpdateManager;
-@class PreferencesManager;
 @class EtreCheckWindow;
 
 @interface AppDelegate : NSObject
@@ -86,7 +85,6 @@
   CleanupManager * myCleanupManager;
   AdwareManager * myAdwareManager;
   UpdateManager * myUpdateManager;
-  PreferencesManager *myPreferencesManager;
   
   BOOL myReportAvailable;
   NSDate * myReportStartTime;
@@ -161,7 +159,6 @@
 @property (retain) IBOutlet CleanupManager * cleanupManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (retain) IBOutlet UpdateManager * updateManager;
-@property (retain) IBOutlet PreferencesManager * preferencesManager;
 @property (assign) BOOL reportAvailable;
 @property (retain) NSDate * reportStartTime;
 @property (retain) IBOutlet NSWindow * TOUPanel;

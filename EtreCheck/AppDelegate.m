@@ -27,7 +27,6 @@
 #import "CleanupManager.h"
 #import "AdwareManager.h"
 #import "UpdateManager.h"
-#import "PreferencesManager.h"
 #import "SubProcess.h"
 #import "CURLRequest.h"
 #import "EtreCheckWindow.h"
@@ -109,7 +108,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpManager = myHelpManager;
 @synthesize cleanupManager = myCleanupManager;
 @synthesize adwareManager = myAdwareManager;
-@synthesize preferencesManager = myPreferencesManager;
 @synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
@@ -2008,7 +2006,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show the preferences panel.
 - (IBAction) showPreferences: (id) sender
   {
-  [self.preferencesManager show: sender];
   }
 
 // Go to the Etresoft web site.
