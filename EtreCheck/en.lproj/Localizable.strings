@@ -88,3 +88,4 @@
 "descriptionrequired" = "Please provide a description of why these files should be added to the whitelist.";
 "adwarefile" = "Adware: ";
 "unknownfile" = "Unknown file: ";
+"ascsearch" = "https://discussions.apple.com/search.jspa?";

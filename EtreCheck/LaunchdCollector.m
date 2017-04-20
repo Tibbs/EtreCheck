@@ -430,33 +430,26 @@
 - (NSString *) getSupportURLFor: (NSDictionary *) info
   name: (NSString *) name bundleID: (NSString *) path
   {
+  NSMutableString * url = [[NSMutableString alloc] initWithString: @""];
+
   NSString * bundleID = [path lastPathComponent];
   
-  // See if I can construct a real web host.
-  NSString * host = [self convertBundleIdToHost: bundleID];
-  
-  if(host)
-    {
-    // If I seem to have a web host, construct a support URL just for that
-    // site.
-    NSString * nameParameter =
-      [name length]
-        ? name
-        : bundleID;
+  if([bundleID hasPrefix: @"com.apple."])
+    return [url autorelease];
+    
+  if([bundleID hasSuffix: @".plist"])
+    bundleID = [bundleID stringByDeletingPathExtension];
 
-    return
-      [NSString
-        stringWithFormat:
-          @"%@%@+support+site:%@",
-          [SearchEngine searchEngineURL], nameParameter, host];
-    }
-  
-  // This file isn't following standard conventions. Look for uninstall
-  // instructions.
-  return
+  NSString * query =
     [NSString
       stringWithFormat:
-        @"%@%@+uninstall+support", [SearchEngine searchEngineURL], bundleID];
+        @"%@%@%@%@",
+        NSLocalizedString(@"ascsearch", NULL),
+        @"type=discussion&showAnsweredFirst=true&q=",
+        bundleID,
+        @"&sort=updatedDesc&currentPage=1&includeResultCount=true"];
+
+  return query;
   }
 
 // Set the details URL.

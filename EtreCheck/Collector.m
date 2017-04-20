@@ -107,32 +107,28 @@
   if([bundleID hasPrefix: @"com.apple."])
     return [url autorelease];
     
-  NSString * host = [self convertBundleIdToHost: bundleID];
-  
-  if(host)
-    {
-    NSString * nameParameter =
-      [name length]
-        ? [NSString stringWithFormat: @"%@+", name]
-        : @"";
+  if([bundleID hasSuffix: @".plist"])
+    bundleID = [bundleID stringByDeletingPathExtension];
 
-    NSString * query =
-      [NSString
-        stringWithFormat:
-          @"%@%@support+site:%@",
-          [SearchEngine searchEngineURL], nameParameter, host];
-    
-    [url appendString: @" "];
+  NSString * query =
+    [NSString
+      stringWithFormat:
+        @"%@%@%@%@",
+        NSLocalizedString(@"ascsearch", NULL),
+        @"type=discussion&showAnsweredFirst=true&q=",
+        bundleID,
+        @"&sort=updatedDesc&currentPage=1&includeResultCount=true"];
 
-    [url
-      appendString: NSLocalizedString(@"[Lookup]", NULL)
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] blue],
-          NSLinkAttributeName : query
-        }];
-    }
+  [url appendString: @" "];
+
+  [url
+    appendString: NSLocalizedString(@"[Lookup]", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [[Utilities shared] blue],
+        NSLinkAttributeName : query
+      }];
     
   return [url autorelease];
   }
