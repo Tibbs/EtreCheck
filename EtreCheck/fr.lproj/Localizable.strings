@@ -97,7 +97,7 @@
 "%@ (hidden)" = "%@ (masqué)";
 " - Hidden" = " - Masqué";
 "    There was a problem retrieving launchd job status.\n" = "    Impossible de trouver le status des taches launchd\n";
-"[Support]" = "[Aide]";
+"[Lookup]" = "[Rechercher]";
 "    %@ - %@: %@\n" = "    %@ - %@ : %@\n";
 "    %@ %@ %@ CPU: %@-core\n" = "    %@ %@ %@ CPU : %@-core\n";
 "    %@: %@Path: %@\n" = "    %@ : %@Chemin : %@\n";

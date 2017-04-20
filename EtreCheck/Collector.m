@@ -125,7 +125,7 @@
     [url appendString: @" "];
 
     [url
-      appendString: NSLocalizedString(@"[Support]", NULL)
+      appendString: NSLocalizedString(@"[Lookup]", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
