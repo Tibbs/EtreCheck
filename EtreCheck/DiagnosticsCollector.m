@@ -484,8 +484,7 @@
         [NSString
           stringWithFormat:
             @"    %@     - %@",
-            [Utilities
-              dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
+            [Utilities dateAsString: event.date],
             event.name]
       attributes:
         @{
@@ -499,8 +498,7 @@
         [NSString
           stringWithFormat:
             @"    %@    %@",
-            [Utilities
-              dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
+            [Utilities dateAsString: event.date],
             event.name]];
   
   if([event.details length])

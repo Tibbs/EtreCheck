@@ -95,8 +95,7 @@
             [NSString
               stringWithFormat:
                 @"    %@ - %@\n",
-                [Utilities
-                  dateAsString: date format: @"MMM d, yyyy, hh:mm:ss a"],
+                [Utilities dateAsString: date],
                 safePath]];
         }
       }
