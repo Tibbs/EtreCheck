@@ -81,7 +81,8 @@
       vram =
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"VRAM: %@", NULL), vramAmount];
+            NSLocalizedString(@"VRAM: %@", NULL),
+            [Utilities translateSize: vramAmount]];
       
     [self.result
       appendString:

@@ -186,4 +186,7 @@
 // Find files inside an /etc/mach_init* directory.
 + (NSArray *) checkMachInit: (NSString *) path;
 
+// Translate a size.
++ (NSString *) translateSize: (NSString *) size;
+
 @end

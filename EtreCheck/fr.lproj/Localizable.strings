@@ -62,6 +62,7 @@
 "OFF\n" = "Désactivé\n";
 "    Auto backup: " = "    Sauvegarde automatique : ";
 "YES\n" = "OUI\n";
+"Yes" = "Oui";
 "NO - Auto backup turned off\n" = "NON - Sauvegarde automatique désactivée\n";
 "    Volumes being backed up:\n" = "    Disques sauvegardés :\n";
 "        %@: Disk size: %@ Disk used: %@\n" = "        %@ : Taille de disque : %@ Disque utilisé : %@\n";
@@ -107,6 +108,11 @@
 "%@%@ (%@) %@ [Startup]: %@ %@\n" = "%@%@ (%@) %@ [Démarrage]: %@ %@\n";
 "%@:\n" = "%@ :\n";
 "B KB MB GB TB" = "o Ko Mo Go To";
+"B" = "o";
+"KB" = "Ko";
+"MB" = "Mo";
+"GB" = "Go";
+"TB" = "To";
 "(Last used)" = "(Utilisé en dernier)";
 "    %@: %@%@%@" = "    %@ : %@%@%@";
 "linkstyle" = "<head><style>a { font-family: sans-serif; } a:active { color: blue; } a:hover { color: blue; } </style></head>";
@@ -305,3 +311,5 @@
 "adwarefile" = "L’adware : ";
 "unknownfile" = "Fichier inconnu : ";
 "    Disk information not found!\n" = "    Informations des disques non trouvés !\n";
+"Runtime: %@\n" = "Temps d’exécution : %@\n";
+

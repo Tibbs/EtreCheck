@@ -194,7 +194,9 @@
     if(!diskSize)
       diskSize = @"";
     else
-      diskSize = [NSString stringWithFormat: @": (%@)", diskSize];
+      diskSize =
+        [NSString
+          stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
 
     if(UUID)
       [self.volumes setObject: disk forKey: UUID];

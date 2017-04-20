@@ -1237,7 +1237,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"Runtime %@\n", NULL), [self elapsedTime]]
+          NSLocalizedString(@"Runtime: %@\n", NULL), [self elapsedTime]]
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:

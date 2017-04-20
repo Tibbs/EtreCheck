@@ -1841,4 +1841,40 @@
   return files;
   }
 
+// Translate a size.
++ (NSString *) translateSize: (NSString *) size
+  {
+  NSString * sizeSuffix = [Utilities translateSizeSuffix: size];
+  
+  if([sizeSuffix length] > 0)
+    {
+    NSString * prefix = [size substringToIndex: [size length] - 2];
+    
+    return [prefix stringByAppendingString: sizeSuffix];
+    }
+        
+  return size;
+  }
+
+// Translate a size suffix.
++ (NSString *) translateSizeSuffix: (NSString *) size
+  {
+  if([size hasSuffix: @" GB"])
+    return NSLocalizedString(@"GB", NULL);
+    
+  else if([size hasSuffix: @" MB"])
+    return NSLocalizedString(@"MB", NULL);
+    
+  else if([size hasSuffix: @" TB"])
+    return NSLocalizedString(@"TB", NULL);
+    
+  else if([size hasSuffix: @" KB"])
+    return NSLocalizedString(@"KB", NULL);
+    
+  else if([size hasSuffix: @" B"])
+    return NSLocalizedString(@"B", NULL);
+    
+  return nil;
+  }
+
 @end
