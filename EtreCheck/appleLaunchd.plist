@@ -28623,7 +28623,7 @@
 				<string>-l</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.net-snmp.snmpd.plist</key>
 		<dict>
@@ -29732,7 +29732,7 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.findmymacmessenger.plist</key>
 		<dict>
@@ -29789,7 +29789,7 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.fontd.useragent.plist</key>
 		<dict>
@@ -30081,7 +30081,7 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.java.updateSharing.plist</key>
 		<dict>
@@ -30706,7 +30706,7 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.printtool.agent.plist</key>
 		<dict>
@@ -30759,7 +30759,7 @@
 				<string>/System/Library/Frameworks/QuickLook.framework/Resources/quicklookd32.app/Contents/MacOS/quicklookd32</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.quicklook.config.plist</key>
 		<dict>
@@ -30785,7 +30785,7 @@
 				<string>/System/Library/Frameworks/QuickLook.framework/Resources/quicklookd.app/Contents/MacOS/quicklookd</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.quicklook.ui.helper.plist</key>
 		<dict>
@@ -30798,7 +30798,7 @@
 				<string>/System/Library/Frameworks/Quartz.framework/Frameworks/QuickLookUI.framework/Resources/QuickLookUIHelper.app/Contents/MacOS/QuickLookUIHelper</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.rcd.plist</key>
 		<dict>
@@ -30990,7 +30990,7 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.screensharing.agent.plist</key>
 		<dict>
@@ -31673,7 +31673,7 @@
 				<string>-s</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.warmd_agent.plist</key>
 		<dict>
