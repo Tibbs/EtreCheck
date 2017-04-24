@@ -89,3 +89,7 @@
 "adwarefile" = "Adware: ";
 "unknownfile" = "Unknown file: ";
 "ascsearch" = "https://discussions.apple.com/search.jspa?";
+"applesignatureindicator" = "  ";
+"validsignatureindicator" = " ✔︎ ";
+"shellscriptindicator" = " § ";
+    

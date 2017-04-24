@@ -23,6 +23,9 @@
 #define kSignatureSkipped @"signatureskipped"
 #define kShell @"signatureshell"
 #define kCodesignFailed @"codesignfailed"
+#define kAppleSignatureIndicator @"applesignatureindicator"
+#define kValidSignatureIndicator @"validsignatureindicator"
+#define kShellScriptIndicator @"shellscriptindicator"
 
 // Assorted utilities.
 @interface Utilities : NSObject

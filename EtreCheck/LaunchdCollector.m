@@ -793,6 +793,19 @@
   // Add the name.
   [output appendString: [Utilities prettyPath: filename]];
   
+  // Add a signature indicator.
+  NSString * signature = [info objectForKey: kSignature];
+  
+  if([signature isEqualToString: kSignatureApple])
+    [output
+      appendString: NSLocalizedString(kAppleSignatureIndicator, NULL)];
+  else if([signature isEqualToString: kSignatureValid])
+    [output
+      appendString: NSLocalizedString(kValidSignatureIndicator, NULL)];
+  else if([signature isEqualToString: kShell])
+    [output
+      appendString: NSLocalizedString(kShellScriptIndicator, NULL)];
+
   // Add any extra content.
   [output
     appendAttributedString: [self formatExtraContent: info for: path]];

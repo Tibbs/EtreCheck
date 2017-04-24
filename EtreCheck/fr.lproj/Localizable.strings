@@ -313,4 +313,8 @@
 "    Disk information not found!\n" = "    Informations des disques non trouvés !\n";
 "Runtime: %@\n" = "Temps d’exécution : %@\n";
 "ascsearch" = "https://communities.apple.com/fr/search.jspa?";
+"applesignatureindicator" = "  ";
+"validsignatureindicator" = " ✔︎ ";
+"shellscriptindicator" = " § ";
+    
 
