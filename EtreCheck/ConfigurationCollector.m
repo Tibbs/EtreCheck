@@ -138,16 +138,9 @@
       if((version >= kYosemite) && (attributes.fileSize != expectedSize))
         switch(version)
           {
+          // Just accept anything recent.
           case kYosemite:
-            if(attributes.fileSize == 1242)
-              expectedSize = attributes.fileSize;
-            break;
           case kElCapitan:
-            if(attributes.fileSize == 1242)
-              expectedSize = attributes.fileSize;
-            else if(attributes.fileSize == 1275)
-              expectedSize = attributes.fileSize;
-            break;
           case kSierra:
             if(attributes.fileSize == 1242)
               expectedSize = attributes.fileSize;
