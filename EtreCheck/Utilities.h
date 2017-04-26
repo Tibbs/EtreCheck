@@ -102,6 +102,9 @@
 // Uncompress some data.
 + (NSData *) ungzip: (NSData *) gzipData;
 
+// Build a secure URL string.
++ (NSString *) buildSecureURLString: (NSString *) url;
+
 // Build a URL.
 + (NSAttributedString *) buildURL: (NSString *) url
   title: (NSString *) title;

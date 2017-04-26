@@ -527,6 +527,24 @@
   return result;
   }
 
+// Build a secure URL string.
++ (NSString *) buildSecureURLString: (NSString *) url
+  {
+  NSString * path = url;
+  
+  if([path hasPrefix: @"http://"])
+    path = [url substringFromIndex: 7];
+  else if([path hasPrefix: @"https://"])
+    path = [url substringFromIndex: 8];
+  
+  int version = [[Model model] majorOSVersion];
+  
+  if(version < kYosemite)
+    return [@"http://" stringByAppendingString: path];
+    
+  return [@"https://" stringByAppendingString: path];
+  }
+
 // Build a URL.
 + (NSAttributedString *) buildURL: (NSString *) url
   title: (NSString *) title

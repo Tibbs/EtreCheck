@@ -363,7 +363,10 @@
   
   POST * request =
     [[POST alloc]
-      init: @"https://etrecheck.com/server/adware_detection.php"
+      init:
+        [Utilities
+          buildSecureURLString:
+            @"etrecheck.com/server/adware_detection.php"]
       callback:
         ^(CURLRequest * curlRequest, BOOL success)
           {

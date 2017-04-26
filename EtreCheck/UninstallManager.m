@@ -334,7 +334,10 @@
   
   POST * request =
     [[POST alloc]
-      init: @"https://etrecheck.com/server/adware_detection.php"];
+      init:
+        [Utilities
+          buildSecureURLString:
+            @"etrecheck.com/server/adware_detection.php"]];
 
   dispatch_async(
     dispatch_get_global_queue(

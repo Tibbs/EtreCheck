@@ -22056,15 +22056,15 @@
 			<key>label</key>
 			<string>org.apache.httpd</string>
 			<key>program</key>
-			<string>/usr/sbin/httpd-wrapper</string>
+			<string>/usr/sbin/httpd</string>
 			<key>programArguments</key>
 			<array>
-				<string>/usr/sbin/httpd-wrapper</string>
+				<string>/usr/sbin/httpd</string>
 				<string>-D</string>
 				<string>FOREGROUND</string>
 			</array>
 			<key>signature</key>
-			<string>signatureshell</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.cups.cups-lpd.plist</key>
 		<dict>
@@ -24398,7 +24398,7 @@
 				<string>/System/Library/CoreServices/Spotlight.app/Contents/MacOS/Spotlight</string>
 			</array>
 			<key>signature</key>
-			<string>signaturenotvalid</string>
+			<string>signatureapple</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.SSInvitationAgent.plist</key>
 		<dict>

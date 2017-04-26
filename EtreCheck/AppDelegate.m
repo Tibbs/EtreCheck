@@ -587,7 +587,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   GET * request =
     [[GET alloc]
-      init: @"https://etrecheck.com/download/ApplicationUpdates.plist"
+      init:
+        [Utilities
+          buildSecureURLString:
+            @"etrecheck.com/download/ApplicationUpdates.plist"]
       callback:
         ^(CURLRequest * curlRequest, BOOL success)
           {
@@ -889,7 +892,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         NSLocalizedString(@"donateurl", nULL), donationKey];
   
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: urlString]];
+    openURL:
+      [NSURL URLWithString: [Utilities buildSecureURLString: urlString]]];
 
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
 
@@ -936,7 +940,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   POST * request =
     [[POST alloc]
-      init: @"https://etrecheck.com/server/lookupdonation.php"
+      init:
+        [Utilities
+          buildSecureURLString: @"etrecheck.com/server/lookupdonation.php"]
       callback:
         ^(CURLRequest * curlRequest, BOOL success)
           {
@@ -1223,11 +1229,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
        dictionaryWithObjectsAndKeys:
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
 
+  NSString * url = [Utilities buildSecureURLString: @"etrecheck.com"];
+  
   [self.log
-    appendAttributedString:
-      [Utilities
-        buildURL: @"https://etrecheck.com"
-        title: @"https://etrecheck.com"]];
+    appendAttributedString: [Utilities buildURL: url title: url]];
     
   [self.log appendString: @"\n"];
   
@@ -1861,7 +1866,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   POST * request =
     [[POST alloc]
-      init: @"https://etrecheck.com/server/verifydonation.php"
+      init:
+        [Utilities
+          buildSecureURLString: @"etrecheck.com/server/verifydonation.php"]
       callback:
         ^(CURLRequest * curlRequest, BOOL success)
           {
@@ -2012,14 +2019,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (IBAction) gotoEtresoft: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: @"https://www.etresoft.com"]];
+    openURL:
+      [NSURL
+        URLWithString:
+          [Utilities buildSecureURLString: @"www.etresoft.com"]]];
   }
 
 // Go to the Etresoft web support site.
 - (IBAction) gotoEtresoftSupport: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: @"https://www.etresoft.com/#support"]];
+    openURL:
+      [NSURL
+        URLWithString:
+          [Utilities buildSecureURLString: @"www.etresoft.com/#support"]]];
   }
 
 // Display help.
