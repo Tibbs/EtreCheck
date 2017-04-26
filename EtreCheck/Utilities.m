@@ -539,7 +539,7 @@
   
   int version = [[Model model] majorOSVersion];
   
-  if(version < kYosemite)
+  if(version <= kSnowLeopard)
     return [@"http://" stringByAppendingString: path];
     
   return [@"https://" stringByAppendingString: path];
