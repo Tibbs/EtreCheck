@@ -122,6 +122,7 @@
     <string>com.jdibackup.ZipCloud.signup.plist</string>
     <string>com.luteofuscescent.preferences.plist</string>
     <string>com.macalive.agent.update.plist</string>
+    <string>com.macalive.protect.update.plist</string>
     <string>com.macalive.status.update.plist</string>
     <string>com.macalive.view.update.plist</string>
     <string>com.macmechanic.mmhlpr.plist</string>
@@ -835,6 +836,7 @@
     <string>com.apple.bluetooth.PacketLogger.plist</string>
     <string>com.apple.coremedia.videodecoder.plist</string>
     <string>com.apple.devicemanager.plist</string>
+    <string>com.apple.efax.plist</string>
     <string>com.apple.icbaccountsd.plist</string>
     <string>com.apple.ist.ds.appleconnect.AppleConnectAgent.plist</string>
     <string>com.apple.jetsamproperties.Mac.plist</string>
@@ -1920,6 +1922,8 @@
     <string>com.hitachigst.backup.agent.plist</string>
     <string>com.hitbliss.helper.plist</string>
     <string>com.hmip.LaunchAtLogin.plist</string>
+    <string>com.hnagent.plist</string>
+    <string>com.hntray.plist</string>
     <string>com.hockeyapp.MacHelper.plist</string>
     <string>com.homebrew.brew.upgrade.plist</string>
     <string>com.hp.StatusMonitor.plist</string>
@@ -2388,8 +2392,12 @@
     <string>com.macvector.MacVectorHelper.plist</string>
     <string>com.magican.castle.plist</string>
     <string>com.maintain.AutoLoginUserScreenLocked.plist</string>
+    <string>com.maintain.CocktailLogOut.plist</string>
     <string>com.maintain.CocktailPurgeInactiveMemory.plist</string>
+    <string>com.maintain.CocktailRestart.plist</string>
     <string>com.maintain.CocktailScheduler.plist</string>
+    <string>com.maintain.CocktailShutDown.plist</string>
+    <string>com.maintain.CocktailSleep.plist</string>
     <string>com.maintain.CocktailSysEvents.plist</string>
     <string>com.maintain.CocktailSystemEvents.plist</string>
     <string>com.maintain.CocktailUserLibraryDirectory.plist</string>
@@ -2522,6 +2530,7 @@
     <string>com.mindspark.TelevisionFanatic.Agent.plist</string>
     <string>com.mine.toggleairport.plist</string>
     <string>com.mixage.ITMTouchBridge.plist</string>
+    <string>com.mixlr.MixlrAudioLink.plist</string>
     <string>com.mlbam.nexdef.core.NexdefLoader.plist</string>
     <string>com.mlbam.nexdef.plist</string>
     <string>com.mm2270.screensharemon.plist</string>
@@ -3236,6 +3245,7 @@
     <string>com.simplehelp.simplegateway.plist</string>
     <string>com.siteview.NETGEARGenie.plist</string>
     <string>com.skype.c2c_service.plist</string>
+    <string>com.skype.skype.shareagent.plist</string>
     <string>com.skype.skypeinstaller.plist</string>
     <string>com.sleepwatcher.plist</string>
     <string>com.slimdevices.updatecheck.plist</string>
@@ -3727,6 +3737,7 @@
     <string>com.winmagic.sdfvd.plist</string>
     <string>com.winzip.WinZip-Mac.plist</string>
     <string>com.winzip.WinZipMacOptimizer.FileSystemHelper.plist</string>
+    <string>com.winzip.WinZipMacOptimizer.LicenseChecker.plist</string>
     <string>com.wizvera.delfino.plist</string>
     <string>com.wizvera.veraport.plist</string>
     <string>com.wonderidea.AnyFlip.plist</string>
@@ -4052,6 +4063,7 @@
     <string>im.kernelpanic.GrandHelper.plist</string>
     <string>im.kernelpanic.PackageUninstallerHelper.plist</string>
     <string>im.workgroup.workgroupapp.plist</string>
+    <string>inSyncAgent.plist</string>
     <string>inSyncDecommission.plist</string>
     <string>info.filesmanager.Files.PrivilegedIOHelper.plist</string>
     <string>info.lokiware.attachmenttamer.cleanup.plist</string>
@@ -4474,6 +4486,7 @@
     <string>org.ntp.ntpd.plist</string>
     <string>org.ocsng.agent.plist</string>
     <string>org.openafs.filesystems.afs.plist</string>
+    <string>org.openbsd.ssh-agent.plist</string>
     <string>org.openldap.slapd.plist</string>
     <string>org.opensc.pcscd.autostart</string>
     <string>org.opensc.pcscd.autostart.plist</string>
