@@ -301,6 +301,18 @@
 // Redact any user names in a string.
 + (NSString *) cleanString: (NSString *) string
   {
+  if([string hasSuffix: @"@me.com"])
+    return
+      [NSString
+        stringWithFormat:
+          @"%@@me.com", NSLocalizedString(@"[redacted]", NULL)];
+
+  if([string hasSuffix: @"@mac.com"])
+    return
+      [NSString
+        stringWithFormat:
+          @"%@@mac.com", NSLocalizedString(@"[redacted]", NULL)];
+
   // See if the full user name is in the computer name.
   NSString * computerName = [[Model model] computerName];
   NSString * hostName = [[Model model] hostName];
@@ -418,8 +430,11 @@
   }
 
 // Apple used to put the user's name into a file name.
-+ (NSString *) sanitizeMobileMe: (NSString *) file
++ (NSString *) sanitizeMobileMe: (NSString *) path
   {
+  NSString * parent = [path stringByDeletingLastPathComponent];
+  NSString * file = [path lastPathComponent];
+  
   NSScanner * scanner = [NSScanner scannerWithString: file];
 
   BOOL found =
@@ -454,9 +469,14 @@
     return file;
     
   return
-    [NSString
-      stringWithFormat:
-        @"com.apple.CSConfigDotMacCert-[...]%@.com-%@", domain, suffix];
+    [parent
+      stringByAppendingPathComponent:
+        [NSString
+          stringWithFormat:
+          @"com.apple.CSConfigDotMacCert-%@%@.com-%@",
+          NSLocalizedString(@"[redacted]", NULL),
+          domain,
+          suffix]];
   }
 
 /* Facebook puts the users name in a filename too. */

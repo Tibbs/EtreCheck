@@ -220,6 +220,8 @@
     addObject: @"com.apple.mobile.keybagd.plist"];
   [self.knownAppleFailures
     addObject: @"com.apple.SafariBookmarksSyncer.plist"];
+  [self.knownAppleFailures
+    addObject: @"com.apple.postfix.newaliases.plist"];
   }
 
 #pragma mark - Collection
@@ -517,10 +519,12 @@
         NSString * argument = [arguments objectAtIndex: 0];
         
         if([command count] == 0)
-          [command addObject: argument];
+          [command addObject: [Utilities cleanPath: argument]];
           
         for(int i = 1; i < arguments.count; ++i)
-          [command addObject: [arguments objectAtIndex: i]];
+          [command
+            addObject:
+              [Utilities cleanPath: [arguments objectAtIndex: i]]];
       }
     }
     

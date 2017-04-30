@@ -64,7 +64,7 @@
           [self.result
             appendString:
               [NSString
-                stringWithFormat: @"    %@", [Utilities cleanPath: obj]]];
+                stringWithFormat: @"    %@", [Utilities prettyPath: obj]]];
 
           NSDictionary * info = [orphanLaunchdFiles objectForKey: obj];
           

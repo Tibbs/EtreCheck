@@ -1997,6 +1997,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   [pasteboard setData: rtfData forType: NSPasteboardTypeRTF];
   
+  /* Nope. This drops the red colour.
+  
+  NSData * htmlData =
+    [self.log
+      dataFromRange: NSMakeRange(0, [self.log length])
+      documentAttributes:
+        @
+          {
+          NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType
+          }
+      error: & error];
+
+  [pasteboard setData: htmlData forType: NSPasteboardTypeHTML]; */
+  
   /* Poison pill
   
   [self.logView
