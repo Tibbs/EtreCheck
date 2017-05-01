@@ -386,16 +386,11 @@
 // the path.
 + (NSString *) formatExecutable: (NSArray *) parts
   {
-  NSMutableArray * mutableParts = [NSMutableArray arrayWithArray: parts];
+  NSMutableArray * mutableParts = [NSMutableArray array];
   
-  // Sanitize the executable.
-  NSString * program = [mutableParts firstObject];
-  
-  if(program)
-    {
-    [mutableParts removeObjectAtIndex: 0];
-    [mutableParts insertObject: [Utilities cleanPath: program] atIndex: 0];
-    }
+  // Sanitize the whole thing.
+  for(NSString * part in parts)
+    [mutableParts addObject: [Utilities cleanPath: part]];
     
   return [mutableParts componentsJoinedByString: @" "];
   }

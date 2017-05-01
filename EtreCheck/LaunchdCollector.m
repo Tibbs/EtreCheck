@@ -519,12 +519,10 @@
         NSString * argument = [arguments objectAtIndex: 0];
         
         if([command count] == 0)
-          [command addObject: [Utilities cleanPath: argument]];
+          [command addObject: argument];
           
         for(int i = 1; i < arguments.count; ++i)
-          [command
-            addObject:
-              [Utilities cleanPath: [arguments objectAtIndex: i]]];
+          [command addObject: [arguments objectAtIndex: i]];
       }
     }
     
