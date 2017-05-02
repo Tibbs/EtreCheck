@@ -32,6 +32,7 @@
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     
     [self loadSignatures];
+    [self buildDatabases];
     }
     
   return self;
@@ -141,6 +142,18 @@
       addObject: [signature stringByExpandingTildeInPath]];
     
   return expandedSignatures;
+  }
+
+// Build additional internal databases.
+- (void) buildDatabases
+  {
+  for(NSString * file in [[Model model] whitelistFiles])
+    {
+    NSString * prefix = [Utilities bundleName: file];
+    
+    if([prefix length] > 0)
+      [[[Model model] legitimateStrings] addObject: prefix];
+    }
   }
 
 // Identify adware files.

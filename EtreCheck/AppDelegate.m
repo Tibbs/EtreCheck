@@ -342,7 +342,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     andEventID: kAEQuitApplication];
   }
 
-//handler for the quit apple event
+// Handler for the quit apple event
 - (void) handleQuitEvent: (NSAppleEventDescriptor *) event
   withReplyEvent: (NSAppleEventDescriptor *) replyEvent
   {

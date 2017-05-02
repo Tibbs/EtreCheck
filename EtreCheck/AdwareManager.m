@@ -20,6 +20,9 @@
 #define kRemoveColumnIndex 0
 #define kWhitelistColumnIndex 1
 
+#define kGetHelp 1
+#define kProceed 2
+
 @interface UninstallManager ()
 
 // Show the window with content.
@@ -45,6 +48,8 @@
 @synthesize removeButton = myRemoveButton;
 @dynamic canReportFiles;
 @synthesize reportButton = myReportButton;
+@synthesize foundUnknownLegitimateFiles = myFoundUnknownLegitimateFiles;
+@synthesize removingUnknownFiles = myRemovingUnknownFiles;
 
 // Can I remove files?
 - (BOOL) canRemoveFiles
@@ -189,6 +194,12 @@
 
       if(!isSigned && !datFile)
         {
+        NSString * prefix = [Utilities bundleName: name];
+        
+        if([prefix length] > 0)
+          if([[[Model model] legitimateStrings] containsObject: prefix])
+            self.foundUnknownLegitimateFiles = YES;
+          
         NSMutableDictionary * item = [NSMutableDictionary new];
         
         [item setObject: path forKey: kPath];
@@ -246,6 +257,21 @@
   {
   if([super canRemoveFiles])
     {
+    if(self.removingUnknownFiles)
+      {
+      int proceed = [self warnDeleteUnknown];
+      
+      if(proceed == kProceed)
+        if(self.foundUnknownLegitimateFiles && self.removingUnknownFiles)
+          proceed = [self warnDeleteUnknownAgain];
+        
+      if(proceed == kGetHelp)
+        [self getHelp];
+        
+      if(proceed != kProceed)
+        return;
+      }
+        
     NSMutableArray * filesToRemove = [NSMutableArray new];
     NSMutableArray * filesToKeep = [NSMutableArray new];
     
@@ -492,6 +518,91 @@
   [alert release];
   }
 
+// Get the user some help.
+- (void) getHelp
+  {
+  [[NSWorkspace sharedWorkspace]
+    openURL:
+      [NSURL
+        URLWithString:
+          [Utilities
+            buildSecureURLString: NSLocalizedString(@"ascurl", NULL)]]];
+  }
+
+// Warn the user that they are deleting unknown files.
+- (int) warnDeleteUnknown
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Are you sure?", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText:
+      NSLocalizedString(@"warndeleteunknown", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Cancel", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Get Help", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  if(result == NSAlertSecondButtonReturn)
+    return kGetHelp;
+    
+  if(result == NSAlertThirdButtonReturn)
+    return kProceed;
+    
+  return 0;
+  }
+
+// Warn the user that they are probably deleting legitimate unknown files.
+- (int) warnDeleteUnknownAgain
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Are you sure you are sure?", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText:
+      NSLocalizedString(@"warndeletelegitimateunknown", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Cancel", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Get Help", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  if(result == NSAlertSecondButtonReturn)
+    return kGetHelp;
+    
+  if(result == NSAlertThirdButtonReturn)
+    return kProceed;
+    
+  return 0;
+  }
+
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger) numberOfRowsInTableView: (NSTableView *) aTableView
@@ -586,8 +697,12 @@
     [item setObject: object forKey: kRemove];
     
     if([object boolValue])
+      {
       [item setObject: [NSNumber numberWithBool: NO] forKey: kWhitelist];
-
+    
+      self.removingUnknownFiles = YES;
+      }
+      
     [tableView
       reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
       columnIndexes: [NSIndexSet indexSetWithIndex: kWhitelistColumnIndex]];

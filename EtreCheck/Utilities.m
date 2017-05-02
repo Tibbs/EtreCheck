@@ -1910,4 +1910,48 @@
   return nil;
   }
 
+// Extract the most significant name from a bundle file name.
++ (NSString *) bundleName: (NSString *) file
+  {
+  if([file length] == 0)
+    return nil;
+    
+  NSString * base = [file stringByDeletingPathExtension];
+  
+  NSArray * parts = [base componentsSeparatedByString: @"."];
+  
+  NSMutableString * prefix = [NSMutableString string];
+  
+  // Append the first two parts, if they exist.
+  NSString * current = [parts firstObject];
+  
+  if([current length] == 0)
+    return nil;
+    
+  [prefix appendString: current];
+  
+  if([parts count] > 1)
+    {
+    current = [parts objectAtIndex: 1];
+  
+    if([current length] == 0)
+      return nil;
+
+    [prefix appendFormat: @".%@", current];
+    }
+    
+  // Now check for two-letter TLD.
+  if(([prefix length] <= 6) && ([parts count] > 2))
+    {
+    current = [parts objectAtIndex: 2];
+  
+    if([current length] == 0)
+      return nil;
+
+    [prefix appendFormat: @".%@", current];
+    }
+    
+  return [prefix lowercaseString];
+  }
+
 @end

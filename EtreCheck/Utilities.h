@@ -195,4 +195,7 @@
 // Translate a size.
 + (NSString *) translateSize: (NSString *) size;
 
+// Extract the most significant name from a bundle file name.
++ (NSString *) bundleName: (NSString *) file;
+
 @end

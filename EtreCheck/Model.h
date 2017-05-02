@@ -76,6 +76,7 @@
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
+  NSMutableSet * myLegitimateStrings;
   bool mySIP;
   bool myCleanupRequired;
   }
@@ -170,6 +171,9 @@
 
 // Unknown files.
 @property (readonly) NSMutableArray * unknownFiles;
+
+// Strings of potentially legitimate files.
+@property (readonly) NSMutableSet * legitimateStrings;
 
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;

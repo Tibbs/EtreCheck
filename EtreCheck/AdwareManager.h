@@ -13,6 +13,8 @@
   NSAttributedString * myWhitelistDescription;
   NSButton * myRemoveButton;
   NSButton * myReportButton;
+  BOOL myFoundUnknownLegitimateFiles;
+  BOOL myRemovingUnknownFiles;
   }
 
 // User's whitelist description.
@@ -26,5 +28,11 @@
 
 // The report button.
 @property (retain) IBOutlet NSButton * reportButton;
+
+// Did I find unknown files that are likely legitimate?
+@property (assign) BOOL foundUnknownLegitimateFiles;
+
+// Is the user removing unknown files?
+@property (assign) BOOL removingUnknownFiles;
 
 @end

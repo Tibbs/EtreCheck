@@ -316,5 +316,11 @@
 "applesignatureindicator" = "  ";
 "validsignatureindicator" = " ✔︎ ";
 "shellscriptindicator" = " § ";
-    
+"Are you sure?" = "Êtes-vous sûr ?";
+"warndeleteunknown" = "Vous supprimez un fichier inconnu. Êtes-vous sûr que c'est un fichier malveillant? L'utilisation d'EtreCheck pour supprimer des fichiers légitimes pourrait endommager votre système.\n\nSi vous avez besoin d'aide, demandez aux Communautés d’assistance Apple.\n\n";
+"Are you sure you are sure?" = "Êtes-vous sûr d'être sûr?";
+"warndeletelegitimateunknown" = "Vous supprimez un fichier qui peut être légitime. Êtes-vous VRAIMENT SÛR que c'est un fichier malveillant? L'utilisation d'EtreCheck pour supprimer des fichiers légitimes pourrait endommager votre système.\n\nSi vous avez besoin d'aide, demandez aux Communautés d’assistance Apple.\n\n";
+"Get Help" = "L’Aide";
+"ascurl" = "communities.apple.com/fr/";
+
 
