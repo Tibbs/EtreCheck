@@ -67,7 +67,7 @@
 "nofilesdeleted" = "No files could be deleted. They must be deleted manually.";
 "restartrecommended" = "Some files were deleted. Etresoft recommends you restart and run another EtreCheck report to verify that these files remain deleted.";
 "restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
-"passwordrequired" = "An administrator password will be requires to remove these files. Do you want to proceed?";
+"passwordrequired" = "An administrator password will be required to remove these files. Do you want to proceed?";
 "cannotverifytimemachinebackup" = "EtreCheck could not find a Time Machine backup. Etresoft recommends you have a Time Machine backup before attempting to remove files.";
 "thanksforadware" = "Thank you for your submission to the EtreCheck adware blacklist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "adwareuploadfailed" = "Your adware upload to the EtreCheck server failed. Would you like to use e-mail instead?";
