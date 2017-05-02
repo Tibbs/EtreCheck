@@ -310,6 +310,16 @@
           ? [command componentsJoinedByString: @" "]
           : @"";
         
+      if([[info objectForKey: kAdware] boolValue])
+        cmd = [cmd stringByAppendingString: @" ==adware=="];
+      else
+        {
+        NSString * signature = [info objectForKey: kSignature];
+      
+        if([signature length] > 0)
+          cmd = [cmd stringByAppendingFormat: @" ==%@==", signature];
+        }
+        
       path =
         [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
         

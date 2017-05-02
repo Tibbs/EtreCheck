@@ -25,6 +25,9 @@
 // Tell the user that the EtreCheck version is unverified.
 - (BOOL) reportUnverifiedEtreCheckVersion;
 
+// Report files deleted.
+- (void) reportFiles;
+
 @end
 
 @implementation CleanupManager

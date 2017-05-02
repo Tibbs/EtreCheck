@@ -73,6 +73,11 @@
   
   for(NSDictionary * deletedFile in deletedFiles)
     {
+    NSString * reason = [deletedFile objectForKey: @"reason"];
+    
+    if([reason length] == 0)
+      reason = NSLocalizedString(@"Unknown", NULL);
+      
     NSDate * date = [deletedFile objectForKey: @"date"];
   
     if([then compare: date] == NSOrderedAscending)
@@ -94,9 +99,10 @@
           appendString:
             [NSString
               stringWithFormat:
-                @"    %@ - %@\n",
+                @"    %@ - %@ - %@\n",
                 [Utilities dateAsString: date],
-                safePath]];
+                safePath,
+                reason]];
         }
       }
     }
