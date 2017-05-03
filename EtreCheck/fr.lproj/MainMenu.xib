@@ -1269,7 +1269,7 @@ Gw
                     <button misplaced="YES" id="KKQ-zt-BYW">
                         <rect key="frame" x="11" y="128" width="355" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Ignorer les échecs attendus dans les tâches Apples" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="i8O-hY-J8G">
+                        <buttonCell key="cell" type="check" title="Ignorer les échecs attendus dans les tâches Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="i8O-hY-J8G">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -1291,7 +1291,7 @@ Gw
                     <button id="J70-n0-ss3">
                         <rect key="frame" x="11" y="70" width="224" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Masquer les tâches Apples" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="NCC-Zm-VaY">
+                        <buttonCell key="cell" type="check" title="Masquer les tâches Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="NCC-Zm-VaY">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

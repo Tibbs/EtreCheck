@@ -243,7 +243,7 @@
 "Copy Report" = "Copier le rapport";
 "Checking for hidden apps" = "Vérification des apps cachées";
 "Check Apple signatures: Enabled\n" = "Vérifier les signatures numériques dans les tâches d’Apple: Activé\n";
-"Ignore expected failures in Apple tasks: Disabled\n" = "Ignorer les échecs attendus dans les tâches Apples : Désactivé\n";
+"Ignore expected failures in Apple tasks: Disabled\n" = "Ignorer les échecs attendus dans les tâches Apple : Désactivé\n";
 "Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";
 "Back" = "Retour";
 "Performance: " = "La vitesse : ";
