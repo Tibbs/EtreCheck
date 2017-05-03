@@ -1363,7 +1363,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.log
       appendString:
         NSLocalizedString(
-          @"Ignore known Apple failures: Disabled\n", NULL)
+          @"Ignore expected failures in Apple tasks: Disabled\n", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
