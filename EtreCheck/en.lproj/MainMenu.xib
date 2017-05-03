@@ -544,7 +544,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="jQH-15-ZHt">
                             <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" spellingCorrection="YES" id="jBT-e2-hx3">
                                     <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
@@ -588,13 +588,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="548" height="329"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="EBF-Wl-xZl">
+                    <button toolTip="Show report options" verticalHuggingPriority="750" id="EBF-Wl-xZl">
                         <rect key="frame" x="14" y="13" width="88" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Options" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="geQ-Ka-sl1">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <accessibility description="Show report options"/>
                         <connections>
                             <action selector="toggleOptions:" target="Voe-Tx-rLC" id="5Rn-tS-ASM"/>
                         </connections>
@@ -640,7 +641,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <popUpButton verticalHuggingPriority="750" id="fuC-gb-f3l">
+                    <popUpButton toolTip="Problem types" verticalHuggingPriority="750" id="fuC-gb-f3l">
                         <rect key="frame" x="18" y="164" width="219" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" altersStateOfSelectedItem="NO" id="sdl-fq-Ypj">
@@ -665,6 +666,7 @@ DQ
                                 </connections>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Choose a problem"/>
                         <connections>
                             <action selector="problemSelected:" target="Voe-Tx-rLC" id="v2n-9w-gtS"/>
                             <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.problemIndex" id="2Xb-Nj-VRD"/>
@@ -713,6 +715,7 @@ DQ
                             <rect key="frame" x="491" y="1" width="16" height="107"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
+                        <accessibility description="Describe your problem"/>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="ldC-Qp-MWE">
                         <rect key="frame" x="18" y="137" width="130" height="17"/>
@@ -854,7 +857,7 @@ Gw
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="VIQ-qK-qD0">
                             <rect key="frame" x="1" y="1" width="563" height="357"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1GW-8d-S16">
                                     <rect key="frame" x="0.0" y="0.0" width="563" height="357"/>
@@ -875,7 +878,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="6Wg-kO-rHz">
+                    <button toolTip="Click to accept the terms of use" verticalHuggingPriority="750" id="6Wg-kO-rHz">
                         <rect key="frame" x="459" y="13" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="I Accept" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6Ji-v2-9L0">
@@ -885,6 +888,7 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <accessibility description="I accept the terms of use"/>
                     </button>
                 </subviews>
             </view>
@@ -898,7 +902,7 @@ DQ
                 <rect key="frame" x="0.0" y="0.0" width="486" height="282"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="Pdh-9K-GvA">
+                    <button toolTip="Dismiss window for now and make a donation later" verticalHuggingPriority="750" id="Pdh-9K-GvA">
                         <rect key="frame" x="14" y="13" width="72" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Later" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="85H-p7-hWD">
@@ -908,6 +912,7 @@ DQ
 Gw
 </string>
                         </buttonCell>
+                        <accessibility description="I will donate later"/>
                         <connections>
                             <action selector="donateLater:" target="Voe-Tx-rLC" id="WDG-Zm-DLq"/>
                         </connections>
@@ -917,7 +922,7 @@ Gw
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="cOn-KS-6rq">
                             <rect key="frame" x="1" y="1" width="486" height="220"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="VAZ-3F-fRB">
                                     <rect key="frame" x="0.0" y="0.0" width="486" height="220"/>
@@ -938,7 +943,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="0me-if-qRu">
+                    <button toolTip="Click to make a donation" verticalHuggingPriority="750" id="0me-if-qRu">
                         <rect key="frame" x="388" y="13" width="84" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Donate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lNV-C8-KMs">
@@ -948,11 +953,12 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <accessibility description="Make a donation"/>
                         <connections>
                             <action selector="donate:" target="Voe-Tx-rLC" id="G9l-Hz-KSk"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="UUE-tT-OcM">
+                    <button toolTip="Lookup donation" verticalHuggingPriority="750" id="UUE-tT-OcM">
                         <rect key="frame" x="225" y="13" width="163" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="I've already donated" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eKA-Jb-iTE">
@@ -988,7 +994,7 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="KAZ-sp-vx5">
+                    <button toolTip="Perform an automatic donation lookup" verticalHuggingPriority="750" id="KAZ-sp-vx5">
                         <rect key="frame" x="312" y="13" width="83" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Submit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZGW-Su-Gmf">
@@ -998,6 +1004,7 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <accessibility description="Perform an automatic donation lookup"/>
                         <connections>
                             <action selector="automaticDonationLookup:" target="Voe-Tx-rLC" id="P8Q-l4-P0N"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="uCB-fc-DYy"/>
@@ -1017,7 +1024,7 @@ Gw
                             <action selector="cancelDonationLookup:" target="Voe-Tx-rLC" id="dSE-6E-chb"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="1xm-yv-PhD">
+                    <button toolTip="Perform a manual donation lookup via e-mail" verticalHuggingPriority="750" id="1xm-yv-PhD">
                         <rect key="frame" x="228" y="13" width="84" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Manual" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SfU-Bg-k8C">
@@ -1027,12 +1034,13 @@ Gw
 Gw
 </string>
                         </buttonCell>
+                        <accessibility description="Perform a manual donation lookup via e-mail"/>
                         <connections>
                             <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="uc4-Ym-NE1"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="P3Y-4H-5Q3"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="7bA-jQ-VV8">
+                    <textField toolTip="Email address used when you made your donation" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="7bA-jQ-VV8">
                         <rect key="frame" x="79" y="61" width="310" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Hrt-WM-Azp">
@@ -1040,6 +1048,7 @@ Gw
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="Email address used when you made your donation"/>
                         <connections>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.donationLookupEmail" id="3HT-Q7-1sq">
                                 <dictionary key="options">
@@ -1099,7 +1108,7 @@ Gw
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="8lt-UL-p23">
                         <rect key="frame" x="1" y="1" width="241" height="179"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" id="9wF-Yp-vPY">
                                 <rect key="frame" x="0.0" y="0.0" width="241" height="179"/>
@@ -1142,14 +1151,14 @@ Gw
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" id="wZa-OJ-ggR">
+                <button toolTip="Copy text to the clipboard" verticalHuggingPriority="750" id="wZa-OJ-ggR">
                     <rect key="frame" x="4" y="5" width="150" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Copy to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zgM-pE-DVl">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
-                    <accessibility description="Close the detail window"/>
+                    <accessibility description="Copy text to the clipboard"/>
                     <connections>
                         <action selector="copyToClipboard:" target="91K-cv-wWe" id="xMz-qW-JdE"/>
                     </connections>
@@ -1166,7 +1175,7 @@ Gw
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="RsR-Sk-SLC">
                         <rect key="frame" x="1" y="1" width="241" height="179"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" spellingCorrection="YES" id="A3B-Ay-068">
                                 <rect key="frame" x="0.0" y="0.0" width="241" height="179"/>
@@ -1213,14 +1222,14 @@ Gw
                     <rect key="frame" x="112" y="122" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </progressIndicator>
-                <button verticalHuggingPriority="750" id="qv1-fV-26H">
+                <button toolTip="Copy text to the clipboard" verticalHuggingPriority="750" id="qv1-fV-26H">
                     <rect key="frame" x="5" y="5" width="150" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="push" title="Copy to Clipboard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F4c-Qt-bUL">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
-                    <accessibility description="Close the detail window"/>
+                    <accessibility description="Copy text to the clipboard"/>
                     <connections>
                         <action selector="copyToClipboard:" target="EFo-xp-MVA" id="tHD-7f-y2L"/>
                     </connections>
@@ -1258,7 +1267,7 @@ Gw
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1QQ-5e-KWQ">
                         <rect key="frame" x="0.0" y="0.0" width="201" height="180"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" drawsBackground="NO" importsGraphics="NO" findStyle="panel" linkDetection="YES" id="GrL-30-ddq">
                                 <rect key="frame" x="0.0" y="0.0" width="201" height="180"/>
@@ -1377,7 +1386,7 @@ Gw
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" copiesOnScroll="NO" id="b89-E1-VpO">
                         <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" id="rRU-vM-wce">
                                 <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
@@ -1409,7 +1418,7 @@ Gw
             </subviews>
             <point key="canvasLocation" x="858" y="837.5"/>
         </customView>
-        <customView id="Wry-qn-NGq" userLabel="Share ToolbarItem View">
+        <customView toolTip="Share report" id="Wry-qn-NGq" userLabel="Share ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
@@ -1425,9 +1434,10 @@ Gw
                     </connections>
                 </button>
             </subviews>
+            <accessibility description="Share report"/>
             <point key="canvasLocation" x="199" y="641"/>
         </customView>
-        <customView id="N7f-kv-4aH" userLabel="Donate ToolbarItem View">
+        <customView toolTip="Make a donation" id="N7f-kv-4aH" userLabel="Donate ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
@@ -1443,9 +1453,10 @@ Gw
                     </connections>
                 </button>
             </subviews>
+            <accessibility description="Make a donation"/>
             <point key="canvasLocation" x="-351" y="574"/>
         </customView>
-        <customView id="kwV-c6-t98" userLabel="Copy ToolbarItem View">
+        <customView toolTip="Copy to clipboard" id="kwV-c6-t98" userLabel="Copy ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
@@ -1461,9 +1472,10 @@ Gw
                     </connections>
                 </button>
             </subviews>
+            <accessibility description="Copy to clipboard"/>
             <point key="canvasLocation" x="402" y="625"/>
         </customView>
-        <customView id="SJD-oN-rKO" userLabel="Help ToolbarItem View">
+        <customView toolTip="Get help" id="SJD-oN-rKO" userLabel="Help ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
@@ -1479,13 +1491,14 @@ Gw
                     </buttonCell>
                 </button>
             </subviews>
+            <accessibility description="Get help"/>
             <point key="canvasLocation" x="199" y="640"/>
         </customView>
         <customView id="JdO-Ik-I8L" userLabel="Text Size ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="116" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <popUpButton verticalHuggingPriority="750" id="Q7d-pz-eK5">
+                <popUpButton toolTip="Change text size" verticalHuggingPriority="750" id="Q7d-pz-eK5">
                     <rect key="frame" x="4" y="3" width="110" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="Very large" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1TX-vd-5Wc" id="sez-xt-NsB">
@@ -1499,6 +1512,7 @@ Gw
                             </items>
                         </menu>
                     </popUpButtonCell>
+                    <accessibility description="Change text size"/>
                     <connections>
                         <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.textSize" id="6lw-wB-sdk"/>
                     </connections>
@@ -1520,7 +1534,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="REH-qc-DZt">
                             <rect key="frame" x="1" y="1" width="526" height="161"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" linkDetection="YES" spellingCorrection="YES" id="5D9-us-RSB">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="161"/>
@@ -1546,7 +1560,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="Noc-4I-RK7">
                             <rect key="frame" x="1" y="1" width="526" height="53"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="esn-Uw-lUh">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="53"/>
@@ -1574,8 +1588,9 @@ Gw
                             <rect key="frame" x="511" y="1" width="16" height="53"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
+                        <accessibility description="Describe why these files should be added to the whitelist"/>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="wU6-YB-gAi">
+                    <button toolTip="Close the adware window" verticalHuggingPriority="750" id="wU6-YB-gAi">
                         <rect key="frame" x="478" y="13" width="76" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="20S-Xs-eRJ">
@@ -1592,7 +1607,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="2L2-w4-E92">
                             <rect key="frame" x="1" y="0.0" width="526" height="125"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="oNX-Lf-msj" id="TNz-uC-Z0v">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="102"/>
@@ -1607,9 +1622,10 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="inU-GC-Kuh">
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" toolTip="Remove this file" inset="2" id="inU-GC-Kuh">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <accessibility description="Remove this file"/>
                                             </buttonCell>
                                         </tableColumn>
                                         <tableColumn identifier="whitelist" width="40" minWidth="40" maxWidth="1000" id="SJi-Kt-K6R">
@@ -1618,9 +1634,10 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="liX-Rj-Vp4">
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" toolTip="Keep this file" inset="2" id="liX-Rj-Vp4">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <accessibility description="Keep this file"/>
                                             </buttonCell>
                                         </tableColumn>
                                         <tableColumn identifier="path" editable="NO" width="420.6796875" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
@@ -1666,25 +1683,27 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="Tnm-72-P6l">
+                    <button toolTip="Remove files marked for removal" verticalHuggingPriority="750" id="Tnm-72-P6l">
                         <rect key="frame" x="14" y="13" width="89" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o1t-3N-Txy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <accessibility description="Remove files marked for removal"/>
                         <connections>
                             <action selector="removeFiles:" target="iUq-Rw-Zgh" id="Cbj-30-9la"/>
                             <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canRemoveFiles" id="Of6-HD-6zt"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="zTe-eC-fao">
+                    <button toolTip="Report whitelisted files" verticalHuggingPriority="750" id="zTe-eC-fao">
                         <rect key="frame" x="103" y="13" width="81" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Report" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FcB-Q8-uP3">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <accessibility description="Report whitelisted files"/>
                         <connections>
                             <action selector="report:" target="iUq-Rw-Zgh" id="XYX-0i-1Og"/>
                             <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canReportFiles" id="xfN-1w-GYq"/>
@@ -1708,7 +1727,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="HkX-Oy-Cu0">
                             <rect key="frame" x="1" y="1" width="526" height="99"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" linkDetection="YES" spellingCorrection="YES" id="AJQ-PD-fXE">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="99"/>
@@ -1729,13 +1748,14 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="8SF-Pl-8kH">
+                    <button toolTip="Remove orphan files" verticalHuggingPriority="750" id="8SF-Pl-8kH">
                         <rect key="frame" x="14" y="13" width="89" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XH2-D0-iv0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <accessibility description="Remove orphan files"/>
                         <connections>
                             <action selector="removeFiles:" target="Vj9-lq-jPe" id="CzW-8M-65r"/>
                             <binding destination="Vj9-lq-jPe" name="enabled" keyPath="self.canRemoveFiles" id="Qow-po-TpQ"/>
@@ -1746,7 +1766,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="lPb-G0-WaY">
                             <rect key="frame" x="1" y="0.0" width="526" height="137"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="zla-Dm-aep" id="bhT-PM-Mux">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="114"/>
@@ -1796,7 +1816,7 @@ Gw
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <accessibility description="Close the adware window"/>
+                        <accessibility description="Close the cleanup window"/>
                         <connections>
                             <action selector="close:" target="Vj9-lq-jPe" id="sbi-eQ-hNH"/>
                         </connections>
@@ -1819,7 +1839,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="aA3-fg-DCT">
                             <rect key="frame" x="1" y="1" width="408" height="98"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" baseWritingDirection="leftToRight" findStyle="panel" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
                                     <rect key="frame" x="0.0" y="0.0" width="408" height="98"/>
@@ -1840,7 +1860,7 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" id="uHS-SL-O9E">
+                    <button toolTip="Quit EtreCheck and download the new version" verticalHuggingPriority="750" id="uHS-SL-O9E">
                         <rect key="frame" x="255" y="13" width="181" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Quit and go to update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
@@ -1850,7 +1870,7 @@ Gw
 DQ
 </string>
                         </buttonCell>
-                        <accessibility description="Close the adware window"/>
+                        <accessibility description="Quit EtreCheck and download the new version"/>
                         <connections>
                             <action selector="quitAndUpdate:" target="bfz-hP-xHF" id="vcr-jD-xJ6"/>
                         </connections>
@@ -1869,7 +1889,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="sxh-Ky-eB6"/>
                     </imageView>
-                    <button verticalHuggingPriority="750" id="Ngx-vF-efn">
+                    <button toolTip="Skip the new version and run the old version" verticalHuggingPriority="750" id="Ngx-vF-efn">
                         <rect key="frame" x="14" y="13" width="67" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Skip" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
@@ -1879,6 +1899,7 @@ DQ
 Gw
 </string>
                         </buttonCell>
+                        <accessibility description="Skip the new version and run the old version"/>
                         <connections>
                             <action selector="continueWithoutUpdate:" target="bfz-hP-xHF" id="zGd-Ig-oen"/>
                         </connections>
