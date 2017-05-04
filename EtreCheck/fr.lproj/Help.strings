@@ -12,7 +12,7 @@
 "launchdaemons" = "Ce sont tous les éléments de votre système d’exploitation de bas niveau qui tournent en tâche de fond. Il est commun pour les logiciels d’utiliser les daemons de lancement de tiers. Toutefois, ce logiciel est toujours en cours d’exécution en arrière-plan. ";
 "launchagents" = "Ce sont tous les éléments de votre système d’exploitation de bas niveau qui tournent en tâche de fond quand l‘utilisateur est connecté. Il est commun pour les logiciels d’utiliser les agents de lancement de tiers. Toutefois, ce logiciel est toujours en cours d’exécution en arrière-plan.";
 "userlaunchagents" = "Ce sont tous les éléments de votre système d’exploitation de bas niveau qui tournent en tâche de fond quand l‘utilisateur est connecté. Il est commun pour les logiciels d’utiliser les agents de lancement de tiers. Toutefois, ce logiciel est toujours en cours d’exécution en arrière-plan.";
-"loginitems" = "Ce sont les logiciels qui démarrent dès la connexion à l’ordinateur. S’il y en a beaucoup, vous risquez de manquer de mémoire.";
+"loginitems" = "Ce sont les logiciels qui démarrent dès la connexion à l’ordinateur. S’il y en a beaucoup, l’ordinateur risque de manquer de mémoire.";
 "internetplugins" = "Ces modules pourraient influer sur votre navigation sur le Web.";
 "userinternetplugins" = "Ces modules pourraient influer sur votre navigation sur le Web.";
 "startupitems" = "Ces logiciels démarrent avec votre Macintosh. Ils ne fonctionnent plus sur OS X 10.10 «Yosemite».";

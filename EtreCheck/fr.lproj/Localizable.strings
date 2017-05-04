@@ -20,8 +20,8 @@
 "Checking preference panes" = "Vérification des panneaux de préférences";
 "Checking fonts" = "Vérification des polices";
 "Checking applications" = "Vérification des applications";
-"Sampling processes for CPU" = "L’échantillonnage des processus pour CPU";
-"Sampling processes for memory" = "L’échantillonnage des processus pour la mémoire";
+"Sampling processes for CPU" = "Échantillonnage des processus pour CPU";
+"Sampling processes for memory" = "Échantillonnage des processus pour la mémoire";
 "Checking system launch daemons" = "Vérification des daemons de lancement du système";
 "Checking system launch agents" = "Vérification des agents de lancement du système";
 "Checking launch daemons" = "Vérification des daemons de lancement";
@@ -58,7 +58,7 @@
 "timemachineneedsmountainlion" = "    Les informations Time Machine requièrent OS X 10.8 «Mountain Lion» ou ultérieur.\n\n";
 "timemachineinformationnotavailable" = "    Informations Time Machine non disponibles\n\n";
 "    Mobile backups: " = "    Sauvegardes mobiles : ";
-"ON\n" = "Allumé\n";
+"ON\n" = "Activé\n";
 "OFF\n" = "Désactivé\n";
 "    Auto backup: " = "    Sauvegarde automatique : ";
 "YES\n" = "OUI\n";
