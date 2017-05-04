@@ -17,9 +17,9 @@
 "userinternetplugins" = "Ces modules pourraient influer sur votre navigation sur le Web.";
 "startupitems" = "Ces logiciels démarrent avec votre Macintosh. Ils ne fonctionnent plus sur OS X 10.10 «Yosemite».";
 "safariextensions" = "Ces extensions pourraient influer sur votre navigation sur le Web.";
-"audioplugins" = "Greffons qui pourraient changer le comportement du son sur votre Macintosh.";
-"itunesplugins" = "Greffons qui pourraient changer le comportement d'iTunes.";
-"preferencepanes" = "Greffons tiers pour les Panneaux de préférences.";
+"audioplugins" = "Modules qui pourraient changer le comportement du son sur votre Macintosh.";
+"itunesplugins" = "Modules qui pourraient changer le comportement d'iTunes.";
+"preferencepanes" = "Modules tiers pour les Panneaux de préférences.";
 "timemachine" = "Il est essentiel d'avoir une bonne sauvegarde. Tous les utilisateurs de Mac devraient être avoir activé Time Machine.";
 "cpu" = "Ce sont les tâches qui utilisent actuellement la majorité de votre capacité de traitement.";
 "memory" = "Ce sont les tâches qui utilisent actuellement l’essentiel de votre mémoire.";
