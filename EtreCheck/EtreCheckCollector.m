@@ -93,7 +93,7 @@
       
       if([path length] > 0)
         {
-        NSString * safePath = [Utilities cleanPath: path];
+        NSString * safePath = [Utilities prettyPath: path];
         
         [self.result
           appendString:
