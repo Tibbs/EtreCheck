@@ -927,7 +927,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   if(![email length])
     {
-    [self donationNotFound];
+    [self donationNotFound: sender];
     
     return;
     }
@@ -964,7 +964,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
                   }
                 }
               
-              [self donationNotFound];
+              [self donationNotFound: sender];
             });
           }];
 
@@ -977,7 +977,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       });
   }
 
-- (void) donationNotFound
+- (void) donationNotFound: (id) sender
   {
   NSAlert * alert = [[NSAlert alloc] init];
 
@@ -991,9 +991,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // This is the rightmost, first, default button.
   [alert addButtonWithTitle: NSLocalizedString(@"Close", NULL)];
 
-  [alert runModal];
+  [alert addButtonWithTitle: NSLocalizedString(@"Manual", NULL)];
+
+  NSModalResponse result = [alert runModal];
   
   [alert release];
+  
+  if(result == NSAlertSecondButtonReturn)
+    [self manualDonationLookup: sender];
   }
 
 - (void) donationFound

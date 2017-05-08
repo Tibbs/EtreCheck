@@ -1024,22 +1024,6 @@ Gw
                             <action selector="cancelDonationLookup:" target="Voe-Tx-rLC" id="dSE-6E-chb"/>
                         </connections>
                     </button>
-                    <button toolTip="Perform a manual donation lookup via e-mail" verticalHuggingPriority="750" id="1xm-yv-PhD">
-                        <rect key="frame" x="228" y="13" width="84" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Manual" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SfU-Bg-k8C">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <accessibility description="Perform a manual donation lookup via e-mail"/>
-                        <connections>
-                            <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="uc4-Ym-NE1"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="P3Y-4H-5Q3"/>
-                        </connections>
-                    </button>
                     <textField toolTip="Email address used when you made your donation" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" id="7bA-jQ-VV8">
                         <rect key="frame" x="79" y="61" width="310" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
