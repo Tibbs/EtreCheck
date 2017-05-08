@@ -506,6 +506,7 @@
   NSString * volumeSize = [self volumeSize: volume];
   NSString * volumeFree = [self volumeFreeSpace: volume];
   NSString * UUID = [volume objectForKey: @"volume_uuid"];
+  NSString * fileSystem = [volume objectForKey: @"file_system"];
 
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
@@ -538,10 +539,11 @@
   NSString * volumeInfo =
     [NSString
       stringWithFormat:
-        NSLocalizedString(@"%@%@ (%@) %@ %@: %@ %@%@\n", NULL),
+        NSLocalizedString(@"%@%@ (%@ - %@) %@ %@: %@ %@%@\n", NULL),
         indent,
         volumeName ? [Utilities cleanPath: volumeName] : @"-",
         volumeDevice,
+        NSLocalizedString(fileSystem, NULL),
         volumeMountPoint,
         [stats objectForKey: kDiskType],
         volumeSize,

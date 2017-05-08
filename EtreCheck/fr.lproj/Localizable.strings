@@ -154,7 +154,7 @@
 "Are you sure you want to cancel this EtreCheck report?" = "Êtes-vous sûr de vouloir annuler ce rapport EtreCheck ?";
 "No, continue" = "Non, continuer";
 "Yes, cancel" = "Oui, annuler";
-"%@%@ (%@) %@ %@: %@ %@%@\n" = "%@%@ (%@) %@ %@ : %@ %@%@\n";
+"%@%@ (%@ - %@) %@ %@: %@ %@%@\n" = "%@%@ (%@ - %@) %@ %@ : %@ %@%@\n";
 " (Low!)" = " (Faible !)";
 "    Launchd job status not available.\n" = "État du travail de ​​Launchd pas disponible.\n";
 "    Destinations:\n" = "    Destinations :\n";
@@ -324,3 +324,4 @@
 "ascurl" = "communities.apple.com/fr/";
 "installed %@" = "installé %@";
 "Solid State" = "SSD";
+"Journaled HFS+" = "HFS+ journalisé";
