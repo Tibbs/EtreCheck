@@ -720,8 +720,6 @@
         dictionaryWithObjectsAndKeys:
           color, NSForegroundColorAttributeName, nil]];
 
-  NSString * date = [self modificationDate: [bundle objectForKey: @"path"]];
-  
   // Fix the version to get past ASC spam filters.
   version =
     [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
@@ -729,7 +727,7 @@
   [formattedOutput
     appendString:
       [NSString
-        stringWithFormat: @"%@ (%@%@%@)", label, version, OSVersion, date]];
+        stringWithFormat: @"%@ (%@%@)", label, version, OSVersion]];
     
   [formattedOutput
     appendAttributedString: [self getSupportLink: bundle]];

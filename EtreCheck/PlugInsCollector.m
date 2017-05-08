@@ -45,16 +45,14 @@
 
       int age = 0;
       
-      NSString * OSVersion = [self getOSVersion: plugin age: & age];
-      
       NSString * date = [self modificationDate: path];
       
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(@"    %@: %@%@%@", NULL),
-              name, version, OSVersion, date]];
+              NSLocalizedString(@"    %@: %@%@", NULL),
+              name, version, date]];
  
       // Some plug-ins are special.
       if([name isEqualToString: @"JavaAppletPlugin"])
