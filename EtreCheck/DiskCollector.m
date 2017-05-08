@@ -182,7 +182,7 @@
         stringWithFormat:
           @"(%@%@)",
           medium
-            ? medium
+            ? NSLocalizedString(medium, NULL)
             : @"",
           ([medium isEqualToString: @"Solid State"] && [trim length])
             ? trimString
