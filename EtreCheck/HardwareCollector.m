@@ -866,14 +866,28 @@
     
   if(cycleCount && [health length])
     {
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
+    if([health isEqualToString: @"Poor"])
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
             NSLocalizedString(
               @"    Battery: Health = %@ - Cycle count = %@\n",
               NULL),
-            NSLocalizedString(health, NULL), cycleCount]];
+            NSLocalizedString(health, NULL), cycleCount]
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    else
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"    Battery: Health = %@ - Cycle count = %@\n",
+                NULL),
+              NSLocalizedString(health, NULL), cycleCount]];
       
     if(serialNumberInvalid)
       [self.result
