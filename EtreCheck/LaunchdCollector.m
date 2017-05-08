@@ -1202,14 +1202,14 @@
     [info objectForKey: kModificationDate];
 
   NSString * modificationDateString =
-    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    [Utilities installDateAsString: modificationDate];
   
   if(modificationDateString)
     [extra
       appendString:
         [NSString
           stringWithFormat:
-            @" (%@ - Installed %@)", developer, modificationDateString]];
+            @" (%@ - %@)", developer, modificationDateString]];
 
   [extra autorelease];
   

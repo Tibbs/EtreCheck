@@ -572,8 +572,7 @@
     return
       [NSString
         stringWithFormat:
-          @" (%@)",
-          [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"]];
+          @" (%@)", [Utilities installDateAsString: modificationDate]];
     
   return @"";
   }

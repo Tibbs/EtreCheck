@@ -1759,6 +1759,18 @@
   return nil;
   }
 
+// Return an install date with consisten text and format.
++ (NSString *) installDateAsString: (NSDate *) date
+  {
+  NSString * modificationDateString =
+    [Utilities dateAsString: date format: @"yyyy-MM-dd"];
+    
+  return
+    [NSString
+      stringWithFormat: NSLocalizedString(@"installed %@", NULL),
+      modificationDateString];
+  }
+
 // Return a string as a date.
 + (NSDate *) stringAsDate: (NSString *) dateString
   {

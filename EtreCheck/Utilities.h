@@ -170,6 +170,9 @@
 // Return a date string in a format.
 + (NSString *) dateAsString: (NSDate *) date format: (NSString *) format;
 
+// Return an install date with consisten text and format.
++ (NSString *) installDateAsString: (NSDate *) date;
+
 // Return a string as a date.
 + (NSDate *) stringAsDate: (NSString *) dateString;
 

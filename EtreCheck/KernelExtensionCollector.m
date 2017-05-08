@@ -743,7 +743,7 @@
   if(modificationDate)
     {
     NSString * modificationDateString =
-      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+      [Utilities installDateAsString: modificationDate];
     
     if(modificationDateString)
       return [NSString stringWithFormat: @" - %@", modificationDateString];
