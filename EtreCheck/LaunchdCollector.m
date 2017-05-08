@@ -612,7 +612,7 @@
     }
   }
 
-// Collect the signagure of a launchd item.
+// Collect the signature of a launchd item.
 - (void) checkSignature: (NSMutableDictionary *) info
   {
   if(![info objectForKey: kSignature])
@@ -620,9 +620,22 @@
     NSString * executable = [info objectForKey: kExecutable];
 
     if([executable length] > 0)
-      [info
-        setObject: [Utilities checkExecutable: executable]
-        forKey: kSignature];
+      {
+      NSString * signature = [Utilities checkExecutable: executable];
+      
+      if([signature length] > 0)
+        {
+        [info setObject: signature forKey: kSignature];
+          
+        if([signature isEqualToString: kSignatureValid])
+          {
+          NSString * developer = [Utilities queryDeveloper: executable];
+          
+          if([developer length] > 0)
+            [info setObject: developer forKey: kDeveloper];
+          }
+        }
+      }
     }
   }
 
@@ -795,19 +808,6 @@
   // Add the name.
   [output appendString: [Utilities prettyPath: filename]];
   
-  // Add a signature indicator.
-  NSString * signature = [info objectForKey: kSignature];
-  
-  if([signature isEqualToString: kSignatureApple])
-    [output
-      appendString: NSLocalizedString(kAppleSignatureIndicator, NULL)];
-  else if([signature isEqualToString: kSignatureValid])
-    [output
-      appendString: NSLocalizedString(kValidSignatureIndicator, NULL)];
-  else if([signature isEqualToString: kShell])
-    [output
-      appendString: NSLocalizedString(kShellScriptIndicator, NULL)];
-
   // Add any extra content.
   [output
     appendAttributedString: [self formatExtraContent: info for: path]];
@@ -1186,6 +1186,18 @@
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
 
+  // Add a signature indicator.
+  NSString * signature = [info objectForKey: kSignature];
+  
+  NSString * developer = NSLocalizedString(@"Unknown", NULL);
+  
+  if([signature isEqualToString: kShell])
+    developer = NSLocalizedString(@"Shell script", NULL);
+  else if([signature isEqualToString: kSignatureApple])
+    developer = @"Apple";
+  else if([signature isEqualToString: kSignatureValid])
+    developer = [info objectForKey: kDeveloper];
+
   NSDate * modificationDate =
     [info objectForKey: kModificationDate];
 
@@ -1195,7 +1207,9 @@
   if(modificationDateString)
     [extra
       appendString:
-        [NSString stringWithFormat: @" (%@)", modificationDateString]];
+        [NSString
+          stringWithFormat:
+            @" (%@ - Installed %@)", developer, modificationDateString]];
 
   [extra autorelease];
   

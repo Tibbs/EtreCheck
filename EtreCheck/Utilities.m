@@ -931,6 +931,44 @@
   return result;
   }
 
+// Get the developer of an executable.
++ (NSString *) queryDeveloper: (NSString *) path
+  {
+  if([path length] == 0)
+    return nil;
+    
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return nil;
+      
+  if([Utilities isShellExecutable: path])
+    return nil;
+
+  NSString * developer = nil;
+
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"--assess"];
+  [args addObject: @"-vv"];
+    
+  NSString * appPath = [Utilities resolveBundlePath: path];
+  
+  [args addObject: appPath];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.timeout = 60;
+  
+  if([subProcess execute: @"/usr/sbin/spctl" arguments: args])
+    developer =
+      [Utilities parseDeveloper: subProcess.standardError forPath: appPath];
+  else
+    NSLog(@"Returning false from /usr/sbin/spctl %@", args);
+    
+  [subProcess release];
+  
+  return developer;
+  }
+
 // Is this a shell executable?
 + (bool) isShellExecutable: (NSString *) path
   {
@@ -1069,6 +1107,61 @@
   [output release];
   
   return result;
+  }
+
+// Parse spctl output.
++ (NSString *) parseDeveloper: (NSData *) data
+  forPath: (NSString *) path
+  {
+  NSArray * lines = [Utilities formatLines: data];
+  
+  if([lines count] >= 2)
+    {
+    int index = 0;
+    
+    NSString * line = [lines objectAtIndex: index++];
+    
+    // I only do this if the signature came back as valid. Even so, with
+    // spctl it could report a failure on this line and skip the next,
+    // only to report an Apple Developer ID at the end.
+    NSString * accepted =
+      [NSString stringWithFormat: @"%@: accepted", path];
+    
+    if([accepted isEqualToString: line])
+      {
+      line = [lines objectAtIndex: index];
+      
+      NSString * developerID = @"source=Developer ID";
+      
+      if([developerID isEqualToString: line])
+        index++;
+      }
+      
+    NSString * origin = @"origin=Developer ID Application: ";
+    
+    line = [lines objectAtIndex: index];
+    
+    if([line hasPrefix: origin])
+      {
+      NSString * developerID = [line substringFromIndex: [origin length]];
+      
+      NSRange endParenRange =
+        [developerID rangeOfString: @")" options: NSBackwardsSearch];
+        
+      NSRange startParentRange =
+        [developerID rangeOfString: @"(" options: NSBackwardsSearch];
+        
+      if(endParenRange.location != NSNotFound)
+        if(startParentRange.location != NSNotFound)
+          if((endParenRange.location - startParentRange.location) == 11)
+            return
+              [developerID substringToIndex: startParentRange.location - 1];
+        
+      return developerID;
+      }
+    }
+      
+  return nil;
   }
 
 // Create a temporary directory.

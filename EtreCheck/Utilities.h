@@ -137,6 +137,9 @@
 // Check the signature of an executable.
 + (NSString *) checkExecutable: (NSString *) path;
 
+// Get the developer of an executable.
++ (NSString *) queryDeveloper: (NSString *) path;
+
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 
