@@ -75,6 +75,9 @@
       
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
+    if([vramAmount length] == 0)
+      vramAmount = [info objectForKey: @"_spdisplays_vram"];
+
     NSString * vram = @"";
     
     if(vramAmount)
