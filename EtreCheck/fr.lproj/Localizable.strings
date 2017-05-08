@@ -256,7 +256,7 @@
 "service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "Text Size" = "Taille du texte";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
-"Donate" = "Faire un don";
+"Donate" = "Verser un don";
 "Thanks for your submission" = "Merci";
 "thanksforsubmission" = "Merci pour votre proposition d’ajout à Etresoft. La vérification du rapport et la mise à jour de nos données peuvent prendre quelques jours. Merci de votre patience.";
 "Submission failed" = "Échec de téléchargement";
@@ -293,7 +293,7 @@
 "manualdonationlookup" = "Si vous n’êtes pas sûr de ces renseignements, nous vous prions d’inclure toute autre donnée telles que votre nom et/ou la somme ou la date de votre don. Merci pour votre don !\n\nS’il vous plaît, ne changez pas les lignes suivantes : \n";
 "Please lookup donation" = "S’il vous plaît, rechercher un don.";
 "Donation Found!" = "Don trouvé !";
-"donationfound" = "Merci pour votre don ! EtreCheck ne vous demandera plus de faire un don.";
+"donationfound" = "Merci pour votre don ! EtreCheck ne vous demandera plus de verser un don.";
 "Donation not found" = "Don pas trouvé";
 "donationnotfound" = "Nous sommes désolés, mais votre don n’a pas été trouvé. S’il vous plaît, utilisez la recherche manuelle.";
 "Close" = "Fermer";
