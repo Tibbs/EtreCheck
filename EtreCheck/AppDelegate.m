@@ -1103,8 +1103,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSImageView * docTileImageView = [[NSImageView alloc] init];
   
-  NSImage * appIcon =
-    [[NSApplication sharedApplication] applicationIconImage];
+  // Only thing that works in Snow Leopard.
+  NSImage * appIcon = [NSImage imageNamed: @"AppIcon.icns"];
   
   [appIcon setSize: NSMakeSize(1024.0, 1024.0)];
   
