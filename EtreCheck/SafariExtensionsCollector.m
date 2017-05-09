@@ -17,11 +17,16 @@
 #define kCachePath @"cachepath"
 #define kAuthor @"Author"
 #define kWebsite @"Website"
+#define kStatus @"status"
+#define kNotLoaded @"notloaded"
+#define kDisabled @"disabled"
+#define kEnabled @"enabled"
 
 // Collect Safari extensions.
 @implementation SafariExtensionsCollector
 
 @synthesize extensions = myExtensions;
+@synthesize extensionsByName = myExtensionsByName;
 
 // Constructor.
 - (id) init
@@ -34,6 +39,7 @@
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
 
     myExtensions = [NSMutableDictionary new];
+    myExtensionsByName = [NSMutableDictionary new];
     }
     
   return self;
@@ -42,7 +48,8 @@
 // Destructor.
 - (void) dealloc
   {
-  self.extensions = nil;
+  [myExtensionsByName release];
+  [myExtensions release];
   
   [super dealloc];
   }
@@ -56,6 +63,7 @@
   [self collectArchives];
   [self collectCaches];
   [self collectModernExtensions];
+  [self collectPropertyList];
 
   // Print the extensions.
   if([self.extensions count])
@@ -66,8 +74,8 @@
     // show up as valid extensions but aren't printed.
     int count = 0;
     
-    for(NSString * name in self.extensions)
-      if([self printExtension: [self.extensions objectForKey: name]])
+    for(NSString * identifier in self.extensions)
+      if([self printExtension: [self.extensions objectForKey: identifier]])
         ++count;
     
     if(!count)
@@ -190,16 +198,20 @@
         {
         if(displayName && path && identifier && isExtension)
           {
-          NSDictionary * extension =
-            [NSDictionary dictionaryWithObjectsAndKeys:
+          NSMutableDictionary * extension =
+            [NSMutableDictionary dictionaryWithObjectsAndKeys:
               displayName, kHumanReadableName,
               identifier, kIdentifier,
               displayName, kFileName,
               path, kArchivePath,
               @"Mac App Store", kAuthor,
+              kNotLoaded, kStatus,
               nil];
             
           [self.extensions setObject: extension forKey: identifier];
+          
+          [self.extensionsByName
+            setObject: extension forKey: [path lastPathComponent]];
           }
 
         isExtension = NO;
@@ -288,18 +300,23 @@
   if(!identifier)
     identifier = name;
     
-  NSMutableDictionary * extension = [self.extensions objectForKey: name];
+  NSMutableDictionary * extension =
+    [self.extensions objectForKey: identifier];
   
   if(!extension)
     {
     extension = [NSMutableDictionary dictionary];
     
-    [self.extensions setObject: extension forKey: name];
+    [self.extensions setObject: extension forKey: identifier];
+    
+    [self.extensionsByName
+      setObject: extension forKey: [path lastPathComponent]];
     }
     
   [extension setObject: humanReadableName forKey: kHumanReadableName];
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
+  [extension setObject: kNotLoaded forKey: kStatus];
   
   // Uncomment this and set <target> to some extension to test an
   // unknown extension.
@@ -430,9 +447,11 @@
 
   NSString * website = [extension objectForKey: kWebsite];
 
+  // Format the status.
   [self.result
-    appendString:
-      [NSString stringWithFormat: @"    %@", humanReadableName]];
+    appendAttributedString: [self formatExtensionStatus: extension]];
+  
+  [self.result appendString: humanReadableName];
     
   if([author length] > 0)
     [self.result
@@ -452,6 +471,52 @@
           NSLinkAttributeName : website
         }];
     }
+  }
+
+// Format a status string.
+- (NSAttributedString *) formatExtensionStatus: (NSDictionary *) extension
+  {
+  NSMutableAttributedString * output =
+    [[NSMutableAttributedString alloc] init];
+  
+  int version = [[Model model] majorOSVersion];
+
+  if(version == kYosemite)
+    [output appendString: @"    "];
+  else
+    {
+    NSString * statusString = NSLocalizedString(@"[unknown]", NULL);
+    
+    NSColor * color = [[Utilities shared] red];
+    
+    NSString * statusCode = [extension objectForKey: kStatus];
+    
+    if([statusCode isEqualToString: kNotLoaded])
+      {
+      statusString = NSLocalizedString(@"[extension not loaded]", NULL);
+      color = [[Utilities shared] gray];
+      }
+    else if([statusCode isEqualToString: kEnabled])
+      {
+      statusString = NSLocalizedString(@"[enabled]", NULL);
+      color = [[Utilities shared] green];
+      }
+    else if([statusCode isEqualToString: kDisabled])
+      {
+      statusString = NSLocalizedString(@"[disabled]", NULL);
+      color = [[Utilities shared] gray];
+      }
+    
+    [output
+      appendString: [NSString stringWithFormat: @"    %@    ", statusString]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : color,
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  
+  return [output autorelease];
   }
 
 // Append the modification date.
@@ -587,4 +652,48 @@
   return plist;
   }
 
+- (void) collectPropertyList
+  {
+  NSString * userSafariExtensionsDir =
+    [NSHomeDirectory()
+      stringByAppendingPathComponent: @"Library/Safari/Extensions"];
+
+  NSString * extensionPlistPath =
+    [userSafariExtensionsDir
+      stringByAppendingPathComponent: @"Extensions.plist"];
+
+  NSDictionary * settings =
+    [Utilities readPropertyList: extensionPlistPath];
+  
+  if(settings)
+    {
+    NSArray * installedExtensions =
+      [settings objectForKey: @"Installed Extensions"];
+    
+    for(NSDictionary * installedExtension in installedExtensions)
+      {
+      NSNumber * enabled = [installedExtension objectForKey: @"Enabled"];
+      
+      NSString * filename =
+        [installedExtension objectForKey: @"Archive File Name"];
+        
+      NSString * bundleIdentifier =
+        [installedExtension objectForKey: @"Bundle Identifier"];
+        
+      NSMutableDictionary * extension =
+        ([bundleIdentifier length] > 0)
+          ? [self.extensions objectForKey: bundleIdentifier]
+          : [self.extensionsByName objectForKey: filename];
+        
+      if(extension != nil)
+        [extension
+          setObject:
+            [enabled boolValue]
+              ? kEnabled
+              : kDisabled
+          forKey: kStatus];
+      }
+    }
+  }
+  
 @end

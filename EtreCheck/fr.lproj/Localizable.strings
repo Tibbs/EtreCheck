@@ -94,6 +94,9 @@
 "[running]" = "[en marche]";
 "[Unknown]" = "[Inconnu]";
 "[System]" = "[Système]";
+"[extension not loaded]" = "[désengagée]";
+"[enabled]" = "[activée]";
+"[disabled]" = "[désactivée]";
 "%@ (hidden)" = "%@ (masqué)";
 " - Hidden" = " - Masqué";
 "    There was a problem retrieving launchd job status.\n" = "    Impossible de trouver le status des taches launchd\n";

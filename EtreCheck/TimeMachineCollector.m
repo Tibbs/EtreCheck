@@ -103,20 +103,11 @@
 // find something.
 - (void) collectInformation
   {
-  NSUserDefaults * defaults = [[NSUserDefaults alloc] init];
-  
   NSDictionary * settings =
-    [defaults
-      persistentDomainForName:
+    [Utilities
+      readPropertyList:
         @"/Library/Preferences/com.apple.TimeMachine.plist"];
 
-  // settings =
-  //   [defaults
-  //     persistentDomainForName:
-  //       @"/tmp/etrecheck/com.apple.TimeMachine.plist"];
-
-  [defaults release];
-  
   if(settings)
     {
     // Collect any excluded volumes.

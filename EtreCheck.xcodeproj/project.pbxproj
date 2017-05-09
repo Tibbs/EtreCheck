@@ -97,6 +97,7 @@
 		A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */; };
 		A5E9E2C01A2522A600309185 /* Help.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C21A2522A600309185 /* Help.strings */; };
 		A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C91A2669A600309185 /* Collectors.strings */; };
+		A5F43C0F1EC2547A008723CC /* EtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */; };
 		A5FC11EE19A4BFDC00E81E9C /* AudioPlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC11ED19A4BFDC00E81E9C /* AudioPlugInsCollector.m */; };
 		A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC11F019A4BFF500E81E9C /* UserAudioPlugInsCollector.m */; };
 		A5FC11F419A4C00F00E81E9C /* ITunesPlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC11F319A4C00F00E81E9C /* ITunesPlugInsCollector.m */; };
@@ -109,6 +110,16 @@
 		A5FC120919A5509700E81E9C /* TimeMachineCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FC120819A5509700E81E9C /* TimeMachineCollector.m */; };
 		F7B1FDB21D82A8860027E122 /* SearchEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B1FDB11D82A8860027E122 /* SearchEngine.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A5F43C111EC2547A008723CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A55BC16015BF987D00D42EF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A55BC16815BF987D00D42EF1;
+			remoteInfo = EtreCheck;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A54A9EDA1DC05B9700F92CA3 /* Embed Frameworks */ = {
@@ -312,6 +323,9 @@
 		A5E9E2C31A2522A800309185 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Help.strings; sourceTree = "<group>"; };
 		A5E9E2C81A2669A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
 		A5E9E2CA1A2669A700309185 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Collectors.strings; sourceTree = "<group>"; };
+		A5F43C0C1EC2547A008723CC /* EtreCheckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EtreCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EtreCheckTests.m; sourceTree = "<group>"; };
+		A5F43C101EC2547A008723CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5FC11EC19A4BFDC00E81E9C /* AudioPlugInsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlugInsCollector.h; sourceTree = "<group>"; };
 		A5FC11ED19A4BFDC00E81E9C /* AudioPlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlugInsCollector.m; sourceTree = "<group>"; };
 		A5FC11EF19A4BFF500E81E9C /* UserAudioPlugInsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAudioPlugInsCollector.h; sourceTree = "<group>"; };
@@ -350,6 +364,13 @@
 				A54A9EF51DC0684200F92CA3 /* INPopoverController.framework in Frameworks */,
 				A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */,
 				A552A31D1818BDAE00829BA3 /* CoreServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5F43C091EC2547A008723CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +527,7 @@
 				A54A9EFE1DC5536000F92CA3 /* Licenses */,
 				A5D25B2A19C4D109006728B8 /* 3rd party */,
 				A55BC17315BF987D00D42EF1 /* EtreCheck */,
+				A5F43C0D1EC2547A008723CC /* EtreCheckTests */,
 				A55BC16C15BF987D00D42EF1 /* Frameworks */,
 				A55BC16A15BF987D00D42EF1 /* Products */,
 			);
@@ -515,6 +537,7 @@
 			isa = PBXGroup;
 			children = (
 				A55BC16915BF987D00D42EF1 /* EtreCheck.app */,
+				A5F43C0C1EC2547A008723CC /* EtreCheckTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -626,6 +649,15 @@
 			name = "3rd party";
 			sourceTree = "<group>";
 		};
+		A5F43C0D1EC2547A008723CC /* EtreCheckTests */ = {
+			isa = PBXGroup;
+			children = (
+				A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */,
+				A5F43C101EC2547A008723CC /* Info.plist */,
+			);
+			path = EtreCheckTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -649,6 +681,24 @@
 			productReference = A55BC16915BF987D00D42EF1 /* EtreCheck.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A5F43C0B1EC2547A008723CC /* EtreCheckTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5F43C131EC2547A008723CC /* Build configuration list for PBXNativeTarget "EtreCheckTests" */;
+			buildPhases = (
+				A5F43C081EC2547A008723CC /* Sources */,
+				A5F43C091EC2547A008723CC /* Frameworks */,
+				A5F43C0A1EC2547A008723CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A5F43C121EC2547A008723CC /* PBXTargetDependency */,
+			);
+			name = EtreCheckTests;
+			productName = EtreCheckTests;
+			productReference = A5F43C0C1EC2547A008723CC /* EtreCheckTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -666,6 +716,11 @@
 							};
 						};
 					};
+					A5F43C0B1EC2547A008723CC = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A55BC16815BF987D00D42EF1;
+					};
 				};
 			};
 			buildConfigurationList = A55BC16315BF987D00D42EF1 /* Build configuration list for PBXProject "EtreCheck" */;
@@ -682,6 +737,7 @@
 			projectRoot = "";
 			targets = (
 				A55BC16815BF987D00D42EF1 /* EtreCheck */,
+				A5F43C0B1EC2547A008723CC /* EtreCheckTests */,
 			);
 		};
 /* End PBXProject section */
@@ -707,6 +763,13 @@
 				A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */,
 				A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */,
 				A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5F43C0A1EC2547A008723CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,7 +871,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A5F43C081EC2547A008723CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5F43C0F1EC2547A008723CC /* EtreCheckTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A5F43C121EC2547A008723CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A55BC16815BF987D00D42EF1 /* EtreCheck */;
+			targetProxy = A5F43C111EC2547A008723CC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		A518C4641C4814740094D7CC /* Help */ = {
@@ -1036,6 +1115,85 @@
 			};
 			name = Release;
 		};
+		A5F43C141EC2547A008723CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = EtreCheckTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheckTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EtreCheck.app/Contents/MacOS/EtreCheck";
+			};
+			name = Debug;
+		};
+		A5F43C151EC2547A008723CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = EtreCheckTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.EtreCheckTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EtreCheck.app/Contents/MacOS/EtreCheck";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1053,6 +1211,15 @@
 			buildConfigurations = (
 				A55BC18815BF987D00D42EF1 /* Debug */,
 				A55BC18915BF987D00D42EF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5F43C131EC2547A008723CC /* Build configuration list for PBXNativeTarget "EtreCheckTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5F43C141EC2547A008723CC /* Debug */,
+				A5F43C151EC2547A008723CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
