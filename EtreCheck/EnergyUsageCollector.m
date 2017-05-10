@@ -30,23 +30,28 @@
 // Perform the collection.
 - (void) collect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Sampling processes for energy", NULL)];
+  int version = [[Model model] majorOSVersion];
 
-  // Collect the average energy usage usage for all processes (5 times).
-  NSMutableDictionary * avgEnergy = [self collectAverageEnergy];
-  
-  // Purge anything that EtreCheck is doing.
-  [avgEnergy removeObjectForKey: @"EtreCheck"];
-  [avgEnergy removeObjectForKey: @"top"];
-  [avgEnergy removeObjectForKey: @"system_profiler"];
-  
-  // Sort the result by average value.
-  NSArray * processesEnergy = [self sortProcesses: avgEnergy by: @"power"];
-  
-  // Print the top processes.
-  [self printTopProcesses: processesEnergy];
+  if(version >= kMavericks)
+    {
+    [self
+      updateStatus:
+        NSLocalizedString(@"Sampling processes for energy", NULL)];
+
+    // Collect the average energy usage usage for all processes (5 times).
+    NSMutableDictionary * avgEnergy = [self collectAverageEnergy];
+    
+    // Purge anything that EtreCheck is doing.
+    [avgEnergy removeObjectForKey: @"EtreCheck"];
+    [avgEnergy removeObjectForKey: @"top"];
+    [avgEnergy removeObjectForKey: @"system_profiler"];
+    
+    // Sort the result by average value.
+    NSArray * processesEnergy = [self sortProcesses: avgEnergy by: @"power"];
+    
+    // Print the top processes.
+    [self printTopProcesses: processesEnergy];
+    }
     
   dispatch_semaphore_signal(self.complete);
   }
