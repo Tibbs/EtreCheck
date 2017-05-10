@@ -23,6 +23,7 @@
 "timemachine" = "Il est essentiel d'avoir une bonne sauvegarde. Tous les utilisateurs de Mac devraient être avoir activé Time Machine.";
 "cpu" = "Ce sont les tâches qui utilisent actuellement la majorité de votre capacité de traitement.";
 "memory" = "Ce sont les tâches qui utilisent actuellement l’essentiel de votre mémoire.";
+"network" = "Ce sont les tâches qui utilisent actuellement l’essentiel de votre capacité de réseau.";
 "vm" = "Des informations détaillées sur le comportement de votre mémoire virtuelle. La valeur la plus importante ici est mise en cache. Si cette valeur représente une part importante de la mémoire vive disponible, le fonctionnement de votre ordinateur peut s’en trouver ralenti.";
 "gatekeeper" = "Vos paramètres actuels de Gatekeeper. Cela devrait se régler sur «Mac App Store et développeurs identifiés»";
 "diagnostics" = "Fichiers récents de diagnostic générés par votre système. EtreCheck inclut crash, hang et les rapports de CPU pour les trois derniers jours. Tous les rapports de panique du noyau sont également inclus, ainsi que vos plus récents résultats d‘autoexamen. Pour les résultats les meilleurs, exécutez EtreCheck en tant qu’administrateur (c’est le réglage par défaut).";

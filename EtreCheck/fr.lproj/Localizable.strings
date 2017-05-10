@@ -22,6 +22,7 @@
 "Checking applications" = "Vérification des applications";
 "Sampling processes for CPU" = "Échantillonnage des processus pour CPU";
 "Sampling processes for memory" = "Échantillonnage des processus pour la mémoire";
+"Sampling processes for network usage" = "Échantillonnage des processus pour le réseau";
 "Checking system launch daemons" = "Vérification des daemons de lancement du système";
 "Checking system launch agents" = "Vérification des agents de lancement du système";
 "Checking launch daemons" = "Vérification des daemons de lancement";
@@ -328,3 +329,6 @@
 "installed %@" = "installé %@";
 "Solid State" = "SSD";
 "Journaled HFS+" = "HFS+ journalisé";
+"Input     " = "Entrée    ";
+"Output    " = "Sortie    ";
+"Process name" = "Nom de l’opération";

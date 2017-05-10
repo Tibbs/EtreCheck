@@ -17,6 +17,7 @@
 "kernelextensions" = "Extensions du noyau :";
 "loginitems" = "Éléments Ouverture :";
 "memory" = "Utilisation de la RAM par opération :";
+"network" = "Utilisation du réseau par opération :";
 "preferencepanes" = "Panneaux de préférences tiers :";
 "safariextensions" = "Extensions de Safari :";
 "startupitems" = "Éléments de démarrage :";
