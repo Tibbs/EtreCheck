@@ -71,7 +71,7 @@
           [[averageProcess objectForKey: @"mem"] doubleValue] * i;
         
         double averageMemory =
-          [[averageProcess objectForKey: @"mem"] doubleValue];
+          [[currentProcess objectForKey: @"mem"] doubleValue];
         
         averageMemory = (totalMemory + averageMemory) / (double)(i + 1);
         
@@ -112,7 +112,6 @@
   }
 
 // Print a top process.
-// Return YES if the process could be printed.
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {

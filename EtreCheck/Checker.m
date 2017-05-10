@@ -23,6 +23,7 @@
 #import "LoginItemsCollector.h"
 #import "MemoryUsageCollector.h"
 #import "NetworkUsageCollector.h"
+#import "EnergyUsageCollector.h"
 #import "PreferencePanesCollector.h"
 #import "SafariExtensionsCollector.h"
 #import "StartupItemsCollector.h"
@@ -234,6 +235,7 @@
   [collectors addObject: [[CPUUsageCollector new] autorelease]];
   [collectors addObject: [[MemoryUsageCollector new] autorelease]];
   [collectors addObject: [[NetworkUsageCollector new] autorelease]];
+  [collectors addObject: [[EnergyUsageCollector new] autorelease]];
   [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
@@ -435,6 +437,7 @@
   [result appendAttributedString: [self getResult: @"cpu"]];
   [result appendAttributedString: [self getResult: @"memory"]];
   [result appendAttributedString: [self getResult: @"network"]];
+  [result appendAttributedString: [self getResult: @"energy"]];
   [result appendAttributedString: [self getResult: @"vm"]];
   [result appendAttributedString: [self getResult: @"diagnostics"]];
   [result

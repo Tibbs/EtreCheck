@@ -94,6 +94,7 @@
 		A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5CC608C19B4BF52006D7E94 /* Carbon.framework */; };
 		A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */; };
 		A5DF7D251EC27B7A002C9686 /* NetworkUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DF7D241EC27B7A002C9686 /* NetworkUsageCollector.m */; };
+		A5DF7D281EC29372002C9686 /* EnergyUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */; };
 		A5E33C3F184CEBDF00ED59A0 /* ByteCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */; };
 		A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */; };
 		A5E9E2C01A2522A600309185 /* Help.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C21A2522A600309185 /* Help.strings */; };
@@ -318,6 +319,8 @@
 		A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubProcess.m; sourceTree = "<group>"; };
 		A5DF7D231EC27B7A002C9686 /* NetworkUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUsageCollector.h; sourceTree = "<group>"; };
 		A5DF7D241EC27B7A002C9686 /* NetworkUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUsageCollector.m; sourceTree = "<group>"; };
+		A5DF7D261EC29372002C9686 /* EnergyUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyUsageCollector.h; sourceTree = "<group>"; };
+		A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyUsageCollector.m; sourceTree = "<group>"; };
 		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteCountFormatter.h; sourceTree = "<group>"; };
 		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteCountFormatter.m; sourceTree = "<group>"; };
 		A5E765E71A03A9BD00BC994C /* CoreStorageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreStorageCollector.h; sourceTree = "<group>"; };
@@ -501,6 +504,8 @@
 				A5257D3319AB525D003084C8 /* MemoryUsageCollector.m */,
 				A5DF7D231EC27B7A002C9686 /* NetworkUsageCollector.h */,
 				A5DF7D241EC27B7A002C9686 /* NetworkUsageCollector.m */,
+				A5DF7D261EC29372002C9686 /* EnergyUsageCollector.h */,
+				A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */,
 				A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */,
 				A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */,
 				A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */,
@@ -808,6 +813,7 @@
 				A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */,
 				A5C292F519A2214E00464E86 /* VideoCollector.m in Sources */,
 				A5C292EF19A039E700464E86 /* UserLaunchAgentsCollector.m in Sources */,
+				A5DF7D281EC29372002C9686 /* EnergyUsageCollector.m in Sources */,
 				A55BC17A15BF987D00D42EF1 /* main.m in Sources */,
 				A5C292F219A13D0800464E86 /* HardwareCollector.m in Sources */,
 				A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */,

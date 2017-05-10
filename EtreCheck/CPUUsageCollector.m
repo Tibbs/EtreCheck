@@ -71,7 +71,7 @@
           [[averageProcess objectForKey: @"cpu"] doubleValue] * i;
         
         double averageCPU =
-          [[averageProcess objectForKey: @"cpu"] doubleValue];
+          [[currentProcess objectForKey: @"cpu"] doubleValue];
         
         averageCPU = (totalCPU + averageCPU) / (double)(i + 1);
         
