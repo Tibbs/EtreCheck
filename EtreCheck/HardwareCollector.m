@@ -83,8 +83,14 @@
 
   NSString * hostName = (NSString *)SCDynamicStoreCopyLocalHostName(NULL);
 
+  // Load the machine image.
+  self.machineIcon = [self findCurrentMachineIcon];
+
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
+  
+  if(self.machineIcon != nil)
+    [[Model model] setMachineIcon: self.machineIcon];
   
   [computerName release];
   [hostName release];
@@ -306,13 +312,8 @@
   NSDictionary * machineProperties = [self lookupMachineProperties: code];
   
   if(machineProperties)
-    {
     if(![self.marketingName length])
       self.marketingName = [machineProperties objectForKey: kMachineName];
-
-    [[Model model]
-      setMachineIcon: [machineProperties objectForKey: kMachineIcon]];
-    }
 
   [self.result
     appendString:
@@ -428,7 +429,8 @@
       NSDictionary * modelInfo = [self.properties objectForKey: code];
       
       // Load the machine image.
-      self.machineIcon = [self findCurrentMachineIcon];
+      if(self.machineIcon == nil)
+        self.machineIcon = [self findCurrentMachineIcon];
       
       // Get machine name.
       NSString * machineName = [self lookupMachineName: modelInfo];
