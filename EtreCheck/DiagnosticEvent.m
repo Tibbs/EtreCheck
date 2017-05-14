@@ -18,4 +18,19 @@
 @synthesize identifier = myIdentifier;
 @synthesize information = myInformation;
 
+// Destructor.
+- (void) dealloc
+  {
+  [myType release];
+  [myDate release];
+  [myName release];
+  [myDetails release];
+  [myFile release];
+  [myPath release];
+  [myIdentifier release];
+  [myInformation release];
+  
+  [super dealloc];
+  }
+
 @end

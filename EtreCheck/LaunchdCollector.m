@@ -439,6 +439,8 @@
   if([bundleID hasPrefix: @"com.apple."])
     return [url autorelease];
     
+  [url release];
+  
   if([bundleID hasSuffix: @".plist"])
     bundleID = [bundleID stringByDeletingPathExtension];
 

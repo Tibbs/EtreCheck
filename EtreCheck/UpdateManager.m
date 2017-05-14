@@ -15,6 +15,17 @@
 @synthesize content = myContent;
 @synthesize updateURL = myUpdateURL;
 
+// Destructor.
+- (void) dealloc
+  {
+  [myWindow release];
+  [myTextView release];
+  [myContent release];
+  [myUpdateURL release];
+  
+  [super dealloc];
+  }
+
 // Allow quit.
 - (void) awakeFromNib
   {

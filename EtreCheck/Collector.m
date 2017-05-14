@@ -45,6 +45,8 @@
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
+  [myTitle release];
+  [myName release];
   
   [super dealloc];
   }

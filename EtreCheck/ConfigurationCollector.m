@@ -311,10 +311,10 @@
     ++count;
     }
     
-  if(localhostCount < 1)
+  if(corrupt && (localhostCount < 1))
     *corrupt = YES;
     
-  if(broadcasthostCount < 1)
+  if(corrupt && (broadcasthostCount < 1))
     *corrupt = YES;
     
   return count;

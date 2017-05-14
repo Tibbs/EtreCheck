@@ -32,6 +32,15 @@
 	return self;
 }
 
+// Destructor.
+- (void) dealloc
+  {
+  [_popoverContentView release];
+  [_popover release];
+  
+  [super dealloc];
+  }
+
 // Leave some space around the content for drawing the arrow
 - (NSRect)contentRectForFrameRect:(NSRect)windowFrame
 {

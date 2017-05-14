@@ -13,6 +13,14 @@
 
 @synthesize maskView = myMaskView;
 
+// Destructor.
+- (void) dealloc
+  {
+  [myMaskView release];
+  
+  [super dealloc];
+  }
+
 // Set the transition style.
 - (void) updateSubviewsWithTransition: (NSString *) transition
   {

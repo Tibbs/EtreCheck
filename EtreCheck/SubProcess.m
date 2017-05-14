@@ -77,13 +77,19 @@ extern char **environ;
   int master = posix_openpt(O_RDWR);
   
   if(master < 0)
-    return NO;
+    {
+    free(argv);
 
+    return NO;
+    }
+    
   int rc = grantpt(master);
   
   if(rc != 0)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
     
@@ -92,6 +98,8 @@ extern char **environ;
   if(rc != 0)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
 
@@ -101,6 +109,8 @@ extern char **environ;
   if(device == NULL)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
     
@@ -109,6 +119,8 @@ extern char **environ;
   if(slave == -1)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
     
@@ -121,6 +133,8 @@ extern char **environ;
   if(error)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
 
@@ -130,6 +144,8 @@ extern char **environ;
   if(error)
     {
     close(master);
+    free(argv);
+
     return NO;
     }
 
@@ -140,6 +156,8 @@ extern char **environ;
   if(error)
     {
     close(master);
+    free(argv);
+    
     return NO;
     }
 

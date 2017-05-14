@@ -111,9 +111,11 @@
 // Destructor.
 - (void) dealloc
   {
-  [super dealloc];
-  
+  self.removeButton = nil;
+  self.reportButton = nil;
   self.whitelistDescription = nil;
+
+  [super dealloc];
   }
 
 // Show the window.

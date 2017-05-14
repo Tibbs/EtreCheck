@@ -151,6 +151,9 @@
       scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
       intoString: & process];
     
+  if(!success)
+    return nil;
+    
   NSRange PIDRange =
     [process rangeOfString: @"." options: NSBackwardsSearch];
   
@@ -159,12 +162,18 @@
     
   unsigned long long bytesIn;
   
-  [scanner scanUnsignedLongLong: & bytesIn];
+  success = [scanner scanUnsignedLongLong: & bytesIn];
 
+  if(!success)
+    return nil;
+    
   unsigned long long bytesOut;
   
-  [scanner scanUnsignedLongLong: & bytesOut];
+  success = [scanner scanUnsignedLongLong: & bytesOut];
   
+  if(!success)
+    return nil;
+    
   return
     [NSDictionary
       dictionaryWithObjectsAndKeys:

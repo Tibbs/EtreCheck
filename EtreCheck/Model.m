@@ -195,6 +195,16 @@
 // Destructor.
 - (void) dealloc
   {
+  [mySerialCode release];
+  [myModel release];
+  [myLogEntries release];
+  [myHostName release];
+  [myGPUErrors release];
+  [myCoreStorageVolumes release];
+  [myComputerName release];
+  [myAppleSoftware release];
+  [myAppleLaunchd release];
+  [myAdwareExtensions release];
   [myLegitimateStrings release];
   [myUnknownFiles release];
   [myAdwareFiles release];
@@ -339,13 +349,17 @@
 
   bool adware = NO;
   
+  NSMutableDictionary * newFileInfo = nil;
   NSMutableDictionary * fileInfo = [self.adwareFiles objectForKey: path];
   
   if(fileInfo)
     adware = YES;
     
   if(!fileInfo)
-    fileInfo = [NSMutableDictionary new];
+    {
+    newFileInfo = [NSMutableDictionary new];
+    fileInfo = newFileInfo;
+    }
     
   if([self isAdwareSuffix: path info: fileInfo])
     adware = YES;
@@ -374,7 +388,7 @@
       }
     }
     
-  [fileInfo release];
+  [newFileInfo release];
   
   return adware;
   }

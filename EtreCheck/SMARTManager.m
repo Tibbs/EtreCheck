@@ -24,6 +24,14 @@
 
 @synthesize spinner = mySpinner;
 
+// Destructor.
+- (void) dealloc
+  {
+  [mySpinner release];
+  
+  [super dealloc];
+  }
+
 // Show detail.
 - (void) showDetail: (NSString *) name
   {
@@ -116,11 +124,6 @@
 // Resize the detail pane to match the content.
 - (void) resizeDetail
   {
-  NSSize minWidth = self.minDrawerSize;
-  
-  if(self.popover)
-    minWidth = self.minPopoverSize;
-    
   NSSize size = [self.popover contentSize];
 
   size.width = 650;

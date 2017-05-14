@@ -329,6 +329,10 @@ CURLException * NewCURLException(
 
   [myPendingResponse release];
   [myData release];
+  [myHeaders release];
+  [myParameters release];
+  [myCompletionCallback release];
+  [myURL release];
   
   [super dealloc];  
   }
@@ -352,17 +356,12 @@ CURLException * NewCURLException(
   
   if([proxies count])
     {
-    // kCFProxyTypeNone is a valid proxy. Check for a real proxy.
-    BOOL haveProxy = NO;
-    
     for(NSDictionary * proxy in proxies)
       {
       [self clearProxy];
       
       if([self setupProxy: proxy])
         {
-        haveProxy = YES;
-      
         error = [self sendRequest];
         
         if(!error)

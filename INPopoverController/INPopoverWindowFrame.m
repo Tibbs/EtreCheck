@@ -29,6 +29,8 @@
 - (void) dealloc
   {
   [_color release];
+  [_topHighlightColor release];
+  [_borderColor release];
   
   [super dealloc];
   }

@@ -133,29 +133,21 @@
   dispatch_async(
     queue,
     ^{
-      bool once = NO;
-      
-      while(!once)
+      for(NSImage * icon in machineIcons)
         {
-        for(NSImage * icon in machineIcons)
-          {
-          [[NSNotificationCenter defaultCenter]
-            postNotificationName: kShowMachineIcon
-            object: icon];
-            
-          struct timespec tm;
+        [[NSNotificationCenter defaultCenter]
+          postNotificationName: kShowMachineIcon
+          object: icon];
           
-          tm.tv_sec = 0;
-          tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
-          
-          nanosleep(& tm, NULL);
-          
-          if(once)
-            if(hardwareCollector.done)
-              break;
-          }
-          
-        once = YES;
+        struct timespec tm;
+        
+        tm.tv_sec = 0;
+        tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
+        
+        nanosleep(& tm, NULL);
+        
+        if(hardwareCollector.done)
+          break;
         }
       
       // Make sure there is some image, even if a generic question mark.
@@ -197,20 +189,10 @@
   
   for(NSString * code in machines)
     {
-    bool showIcon = NO;
-    
-    if([code hasPrefix: @"Mac"])
-      showIcon = YES;
-    else if([code hasPrefix: @"iMac"])
-      showIcon = YES;
-      
-    if(showIcon)
-      {
-      NSImage * machineIcon = [hardwareCollector findMachineIcon: code];
-    
-      if(machineIcon)
-        [machineIcons addObject: machineIcon];
-      }
+    NSImage * machineIcon = [hardwareCollector findMachineIcon: code];
+  
+    if(machineIcon)
+      [machineIcons addObject: machineIcon];
     }
     
   return machineIcons;

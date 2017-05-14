@@ -21,6 +21,17 @@
 @synthesize filesToRemove = myFilesToRemove;
 @synthesize filesRemoved = myFilesRemoved;
 
+- (void) dealloc
+  {
+  [myWindow release];
+  [myTextView release];
+  [myTableView release];
+  [myFilesToRemove release];
+  [myFilesRemoved release];
+  
+  [super dealloc];
+  }
+
 // Can I remove files?
 - (BOOL) canRemoveFiles
   {

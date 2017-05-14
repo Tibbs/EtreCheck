@@ -52,6 +52,8 @@
 // Destructor.
 - (void) dealloc
   {
+  self.genericDocumentIcon = nil;
+  self.CPUCode = nil;
   self.EnglishMarketingName = nil;
   self.marketingName = nil;
   self.machineIcon = nil;
@@ -76,7 +78,8 @@
           NSLocalizedString(@"oldmachineattributes", NULL)];
     
   // This is as good a place as any to collect this.
-  NSString * computerName = (NSString *)SCDynamicStoreCopyComputerName(NULL, NULL);
+  NSString * computerName =
+    (NSString *)SCDynamicStoreCopyComputerName(NULL, NULL);
 
   NSString * hostName = (NSString *)SCDynamicStoreCopyLocalHostName(NULL);
 

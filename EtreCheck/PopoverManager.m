@@ -71,9 +71,11 @@
 - (void) dealloc
   {
   self.details = nil;
-  
-  if(self.popover)
-    self.popover = nil;
+  self.popover = nil;
+  self.contentView = nil;
+  self.popoverViewController = nil;
+  self.textView = nil;
+  self.title = nil;
     
   [super dealloc];
   }
