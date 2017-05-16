@@ -2059,4 +2059,21 @@
   return [prefix lowercaseString];
   }
 
+// Get the current locale/language code for use in a URL.
++ (NSString *) localeCode
+  {
+  NSLocale * locale = [NSLocale currentLocale];
+  
+  NSString * language = [[locale languageCode] lowercaseString];
+  NSString * country = [[locale countryCode] lowercaseString];
+  
+  if(([language length] == 0) || ([country length] == 0))
+    {
+    language = @"en";
+    country = @"us";
+    }
+    
+  return [NSString stringWithFormat: @"%@-%@", language, country];
+  }
+
 @end

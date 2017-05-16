@@ -204,4 +204,7 @@
 // Extract the most significant name from a bundle file name.
 + (NSString *) bundleName: (NSString *) file;
 
+// Get the current locale/language code for use in a URL.
++ (NSString *) localeCode;
+
 @end

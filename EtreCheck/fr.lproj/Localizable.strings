@@ -256,8 +256,6 @@
 "belowaverageperformance" = "Inférieure à la moyenne";
 "poorperformance" = "Médiocre";
 "[Warranty & Service]" = "[Garantie & service]";
-"service_desktop" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
-"service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "Text Size" = "Taille du texte";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "Donate" = "Verser un don";

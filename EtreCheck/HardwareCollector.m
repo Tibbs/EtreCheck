@@ -413,10 +413,15 @@
 // Construct a user guide URL.
 - (NSString *) serviceURL
   {
-  if([[[Model model] model] hasPrefix: @"MacBook"])
-    return NSLocalizedString(@"service_notebook", NULL);
+  NSString * localeCode = [Utilities localeCode];
   
-    return NSLocalizedString(@"service_desktop", NULL);
+  NSString * url =
+    @"https://support.apple.com/%@/mac-desktops/repair/service";
+  
+  if([[[Model model] model] hasPrefix: @"MacBook"])
+    url = @"https://support.apple.com/%@/mac-notebooks/repair/service";
+
+  return [NSString stringWithFormat: url, localeCode];
   }
 
 // Try to get information about the machine from system resources.

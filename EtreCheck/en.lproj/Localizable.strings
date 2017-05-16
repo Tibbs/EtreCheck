@@ -46,8 +46,6 @@
 "Fair" = "Replace Soon";
 "Poor" = "Replace Now";
 "    %@ - Uptime: %@%@\n" = "    %@ - Time since boot: %@%@\n";
-"service_desktop" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
-"service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "excellentperformance" = "Excellent";
 "goodperformance" = "Good";
 "belowaverageperformance" = "Below Average";
