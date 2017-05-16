@@ -7,6 +7,7 @@
 #import "MemoryUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "ByteCountFormatter.h"
+#import "Model.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -131,15 +132,25 @@
     [memoryString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
+  NSString * name = [process objectForKey: @"command"];
+  
+  if([name length] == 0)
+    name = NSLocalizedString(@"Unknown", NULL);
+    
   NSString * output =
     [NSString
-      stringWithFormat:
-        @"    %@\t%@%@\n",
-        printString,
-        [process objectForKey: @"command"],
-        countString];
+      stringWithFormat: @"    %@\t%@%@\n", printString, name, countString];
     
-  if(value > 1024 * 1024 * 1024 * 2.0)
+  BOOL excessiveRAM = NO;
+  
+  double gb = 1024 * 1024 * 1024;
+  
+  if([name isEqualToString: @"kernel_task"])
+    excessiveRAM = value > ([[Model model] physicalRAM]  * gb * .2);
+  else
+    excessiveRAM = value > (gb * 2.0);
+    
+  if(excessiveRAM)
     [self.result
       appendString: output
       attributes:
