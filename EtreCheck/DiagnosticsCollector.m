@@ -129,30 +129,27 @@
   
   if([name isEqualToString: @"spdiags_post_value"])
     {
-    NSDate * lastRun =
-      [result objectForKey: @"spdiags_last_run_key"];
-    
-    DiagnosticEvent * event = [DiagnosticEvent new];
-
-    event.date = lastRun;
-    
     NSString * details = [result objectForKey: @"spdiags_result_key"];
       
-    if([details isEqualToString: @"spdiags_passed_value"])
+    if(![details isEqualToString: @"spdiags_passed_value"])
       {
-      event.type = kSelfTestPass;
-      event.name = NSLocalizedString(@"Self test - passed", NULL);
-      }
-    else
-      {
+      DiagnosticEvent * event = [DiagnosticEvent new];
+
+      NSDate * lastRun =
+        [result objectForKey: @"spdiags_last_run_key"];
+    
+      event.date = lastRun;
+    
       event.type = kSelfTestFail;
       event.name = NSLocalizedString(@"Self test - failed", NULL);
       event.details = details;
-      }
       
-    [[[Model model] diagnosticEvents] setObject: event forKey: @"selftest"];
+      [[[Model model] diagnosticEvents]
+        setObject: event forKey: @"selftest"];
+      
+      [event release];
+      }
     
-    [event release];
     }
   }
 

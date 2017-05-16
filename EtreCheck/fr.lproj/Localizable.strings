@@ -191,7 +191,6 @@
 "/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.\n";
 "[Details]" = "[Les détails]";
 "Checking information from log files" = "Vérification des informations des fichiers journaux";
-"Self test - passed" = "Auto-examen - succès";
 "Self test - failed" = "Auto-examen - échec";
 "Checking diagnostics information" = "Vérification des informations du diagnostic";
 "No details available" = "Aucun détail disponible";
