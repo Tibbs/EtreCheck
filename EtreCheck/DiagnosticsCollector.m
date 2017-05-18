@@ -378,7 +378,7 @@
           [result appendString: @"\n"];
           }
           
-        if([line hasPrefix: @"Path:"])
+        if([line hasPrefix: @"Path:"] && ([path length] == 0))
           [path
             appendString:
               [[line substringFromIndex: 5]

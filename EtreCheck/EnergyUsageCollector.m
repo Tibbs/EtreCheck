@@ -47,7 +47,8 @@
     [avgEnergy removeObjectForKey: @"system_profiler"];
     
     // Sort the result by average value.
-    NSArray * processesEnergy = [self sortProcesses: avgEnergy by: @"power"];
+    NSArray * processesEnergy =
+      [self sortProcesses: avgEnergy by: @"power"];
     
     // Print the top processes.
     [self printTopProcesses: processesEnergy];
