@@ -10,9 +10,12 @@
 #import "SubProcess.h"
 #import "Utilities.h"
 #import "Model.h"
+#import "NumberFormatter.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
+
+@synthesize processesByPID = myProcessesByPID;
 
 // Constructor.
 - (id) init
@@ -28,6 +31,14 @@
   return self;
   }
 
+// Destructor.
+- (void) dealloc
+  {
+  [myProcessesByPID release];
+  
+  [super dealloc];
+  }
+
 // Perform the collection.
 - (void) collect
   {
@@ -41,6 +52,8 @@
 
     // Collect the average memory usage usage for all processes (5 times).
     NSArray * processes = [self collectNetwork];
+    
+    self.processesByPID = [super collectProcesses];
     
     // Print the top processes.
     [self printTopProcesses: processes];
@@ -157,8 +170,18 @@
   NSRange PIDRange =
     [process rangeOfString: @"." options: NSBackwardsSearch];
   
+  NSNumber * pid = [NSNumber numberWithInteger: 0];
+  
   if(PIDRange.location != NSNotFound)
+    {
+    if(PIDRange.location < [process length])
+      pid =
+        [[NumberFormatter sharedNumberFormatter]
+          convertFromString:
+            [process substringFromIndex: PIDRange.location + 1]];
+    
     process = [process substringToIndex: PIDRange.location];
+    }
     
   unsigned long long bytesIn;
   
@@ -178,6 +201,7 @@
     [NSDictionary
       dictionaryWithObjectsAndKeys:
         process, @"process",
+        pid, @"pid",
         [NSNumber numberWithUnsignedLongLong: bytesIn], @"bytesIn",
         [NSNumber numberWithUnsignedLongLong: bytesOut], @"bytesOut",
         nil];
@@ -224,6 +248,26 @@
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {
+  // Cross-reference the process ID to get a decent process name using
+  // "ps" results that are better than names from "nettop".
+  NSString * processName = nil;
+  
+  NSNumber * pid = [process objectForKey: @"pid"];
+  
+  NSDictionary * processByPID = [self.processesByPID objectForKey: pid];
+  
+  if(processByPID != nil)
+    processName = [processByPID objectForKey: @"command"];
+    
+  if(processName == nil)
+    processName = [process objectForKey: @"process"];
+  
+  if([processName length] == 0)
+    processName = NSLocalizedString(@"Unknown", NULL);
+    
+  if([processName hasPrefix: @"EtreCheck"])
+    return;
+
   double bytesIn = [[process objectForKey: @"bytesIn"] doubleValue];
   double bytesOut = [[process objectForKey: @"bytesOut"] doubleValue];
 
@@ -248,7 +292,7 @@
           @"    %@\t%@\t%@\n",
           printBytesInString,
           printBytesOutString,
-          [process objectForKey: @"process"]]];
+          processName]];
   }
 
 @end
