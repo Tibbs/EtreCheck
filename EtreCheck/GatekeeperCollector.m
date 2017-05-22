@@ -44,7 +44,7 @@ GatekeeperSetting;
     updateStatus:
       NSLocalizedString(@"Checking Gatekeeper information", NULL)];
 
-  // Only check gatekeeper on Maountain Lion or later.
+  // Only check gatekeeper on Mountain Lion or later.
   if([[Model model] majorOSVersion] < kMountainLion)
     return;
     
