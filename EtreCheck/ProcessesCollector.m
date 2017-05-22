@@ -15,7 +15,7 @@
 // Collect running processes.
 - (NSMutableDictionary *) collectProcesses
   {
-  NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, comm" ];
+  NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, pid, args" ];
   
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];
     
@@ -32,14 +32,17 @@
 
       NSNumber * mem = nil;
       NSNumber * cpu = nil;
+      NSNumber * pid = nil;
       NSString * command = nil;
 
-      [self parsePs: line mem: & mem cpu: & cpu command: & command];
+      [self
+        parsePs: line mem: & mem cpu: & cpu pid: & pid command: & command];
 
       if(!command)
         continue;
         
-      if([command isEqualToString: @"EtreCheck"])
+      // Ignore EtreCheck itself.
+      if([command hasPrefix: @"EtreCheck"])
         continue;
         
       double RAM = [[Model model] physicalRAM];
@@ -49,9 +52,10 @@
       double usage = ([mem doubleValue] / 100.0) * RAM;
         
       [self
-        recordProcess: command
+        recordProcess: [self formatExecutable: command]
         memory: usage
         cpu: [cpu doubleValue]
+        pid: pid
         in: processes];
       }
       
@@ -68,27 +72,31 @@
 - (void) parsePs: (NSString *) line
   mem: (NSNumber **) mem
   cpu: (NSNumber **) cpu
+  pid: (NSNumber **) pid
   command: (NSString **) command
   {
   NSScanner * scanner = [NSScanner scannerWithString: line];
 
   double memValue;
   
-  bool found = [scanner scanDouble: & memValue];
-
-  if(!found)
+  if(![scanner scanDouble: & memValue])
     return;
 
   *mem = [NSNumber numberWithDouble: memValue];
   
   double cpuValue;
 
-  found = [scanner scanDouble: & cpuValue];
-
-  if(!found)
+  if(![scanner scanDouble: & cpuValue])
     return;
 
   *cpu = [NSNumber numberWithDouble: cpuValue];
+
+  unsigned long long pidValue;
+  
+  if(![scanner scanUnsignedLongLong: & pidValue])
+    return;
+
+  *pid = [NSNumber numberWithUnsignedLongLong: pidValue];
 
   [scanner scanUpToString: @"\n" intoString: command];
   }
@@ -97,8 +105,12 @@
 - (void) recordProcess: (NSString *) command
   memory: (double) usage
   cpu: (double) cpu
+  pid: (NSNumber *) pid
   in: (NSMutableDictionary *) processes
   {
+  if(pid == nil)
+    return;
+    
   NSMutableDictionary * dict = [processes objectForKey: command];
   
   if(dict)
@@ -111,6 +123,7 @@
     [dict setObject: [NSNumber numberWithDouble: usage] forKey: @"mem"];
     [dict setObject: [NSNumber numberWithDouble: cpu] forKey: @"cpu"];
     [dict setObject: [NSNumber numberWithInt: count] forKey: @"count"];
+    [dict setObject: pid forKey: @"pid"];
     }
   else
     {
@@ -120,10 +133,11 @@
           command, @"command",
           [NSNumber numberWithDouble: usage], @"mem",
           [NSNumber numberWithDouble: cpu], @"cpu",
+          pid, @"pid",
           @1, @"count",
           nil];
        
-    [processes setObject: dict forKey: command];
+    [processes setObject: dict forKey: pid];
     }
   }
 
@@ -152,6 +166,7 @@
         
       NSNumber * mem = nil;
       NSNumber * cpu = nil;
+      NSNumber * pid = nil;
 
       [self parseTop: line mem: & mem cpu: & cpu];
 
@@ -159,6 +174,7 @@
         recordProcess: @"kernel_task"
         memory: [mem doubleValue]
         cpu: [cpu doubleValue]
+        pid: pid
         in: processes];
       }
     }
@@ -228,6 +244,14 @@
         }];
   
   return [sorted autorelease];
+  }
+
+// Format an executable.
+- (NSString *) formatExecutable: (NSString *) executable
+  {
+  return
+    [Utilities
+      formatExecutable: [executable componentsSeparatedByString: @" "]];
   }
 
 @end

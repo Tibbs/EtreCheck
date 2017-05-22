@@ -43,8 +43,6 @@
         [version
           stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
 
-      int age = 0;
-      
       NSString * date = [self modificationDate: path];
       
       [self.result

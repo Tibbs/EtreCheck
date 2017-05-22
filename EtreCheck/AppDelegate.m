@@ -299,6 +299,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.donateView = nil;
   self.donationLookupPanel = nil;
   self.donationLookupEmail = nil;
+  self.window = nil;
   
   [super dealloc];
   }
@@ -2004,7 +2005,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // Notify the user.
   NSUserNotification * notification = [[NSUserNotification alloc] init];
     
-  notification.title = @"Etrecheck";
+  notification.title = NSLocalizedString(@"EtreCheck", NULL);
   notification.informativeText =
     NSLocalizedString(@"Report complete", NULL);
   

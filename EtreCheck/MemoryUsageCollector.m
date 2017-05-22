@@ -56,15 +56,15 @@
     
     NSDictionary * currentProcesses = [self collectProcesses];
     
-    for(NSString * command in currentProcesses)
+    for(NSString * pid in currentProcesses)
       {
       NSMutableDictionary * currentProcess =
-        [currentProcesses objectForKey: command];
+        [currentProcesses objectForKey: pid];
       NSMutableDictionary * averageProcess =
-        [averageProcesses objectForKey: command];
+        [averageProcesses objectForKey: pid];
         
       if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: command];
+        [averageProcesses setObject: currentProcess forKey: pid];
         
       else if(currentProcess && averageProcess)
         {

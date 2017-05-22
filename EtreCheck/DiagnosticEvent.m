@@ -21,7 +21,6 @@
 // Destructor.
 - (void) dealloc
   {
-  [myType release];
   [myDate release];
   [myName release];
   [myDetails release];

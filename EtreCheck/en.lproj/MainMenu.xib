@@ -1403,7 +1403,7 @@ Gw
             <point key="canvasLocation" x="858" y="837.5"/>
         </customView>
         <customView toolTip="Share report" id="Wry-qn-NGq" userLabel="Share ToolbarItem View">
-            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+            <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="eGD-du-9Qv">
@@ -1606,7 +1606,7 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" toolTip="Remove this file" inset="2" id="inU-GC-Kuh">
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="inU-GC-Kuh">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <accessibility description="Remove this file"/>
@@ -1618,7 +1618,7 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" toolTip="Keep this file" inset="2" id="liX-Rj-Vp4">
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="liX-Rj-Vp4">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <accessibility description="Keep this file"/>

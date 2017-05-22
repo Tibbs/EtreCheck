@@ -13,6 +13,8 @@
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
 
+@synthesize processesByPID = myProcessesByPID;
+
 // Constructor.
 - (id) init
   {
@@ -25,6 +27,14 @@
     }
     
   return self;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myProcessesByPID release];
+  
+  [super dealloc];
   }
 
 // Perform the collection.
@@ -45,6 +55,8 @@
     [avgEnergy removeObjectForKey: @"EtreCheck"];
     [avgEnergy removeObjectForKey: @"top"];
     [avgEnergy removeObjectForKey: @"system_profiler"];
+    
+    self.processesByPID = [super collectProcesses];
     
     // Sort the result by average value.
     NSArray * processesEnergy =
@@ -68,15 +80,15 @@
     
     NSDictionary * currentProcesses = [self collectProcesses];
     
-    for(NSString * command in currentProcesses)
+    for(NSString * pid in currentProcesses)
       {
       NSMutableDictionary * currentProcess =
-        [currentProcesses objectForKey: command];
+        [currentProcesses objectForKey: pid];
       NSMutableDictionary * averageProcess =
-        [averageProcesses objectForKey: command];
+        [averageProcesses objectForKey: pid];
         
       if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: command];
+        [averageProcesses setObject: currentProcess forKey: pid];
         
       else if(currentProcess && averageProcess)
         {
@@ -101,7 +113,7 @@
 // Record process information.
 - (NSDictionary *) collectProcesses
   {
-  NSArray * args = @[@"-l", @"2", @"-stats", @"command,power"];
+  NSArray * args = @[@"-l", @"2", @"-stats", @"power,pid,command"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -118,7 +130,7 @@
     
     for(NSString * line in lines)
       {
-      if([line hasPrefix: @"COMMAND"] && !parsing)
+      if([line hasPrefix: @"POWER"] && !parsing)
         {
         parsing = true;
         
@@ -141,10 +153,14 @@
       
       NSDictionary * process = [self parseTop: line];
 
-      NSString * command = [process objectForKey: @"process"];
+      NSString * pid = [process objectForKey: @"pid"];
+      NSString * name = [process objectForKey: @"process"];
       
-      if((process != nil) && ([command length] > 0))
-        [processes setObject: process forKey: command];
+      if([name isEqualToString: @"top"])
+        continue;
+        
+      if((process != nil) && (pid != nil))
+        [processes setObject: process forKey: pid];
       }
     }
     
@@ -158,24 +174,30 @@
   {
   NSScanner * scanner = [NSScanner scannerWithString: line];
   
-  NSString * process = NULL;
-  
-  BOOL success =
-    [scanner
-      scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
-      intoString: & process];
-    
-  if(!success)
-    return nil;
-    
   double power;
   
-  [scanner scanDouble: & power];
+  if(![scanner scanDouble: & power])
+    return nil;
 
+  unsigned long long pid;
+  
+  if(![scanner scanUnsignedLongLong: & pid])
+    return nil;
+
+  [scanner
+    scanCharactersFromSet:
+      [NSCharacterSet whitespaceCharacterSet] intoString: NULL];
+    
+  NSString * process = NULL;
+  
+  if(![scanner scanUpToString: @"\n" intoString: & process])
+    return nil;
+    
   return
     [NSMutableDictionary
       dictionaryWithObjectsAndKeys:
-        process, @"process",
+        [self formatExecutable: process], @"process",
+        [NSNumber numberWithUnsignedLongLong: pid], @"pid",
         [NSNumber numberWithDouble: power], @"power",
         nil];
   }
@@ -203,6 +225,26 @@
 // Print a top process.
 - (void) printTopProcess: (NSDictionary *) process
   {
+  // Cross-reference the process ID to get a decent process name using
+  // "ps" results that are better than names from "top".
+  NSString * processName = nil;
+  
+  NSNumber * pid = [process objectForKey: @"pid"];
+  
+  NSDictionary * processByPID = [self.processesByPID objectForKey: pid];
+  
+  if(processByPID != nil)
+    processName = [processByPID objectForKey: @"command"];
+    
+  if(processName == nil)
+    processName = [process objectForKey: @"process"];
+  
+  if([processName length] == 0)
+    processName = NSLocalizedString(@"Unknown", NULL);
+    
+  if([processName hasPrefix: @"EtreCheck"])
+    return;
+    
   double power = [[process objectForKey: @"power"] doubleValue];
 
   NSString * printString =
@@ -217,7 +259,7 @@
           stringWithFormat:
             @"    %@\t%@\n",
             printString,
-            [process objectForKey: @"process"]]
+            processName]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -229,7 +271,7 @@
           stringWithFormat:
             @"    %@\t%@\n",
             printString,
-            [process objectForKey: @"process"]]];
+            processName]];
   }
 
 @end

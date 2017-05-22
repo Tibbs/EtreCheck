@@ -949,7 +949,7 @@ Gw
             </subviews>
         </customView>
         <customView id="h3a-5W-2if" userLabel="Share ToolbarItem View">
-            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+            <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button toolTip="Partager le rapport" id="g85-q5-HAV">
@@ -1593,7 +1593,7 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" toolTip="Enlever ce fichier" inset="2" id="myq-3h-eTw">
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="myq-3h-eTw">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <accessibility description="Enlever ce fichier"/>
@@ -1605,7 +1605,7 @@ Gw
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" toolTip="Garder ce fichier" inset="2" id="vhh-EA-l8O">
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="vhh-EA-l8O">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <accessibility description="Garder ce fichier"/>

@@ -27,7 +27,6 @@
   [myTextView release];
   [myTableView release];
   [myFilesToRemove release];
-  [myFilesRemoved release];
   
   [super dealloc];
   }
