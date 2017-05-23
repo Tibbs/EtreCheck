@@ -289,7 +289,8 @@
     [info setObject: modificationDate forKey: kModificationDate];
 
   [self setDetailsURL: info];
-  [self setExecutable: info];
+  
+  NSString * executable = [self setExecutable: info];
   
   [[[Model model] launchdFiles] setObject: info forKey: path];
 
@@ -331,10 +332,26 @@
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
     
-    [self checkSignature: info];
+    BOOL signatureValid = [self checkSignature: info];
     
     // See if this is a file I know about, either good or bad.
     [self checkForKnownFile: path info: info];
+
+    if(!signatureValid)
+      {
+      NSString * crc = [Utilities crcFile: path];
+    
+      if([crc length] > 0)
+        [info setObject: crc forKey: kPlistCRC];
+        
+      if([executable length] > 0)
+        {
+        NSString * crc = [Utilities crcFile: executable];
+        
+        if([crc length] > 0)
+          [info setObject: crc forKey: kExecutableCRC];
+        }
+      }
     }
     
   return info;
@@ -477,7 +494,7 @@
   }
 
 // Set command and executable information.
-- (void) setExecutable: (NSMutableDictionary *) info
+- (NSString *) setExecutable: (NSMutableDictionary *) info
   {
   // Get the command.
   NSArray * command = [self collectLaunchdItemCommand: info];
@@ -496,8 +513,12 @@
       [info
         setObject: [NSNumber numberWithBool: [self isAppleFile: executable]]
         forKey: kApple];
+       
+      return executable;
       }
     }
+    
+  return nil;
   }
 
 // Collect the command of the launchd item.
@@ -615,7 +636,7 @@
   }
 
 // Collect the signature of a launchd item.
-- (void) checkSignature: (NSMutableDictionary *) info
+- (BOOL) checkSignature: (NSMutableDictionary *) info
   {
   if(![info objectForKey: kSignature])
     {
@@ -635,10 +656,14 @@
           
           if([developer length] > 0)
             [info setObject: developer forKey: kDeveloper];
+            
+          return YES;
           }
         }
       }
     }
+    
+  return NO;
   }
 
 // See if this is a file I know about, either good or bad.
@@ -1194,12 +1219,37 @@
   NSString * developer = nil;
   
   if([signature isEqualToString: kShell])
-    developer = NSLocalizedString(@"Shell script", NULL);
+    {
+    NSString * crc = [info objectForKey: kPlistCRC];
+    
+    if([crc length] == 0)
+      crc = @"0";
+      
+    developer =
+      [NSString
+        stringWithFormat:
+          @"%@ %@", NSLocalizedString(@"Shell Script", NULL), crc];
+    }
   else if([signature isEqualToString: kSignatureApple])
     developer = @"Apple, Inc.";
   else if([signature isEqualToString: kSignatureValid])
     developer = [info objectForKey: kDeveloper];
 
+  if([developer length] == 0)
+    {
+    NSString * plistcrc = [info objectForKey: kPlistCRC];
+    
+    if([plistcrc length] == 0)
+      plistcrc = @"?";
+      
+    NSString * execrc = [info objectForKey: kExecutableCRC];
+    
+    if([execrc length] == 0)
+      execrc = @"?";
+      
+    developer = [NSString stringWithFormat: @"? %@ %@", plistcrc, execrc];
+    }
+    
   if([developer length] == 0)
     developer = NSLocalizedString(@"Unknown", NULL);
     

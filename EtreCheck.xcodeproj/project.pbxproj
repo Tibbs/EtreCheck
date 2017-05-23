@@ -58,6 +58,7 @@
 		A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A55BC17C15BF987D00D42EF1 /* Credits.rtf */; };
 		A55BC18115BF987D00D42EF1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BC18015BF987D00D42EF1 /* AppDelegate.m */; };
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
+		A55CBF451ED49CB300A43C84 /* CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CBF441ED49CB300A43C84 /* CRC32.m */; };
 		A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */; };
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */; };
@@ -256,6 +257,8 @@
 		A55BC1C815C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A55BC1C915C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A55BC1CA15C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
+		A55CBF431ED49CB300A43C84 /* CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC32.h; sourceTree = "<group>"; };
+		A55CBF441ED49CB300A43C84 /* CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC32.m; sourceTree = "<group>"; };
 		A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcurl.4.dylib; sourceTree = "<group>"; };
 		A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
 		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
@@ -607,6 +610,8 @@
 				A53822391D5FF27200484388 /* XMLBuilder.m */,
 				A51ED75F1DAAF9B60026833B /* CURLRequest.h */,
 				A51ED7601DAAF9B60026833B /* CURLRequest.m */,
+				A55CBF431ED49CB300A43C84 /* CRC32.h */,
+				A55CBF441ED49CB300A43C84 /* CRC32.m */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
@@ -818,6 +823,7 @@
 				A5C292F219A13D0800464E86 /* HardwareCollector.m in Sources */,
 				A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */,
 				A5FC11FA19A4C03E00E81E9C /* UserInternetPlugInsCollector.m in Sources */,
+				A55CBF451ED49CB300A43C84 /* CRC32.m in Sources */,
 				A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */,
 				A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */,
 				A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */,

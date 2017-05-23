@@ -13,6 +13,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "LaunchdCollector.h"
 #import "SubProcess.h"
+#import "CRC32.h"
 
 // Assorted utilities.
 @implementation Utilities
@@ -2060,6 +2061,31 @@
     }
     
   return [NSString stringWithFormat: @"%@-%@", language, country];
+  }
+
+// Get the CRC of an NSData.
++ (NSString *) crcData: (NSData *) data
+  {
+  CRC32 * crc = [CRC32 new];
+  
+  [crc addData: data];
+  
+  uint32_t value = crc.value;
+  
+  [crc release];
+  
+  return [NSString stringWithFormat: @"%x", value];
+  }
+
+// Get the CRC of a file.
++ (NSString *) crcFile: (NSString *) path
+  {
+  NSData * data = [NSData dataWithContentsOfFile: path];
+  
+  if(data != nil)
+    return [Utilities crcData: data];
+    
+  return @"0";
   }
 
 @end

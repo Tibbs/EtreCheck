@@ -29,6 +29,8 @@
 #define kDetailsURL @"detailsurl"
 #define kPlist @"plist"
 #define kModificationDate @"modificationdate"
+#define kPlistCRC @"plistcrc"
+#define kExecutableCRC @"executablecrc"
 
 #define kStatusUnknown @"unknown"
 #define kStatusNotLoaded @"notloaded"

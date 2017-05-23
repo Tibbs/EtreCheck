@@ -96,19 +96,7 @@
   
   for(NSString * file in machInitFiles)
     {
-    NSString * developer = nil;
-    
-    NSRange range = [path rangeOfString: @".app"];
-    
-    if(range.location != NSNotFound)
-      {
-      NSString * signature = [Utilities checkExecutable: path];
-    
-      if([signature isEqualToString: kSignatureValid])
-        developer = [Utilities queryDeveloper: path];
-      else if([signature isEqualToString: kShell])
-        developer = NSLocalizedString(@"Shell Script", NULL);
-      }
+    NSString * developer = [self getDeveloper: path];
       
     if([developer length] == 0)
       developer = @"";
@@ -234,20 +222,8 @@
     
   if([loginHook length])
     {
-    NSString * developer = nil;
+    NSString * developer = [self getDeveloper: loginHook];
     
-    NSRange range = [loginHook rangeOfString: @".app"];
-    
-    if(range.location != NSNotFound)
-      {
-      NSString * signature = [Utilities checkExecutable: loginHook];
-    
-      if([signature isEqualToString: kSignatureValid])
-        developer = [Utilities queryDeveloper: loginHook];
-      else if([signature isEqualToString: kShell])
-        developer = NSLocalizedString(@"Shell Script", NULL);
-      }
-      
     if([developer length] == 0)
       developer = @"";
       
@@ -329,19 +305,7 @@
         if(path && resolvedPath && loginItem && backgroundItem)
           if([self SMLoginItemActive: identifier])
             {
-            NSString * developer = nil;
-            
-            NSRange range = [path rangeOfString: @".app"];
-            
-            if(range.location != NSNotFound)
-              {
-              NSString * signature = [Utilities checkExecutable: path];
-            
-              if([signature isEqualToString: kSignatureValid])
-                developer = [Utilities queryDeveloper: path];
-              else if([signature isEqualToString: kShell])
-                developer = NSLocalizedString(@"Shell Script", NULL);
-              }
+            NSString * developer = [self getDeveloper: path];
               
             if([developer length] == 0)
               developer = @"";
@@ -510,22 +474,10 @@
       }
     else if([key isEqualToString: @"path"])
       {
-      NSString * developer = nil;
-      
-      NSRange range = [value rangeOfString: @".app"];
-      
-      if(range.location != NSNotFound)
-        {
-        NSString * signature = [Utilities checkExecutable: value];
-      
-        if([signature isEqualToString: kSignatureValid])
-          developer = [Utilities queryDeveloper: value];
-        else if([signature isEqualToString: kShell])
-          developer = NSLocalizedString(@"Shell Script", NULL);
+      NSString * developer = [self getDeveloper: value];
         
-        if([developer length] > 0)
-          [loginItem setObject: developer forKey: @"developer"];
-        }
+      if([developer length] > 0)
+        [loginItem setObject: developer forKey: @"developer"];
       }
     
     [loginItem setObject: value forKey: key];
@@ -592,6 +544,14 @@
   if([kind isEqualToString: @"LogoutHook"])
     highlight = YES;
 
+  if([developer length] == 0)
+    {
+    NSString * crc = [Utilities crcFile: path];
+    
+    if([crc length] > 0)
+      developer = [NSString stringWithFormat: @"? %@", crc];
+    }
+    
   if([developer length] == 0)
     developer = NSLocalizedString(@"Unknown", NULL);
     
@@ -681,6 +641,35 @@
         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
   return @[key, value];
+  }
+
+// Get the developer name.
+- (NSString *) getDeveloper: (NSString *) path
+  {
+  NSRange range = [path rangeOfString: @".app"];
+  
+  if(range.location != NSNotFound)
+    {
+    NSString * signature = [Utilities checkExecutable: path];
+  
+    if([signature isEqualToString: kSignatureValid])
+      return [Utilities queryDeveloper: path];
+      
+    if([signature isEqualToString: kShell])
+      {
+      NSString * crc = [Utilities crcFile: path];
+      
+      if([crc length] == 0)
+        crc = @"0";
+        
+      return
+        [NSString
+          stringWithFormat:
+            @"%@ %@", NSLocalizedString(@"Shell Script", NULL), crc];
+      }
+    }
+    
+  return nil;
   }
 
 @end

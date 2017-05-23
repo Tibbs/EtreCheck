@@ -207,4 +207,10 @@
 // Get the current locale/language code for use in a URL.
 + (NSString *) localeCode;
 
+// Get the CRC of an NSData.
++ (NSString *) crcData: (NSData *) data;
+
+// Get the CRC of a file.
++ (NSString *) crcFile: (NSString *) path;
+
 @end
