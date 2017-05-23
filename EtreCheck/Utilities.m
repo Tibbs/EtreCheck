@@ -1115,49 +1115,35 @@
   {
   NSArray * lines = [Utilities formatLines: data];
   
-  if([lines count] >= 2)
+  for(NSString * line in lines)
     {
-    int index = 0;
-    
-    NSString * line = [lines objectAtIndex: index++];
-    
-    // I only do this if the signature came back as valid. Even so, with
-    // spctl it could report a failure on this line and skip the next,
-    // only to report an Apple Developer ID at the end.
-    NSString * accepted =
-      [NSString stringWithFormat: @"%@: accepted", path];
-    
-    if([accepted isEqualToString: line])
+    if([line hasPrefix: @"origin="])
       {
-      line = [lines objectAtIndex: index];
+      NSString * origin = [line substringFromIndex: 7];
       
-      NSString * developerID = @"source=Developer ID";
-      
-      if([developerID isEqualToString: line])
-        index++;
-      }
-      
-    NSString * origin = @"origin=Developer ID Application: ";
-    
-    line = [lines objectAtIndex: index];
-    
-    if([line hasPrefix: origin])
-      {
-      NSString * developerID = [line substringFromIndex: [origin length]];
-      
-      NSRange endParenRange =
-        [developerID rangeOfString: @")" options: NSBackwardsSearch];
+      if([origin hasPrefix: @"Developer ID Application: "])
+        {
+        NSString * developerID = [origin substringFromIndex: 26];
         
-      NSRange startParentRange =
-        [developerID rangeOfString: @"(" options: NSBackwardsSearch];
-        
-      if(endParenRange.location != NSNotFound)
-        if(startParentRange.location != NSNotFound)
-          if((endParenRange.location - startParentRange.location) == 11)
-            return
-              [developerID substringToIndex: startParentRange.location - 1];
-        
-      return developerID;
+        NSRange endParenRange =
+          [developerID rangeOfString: @")" options: NSBackwardsSearch];
+          
+        NSRange startParentRange =
+          [developerID rangeOfString: @"(" options: NSBackwardsSearch];
+          
+        if(endParenRange.location != NSNotFound)
+          if(startParentRange.location != NSNotFound)
+            if((endParenRange.location - startParentRange.location) == 11)
+              return
+                [developerID
+                  substringToIndex: startParentRange.location - 1];
+          
+        return developerID;
+        }
+      else if([origin isEqualToString: @"Software Signing"])
+        return @"Apple, Inc.";
+      else if([origin isEqualToString: @"Apple Mac OS Application Signing"])
+        return @"Apple, Inc.";
       }
     }
       

@@ -96,6 +96,23 @@
   
   for(NSString * file in machInitFiles)
     {
+    NSString * developer = nil;
+    
+    NSRange range = [path rangeOfString: @".app"];
+    
+    if(range.location != NSNotFound)
+      {
+      NSString * signature = [Utilities checkExecutable: path];
+    
+      if([signature isEqualToString: kSignatureValid])
+        developer = [Utilities queryDeveloper: path];
+      else if([signature isEqualToString: kShell])
+        developer = NSLocalizedString(@"Shell Script", NULL);
+      }
+      
+    if([developer length] == 0)
+      developer = @"";
+      
     NSString * name = [file lastPathComponent];
     
     NSDictionary * item =
@@ -104,6 +121,7 @@
         file, @"path",
         @"MachInit", @"kind",
         [NSNumber numberWithBool: YES], @"hidden",
+        developer, @"developer",
         nil];
       
     [self.loginItems addObject: item];
@@ -216,12 +234,30 @@
     
   if([loginHook length])
     {
+    NSString * developer = nil;
+    
+    NSRange range = [loginHook rangeOfString: @".app"];
+    
+    if(range.location != NSNotFound)
+      {
+      NSString * signature = [Utilities checkExecutable: loginHook];
+    
+      if([signature isEqualToString: kSignatureValid])
+        developer = [Utilities queryDeveloper: loginHook];
+      else if([signature isEqualToString: kShell])
+        developer = NSLocalizedString(@"Shell Script", NULL);
+      }
+      
+    if([developer length] == 0)
+      developer = @"";
+      
     NSDictionary * item =
       [NSDictionary dictionaryWithObjectsAndKeys:
         @"/etc/ttys", @"name",
         loginHook, @"path",
         @"LoginHook", @"kind",
         [NSNumber numberWithBool: YES], @"hidden",
+        developer, @"developer",
         nil];
       
     [self.loginItems addObject: item];
@@ -229,21 +265,6 @@
     ++hooks;
     }
     
-  if([logoutHook length])
-    {
-    NSDictionary * item =
-      [NSDictionary dictionaryWithObjectsAndKeys:
-        @"/etc/ttys", @"name",
-        logoutHook, @"path",
-        @"LogoutHook", @"kind",
-        [NSNumber numberWithBool: YES], @"hidden",
-        nil];
-      
-    [self.loginItems addObject: item];
-    
-    ++hooks;
-    }
-
   return hooks;
   }
 
@@ -308,12 +329,30 @@
         if(path && resolvedPath && loginItem && backgroundItem)
           if([self SMLoginItemActive: identifier])
             {
+            NSString * developer = nil;
+            
+            NSRange range = [path rangeOfString: @".app"];
+            
+            if(range.location != NSNotFound)
+              {
+              NSString * signature = [Utilities checkExecutable: path];
+            
+              if([signature isEqualToString: kSignatureValid])
+                developer = [Utilities queryDeveloper: path];
+              else if([signature isEqualToString: kShell])
+                developer = NSLocalizedString(@"Shell Script", NULL);
+              }
+              
+            if([developer length] == 0)
+              developer = @"";
+              
             NSDictionary * item =
               [NSDictionary dictionaryWithObjectsAndKeys:
                 name, @"name",
                 path, @"path",
                 @"SMLoginItem", @"kind",
                 [NSNumber numberWithBool: YES], @"hidden",
+                developer, @"developer",
                 nil];
               
             [loginItems setObject: item forKey: path];
@@ -462,12 +501,32 @@
     NSString * key = [keyValue objectAtIndex: 0];
     NSString * value = [keyValue objectAtIndex: 1];
     
-    if([key isEqualToString: @"name"])
-      [self.loginItems addObject: [NSMutableDictionary dictionary]];
-    else if([key isEqualToString: @"path"])
-      value = [Utilities cleanPath: value];
-    
     NSMutableDictionary * loginItem = [self.loginItems lastObject];
+    
+    if([key isEqualToString: @"name"])
+      {
+      loginItem = [NSMutableDictionary dictionary];
+      [self.loginItems addObject: loginItem];
+      }
+    else if([key isEqualToString: @"path"])
+      {
+      NSString * developer = nil;
+      
+      NSRange range = [value rangeOfString: @".app"];
+      
+      if(range.location != NSNotFound)
+        {
+        NSString * signature = [Utilities checkExecutable: value];
+      
+        if([signature isEqualToString: kSignatureValid])
+          developer = [Utilities queryDeveloper: value];
+        else if([signature isEqualToString: kShell])
+          developer = NSLocalizedString(@"Shell Script", NULL);
+        
+        if([developer length] > 0)
+          [loginItem setObject: developer forKey: @"developer"];
+        }
+      }
     
     [loginItem setObject: value forKey: key];
     }
@@ -481,6 +540,7 @@
   NSString * path = [loginItem objectForKey: @"path"];
   NSString * kind = [loginItem objectForKey: @"kind"];
   NSNumber * hidden = [loginItem objectForKey: @"hidden"];
+  NSString * developer = [loginItem objectForKey: @"developer"];
   
   if(![name length])
     name = @"-";
@@ -532,6 +592,16 @@
   if([kind isEqualToString: @"LogoutHook"])
     highlight = YES;
 
+  if([developer length] == 0)
+    developer = NSLocalizedString(@"Unknown", NULL);
+    
+  NSString * appInfo = @"";
+  
+  if([modificationDateString length] > 0)
+    appInfo =
+      [NSString
+        stringWithFormat: @"(%@ - %@)", developer, modificationDateString];
+
   // Flag a login item if it is in the trash.
   if(highlight)
     [self.result
@@ -542,7 +612,7 @@
             safeName,
             kind,
             isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
-            modificationDateString,
+            appInfo,
             safePath]
       attributes:
         [NSDictionary
@@ -557,7 +627,7 @@
             safeName,
             kind,
             isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
-            modificationDateString,
+            appInfo,
             safePath]];
     
   return YES;
@@ -569,10 +639,7 @@
   NSDate * modificationDate = [self modificationDate: path];
   
   if(modificationDate)
-    return
-      [NSString
-        stringWithFormat:
-          @" (%@)", [Utilities installDateAsString: modificationDate]];
+    return [Utilities installDateAsString: modificationDate];
     
   return @"";
   }

@@ -1191,15 +1191,18 @@
   // Add a signature indicator.
   NSString * signature = [info objectForKey: kSignature];
   
-  NSString * developer = NSLocalizedString(@"Unknown", NULL);
+  NSString * developer = nil;
   
   if([signature isEqualToString: kShell])
     developer = NSLocalizedString(@"Shell script", NULL);
   else if([signature isEqualToString: kSignatureApple])
-    developer = @"Apple";
+    developer = @"Apple, Inc.";
   else if([signature isEqualToString: kSignatureValid])
     developer = [info objectForKey: kDeveloper];
 
+  if([developer length] == 0)
+    developer = NSLocalizedString(@"Unknown", NULL);
+    
   NSDate * modificationDate =
     [info objectForKey: kModificationDate];
 
