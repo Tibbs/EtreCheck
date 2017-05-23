@@ -198,7 +198,7 @@
 "%d error (plural rule: one)" = "une erreur";
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
-"adware" = "EtreCheck a détecté que votre Macintosh est peut-être infecté par l’adware.\n\nEtreCheck a deviné les fichiers qui ont l’air d’être l’adware et ceux qui sont peut-être légitimes. Veuillez vérifier chaque fichier et choisir «Enlever» ou «Garder». Puis, cliquez sur le bouton «Enlever» pour supprimer l'adware, ou cliquer sur le bouton «Signaler» pour ajouter le fichier à la liste blanche des fichiers légitimes.\n\nVos décisions seront automatiquement envoyer à Etresoft afin de mettre à jour nos bases de données d'adwares et de fichiers légitimes.";
+"adware" = "EtreCheck a détecté que votre Macintosh est peut-être infecté par l’adware.\n\nEtreCheck a deviné les fichiers qui ont l’air d’être l’adware et ceux qui sont peut-être légitimes. Veuillez vérifier chaque fichier et choisir «Enlever» ou «Garder». Puis, cliquez sur le bouton «Enlever» pour supprimer l'adware, ou cliquer sur le bouton «Signaler» pour ajouter le fichier à la liste blanche des fichiers légitimes. Vos décisions seront automatiquement envoyer à Etresoft afin de mettre à jour nos bases de données d'adwares et de fichiers légitimes.\n\nAvis: Ceci est un formulaire anonyme. Nous ne pouvons pas répondre à vos questions ici. Veuillez cliquer sur le bouton «Aide» pour poser une question.";
 "orphan" = "EtreCheck a trouvé des fichiers launchd qui peuvent être retirés car ils font référence à des logiciels qui ne sont plus installés. Cliquez sur le bouton «Retirer» pour retirés ces fichiers orphelins.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "Un fichier trouvé qui peut-être adware.";

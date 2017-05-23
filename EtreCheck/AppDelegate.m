@@ -2109,10 +2109,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (IBAction) gotoEtresoftSupport: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
-    openURL:
-      [NSURL
-        URLWithString:
-          [Utilities buildSecureURLString: @"www.etresoft.com/#support"]]];
+    openURL: [NSURL URLWithString: @"mailto:support@etresoft.com"]];
   }
 
 // Display help.

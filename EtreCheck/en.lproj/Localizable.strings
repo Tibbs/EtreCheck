@@ -29,7 +29,7 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh may be infected with adware.\n\nEtreCheck has made an educated guess about which files are truly adware and which files may be legitimate. Please review each file and choose to either “Remove” or “Keep” it. Then, click the “Remove” button to remove the adware. Click the “Report” button to add the file to the whitelist of legitimate files.\n\nYour descisions will be automatically reported to Etresoft to update our adware and whitelist databases.";
+"adware" = "EtreCheck has detected that your Macintosh may be infected with adware.\n\nEtreCheck has made an educated guess about which files are truly adware and which files may be legitimate. Please review each file and choose to either “Remove” or “Keep” it. Then, click the “Remove” button to remove the adware. Click the “Report” button to add the file to the whitelist of legitimate files. Your decisions will be automatically reported to Etresoft to update our adware and whitelist databases.\n\nNote: This is an anonymous form. We cannot reply to any questions here. Please use the “Help” button to ask a question.";
 "orphan" = "EtreCheck has found launchd scripts that can be removed because they refer to software that is no longer installed. Click the “Remove” button to remove these orphaned files.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One possible adware file found.";
