@@ -2051,8 +2051,11 @@
   {
   NSLocale * locale = [NSLocale currentLocale];
   
-  NSString * language = [[locale languageCode] lowercaseString];
-  NSString * country = [[locale countryCode] lowercaseString];
+  NSString * language =
+    [[locale objectForKey: NSLocaleLanguageCode] lowercaseString];
+  
+  NSString * country =
+    [[locale objectForKey: NSLocaleCountryCode] lowercaseString];
   
   if(([language length] == 0) || ([country length] == 0))
     {

@@ -179,9 +179,9 @@
   if(![scanner scanDouble: & power])
     return nil;
 
-  unsigned long long pid;
+  long long pid;
   
-  if(![scanner scanUnsignedLongLong: & pid])
+  if(![scanner scanLongLong: & pid])
     return nil;
 
   [scanner
@@ -197,7 +197,7 @@
     [NSMutableDictionary
       dictionaryWithObjectsAndKeys:
         [self formatExecutable: process], @"process",
-        [NSNumber numberWithUnsignedLongLong: pid], @"pid",
+        [NSNumber numberWithLongLong: pid], @"pid",
         [NSNumber numberWithDouble: power], @"power",
         nil];
   }

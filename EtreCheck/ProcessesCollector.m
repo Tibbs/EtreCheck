@@ -91,12 +91,12 @@
 
   *cpu = [NSNumber numberWithDouble: cpuValue];
 
-  unsigned long long pidValue;
+  long long pidValue;
   
-  if(![scanner scanUnsignedLongLong: & pidValue])
+  if(![scanner scanLongLong: & pidValue])
     return;
 
-  *pid = [NSNumber numberWithUnsignedLongLong: pidValue];
+  *pid = [NSNumber numberWithLongLong: pidValue];
 
   [scanner scanUpToString: @"\n" intoString: command];
   }

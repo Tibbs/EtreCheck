@@ -183,16 +183,16 @@
     process = [process substringToIndex: PIDRange.location];
     }
     
-  unsigned long long bytesIn;
+  long long bytesIn;
   
-  success = [scanner scanUnsignedLongLong: & bytesIn];
+  success = [scanner scanLongLong: & bytesIn];
 
   if(!success)
     return nil;
     
-  unsigned long long bytesOut;
+  long long bytesOut;
   
-  success = [scanner scanUnsignedLongLong: & bytesOut];
+  success = [scanner scanLongLong: & bytesOut];
   
   if(!success)
     return nil;
@@ -202,8 +202,8 @@
       dictionaryWithObjectsAndKeys:
         process, @"process",
         pid, @"pid",
-        [NSNumber numberWithUnsignedLongLong: bytesIn], @"bytesIn",
-        [NSNumber numberWithUnsignedLongLong: bytesOut], @"bytesOut",
+        [NSNumber numberWithLongLong: bytesIn], @"bytesIn",
+        [NSNumber numberWithLongLong: bytesOut], @"bytesOut",
         nil];
   }
 
