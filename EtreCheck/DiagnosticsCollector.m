@@ -7,7 +7,6 @@
 #import "DiagnosticsCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "DiagnosticEvent.h"
 #import "NSArray+Etresoft.h"
 #import "Model.h"

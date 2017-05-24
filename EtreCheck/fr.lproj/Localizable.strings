@@ -329,3 +329,7 @@
 "Input     " = "Entrée    ";
 "Output    " = "Sortie    ";
 "Process name" = "Nom de l’opération";
+"%d more argument (plural rule: zero)" = "";
+"%d more argument (plural rule: one)" = "[et un autre argument]";
+"%d more argument (plural rule: other)" = "[et %d autres arguments]";
+

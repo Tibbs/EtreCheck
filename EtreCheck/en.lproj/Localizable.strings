@@ -94,4 +94,7 @@
 "warndeletelegitimateunknown" = "You are deleting a file that may be legitimate. Are you ABSOLUTELY SURE this is a malicious file? Using EtreCheck to delete legitimate files could damage your system.\n\nIf you need help, please ask on Apple Support Communities.\n\n";
 "ascurl" = "discussions.apple.com";
 "[extension not loaded]" = "[not loaded]";
+"%d more argument (plural rule: zero)" = "";
+"%d more argument (plural rule: one)" = "[and one more argument]";
+"%d more argument (plural rule: other)" = "[and %d more arguments]";
 

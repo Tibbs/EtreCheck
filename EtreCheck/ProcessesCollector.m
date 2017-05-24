@@ -8,6 +8,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "TTTLocalizedPluralString.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
@@ -249,9 +250,25 @@
 // Format an executable.
 - (NSString *) formatExecutable: (NSString *) executable
   {
-  return
-    [Utilities
-      formatExecutable: [executable componentsSeparatedByString: @" "]];
+  NSMutableArray * parts =
+    [NSMutableArray
+      arrayWithArray: [executable componentsSeparatedByString: @" "]];
+  
+  int removedCount = 0;
+  
+  while([parts count] > 4)
+    {
+    [parts removeObjectAtIndex: 4];
+    
+    ++removedCount;
+    }
+    
+  if(removedCount > 0)
+    [parts
+      addObject:
+        TTTLocalizedPluralString(removedCount, @"more argument", NULL)];
+
+  return [Utilities formatExecutable: parts];
   }
 
 @end

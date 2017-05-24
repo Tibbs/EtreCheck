@@ -8,7 +8,6 @@
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 
 @interface UninstallManager ()
