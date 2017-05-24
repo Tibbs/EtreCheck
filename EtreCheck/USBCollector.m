@@ -81,6 +81,9 @@
   if(!manufacturer)
     manufacturer = [device objectForKey: @"f_manufacturer"];
 
+  manufacturer = [Utilities cleanPath: manufacturer];
+  name = [Utilities cleanPath: name];
+  
   if(!size)
     size = @"";
     

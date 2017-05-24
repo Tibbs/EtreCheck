@@ -647,7 +647,14 @@
         stringWithFormat:
           @"            %@ %@ %@ %@\n", size, type, speed, status];
       
-    bool isRAMSlotID = [lastBankID hasPrefix: @"        RAM slot"];
+    bool isRAMSlotID = NO;
+    
+    if([lastBankID hasPrefix: @"        RAM slot"])
+      isRAMSlotID = YES;
+      
+    if([lastBankID hasPrefix: @"        BANK "])
+      isRAMSlotID = YES;
+
     bool isEmpty = [size isEqualToString: empty];
     
     if(isRAMSlotID && isEmpty && (bank != [banks lastObject]))

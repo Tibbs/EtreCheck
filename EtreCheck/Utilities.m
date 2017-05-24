@@ -331,16 +331,25 @@
   if((range.location == NSNotFound) && ([fullname length] >= 4))
     range = [part rangeOfString: fullname];
   
-  if((range.location == NSNotFound) && [part hasPrefix: @"/Users/"])
+  if(range.location == NSNotFound)
     {
-    NSArray * pathParts = [part componentsSeparatedByString: @"/"];
-    
-    NSString * usernamePart = [pathParts objectAtIndex: 2];
+    range = [part rangeOfString: @"/Users/"];
+
+    if(range.location != NSNotFound)
+      {
+      NSString * pathPart = [part substringFromIndex: range.location];
       
-    range.length = [usernamePart length];
+      NSArray * pathParts = [pathPart componentsSeparatedByString: @"/"];
       
-    if(range.length >= 4)
-      range.location = 7;
+      NSString * usernamePart = [pathParts objectAtIndex: 2];
+        
+      range.length = [usernamePart length];
+        
+      if(range.length >= 4)
+        range.location += 7;
+      else
+        range.location = NSNotFound;
+      }
     }
     
   // Now check for a hostname version.
