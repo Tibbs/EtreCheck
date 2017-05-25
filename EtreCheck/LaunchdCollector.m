@@ -579,13 +579,13 @@
     NSString * argument = [command objectAtIndex: i];
     
     if([argument isEqualToString: @"-f"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-n"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-p"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-D"])
-      ++i;
+      continue;
     else
       {
       executable = argument;
@@ -607,34 +607,32 @@
     NSString * argument = [command objectAtIndex: i];
     
     if([argument isEqualToString: @"-e"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-t"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-f"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-F"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-W"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-R"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-n"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-g"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-h"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-a"])
-      ++i;
+      continue;
     else if([argument isEqualToString: @"-s"])
-      i += 2;
+      ++i;
     else if([argument isEqualToString: @"-b"])
       {
-      ++i;
-      
-      if(i < argumentCount)
+      if((i + 1) < argumentCount)
         {
-        NSString * bundleID = [command objectAtIndex: i];
+        NSString * bundleID = [command objectAtIndex: i + 1];
         
         NSString * path =
           [[NSWorkspace sharedWorkspace]
