@@ -560,32 +560,97 @@
   if(![executable hasPrefix: @"/"])
     executable = [self resolveRelativeExecutable: executable];
     
-  BOOL sandboxExec = NO;
-  
   if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
-    sandboxExec = YES;
+    return [self resolveSandboxExec: command executable: executable];
+  else if([executable isEqualToString: @"/usr/bin/open"])
+    return [self resolveOpen: command executable: executable];
     
-  if(sandboxExec)
+  return executable;
+  }
+
+// Resolve a sandbox-exec executable.
+- (NSString *) resolveSandboxExec: (NSArray *) command
+  executable: (NSString *) executable
+  {
+  NSUInteger argumentCount = command.count;
+  
+  for(NSUInteger i = 1; i < argumentCount; ++i)
     {
-    NSUInteger argumentCount = command.count;
+    NSString * argument = [command objectAtIndex: i];
     
-    for(NSUInteger i = 1; i < argumentCount; ++i)
+    if([argument isEqualToString: @"-f"])
+      ++i;
+    else if([argument isEqualToString: @"-n"])
+      ++i;
+    else if([argument isEqualToString: @"-p"])
+      ++i;
+    else if([argument isEqualToString: @"-D"])
+      ++i;
+    else
       {
-      NSString * argument = [command objectAtIndex: i];
+      executable = argument;
+      break;
+      }
+    }
+    
+  return executable;
+  }
+
+// Resolve an open executable.
+- (NSString *) resolveOpen: (NSArray *) command
+  executable: (NSString *) executable
+  {
+  NSUInteger argumentCount = command.count;
+  
+  for(NSUInteger i = 1; i < argumentCount; ++i)
+    {
+    NSString * argument = [command objectAtIndex: i];
+    
+    if([argument isEqualToString: @"-e"])
+      ++i;
+    else if([argument isEqualToString: @"-t"])
+      ++i;
+    else if([argument isEqualToString: @"-f"])
+      ++i;
+    else if([argument isEqualToString: @"-F"])
+      ++i;
+    else if([argument isEqualToString: @"-W"])
+      ++i;
+    else if([argument isEqualToString: @"-R"])
+      ++i;
+    else if([argument isEqualToString: @"-n"])
+      ++i;
+    else if([argument isEqualToString: @"-g"])
+      ++i;
+    else if([argument isEqualToString: @"-h"])
+      ++i;
+    else if([argument isEqualToString: @"-a"])
+      ++i;
+    else if([argument isEqualToString: @"-s"])
+      i += 2;
+    else if([argument isEqualToString: @"-b"])
+      {
+      ++i;
       
-      if([argument isEqualToString: @"-f"])
-        ++i;
-      else if([argument isEqualToString: @"-n"])
-        ++i;
-      else if([argument isEqualToString: @"-p"])
-        ++i;
-      else if([argument isEqualToString: @"-D"])
-        ++i;
-      else
+      if(i < argumentCount)
         {
-        executable = argument;
-        break;
+        NSString * bundleID = [command objectAtIndex: i];
+        
+        NSString * path =
+          [[NSWorkspace sharedWorkspace]
+            absolutePathForAppBundleWithIdentifier: bundleID];
+          
+        if([path length] > 0)
+          {
+          executable = path;
+          break;
+          }
         }
+      }
+    else
+      {
+      executable = argument;
+      break;
       }
     }
     
