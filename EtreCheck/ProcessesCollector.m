@@ -167,7 +167,6 @@
         
       NSNumber * mem = nil;
       NSNumber * cpu = nil;
-      NSNumber * pid = nil;
 
       [self parseTop: line mem: & mem cpu: & cpu];
 
@@ -175,7 +174,7 @@
         recordProcess: @"kernel_task"
         memory: [mem doubleValue]
         cpu: [cpu doubleValue]
-        pid: pid
+        pid: [NSNumber numberWithLongLong: 0]
         in: processes];
       }
     }
