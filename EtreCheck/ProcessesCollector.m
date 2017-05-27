@@ -8,7 +8,6 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
-#import "TTTLocalizedPluralString.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
@@ -16,7 +15,7 @@
 // Collect running processes.
 - (NSMutableDictionary *) collectProcesses
   {
-  NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, pid, args" ];
+  NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, pid, command" ];
   
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];
     
@@ -39,8 +38,8 @@
       [self
         parsePs: line mem: & mem cpu: & cpu pid: & pid command: & command];
 
-      if(!command)
-        continue;
+      if([command length] == 0)
+        command = NSLocalizedString(@"Unknown", NULL);
         
       // Ignore EtreCheck itself.
       if([command hasPrefix: @"EtreCheck"])
@@ -53,7 +52,7 @@
       double usage = ([mem doubleValue] / 100.0) * RAM;
         
       [self
-        recordProcess: [self formatExecutable: command]
+        recordProcess: command
         memory: usage
         cpu: [cpu doubleValue]
         pid: pid
@@ -244,30 +243,6 @@
         }];
   
   return [sorted autorelease];
-  }
-
-// Format an executable.
-- (NSString *) formatExecutable: (NSString *) executable
-  {
-  NSMutableArray * parts =
-    [NSMutableArray
-      arrayWithArray: [executable componentsSeparatedByString: @" "]];
-  
-  int removedCount = 0;
-  
-  while([parts count] > 4)
-    {
-    [parts removeObjectAtIndex: 4];
-    
-    ++removedCount;
-    }
-    
-  if(removedCount > 0)
-    [parts
-      addObject:
-        TTTLocalizedPluralString(removedCount, @"more argument", NULL)];
-
-  return [Utilities formatExecutable: parts];
   }
 
 @end

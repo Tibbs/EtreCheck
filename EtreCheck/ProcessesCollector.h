@@ -16,7 +16,4 @@
 - (NSArray *) sortProcesses: (NSDictionary *) processes
   by: (NSString *) key;
 
-// Format an executable.
-- (NSString *) formatExecutable: (NSString *) executable;
-
 @end

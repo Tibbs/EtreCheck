@@ -193,10 +193,13 @@
   if(![scanner scanUpToString: @"\n" intoString: & process])
     return nil;
     
+  if([process length] == 0)
+    process = NSLocalizedString(@"Unknown", NULL);
+
   return
     [NSMutableDictionary
       dictionaryWithObjectsAndKeys:
-        [self formatExecutable: process], @"process",
+        process, @"process",
         [NSNumber numberWithLongLong: pid], @"pid",
         [NSNumber numberWithDouble: power], @"power",
         nil];
