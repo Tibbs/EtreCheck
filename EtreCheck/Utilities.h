@@ -213,4 +213,7 @@
 // Get the CRC of a file.
 + (NSString *) crcFile: (NSString *) path;
 
+// Get parent bundle of a path.
++ (NSString *) getParentBundle: (NSString *) path;
+
 @end

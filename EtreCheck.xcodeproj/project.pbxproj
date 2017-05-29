@@ -25,6 +25,7 @@
 		A51ED7671DB090B60026833B /* NumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51ED7661DB090B60026833B /* NumberFormatter.m */; };
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */; };
+		A52358101EDC7B02008511BA /* NSString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A523580F1EDC7B02008511BA /* NSString+Etresoft.m */; };
 		A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */; };
 		A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3019AB5251003084C8 /* CPUUsageCollector.m */; };
 		A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3319AB525D003084C8 /* MemoryUsageCollector.m */; };
@@ -187,6 +188,8 @@
 		A52006A11A292A2200644C40 /* PopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverManager.m; sourceTree = "<group>"; };
 		A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UninstallManager.m; sourceTree = "<group>"; };
 		A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UninstallManager.h; sourceTree = "<group>"; };
+		A523580E1EDC7B02008511BA /* NSString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Etresoft.h"; sourceTree = "<group>"; };
+		A523580F1EDC7B02008511BA /* NSString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Etresoft.m"; sourceTree = "<group>"; };
 		A5257D2C19AB51BE003084C8 /* ProcessesCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessesCollector.h; sourceTree = "<group>"; };
 		A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessesCollector.m; sourceTree = "<group>"; };
 		A5257D2F19AB5251003084C8 /* CPUUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUUsageCollector.h; sourceTree = "<group>"; };
@@ -399,6 +402,8 @@
 				A5D0877B19ECAD4E004F52C2 /* NSDictionary+Etresoft.m */,
 				A53EA3751C6FCF0200F270B0 /* NSDate+Etresoft.h */,
 				A53EA3761C6FCF0200F270B0 /* NSDate+Etresoft.m */,
+				A523580E1EDC7B02008511BA /* NSString+Etresoft.h */,
+				A523580F1EDC7B02008511BA /* NSString+Etresoft.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -877,6 +882,7 @@
 				A50C9DBC19A3690F00BA6A25 /* ConfigurationCollector.m in Sources */,
 				A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */,
 				A50C9DC519A4052000BA6A25 /* LoginItemsCollector.m in Sources */,
+				A52358101EDC7B02008511BA /* NSString+Etresoft.m in Sources */,
 				A5FC11FD19A4C30600E81E9C /* SafariExtensionsCollector.m in Sources */,
 				A5D0877919ECACF6004F52C2 /* NSArray+Etresoft.m in Sources */,
 				A5C292E619A039BD00464E86 /* SystemLaunchDaemonsCollector.m in Sources */,

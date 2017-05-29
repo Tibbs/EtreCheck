@@ -9,6 +9,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "LaunchdCollector.h"
+#import "NSString+Etresoft.h"
 
 @implementation Model
 
@@ -54,6 +55,7 @@
 @synthesize legitimateStrings = myLegitimateStrings;
 @synthesize sip = mySIP;
 @synthesize cleanupRequired = myCleanupRequired;
+@synthesize pathsForUUIDs = myPathsForUUIDs;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -187,6 +189,7 @@
     myBlacklistFiles = [NSMutableSet new];
     myBlacklistSuffixes = [NSMutableSet new];
     myBlacklistMatches = [NSMutableSet new];
+    myPathsForUUIDs = [NSMutableDictionary new];
     }
     
   return self;
@@ -195,6 +198,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myPathsForUUIDs release];
   [mySerialCode release];
   [myModel release];
   [myLogEntries release];
@@ -327,6 +331,30 @@
   
   [urlString
     appendString: NSLocalizedString(@"[Details]", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [[Utilities shared] blue],
+        NSLinkAttributeName : url
+      }];
+  
+  return [urlString autorelease];
+  }
+
+// Create an open URL for a file.
+- (NSAttributedString *) getOpenURLFor: (NSString *) path
+  {
+  NSMutableAttributedString * urlString =
+    [[NSMutableAttributedString alloc] initWithString: @""];
+    
+  // Use UUIDs since these are sometimes printed in plain text.
+  NSString * UUID = [self createUUIDForPath: path];
+  
+  NSString * url =
+    [NSString stringWithFormat: @"etrecheck://open/%@", UUID];
+  
+  [urlString
+    appendString: NSLocalizedString(@"[Open]", NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -732,4 +760,15 @@
   return NO;
   }
 
+// Associate a path with a UUID to hide it.
+- (NSString *) createUUIDForPath: (NSString *) path
+  {
+  NSString * UUID = [NSString UUID];
+  
+  if([UUID length] > 0)
+    [self.pathsForUUIDs setObject: path forKey: UUID];
+    
+  return UUID;
+  }
+  
 @end

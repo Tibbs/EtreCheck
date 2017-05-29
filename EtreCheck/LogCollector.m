@@ -248,7 +248,7 @@
   
   DiagnosticEvent * event = [DiagnosticEvent new];
   
-  event.name = sanitizedName;
+  event.name = NSLocalizedString(@"Kernel", NULL);
   event.date = date;
   event.type = kPanic;
   event.file = file;

@@ -14,6 +14,7 @@
 @synthesize name = myName;
 @synthesize details = myDetails;
 @synthesize file = myFile;
+@synthesize safefile = mySafeFile;
 @synthesize path = myPath;
 @synthesize identifier = myIdentifier;
 @synthesize information = myInformation;
@@ -24,6 +25,7 @@
   [myDate release];
   [myName release];
   [myDetails release];
+  [mySafeFile release];
   [myFile release];
   [myPath release];
   [myIdentifier release];

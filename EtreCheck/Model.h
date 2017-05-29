@@ -79,6 +79,7 @@
   NSMutableSet * myLegitimateStrings;
   bool mySIP;
   bool myCleanupRequired;
+  NSMutableDictionary * myUUIDsForPaths;
   }
 
 // Keep track of the OS version.
@@ -214,6 +215,9 @@
 // Is clean up required?
 @property (assign) bool cleanupRequired;
 
+// Map paths to UUIDs for privacy.
+@property (readonly) NSMutableDictionary * pathsForUUIDs;
+
 // Return the singeton of shared values.
 + (Model *) model;
 
@@ -225,6 +229,9 @@
 
 // Create a details URL for a query string.
 - (NSAttributedString *) getDetailsURLFor: (NSString *) query;
+
+// Create an open URL for a file.
+- (NSAttributedString *) getOpenURLFor: (NSString *) path;
 
 // Is this file an adware file?
 - (bool) checkForAdware: (NSString *) path

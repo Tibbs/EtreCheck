@@ -26,6 +26,7 @@ EventType;
   {
   EventType myType;
   NSString * myName;
+  NSString * mySafeFile;
   NSDate * myDate;
   NSString * myFile;
   NSString * myDetails;
@@ -38,6 +39,7 @@ EventType;
 @property (strong) NSString * name;
 @property (strong) NSDate * date;
 @property (strong) NSString * file;
+@property (strong) NSString * safefile;
 @property (strong) NSString * details;
 @property (strong) NSString * path;
 @property (strong) NSString * identifier;

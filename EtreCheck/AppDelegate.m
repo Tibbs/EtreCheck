@@ -640,6 +640,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
       [[NSWorkspace sharedWorkspace] openURL: url];
       }
+    else if([manager isEqualToString: @"open"])
+      {
+      relativePath =
+        [[[Model model] pathsForUUIDs] objectForKey: relativePath];
+      
+      if([relativePath length] > 0)
+        [[NSWorkspace sharedWorkspace] openFile: relativePath];
+      }
     }
   }
 

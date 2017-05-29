@@ -2100,4 +2100,28 @@
   return @"0";
   }
 
+// Get parent bundle of a path.
++ (NSString *) getParentBundle: (NSString *) path
+  {
+  if([path length] == 0)
+    return path;
+  
+  NSRange range = [path rangeOfString: @".app"];
+  
+  if(range.location != NSNotFound)
+    return [path substringToIndex: range.location + 4];
+    
+  range = [path rangeOfString: @".plugin"];
+  
+  if(range.location != NSNotFound)
+    return [path substringToIndex: range.location + 7];
+
+  range = [[path lowercaseString] rangeOfString: @".prefpane"];
+  
+  if(range.location != NSNotFound)
+    return [path substringToIndex: range.location + 9];
+
+  return path;
+  }
+
 @end

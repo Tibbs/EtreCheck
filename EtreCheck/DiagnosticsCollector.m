@@ -285,6 +285,7 @@
     DiagnosticEvent * event = [DiagnosticEvent new];
     
     event.name = sanitizedName;
+    event.safefile = sanitizedName;
     event.date = date;
     event.type = type;
     event.file = file;
@@ -392,7 +393,9 @@
           {
           capturingInformation = YES;
           
-          [information appendFormat: @"        %@\n", line];
+          [information
+            appendFormat:
+              @"        %@", NSLocalizedString(@"Cause:", NULL)];
           }
         else if(capturingInformation)
           {
@@ -412,15 +415,26 @@
         }];
     
   if(event.type == kPanic)
+    {
     event.details = contents;
+    event.name = NSLocalizedString(@"Kernel", NULL);
+    }
   else if(event.type == kCPU)
     event.details = result;
   else
     event.details = [[Model model] logEntriesAround: event.date];
     
   if([path length])
+    {
     event.path = path;
-  
+    event.name = [path lastPathComponent];
+    
+    NSString * bundle = [Utilities getParentBundle: path];
+    
+    if(![bundle isEqualToString: path])
+      event.name = [bundle lastPathComponent];
+    }
+    
   if([path length] && [identifier length])
     if(![[path lastPathComponent] isEqualToString: identifier])
       event.identifier = identifier;
@@ -492,14 +506,26 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@    %@",
+            @"    %@    %@ %@",
             [Utilities dateAsString: event.date],
-            event.name]];
+            event.name,
+            [self getEventType: event.type]]];
   
   BOOL fileExists =
     [[NSFileManager defaultManager] fileExistsAtPath: event.file];
   
-  if(!fileExists)
+  if(fileExists)
+    {
+    NSAttributedString * openURL =
+      [[Model model] getOpenURLFor: event.file];
+
+    if(openURL != nil)
+      {
+      [self.result appendString: @" "];
+      [self.result appendAttributedString: openURL];
+      }
+    }
+  else
     [self.result
       appendString: NSLocalizedString(@" Missing!", NULL)
       attributes:
@@ -513,7 +539,7 @@
     NSAttributedString * detailsURL =
       [[Model model] getDetailsURLFor: name];
 
-    if(detailsURL)
+    if(detailsURL != nil)
       {
       [self.result appendString: @" "];
       [self.result appendAttributedString: detailsURL];
@@ -522,30 +548,34 @@
 
   [self.result appendString: @"\n"];
   
-  if([event.path length] && ![self.paths containsObject: event.path])
-    {
-    [self.paths addObject: event.path];
-    
-    [self.result appendString: @"        "];
-    
-    if([event.identifier length])
-      [self.result appendString: event.identifier];
-      
-    if([event.path length])
-      {
-      if([event.identifier length])
-        [self.result appendString: @" - "];
-      
-      [self.result appendString: [Utilities cleanPath: event.path]];
-      }
-      
-    [self.result appendString: @"\n"];
-    }
-    
   if([event.information length] > 0)
     [self.result appendString: event.information];
 
   hasOutput = YES;
+  }
+
+// Get an event name.
+- (NSString *) getEventType: (EventType) eventType
+  {
+  switch(eventType)
+    {
+    case kCrash:
+      return NSLocalizedString(@"Crash", NULL);
+      
+    case kCPU:
+      return NSLocalizedString(@"High CPU use", NULL);
+
+    case kHang:
+      return NSLocalizedString(@"Hang", NULL);
+      
+    case kPanic:
+      return NSLocalizedString(@"Panic", NULL);
+      
+    default:
+      break;
+    }
+    
+  return NSLocalizedString(@"Unknown", NULL);
   }
 
 @end

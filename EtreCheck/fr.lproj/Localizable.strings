@@ -330,3 +330,10 @@
 "Output    " = "Sortie    ";
 "Process name" = "Nom de l’opération";
 " Missing!" = "non-trouvé !";
+"Crash" = "Écrasement";
+"High CPU use" = "Taux d’usage du CPU élevé";
+"Hang" = "Bloqué";
+"[Open]" = "[Ouvrir]";
+"Cause:" = "La cause :";
+"Kernel" = "Noyau";
+"Panic" = "Erreur grave";
