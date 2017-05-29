@@ -54,7 +54,7 @@
   [self collectUserDiagnosticReportCrashes];
   [self collectDiagnosticReportHangs];
   [self collectUserDiagnosticReportHangs];
-  [self collectPanics];
+  //[self collectPanics];
   [self collectCPU];
   
   if([[[Model model] diagnosticEvents] count] || insufficientPermissions)
@@ -148,7 +148,6 @@
       
       [event release];
       }
-    
     }
   }
 
@@ -497,6 +496,18 @@
             [Utilities dateAsString: event.date],
             event.name]];
   
+  BOOL fileExists =
+    [[NSFileManager defaultManager] fileExistsAtPath: event.file];
+  
+  if(!fileExists)
+    [self.result
+      appendString: NSLocalizedString(@" Missing!", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
   if([event.details length])
     {
     NSAttributedString * detailsURL =

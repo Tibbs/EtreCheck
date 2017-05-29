@@ -91,6 +91,8 @@
     [self collectKernelLogContent: content];
   else if([name isEqualToString: @"asl_messages_description"])
     [self collectASLLogContent: content];
+  else if([name isEqualToString: @"panic_log_description"])
+    [self collectPanicLog: result];
   }
 
 // Collect results from the kernel log entry.
@@ -223,6 +225,72 @@
     
     
   [[Model model] setLogEntries: events];
+  }
+
+// Collect results from the panic log entry.
+- (void) collectPanicLog: (NSDictionary *) info
+  {
+  NSString * file = [info objectForKey: @"source"];
+  
+  if([file length] == 0)
+    return;
+    
+  NSString * sanitizedName = nil;
+  
+  NSDate * date = [info objectForKey: @"lastModified"];
+  
+  if(date == nil)
+    return;
+    
+  [self parseFileName: file date: & date name: & sanitizedName];
+  
+  NSString * contents = [info objectForKey: @"contents"];
+  
+  DiagnosticEvent * event = [DiagnosticEvent new];
+  
+  event.name = sanitizedName;
+  event.date = date;
+  event.type = kPanic;
+  event.file = file;
+  event.details = contents;
+  
+  [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+  
+  [event release];
+  }
+
+// Parse a file name and extract the date and sanitized name.
+- (void) parseFileName: (NSString *) file
+  date: (NSDate **) date
+  name: (NSString **) name
+  {
+  NSString * extension = [file pathExtension];
+  NSString * base = [file stringByDeletingPathExtension];
+  
+  // First the 2nd portion of the file name that contains the date.
+  NSArray * parts = [base componentsSeparatedByString: @"_"];
+
+  NSUInteger count = [parts count];
+  
+  if(count > 1)
+    if(date)
+      *date =
+        [Utilities
+          stringAsDate: [parts objectAtIndex: count - 2]
+          format: @"yyyy-MM-dd-HHmmss"];
+
+  // Now construct a safe file name.
+  NSMutableArray * safeParts = [NSMutableArray arrayWithArray: parts];
+  
+  [safeParts removeLastObject];
+  [safeParts
+    addObject:
+      [NSLocalizedString(@"[redacted]", NULL)
+        stringByAppendingPathExtension: extension]];
+  
+  if(name)
+    *name =
+      [Utilities cleanPath: [safeParts componentsJoinedByString: @"_"]];
   }
 
 // Collect the system log, if accessible.
