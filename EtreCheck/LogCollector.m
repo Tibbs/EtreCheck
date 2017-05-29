@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "DiagnosticEvent.h"
 #import "SubProcess.h"
+#import "DiagnosticsCollector.h"
 
 // Collect information from log files.
 @implementation LogCollector
@@ -254,6 +255,8 @@
   event.file = file;
   event.details = contents;
   
+  [DiagnosticsCollector parseDiagnosticData: contents event: event];
+
   [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
   
   [event release];

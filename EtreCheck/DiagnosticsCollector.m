@@ -344,15 +344,23 @@
 - (void) parseFileContents: (NSString *) file
   event: (DiagnosticEvent *) event
   {
+  NSData * data = [NSData dataWithContentsOfFile: file];
+  
+  NSString * contents =
+    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+  
+  [DiagnosticsCollector parseDiagnosticData: contents event: event];
+  
+  [contents release];
+  }
+
+// Parse diagnostic data.
++ (void) parseDiagnosticData: (NSString *) contents
+  event: (DiagnosticEvent *) event
+  {
   if(!event)
     return;
     
-  NSString * contents =
-    [NSString
-      stringWithContentsOfFile: file
-      encoding: NSUTF8StringEncoding
-      error: NULL];
-  
   NSArray * lines = [contents componentsSeparatedByString: @"\n"];
 
   __block NSMutableString * result = [NSMutableString string];
@@ -362,6 +370,7 @@
   __block NSMutableString * path = [NSMutableString string];
   __block NSMutableString * identifier = [NSMutableString string];
   __block NSMutableString * information = [NSMutableString string];
+  __block NSMutableSet * extensions = [NSMutableSet set];
   
   __block BOOL capturingInformation = NO;
   
@@ -383,12 +392,14 @@
               [[line substringFromIndex: 5]
                 stringByTrimmingCharactersInSet:
                   [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+          
         else if([line hasPrefix: @"Identifier:"])
           [identifier
             appendString:
               [[line substringFromIndex: 11]
                 stringByTrimmingCharactersInSet:
                   [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+          
         else if([line hasPrefix: @"Application Specific Information:"])
           {
           capturingInformation = YES;
@@ -397,6 +408,40 @@
             appendFormat:
               @"        %@", NSLocalizedString(@"Cause:", NULL)];
           }
+          
+        else if([line hasPrefix: @"loaded kexts:"])
+          capturingInformation = YES;
+        
+        else if([line hasPrefix: @"last loaded kext at "])
+          {
+          NSRange range = [line rangeOfString: @": "];
+          
+          if(range.location != NSNotFound)
+            {
+            NSString * extension =
+              [line substringFromIndex: range.location + range.length];
+          
+            if([extension length] > 0)
+              if(![extension hasPrefix: @"com.apple."])
+                [extensions addObject: extension];
+            }
+          }
+          
+        else if([line hasPrefix: @"last unloaded kext at "])
+          {
+          NSRange range = [line rangeOfString: @": "];
+          
+          if(range.location != NSNotFound)
+            {
+            NSString * extension =
+              [line substringFromIndex: range.location + range.length];
+          
+            if([extension length] > 0)
+              if(![extension hasPrefix: @"com.apple."])
+                [extensions addObject: extension];
+            }
+          }
+          
         else if(capturingInformation)
           {
           NSString * trimmedLine =
@@ -404,13 +449,22 @@
               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
           if([trimmedLine length] > 0)
-            [information appendFormat: @"        %@\n", trimmedLine];
-          else
             {
-            capturingInformation = NO;
-            
-            *stop = YES;
+            if(event.type == kPanic)
+              {
+              if([trimmedLine hasPrefix: @"com.apple."])
+                capturingInformation = NO;
+              else
+                [extensions addObject: trimmedLine];
+              }
+            else
+              [information appendFormat: @"        %@\n", trimmedLine];
             }
+          else
+            capturingInformation = NO;
+          
+          if(!capturingInformation && stop)
+            *stop = YES;
           }
         }];
     
@@ -418,6 +472,24 @@
     {
     event.details = contents;
     event.name = NSLocalizedString(@"Kernel", NULL);
+    
+    [information
+      appendFormat:
+        @"        %@",
+        NSLocalizedString(@"3rd Party Kernel Extensions: ", NULL)];
+      
+    if([extensions count] == 0)
+      {
+      [information appendString: NSLocalizedString(@"None", NULL)];
+      [information appendString: @"\n"];
+      }
+    else
+      {
+      [information appendString: @"\n"];
+      
+      for(NSString * extension in extensions)
+        [information appendFormat: @"                %@\n", extension];
+      }
     }
   else if(event.type == kCPU)
     event.details = result;

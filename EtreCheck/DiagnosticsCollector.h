@@ -6,6 +6,8 @@
 
 #import "Collector.h"
 
+@class DiagnosticEvent;
+
 // Collect diagnostics information.
 @interface DiagnosticsCollector : Collector
   {
@@ -17,5 +19,9 @@
   }
 
 @property (retain) NSMutableSet * paths;
+
+// Parse diagnostic data.
++ (void) parseDiagnosticData: (NSString *) contents
+  event: (DiagnosticEvent *) event;
 
 @end

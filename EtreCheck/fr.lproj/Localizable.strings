@@ -337,3 +337,6 @@
 "Cause:" = "La cause :";
 "Kernel" = "Noyau";
 "Panic" = "Erreur grave";
+"3rd Party Kernel Extensions: " = "Extensions du noyau de tiers : ";
+"None" = "Aucun";
+
