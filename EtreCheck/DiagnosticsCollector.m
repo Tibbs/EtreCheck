@@ -54,7 +54,7 @@
   [self collectUserDiagnosticReportCrashes];
   [self collectDiagnosticReportHangs];
   [self collectUserDiagnosticReportHangs];
-  //[self collectPanics];
+  [self collectPanics];
   [self collectCPU];
   
   if([[[Model model] diagnosticEvents] count] || insufficientPermissions)
