@@ -615,9 +615,6 @@
 // Print memory banks.
 - (void) printMemoryBanks: (NSArray *) banks
   {
-  NSString * lastBankID = nil;
-  int bankCount = 0;
-  
   for(NSDictionary * bank in banks)
     {
     NSString * name = [bank objectForKey: @"_name"];
@@ -647,33 +644,9 @@
         stringWithFormat:
           @"            %@ %@ %@ %@\n", size, type, speed, status];
       
-    bool isRAMSlotID = NO;
-    
-    if([lastBankID hasPrefix: @"        RAM slot"])
-      isRAMSlotID = YES;
-      
-    if([lastBankID hasPrefix: @"        BANK "])
-      isRAMSlotID = YES;
-
-    bool isEmpty = [size isEqualToString: empty];
-    
-    if(isRAMSlotID && isEmpty && (bank != [banks lastObject]))
-      ++bankCount;
-    else
-      {
-      [self.result appendString: currentBankID];
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"%@\n",
-              bankCount > 0
-                ? [NSString stringWithFormat: @" (%d)", bankCount]
-                : @""]];
-      [self.result appendString: currentBankInfo];
-      
-      lastBankID = currentBankID;
-      }
+    [self.result appendString: currentBankID];
+    [self.result appendString: @"\n"];
+    [self.result appendString: currentBankInfo];
     }
   }
 
