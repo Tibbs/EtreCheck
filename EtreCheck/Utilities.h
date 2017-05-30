@@ -158,6 +158,9 @@
 // Restart the machine.
 + (BOOL) restart;
 
+// Turn on Gatekeeper.
++ (void) enableGatekeeper;
+
 // Resolve a deep app path to the wrapper path.
 + (NSString *) resolveBundlePath: (NSString *) path;
 

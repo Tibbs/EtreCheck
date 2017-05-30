@@ -1707,6 +1707,23 @@
   return YES;
   }
 
+// Turn on Gatekeeper.
++ (void) enableGatekeeper
+  {
+  NSMutableString * command =
+    [NSMutableString stringWithString: @"/usr/sbin/spctl --master-enable"];
+
+  NSArray * statements =
+    [NSArray arrayWithObject:
+      [NSString
+        stringWithFormat:
+          @"do shell script(\"%@\") with administrator privileges",
+          command]];
+    
+  // Execute the statements.
+  [Utilities executeAppleScriptStatements: statements];
+  }
+
 // Make a path that is suitable for a URL by appending a / for a directory.
 + (NSString *) makeURLPath: (NSString *) path
   {

@@ -352,4 +352,6 @@
 "Power supply overheating" = "La source d’alimentation en train de surchauffer";
 "RAM overheating" = "La mémoire en train de surchauffer";
 "System unresponsive" = "Le système ne répond pas";
-
+"Enable Gatekeeper" = "Activer Gatekeeper";
+"enablegatekeeper" = "Vous devez utiliser votre mot de passe administrateur pour activer Gatekeeper. Voulez-vous continuer ?";
+"[Fix Gatekeeper security]" = "[Activer la sécurité Gatekeeper]";

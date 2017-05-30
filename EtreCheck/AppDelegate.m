@@ -648,7 +648,35 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       if([relativePath length] > 0)
         [[NSWorkspace sharedWorkspace] openFile: relativePath];
       }
+    else if([manager isEqualToString: @"enablegatekeeper"])
+      [self enableGatekeeper];
     }
+  }
+
+// Enable Gatekeeper.
+- (void) enableGatekeeper
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Enable Gatekeeper", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"enablegatekeeper", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+  [alert addButtonWithTitle: NSLocalizedString(@"Cancel", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  if(result == NSAlertFirstButtonReturn)
+    [Utilities enableGatekeeper];
   }
 
 // Check for a new version.

@@ -184,11 +184,13 @@ GatekeeperSetting;
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@\n", NSLocalizedString(@"Anywhere", NULL)]
+              @"    %@ ", NSLocalizedString(@"Anywhere", NULL)]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
+      [self.result appendAttributedString: [self buildFixLink]];
+      [self.result appendString: @"\n"];
       break;
       
     case kUnknown:
@@ -204,6 +206,24 @@ GatekeeperSetting;
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
       break;
     }
+  }
+
+// Create an open URL for a file.
+- (NSAttributedString *) buildFixLink
+  {
+  NSMutableAttributedString * urlString =
+    [[NSMutableAttributedString alloc] initWithString: @""];
+    
+  [urlString
+    appendString: NSLocalizedString(@"[Fix Gatekeeper security]", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [NSColor redColor],
+        NSLinkAttributeName : @"etrecheck://enablegatekeeper/"
+      }];
+  
+  return [urlString autorelease];
   }
 
 @end
