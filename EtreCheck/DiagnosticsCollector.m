@@ -65,7 +65,7 @@
       {
       if(!hasOutput)
         [self.result appendAttributedString: [self buildTitle]];
-      
+        
       [self.result appendString: @"\n"];
       [self.result
         appendString:
@@ -542,6 +542,7 @@
       {
       case kPanic:
       case kSelfTestFail:
+      case kShutdown:
         [self printDiagnosticEvent: event name: name];
         break;
         
@@ -559,52 +560,86 @@
   if(!hasOutput)
     [self.result appendAttributedString: [self buildTitle]];
   
-  if(event.type == kSelfTestFail)
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"    %@     - %@",
-            [Utilities dateAsString: event.date],
-            event.name]
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-    
-  else
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"    %@    %@ %@",
-            [Utilities dateAsString: event.date],
-            event.name,
-            [self getEventType: event.type]]];
-  
-  BOOL fileExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: event.file];
-  
-  if(fileExists)
+  switch(event.type)
     {
-    NSAttributedString * openURL =
-      [[Model model] getOpenURLFor: event.file];
+    case kSelfTestFail:
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"    %@     - %@",
+              [Utilities dateAsString: event.date],
+              event.name]
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+      break;
+    
+    case kShutdown:
+      if(event.code < 0)
+        [self.result
+          appendString:
+            [NSString
+              stringWithFormat:
+                @"    %@    %@ %@",
+                [Utilities dateAsString: event.date],
+                [self getEventType: event.type],
+                event.name]
+          attributes:
+            @{
+              NSForegroundColorAttributeName : [[Utilities shared] red],
+              NSFontAttributeName : [[Utilities shared] boldFont]
+            }];
+      else
+        [self.result
+          appendString:
+            [NSString
+              stringWithFormat:
+                @"    %@    %@ %@",
+                [Utilities dateAsString: event.date],
+                [self getEventType: event.type],
+                event.name]];
+      break;
 
-    if(openURL != nil)
-      {
-      [self.result appendString: @" "];
-      [self.result appendAttributedString: openURL];
-      }
+    default:
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"    %@    %@ %@",
+              [Utilities dateAsString: event.date],
+              event.name,
+              [self getEventType: event.type]]];
+      break;
     }
-  else
-    [self.result
-      appendString: NSLocalizedString(@" Missing!", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
+  
+  if([event.file length] > 0)
+    {
+    BOOL fileExists =
+      [[NSFileManager defaultManager] fileExistsAtPath: event.file];
+    
+    if(fileExists)
+      {
+      NSAttributedString * openURL =
+        [[Model model] getOpenURLFor: event.file];
+
+      if(openURL != nil)
+        {
+        [self.result appendString: @" "];
+        [self.result appendAttributedString: openURL];
+        }
+      }
+    else
+      [self.result
+        appendString: NSLocalizedString(@" Missing!", NULL)
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+    }
     
   if([event.details length])
     {
@@ -642,6 +677,9 @@
       
     case kPanic:
       return NSLocalizedString(@"Panic", NULL);
+      
+    case kShutdown:
+      return NSLocalizedString(@"Last shutdown cause:", NULL);
       
     default:
       break;

@@ -337,6 +337,19 @@
 "Cause:" = "La cause :";
 "Kernel" = "Noyau";
 "Panic" = "Erreur grave";
+"Last shutdown cause:" = "La cause du dernier arrêt :";
 "3rd Party Kernel Extensions: " = "Extensions du noyau de tiers : ";
 "None" = "Aucun";
+"Battery failure" = "Échec de la batterie";
+"Battery overheating" = "La batterie en train de surchauffer";
+"Corrupt filesystem" = "Le système de fichiers est corrompu";
+"CPU overheating" = "CPU en train de surchauffer";
+"Hard shutdown" = "Arrêt complet non ordonné";
+"Normal" = "Normale";
+"Overheating" = "En train de surchauffer";
+"Power loss" = "Une coupure de courant";
+"Power supply failure" = "Échec de la source d’alimentation";
+"Power supply overheating" = "La source d’alimentation en train de surchauffer";
+"RAM overheating" = "La mémoire en train de surchauffer";
+"System unresponsive" = "Le système ne répond pas";
 

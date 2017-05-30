@@ -18,7 +18,8 @@ typedef enum EventType
   kPanic,
   kASLLog,
   kSystemLog,
-  kLog
+  kLog,
+  kShutdown
   }
 EventType;
 
@@ -33,6 +34,7 @@ EventType;
   NSString * myPath;
   NSString * myIdentifier;
   NSString * myInformation;
+  int myCode;
   }
 
 @property (assign) EventType type;
@@ -44,5 +46,6 @@ EventType;
 @property (strong) NSString * path;
 @property (strong) NSString * identifier;
 @property (strong) NSString * information;
+@property (assign) int code;
 
 @end

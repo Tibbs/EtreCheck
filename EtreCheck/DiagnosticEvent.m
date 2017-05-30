@@ -18,6 +18,7 @@
 @synthesize path = myPath;
 @synthesize identifier = myIdentifier;
 @synthesize information = myInformation;
+@synthesize code = myCode;
 
 // Destructor.
 - (void) dealloc

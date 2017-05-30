@@ -94,6 +94,12 @@
     [self collectASLLogContent: content];
   else if([name isEqualToString: @"panic_log_description"])
     [self collectPanicLog: result];
+  else if([name isEqualToString: @"ioreg_output_description"])
+    [self collectIOReg: content];
+    
+  // I could do this on Sierra:
+  // log show --predicate '(process == "kernel") && (eventMessage endswith ": I/O error.")'
+  // but it would take forever.
   }
 
 // Collect results from the kernel log entry.
@@ -352,6 +358,142 @@
     
     
   [[Model model] setLogEntries: events];
+  }
+
+// Collect results from the ioreg_output_description log entry.
+- (void) collectIOReg: (NSString *) content
+  {
+  NSArray * lines = [content componentsSeparatedByString: @"\n"];
+  
+  for(NSString * line in lines)
+    {
+    NSRange range = [line rangeOfString: @"ShutdownCause"];
+    
+    if(range.location != NSNotFound)
+      {
+      NSString * shutdownCauseString =
+        [line substringFromIndex: range.location + range.length];
+      
+      NSScanner * scanner =
+        [NSScanner scannerWithString: shutdownCauseString];
+      
+      [scanner
+        setCharactersToBeSkipped:
+          [NSCharacterSet characterSetWithCharactersInString: @" =\""]];
+        
+      int shutdownCause = 0;
+      
+      if([scanner scanInt: & shutdownCause])
+        [self parseShutdownCode: shutdownCause];
+      }
+    }
+  }
+
+// Parse a shutdown code.
+- (void) parseShutdownCode: (int) shutdownCause
+  {
+  NSString * shutdownString = NSLocalizedString(@"Unknown", NULL);
+  
+  switch(shutdownCause)
+    {
+    case 5:
+      shutdownString = NSLocalizedString(@"Normal", NULL);
+      return;
+      
+    case 3:
+      shutdownString = NSLocalizedString(@"Hard shutdown", NULL);
+      break;
+      
+    case 0:
+      shutdownString = NSLocalizedString(@"Power loss", NULL);
+      break;
+      
+    case -3:
+    case -86:
+      shutdownString = NSLocalizedString(@"Overheating", NULL);
+      break;
+      
+    case -60:
+      shutdownString = NSLocalizedString(@"Corrupt filesystem", NULL);
+      break;
+    
+    case -61:
+    case -62:
+      shutdownString = NSLocalizedString(@"System unresponsive", NULL);
+      break;
+    
+    case -71:
+      shutdownString = NSLocalizedString(@"RAM overheating", NULL);
+      break;
+    
+    case -74:
+      shutdownString = NSLocalizedString(@"Battery overheating", NULL);
+      break;
+    
+    case -75:
+    case -78:
+      shutdownString = NSLocalizedString(@"Power supply failure", NULL);
+      break;
+    
+    case -79:
+    case -103:
+      shutdownString = NSLocalizedString(@"Battery failure", NULL);
+      break;
+    
+    case -95:
+      shutdownString = NSLocalizedString(@"CPU overheating", NULL);
+      break;
+    
+    case -100:
+      shutdownString = NSLocalizedString(@"Power supply overheating", NULL);
+      break;
+    }
+    
+  NSDate * date = [self getShutdownTime];
+  
+  DiagnosticEvent * event = [DiagnosticEvent new];
+  
+  event.code = shutdownCause;
+  event.date = date;
+  event.type = kShutdown;
+  event.name =
+    [NSString stringWithFormat: @"%d - %@", shutdownCause, shutdownString];
+  
+  [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+  
+  [event release];
+  }
+
+// Get the shutdown time.
+- (NSDate *) getShutdownTime
+  {
+  NSArray * args = @[@"kern.boottime"];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      if([line hasPrefix: @"kern.boottime: { sec = "])
+        {
+        NSString * secondsString = [line substringFromIndex: 23];
+        
+        NSScanner * scanner = [NSScanner scannerWithString: secondsString];
+      
+        long long boottime = 0;
+      
+        if([scanner scanLongLong: & boottime])
+          {
+          NSDate * date = [NSDate dateWithTimeIntervalSince1970: boottime];
+          
+          return date;
+          }
+        }
+    }
+    
+  return nil;
   }
 
 @end
