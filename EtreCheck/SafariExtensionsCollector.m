@@ -672,6 +672,9 @@
     
     for(NSDictionary * installedExtension in installedExtensions)
       {
+      if(![installedExtension respondsToSelector: @selector(objectForKey:)])
+        continue;
+        
       NSNumber * enabled = [installedExtension objectForKey: @"Enabled"];
       
       NSString * filename =
