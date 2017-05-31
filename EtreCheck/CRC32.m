@@ -79,11 +79,11 @@ static uint32_t CRC32Table[256] =
 
 #pragma mark - Properties
 
-@synthesize value;
+@synthesize value = myValue;
 
 - (uint32_t) value
   {
-  return value ^ 0xFFFFFFFF;
+  return myValue ^ 0xFFFFFFFF;
   }
 
 #pragma mark - CRC32 logic
@@ -92,7 +92,7 @@ static uint32_t CRC32Table[256] =
 - (id) init
   {
   if(self = [super init])
-    value = 0xFFFFFFFF;
+    myValue = 0xFFFFFFFF;
   
   return self;
   }
@@ -108,8 +108,8 @@ static uint32_t CRC32Table[256] =
   const unsigned char * p = bytes;
   
   while(size--)
-    value = ((value >> 8) & 0x00FFFFFF) ^
-      CRC32Table[(value ^ (uint32_t)*p++) & 0x000000FF];
+    myValue = ((myValue >> 8) & 0x00FFFFFF) ^
+      CRC32Table[(myValue ^ (uint32_t)*p++) & 0x000000FF];
   }
 
 @end

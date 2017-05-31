@@ -79,7 +79,7 @@
   NSMutableSet * myLegitimateStrings;
   bool mySIP;
   bool myCleanupRequired;
-  NSMutableDictionary * myUUIDsForPaths;
+  NSMutableDictionary * myPathsForUUIDs;
   }
 
 // Keep track of the OS version.

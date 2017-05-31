@@ -7,6 +7,9 @@
 #import <Foundation/Foundation.h>
 
 @interface CRC32 : NSObject
+  {
+  uint32_t myValue;
+  }
 
 @property (readonly, assign) uint32_t value;
 
