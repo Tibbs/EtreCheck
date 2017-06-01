@@ -48,6 +48,7 @@
                 <outlet property="machineIcon" destination="kxf-sE-hK4" id="g5f-Le-vgx"/>
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="Gpp-rD-Etp"/>
+                <outlet property="notificationSPAMCleanupManager" destination="PdM-hY-LZ0" id="v5s-R0-pgU"/>
                 <outlet property="optionsButton" destination="EBF-Wl-xZl" id="f4U-wd-G31"/>
                 <outlet property="problemDescriptionTextView" destination="78R-B9-GBa" id="USD-93-PLK"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
@@ -108,14 +109,20 @@
                 <outlet property="view" destination="nCU-Ry-DLu" id="atU-qN-wlc"/>
             </connections>
         </viewController>
-        <customObject id="Vj9-lq-jPe" userLabel="Adware Manager" customClass="CleanupManager">
+        <customObject id="Vj9-lq-jPe" customClass="CleanupManager">
             <connections>
                 <outlet property="tableView" destination="bhT-PM-Mux" id="Lu2-Ic-Qve"/>
                 <outlet property="textView" destination="AJQ-PD-fXE" id="2EX-zD-Tg7"/>
                 <outlet property="window" destination="zLb-Mx-zP0" id="HEs-Hy-7az"/>
             </connections>
         </customObject>
-        <customObject id="iUq-Rw-Zgh" userLabel="Unknown files Manager" customClass="AdwareManager">
+        <customObject id="PdM-hY-LZ0" userLabel="Notification SPAM Cleanup Manager" customClass="NotificationSPAMCleanupManager">
+            <connections>
+                <outlet property="tableView" destination="5fT-L9-tTB" id="nAQ-BS-BEW"/>
+                <outlet property="window" destination="f9v-kI-EaE" id="ztI-O6-wUI"/>
+            </connections>
+        </customObject>
+        <customObject id="iUq-Rw-Zgh" customClass="AdwareManager">
             <connections>
                 <outlet property="removeButton" destination="Tnm-72-P6l" id="6GU-e9-4RN"/>
                 <outlet property="reportButton" destination="zTe-eC-fao" id="8PS-sq-VlY"/>
@@ -1709,7 +1716,140 @@ Gw
             </view>
             <point key="canvasLocation" x="296" y="2220"/>
         </window>
-        <window title="Cleanup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zLb-Mx-zP0" userLabel="Cleanup Window">
+        <window title="Clean up notification SPAM" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="f9v-kI-EaE" userLabel="Notification SPAM Cleanup Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="359"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" misplaced="YES" id="ofJ-pF-GTt">
+                <rect key="frame" x="0.0" y="0.0" width="568" height="359"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button toolTip="Close the adware window" verticalHuggingPriority="750" id="0NM-nf-ugT">
+                        <rect key="frame" x="478" y="13" width="76" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SKz-4Q-Yii">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <accessibility description="Close the adware window"/>
+                        <connections>
+                            <action selector="close:" target="PdM-hY-LZ0" id="mWg-ah-R4x"/>
+                        </connections>
+                    </button>
+                    <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="Zcc-Hk-tGn">
+                        <rect key="frame" x="20" y="61" width="528" height="207"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="GWf-gt-1FN">
+                            <rect key="frame" x="1" y="0.0" width="526" height="206"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="KdD-aM-Pzy" id="5fT-L9-tTB">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="183"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="remove" width="56.515625" minWidth="10" maxWidth="3.4028234663852886e+38" id="hsq-lh-c8p">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Remove?">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="tgV-xq-ckQ">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <accessibility description="Remove this file"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="keep" width="40" minWidth="40" maxWidth="1000" id="eEu-1q-YBA">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Keep?">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="txs-DS-dve">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <accessibility description="Keep this file"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="date" editable="NO" width="158.6796875" minWidth="40" maxWidth="1000" id="ePe-So-ZTh" userLabel="Date">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Date">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="Aia-bZ-KtR">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="text" width="259" minWidth="10" maxWidth="3.4028234663852886e+38" id="7xZ-Qw-g5l" userLabel="Text">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Text">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="jjy-YC-PQn">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="PdM-hY-LZ0" id="EXe-eK-U12"/>
+                                        <outlet property="delegate" destination="PdM-hY-LZ0" id="ZLX-8Y-O8d"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="O7E-Lw-tXH">
+                            <rect key="frame" x="1" y="190" width="526" height="16"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="tTj-Ot-mZv">
+                            <rect key="frame" x="224" y="17" width="15" height="102"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <tableHeaderView key="headerView" id="KdD-aM-Pzy">
+                            <rect key="frame" x="0.0" y="0.0" width="526" height="23"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </tableHeaderView>
+                    </scrollView>
+                    <button toolTip="Remove files marked for removal" verticalHuggingPriority="750" id="XWB-sc-4FQ">
+                        <rect key="frame" x="14" y="13" width="89" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Remove" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u8D-jK-iOf">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <accessibility description="Remove files marked for removal"/>
+                        <connections>
+                            <action selector="removeNotifications:" target="PdM-hY-LZ0" id="H9Q-8S-sSc"/>
+                            <binding destination="PdM-hY-LZ0" name="enabled" keyPath="self.canRemove" id="Cy5-tM-zmk"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" allowsCharacterPickerTouchBarItem="NO" id="tww-Gw-twl">
+                        <rect key="frame" x="18" y="276" width="532" height="63"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="RZP-HM-8i3">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">EtreCheck has identified these notifications as possible SPAM. Please review and indicate which notifications you want to keep and which you want to remove.</string>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="296" y="2292.5"/>
+        </window>
+        <window title="Clean up orphan files" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zLb-Mx-zP0" userLabel="Cleanup Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="152" y="158" width="568" height="328"/>
@@ -1723,7 +1863,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="HkX-Oy-Cu0">
                             <rect key="frame" x="1" y="1" width="526" height="99"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" linkDetection="YES" spellingCorrection="YES" id="AJQ-PD-fXE">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="99"/>
@@ -1762,7 +1902,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="lPb-G0-WaY">
                             <rect key="frame" x="1" y="0.0" width="526" height="137"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="zla-Dm-aep" id="bhT-PM-Mux">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="114"/>

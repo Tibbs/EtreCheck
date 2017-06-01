@@ -382,24 +382,4 @@
   return [urlString autorelease];
   }
 
-// Generate a "check files" link.
-- (NSAttributedString *) generateRemoveOrphanFilesLink: (NSString *) name
-  {
-  NSMutableAttributedString * urlString =
-    [[NSMutableAttributedString alloc] initWithString: @""];
-    
-  [urlString appendString: @" "];
-  
-  [urlString
-    appendString: NSLocalizedString(@"[Clean up]", NULL)
-    attributes:
-      @{
-        NSFontAttributeName : [[Utilities shared] boldFont],
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : @"etrecheck://cleanup/cleanup"
-      }];
-    
-  return [urlString autorelease];
-  }
-
 @end

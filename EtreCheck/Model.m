@@ -56,6 +56,7 @@
 @synthesize sip = mySIP;
 @synthesize cleanupRequired = myCleanupRequired;
 @synthesize pathsForUUIDs = myPathsForUUIDs;
+@synthesize notificationSPAMs = myNotificationSPAMs;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -190,6 +191,7 @@
     myBlacklistSuffixes = [NSMutableSet new];
     myBlacklistMatches = [NSMutableSet new];
     myPathsForUUIDs = [NSMutableDictionary new];
+    myNotificationSPAMs = [NSMutableDictionary new];
     }
     
   return self;
@@ -198,6 +200,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myNotificationSPAMs release];
   [myPathsForUUIDs release];
   [mySerialCode release];
   [myModel release];

@@ -355,3 +355,6 @@
 "Enable Gatekeeper" = "Activer Gatekeeper";
 "enablegatekeeper" = "Vous devez utiliser votre mot de passe administrateur pour activer Gatekeeper. Voulez-vous continuer ?";
 "[Fix Gatekeeper security]" = "[Activer la sécurité Gatekeeper]";
+"%d SPAM notification (plural rule: zero)" = "";
+"%d SPAM notification (plural rule: one)" = "Une notification pourriel";
+"%d SPAM notification (plural rule: other)" = "%d notifications pourriels";

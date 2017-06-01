@@ -11,6 +11,7 @@
 @class SMARTManager;
 @class HelpManager;
 @class CleanupManager;
+@class NotificationSPAMCleanupManager;
 @class AdwareManager;
 @class UpdateManager;
 @class EtreCheckWindow;
@@ -83,6 +84,7 @@
   SMARTManager * mySMARTManager;
   HelpManager * myHelpManager;
   CleanupManager * myCleanupManager;
+  NotificationSPAMCleanupManager * myNotificationSPAMCleanupManager;
   AdwareManager * myAdwareManager;
   UpdateManager * myUpdateManager;
   
@@ -157,6 +159,8 @@
 @property (retain) IBOutlet SMARTManager * smartManager;
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet CleanupManager * cleanupManager;
+@property (retain) IBOutlet
+  NotificationSPAMCleanupManager * notificationSPAMCleanupManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (retain) IBOutlet UpdateManager * updateManager;
 @property (assign) BOOL reportAvailable;

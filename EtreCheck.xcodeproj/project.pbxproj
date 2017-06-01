@@ -61,6 +61,8 @@
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
 		A55CBF451ED49CB300A43C84 /* CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = A55CBF441ED49CB300A43C84 /* CRC32.m */; };
 		A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */; };
+		A565A3981EDF5DE90053264A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A565A3971EDF5DE90053264A /* libsqlite3.tbd */; };
+		A565A39B1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */; };
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */; };
 		A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* CleanupCollector.m */; };
@@ -263,6 +265,9 @@
 		A55CBF431ED49CB300A43C84 /* CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC32.h; sourceTree = "<group>"; };
 		A55CBF441ED49CB300A43C84 /* CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC32.m; sourceTree = "<group>"; };
 		A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcurl.4.dylib; sourceTree = "<group>"; };
+		A565A3971EDF5DE90053264A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		A565A3991EDF6B4E0053264A /* NotificationSPAMCleanupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSPAMCleanupManager.h; sourceTree = "<group>"; };
+		A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationSPAMCleanupManager.m; sourceTree = "<group>"; };
 		A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
 		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
 		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
@@ -367,6 +372,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A565A3981EDF5DE90053264A /* libsqlite3.tbd in Frameworks */,
 				A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */,
 				A549C6761C75198700283F7F /* Security.framework in Frameworks */,
 				A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */,
@@ -431,6 +437,8 @@
 				A53EA3711C6E86B600F270B0 /* UpdateManager.m */,
 				F7B1FDB01D82A8860027E122 /* SearchEngine.h */,
 				F7B1FDB11D82A8860027E122 /* SearchEngine.m */,
+				A565A3991EDF6B4E0053264A /* NotificationSPAMCleanupManager.h */,
+				A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -563,6 +571,7 @@
 		A55BC16C15BF987D00D42EF1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A565A3971EDF5DE90053264A /* libsqlite3.tbd */,
 				A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */,
 				A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */,
 				A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */,
@@ -818,6 +827,7 @@
 			files = (
 				A50C9DB319A2E68C00BA6A25 /* USBCollector.m in Sources */,
 				A5B659231A16D57800476A76 /* DiagnosticEvent.m in Sources */,
+				A565A39B1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m in Sources */,
 				A53EA3771C6FCF0200F270B0 /* NSDate+Etresoft.m in Sources */,
 				A5E33C3F184CEBDF00ED59A0 /* ByteCountFormatter.m in Sources */,
 				A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */,

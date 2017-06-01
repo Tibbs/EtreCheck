@@ -25,6 +25,7 @@
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
 #import "CleanupManager.h"
+#import "NotificationSPAMCleanupManager.h"
 #import "AdwareManager.h"
 #import "UpdateManager.h"
 #import "SubProcess.h"
@@ -107,6 +108,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize smartManager = mySMARTManager;
 @synthesize helpManager = myHelpManager;
 @synthesize cleanupManager = myCleanupManager;
+@synthesize notificationSPAMCleanupManager =
+  myNotificationSPAMCleanupManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
@@ -288,6 +291,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.detailManager = nil;
   self.smartManager = nil;
   self.helpManager = nil;
+  self.notificationSPAMCleanupManager = nil;
   self.cleanupManager = nil;
   self.adwareManager = nil;
   self.updateManager = nil;
@@ -626,7 +630,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     else if([manager isEqualToString: @"help"])
       [self.helpManager showDetail: relativePath];
     else if([manager isEqualToString: @"cleanup"])
-      [self.cleanupManager show];
+      {
+      if([relativePath isEqualToString: @"orphans"])
+        [self.cleanupManager show];
+      else if([relativePath hasPrefix: @"notificationspam/"])
+        {
+        NSString * spammer = [relativePath substringFromIndex: 17];
+        
+        [self.notificationSPAMCleanupManager show: spammer];
+        }
+      }
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager show];
     else if([manager isEqualToString: @"smart"])

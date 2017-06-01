@@ -95,3 +95,6 @@
 "ascurl" = "discussions.apple.com";
 "[extension not loaded]" = "[not loaded]";
 "enablegatekeeper" = "An administrator password will be required to activate Gatekeeper. Do you want to proceed?";
+"%d SPAM notification (plural rule: zero)" = "";
+"%d SPAM notification (plural rule: one)" = "One SPAM notification";
+"%d SPAM notification (plural rule: other)" = "%d SPAM notifications";

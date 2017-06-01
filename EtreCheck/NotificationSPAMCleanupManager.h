@@ -6,53 +6,48 @@
 
 #import <Foundation/Foundation.h>
 
-#define kLaunchdTask @"launchdtask"
-#define kFileDeleted @"filedeleted"
-
-@interface UninstallManager : NSObject
+@interface NotificationSPAMCleanupManager : NSObject
+  <NSTableViewDelegate, NSTableViewDataSource>
   {
   NSWindow * myWindow;
-  NSTextView * myTextView;
   NSTableView * myTableView;
   
   // This is an array of dictionaries, not files. Because this class is
   // a manager for a user interface, use the concept being presented to
   // the user instead of what is actually going on.
   // Each dictionary has a path and optionally a launchd info dictionary.
-  NSMutableArray * myFilesToRemove;
+  NSMutableArray * myNotificationsToRemove;
   
-  BOOL myFilesRemoved;
+  NSDateFormatter * myDateFormatter;
+  
+  BOOL myNotificationsRemoved;
   }
 
 // The window itself.
 @property (retain) IBOutlet NSWindow * window;
 
-// The text view.
-@property (retain) IBOutlet NSTextView * textView;
-
 // The table view.
 @property (retain) IBOutlet NSTableView * tableView;
 
-// Can the manager remove any files?
-@property (readonly) BOOL canRemoveFiles;
+// Can the manager remove any notifications?
+@property (readonly) BOOL canRemove;
 
-// Files to remove.
-// This is an array of dictionaries, not files. Because this class is
-// a manager for a user interface, use the concept being presented to
-// the user instead of what is actually going on.
-// Each dictionary has a path and optionally a launchd info dictionary.
-@property (retain) NSMutableArray * filesToRemove;
+// Notifications to remove.
+@property (retain) NSMutableArray * notificationsToRemove;
 
-// Were any files removed?
-@property (assign) BOOL filesRemoved;
+// Date formatter.
+@property (retain) NSDateFormatter * dateFormatter;
+
+// Were any notifications removed?
+@property (assign) BOOL notificationsRemoved;
 
 // Show the window.
-- (void) show;
+- (void) show: (NSString *) bundleID;
 
 // Close the window.
 - (IBAction) close: (id) sender;
 
-// Remove files.
-- (IBAction) removeFiles: (id) sender;
+// Remove notifications.
+- (IBAction) removeNotifications: (id) sender;
 
 @end

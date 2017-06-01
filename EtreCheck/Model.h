@@ -80,6 +80,7 @@
   bool mySIP;
   bool myCleanupRequired;
   NSMutableDictionary * myPathsForUUIDs;
+  NSMutableDictionary * myNotificationSPAMs;
   }
 
 // Keep track of the OS version.
@@ -217,6 +218,9 @@
 
 // Map paths to UUIDs for privacy.
 @property (readonly) NSMutableDictionary * pathsForUUIDs;
+
+// Notification SPAM.
+@property (readonly) NSMutableDictionary * notificationSPAMs;
 
 // Return the singeton of shared values.
 + (Model *) model;
