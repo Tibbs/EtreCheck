@@ -8,7 +8,6 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
-#import "ByteCountFormatter.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 

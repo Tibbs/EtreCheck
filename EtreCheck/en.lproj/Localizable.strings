@@ -98,3 +98,7 @@
 "%d SPAM notification (plural rule: zero)" = "";
 "%d SPAM notification (plural rule: one)" = "One SPAM notification";
 "%d SPAM notification (plural rule: other)" = "%d SPAM notifications";
+"%d pending file (plural rule: zero)" = "";
+"%d pending file (plural rule: one)" = "One pending file";
+"%d pending file (plural rule: other)" = "%d pending files";
+

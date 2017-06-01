@@ -13,6 +13,7 @@
 #import "NSDictionary+Etresoft.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "SubProcess.h"
+#import "ByteCountFormatter.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -107,6 +108,7 @@
   [self collectSysctl];
   [self collectHardware];
   [self collectNetwork];
+  [self collectiCloud];
     
   [self.result appendCR];
   
@@ -925,11 +927,133 @@
         if([proxy length] > 0)
           [self.result
             appendString:
-              [NSString stringWithFormat: @"    Proxy: %@\n", proxy]];
+              [NSString
+                stringWithFormat:
+                  NSLocalizedString(@"    Proxy: %@\n", NULL), proxy]];
         }
       }
     }
     
+  [subProcess release];
+  }
+
+// Collect iCloud information.
+- (void) collectiCloud
+  {
+  int version = [[Model model] majorOSVersion];
+
+  if(version < kElCapitan)
+    return;
+    
+  int count = 0;
+    
+  NSString * pendingFiles = nil;
+  
+  NSArray * args =
+    @[
+      @"status",
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/bin/brctl" arguments: args])
+    {
+    //NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    NSArray * lines = [Utilities formatLines: [NSData dataWithContentsOfFile: @"/tmp/stat.txt"]];
+    
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+      if([trimmedLine hasPrefix: @"r:"])
+        ++count;
+      }
+      
+    if(count > 0)
+      pendingFiles = TTTLocalizedPluralString(count, @"pending file", nil);
+    }
+    
+  [subProcess release];
+
+  long long bytes = 0;
+    
+  NSString * iCloudFree = nil;
+  
+  if(version >= kSierra)
+    {
+    args =
+      @[
+        @"quota",
+      ];
+    
+    subProcess = [[SubProcess alloc] init];
+    
+    if([subProcess execute: @"/usr/bin/brctl" arguments: args])
+      {
+      NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+      
+      for(NSString * line in lines)
+        {
+        NSScanner * scanner = [NSScanner scannerWithString: line];
+        
+        if([scanner scanLongLong: & bytes])
+          {
+          ByteCountFormatter * formatter = [ByteCountFormatter new];
+          
+          // Apple uses 1024 for this one.
+          formatter.k1000 = 1024.0;
+          
+          iCloudFree = [formatter stringFromByteCount: bytes];
+            
+          [formatter release];
+          }
+        }
+      }
+    }
+    
+  if([iCloudFree length] > 0)
+    {
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
+            iCloudFree]];
+      
+    if(bytes < 1024 * 1024 * 256)
+      [self.result
+        appendString: NSLocalizedString(@" (Low!)", NULL)
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+      
+    [self.result appendString: @"\n"];
+    }
+    
+  if([pendingFiles length] > 0)
+    {
+    [self.result
+      appendString: NSLocalizedString(@"    iCloud Status: ", NULL)];
+      
+    if(count >= 10)
+      [self.result
+        appendString: pendingFiles
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+    else
+      [self.result appendString: pendingFiles];
+      
+    [self.result appendString: @"\n"];
+    }
+
   [subProcess release];
   }
 

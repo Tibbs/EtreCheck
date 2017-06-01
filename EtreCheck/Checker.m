@@ -107,8 +107,8 @@
     [[HardwareCollector new] autorelease];
     
   // Collect items that will be needed by other collectors.
-  [collectors addObject: hardwareCollector];
   [collectors addObject: [[SystemSoftwareCollector new] autorelease]];
+  [collectors addObject: hardwareCollector];
   [collectors addObject: [[CoreStorageCollector new] autorelease]];
   [collectors addObject: [[LogCollector new] autorelease]];
   [collectors addObject: [[DiskCollector new] autorelease]];

@@ -359,3 +359,8 @@
 "%d SPAM notification (plural rule: one)" = "Une notification pourriel";
 "%d SPAM notification (plural rule: other)" = "%d notifications pourriels";
 "    Proxy: %@\n" = "    Proxy : %@\n";
+"    iCloud Quota: %@ available" = "    Quota iCloud : %@ disponible";
+"    iCloud Status: " = "    Bilan iCloud : ";
+"%d pending file (plural rule: zero)" = "";
+"%d pending file (plural rule: one)" = "Un fichier en attendant";
+"%d pending file (plural rule: other)" = "%d fichiers en attendant";
