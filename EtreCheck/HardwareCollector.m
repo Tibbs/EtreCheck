@@ -958,8 +958,7 @@
   
   if([subProcess execute: @"/usr/bin/brctl" arguments: args])
     {
-    //NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
-    NSArray * lines = [Utilities formatLines: [NSData dataWithContentsOfFile: @"/tmp/stat.txt"]];
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
     for(NSString * line in lines)
       {
