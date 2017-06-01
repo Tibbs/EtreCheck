@@ -358,3 +358,4 @@
 "%d SPAM notification (plural rule: zero)" = "";
 "%d SPAM notification (plural rule: one)" = "Une notification pourriel";
 "%d SPAM notification (plural rule: other)" = "%d notifications pourriels";
+"    Proxy: %@\n" = "    Proxy : %@\n";

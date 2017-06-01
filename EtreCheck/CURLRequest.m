@@ -468,7 +468,7 @@ CURLException * NewCURLException(
     NSString * proxyUsername = proxy[(NSString *)kCFProxyUsernameKey];
     NSString * proxyPassword = proxy[(NSString *)kCFProxyPasswordKey];
     NSString * proxyHostname = proxy[(NSString *)kCFProxyHostNameKey];
-    NSString * proxyPortValue = proxy[(NSString *)kCFProxyPortNumberKey];
+    NSNumber * proxyPortValue = proxy[(NSString *)kCFProxyPortNumberKey];
     
     if(proxyUsername)
       error =
@@ -506,13 +506,9 @@ CURLException * NewCURLException(
           __FILE__, __LINE__, @"CURLOPT_PROXY", error);
 
     if(proxyPortValue)
-      {
-      NSNumber * port =
-        [[NumberFormatter sharedNumberFormatter]
-          convertFromString: proxyPortValue];
-        
-      error = curl_easy_setopt(myCURL, CURLOPT_PROXYPORT, [port longValue]);
-      }
+      error = curl_easy_setopt(
+        myCURL, CURLOPT_PROXYPORT, [proxyPortValue longValue]);
+    
     else
       error = curl_easy_setopt(myCURL, CURLOPT_PROXYPORT, NULL);
 

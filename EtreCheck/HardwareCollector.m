@@ -106,7 +106,10 @@
   [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
+  [self collectNetwork];
     
+  [self.result appendCR];
+  
   dispatch_semaphore_signal(self.complete);
   }
 
@@ -233,8 +236,6 @@
         [self printBluetoothInformation];
         [self printWirelessInformation];
         [self printBatteryInformation];
-        
-        [self.result appendCR];
         }
       }
     }
@@ -892,6 +893,44 @@
             dictionaryWithObjectsAndKeys:
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
     }
+  }
+
+// Collect network information.
+- (void) collectNetwork
+  {
+  NSArray * args =
+    @[
+      @"--proxy",
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/scutil" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          
+      NSRange range = [trimmedLine rangeOfString: @"Enable : 1"];
+      
+      if(range.location != NSNotFound)
+        {
+        NSString * proxy = [trimmedLine substringToIndex: range.location];
+        
+        if([proxy length] > 0)
+          [self.result
+            appendString:
+              [NSString stringWithFormat: @"    Proxy: %@\n", proxy]];
+        }
+      }
+    }
+    
+  [subProcess release];
   }
 
 @end
