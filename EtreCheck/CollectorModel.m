@@ -9,9 +9,6 @@
 #import "NumberFormatter.h"
 
 @interface CollectorModel ()
-  {
-  NSMutableDictionary * myDictionary;
-  }
 
 @property (readonly) NSMutableDictionary * dictionary;
 

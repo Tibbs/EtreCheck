@@ -7,6 +7,9 @@
 #import <Foundation/Foundation.h>
 
 @interface CollectorModel : NSObject
+  {
+  NSMutableDictionary * myDictionary;
+  }
 
 // Get a BOOL value for a key.
 - (BOOL) boolValueForKey: (NSString *) key;
