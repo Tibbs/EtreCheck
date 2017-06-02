@@ -84,6 +84,8 @@
 // Perform the collection for old Serial ATA controllers.
 - (BOOL) collectSerialATA
   {
+  BOOL dataFound = NO;
+      
   NSArray * args =
     @[
       @"-xml",
@@ -111,13 +113,12 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * controller in controllers)
-        [self printSerialATAController: controller];
-        
-      return YES;
+        if([self printSerialATAController: controller])
+          dataFound = YES;
       }
     }
 
-  return NO;
+  return dataFound;
   }
 
 // Perform the collection for new NVM controllers.
@@ -150,18 +151,19 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * controller in controllers)
-        [self printNVMExpressController: controller];
-        
-      return YES;
+        if([self printNVMExpressController: controller])
+          dataFound = YES;
       }
     }
 
-  return NO;
+  return dataFound;
   }
 
 // Print disks attached to a single Serial ATA controller.
-- (void) printSerialATAController: (NSDictionary *) controller
+- (BOOL) printSerialATAController: (NSDictionary *) controller
   {
+  BOOL dataFound = NO;
+  
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
@@ -213,12 +215,18 @@
     [self printDiskVolumes: disk];
     
     [self.result appendCR];
+    
+    dataFound = YES;
     }
+    
+  return dataFound;
   }
 
 // Print disks attached to a single NVMExpress controller.
-- (void) printNVMExpressController: (NSDictionary *) controller
+- (BOOL) printNVMExpressController: (NSDictionary *) controller
   {
+  BOOL dataFound = NO;
+  
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
@@ -268,7 +276,11 @@
     [self printDiskVolumes: disk];
     
     [self.result appendCR];
+    
+    dataFound = YES;
     }
+    
+  return dataFound;
   }
 
 // Print the volumes on a disk.
