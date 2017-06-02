@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class CollectorModel;
+
 // Base class for all collector activities. Also has values like current
 // OS version that may be needed by all collectors.
 @interface Collector : NSObject
@@ -15,6 +17,7 @@
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
+  CollectorModel * myModel;
   }
 
 // The name of this collector.
@@ -29,6 +32,8 @@
 // Allow people to know when a collection is complete.
 @property (assign) dispatch_semaphore_t complete;
 @property (readonly) bool done;
+
+@property (readonly) CollectorModel * model;
 
 // Perform the collection.
 - (void) collect;

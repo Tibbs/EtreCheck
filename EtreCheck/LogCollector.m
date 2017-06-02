@@ -397,7 +397,7 @@
   switch(shutdownCause)
     {
     case 5:
-      shutdownString = NSLocalizedString(@"Normal", NULL);
+      //shutdownString = NSLocalizedString(@"Normal", NULL);
       return;
       
     case 3:
@@ -467,6 +467,8 @@
 // Get the shutdown time.
 - (NSDate *) getShutdownTime
   {
+  NSDate * date = nil;
+  
   NSArray * args = @[@"kern.boottime"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -485,15 +487,13 @@
         long long boottime = 0;
       
         if([scanner scanLongLong: & boottime])
-          {
-          NSDate * date = [NSDate dateWithTimeIntervalSince1970: boottime];
-          
-          return date;
-          }
+          date = [NSDate dateWithTimeIntervalSince1970: boottime];
         }
     }
     
-  return nil;
+  [subProcess release];
+    
+  return date;
   }
 
 @end

@@ -170,7 +170,7 @@
   result =
     sqlite3_prepare_v2(handle, SQL, -1, & query, NULL);
     
-  bool done = NO;
+  bool done = (result != SQLITE_OK);
   
   while(!done)
     {
@@ -190,8 +190,7 @@
       }
     }
 
-  result = sqlite3_finalize(query);
-
+  sqlite3_finalize(query);
 
   sqlite3_close(handle);
   }
@@ -405,7 +404,7 @@
           @"delete from scheduled_notifications where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
 
     SQL =
       [NSString
@@ -413,7 +412,7 @@
           @"delete from presented_notifications where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
 
     SQL =
       [NSString
@@ -421,7 +420,7 @@
           @"delete from presented_alerts where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
 
     SQL =
       [NSString
@@ -429,7 +428,7 @@
           @"delete from today_summary_notifications where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
 
     SQL =
       [NSString

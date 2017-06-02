@@ -14,6 +14,8 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "SubProcess.h"
 #import "ByteCountFormatter.h"
+#import "CollectorModel.h"
+#import "NumberFormatter.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -85,13 +87,16 @@
   NSString * hostName = (NSString *)SCDynamicStoreCopyLocalHostName(NULL);
 
   // Load the machine image.
-  self.machineIcon = [self findCurrentMachineIcon];
-
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
+  [self.model setString: computerName forKey: @"computername"];
+  [self.model setString: hostName forKey: @"hostname"];
+  
   if(self.machineIcon != nil)
     [[Model model] setMachineIcon: self.machineIcon];
+  
+  [self.model setObject: self.machineIcon forKey: @"machineicon"];
   
   [computerName release];
   [hostName release];
@@ -160,6 +165,18 @@
                   isEqualToString: @"attrib_Yes"];
               self.supportsLowEnergy =
                 [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
+                
+              [self.model
+                setBoolean: self.supportsHandoff
+                forKey: @"supportshandoff"];
+
+              [self.model
+                setBoolean: self.supportsInstantHotspot
+                forKey: @"supportinstanthotspot"];
+
+              [self.model
+                setBoolean: self.supportsLowEnergy
+                forKey: @"supportlowenergy"];
               }
             }
       }
@@ -204,7 +221,11 @@
   [subProcess release];
   
   if([code length] > 0)
+    {
     self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
+    
+    [self.model setString: self.CPUCode forKey: @"cpucode"];
+    }
   }
 
 // Collect hardware information.
@@ -277,6 +298,9 @@
           NSLocalizedString(@"    %@ - %@: %@\n", NULL),
           name, NSLocalizedString(@"model", NULL), model]];
     
+  [self.model setString: name forKey: @"name"];
+  [self.model setString: model forKey: @"model"];
+    
   [self.result
     appendString:
       [NSString
@@ -289,6 +313,11 @@
           self.CPUCode ? self.CPUCode : @"",
           core_count]];
     
+  [self.model setNumber: cpu_count forKey: @"cpucount"];
+  [self.model setString: speed forKey: @"speed"];
+  [self.model setString: cpu_type forKey: @"cpu_type"];
+  [self.model setNumber: core_count forKey: @"corecount"];
+
   [self printMemory: memory];
   }
 
@@ -317,45 +346,60 @@
   if(machineProperties)
     if(![self.marketingName length])
       self.marketingName = [machineProperties objectForKey: kMachineName];
-
+      
   [self.result
     appendString:
       [NSString
         stringWithFormat: @"    %@ \n", self.marketingName]];
       
+  [self.model setString: self.marketingName forKey: @"marketingname"];
+    
   NSString * language = NSLocalizedString(@"en", NULL);
 
   [self.result appendString: @"    "];
   
+  NSString * url = [self technicalSpecificationsURL: language];
+  
   [self.result
     appendAttributedString:
       [Utilities
-        buildURL:
-          [self technicalSpecificationsURL: language]
+        buildURL: url
         title:
           NSLocalizedString(
             @"[Technical Specifications]", NULL)]];
 
+  [self.model
+    setURL: [NSURL URLWithString: url]
+    forKey: @"technicalspecificationsurl"];
+
   [self.result appendString: @" - "];
+
+  url = [self userGuideURL: language];
 
   [self.result
     appendAttributedString:
       [Utilities
-        buildURL:
-          [self userGuideURL: language]
+        buildURL: url
         title:
           NSLocalizedString(
             @"[User Guide]", NULL)]];
     
+  [self.model setURL: [NSURL URLWithString: url] forKey: @"userguideurl"];
+
   [self.result appendString: @" - "];
+
+  url = [self serviceURL];
 
   [self.result
     appendAttributedString:
       [Utilities
-        buildURL: [self serviceURL]
+        buildURL: url
         title:
           NSLocalizedString(
             @"[Warranty & Service]", NULL)]];
+
+  [self.model
+    setURL: [NSURL URLWithString: url] forKey: @"warrantyandserviceurl"];
 
   [self.result appendString: @"\n"];
   }
@@ -559,8 +603,16 @@
         [NSString
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
+  [self.model
+    setLongLong: [memory longLongValue] * 1024 * 1024 * 1024
+    forKey: @"ram"];
+  
   NSString * language = NSLocalizedString(@"en", NULL);
 
+  NSString * url = [self memoryUpgradeURL: language];
+  
+  [self.model setBoolean: upgradeable forKey: @"upgradeable"];
+  
   if(upgradeable)
     {
     [self.result appendString: @" - "];
@@ -568,10 +620,14 @@
     [self.result
       appendAttributedString:
         [Utilities
-          buildURL: [self memoryUpgradeURL: language]
+          buildURL: url
           title:
             NSLocalizedString(
               @"[Instructions]\n", NULL)]];
+      
+    [self.model
+      setURL: [NSURL URLWithString: url]
+      forKey: @"memoryupgradeinstructionsurl"];
     }
   else
     [self.result appendString: @"\n"];
@@ -650,17 +706,38 @@
     [self.result appendString: currentBankID];
     [self.result appendString: @"\n"];
     [self.result appendString: currentBankInfo];
+    
+    NSString * key =
+      [@"memorybanks" stringByAppendingPathComponent: currentBankID];
+    
+    [self.model
+      setString: size
+      forKey: [key stringByAppendingPathComponent: @"size"]];
+
+    [self.model
+      setString: type
+      forKey: [key stringByAppendingPathComponent: @"type"]];
+
+    [self.model
+      setString: speed
+      forKey: [key stringByAppendingPathComponent: @"speed"]];
+
+    [self.model
+      setString: status
+      forKey: [key stringByAppendingPathComponent: @"status"]];
     }
   }
 
 // Print information about bluetooth.
 - (void) printBluetoothInformation
   {
+  NSString * info = [self collectBluetoothInformation];
+  
   [self.result
     appendString:
-      [NSString
-        stringWithFormat:
-          @"    Bluetooth: %@\n", [self collectBluetoothInformation]]];
+      [NSString stringWithFormat: @"    Bluetooth: %@\n", info]];
+  
+  [self.model setString: info forKey: @"bluetooth"];
   }
 
 // Collect bluetooth information.
@@ -787,9 +864,15 @@
     [interface objectForKey: @"spairport_supported_phymodes"];
 
   if([modes length])
+    {
     [self.result
       appendString:
         [NSString stringWithFormat: @"%@%@: %@\n", indent, name, modes]];
+    
+    [self.model
+      setString: modes
+      forKey: [NSString stringWithFormat: @"wireless/%@", name]];
+    }
   else
     [self.result appendString: NSLocalizedString(@"Unknown", NULL)];
   }
@@ -882,6 +965,10 @@
                 NULL),
               NSLocalizedString(health, NULL), cycleCount]];
       
+    [self.model setString: health forKey: @"batteryhealth"];
+    [self.model setNumber: cycleCount forKey: @"batterycyclecount"];
+    [self.model setString: serialNumber forKey: @"batteryserialnumber"];
+    
     if(serialNumberInvalid)
       [self.result
         appendString:
@@ -925,11 +1012,17 @@
         NSString * proxy = [trimmedLine substringToIndex: range.location];
         
         if([proxy length] > 0)
+          {
           [self.result
             appendString:
               [NSString
                 stringWithFormat:
                   NSLocalizedString(@"    Proxy: %@\n", NULL), proxy]];
+          
+          [self.model
+            setBoolean: YES
+            forKey: [NSString stringWithFormat: @"proxies/%@", proxy]];
+          }
         }
       }
     }
@@ -1011,6 +1104,8 @@
           }
         }
       }
+      
+    [subProcess release];
     }
     
   if([iCloudFree length] > 0)
@@ -1022,6 +1117,8 @@
             NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
             iCloudFree]];
       
+    [self.model setLongLong: bytes forKey: @"icloudquota"];
+    
     if(bytes < 1024 * 1024 * 256)
       [self.result
         appendString: NSLocalizedString(@" (Low!)", NULL)
@@ -1039,6 +1136,8 @@
     [self.result
       appendString: NSLocalizedString(@"    iCloud Status: ", NULL)];
       
+    [self.model setInteger: count forKey: @"icloudpendingfiles"];
+    
     if(count >= 10)
       [self.result
         appendString: pendingFiles
@@ -1052,8 +1151,6 @@
       
     [self.result appendString: @"\n"];
     }
-
-  [subProcess release];
   }
 
 @end

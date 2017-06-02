@@ -31,8 +31,7 @@
 // Destructor.
 - (void) dealloc
   {
-  self.dateFormatter = nil;
-  
+  [myDateFormatter release];
   [myWindow release];
   [myTableView release];
   [myNotificationsToRemove release];
@@ -57,12 +56,18 @@
   return count > 0;
   }
 
+- (NSDateFormatter *) dateFormatter
+  {
+  if(myDateFormatter == nil)
+    myDateFormatter = [[NSDateFormatter alloc] init];
+    
+  return myDateFormatter;
+  }
+
 // Show the window.
 - (void) show: (NSString *) bundleID
   {
   // Use a compact date format.
-  self.dateFormatter = [[NSDateFormatter alloc] init];
-  
   [self.dateFormatter setDateStyle: NSDateFormatterShortStyle];
   [self.dateFormatter setTimeStyle: NSDateFormatterShortStyle];
   [self.dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
@@ -77,7 +82,7 @@
   {
   self.notificationsRemoved = NO;
   
-  self.notificationsToRemove = [NSMutableArray new];
+  myNotificationsToRemove = [NSMutableArray new];
   
   [self willChangeValueForKey: @"canRemove"];
   
@@ -135,7 +140,8 @@
   if(self.notificationsRemoved)
     [self suggestRestart];
   
-  self.notificationsToRemove = nil;
+  [myNotificationsToRemove release];
+  myNotificationsToRemove = nil;
 
   [self.window close];
   }
@@ -189,7 +195,10 @@
     [modelNotifications removeObjectForKey: note_id];
     
   // Setup the table for the notifications that the user wanted to keep.
-  self.notificationsToRemove = notificationsToKeep;
+  [myNotificationsToRemove release];
+  [note_ids release];
+  
+  myNotificationsToRemove = notificationsToKeep;
   
   [self willChangeValueForKey: @"canRemove"];
 

@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SearchEngine.h"
+#import "CollectorModel.h"
 
 @implementation Collector
 
@@ -17,6 +18,7 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
+@synthesize model = myModel;
 
 // Is this collector complete?
 - (bool) done
@@ -34,6 +36,7 @@
     myResult = [NSMutableAttributedString new];
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
+    myModel = [CollectorModel new];
     }
     
   return self;
@@ -42,6 +45,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myModel release];
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];

@@ -33,10 +33,10 @@
 @property (readonly) BOOL canRemove;
 
 // Notifications to remove.
-@property (retain) NSMutableArray * notificationsToRemove;
+@property (readonly) NSMutableArray * notificationsToRemove;
 
 // Date formatter.
-@property (retain) NSDateFormatter * dateFormatter;
+@property (readonly) NSDateFormatter * dateFormatter;
 
 // Were any notifications removed?
 @property (assign) BOOL notificationsRemoved;
