@@ -101,4 +101,4 @@
 "%d pending file (plural rule: zero)" = "";
 "%d pending file (plural rule: one)" = "One pending file";
 "%d pending file (plural rule: other)" = "%d pending files";
-
+"installsincomplete" = "    Install information may not be complete.\n";

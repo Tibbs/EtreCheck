@@ -44,6 +44,7 @@
 "Checking software" = "Vérification du logiciel";
 "Checking daemons and agents" = "Vérification des daemons et des agents";
 "Checking for clean up opportuntities" = "Vérification des opportunités de nettoyage";
+"Checking installs" = "Vérification des installations de logiciel";
 "model" = "modèle";
 "%@S.M.A.R.T. Status: %@\n" = "%@Statut S.M.A.R.T. : %@\n";
 "<not mounted>" = "<non monté>";
@@ -364,3 +365,5 @@
 "%d pending file (plural rule: zero)" = "";
 "%d pending file (plural rule: one)" = "Un fichier en attendant";
 "%d pending file (plural rule: other)" = "%d fichiers en attendant";
+"    %@: %@ - %@\n" = "    %@ : %@ - %@\n";
+"installsincomplete" = "    La liste des installations peut ne pas être complète.\n";

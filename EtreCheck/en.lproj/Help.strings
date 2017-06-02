@@ -32,3 +32,4 @@
 "unknownfiles" = "These are files that are not in EtreCheck's whitelist of known, legitimate software. They may be adware, malware, or just something new that needs to be added to the EtreCheck whitelist.";
 "hiddenapps" = "Other software that may be running in the background.";
 "etrecheckdeletedfiles" = "These are files that EtreCheck recently flagged as unknown software and were deleted by the user.";
+"install" = "Third party software installations in the past 30 days";

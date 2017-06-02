@@ -39,6 +39,7 @@
 #import "UserLaunchAgentsCollector.h"
 #import "VideoCollector.h"
 #import "VirtualMemoryCollector.h"
+#import "InstallCollector.h"
 #import "DiagnosticsCollector.h"
 #import "Utilities.h"
 #import "Model.h"
@@ -219,6 +220,7 @@
   [collectors addObject: [[NetworkUsageCollector new] autorelease]];
   [collectors addObject: [[EnergyUsageCollector new] autorelease]];
   [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
+  [collectors addObject: [[InstallCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
   // Start the machine animation.
@@ -421,6 +423,7 @@
   [result appendAttributedString: [self getResult: @"network"]];
   [result appendAttributedString: [self getResult: @"energy"]];
   [result appendAttributedString: [self getResult: @"vm"]];
+  [result appendAttributedString: [self getResult: @"install"]];
   [result appendAttributedString: [self getResult: @"diagnostics"]];
   [result
     appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];

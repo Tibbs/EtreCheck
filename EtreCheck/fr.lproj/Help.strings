@@ -32,4 +32,4 @@
 "unknownfiles" = "Ce sont des fichiers absents de la liste blanche d’EtreCheck, qui répertorie des logiciels bien connus et sûrs. Ce sont peut-être des publiciels ou des maliciels. Mais il est également possible que ce soit simplement quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck.";
 "hiddenapps" = "Les autres logiciels qui tournent, parfois en tâche de fond.";
 "etrecheckdeletedfiles" = "Ce sont les fichiers, récemment signalés comme logiciels inconnus par EtreCheck, que l’utilisateur a retirés.";
-
+"install" = "Installations de logiciel de tiers pendant les 30 derniers jours";

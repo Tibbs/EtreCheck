@@ -68,6 +68,7 @@
 		A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* CleanupCollector.m */; };
 		A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* AdwareManager.m */; };
 		A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */; };
+		A58B4D141EE0E4FB00415121 /* InstallCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A58B4D131EE0E4FB00415121 /* InstallCollector.m */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
 		A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */; };
@@ -277,6 +278,8 @@
 		A5716E141C4C5A6E00297727 /* AdwareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdwareManager.m; sourceTree = "<group>"; };
 		A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsCollector.h; sourceTree = "<group>"; };
 		A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsCollector.m; sourceTree = "<group>"; };
+		A58B4D121EE0E4FB00415121 /* InstallCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallCollector.h; sourceTree = "<group>"; };
+		A58B4D131EE0E4FB00415121 /* InstallCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCollector.m; sourceTree = "<group>"; };
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Etresoft.m"; sourceTree = "<group>"; };
@@ -524,6 +527,8 @@
 				A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */,
 				A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */,
 				A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */,
+				A58B4D121EE0E4FB00415121 /* InstallCollector.h */,
+				A58B4D131EE0E4FB00415121 /* InstallCollector.m */,
 				A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */,
 				A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */,
 				A5C9FC021A1AADA200C1EAA5 /* LogCollector.h */,
@@ -846,6 +851,7 @@
 				A5FC120619A5443500E81E9C /* ApplicationsCollector.m in Sources */,
 				A55BC18115BF987D00D42EF1 /* AppDelegate.m in Sources */,
 				A5FC11F419A4C00F00E81E9C /* ITunesPlugInsCollector.m in Sources */,
+				A58B4D141EE0E4FB00415121 /* InstallCollector.m in Sources */,
 				A5C292E019A02B2700464E86 /* Collector.m in Sources */,
 				A5C9E07D1DBDCA670099288B /* SMARTManager.m in Sources */,
 				A5C292EC19A039D900464E86 /* LaunchDaemonsCollector.m in Sources */,
