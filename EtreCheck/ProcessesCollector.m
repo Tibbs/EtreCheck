@@ -15,7 +15,7 @@
 // Collect running processes.
 - (NSMutableDictionary *) collectProcesses
   {
-  NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, pid, command" ];
+  NSArray * args = @[ @"-raxcww", @"-o", @"rss, %cpu, pid, command" ];
   
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];
     
@@ -45,11 +45,7 @@
       if([command hasPrefix: @"EtreCheck"])
         continue;
         
-      double RAM = [[Model model] physicalRAM];
-      
-      RAM = RAM * 1024 * 1024 * 1024;
-      
-      double usage = ([mem doubleValue] / 100.0) * RAM;
+      double usage = [mem doubleValue] * 1024;
         
       [self
         recordProcess: command
