@@ -755,11 +755,16 @@
   language: (NSString *) language
   type: (NSString *) type
   {
+  NSString * append = @"&";
+  
+  if([type hasSuffix: @"?"])
+    append = @"";
+    
   return
     [NSString
       stringWithFormat:
-        @"http://support-sp.apple.com/sp/%@&cc=%@&lang=%@",
-        type, serialCode, language];
+        @"http://support-sp.apple.com/sp/%@%@cc=%@&lang=%@",
+        type, append, serialCode, language];
   }
 
 // Verify the signature of an Apple executable.
