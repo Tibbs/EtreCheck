@@ -3,6 +3,7 @@
 use strict;
 use File::Basename;
 use Capture::Tiny ':all';
+use Digest::CRC qw(crc32);
 
 my %apps = ();
 
@@ -24,6 +25,8 @@ foreach my $plist (@launchd)
   my $program = $plist->{program};
   my $programArguments = $plist->{programArguments};
   my $signature = $plist->{signature};
+  my $plist_checksum = $plist->{plist_checksum};
+  my $executable_checksum = $plist->{executable_checksum};
   
   printf("      <key>$path</key>\n");
   printf("      <dict>\n");
@@ -45,6 +48,19 @@ foreach my $plist (@launchd)
   printf("        </array>\n");
   printf("        <key>signature</key>\n");
   printf("        <string>$signature</string>\n");
+
+  if($plist_checksum)
+    {
+    printf("        <key>plist_checksum</key>\n");
+    printf("        <string>$plist_checksum</string>\n");
+    }
+
+  if($executable_checksum)
+    {
+    printf("        <key>executable_checksum</key>\n");
+    printf("        <string>$executable_checksum</string>\n");
+    }
+
   printf("      </dict>\n");
   }
     
@@ -268,6 +284,40 @@ sub getLaunchdFiles
       $bundle = $1;
       }
       
+    my $signature = checkSignature($bundle);
+
+    my %checksums;
+
+    if($signature ne 'signatureapple')
+      {
+      local $/;
+
+      open(PLIST, $plist);
+      my $plistData = <PLIST>;
+      close(PLIST);
+
+      my $crc = Digest::CRC->new(type=>"crc32");
+
+      $crc->add($plistData);
+
+      $checksums{'plist_checksum'} = $crc->hexdigest;
+      }
+
+    if($signature eq 'signaturenotvalid')
+      {
+      local $/;
+
+      open(EXE, $program);
+      my $exeData = <EXE>;
+      close(EXE);
+
+      my $crc = Digest::CRC->new(type=>"crc32");
+
+      $crc->add($exeData);
+
+      $checksums{'executable_checksum'} = $crc->hexdigest;
+      }
+
     push 
       @files, 
         {
@@ -275,7 +325,8 @@ sub getLaunchdFiles
         label => $label,
         program => $program,
         programArguments => \@programArguments,
-        signature => checkSignature($bundle)
+        signature => $signature,
+        %checksums
         }
     }
     

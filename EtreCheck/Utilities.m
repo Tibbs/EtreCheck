@@ -806,7 +806,9 @@
       break;
     }
     
-  [args addObject: path];
+  NSString * appPath = [Utilities resolveBundlePath: path];
+  
+  [args addObject: appPath];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -819,7 +821,7 @@
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     result =
-      [Utilities parseSignature: subProcess.standardError forPath: path];
+      [Utilities parseSignature: subProcess.standardError forPath: appPath];
         
     if([result isEqualToString: kSignatureValid])
       result = kSignatureApple;
@@ -929,7 +931,7 @@
     result =
       [Utilities parseSignature: subProcess.standardError forPath: appPath];
       
-    [[[Utilities shared] signatureCache] setObject: result forKey: appPath];
+    [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
   else
     {

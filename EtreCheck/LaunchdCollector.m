@@ -294,11 +294,13 @@
   
   [[[Model model] launchdFiles] setObject: info forKey: path];
 
+  BOOL signatureValid = NO;
+  
   if([[[Model model] appleLaunchd] objectForKey: path])
     {
     [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
     
-    [self checkAppleSignature: info];
+    signatureValid = [self checkAppleSignature: info];
     }
   else
     {
@@ -332,25 +334,25 @@
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
     
-    BOOL signatureValid = [self checkSignature: info];
+    signatureValid = [self checkSignature: info];
     
     // See if this is a file I know about, either good or bad.
     [self checkForKnownFile: path info: info];
-
-    if(!signatureValid)
-      {
-      NSString * crc = [Utilities crcFile: path];
+    }
     
+  if(!signatureValid)
+    {
+    NSString * crc = [Utilities crcFile: path];
+  
+    if([crc length] > 0)
+      [info setObject: crc forKey: kPlistCRC];
+      
+    if([executable length] > 0)
+      {
+      NSString * crc = [Utilities crcFile: executable];
+      
       if([crc length] > 0)
-        [info setObject: crc forKey: kPlistCRC];
-        
-      if([executable length] > 0)
-        {
-        NSString * crc = [Utilities crcFile: executable];
-        
-        if([crc length] > 0)
-          [info setObject: crc forKey: kExecutableCRC];
-        }
+        [info setObject: crc forKey: kExecutableCRC];
       }
     }
     
@@ -685,17 +687,27 @@
   }
   
 // Collect the signagure of an Apple launchd item.
-- (void) checkAppleSignature: (NSMutableDictionary *) info
+- (BOOL) checkAppleSignature: (NSMutableDictionary *) info
   {
   if(![info objectForKey: kSignature])
     {
     NSString * executable = [info objectForKey: kExecutable];
 
     if([executable length] > 0)
-      [info
-        setObject: [Utilities checkAppleExecutable: executable]
-        forKey: kSignature];
+      {
+      NSString * signature = [Utilities checkAppleExecutable: executable];
+      
+      if([signature length] > 0)
+        {
+        [info setObject: signature forKey: kSignature];
+        
+        if([signature isEqualToString: kSignatureValid])
+          return YES;
+        }
+      }
     }
+    
+  return NO;
   }
 
 // Collect the signature of a launchd item.
