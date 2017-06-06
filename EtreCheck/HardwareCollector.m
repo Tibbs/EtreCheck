@@ -1061,7 +1061,12 @@
             [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
       if([trimmedLine hasPrefix: @"r:"])
-        ++count;
+        {
+        NSRange range = [trimmedLine rangeOfString: @" doc bt:"];
+        
+        if(range.location != NSNotFound)
+          ++count;
+        }
       }
       
     if(count > 0)
