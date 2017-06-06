@@ -1785,19 +1785,23 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show the demon and agent animation.
 - (void) showDemonAgent: (NSNotification *) notification
   {
-  NSRect demonStartFrame = [self.demonImage frame];
-  NSRect demonEndFrame = demonStartFrame;
-  
-  demonEndFrame.origin.x -= 45;
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      NSRect demonStartFrame = [self.demonImage frame];
+      NSRect demonEndFrame = demonStartFrame;
+      
+      demonEndFrame.origin.x -= 45;
 
-  NSRect agentStartFrame = [self.agentImage frame];
-  NSRect agentEndFrame = agentStartFrame;
-  
-  agentEndFrame.origin.x += 45;
+      NSRect agentStartFrame = [self.agentImage frame];
+      NSRect agentEndFrame = agentStartFrame;
+      
+      agentEndFrame.origin.x += 45;
 
-  [self animateDemon: demonEndFrame];
-  [self animateDemon: demonStartFrame agent: agentEndFrame];
-  [self animateAgent: agentStartFrame];
+      [self animateDemon: demonEndFrame];
+      [self animateDemon: demonStartFrame agent: agentEndFrame];
+      [self animateAgent: agentStartFrame];
+    });
   }
 
 // Show the demon.
