@@ -1,10 +1,10 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
-#import "CoreStorageCollector.h"
+#import "VirtualVolumeCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
@@ -17,14 +17,14 @@
 #define kAttributes @"attributes"
 
 // Collect information about disks.
-@implementation CoreStorageCollector
+@implementation VirtualVolumeCollector
 
-@dynamic coreStorageVolumes;
+@dynamic virtualVolumes;
 
-// Provide easy access to coreStorageVolumes.
-- (NSMutableDictionary *) coreStorageVolumes
+// Provide easy access to virtual volumes.
+- (NSMutableDictionary *) virtualVolumes
   {
-  return [[Model model] coreStorageVolumes];
+  return [[Model model] virtualVolumes];
   }
 
 // Constructor.
@@ -34,7 +34,7 @@
   
   if(self)
     {
-    self.name = @"corestorageinformation";
+    self.name = @"virtualvolumeinformation";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
@@ -65,19 +65,19 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * volume in volumes)
-        [self collectCoreStorageVolume: volume];
+        [self collectVirtualVolume: volume];
       }
     }
     
   [subProcess release];
   }
 
-// Collect a Core Storage volume.
-- (void) collectCoreStorageVolume: (NSDictionary *) volume
+// Collect a virtual volume.
+- (void) collectVirtualVolume: (NSDictionary *) volume
   {
   NSString * device = [volume objectForKey: @"bsd_name"];
   
-  [self.coreStorageVolumes setObject: volume forKey: device];
+  [self.virtualVolumes setObject: volume forKey: device];
   }
 
 @end

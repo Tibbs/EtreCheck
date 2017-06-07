@@ -12,8 +12,8 @@
 // Provide easy access to volumes.
 @property (readonly) NSMutableDictionary * volumes;
 
-// Provide easy access to Core Storage volumes.
-@property (readonly) NSMutableDictionary * coreStorageVolumes;
+// Provide easy access to virtual volumes.
+@property (readonly) NSMutableDictionary * virtualVolumes;
 
 // Get the SMART status for this disk.
 - (void) collectSMARTStatus: (NSDictionary *) disk

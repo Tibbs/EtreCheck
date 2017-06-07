@@ -102,7 +102,7 @@
 		A5DF7D251EC27B7A002C9686 /* NetworkUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DF7D241EC27B7A002C9686 /* NetworkUsageCollector.m */; };
 		A5DF7D281EC29372002C9686 /* EnergyUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */; };
 		A5E33C3F184CEBDF00ED59A0 /* ByteCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */; };
-		A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */; };
+		A5E765E91A03A9BD00BC994C /* VirtualVolumeCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */; };
 		A5E9E2C01A2522A600309185 /* Help.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C21A2522A600309185 /* Help.strings */; };
 		A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C91A2669A600309185 /* Collectors.strings */; };
 		A5F43C0F1EC2547A008723CC /* EtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */; };
@@ -340,8 +340,8 @@
 		A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyUsageCollector.m; sourceTree = "<group>"; };
 		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteCountFormatter.h; sourceTree = "<group>"; };
 		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteCountFormatter.m; sourceTree = "<group>"; };
-		A5E765E71A03A9BD00BC994C /* CoreStorageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreStorageCollector.h; sourceTree = "<group>"; };
-		A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreStorageCollector.m; sourceTree = "<group>"; };
+		A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualVolumeCollector.h; sourceTree = "<group>"; };
+		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
 		A5E9E2C11A2522A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Help.strings; sourceTree = "<group>"; };
 		A5E9E2C31A2522A800309185 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Help.strings; sourceTree = "<group>"; };
 		A5E9E2C81A2669A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
@@ -460,8 +460,8 @@
 				A5C292F419A2214E00464E86 /* VideoCollector.m */,
 				A5C292F619A2220400464E86 /* SystemSoftwareCollector.h */,
 				A5C292F719A2220400464E86 /* SystemSoftwareCollector.m */,
-				A5E765E71A03A9BD00BC994C /* CoreStorageCollector.h */,
-				A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */,
+				A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */,
+				A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */,
 				A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */,
 				A50C9DAF19A2DFDB00BA6A25 /* DiskCollector.m */,
 				A50C9DB119A2E68C00BA6A25 /* USBCollector.h */,
@@ -899,7 +899,7 @@
 				A5C00A2819BFF2D500140404 /* NSAttributedString+Etresoft.m in Sources */,
 				A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */,
 				A5D25B2D19C4D11F006728B8 /* TTTLocalizedPluralString.m in Sources */,
-				A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */,
+				A5E765E91A03A9BD00BC994C /* VirtualVolumeCollector.m in Sources */,
 				A50C9DCB19A4065B00BA6A25 /* InternetPlugInsCollector.m in Sources */,
 				A50C9DBC19A3690F00BA6A25 /* ConfigurationCollector.m in Sources */,
 				A5257D3A19ABE02A003084C8 /* VirtualMemoryCollector.m in Sources */,

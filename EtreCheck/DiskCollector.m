@@ -22,7 +22,7 @@
 @implementation DiskCollector
 
 @dynamic volumes;
-@dynamic coreStorageVolumes;
+@dynamic virtualVolumes;
 
 // Provide easy access to volumes.
 - (NSMutableDictionary *) volumes
@@ -30,10 +30,10 @@
   return [[Model model] volumes];
   }
 
-// Provide easy access to coreStorageVolumes.
-- (NSMutableDictionary *) coreStorageVolumes
+// Provide easy access to virtual volumes.
+- (NSMutableDictionary *) virtualVolumes
   {
-  return [[Model model] coreStorageVolumes];
+  return [[Model model] virtualVolumes];
   }
 
 // Constructor.
@@ -63,7 +63,7 @@
   
   // There should always be data found.
   if(dataFound)
-    [self printCoreStorage];
+    [self printVirtualVolumes];
   else
     {
     [self.result appendAttributedString: [self buildTitle]];
@@ -348,11 +348,11 @@
   [urlString release];
   }
 
-// Print Core Storage volumes.
-- (void) printCoreStorage
+// Print virtual volumes.
+- (void) printVirtualVolumes
   {
   NSArray * devices =
-    [[[[Model model] coreStorageVolumes] allKeys]
+    [[[[Model model] virtualVolumes] allKeys]
       sortedArrayUsingSelector: @selector(compare:)];
       
   BOOL printed = NO;
@@ -360,7 +360,7 @@
   for(NSString * device in devices)
     {
     NSDictionary * volume =
-      [[[Model model] coreStorageVolumes] objectForKey: device];
+      [[[Model model] virtualVolumes] objectForKey: device];
       
     if(volume != nil)
       {
@@ -377,7 +377,7 @@
         printed = YES;
         }
         
-      [self printCoreStorageVolume: volume indent: @"        "];
+      [self printVirtualVolume: volume indent: @"        "];
       }
     }
     
@@ -385,8 +385,8 @@
     [self.result appendString: @"\n"];
   }
   
-// Print information about a Core Storage volume.
-- (void) printCoreStorageVolume: (NSDictionary *) volume
+// Print information about a virtual volume.
+- (void) printVirtualVolume: (NSDictionary *) volume
   indent: (NSString *) indent
   {
   [self printVolume: volume indent: indent];

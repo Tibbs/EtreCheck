@@ -40,7 +40,7 @@
   int myMajorOSVersion;
   int myMinorOSVersion;
   NSMutableDictionary * myVolumes;
-  NSMutableDictionary * myCoreStorageVolumes;
+  NSMutableDictionary * myVirtualVolumes;
   NSMutableDictionary * myDiskErrors;
   NSNumber * myGPUErrors;
   NSArray * myLogEntries;
@@ -90,8 +90,8 @@
 // Keep track of system volumes.
 @property (retain) NSMutableDictionary * volumes;
 
-// Keep track of CoreStorage volumes.
-@property (retain) NSMutableDictionary * coreStorageVolumes;
+// Keep track of virtual volumes.
+@property (retain) NSMutableDictionary * virtualVolumes;
 
 // Keep track of disk errors.
 @property (retain) NSMutableDictionary * diskErrors;
