@@ -599,7 +599,7 @@
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@ [Core Storage] (%@) : %@\n", NULL),
+          NSLocalizedString(@"%@(%@) [Core Storage] : %@\n", NULL),
           indent, volumeDevice, volumeSize];
             
   else if([fileSystem hasPrefix: @"APFS"])
