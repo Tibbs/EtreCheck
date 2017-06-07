@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 
 // Some keys for an internal dictionary.
@@ -44,6 +45,52 @@
 // Perform the collection.
 - (void) collect
   {
+  [self collectDiskUtil];
+  [self collectStorage];
+  }
+
+// Collect disk util information.
+- (void) collectDiskUtil
+  {
+  NSArray * args =
+    @[
+      @"list",
+      @"-plist"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/disk_util" arguments: args])
+    {
+    NSDictionary * plist =
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
+  
+    if(plist && [plist count])
+      {
+      NSArray * volumeSets = [plist objectForKey: @"AllDisksAndPartitions"];
+        
+      for(NSDictionary * volumeSet in volumeSets)
+        {
+        NSArray * volumes = [volumeSet objectForKey: @"APFSVolumes"];
+        
+        if([volumes count] > 0)
+          for(NSDictionary * volume in volumes)
+            {
+            NSString * device = [volume objectForKey: @"bsd_name"];
+            
+            if([device length] > 0)
+              [self.virtualVolumes setObject: volume forKey: device];
+            }
+        }
+      }
+    }
+    
+  [subProcess release];
+  }
+
+// Collect storage information.
+- (void) collectStorage
+  {
   NSArray * args =
     @[
       @"-xml",
@@ -65,19 +112,16 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * volume in volumes)
-        [self collectVirtualVolume: volume];
+        {
+        NSString * device = [volume objectForKey: @"bsd_name"];
+        
+        if([device length] > 0)
+          [self.virtualVolumes setObject: volume forKey: device];
+        }
       }
     }
     
   [subProcess release];
-  }
-
-// Collect a virtual volume.
-- (void) collectVirtualVolume: (NSDictionary *) volume
-  {
-  NSString * device = [volume objectForKey: @"bsd_name"];
-  
-  [self.virtualVolumes setObject: volume forKey: device];
   }
 
 @end
