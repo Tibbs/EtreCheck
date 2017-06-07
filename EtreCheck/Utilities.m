@@ -2130,20 +2130,20 @@
   if([path length] == 0)
     return path;
   
-  NSRange range = [path rangeOfString: @".app"];
+  NSRange range = [path rangeOfString: @".app/"];
   
   if(range.location != NSNotFound)
-    return [path substringToIndex: range.location + 4];
+    return [path substringToIndex: range.location + 5];
     
-  range = [path rangeOfString: @".plugin"];
+  range = [path rangeOfString: @".plugin/"];
   
   if(range.location != NSNotFound)
-    return [path substringToIndex: range.location + 7];
+    return [path substringToIndex: range.location + 8];
 
-  range = [[path lowercaseString] rangeOfString: @".prefpane"];
+  range = [[path lowercaseString] rangeOfString: @".prefpane/"];
   
   if(range.location != NSNotFound)
-    return [path substringToIndex: range.location + 9];
+    return [path substringToIndex: range.location + 10];
 
   return path;
   }
