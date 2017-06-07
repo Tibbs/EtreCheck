@@ -599,10 +599,13 @@
     {
     NSString * type = [iocontent substringFromIndex: 6];
     
+    if([type isEqualToString: @"APFS"])
+      type = NSLocalizedString(@"APFS Container", NULL);
+      
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@(%@) %@ : %@\n", NULL),
+          NSLocalizedString(@"%@(%@) [%@] : %@\n", NULL),
           indent, volumeDevice, type, volumeSize];
     }
     

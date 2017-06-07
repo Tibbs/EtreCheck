@@ -436,7 +436,7 @@
           @"delete from tomorrow_summary_notifications where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
 
     SQL =
       [NSString
@@ -444,7 +444,7 @@
           @"delete from notification_source where note_id in (%@);",
           arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
     }
     
   sqlite3_close(handle);

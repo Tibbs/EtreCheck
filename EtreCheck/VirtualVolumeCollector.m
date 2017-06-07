@@ -60,7 +60,7 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if([subProcess execute: @"/usr/sbin/disk_util" arguments: args])
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     {
     NSDictionary * plist =
       [NSDictionary readPropertyListData: subProcess.standardOutput];
@@ -76,10 +76,39 @@
         if([volumes count] > 0)
           for(NSDictionary * volume in volumes)
             {
-            NSString * device = [volume objectForKey: @"bsd_name"];
+            NSString * device = [volume objectForKey: @"DeviceIdentifier"];
+            NSString * volumeName = [volume objectForKey: @"VolumeName"];
+            NSString * mountPoint = [volume objectForKey: @"MountPoint"];
+            NSNumber * size = [volume objectForKey: @"Size"];
             
             if([device length] > 0)
-              [self.virtualVolumes setObject: volume forKey: device];
+              {
+              NSMutableDictionary * virtualVolume =
+                [NSMutableDictionary new];
+                
+              [virtualVolume setObject: device forKey: @"bsd_name"];
+              
+              if([volumeName length] > 0)
+                {
+                [virtualVolume setObject: volumeName forKey: @"_name"];
+                
+                NSString * iocontent =
+                  [@"Apple_" stringByAppendingString: volumeName];
+                  
+                [virtualVolume setObject: iocontent forKey: @"iocontent"];
+                }
+                
+              if([mountPoint length] > 0)
+                [virtualVolume
+                  setObject: mountPoint forKey: @"mount_point"];
+                
+              if(size != nil)
+                [virtualVolume setObject: size forKey: @"size_in_bytes"];
+                
+              [self.virtualVolumes setObject: virtualVolume forKey: device];
+              
+              [virtualVolume release];
+              }
             }
         }
       }

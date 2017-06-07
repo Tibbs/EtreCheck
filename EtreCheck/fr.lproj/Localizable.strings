@@ -369,3 +369,4 @@
 "installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
 "Virtual disks:\n" = "Disques virtuels :\n";
 "Physical disk:" = "Disque phsyique :";
+"APFS Container" = "Conteneur APFS";
