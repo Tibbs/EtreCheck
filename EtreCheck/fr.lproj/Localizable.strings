@@ -367,3 +367,5 @@
 "%d pending file (plural rule: other)" = "%d fichiers en attendant";
 "    %@: %@ - %@\n" = "    %@ : %@ - %@\n";
 "installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
+"Virtual disks:\n" = "Disques virtuels :\n";
+"Physical disk:" = "Disque phsyique :";

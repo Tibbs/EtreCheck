@@ -75,14 +75,9 @@
 // Collect a Core Storage volume.
 - (void) collectCoreStorageVolume: (NSDictionary *) volume
   {
-  NSArray * pvs = [volume objectForKey: @"com.apple.corestorage.pv"];
+  NSString * device = [volume objectForKey: @"bsd_name"];
   
-  for(NSDictionary * pv in pvs)
-    {
-    NSString * name = [pv objectForKey: @"_name"];
-    
-    [self.coreStorageVolumes setObject: volume forKey: name];
-    }
+  [self.coreStorageVolumes setObject: volume forKey: device];
   }
 
 @end

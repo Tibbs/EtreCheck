@@ -62,7 +62,9 @@
     dataFound = YES;
   
   // There should always be data found.
-  if(!dataFound)
+  if(dataFound)
+    [self printCoreStorage];
+  else
     {
     [self.result appendAttributedString: [self buildTitle]];
 
@@ -287,35 +289,10 @@
 - (void) printDiskVolumes: (NSDictionary *) disk
   {
   NSArray * volumes = [disk objectForKey: @"volumes"];
-  NSMutableSet * coreStorageVolumeNames = [NSMutableSet set];
-
+  
   if(volumes && [volumes count])
-    {
     for(NSDictionary * volume in volumes)
-      {
-      NSString * iocontent = [volume objectForKey: @"iocontent"];
-      
-      if([iocontent isEqualToString: @"Apple_CoreStorage"])
-        {
-        NSString * name = [volume objectForKey: @"_name"];
-        
-        [coreStorageVolumeNames addObject: name];
-        }
-        
-      else
-        [self printVolume: volume indent: @"        "];
-      }
-      
-    for(NSDictionary * name in coreStorageVolumeNames)
-      {
-      NSDictionary * coreStorageVolume =
-        [self.coreStorageVolumes objectForKey: name];
-        
-      if(coreStorageVolume)
-        [self
-          printCoreStorageVolume: coreStorageVolume indent: @"        "];
-      }
-    }
+      [self printVolume: volume indent: @"        "];
   }
 
 // Get the SMART status for this disk.
@@ -371,6 +348,43 @@
   [urlString release];
   }
 
+// Print Core Storage volumes.
+- (void) printCoreStorage
+  {
+  NSArray * devices =
+    [[[[Model model] coreStorageVolumes] allKeys]
+      sortedArrayUsingSelector: @selector(compare:)];
+      
+  BOOL printed = NO;
+  
+  for(NSString * device in devices)
+    {
+    NSDictionary * volume =
+      [[[Model model] coreStorageVolumes] objectForKey: device];
+      
+    if(volume != nil)
+      {
+      if(!printed)
+        {
+        [self.result appendString: @"    "];
+        [self.result
+          appendString: NSLocalizedString(@"Virtual disks:\n", NULL)
+          attributes:
+            @{
+              NSFontAttributeName : [[Utilities shared] boldFont]
+            }];
+            
+        printed = YES;
+        }
+        
+      [self printCoreStorageVolume: volume indent: @"        "];
+      }
+    }
+    
+  if(printed)
+    [self.result appendString: @"\n"];
+  }
+  
 // Print information about a Core Storage volume.
 - (void) printCoreStorageVolume: (NSDictionary *) volume
   indent: (NSString *) indent
@@ -388,6 +402,14 @@
   
   if(pvs)
     [self printCoreStoragePvInformation: pvs indent: indent];
+    
+  NSDictionary * physicalDrive = [volume objectForKey: @"physical_drive"];
+  
+  if([physicalDrive respondsToSelector: @selector(objectForKey:)])
+    [self
+      printPhysicalDriveInformation: physicalDrive
+      volume: volume
+      indent: indent];
   }
 
 // Print Core Storage "lv" information about a volume.
@@ -509,6 +531,28 @@
     }
   }
 
+// Print APFS physicalDrive information about a volume.
+- (void) printPhysicalDriveInformation: (NSDictionary *) physicalDrive
+  volume: (NSDictionary *) volume indent: (NSString *) indent
+  {
+  NSString * name = [physicalDrive objectForKey: @"device_name"];
+  NSString * volumeSize = [self volumeSize: volume];
+  NSString * volumeFree = [self volumeFreeSpace: volume];
+  
+  [self.result
+    appendString:
+      [NSString
+        stringWithFormat:
+          @"%@%@ %@ %@ %@",
+          indent,
+          NSLocalizedString(@"Physical disk:", NULL),
+          name,
+          volumeSize,
+          volumeFree]];
+          
+  [self.result appendCR];
+  }
+  
 // Print information about a volume.
 - (void) printVolume: (NSDictionary *) volume indent: (NSString *) indent
   {
@@ -519,7 +563,8 @@
   NSString * volumeFree = [self volumeFreeSpace: volume];
   NSString * UUID = [volume objectForKey: @"volume_uuid"];
   NSString * fileSystem = [volume objectForKey: @"file_system"];
-
+  NSString * iocontent = [volume objectForKey: @"iocontent"];
+      
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
     
@@ -548,19 +593,42 @@
   NSString * status =
     [[stats objectForKey: kDiskStatus] stringByAppendingString: errors];
 
-  NSString * volumeInfo =
-    [NSString
-      stringWithFormat:
-        NSLocalizedString(@"%@%@ (%@ - %@) %@ %@: %@ %@%@\n", NULL),
-        indent,
-        volumeName ? [Utilities cleanPath: volumeName] : @"-",
-        volumeDevice,
-        NSLocalizedString(fileSystem, NULL),
-        volumeMountPoint,
-        [stats objectForKey: kDiskType],
-        volumeSize,
-        volumeFree,
-        status];
+  NSString * volumeInfo = nil;
+  
+  if([iocontent isEqualToString: @"Apple_CoreStorage"])
+    volumeInfo =
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(@"%@ [Core Storage] (%@) : %@\n", NULL),
+          indent, volumeDevice, volumeSize];
+            
+  else if([fileSystem hasPrefix: @"APFS"])
+    volumeInfo =
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(@"%@%@ (%@ - %@) %@ %@%@\n", NULL),
+          indent,
+          volumeName ? [Utilities cleanPath: volumeName] : @"-",
+          volumeDevice,
+          NSLocalizedString(fileSystem, NULL),
+          volumeMountPoint,
+          [stats objectForKey: kDiskType],
+          status];
+        
+  else
+    volumeInfo =
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(@"%@%@ (%@ - %@) %@ %@: %@ %@%@\n", NULL),
+          indent,
+          volumeName ? [Utilities cleanPath: volumeName] : @"-",
+          volumeDevice,
+          NSLocalizedString(fileSystem, NULL),
+          volumeMountPoint,
+          [stats objectForKey: kDiskType],
+          volumeSize,
+          volumeFree,
+          status];
     
   if(attributes)
     [self.result appendString: volumeInfo attributes: attributes];
