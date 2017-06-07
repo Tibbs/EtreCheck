@@ -595,13 +595,17 @@
 
   NSString * volumeInfo = nil;
   
-  if([iocontent isEqualToString: @"Apple_CoreStorage"])
+  if([iocontent hasPrefix: @"Apple_"])
+    {
+    NSString * type = [iocontent substringFromIndex: 6];
+    
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@(%@) [Core Storage] : %@\n", NULL),
-          indent, volumeDevice, volumeSize];
-            
+          NSLocalizedString(@"%@(%@) %@ : %@\n", NULL),
+          indent, volumeDevice, type, volumeSize];
+    }
+    
   else if([fileSystem hasPrefix: @"APFS"])
     volumeInfo =
       [NSString
