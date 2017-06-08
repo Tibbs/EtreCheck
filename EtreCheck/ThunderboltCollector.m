@@ -45,6 +45,8 @@
   //subProcess.debugStandardOutput =
   //  [NSData dataWithContentsOfFile: @"/tmp/SPThunderboltDataType.xml"];
 
+  bool dataFound = NO;
+      
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -52,42 +54,43 @@
   
     if(plist && [plist count])
       {
-      bool found = NO;
-      
       NSDictionary * devices =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * device in devices)
-        [self
-          printThunderboltDevice: device indent: @"    " found: & found];
+        dataFound =
+          [self
+            printThunderboltDevice: device
+            indent: @"    "
+            dataFound: dataFound];
         
-      if(found)
+      if(dataFound)
         [self.result appendCR];
       }
     }
     
   [subProcess release];
   
-  BOOL found = [self collectSerialATA];
-  found = [self collectNVMExpress: found];
+  dataFound = [self collectSerialATA: dataFound];
+  dataFound = [self collectNVMExpress: dataFound];
   
   dispatch_semaphore_signal(self.complete);
   }
 
 // Collect information about a single Thunderbolt device.
-- (void) printThunderboltDevice: (NSDictionary *) device
-  indent: (NSString *) indent found: (bool *) found
+- (BOOL) printThunderboltDevice: (NSDictionary *) device
+  indent: (NSString *) indent dataFound: (BOOL) dataFound
   {
   NSString * name = [device objectForKey: @"_name"];
   NSString * vendor_name = [device objectForKey: @"vendor_name_key"];
         
   if(vendor_name)
     {
-    if(!*found)
+    if(!dataFound)
       {
       [self.result appendAttributedString: [self buildTitle]];
       
-      *found = YES;
+      dataFound = YES;
       }
 
     [self.result
@@ -102,12 +105,15 @@
   [self collectSMARTStatus: device indent: indent];
   
   // There could be more devices.
-  [self printMoreDevices: device indent: indent found: found];
+  dataFound =
+    [self printMoreDevices: device indent: indent dataFound: dataFound];
+    
+  return dataFound;
   }
 
 // Print more devices.
-- (void) printMoreDevices: (NSDictionary *) device
-  indent: (NSString *) indent found: (bool *) found
+- (BOOL) printMoreDevices: (NSDictionary *) device
+  indent: (NSString *) indent dataFound: (BOOL) dataFound
   {
   NSDictionary * devices = [device objectForKey: @"_items"];
   
@@ -116,14 +122,23 @@
     
   if(devices)
     for(NSDictionary * device in devices)
-      [self printThunderboltDevice: device indent: indent found: found];
+      {
+      BOOL printed =
+        [self
+          printThunderboltDevice: device
+          indent: indent
+          dataFound: dataFound];
+          
+      if(printed)
+        dataFound = YES;
+      }
+      
+  return dataFound;
   }
 
 // Perform the collection for old Serial ATA controllers.
-- (BOOL) collectSerialATA
+- (BOOL) collectSerialATA: (BOOL) dataFound
   {
-  BOOL dataFound = NO;
-      
   NSArray * args =
     @[
       @"-xml",
@@ -148,8 +163,14 @@
         
       for(NSDictionary * controller in controllers)
         if([self shouldPrintController: controller])
-          if([self printSerialATAController: controller])
+          {
+          BOOL printed =
+            [self
+              printSerialATAController: controller dataFound: dataFound];
+              
+          if(printed)
             dataFound = YES;
+          }
       }
     }
 
@@ -183,8 +204,14 @@
         
       for(NSDictionary * controller in controllers)
         if([self shouldPrintController: controller])
-          if([self printNVMExpressController: controller])
+          {
+          BOOL printed =
+            [self
+              printNVMExpressController: controller dataFound: dataFound];
+              
+          if(printed)
             dataFound = YES;
+          }
       }
     }
 
