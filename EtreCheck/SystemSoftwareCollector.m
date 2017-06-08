@@ -35,6 +35,10 @@
   {
   [self updateStatus: NSLocalizedString(@"Checking system software", NULL)];
     
+  [self.result appendAttributedString: [self buildTitle]];
+  
+  BOOL dataFound = NO;
+  
   NSArray * args =
     @[
       @"-xml",
@@ -54,23 +58,40 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       if([items count])
-        {
-        [self.result appendAttributedString: [self buildTitle]];
-        
         for(NSDictionary * item in items)
-          [self printSystemSoftware: item];
-
-        [self.result appendCR];
-        }
+          if([self printSystemSoftware: item])
+            {
+            dataFound = YES;
+            [self.result appendCR];
+            break;
+            }
       }
     }
-  
-  // Now that I know what OS version I have, load the software signatures
-  // and expected launchd files.
-  [self loadAppleSoftware];
-  [self loadAppleLaunchd];
-  
+    
   [subProcess release];
+    
+  // There should always be data found.
+  if(dataFound)
+    {
+    // Now that I know what OS version I have, load the software signatures
+    // and expected launchd files.
+    [self loadAppleSoftware];
+    [self loadAppleLaunchd];
+    }
+  else
+    {
+    [self.result
+      appendString:
+        NSLocalizedString(
+          @"    Operating system information not found!\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red]
+        }];
+        
+    [self.result appendCR];
+    }
     
   dispatch_semaphore_signal(self.complete);
   }
@@ -198,12 +219,13 @@
   }
 
 // Print a system software item.
-- (void) printSystemSoftware: (NSDictionary *) item
+- (BOOL) printSystemSoftware: (NSDictionary *) item
   {
   NSString * version = [item objectForKey: @"os_version"];
   NSString * uptime = [item objectForKey: @"uptime"];
 
-  [self parseOSVersion: version];
+  if(![self parseOSVersion: version])
+    return NO;
   
   NSString * marketingName = [self fallbackMarketingName: version];
   
@@ -213,15 +235,18 @@
   BOOL parsed = [self parseUpTime: uptime days: & days hours: & hours];
   
   if(!parsed)
-    return
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
-              marketingName,
-              @"",
-              uptime]];
+    {
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
+            marketingName,
+            @"",
+            uptime]];
+            
+    return YES;
+    }
     
   NSString * dayString = TTTLocalizedPluralString(days, @"day", nil);
   NSString * hourString = TTTLocalizedPluralString(hours, @"hour", nil);
@@ -237,6 +262,8 @@
           marketingName,
           dayString,
           hourString]];
+          
+  return YES;
   }
 
 // Query Apple for the marketing name.
@@ -323,7 +350,7 @@
   }
 
 // Parse the OS version.
-- (void) parseOSVersion: (NSString *) profilerVersion
+- (BOOL) parseOSVersion: (NSString *) profilerVersion
   {
   if(profilerVersion)
     {
@@ -337,22 +364,28 @@
     bool found = [scanner scanInt: & majorVersion];
     
     if(found)
+      {
       [[Model model]
         setMajorOSVersion: majorVersion];
       
-    NSString * minorVersion = nil;
-    
-    found = [scanner scanUpToString: @")" intoString: & minorVersion];
-    
-    if(found)
-      {
-      unichar ch;
+      NSString * minorVersion = nil;
       
-      [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
+      found = [scanner scanUpToString: @")" intoString: & minorVersion];
       
-      [[Model model] setMinorOSVersion: ch - 'A'];
+      if(found)
+        {
+        unichar ch;
+        
+        [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
+        
+        [[Model model] setMinorOSVersion: ch - 'A'];
+        
+        return YES;
+        }
       }
     }
+    
+  return NO;
   }
 
 // Parse system uptime.
