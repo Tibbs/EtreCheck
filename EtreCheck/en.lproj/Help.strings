@@ -33,3 +33,4 @@
 "hiddenapps" = "Other software that may be running in the background.";
 "etrecheckdeletedfiles" = "These are files that EtreCheck recently flagged as unknown software and were deleted by the user.";
 "install" = "Third party software installations in the past 30 days";
+"virtualvolume" = "Modern Mac disk volumes may be virtual for encryption, Fusion drives, or new file systems.";

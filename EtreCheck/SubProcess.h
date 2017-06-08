@@ -16,6 +16,8 @@
   NSMutableData * myStandardOutput;
   NSMutableData * myStandardError;
   BOOL myUsePseudoTerminal;
+  NSData * myDebugStandardOutput;
+  NSData * myDebugStandardError;
   }
 
 @property (assign) BOOL timedout;
@@ -24,6 +26,8 @@
 @property (readonly) NSMutableData * standardOutput;
 @property (readonly) NSMutableData * standardError;
 @property (assign) BOOL usePseudoTerminal;
+@property (retain) NSData * debugStandardOutput;
+@property (retain) NSData * debugStandardError;
 
 // Execute an external program and return the results.
 // If this returns NO, internal data structures are undefined.

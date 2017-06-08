@@ -39,10 +39,11 @@
       @"SPUSBDataType"
     ];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPUSBDataType.xml"];
-  
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/SPUSBDataType.xml"];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -125,8 +126,64 @@
       [self printUSBDevice: device indent: indent found: found];
   
   else
+  
     // Print all volumes on the device.
-    [self printDiskVolumes: device];
+    [self printUSBController: device indent: indent];
+  }
+
+// Print disks attached to a single Serial ATA controller.
+- (BOOL) printUSBController: (NSDictionary *) controller
+  indent: (NSString *) indent
+  {
+  BOOL dataFound = NO;
+  
+  NSDictionary * disks = [controller objectForKey: @"Media"];
+  
+  for(NSDictionary * disk in disks)
+    {
+    NSString * diskName = [disk objectForKey: @"_name"];
+    NSString * diskDevice = [disk objectForKey: @"bsd_name"];
+    NSString * diskSize = [disk objectForKey: @"size"];
+    NSString * UUID = [disk objectForKey: @"volume_uuid"];
+    
+    if(!diskDevice)
+      diskDevice = @"";
+      
+    if(!diskSize)
+      diskSize = @"";
+    else
+      diskSize =
+        [NSString
+          stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
+
+    if(UUID)
+      [self.volumes setObject: disk forKey: UUID];
+
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"%@%@ %@%@\n",
+            indent, diskName ? diskName : @"-", diskDevice, diskSize]];
+    
+    [self
+      printDiskVolumes: disk
+      indent: [indent stringByAppendingString: @"    "]];
+    
+    dataFound = YES;
+    }
+    
+  return dataFound;
+  }
+
+// Print the volumes on a disk.
+- (void) printDiskVolumes: (NSDictionary *) disk indent: (NSString *) indent
+  {
+  NSArray * volumes = [disk objectForKey: @"volumes"];
+  
+  if(volumes && [volumes count])
+    for(NSDictionary * volume in volumes)
+      [self printVolume: volume indent: indent];
   }
 
 @end

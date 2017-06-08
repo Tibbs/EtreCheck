@@ -42,6 +42,9 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/SPThunderboltDataType.xml"];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -64,6 +67,9 @@
     }
     
   [subProcess release];
+  
+  BOOL found = [self collectSerialATA];
+  found = [self collectNVMExpress: found];
   
   dispatch_semaphore_signal(self.complete);
   }
@@ -111,9 +117,89 @@
   if(devices)
     for(NSDictionary * device in devices)
       [self printThunderboltDevice: device indent: indent found: found];
+  }
 
-  // Print all volumes on the device.
-  [self printDiskVolumes: device];
+// Perform the collection for old Serial ATA controllers.
+- (BOOL) collectSerialATA
+  {
+  BOOL dataFound = NO;
+      
+  NSArray * args =
+    @[
+      @"-xml",
+      @"SPSerialATADataType"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  //subProcess.debugStandardOutput =
+  //  [NSData
+  //    dataWithContentsOfFile: @"/tmp/SPSerialATADataType.xml"];
+    
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+    {
+     NSArray * plist =
+       [NSArray readPropertyListData: subProcess.standardOutput];
+  
+    if(plist && [plist count])
+      {
+      NSDictionary * controllers =
+        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+        
+      for(NSDictionary * controller in controllers)
+        if([self shouldPrintController: controller])
+          if([self printSerialATAController: controller])
+            dataFound = YES;
+      }
+    }
+
+  [subProcess release];
+  
+  return dataFound;
+  }
+
+// Perform the collection for new NVM controllers.
+- (BOOL) collectNVMExpress: (BOOL) dataFound
+  {
+  NSArray * args =
+    @[
+      @"-xml",
+      @"SPNVMeDataType"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+    {
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
+  
+    if(plist && [plist count])
+      {
+      NSDictionary * controllers =
+        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+        
+      for(NSDictionary * controller in controllers)
+        if([self shouldPrintController: controller])
+          if([self printNVMExpressController: controller])
+            dataFound = YES;
+      }
+    }
+
+  return dataFound;
+  }
+
+// Should this controller be printed here?
+- (BOOL) shouldPrintController: (NSDictionary *) controller
+  {
+  NSString * name = [controller objectForKey: @"_name"];
+  
+  if([name hasPrefix: @"Thunderbolt"])
+    return YES;
+    
+  return NO;
   }
 
 @end

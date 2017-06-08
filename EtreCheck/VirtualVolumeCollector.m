@@ -11,6 +11,7 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "ByteCountFormatter.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -20,13 +21,7 @@
 // Collect information about disks.
 @implementation VirtualVolumeCollector
 
-@dynamic virtualVolumes;
-
-// Provide easy access to virtual volumes.
-- (NSMutableDictionary *) virtualVolumes
-  {
-  return [[Model model] virtualVolumes];
-  }
+@synthesize virtualVolumes = myVirtualVolumes;
 
 // Constructor.
 - (id) init
@@ -35,11 +30,20 @@
   
   if(self)
     {
-    self.name = @"virtualvolumeinformation";
+    self.name = @"virtualvolume";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    myVirtualVolumes = [NSMutableDictionary new];
     }
     
   return self;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myVirtualVolumes release];
+  
+  [super dealloc];
   }
 
 // Perform the collection.
@@ -47,6 +51,8 @@
   {
   [self collectDiskUtil];
   [self collectStorage];
+  
+  [self printVirtualVolumes];
   }
 
 // Collect disk util information.
@@ -60,6 +66,9 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/diskutil.xml"];
+
   if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     {
     NSDictionary * plist =
@@ -126,10 +135,11 @@
       @"SPStorageDataType"
     ];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPStorageDataType.xml"];
-  
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/SPStorageDataType.xml"];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -151,6 +161,219 @@
     }
     
   [subProcess release];
+  }
+
+// Print virtual volumes.
+- (void) printVirtualVolumes
+  {
+  NSArray * devices =
+    [[self.virtualVolumes allKeys]
+      sortedArrayUsingSelector: @selector(compare:)];
+      
+  BOOL printed = NO;
+  
+  for(NSString * device in devices)
+    {
+    NSDictionary * volume = [self.virtualVolumes objectForKey: device];
+      
+    if(volume != nil)
+      {
+      NSString * volumeDevice = [volume objectForKey: @"bsd_name"];
+      
+      if([[[Model model] physicalVolumes] containsObject: volumeDevice])
+        continue;
+        
+      if(!printed)
+        {
+        [self.result appendAttributedString: [self buildTitle]];
+          
+        printed = YES;
+        }
+        
+      [self printVirtualVolume: volume indent: @"    "];
+      }
+    }
+    
+  if(printed)
+    [self.result appendString: @"\n"];
+  }
+  
+// Print information about a virtual volume.
+- (void) printVirtualVolume: (NSDictionary *) volume
+  indent: (NSString *) indent
+  {
+  [self printVolume: volume indent: indent];
+  
+  indent = [indent stringByAppendingString: @"    "];
+  
+  NSDictionary * lv = [volume objectForKey: @"com.apple.corestorage.lv"];
+  
+  if(lv)
+    [self printCoreStorageLvInformation: lv indent: indent];
+    
+  NSArray * pvs = [volume objectForKey: @"com.apple.corestorage.pv"];
+  
+  if(pvs)
+    [self printCoreStoragePvInformation: pvs indent: indent];
+    
+  NSDictionary * physicalDrive = [volume objectForKey: @"physical_drive"];
+  
+  if([physicalDrive respondsToSelector: @selector(objectForKey:)])
+    [self
+      printPhysicalDriveInformation: physicalDrive
+      volume: volume
+      indent: indent];
+  }
+
+// Print Core Storage "lv" information about a volume.
+- (void) printCoreStorageLvInformation: (NSDictionary *) lv
+  indent: (NSString *) indent
+  {
+  NSString * state =
+    [lv objectForKey: @"com.apple.corestorage.lv.conversionState"];
+  NSString * encrypted =
+    [lv objectForKey: @"com.apple.corestorage.lv.encrypted"];
+  NSString * encryptionType =
+    [lv objectForKey: @"com.apple.corestorage.lv.encryptionType"];
+  NSString * locked =
+    [lv objectForKey: @"com.apple.corestorage.lv.locked"];
+    
+  if(!encryptionType)
+    encryptionType = @"";
+    
+  if([encrypted isEqualToString: @"yes"])
+    {
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"%@%@ %@ %@",
+            indent,
+            NSLocalizedString(@"Encrypted", NULL),
+            encryptionType,
+            [locked isEqualToString: @"yes"]
+              ? NSLocalizedString(@"Locked", NULL)
+              : NSLocalizedString(@"Unlocked", NULL)]];
+
+    [self printCoreStorageState: state];
+      
+    [self.result appendCR];
+    }
+  }
+
+// Print the Core Storage state.
+- (void) printCoreStorageState: (NSString *) state
+  {
+  if(!state)
+    return;
+    
+  if([state isEqualToString: @"Failed"])
+    {
+    [self.result appendString: @" "];
+    
+    [self.result
+      appendString: state
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  else if(![state isEqualToString: @"Complete"])
+    {
+    [self.result appendString: @" "];
+    
+    [self.result
+      appendString: state
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] blue],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  }
+  
+// Print Core Storage "pv" information about a volume.
+- (void) printCoreStoragePvInformation: (NSArray *) pvs
+  indent: (NSString *) indent
+  {
+  for(NSDictionary * pv in pvs)
+    {
+    NSString * name = [pv objectForKey: @"_name"];
+    NSString * status =
+      [pv objectForKey: @"com.apple.corestorage.pv.status"];
+
+    NSNumber * pvSize =
+      [pv objectForKey: @"com.apple.corestorage.pv.size"];
+    
+    NSString * size = @"";
+    
+    if(pvSize)
+      {
+      ByteCountFormatter * formatter = [ByteCountFormatter new];
+      
+      size =
+        [formatter stringFromByteCount: [pvSize unsignedLongLongValue]];
+        
+      [formatter release];
+      }
+
+    NSString * errors = [self errorsFor: name];
+    
+    status = [status stringByAppendingString: errors];
+    
+    if([errors length])
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"%@%@ %@ %@ %@",
+              indent,
+              NSLocalizedString(@"Physical disk:", NULL),
+              name,
+              size,
+              status]
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+    else
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"%@%@ %@ %@ %@",
+              indent,
+              NSLocalizedString(@"Physical disk:", NULL),
+              name,
+              size,
+              status]];
+
+    [self.result appendCR];
+    }
+  }
+
+// Print APFS physicalDrive information about a volume.
+- (void) printPhysicalDriveInformation: (NSDictionary *) physicalDrive
+  volume: (NSDictionary *) volume indent: (NSString *) indent
+  {
+  NSString * name = [physicalDrive objectForKey: @"device_name"];
+  NSString * volumeSize = [self volumeSize: volume];
+  NSString * volumeFree = [self volumeFreeSpace: volume];
+  
+  [self.result
+    appendString:
+      [NSString
+        stringWithFormat:
+          @"%@%@ %@ %@ %@",
+          indent,
+          NSLocalizedString(@"Physical disk:", NULL),
+          name,
+          volumeSize,
+          volumeFree]];
+          
+  [self.result appendCR];
   }
 
 @end

@@ -110,7 +110,6 @@
   // Collect items that will be needed by other collectors.
   [collectors addObject: [[SystemSoftwareCollector new] autorelease]];
   [collectors addObject: hardwareCollector];
-  [collectors addObject: [[VirtualVolumeCollector new] autorelease]];
   [collectors addObject: [[LogCollector new] autorelease]];
   [collectors addObject: [[DiskCollector new] autorelease]];
   [collectors addObject: [[ApplicationsCollector new] autorelease]];
@@ -118,6 +117,7 @@
   [collectors addObject: [[USBCollector new] autorelease]];
   [collectors addObject: [[FirewireCollector new] autorelease]];
   [collectors addObject: [[ThunderboltCollector new] autorelease]];
+  [collectors addObject: [[VirtualVolumeCollector new] autorelease]];
   [collectors addObject: [[TimeMachineCollector new] autorelease]];
   
   // Start the machine animation.
@@ -388,13 +388,14 @@
 
   [result appendAttributedString: [self getResult: @"hardware"]];
   [result appendAttributedString: [self getResult: @"video"]];
-  [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"disk"]];
   [result appendAttributedString: [self getResult: @"usb"]];
   [result
     appendAttributedString: [self getResult: @"firewire"]];
   [result
     appendAttributedString: [self getResult: @"thunderbolt"]];
+  [result appendAttributedString: [self getResult: @"virtualvolume"]];
+  [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];
   [result appendAttributedString: [self getResult: @"gatekeeper"]];
   [result appendAttributedString: [self getResult: @"applications"]];

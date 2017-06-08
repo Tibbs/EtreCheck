@@ -19,6 +19,8 @@ extern char **environ;
 @synthesize standardOutput = myStandardOutput;
 @synthesize standardError = myStandardError;
 @synthesize usePseudoTerminal = myUsePseudoTerminal;
+@synthesize debugStandardOutput = myDebugStandardOutput;
+@synthesize debugStandardError = myDebugStandardError;
 
 // Constructor.
 - (instancetype) init
@@ -48,6 +50,17 @@ extern char **environ;
 // Execute an external program and return the results.
 - (BOOL) execute: (NSString *) program arguments: (NSArray *) args
   {
+  if((self.debugStandardOutput != nil) || (self.debugStandardError != nil))
+    {
+    if(self.debugStandardOutput != nil)
+      [self.standardOutput appendData: self.debugStandardOutput];
+    
+    if(self.debugStandardError != nil)
+      [self.standardError appendData: self.debugStandardError];
+    
+    return YES;
+    }
+    
   if(self.usePseudoTerminal)
     return [self forkpty: program arguments: args];
 

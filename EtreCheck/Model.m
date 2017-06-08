@@ -16,7 +16,7 @@
 @synthesize majorOSVersion = myMajorOSVersion;
 @synthesize minorOSVersion = myMinorOSVersion;
 @synthesize volumes = myVolumes;
-@synthesize virtualVolumes = myVirtualVolumes;
+@synthesize physicalVolumes = myPhysicalVolumes;
 @synthesize diskErrors = myDiskErrors;
 @synthesize gpuErrors = myGPUErrors;
 @synthesize logEntries = myLogEntries;
@@ -174,7 +174,7 @@
     myUnknownFiles = [NSMutableArray new];
     myLaunchdFiles = [NSMutableDictionary new];
     myVolumes = [NSMutableDictionary new];
-    myVirtualVolumes = [NSMutableDictionary new];
+    myPhysicalVolumes = [NSMutableSet new];
     myDiskErrors = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
     myAdwareFiles = [NSMutableDictionary new];
@@ -207,7 +207,7 @@
   [myLogEntries release];
   [myHostName release];
   [myGPUErrors release];
-  [myVirtualVolumes release];
+  [myPhysicalVolumes release];
   [myComputerName release];
   [myAppleSoftware release];
   [myAppleLaunchd release];

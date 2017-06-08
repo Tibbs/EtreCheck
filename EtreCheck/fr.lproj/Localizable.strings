@@ -106,12 +106,7 @@
 "    %@ - %@: %@\n" = "    %@ - %@ : %@\n";
 "    %@ %@ %@ CPU: %@-core\n" = "    %@ %@ %@ CPU : %@-core\n";
 "    %@: %@Path: %@\n" = "    %@ : %@Chemin : %@\n";
-"%@%@ (%@) %@: %@ %@ (%@)\n" = "%@%@ (%@) %@ : %@ %@ (%@)\n";
-"%@%@ (%@) %@: %@ %@\n" = "%@%@ (%@) %@ : %@ %@\n";
 "    %@: %@\n" = "    %@ : %@\n";
-"%@%@ (%@) %@ [Startup]: %@ %@ (%@)\n" = "%@%@ (%@) %@ [Démarrage]: %@ %@ (%@)\n";
-"%@%@ (%@) %@ [Startup]: %@ %@\n" = "%@%@ (%@) %@ [Démarrage]: %@ %@\n";
-"%@:\n" = "%@ :\n";
 "B KB MB GB TB" = "o Ko Mo Go To";
 "B" = "o";
 "KB" = "Ko";
@@ -159,7 +154,7 @@
 "Are you sure you want to cancel this EtreCheck report?" = "Êtes-vous sûr de vouloir annuler ce rapport EtreCheck ?";
 "No, continue" = "Non, continuer";
 "Yes, cancel" = "Oui, annuler";
-"%@%@ (%@ - %@) %@ %@: %@ %@%@\n" = "%@%@ (%@ - %@) %@ %@ : %@ %@%@\n";
+"%@%@ (%@%@) %@ %@: %@ %@%@\n" = "%@%@ (%@%@) %@ %@ : %@ %@%@\n";
 " (Low!)" = " (Faible !)";
 "    Launchd job status not available.\n" = "État du travail de ​​Launchd pas disponible.\n";
 "    Destinations:\n" = "    Destinations :\n";
@@ -180,7 +175,6 @@
 "%d interface (plural rule: zero)" = "aucune interface\n";
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
-"        %@: %@\n" = "        %@ : %@\n";
 "Report complete" = "Rapport complet";
 "Encrypted" = "Crypté";
 "Locked" = "Fermé";
@@ -365,8 +359,8 @@
 "%d pending file (plural rule: zero)" = "";
 "%d pending file (plural rule: one)" = "Un fichier en attendant";
 "%d pending file (plural rule: other)" = "%d fichiers en attendant";
-"    %@: %@ - %@\n" = "    %@ : %@ - %@\n";
 "installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
-"Virtual disks:\n" = "Disques virtuels :\n";
 "Physical disk:" = "Disque phsyique :";
+"CoreStorage Container" = "Conteneur CoreStorage";
 "APFS Container" = "Conteneur APFS";
+"%@(%@) %@: %@\n" = "%@(%@) %@ : %@\n";

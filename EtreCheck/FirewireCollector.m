@@ -42,6 +42,9 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/SPFireWireDataType.xml"];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

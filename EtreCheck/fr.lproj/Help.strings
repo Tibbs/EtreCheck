@@ -33,3 +33,4 @@
 "hiddenapps" = "Les autres logiciels qui tournent, parfois en tâche de fond.";
 "etrecheckdeletedfiles" = "Ce sont les fichiers, récemment signalés comme logiciels inconnus par EtreCheck, que l’utilisateur a retirés.";
 "install" = "Installations de logiciel de tiers pendant les 30 derniers jours";
+"virtualvolume" = "Les volumes sur des disques modernes Mac sont peut-être virtuels pour le cryptage, les disques Fusion, or les nouveaux systèmes de fichiers.";
