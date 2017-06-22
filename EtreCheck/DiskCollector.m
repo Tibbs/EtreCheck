@@ -98,15 +98,19 @@
   
     if(plist && [plist count])
       {
-      [self.result appendAttributedString: [self buildTitle]];
-      
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * controller in controllers)
         if([self shouldPrintController: controller])
-          if([self printSerialATAController: controller])
+          {
+          BOOL printed =
+            [self
+              printSerialATAController: controller dataFound: dataFound];
+            
+          if(printed)
             dataFound = YES;
+          }
       }
     }
 
@@ -135,16 +139,19 @@
   
     if(plist && [plist count])
       {
-      if(!dataFound)
-        [self.result appendAttributedString: [self buildTitle]];
-      
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * controller in controllers)
         if([self shouldPrintController: controller])
-          if([self printNVMExpressController: controller])
+          {
+          BOOL printed =
+            [self
+              printNVMExpressController: controller dataFound: dataFound];
+          
+          if(printed)
             dataFound = YES;
+          }
       }
     }
 
@@ -164,9 +171,8 @@
 
 // Print disks attached to a single Serial ATA controller.
 - (BOOL) printSerialATAController: (NSDictionary *) controller
+  dataFound: (BOOL) dataFound
   {
-  BOOL dataFound = NO;
-  
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
@@ -205,7 +211,10 @@
 
     if(UUID)
       [self.volumes setObject: disk forKey: UUID];
-
+      
+    if(!dataFound)
+      [self.result appendAttributedString: [self buildTitle]];
+      
     [self.result
       appendString:
         [NSString
@@ -227,9 +236,8 @@
 
 // Print disks attached to a single NVMExpress controller.
 - (BOOL) printNVMExpressController: (NSDictionary *) controller
+  dataFound: (BOOL) dataFound
   {
-  BOOL dataFound = NO;
-  
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
   for(NSDictionary * disk in disks)
@@ -267,6 +275,9 @@
     if(UUID)
       [self.volumes setObject: disk forKey: UUID];
 
+    if(!dataFound)
+      [self.result appendAttributedString: [self buildTitle]];
+      
     [self.result
       appendString:
         [NSString

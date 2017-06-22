@@ -32,9 +32,11 @@
 - (NSString *) errorsFor: (NSString *) name;
 
 // Print disks attached to a single Serial ATA controller.
-- (BOOL) printSerialATAController: (NSDictionary *) controller;
+- (BOOL) printSerialATAController: (NSDictionary *) controller
+  dataFound: (BOOL) dataFound;
 
 // Print disks attached to a single NVMExpress controller.
-- (BOOL) printNVMExpressController: (NSDictionary *) controller;
+- (BOOL) printNVMExpressController: (NSDictionary *) controller
+  dataFound: (BOOL) dataFound;
 
 @end

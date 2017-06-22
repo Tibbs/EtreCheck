@@ -307,6 +307,7 @@
 "adwarefile" = "L’adware : ";
 "unknownfile" = "Fichier inconnu : ";
 "    Disk information not found!\n" = "    Informations des disques non trouvés !\n";
+"    Operating system information not found!\n" = "    Information du système d’exploitation non trouvé !\n";
 "Runtime: %@\n" = "Temps d’exécution : %@\n";
 "ascsearch" = "https://communities.apple.com/fr/search.jspa?";
 "applesignatureindicator" = "  ";
