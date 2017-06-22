@@ -794,6 +794,7 @@ DQ
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <action selector="authorizeOptions:" target="Voe-Tx-rLC" id="5rl-Xt-YcI"/>
                             <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.hideAppleTasks" id="Zcu-EP-FHz"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="dsz-uQ-sYH"/>
                         </connections>
@@ -816,6 +817,7 @@ DQ
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <action selector="authorizeOptions:" target="Voe-Tx-rLC" id="lly-Zf-QsD"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="2UG-md-QmO"/>
                         </connections>
                     </button>
@@ -827,6 +829,7 @@ DQ
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <action selector="authorizeOptions:" target="Voe-Tx-rLC" id="Nrb-0M-hI9"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.showSignatureFailures" id="BCg-oE-owL"/>
                         </connections>
                     </button>

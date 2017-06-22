@@ -102,3 +102,6 @@
 "%d pending file (plural rule: one)" = "One pending file";
 "%d pending file (plural rule: other)" = "%d pending files";
 "installsincomplete" = "    Install information may not be complete.\n";
+"authorizeoptions" = "An EtreCheck report made with these options should not be posted on the internet. Clipboard functionality will be disabled if you continue.";
+"copydisabled" = "Clipboard functionality is disabled due to options.";
+

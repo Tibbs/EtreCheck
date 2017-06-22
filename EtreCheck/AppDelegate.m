@@ -123,6 +123,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donationLookupEmail = myDonationLookupEmail;
 @synthesize donationVerified = myDonationVerified;
 @dynamic currentTextView;
+@synthesize copyDisabled= myCopyDisabled;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic showSignatureFailures;
@@ -891,7 +892,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show Terms of Use agreement.
 - (IBAction) showTOUAgreementCopy: (id) sender
   {
-  if(self.TOSAccepted)
+  if(self.copyDisabled)
+    [self showCopyDisabled: sender];
+  else if(self.TOSAccepted)
     [self copy: sender];
   else
     {
@@ -905,7 +908,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show Terms of Use agreement.
 - (IBAction) showTOUAgreementCopyAll: (id) sender
   {
-  if(self.TOSAccepted)
+  if(self.copyDisabled)
+    [self showCopyDisabled: sender];
+  else if(self.TOSAccepted)
     [self copyToClipboard: sender];
   else
     {
@@ -2360,6 +2365,72 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   [self.logView scaleUnitSquareToSize: size];
   [self.logView setNeedsDisplay: YES];
+  }
+
+// Authorize EtreCheck options and disable copy/paste, if necessary.
+- (IBAction) authorizeOptions: (id) sender
+  {
+  // Maybe the poor user has changed his or her mind due to these terrible
+  // consequences. 
+  if(self.copyDisabled)
+    {
+    if([self ignoreKnownAppleFailures])
+      if(![self showSignatureFailures])
+        if([self hideAppleTasks])
+          {
+          self.copyDisabled = NO;
+          
+          return;
+          }
+    }
+    
+  if(!self.copyDisabled)
+    {
+    NSAlert * alert = [[NSAlert alloc] init];
+
+    [alert setMessageText: NSLocalizedString(@"Please confirm", NULL)];
+      
+    [alert setAlertStyle: NSInformationalAlertStyle];
+
+    [alert setInformativeText: NSLocalizedString(@"authorizeoptions", NULL)];
+
+    // This is the rightmost, first, default button.
+    [alert addButtonWithTitle: NSLocalizedString(@"Cancel", NULL)];
+
+    [alert addButtonWithTitle: NSLocalizedString(@"Confirm", NULL)];
+
+    NSModalResponse result = [alert runModal];
+    
+    [alert release];
+    
+    if(result == NSAlertSecondButtonReturn)
+      self.copyDisabled = YES;
+    else
+      {
+      [self setIgnoreKnownAppleFailures: YES];
+      [self setShowSignatureFailures: NO];
+      [self setHideAppleTasks: YES];
+      }
+    }
+  }
+
+// Tell the user that copy and paste has been disabled.
+- (void) showCopyDisabled: (id) sender
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Clipboard disabled", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"copydisabled", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+  
+  [alert release];
   }
 
 #pragma mark - NSToolbarDelegate conformance

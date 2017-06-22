@@ -365,3 +365,8 @@
 "CoreStorage Container" = "Conteneur CoreStorage";
 "APFS Container" = "Conteneur APFS";
 "%@(%@) %@: %@\n" = "%@(%@) %@ : %@\n";
+"Please confirm" = "Confirmez, s’il vous plaît";
+"authorizeoptions" = "Un rapport EtreCheck fait avec ces options ne devrait pas afficher sur l'internet. La fonctionnalité du presse-papiers sera désactivée si vous continuez.";
+"Confirm" = "Confirmer";
+"Clipboard disabled" = "Le presse-papiers est désactivé";
+"copydisabled" = "La fonctionnalité du presse-papiers est désactivée à cause des options.";

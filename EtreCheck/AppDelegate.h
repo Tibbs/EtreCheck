@@ -101,6 +101,8 @@
   NSWindow * myDonationLookupPanel;
   NSString * myDonationLookupEmail;
   BOOL myDonationVerified;
+  
+  BOOL myCopyDisabled;
   }
   
 @property (retain) IBOutlet EtreCheckWindow * window;
@@ -176,6 +178,7 @@
 @property (readonly) BOOL canSubmitDonationLookup;
 @property (assign) BOOL donationVerified;
 @property (readonly) NSTextView * currentTextView;
+@property (assign) BOOL copyDisabled;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -263,5 +266,8 @@
 
 // Close the active window.
 - (IBAction) closeWindow: (id) sender;
+
+// Authorize EtreCheck options and disable copy/paste, if necessary.
+- (IBAction) authorizeOptions: (id) sender;
 
 @end
