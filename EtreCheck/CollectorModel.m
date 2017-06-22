@@ -164,58 +164,62 @@
 // Bind an NSNull value to a key.
 - (void) setNullForKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNull null];
+  [self.dictionary setObject: [NSNull null] forKey: key];
   }
 
 // Bind a void value to a key.
 - (void) setBoolean: (BOOL) value forKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNumber numberWithBool: value];
+  [self.dictionary setObject: [NSNumber numberWithBool: value] forKey: key];
   }
 
 // Bind an NSInteger to a key.
 - (void) setInteger: (NSInteger) value forKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNumber numberWithInteger: value];
+  [self.dictionary 
+    setObject: [NSNumber numberWithInteger: value] forKey: key];
   }
 
 // Bind an NSUInteger value to key.
 - (void) setUnsignedInteger: (NSUInteger) value forKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNumber numberWithUnsignedInteger: value];
+  [self.dictionary 
+    setObject: [NSNumber numberWithUnsignedInteger: value] forKey: key];
   }
 
 // Bind a long long value to a key.
 - (void) setLongLong: (long long) value forKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNumber numberWithLongLong: value];
+  [self.dictionary 
+    setObject: [NSNumber numberWithLongLong: value] forKey: key];
   }
 
 // Bind a double value to a key.
 - (void) setDouble: (double) value forKey: (NSString *) key
   {
-  self.dictionary[key] = [NSNumber numberWithDouble: value];
+  [self.dictionary 
+    setObject: [NSNumber numberWithDouble: value] forKey: key];
   }
 
 // Bind an NSString value to a key.
 - (void) setString: (NSString *) value forKey: (NSString *) key
   {
   if([value respondsToSelector: @selector(UTF8String)])
-    self.dictionary[key] = value;
+    [self.dictionary setObject: value forKey: key];
   }
 
 // Bind an NSData value to a key
 - (void) setData: (NSData *) value forKey: (NSString *) key
   {
   if([value respondsToSelector: @selector(bytes)])
-    self.dictionary[key] = value;
+    [self.dictionary setObject: value forKey: key];
   else if([value respondsToSelector: @selector(UTF8String)])
     {
     NSData * data =
       [(NSString *)value dataUsingEncoding: NSUTF8StringEncoding];
     
     if(data != nil)
-      self.dictionary[key] = data;
+      [self.dictionary setObject: data forKey: key];
     }
   }
 
@@ -223,7 +227,7 @@
 - (void) setDate: (NSDate *) value forKey: (NSString *) key
   {
   if([value respondsToSelector: @selector(isEqualToString:)])
-    self.dictionary[key] = value;
+    [self.dictionary setObject: value forKey: key];
   else if([value respondsToSelector: @selector(UTF8String)])
     {
     NSDate * date = [Utilities stringAsDate: (NSString *) value];
@@ -246,7 +250,7 @@
           format: @"MMM d HH:mm:ss"];
       
     if(date != nil)
-      self.dictionary[key] = date;
+      [self.dictionary setObject: date forKey: key];
     }
   }
 
@@ -254,13 +258,13 @@
 - (void) setURL: (NSURL *) value forKey: (NSString *) key
   {
   if([value respondsToSelector: @selector(host)])
-    self.dictionary[key] = value;
+    [self.dictionary setObject: value forKey: key];
   else if([value respondsToSelector: @selector(UTF8String)])
     {
     NSURL * url = [NSURL URLWithString: (NSString *)value];
     
     if(url != nil)
-      self.dictionary[key] = url;
+      [self.dictionary setObject: url forKey: key];
     }
   }
 
@@ -268,7 +272,7 @@
 - (void) setObject: (id) object forKey: (id<NSCopying>) key
   {
   if(object != nil)
-    self.dictionary[key] = object;
+    [self.dictionary setObject: object forKey: key];
   }
 
 // Bind an NSNumber value to a key.
@@ -276,7 +280,7 @@
   forKey: (NSString *) key
   {
   if([value respondsToSelector: @selector(longLongValue)])
-    self.dictionary[key] = value;
+    [self.dictionary setObject: value forKey: key];
   else if([value respondsToSelector: @selector(UTF8String)])
     {
     NSNumber * number =
@@ -284,7 +288,7 @@
         convertFromString: (NSString *)value];
     
     if(number != nil)
-      self.dictionary[key] = number;
+      [self.dictionary setObject: number forKey: key];
     }
   }
 
@@ -292,7 +296,7 @@
 - (void) setObject: (id) object forKeyedSubscript: (id<NSCopying>) key
   {
   if(object != nil)
-    self.dictionary[key] = object;
+    [self.dictionary setObject: object forKey: key];
   }
 
 @end

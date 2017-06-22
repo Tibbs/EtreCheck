@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2015. All rights reserved.
+ ** Copyright (c) 2015-2017. All rights reserved.
  **********************************************************************/
 
 #import "XMLBuilder.h"
@@ -141,7 +141,7 @@ AttemptToCloseWrongElement *
   XMLElement * topElement = [self.elements lastObject];
   
   if(topElement != nil)
-    topElement.attributes[name] = attributeStringValue;
+    [topElement.attributes setObject: attributeStringValue forKey: name];
   }
   
 // Add a string to the current element's contents.
