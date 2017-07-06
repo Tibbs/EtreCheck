@@ -349,6 +349,8 @@
   for(NSString * name in names)
     redacted = [self redactName: name from: redacted];
     
+  [names release];
+  
   // Go ahead and look for an unredacted and unabbreviated user path.
   NSRange range = [redacted rangeOfString: @"/Users/"];
 

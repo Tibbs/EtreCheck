@@ -72,7 +72,7 @@
   [subProcess release];
   
   dataFound = [self collectSerialATA: dataFound];
-  dataFound = [self collectNVMExpress: dataFound];
+  [self collectNVMExpress: dataFound];
   
   dispatch_semaphore_signal(self.complete);
   }

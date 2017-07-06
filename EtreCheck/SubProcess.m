@@ -41,6 +41,8 @@ extern char **environ;
 // Deallocate.
 - (void) dealloc
   {
+  [myDebugStandardOutput release];
+  [myDebugStandardError release];
   [myStandardOutput release];
   [myStandardError release];
   

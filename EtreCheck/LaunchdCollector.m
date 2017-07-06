@@ -654,6 +654,18 @@
       }
     }
     
+  // Clean up URLs and quasi-URLs.
+  if([executable hasPrefix: @"file:"])
+    executable = [executable substringFromIndex: 5];
+    
+  executable = 
+    [executable 
+      stringByReplacingOccurrencesOfString: @"//" withString: @"/"];
+      
+  executable = 
+    [executable 
+      stringByReplacingOccurrencesOfString: @"//" withString: @"/"];
+    
   return executable;
   }
 
