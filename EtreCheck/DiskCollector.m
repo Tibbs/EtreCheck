@@ -398,9 +398,9 @@
   NSString * fileSystemName = @"";
   
   if([fileSystem length] > 0)
-   fileSystemName =
-     [NSString
-       stringWithFormat: @" - %@", NSLocalizedString(fileSystem, NULL)];
+    fileSystemName =
+      [NSString
+        stringWithFormat: @" - %@", NSLocalizedString(fileSystem, NULL)];
     
   if([fileSystemName length] > 0)
     {

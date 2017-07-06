@@ -127,6 +127,14 @@
   {
   NSString * name = [display objectForKey: @"_name"];
   
+  if([name isEqualToString: @"spdisplays_display_connector"])
+    {
+    NSString * status = [display objectForKey: @"spdisplays_status"];
+    
+    if([status isEqualToString: @"spdisplays_not_connected"])
+      return;
+    }
+    
   if([name isEqualToString: @"spdisplays_display"])
     name = NSLocalizedString(@"Display", NULL);
     
