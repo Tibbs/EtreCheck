@@ -107,6 +107,9 @@
 "    %@ %@ %@ CPU: %@-core\n" = "    %@ %@ %@ CPU : %@-core\n";
 "    %@: %@Path: %@\n" = "    %@ : %@Chemin : %@\n";
 "    %@: %@\n" = "    %@ : %@\n";
+"%@%@: %@\n" = "%@%@ : %@\n";
+"    Bluetooth: %@\n" = "    Bluetooth : %@\n";
+"    Wireless: %@" = "    Réseau sans fil : %@";
 "B KB MB GB TB" = "o Ko Mo Go To";
 "B" = "o";
 "KB" = "Ko";

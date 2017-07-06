@@ -735,7 +735,9 @@
   
   [self.result
     appendString:
-      [NSString stringWithFormat: @"    Bluetooth: %@\n", info]];
+      [NSString 
+        stringWithFormat: 
+          NSLocalizedString(@"    Bluetooth: %@\n", NULL), info]];
   
   [self.model setString: info forKey: @"bluetooth"];
   }
@@ -840,7 +842,7 @@
               appendString:
                 [NSString
                   stringWithFormat:
-                    @"    Wireless: %@",
+                    NSLocalizedString(@"    Wireless: %@", NULL),
                     TTTLocalizedPluralString(count, @"interface", nil)]];
           
           for(NSDictionary * interface in interfaces)
@@ -860,21 +862,38 @@
   indent: (NSString *) indent
   {
   NSString * name = [interface objectForKey: @"_name"];
-  NSString * modes =
+  NSString * modes = 
     [interface objectForKey: @"spairport_supported_phymodes"];
 
-  if([modes length])
+  if(([name length] > 0) && ([modes length] > 0))
     {
     [self.result
       appendString:
-        [NSString stringWithFormat: @"%@%@: %@\n", indent, name, modes]];
+        [NSString 
+          stringWithFormat: 
+            NSLocalizedString(@"%@%@: %@\n", NULL), indent, name, modes]];
     
     [self.model
       setString: modes
       forKey: [NSString stringWithFormat: @"wireless/%@", name]];
     }
+    
+  else if([name length] > 0)
+    [self.result
+      appendString:
+        [NSString 
+          stringWithFormat: 
+            NSLocalizedString(@"%@%@: %@\n", NULL), 
+            indent, 
+            name, 
+            NSLocalizedString(@"Unknown", NULL)]];
+            
   else
-    [self.result appendString: NSLocalizedString(@"Unknown", NULL)];
+    [self.result
+      appendString:
+        [NSString 
+          stringWithFormat: 
+            @"%@%@\n", indent, NSLocalizedString(@"Unknown", NULL)]];
   }
 
 // Print battery information.
