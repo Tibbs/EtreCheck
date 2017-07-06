@@ -320,78 +320,89 @@
     
   NSString * username = NSUserName();
   NSString * fullname = NSFullUserName();
-  
-  NSString * part = [string stringByAbbreviatingWithTildeInPath];
 
+  NSMutableSet * names = [NSMutableSet new];
+  
+  if([username length] > 0)
+    [names addObject: username];
+    
+  if([fullname length] > 0)
+    [names addObject: fullname];
+    
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @" "]];
+  
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @"-"]];
+
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @"_"]];
+      
+  if([computerName length] > 0)
+    [names addObject: computerName];
+    
+  if([hostName length] > 0)
+    [names addObject: hostName];
+
+  NSString * redacted = [string stringByAbbreviatingWithTildeInPath];
+
+  for(NSString * name in names)
+    redacted = [self redactName: name from: redacted];
+    
+  // Go ahead and look for an unredacted and unabbreviated user path.
+  NSRange range = [redacted rangeOfString: @"/Users/"];
+
+  if(range.location != NSNotFound)
+    {
+    NSString * pathPart = 
+      [redacted substringFromIndex: range.location];
+    
+    NSArray * pathParts = [pathPart componentsSeparatedByString: @"/"];
+    
+    redacted = 
+      [self redactName: [pathParts objectAtIndex: 2] from: redacted];
+    }
+    
+  return redacted;
+  }
+
+// Redact any user names in a string.
++ (NSString *) redactName: (NSString *) name from: (NSString *) string
+  {
   NSRange range = NSMakeRange(NSNotFound, 0);
 
-  if([username length] >= 4)
-    range = [part rangeOfString: username];
-
-  if((range.location == NSNotFound) && ([fullname length] >= 4))
-    range = [part rangeOfString: fullname];
+  if([self shouldRedact: name])
+    range = [string rangeOfString: name];
   
   if(range.location == NSNotFound)
-    {
-    range = [part rangeOfString: @"/Users/"];
-
-    if(range.location != NSNotFound)
-      {
-      NSString * pathPart = [part substringFromIndex: range.location];
-      
-      NSArray * pathParts = [pathPart componentsSeparatedByString: @"/"];
-      
-      NSString * usernamePart = [pathParts objectAtIndex: 2];
-        
-      range.length = [usernamePart length];
-        
-      if(range.length >= 4)
-        range.location += 7;
-      else
-        range.location = NSNotFound;
-      }
-    }
-    
-  // Now check for a hostname version.
-  if(([computerName length] >= 4) && (range.location == NSNotFound))
-    {
-    BOOL redact = NO;
-    
-    if([username length] >= 4)
-      {
-      if([computerName rangeOfString: username].location != NSNotFound)
-        redact = YES;
-      }
-    else if([fullname length] >= 4)
-      if([computerName rangeOfString: fullname].location != NSNotFound)
-        redact = YES;
-      
-    if(redact)
-      {
-      range = [part rangeOfString: computerName];
-
-      if(range.location == NSNotFound)
-        {
-        if(hostName)
-          range = [part rangeOfString: hostName];
-        else
-          range.location = NSNotFound;
-        }
-      }
-    }
-  
-  if(range.location == NSNotFound)
-    return part;
+    return string;
     
   return
     [NSString
       stringWithFormat:
         @"%@%@%@",
-        [part substringToIndex: range.location],
+        [string substringToIndex: range.location],
         NSLocalizedString(@"[redacted]", NULL),
-        [part substringFromIndex: range.location + range.length]];
+        [string substringFromIndex: range.location + range.length]];
   }
 
+// Is this a redactable user name?
++ (bool) shouldRedact: (NSString *) username
+  {
+  NSString * name = [username lowercaseString];
+  
+  if([name length] < 4)
+    return NO;
+    
+  if([name isEqualToString: @"apple"])
+    return NO;
+    
+  if([name isEqualToString: @"macintosh"])
+    return NO;
+    
+  return YES;
+  }
+  
 // Format an exectuable array for printing, redacting any user names in
 // the path.
 + (NSString *) formatExecutable: (NSArray *) parts

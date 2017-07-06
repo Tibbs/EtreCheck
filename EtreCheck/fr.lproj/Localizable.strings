@@ -126,6 +126,7 @@
 "    %@ - File exists but not expected\n" = "    %@ - Fichier existant, mais non prévu\n";
 "    %@, File size %llu but expected %llu\n" = "    %@, Taille du fichier %llu mais %llu prévu\n";
 "[redacted]" = "[expurgé]";
+"redacted" = "expurgé";
 "com.facebook.videochat.[redacted].plist" = "com.facebook.videochat.[expurgé].plist";
 "Oracle recommends %@" = "Oracle recommande %@";
 "Anywhere" = "N’importe où";
