@@ -5,6 +5,7 @@
 use strict;
 
 use Getopt::Long;
+use POSIX qw(floor);
 
 my $help;
 
@@ -68,6 +69,10 @@ while($line = <>)
   }
 
 my $current = lc $currentSection;
+
+# Time Machine is messy.
+my $volumesBeingBackedUp = 0;
+my $destinations = 0;
 
 popTag('etrecheck');
 
@@ -453,143 +458,437 @@ sub processLaunchdLine
 # Process user login items.
 sub processUserLoginItems
   {
-  if($line =~ //)
+  if($line =~ /^\s+(\S.+\S)\s+(\S+)\s\((\S.+\S)\s-\sinstalled\s(\d{4}-\d\d-\d\d)\)/)
     {
+    my $name = $1;
+    my $type = $2;
+    my $signature = $3;
+    my $installdate = $4;
+
+    popTag('loginitem')
+      if currentTag() eq 'loginitem';
+
+    pushTag('loginitem');
+    printTag('name', $name);
+    printTag('type', $type);
+    printTag('signature', $signature);
+    printTag('installdate', $installdate);
     }
-  elsif($line =~ //)
+  else
     {
+    $line =~ /^\s+\((.+)\)/;
+  
+    my $path = $1;
+
+    printTag('path', $path)  
+      if $path;
     }
   }
 
 # Process internet plug-ins.
 sub processInternetPlugIns
   {
-  if($line =~ //)
-    {
-    }
-  elsif($line =~ //)
-    {
-    }
+  processPlugInLine();
   }
 
 # Process user internet plug-ins.
 sub processUserInternetPlugIns
   {
-  if($line =~ //)
+  processPlugInLine();
+  }
+
+# Process a plug in line.
+sub processPlugInLine
+  {
+  if($line =~ /^\s+(\S.+\S)\s*:\s+(\S.+\S)\s+\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $name = $1;
+    my $version = $2;
+    my $installdate = $3;
+
+    pushTag('plugin');
+    printTag('name', $name);
+    printTag('version', $version);
+    printTag('installdate', $installdate);
+    popTag('plugin');
     }
   }
 
 # Process Safari extensions.
 sub processSafariExtensions
   {
-  if($line =~ //)
+  if($line =~ /^\s+\[(.+)\]\s+(\S.+\S)\s-\s(\S.+\S)\s-\s(\S+)\s\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $status = $1;
+    my $name = $2;
+    my $developer = $3;
+    my $url = $4;
+    my $installdate = $5;
+
+    pushTag('extension');
+    printTag('name', $name);
+    printTag('status', $status);
+    printTag('developer', $developer);
+    printTag('url', $url);
+    printTag('installdate', $installdate);
+    popTag('extension');
     }
   }
 
 # Process 3rd party preference panes.
 sub process3rdPartyPreferencePanes
   {
-  if($line =~ //)
+  if($line =~ /^\s+(\S.+\S)\s+\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $name = $1;
+    my $installdate = $2;
+
+    pushTag('preferencepane');
+    printTag('name', $name);
+    printTag('installdate', $installdate);
+    popTag('preferencepane');
     }
   }
 
 # Process Time Machine.
 sub processTimeMachine
   {
-  if($line =~ //)
+  if($line =~ /^\s+Skip\sSystem\sFiles:\s(\S+)/)
     {
+    my $skipSystemFiles = $1;
+
+    printTag('skipsystemfiles', $skipSystemFiles);
     }
-  elsif($line =~ //)
+  elsif($line =~ /^\s+Mobile\sbackups:\s(\S+)/)
     {
+    my $mobileBacksups = $1;
+
+    printTag('mobilebackups', $mobileBacksups);
+    }
+  elsif($line =~ /^\s+Auto\sbackup:\s(\S+)/)
+    {
+    my $autoBackup = $1;
+
+    printTag('autobackup', $autoBackup);
+    }
+  elsif($line =~ /^\s+Volumes\sbeing\sbacked\sup:/)
+    {
+    pushTag('volumesbeingbackedup');
+
+    $volumesBeingBackedUp = 1;
+    }
+  elsif($line =~ /^\s+Destinations:/)
+    {
+    popTag('volumesbeingbackedup');
+    pushTag('destinations');
+
+    $volumesBeingBackedUp = 0;
+    $destinations = 1;
+    }
+  elsif($volumesBeingBackedUp)
+    {
+    $line =~ /^\s+(\S.+\S):\sDisk\ssize:\s([0-9.]+)\s(GB|TB)\sDisk\sused:\s([0-9.]+)\s(GB|TB)/;
+
+    my $name = $1;
+    my $size = $2 * 1024 * 1024 * 1024;
+    my $sizeUnits = $3;
+    my $used = $4 * 1024 * 1024 * 1024;
+    my $usedUnits = $5;
+
+    $size *= 1024
+      if $sizeUnits eq 'TB';
+
+    $used *= 1024
+      if $usedUnits eq 'TB';
+
+    pushTag('volume');
+    printTag('name', $name);
+    printTag('size', $size);
+    printTag('used', $used);
+    popTag('volume');
+    }
+  elsif($destinations)
+    {
+    if($line =~ /^\s+Total\ssize:\s([0-9.]+)\s(GB|TB)/)
+      {
+      my $size = $1 * 1024 * 1024 * 1024;
+      my $sizeUnits = $2;
+
+      $size *= 1024
+        if $sizeUnits eq 'TB';
+
+      printTag('size', $size);
+      }
+    elsif($line =~ /^\s+Total\snumber\sof\sbackups:\s(\d+)/)
+      {
+      my $count = $1;
+
+      printTag('count', $count);
+      }
+    elsif($line =~ /^\s+Oldest\sbackup:\s(\S.+\S)/)
+      {
+      my $oldestBackup = $1;
+
+      printTag('oldestbackup', $oldestBackup);
+      }
+    elsif($line =~ /^\s+Last\sbackup:\s(\S.+\S)/)
+      {
+      my $lastBackup = $1;
+
+      printTag('lastbackup', $lastBackup);
+      }
+    elsif($line =~ /^\s+Size\sof\sbackup\sdisk:\s\S+/)
+      {
+      }
+    elsif($line =~ /^\s+Backup\ssize\s.+/)
+      {
+      }
+    elsif($line)
+      {
+      $line =~ /^\s+(\S.+\S)\s\[(\S+)\]/;
+
+      my $name = $1;
+      my $type = $2;
+
+      pushTag('destination');
+      printTag('name', $name);
+      printTag('type', $type);
+      }
+    else
+      {
+      popTag('destination');
+      }
     }
   }
 
 # Process top processes by CPU.
 sub processTopProcessesByCPU
   {
-  if($line =~ //)
+  if($line =~ /^\s+(\d+%)\s+(.+)$/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $pct = $1;
+    my $process = $2;
+
+    pushTag('process');
+    printTag('cpupct', $pct);
+    printTag('name', $process);
+    popTag('process');
     }
   }
 
 # Process top processes by memory.
 sub processTopProcessesByMemory
   {
-  if($line =~ //)
+  if($line =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)\s+(.+)$/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $size = $1;
+    my $sizeUnits = $2;
+    my $process = $3;
+
+    $size *= 1024
+      if $sizeUnits eq 'KB';
+
+    $size *= 1024 * 1024
+      if $sizeUnits eq 'MB';
+
+    $size *= 1024 * 1024 * 1024
+      if $sizeUnits eq 'GB';
+
+    pushTag('process');
+    printTag('size', $size);
+    printTag('name', $process);
+    popTag('process');
     }
   }
 
 # Process top processes by network.
 sub processTopProcessesByNetwork
   {
-  if($line =~ //)
+  if($line =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)\s+([0-9.]+)\s(B|KB|MB|GB)\s+(.+)$/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $inputSize = $1;
+    my $inputSizeUnits = $2;
+    my $outputSize = $3;
+    my $outputSizeUnits = $4;
+    my $process = $5;
+
+    $inputSize *= 1024
+      if $inputSizeUnits eq 'KB';
+
+    $inputSize *= 1024 * 1024
+      if $inputSizeUnits eq 'MB';
+
+    $inputSize *= 1024 * 1024 * 1024
+      if $inputSizeUnits eq 'GB';
+
+    $outputSize *= 1024
+      if $outputSizeUnits eq 'KB';
+
+    $outputSize *= 1024 * 1024
+      if $outputSizeUnits eq 'MB';
+
+    $outputSize *= 1024 * 1024 * 1024
+      if $outputSizeUnits eq 'GB';
+
+    pushTag('process');
+    printTag('inputsize', $inputSize);
+    printTag('outputsize', $outputSize);
+    printTag('name', $process);
+    popTag('process');
     }
   }
 
 # Process top processes by energy.
 sub processTopProcessesByEnergy
   {
-  if($line =~ //)
+  if($line =~ /^\s+([0-9.]+)\s+(.+)$/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $amount = $1;
+    my $process = $2;
+
+    pushTag('process');
+    printTag('amount', $amount);
+    printTag('name', $process);
+    popTag('process');
     }
   }
 
 # Process virtual memory information.
 sub processVirtualMemoryInformation
   {
-  if($line =~ //)
+  my $size;
+  my $sizeUnits;
+  my $type;
+
+  if($line =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)/)
     {
+    $size = $1;
+    $sizeUnits = $2;
     }
-  elsif($line =~ //)
+
+  if($line =~ /Available\sRAM/)
     {
+    $type = 'availableram';
     }
+  elsif($line =~ /Free\sRAM/)
+    {
+    $type = 'freeram';
+    }
+  elsif($line =~ /Used\sRAM/)
+    {
+    $type = 'usedram';
+    }
+  elsif($line =~ /Cached\sfiles/)
+    {
+    $type = 'cachedfiles';
+    }
+  elsif($line =~ /Swap\sUsed/)
+    {
+    $type = 'swapused';
+    }
+  else
+    {
+    return;
+    }
+
+  $size *= 1024
+    if $sizeUnits eq 'KB';
+
+  $size *= 1024 * 1024
+    if $sizeUnits eq 'MB';
+
+  $size *= 1024 * 1024 * 1024
+    if $sizeUnits eq 'GB';
+
+  printTag($type, floor($size));
   }
 
 # Process software installs.
 sub processSoftwareInstalls
   {
-  if($line =~ //)
+  if($line =~ /^\s+(\S.+\S):\s(.*)\s\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
-    }
-  elsif($line =~ //)
-    {
+    my $name = $1;
+    my $version = $2;
+    my $installdate = $3;
+
+    pushTag('package');
+    printTag('name', $name);
+
+    printTag('version', $version)
+      if $version;
+
+    printTag('installdate', $installdate);
+    popTag('package');
     }
   }
 
 # Process diagnostics information.
 sub processDiagnosticsInformation
   {
-  if($line =~ //)
+  if($line =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+(\S.+\S)\s(Crash|High\sCPU\suse|Hang|Panic)/)
+    {
+    my $date = $1;
+    my $app = $2;
+    my $type = $3;
+
+    popTag('cause')
+      if currentTag() eq 'cause';
+
+    popTag('event')
+      if currentTag() eq 'event';
+
+    pushTag('event');
+    printTag('date', $date);
+    printTag('type', $type);
+    printTag('app', $app);
+    }
+  elsif($line =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+Last\sshutdown\scause:\s(\d+)\s-\s(.+)/)
+    {
+    my $date = $1;
+    my $type = 'lastshutdown';
+    my $code = $2;
+    my $description = $3;
+
+    popTag('cause')
+      if currentTag() eq 'cause';
+
+    popTag('event')
+      if currentTag() eq 'event';
+
+    pushTag('event');
+    printTag('date', $date);
+    printTag('type', $type);
+    printTag('code', $code);
+    printTag('description', $description);
+    popTag('event');
+    }
+  elsif($line =~ /^\s+Cause:\s+(.+)/)
+    {
+    my $text = $1;
+
+    pushTag('cause');
+    print "        $text\n";
+    }
+  elsif($line =~ /^\s+Standard\susers\scannot\sread\s\/Library\/Logs\/DiagnosticReports\./)
     {
     }
-  elsif($line =~ //)
+  elsif($line =~ /^\s+Run\sas\san\sadministrator\saccount\sto\ssee\smore\sinformation\./)
     {
+    }
+  elsif($line =~ /^\s+(\S.+\S)/)
+    {
+    my $text = $1;
+
+    print "        $text\n";
+    }
+  else
+    {
+    popTag('cause')
+      if currentTag() eq 'cause';
+
+    popTag('event')
+      if currentTag() eq 'event';
     }
   }
 
