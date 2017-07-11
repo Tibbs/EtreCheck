@@ -250,13 +250,14 @@ sub printDisk
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+)\s(..)\)\s\((Solid\sState|Rotational).*\)/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+)\s(..)\)\s\((Solid\sState|Rotational)(?:\s-\sTRIM:\s(.+))?\)/)
     {
     my $diskModel = $1;
     my $device = $2;
     my $size = $3 * 1024 * 1024;
     my $sizeUnits = $4;
     my $type = $5;
+    my $TRIM = $6;
 
     $size *= 1024
       if $sizeUnits eq 'GB';
@@ -277,6 +278,9 @@ sub printDisk
 
     $self->printTag('type', $type)
       if $type;
+
+    $self->printTag('trim', $TRIM)
+      if $TRIM;
 
     return 1;
     }
@@ -450,6 +454,9 @@ sub processVirtualDiskInformation
     $free *= 1024
       if $freeUnits eq 'TB';
 
+    $self->popTag('physicaldisks')
+      if $self->currentTag() eq 'physicaldisks';
+
     $self->popTag('disk')
       if $self->currentTag() eq 'disk';
 
@@ -496,6 +503,9 @@ sub processVirtualDiskInformation
     $free *= 1024
       if $freeUnits eq 'TB';
 
+    $self->pushTag('physicaldisks')
+      if $self->currentTag() ne 'physicaldisks';
+
     $self->pushTag('physicaldisk');
     $self->printTag('name', $name);
     $self->printTag('size', $size);
@@ -520,7 +530,15 @@ sub processSystemSoftware
     my $osname = $1;
     my $version = $2;
     my $build = $3;
-    my $uptime = $4;
+    my $uptimeString = $4;
+
+    my ($uptime, $uptimeUnits) = $uptimeString =~ /^(?:about|an)\s(\S+)\s(day|hour)/;
+
+    $uptime = 1
+      if $uptime eq 'one';
+
+    $uptime *= 24
+      if $uptimeUnits eq 'day';
 
     $self->printTag('name', $osname);
     $self->printTag('version', $version);
