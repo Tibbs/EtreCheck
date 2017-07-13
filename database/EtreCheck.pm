@@ -18,13 +18,16 @@ our %sections =
   'Video Information' => \&processVideoInformation,
   'Disk Information' => \&processDiskInformation,
   'USB Information' => \&processUSBInformation,
-  'FireWire Information' => \&processFireWireInformation,
+  'Firewire Information' => \&processFireWireInformation,
   'Thunderbolt Information' => \&processThunderboltInformation,
   'Virtual disks' => \&processVirtualDiskInformation,
   'System Software' => \&processSystemSoftware,
   'Configuration files' => \&processConfigurationFiles,
   Gatekeeper => \&processGatekeeperInformation,
+  'Possible adware' => \&processPossibleAdware,
+  'Clean up' => \&processCleanUp,
   'Kernel Extensions' => \&processKernelInformation,
+  'Startup Items' => \&processStartupItems,
   'System Launch Agents' => \&processSystemLaunchAgents,
   'System Launch Daemons' => \&processSystemLaunchDaemons,
   'Launch Agents' => \&processLaunchAgents,
@@ -33,6 +36,8 @@ our %sections =
   'User Login Items' => \&processUserLoginItems,
   'Internet Plug-ins' => \&processInternetPlugIns,
   'User internet Plug-ins' => \&processUserInternetPlugIns,
+  'Audio Plug-ins' => \&processAudioPlugIns,
+  'User audio Plug-ins' => \&processUserAudioPlugIns,
   'Safari Extensions' => \&processSafariExtensions,
   '3rd Party Preference Panes' => \&process3rdPartyPreferencePanes,
   'Time Machine' => \&processTimeMachine,
@@ -43,7 +48,7 @@ our %sections =
   'Virtual Memory Information' => \&processVirtualMemoryInformation,
   'Software installs' => \&processSoftwareInstalls,
   'Diagnostics Information' => \&processDiagnosticsInformation,
-  'EtreCheck Information' => \&processEtreCheckInformation
+  'Files deleted by EtreCheck' => \&processEtreCheckInformation
   );
 
 sub new
@@ -56,7 +61,10 @@ sub new
     section => 'Header',
     currentSection => undef,
     index => 0,
-    tags => []
+    tags => [],
+    input => '',
+    output => '',
+    id => ''
     };
 
   bless $self, $class;
@@ -75,6 +83,8 @@ sub reverse
 
   while($self->{line} = <$fh>)
     {
+    $self->{input} .= $self->{line};
+
     chomp $self->{line};
 
     $self->processLine();
@@ -94,7 +104,8 @@ sub processLine
     # Close the current section. The header section is special.
     my $name = $self->sectionTag($self->{section});
 
-    $self->popTag($name);
+    $self->popTag($name)
+      if $name;
 
     # Start a new section.
     $self->{section} = $1;
@@ -112,7 +123,8 @@ sub processLine
   ++$self->{index};
 
   # Process the current section.
-  $sections{$self->{section}}($self);
+  $sections{$self->{section}}($self)
+    if $self->{section};
   }
 
 # Process the header section.
@@ -133,6 +145,12 @@ sub processHeader
     my $date = $1;
 
     $self->printTag('date', $date);
+
+    $date =~ s/\s/_/;
+    $date =~ s/://g;
+    $date =~ s/-//g;
+
+    $self->{id} = $date;
     }
   elsif($self->{line} =~ /^Runtime:\s(.+)$/)
     {
@@ -250,7 +268,7 @@ sub printDisk
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+)\s(..)\)\s\((Solid\sState|Rotational)(?:\s-\sTRIM:\s(.+))?\)/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+)\s(..)\)(?:\s\((Solid\sState|Rotational)(?:\s-\sTRIM:\s(.+))?\))?/)
     {
     my $diskModel = $1;
     my $device = $2;
@@ -262,7 +280,7 @@ sub printDisk
     $size *= 1024
       if $sizeUnits eq 'GB';
 
-    $size *= 1024
+    $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
     $self->popTag('partitions')
@@ -293,7 +311,7 @@ sub printPartition
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(?:(\S.+\S)\s)?\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S.+\S)\s+(?:\[(.+)\])?:\s([\d.]+)\s(..)/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+)\s(..)/)
     {
     my $name = $1;
     my $device = $2;
@@ -306,7 +324,7 @@ sub printPartition
     $size *= 1024
       if $sizeUnits eq 'GB';
 
-    $size *= 1024
+    $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
     $self->pushTag('partitions')
@@ -318,7 +336,47 @@ sub printPartition
       if $name;
 
     $self->printTag('device', $device);
-    $self->printTag('filesystem', $fileSystem);
+
+    $self->printTag('filesystem', $fileSystem)
+      if $fileSystem;
+
+    $self->printTag('size', floor($size));
+
+    $self->printTag('type', $type)
+      if $type;
+
+    $self->printTag('mountpoint', $mountPoint)
+      if $mountPoint ne '<not mounted>';
+
+    $self->popTag('partition');
+
+    return 1;
+    }
+  elsif($self->{line} =~ /^\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+)\s(..)/)
+    {
+    my $device = $1;
+    my $fileSystem = $2;
+    my $mountPoint = $3;
+    my $type = $4;
+    my $size = $5 * 1024 * 1024;
+    my $sizeUnits = $6; 
+
+    $size *= 1024
+      if $sizeUnits eq 'GB';
+
+    $size *= 1024 * 1024
+      if $sizeUnits eq 'TB';
+
+    $self->pushTag('partitions')
+      if $self->currentTag() eq 'disk';
+    
+    $self->pushTag('partition');
+
+    $self->printTag('device', $device);
+
+    $self->printTag('filesystem', $fileSystem)
+      if $fileSystem;
+
     $self->printTag('size', floor($size));
 
     $self->printTag('type', $type)
@@ -340,6 +398,14 @@ sub processUSBInformation
   {
   my $self = shift;
 
+  $self->processBusInformation();
+  }
+
+# Process bus information.
+sub processBusInformation
+  {
+  my $self = shift;
+
   if($self->printDisk())
     {
     }
@@ -348,20 +414,36 @@ sub processUSBInformation
     }
   elsif($self->{line} =~ /^(\s+)(\S.+\S)\s*$/)
     {
-    my $indent = length($1) / 2;
+    $self->popTag('partitions')
+      if $self->currentTag() eq 'partitions';
+
+    $self->popTag('disk')
+      if($self->currentTag() eq 'disk');
+
+    my $indent = length($1);
     my $name = $2;
 
-    if($self->{currentSection}->{indent} < $indent)
+    if(defined $self->{currentSection}->{indent})
       {
-      $self->pushTag('node');
-      $self->printTag('name', $name);
-      }
-    elsif($self->{currentSection}->{indent} > $indent)
-      {
-      $self->popTag('node');
-      }
+      my $currentIndentSize = scalar(@{$self->{currentSection}->{indent}});
+      my $currentIndent = 
+        $self->{currentSection}->{indent}->[$currentIndentSize - 1];
 
-    $self->{currentSection}->{indent} = $indent;
+      while($currentIndent >= $indent)
+        {
+        $self->popTag('node');
+
+        pop @{$self->{currentSection}->{indent}};
+        $currentIndentSize = scalar(@{$self->{currentSection}->{indent}});
+        $currentIndent = 
+          $self->{currentSection}->{indent}->[$currentIndentSize - 1];
+        }
+      }
+      
+    push @{$self->{currentSection}->{indent}}, $indent;
+
+    $self->pushTag('node');
+    $self->printTag('name', $name);
     }
   }
 
@@ -370,29 +452,7 @@ sub processFireWireInformation
   {
   my $self = shift;
 
-  if($self->printDisk())
-    {
-    }
-  elsif($self->printPartition())
-    {
-    }
-  elsif($self->{line} =~ /^(\s+)(\S.+\S)\s*$/)
-    {
-    my $indent = scalar($1) / 2;
-    my $name = $2;
-
-    if($self->{currentSection}->{indent} < $indent)
-      {
-      $self->pushTag('node');
-      $self->printTag('name', $name);
-      }
-    elsif($self->{currentSection}->{indent} > $indent)
-      {
-      $self->popTag('node');
-      }
-
-    $self->{currentSection}->{indent} = $indent;
-    }
+  $self->processBusInformation();
   }
 
 # Process Thunderbolt information.
@@ -400,29 +460,7 @@ sub processThunderboltInformation
   {
   my $self = shift;
 
-  if($self->printDisk())
-    {
-    }
-  elsif($self->printPartition())
-    {
-    }
-  elsif($self->{line} =~ /^(\s+)(\S.+\S)\s*$/)
-    {
-    my $indent = scalar($1) / 2;
-    my $name = $2;
-
-    if($self->{currentSection}->{indent} < $indent)
-      {
-      $self->pushTag('node');
-      $self->printTag('name', $name);
-      }
-    elsif($self->{currentSection}->{indent} > $indent)
-      {
-      $self->popTag('node');
-      }
-
-    $self->{currentSection}->{indent} = $indent;
-    }
+  $self->processBusInformation();
   }
 
 # Process virtual disk information.
@@ -445,13 +483,13 @@ sub processVirtualDiskInformation
     $size *= 1024
       if $sizeUnits eq 'GB';
 
-    $size *= 1024
+    $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
     $free *= 1024
       if $freeUnits eq 'GB';
 
-    $free *= 1024
+    $free *= 1024 * 1024
       if $freeUnits eq 'TB';
 
     $self->popTag('physicaldisks')
@@ -494,13 +532,13 @@ sub processVirtualDiskInformation
     $size *= 1024
       if $sizeUnits eq 'GB';
 
-    $size *= 1024
+    $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
     $free *= 1024
       if $freeUnits eq 'GB';
 
-    $free *= 1024
+    $free *= 1024 * 1024
       if $freeUnits eq 'TB';
 
     $self->pushTag('physicaldisks')
@@ -532,10 +570,13 @@ sub processSystemSoftware
     my $build = $3;
     my $uptimeString = $4;
 
-    my ($uptime, $uptimeUnits) = $uptimeString =~ /^(?:about|an)\s(\S+)\s(day|hour)/;
+    my ($uptime, $uptimeUnits) = $uptimeString =~ /^(?:about|less\sthan)\s(\S+)\s(day|hour)/;
 
     $uptime = 1
       if $uptime eq 'one';
+
+    $uptime = 0.5
+      if $uptime eq 'an';
 
     $uptime *= 24
       if $uptimeUnits eq 'day';
@@ -558,6 +599,10 @@ sub processConfigurationFiles
 
     $self->printTag('hostcounts', $hosts);
     }
+  elsif($self->{line} =~ /^\s+\/etc\/sysctl\.conf/)
+    {
+    $self->printTag('etcsysctlconfexists', 'true');
+    }
   }
 
 # Process Gatekeeper information.
@@ -565,11 +610,67 @@ sub processGatekeeperInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s*$/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s+\[.+\]$/)
     {
     my $gatekeeper = $1;
 
     $self->printTag('gatekeeper', $gatekeeper);
+    }
+  elsif($self->{line} =~ /^\s+(\S.+\S)$/)
+    {
+    my $gatekeeper = $1;
+
+    $self->printTag('gatekeeper', $gatekeeper);
+    }
+  }
+
+# Process possible adware.
+sub processPossibleAdware
+  {
+  my $self = shift;
+
+  if($self->{line} =~ /^\s+Adware:\s+(\S.+\S)$/)
+    {
+    my $path = $1;
+
+    $self->printTag('adware', $path);
+    }
+  elsif($self->{line} =~ /^\s+Unknown file:\s+(\S.+\S)$/)
+    {
+    my $path = $1;
+
+    $self->printTag('unknownfile', $path);
+    }
+  }
+
+# Process clean up.
+sub processCleanUp
+  {
+  my $self = shift;
+
+  if($self->{line} =~ /\[Clean up\]$/)
+    {
+    }
+  elsif($self->{index} == 1)
+    {
+    my ($path) = $self->{line} =~ /^\s+(\S.+\S)/;
+
+    $self->popTag('item')
+      if $self->currentTag() eq 'item';
+
+    $self->pushTag('item');
+    $self->printTag('path', $path);
+    }
+  elsif($self->{index} == 2)
+    {
+    my ($executable) = $self->{line} =~ /^\s+(\S.+\S)/;
+
+    $self->printTag('executable', $executable);
+    }
+  
+  if($self->{line} =~ /^\s+Executable\snot\sfound!/)
+    {
+    $self->{index} = 0;
     }
   }
 
@@ -578,7 +679,7 @@ sub processKernelInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+\[(\S+)\]\s+(.+)\s+\((\S+)\s-\sSDK\s(\S+)\)/)
+  if($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\s-\sSDK\s(\S+)\)/)
     {
     my $status = $1;
     my $bundleID = $2;
@@ -592,9 +693,38 @@ sub processKernelInformation
     $self->printTag('sdkversion', $SDKVersion);
     $self->popTag('extension');
     }
+  elsif($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\s-\sOS X\s(\S+)\)/)
+    {
+    my $status = $1;
+    my $bundleID = $2;
+    my $version = $3;
+    my $OSVersion = $4;
+
+    $self->pushTag('extension');
+    $self->printTag('bundleid', $bundleID);
+    $self->printTag('status', $status);
+    $self->printTag('version', $version);
+    $self->printTag('osversion', $OSVersion);
+    $self->popTag('extension');
+    }
+  elsif($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\)/)
+    {
+    my $status = $1;
+    my $bundleID = $2;
+    my $version = $3;
+
+    $self->pushTag('extension');
+    $self->printTag('bundleid', $bundleID);
+    $self->printTag('status', $status);
+    $self->printTag('version', $version);
+    $self->popTag('extension');
+    }
   elsif($self->{line} =~ /^\s+(\S.+\S)\s*$/)
     {
     my $directory = $1;
+
+    $self->popTag('extensions')
+      if $self->currentTag() eq 'extensions';
 
     $self->popTag('directory')
       if $self->currentTag() eq 'directory';
@@ -602,6 +732,23 @@ sub processKernelInformation
     $self->pushTag('directory');
     $self->printTag('path', $directory);
     $self->pushTag('extensions');
+    }
+  }
+
+# Process startup items.
+sub processStartupItems
+  {
+  my $self = shift;
+
+  if($self->{line} =~ /^\s+(\S.+\S):\sPath:\s(.+)$/)
+    {
+    my $name = $1;
+    my $path = $2;
+
+    $self->pushTag('startupitem');
+    $self->printTag('name', $name);
+    $self->printTag('path', $path);
+    $self->popTag('startupitem');
     }
   }
 
@@ -688,7 +835,7 @@ sub processLaunchdLine
     
     my ($plistcrc, $execrc) = $signature =~ /\?\s([0-9a-f]+)\s([0-9a-f]+)/;
     
-    if($plistcrc && $execrc)
+    if(defined($plistcrc) && defined($execrc))
       {
       $self->printTag('signature', 'none');
       $self->printTag('plistcrc', $plistcrc);
@@ -703,10 +850,13 @@ sub processLaunchdLine
         $self->printTag('signature', 'shellscript');
         $self->printTag('plistcrc', $plistcrc);
         }
+      elsif($signature eq '? ? ?')
+        {
+        $self->printTag('signature', 'failure');
+        }
       else
         {
         $self->printTag('signature', $signature);
-        $self->printTag('plistcrc', $plistcrc);
         }
       }
 
@@ -720,7 +870,30 @@ sub processUserLoginItems
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s+(\S+)\s\((\S.+\S)\s-\sinstalled\s(\d{4}-\d\d-\d\d)\)/)
+  if($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)\s-\s(Hidden)\s\((\S.+\S)\s-\sinstalled\s(\d{4}-\d\d-\d\d)\)/)
+    {
+    my $name = $1;
+    my $type = $2;
+    my $hidden = $3;
+    my $signature = $4;
+    my $installdate = $5;
+
+    $self->popTag('loginitem')
+      if $self->currentTag() eq 'loginitem';
+
+    $self->pushTag('loginitem');
+    $self->printTag('name', $name);
+    $self->printTag('type', $type);
+
+    $self->printTag('hidden', 'true')
+      if $hidden;
+
+    $self->printTag('signature', $signature)
+      if $signature ne '? 0';
+
+    $self->printTag('installdate', $installdate);
+    }
+  elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)\s\((\S.+\S)\s-\sinstalled\s(\d{4}-\d\d-\d\d)\)/)
     {
     my $name = $1;
     my $type = $2;
@@ -733,8 +906,39 @@ sub processUserLoginItems
     $self->pushTag('loginitem');
     $self->printTag('name', $name);
     $self->printTag('type', $type);
-    $self->printTag('signature', $signature);
+
+    $self->printTag('signature', $signature)
+      if $signature ne '? 0';
+
     $self->printTag('installdate', $installdate);
+    }
+  elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)\s-\s(Hidden)/)
+    {
+    my $name = $1;
+    my $type = $2;
+    my $hidden = $3;
+
+    $self->popTag('loginitem')
+      if $self->currentTag() eq 'loginitem';
+
+    $self->pushTag('loginitem');
+    $self->printTag('name', $name);
+    $self->printTag('type', $type);
+
+    $self->printTag('hidden', 'true')
+      if $hidden;
+    }
+  elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)/)
+    {
+    my $name = $1;
+    my $type = $2;
+
+    $self->popTag('loginitem')
+      if $self->currentTag() eq 'loginitem';
+
+    $self->pushTag('loginitem');
+    $self->printTag('name', $name);
+    $self->printTag('type', $type);
     }
   else
     {
@@ -757,6 +961,22 @@ sub processInternetPlugIns
 
 # Process user internet plug-ins.
 sub processUserInternetPlugIns
+  {
+  my $self = shift;
+
+  $self->processPlugInLine();
+  }
+
+# Process audio plug-ins.
+sub processAudioPlugIns
+  {
+  my $self = shift;
+
+  $self->processPlugInLine();
+  }
+
+# Process user audio plug-ins.
+sub processUserAudioPlugIns
   {
   my $self = shift;
 
@@ -861,7 +1081,7 @@ sub processTimeMachine
     }
   elsif($self->{currentSection}->{volumesBeingBackedUp})
     {
-    $self->{line} =~ /^\s+(\S.+\S):\sDisk\ssize:\s([0-9.]+)\s(GB|TB)\sDisk\sused:\s([0-9.]+)\s(GB|TB)/;
+    $self->{line} =~ /^\s+(.+):\s+Disk\ssize:\s([0-9.]+)\s(GB|TB)\sDisk\sused:\s([0-9.]+)\s(GB|TB)/;
 
     my $name = $1;
     my $size = $2 * 1024 * 1024 * 1024;
@@ -877,8 +1097,8 @@ sub processTimeMachine
 
     $self->pushTag('volume');
     $self->printTag('name', $name);
-    $self->printTag('size', $size);
-    $self->printTag('used', $used);
+    $self->printTag('size', floor($size));
+    $self->printTag('used', floor($used));
     $self->popTag('volume');
     }
   elsif($self->{currentSection}->{destinations})
@@ -891,7 +1111,7 @@ sub processTimeMachine
       $size *= 1024
         if $sizeUnits eq 'TB';
 
-      $self->printTag('size', $size);
+      $self->printTag('size', floor($size));
       }
     elsif($self->{line} =~ /^\s+Total\snumber\sof\sbackups:\s(\d+)/)
       {
@@ -899,17 +1119,19 @@ sub processTimeMachine
 
       $self->printTag('count', $count);
       }
-    elsif($self->{line} =~ /^\s+Oldest\sbackup:\s(\S.+\S)/)
+    elsif($self->{line} =~ /^\s+Oldest\sbackup:\s(-|\S.+\S)/)
       {
       my $oldestBackup = $1;
 
-      $self->printTag('oldestbackup', $oldestBackup);
+      $self->printTag('oldestbackup', $oldestBackup)
+        if $oldestBackup ne '-';
       }
-    elsif($self->{line} =~ /^\s+Last\sbackup:\s(\S.+\S)/)
+    elsif($self->{line} =~ /^\s+Last\sbackup:\s(-|\S.+\S)/)
       {
       my $lastBackup = $1;
 
-      $self->printTag('lastbackup', $lastBackup);
+      $self->printTag('lastbackup', $lastBackup)
+        if $lastBackup ne '-';
       }
     elsif($self->{line} =~ /^\s+Size\sof\sbackup\sdisk:\s\S+/)
       {
@@ -917,7 +1139,7 @@ sub processTimeMachine
     elsif($self->{line} =~ /^\s+Backup\ssize\s.+/)
       {
       }
-    elsif($self->{line})
+    elsif($self->{line} =~ /\S/)
       {
       $self->{line} =~ /^\s+(\S.+\S)\s\[(\S+)\]/;
 
@@ -1092,7 +1314,7 @@ sub processSoftwareInstalls
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S):\s(.*)\s\(installed\s(\d{4}-\d\d-\d\d)\)/)
+  if($self->{line} =~ /^\s+(\S.+\S):\s+(?:(.+)\s)?\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
     my $name = $1;
     my $version = $2;
@@ -1120,6 +1342,9 @@ sub processDiagnosticsInformation
     my $app = $2;
     my $type = $3;
 
+    $self->popTag('kernelextensions')
+      if $self->currentTag() eq 'kernelextensions';
+
     $self->popTag('cause')
       if $self->currentTag() eq 'cause';
 
@@ -1137,6 +1362,9 @@ sub processDiagnosticsInformation
     my $type = 'lastshutdown';
     my $code = $2;
     my $description = $3;
+
+    $self->popTag('kernelextensions')
+      if $self->currentTag() eq 'kernelextensions';
 
     $self->popTag('cause')
       if $self->currentTag() eq 'cause';
@@ -1158,6 +1386,12 @@ sub processDiagnosticsInformation
     $self->pushTag('cause');
     $self->printText($text);
     }
+  elsif($self->{line} =~ /^\s+3rd\sParty\sKernel\sExtensions:/)
+    {
+    my $text = $1;
+
+    $self->pushTag('kernelextensions');
+    }
   elsif($self->{line} =~ /^\s+Standard\susers\scannot\sread\s\/Library\/Logs\/DiagnosticReports\./)
     {
     }
@@ -1172,11 +1406,33 @@ sub processDiagnosticsInformation
     }
   else
     {
+    $self->popTag('kernelextensions')
+      if $self->currentTag() eq 'kernelextensions';
+
     $self->popTag('cause')
       if $self->currentTag() eq 'cause';
 
     $self->popTag('event')
       if $self->currentTag() eq 'event';
+
+    $self->{section} = undef;
+    }
+  }
+
+# Process EtreCheck information.
+sub processEtreCheckInformation
+  {
+  my $self = shift;
+
+  if($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s-\s(\S.+\S)\s-\s\S+$/)
+    {
+    my $date = $1;
+    my $file = $2;
+
+    $self->pushTag('deletedfile');
+    $self->printTag('date', $date);
+    $self->printTag('file', $file);
+    $self->popTag('deletedfile');
     }
   }
 
@@ -1189,6 +1445,7 @@ sub sectionTag
 
   $name =~ s/\s/_/g;
   $name =~ s/-//g;
+  $name =~ s/^(\d)/_$1/;
 
   return $name;
   }
@@ -1202,7 +1459,7 @@ sub pushTag
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  print "$indent<$tag>\n";
+  $self->{output} .= "$indent<$tag>\n";
 
   push @{$self->{tags}}, $tag;
   }
@@ -1227,7 +1484,7 @@ sub printTag
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  print "$indent<$tag>$value</$tag>\n";
+  $self->{output} .= "$indent<$tag>$value</$tag>\n";
   }
 
 # Print text.
@@ -1239,7 +1496,7 @@ sub printText
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  print "$indent$text\n";
+  $self->{output} .= "$indent$text\n";
   }
 
 # Pop a specific tag, popping all intermediate tags to get there.
@@ -1257,9 +1514,9 @@ sub popTag
 
     my $indent = '  ' x scalar(@{$self->{tags}});
 
-    print "$indent</$foundTag>\n";
+    $self->{output} .= "$indent</$foundTag>\n";
 
-    die "Failed to find tag $tag\n"
+    die "Failed to find tag $tag\n$self->{output}\n"
       if not defined $foundTag;
 
     last 
