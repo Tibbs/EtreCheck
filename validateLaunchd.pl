@@ -14,9 +14,9 @@ my $expectedTemplate =
 
 my $notSignedTemplate = "%s: code object is not signed at all\n";
 
-my @launchd = getLaunchdFiles();
-
 my $OSVersion = getOSVersion();
+
+my @launchd = getLaunchdFiles();
 
 foreach my $plist (@launchd)
   {
@@ -28,42 +28,68 @@ foreach my $plist (@launchd)
   my $plist_checksum = $plist->{plist_checksum};
   my $executable_checksum = $plist->{executable_checksum};
   
-  printf("      <key>$path</key>\n");
-  printf("      <dict>\n");
-  printf("        <key>label</key>\n");
-  printf("        <string>$label</string>\n");
-  printf("        <key>program</key>\n");
-  printf("        <string>$program</string>\n");
-  printf("        <key>programArguments</key>\n");
-  printf("        <array>\n");
-  
-  for my $argument (@{$programArguments})
+  next 
+    if $label =~ /^com\.parallels\./;
+
+  printf("\t\t<key>$path</key>\n");
+  printf("\t\t<dict>\n");
+
+  if($label)
     {
-    $argument =~ s/^\s+//;
-    $argument =~ s/\s+$//;
-    
-    printf("          <string>$argument</string>\n");
+    printf("\t\t\t<key>label</key>\n");
+    printf("\t\t\t<string>$label</string>\n");
     }
+
+  if($program)
+    {
+    printf("\t\t\t<key>program</key>\n");
+    printf("\t\t\t<string>$program</string>\n");
+    }
+
+  if($programArguments)
+    {  
+    printf("\t\t\t<key>programArguments</key>\n");
+
+    if(scalar(@{$programArguments}) > 0)
+      {
+      printf("\t\t\t<array>\n");
+  
+      for my $argument (@{$programArguments})
+        {
+        $argument =~ s/^\s+//;
+        $argument =~ s/\s+$//;
+        $argument =~ s/&/&amp;/g;
+        $argument =~ s/"/&quot;/g;
     
-  printf("        </array>\n");
-  printf("        <key>signature</key>\n");
-  printf("        <string>$signature</string>\n");
+        printf("\t\t\t\t<string>$argument</string>\n");
+        }
+    
+      printf("\t\t\t</array>\n");
+      }
+    else
+      {
+      printf("\t\t\t<array/>\n");
+      }
+    }
+
+  printf("\t\t\t<key>signature</key>\n");
+  printf("\t\t\t<string>$signature</string>\n");
 
   if($plist_checksum)
     {
-    printf("        <key>plist_checksum</key>\n");
-    printf("        <string>$plist_checksum</string>\n");
+    printf("\t\t\t<key>plist_checksum</key>\n");
+    printf("\t\t\t<string>$plist_checksum</string>\n");
     }
 
   if($executable_checksum)
     {
-    printf("        <key>executable_checksum</key>\n");
-    printf("        <string>$executable_checksum</string>\n");
+    printf("\t\t\t<key>executable_checksum</key>\n");
+    printf("\t\t\t<string>$executable_checksum</string>\n");
     }
 
-  printf("      </dict>\n");
+  printf("\t\t</dict>\n");
   }
-    
+
 sub verify
   {
   my $bundle = shift;
@@ -80,7 +106,7 @@ sub verify
       my $hack = '';
       
       $hack = '--no-strict'
-        if ($hack eq '10.9.5') || ($hack =~ /^10.10/);
+        if ($OSVersion eq '10.9.5') || ($OSVersion =~ /^10.10/);
         
       system(qq{/usr/bin/codesign -vv -R="anchor $anchor" $hack "$bundle"});
       };
@@ -185,11 +211,10 @@ sub getOSVersion
   my ($stdout, $stderr, $exit) = 
     capture 
       {
-      # Don't forget to add --no-strict for 10.9.5 and 10.10 only.
       system(qq{system_profiler SPSoftwareDataType});
       };
   
-  my ($version) = $stdout =~ /System Version: OS X (\S+) \(.+\)/;
+  my ($version) = $stdout =~ /System\sVersion:\s(?:OS\sX|macOS)\s(\S+)\s\(.+\)/;
   
   return $version;
   }
@@ -330,6 +355,8 @@ sub getLaunchdFiles
         }
     }
     
+  push @files, getManualAdditions();
+
   return @files;
   }
   
@@ -342,3 +369,73 @@ sub trim
   
   return $value;
   }  
+
+sub getManualAdditions
+  {
+  my @additions;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist',
+    label => 'com.apple.installer.osmessagetracing',
+    program => '/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer',
+    programArguments => ['/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer'],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.10/ or $OSVersion =~ /^10\.11/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.xprotectupdater.plist',
+    label => 'com.apple.xprotectupdater',
+    program => '/usr/libexec/XProtectUpdater',
+    programArguments => ['/usr/libexec/XProtectUpdater'],
+    signature => 'executablemissing'
+    }
+    if $OSVersion =~ /^10\.10/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.rpmuxd.plist',
+    label => 'com.apple.rpmuxd',
+    program => '/usr/libexec/rpmuxd',
+    programArguments => ['/usr/libexec/rpmuxd'],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.11/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchAgents/com.apple.webdriverd.plist',
+    label => 'com.apple.webdriverd',
+    program => '/usr/libexec/webdriverd',
+    programArguments => [],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.11/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.hidfud.plist',
+    label => 'com.apple.hidfud',
+    program => '/System/Library/CoreServices/HID/FirmwareUpdates/hidfud',
+    programArguments => ['/System/Library/CoreServices/HID/FirmwareUpdates/hidfud'],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.12/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.jetsamproperties.Mac.plist',
+    signature => 'executablemissing'
+    }
+    if $OSVersion =~ /^10\.12/;
+
+  return @additions;
+  }

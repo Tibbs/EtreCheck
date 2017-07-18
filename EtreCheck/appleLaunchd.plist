@@ -144,6 +144,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>ab2cee0d</string>
+			<key>executable_checksum</key>
+			<string>11884fd0</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.appleprofilepolicyd.plist</key>
 		<dict>
@@ -391,6 +395,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>3edb57ed</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
 		<dict>
@@ -630,6 +636,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>f78ae4b6</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.eppc.plist</key>
 		<dict>
@@ -904,6 +912,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -1104,6 +1114,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>8f964133</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.notifyd.plist</key>
 		<dict>
@@ -1184,6 +1196,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>5b88bc3e</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.PCIELaneConfigTool.plist</key>
 		<dict>
@@ -1211,6 +1225,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>655e3db5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
 		<dict>
@@ -1225,6 +1241,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>a803d9e7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
 		<dict>
@@ -1239,6 +1257,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ac20e886</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.platform.ptmd.plist</key>
 		<dict>
@@ -1492,6 +1512,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>a097f41c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.smbfs_load_kext.plist</key>
 		<dict>
@@ -1609,6 +1631,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>e535fcf2</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.systempreferences.installer.plist</key>
 		<dict>
@@ -2012,6 +2036,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>01810ba3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.amavis.amavisd_cleanup.plist</key>
 		<dict>
@@ -2025,6 +2051,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ebcf4060</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.apache.httpd.plist</key>
 		<dict>
@@ -2069,6 +2097,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>335c63ef</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.isc.named.plist</key>
 		<dict>
@@ -2110,6 +2142,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>31e9aedb</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.postfix.master.plist</key>
 		<dict>
@@ -2195,6 +2229,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d0552120</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -2766,6 +2802,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d6d57330</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.PCIESlotCheck.plist</key>
 		<dict>
@@ -2844,6 +2882,10 @@
 			<array/>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0aff3bdb</string>
+			<key>executable_checksum</key>
+			<string>28191b89</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.RemoteUI.plist</key>
 		<dict>
@@ -3179,6 +3221,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d319fe35</string>
 		</dict>
 	</dict>
 	<key>10.7</key>
@@ -3642,6 +3686,8 @@
 			<array/>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>0c363ae2</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.configd.plist</key>
 		<dict>
@@ -3668,6 +3714,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
 		<dict>
@@ -3938,6 +3986,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>f78ae4b6</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
 		<dict>
@@ -3954,6 +4004,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>3b3c48cc</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emlog.plist</key>
 		<dict>
@@ -3968,6 +4020,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>1f3170c7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.plist</key>
 		<dict>
@@ -4341,6 +4395,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d660a7c9</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -4822,6 +4878,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ed3906b4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.notifyd.plist</key>
 		<dict>
@@ -4932,6 +4990,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ec6265d3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.pcastuploader.plist</key>
 		<dict>
@@ -4948,6 +5008,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>5b88bc3e</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.PCIELaneConfigTool.plist</key>
 		<dict>
@@ -4975,6 +5037,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>655e3db5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
 		<dict>
@@ -4989,6 +5053,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>a803d9e7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
 		<dict>
@@ -5003,6 +5069,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ac20e886</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.pfctl.plist</key>
 		<dict>
@@ -6049,6 +6117,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>01810ba3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.amavis.amavisd_cleanup.plist</key>
 		<dict>
@@ -6062,6 +6132,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>ebcf4060</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.apache.httpd.plist</key>
 		<dict>
@@ -6106,6 +6178,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0387fd25</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.isc.named.plist</key>
 		<dict>
@@ -6147,6 +6223,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>31e9aedb</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.postfix.master.plist</key>
 		<dict>
@@ -6204,6 +6282,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d0552120</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -6272,6 +6352,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>e0e7c399</string>
+			<key>executable_checksum</key>
+			<string>aa145980</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.alf.useragent.plist</key>
 		<dict>
@@ -7291,6 +7375,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d6d57330</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.PCIESlotCheck.plist</key>
 		<dict>
@@ -7533,6 +7619,8 @@
 			<array/>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>efe4e2af</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scopedbookmarkagent.xpc.plist</key>
 		<dict>
@@ -7581,6 +7669,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>6a92ee65</string>
+			<key>executable_checksum</key>
+			<string>a1c0271f</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -7957,6 +8049,8 @@
 			</array>
 			<key>signature</key>
 			<string>signaturemissing</string>
+			<key>plist_checksum</key>
+			<string>6f7df7f9</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.xgridd.plist</key>
 		<dict>
@@ -8012,6 +8106,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>d319fe35</string>
 		</dict>
 		<key>/Library/LaunchDaemons/com.apple.remotepairtool.plist</key>
 		<dict>
@@ -8516,6 +8612,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
 		<dict>
@@ -8802,6 +8900,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>f78ae4b6</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
 		<dict>
@@ -8829,6 +8929,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>1f3170c7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.aslmanager.plist</key>
 		<dict>
@@ -9058,6 +9160,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>602379f1</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.gssd.plist</key>
 		<dict>
@@ -9305,6 +9409,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -9935,6 +10041,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>655e3db5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
 		<dict>
@@ -9949,6 +10057,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>a803d9e7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
 		<dict>
@@ -9963,6 +10073,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>ac20e886</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.pfctl.plist</key>
 		<dict>
@@ -11019,6 +11131,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0387fd25</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.freeradius.radiusd.plist</key>
 		<dict>
@@ -11074,6 +11190,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>31e9aedb</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
 		<dict>
@@ -11143,6 +11261,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>30889668</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/shell.plist</key>
 		<dict>
@@ -11170,6 +11290,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>7b8fb504</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -11263,6 +11385,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>9a8c7f91</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.AirPlayUIAgent.plist</key>
 		<dict>
@@ -11291,6 +11415,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>e0e7c399</string>
+			<key>executable_checksum</key>
+			<string>aa145980</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.alf.useragent.plist</key>
 		<dict>
@@ -12450,7 +12578,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0aff3bdb</string>
+			<key>executable_checksum</key>
+			<string>cd5b055d</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.ReportCrash.plist</key>
 		<dict>
@@ -12572,7 +12704,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/MacOS/AppleVNCServer</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>6a92ee65</string>
+			<key>executable_checksum</key>
+			<string>255b6cd2</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -13525,6 +13661,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
 		<dict>
@@ -13841,6 +13979,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>f78ae4b6</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
 		<dict>
@@ -13868,6 +14008,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>1f3170c7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.aslmanager.plist</key>
 		<dict>
@@ -14082,6 +14224,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>602379f1</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.gssd.plist</key>
 		<dict>
@@ -14366,6 +14510,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -15145,6 +15291,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>08976594</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.powerd.plist</key>
 		<dict>
@@ -16268,6 +16416,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0387fd25</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.net-snmp.snmpd.plist</key>
 		<dict>
@@ -16282,6 +16434,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>c1ef6d96</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
 		<dict>
@@ -16295,6 +16449,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>352be8e5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
 		<dict>
@@ -16354,6 +16510,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>bfd6094f</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -17409,6 +17567,20 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
+		<key>/System/Library/LaunchAgents/com.apple.ManagedClient.enrollagent.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.ManagedClient.enrollagent</string>
+			<key>program</key>
+			<string>/System/Library/CoreServices/ManagedClient.app/Contents/MacOS/ManagedClient</string>
+			<key>programArguments</key>
+			<array>
+				<string>/System/Library/CoreServices/ManagedClient.app/Contents/MacOS/ManagedClient</string>
+				<string>-j</string>
+			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.Maps.pushdaemon.plist</key>
 		<dict>
 			<key>label</key>
@@ -17971,7 +18143,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>0aff3bdb</string>
+			<key>executable_checksum</key>
+			<string>cd5b055d</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.ReportCrash.plist</key>
 		<dict>
@@ -18106,7 +18282,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/MacOS/AppleVNCServer</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>6a92ee65</string>
+			<key>executable_checksum</key>
+			<string>255b6cd2</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -19220,6 +19400,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.coreduetd.osx.plist</key>
 		<dict>
@@ -19580,6 +19762,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>4bbede1f</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
 		<dict>
@@ -19607,6 +19791,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>1f3170c7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.aslmanager.plist</key>
 		<dict>
@@ -19834,6 +20020,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>602379f1</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.GSSCred.plist</key>
 		<dict>
@@ -19972,19 +20160,6 @@
 			<key>programArguments</key>
 			<array>
 				<string>/System/Library/PrivateFrameworks/PackageKit.framework/Resources/installd</string>
-			</array>
-			<key>signature</key>
-			<string>signatureapple</string>
-		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.installer.osmessagetracing</string>
-			<key>program</key>
-			<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
-			<key>programArguments</key>
-			<array>
-				<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -20157,6 +20332,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -20261,6 +20438,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>3faa6c36</string>
+			<key>executable_checksum</key>
+			<string>cbb9f511</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.ManagedClient.plist</key>
 		<dict>
@@ -20272,6 +20453,10 @@
 			<array/>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>9a0719bf</string>
+			<key>executable_checksum</key>
+			<string>cbb9f511</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.ManagedClient.startup.plist</key>
 		<dict>
@@ -20286,6 +20471,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>74d6fe3b</string>
+			<key>executable_checksum</key>
+			<string>cbb9f511</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.mbicloudsetupd.plist</key>
 		<dict>
@@ -20974,6 +21163,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>08976594</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.powerd.plist</key>
 		<dict>
@@ -21891,19 +22082,6 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.xprotectupdater.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.xprotectupdater</string>
-			<key>program</key>
-			<string>/usr/libexec/XProtectUpdater</string>
-			<key>programArguments</key>
-			<array>
-				<string>/usr/libexec/XProtectUpdater</string>
-			</array>
-			<key>signature</key>
-			<string>executablemissing</string>
-		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.xsan.plist</key>
 		<dict>
 			<key>label</key>
@@ -22094,6 +22272,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>9e60ca62</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.net-snmp.snmpd.plist</key>
 		<dict>
@@ -22108,6 +22290,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>0440756a</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
 		<dict>
@@ -22121,6 +22305,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>352be8e5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
 		<dict>
@@ -22180,6 +22366,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>bfd6094f</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -23382,6 +23570,28 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>ad83722a</string>
+			<key>executable_checksum</key>
+			<string>5ef35dd4</string>
+		</dict>
+		<key>/System/Library/LaunchAgents/com.apple.ManagedClientAgent.enrollagent.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.ManagedClientAgent.enrollagent</string>
+			<key>program</key>
+			<string>/System/Library/CoreServices/ManagedClient.app/Contents/Resources/ManagedClientAgent</string>
+			<key>programArguments</key>
+			<array>
+				<string>/System/Library/CoreServices/ManagedClient.app/Contents/Resources/ManagedClientAgent</string>
+				<string>-j</string>
+			</array>
+			<key>signature</key>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>98ee5072</string>
+			<key>executable_checksum</key>
+			<string>5ef35dd4</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.Maps.pushdaemon.plist</key>
 		<dict>
@@ -24199,7 +24409,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/MacOS/AppleVNCServer</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>4b17f9ac</string>
+			<key>executable_checksum</key>
+			<string>1f7390d5</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -24522,6 +24736,10 @@
 			<array/>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>46640196</string>
+			<key>executable_checksum</key>
+			<string>96bf37d5</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.SystemUIServer.plist</key>
 		<dict>
@@ -24893,6 +25111,32 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.installer.osmessagetracing</string>
+			<key>program</key>
+			<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+			<key>programArguments</key>
+			<array>
+				<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.xprotectupdater.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.xprotectupdater</string>
+			<key>program</key>
+			<string>/usr/libexec/XProtectUpdater</string>
+			<key>programArguments</key>
+			<array>
+				<string>/usr/libexec/XProtectUpdater</string>
+			</array>
+			<key>signature</key>
+			<string>executablemissing</string>
+		</dict>
 	</dict>
 	<key>10.11</key>
 	<dict>
@@ -24947,6 +25191,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>94afd281</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.AirPlayXPCHelper.plist</key>
 		<dict>
@@ -25461,6 +25707,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.corecaptured.plist</key>
 		<dict>
@@ -25886,6 +26134,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>e9cf10b2</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
 		<dict>
@@ -25913,6 +26163,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>24984d78</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.aslmanager.plist</key>
 		<dict>
@@ -26140,6 +26392,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>602379f1</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.GSSCred.plist</key>
 		<dict>
@@ -26291,19 +26545,6 @@
 			<key>programArguments</key>
 			<array>
 				<string>/System/Library/PrivateFrameworks/PackageKit.framework/Resources/installd</string>
-			</array>
-			<key>signature</key>
-			<string>signatureapple</string>
-		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.installer.osmessagetracing</string>
-			<key>program</key>
-			<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
-			<key>programArguments</key>
-			<array>
-				<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -26503,6 +26744,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -27504,7 +27747,11 @@
 				<string>/System/Library/CoreServices/RFBEventHelper.bundle/Contents/MacOS/RFBEventHelperd</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>6eaa3555</string>
+			<key>executable_checksum</key>
+			<string>9d43d5d7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.rootless.init.plist</key>
 		<dict>
@@ -27528,19 +27775,6 @@
 			<key>programArguments</key>
 			<array>
 				<string>/usr/sbin/rpcbind</string>
-			</array>
-			<key>signature</key>
-			<string>signatureapple</string>
-		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.rpmuxd.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.rpmuxd</string>
-			<key>program</key>
-			<string>/usr/libexec/rpmuxd</string>
-			<key>programArguments</key>
-			<array>
-				<string>/usr/libexec/rpmuxd</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -27580,7 +27814,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/screensharingd.bundle/Contents/MacOS/screensharingd</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>42abd9fd</string>
+			<key>executable_checksum</key>
+			<string>7917ec01</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.scsid.plist</key>
 		<dict>
@@ -28595,6 +28833,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>4f12bccd</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.cups.cups-lpd.plist</key>
 		<dict>
@@ -28623,7 +28863,11 @@
 				<string>-l</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>2322eb96</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.net-snmp.snmpd.plist</key>
 		<dict>
@@ -28638,6 +28882,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>0440756a</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
 		<dict>
@@ -28651,6 +28897,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>352be8e5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
 		<dict>
@@ -28696,6 +28944,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>9b08acb0</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/shell.plist</key>
 		<dict>
@@ -28723,6 +28973,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>edc54f2c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -30105,7 +30357,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>72d87939</string>
+			<key>executable_checksum</key>
+			<string>4a7f32e9</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.locationmenu.plist</key>
 		<dict>
@@ -30835,7 +31091,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>5a375bea</string>
+			<key>executable_checksum</key>
+			<string>53969ff2</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.ReportCrash.plist</key>
 		<dict>
@@ -31003,7 +31263,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/ScreensharingAgent.bundle/Contents/MacOS/ScreensharingAgent</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>09539ebb</string>
+			<key>executable_checksum</key>
+			<string>8628a4f0</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.screensharing.MessagesAgent.plist</key>
 		<dict>
@@ -31016,7 +31280,11 @@
 				<string>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/MacOS/AppleVNCServer</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>4b17f9ac</string>
+			<key>executable_checksum</key>
+			<string>1f7390d5</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -31250,7 +31518,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>1d961cf9</string>
+			<key>executable_checksum</key>
+			<string>150a6dbc</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.storeaccountd.plist</key>
 		<dict>
@@ -31327,7 +31599,11 @@
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>1c677f64</string>
+			<key>executable_checksum</key>
+			<string>792d0f18</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.suggestd.plist</key>
 		<dict>
@@ -31772,6 +32048,32 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.installer.osmessagetracing</string>
+			<key>program</key>
+			<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+			<key>programArguments</key>
+			<array>
+				<string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.rpmuxd.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.rpmuxd</string>
+			<key>program</key>
+			<string>/usr/libexec/rpmuxd</string>
+			<key>programArguments</key>
+			<array>
+				<string>/usr/libexec/rpmuxd</string>
+			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.webdriverd.plist</key>
 		<dict>
 			<key>label</key>
@@ -31837,6 +32139,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>26987031</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.AirPlayXPCHelper.plist</key>
 		<dict>
@@ -32415,6 +32719,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>fdaa81a4</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.CoreAuthentication.daemon.plist</key>
 		<dict>
@@ -32892,6 +33198,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>abbd09ec</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.driver.ethcheckthunderbolt.plist</key>
 		<dict>
@@ -32906,6 +33216,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>95c4d5ad</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.dspluginhelperd.plist</key>
 		<dict>
@@ -33031,6 +33345,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>24984d78</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.emond.aslmanager.plist</key>
 		<dict>
@@ -33255,6 +33571,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>602379f1</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.GSSCred.plist</key>
 		<dict>
@@ -33304,19 +33622,6 @@
 			<key>programArguments</key>
 			<array>
 				<string>/usr/libexec/hidd</string>
-			</array>
-			<key>signature</key>
-			<string>signatureapple</string>
-		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.hidfud.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.hidfud</string>
-			<key>program</key>
-			<string>/System/Library/CoreServices/HID/FirmwareUpdates/hidfud</string>
-			<key>programArguments</key>
-			<array>
-				<string>/System/Library/CoreServices/HID/FirmwareUpdates/hidfud</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -33635,6 +33940,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>901bcab3</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
 		<dict>
@@ -33961,6 +34268,8 @@
 			</array>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>a2c4529d</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.MobileAccessoryUpdater.plist</key>
 		<dict>
@@ -34580,6 +34889,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>dd5d53f9</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.powerd.plist</key>
 		<dict>
@@ -34743,6 +35054,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>6eaa3555</string>
+			<key>executable_checksum</key>
+			<string>9d43d5d7</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.rootless.init.plist</key>
 		<dict>
@@ -34819,6 +35134,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>42abd9fd</string>
+			<key>executable_checksum</key>
+			<string>7917ec01</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.scsid.plist</key>
 		<dict>
@@ -35840,6 +36159,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>4f12bccd</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.cups.cups-lpd.plist</key>
 		<dict>
@@ -35869,6 +36190,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>2322eb96</string>
+			<key>executable_checksum</key>
+			<string>00000000</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.net-snmp.snmpd.plist</key>
 		<dict>
@@ -35883,6 +36208,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>0440756a</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
 		<dict>
@@ -35896,6 +36223,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>352be8e5</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
 		<dict>
@@ -35927,6 +36256,8 @@
 			</array>
 			<key>signature</key>
 			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>edc54f2c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/telnet.plist</key>
 		<dict>
@@ -36297,6 +36628,8 @@
 			<array/>
 			<key>signature</key>
 			<string>executablemissing</string>
+			<key>plist_checksum</key>
+			<string>2393e0b0</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.bluetoothUIServer.plist</key>
 		<dict>
@@ -36391,10 +36724,10 @@
 			<key>label</key>
 			<string>com.apple.cfnetwork.AuthBrokerAgent</string>
 			<key>program</key>
-			<string>/System/Library/CoreServices/AuthBrokerAgent</string>
+			<string>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/AuthBrokerAgent</string>
 			<key>programArguments</key>
 			<array>
-				<string>/System/Library/CoreServices/AuthBrokerAgent</string>
+				<string>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/AuthBrokerAgent</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -36404,10 +36737,10 @@
 			<key>label</key>
 			<string>com.apple.cfnetwork.cfnetworkagent</string>
 			<key>program</key>
-			<string>/System/Library/CoreServices/CFNetworkAgent</string>
+			<string>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/CFNetworkAgent</string>
 			<key>programArguments</key>
 			<array>
-				<string>/System/Library/CoreServices/CFNetworkAgent</string>
+				<string>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/CFNetworkAgent</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>
@@ -38472,6 +38805,10 @@
 			<array/>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>5a375bea</string>
+			<key>executable_checksum</key>
+			<string>53969ff2</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.ReportCrash.plist</key>
 		<dict>
@@ -38638,6 +38975,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>09539ebb</string>
+			<key>executable_checksum</key>
+			<string>8628a4f0</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.screensharing.MessagesAgent.plist</key>
 		<dict>
@@ -38651,6 +38992,10 @@
 			</array>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>4b17f9ac</string>
+			<key>executable_checksum</key>
+			<string>1f7390d5</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.scrod.plist</key>
 		<dict>
@@ -38899,6 +39244,10 @@
 			<array/>
 			<key>signature</key>
 			<string>signaturenotvalid</string>
+			<key>plist_checksum</key>
+			<string>1d961cf9</string>
+			<key>executable_checksum</key>
+			<string>150a6dbc</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.StorageManagementUIHelper.plist</key>
 		<dict>
@@ -39512,6 +39861,19 @@
 			<array>
 				<string>/usr/bin/ssh-agent</string>
 				<string>-l</string>
+			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.hidfud.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.hidfud</string>
+			<key>program</key>
+			<string>/System/Library/CoreServices/HID/FirmwareUpdates/hidfud</string>
+			<key>programArguments</key>
+			<array>
+				<string>/System/Library/CoreServices/HID/FirmwareUpdates/hidfud</string>
 			</array>
 			<key>signature</key>
 			<string>signatureapple</string>

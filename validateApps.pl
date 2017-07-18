@@ -59,6 +59,9 @@ foreach
 
 foreach my $app (sort keys %apps)
   {
+  next 
+    if $app =~ m|^/Library/Parallels|;
+
   my $shell = $app =~ /\.(pl|cgi|d|py|rb|sh)$/;
   
   my $result = 'signaturenotvalid';
@@ -81,7 +84,7 @@ foreach my $app (sort keys %apps)
       }
     }
     
-  printf("      <key>$app</key>\n    <string>$result</string>\n");
+  printf("      <key>$app</key>\n      <string>$result</string>\n");
   }
     
 sub verify
@@ -90,19 +93,17 @@ sub verify
   my $anchor = shift;
   my $expectedResult = shift;
   
-  my ($stdout, $stderr, $exit) = 
-    capture 
+  my ($data, $exit) = 
+    capture_merged 
       {
       # Don't forget to add --no-strict for 10.9.5 and 10.10 only.
       my $hack = '';
       
       $hack = '--no-strict'
-        if ($hack eq '10.9.5') || ($hack =~ /^10.10/);
+        if ($OSVersion eq '10.9.5') || ($OSVersion =~ /^10.10/);
         
       system(qq{/usr/bin/codesign -vv -R="anchor $anchor" $hack "$bundle"});
       };
-
-  my $data = $stdout . $stderr;
 
   return $expectedResult
     if $data eq sprintf($expectedTemplate, $bundle, $bundle, $bundle);
@@ -118,11 +119,10 @@ sub getOSVersion
   my ($stdout, $stderr, $exit) = 
     capture 
       {
-      # Don't forget to add --no-strict for 10.9.5 and 10.10 only.
       system(qq{system_profiler SPSoftwareDataType});
       };
   
-  my ($version) = $stdout =~ /System Version: OS X (\S+) \(.+\)/;
+  my ($version) = $stdout =~ /System\sVersion:\s(?:OS\sX|macOS)\s(\S+)\s\(.+\)/;
   
   return $version;
   }

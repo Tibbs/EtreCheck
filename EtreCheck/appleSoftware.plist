@@ -2586,6 +2586,8 @@
       <string>signaturenotvalid</string>
       <key>/usr/bin/xattr-2.6</key>
       <string>signaturenotvalid</string>
+      <key>/usr/bin/xcman</key>
+      <string>signatureapple</string>
       <key>/usr/bin/xcrun</key>
       <string>signatureapple</string>
       <key>/usr/bin/xgettext.pl</key>
@@ -2730,8 +2732,6 @@
       <string>signaturenotvalid</string>
       <key>/usr/libexec/crsud</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/cups/backend/HP-Fax</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/bluetooth</key>
       <string>signatureapple</string>
       <key>/usr/libexec/cups/backend/dnssd</key>
@@ -2739,6 +2739,8 @@
       <key>/usr/libexec/cups/backend/epsonfirewire</key>
       <string>signatureapple</string>
       <key>/usr/libexec/cups/backend/fax</key>
+      <string>signaturenotvalid</string>
+      <key>/usr/libexec/cups/backend/hpfax</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/http</key>
       <string>signaturenotvalid</string>
@@ -4617,8 +4619,6 @@
       <string>signatureapple</string>
       <key>/sbin/mount_udf</key>
       <string>signatureapple</string>
-      <key>/sbin/mount_vmhgfs</key>
-      <string>signaturevalid</string>
       <key>/sbin/mount_webdav</key>
       <string>signatureapple</string>
       <key>/sbin/mpioutil</key>
@@ -4649,8 +4649,6 @@
       <string>signatureapple</string>
       <key>/sbin/route</key>
       <string>signatureapple</string>
-      <key>/sbin/rpctool</key>
-      <string>signaturevalid</string>
       <key>/sbin/rtsol</key>
       <string>signatureapple</string>
       <key>/sbin/shutdown</key>
@@ -6649,6 +6647,8 @@
       <string>signatureapple</string>
       <key>/usr/libexec/cups/backend/fax</key>
       <string>signaturenotvalid</string>
+      <key>/usr/libexec/cups/backend/hpfax</key>
+      <string>signaturevalid</string>
       <key>/usr/libexec/cups/backend/http</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/https</key>
@@ -7648,8 +7648,6 @@
       <string>signatureapple</string>
       <key>/Applications/Dictionary.app</key>
       <string>signatureapple</string>
-      <key>/Applications/EtreFeed.app</key>
-      <string>signaturevalid</string>
       <key>/Applications/FaceTime.app</key>
       <string>signatureapple</string>
       <key>/Applications/Font Book.app</key>
@@ -7889,7 +7887,7 @@
       <key>/System/Library/CoreServices/RegisterPluginIMApp.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/ARDForcedViewer.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Remote Desktop Message.app</key>
@@ -7897,7 +7895,7 @@
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Shared Screen Viewer.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/LockScreen.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/SSDragHelper.app</key>
@@ -8662,8 +8660,6 @@
       <string>signatureapple</string>
       <key>/sbin/mount_udf</key>
       <string>signatureapple</string>
-      <key>/sbin/mount_vmhgfs</key>
-      <string>signaturevalid</string>
       <key>/sbin/mount_webdav</key>
       <string>signatureapple</string>
       <key>/sbin/mpioutil</key>
@@ -8694,8 +8690,6 @@
       <string>signatureapple</string>
       <key>/sbin/route</key>
       <string>signatureapple</string>
-      <key>/sbin/rpctool</key>
-      <string>signaturevalid</string>
       <key>/sbin/rtsol</key>
       <string>signatureapple</string>
       <key>/sbin/shutdown</key>
@@ -10738,6 +10732,8 @@
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/fax</key>
       <string>signaturenotvalid</string>
+      <key>/usr/libexec/cups/backend/hpfax</key>
+      <string>signaturevalid</string>
       <key>/usr/libexec/cups/backend/http</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/https</key>
@@ -12033,8 +12029,6 @@
       <string>signatureapple</string>
       <key>/Applications/Dictionary.app</key>
       <string>signatureapple</string>
-      <key>/Applications/EtreFeed.app</key>
-      <string>signaturevalid</string>
       <key>/Applications/FaceTime.app</key>
       <string>signatureapple</string>
       <key>/Applications/Font Book.app</key>
@@ -12060,7 +12054,7 @@
       <key>/Applications/Preview.app</key>
       <string>signatureapple</string>
       <key>/Applications/QuickTime Player.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Reminders.app</key>
       <string>signatureapple</string>
       <key>/Applications/Safari.app</key>
@@ -12118,11 +12112,9 @@
       <key>/Applications/iBooks.app</key>
       <string>signatureapple</string>
       <key>/Applications/iTunes.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/Applications/iTunes.app/Contents/MacOS/iTunesHelper.app</key>
       <string>signatureapple</string>
-      <key>/Library/Application Support/VMware Tools/vmware-tools-daemon</key>
-      <string>signaturevalid</string>
       <key>/Library/CoreMediaIO/Plug-Ins/DAL/AppleCamera.plugin/Contents/Resources/AppleCameraAssistant</key>
       <string>signatureapple</string>
       <key>/System/Library/ColorSync/Calibrators/Display Calibrator.app</key>
@@ -12213,6 +12205,8 @@
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Expansion Slot Utility.app/Contents/Resources/PCIESlotCheck</key>
       <string>signatureapple</string>
+      <key>/System/Library/CoreServices/Feedback Assistant.app</key>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/File Sync.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/FileSyncAgent.app</key>
@@ -12286,13 +12280,13 @@
       <key>/System/Library/CoreServices/RegisterPluginIMApp.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Remote Desktop Message.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Shared Screen Viewer.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/LockScreen.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/SSDragHelper.app</key>
@@ -13225,8 +13219,6 @@
       <string>signatureapple</string>
       <key>/sbin/mount_udf</key>
       <string>signatureapple</string>
-      <key>/sbin/mount_vmhgfs</key>
-      <string>signaturevalid</string>
       <key>/sbin/mount_webdav</key>
       <string>signatureapple</string>
       <key>/sbin/mpioutil</key>
@@ -13257,8 +13249,6 @@
       <string>signatureapple</string>
       <key>/sbin/route</key>
       <string>signatureapple</string>
-      <key>/sbin/rpctool</key>
-      <string>signaturevalid</string>
       <key>/sbin/rtsol</key>
       <string>signatureapple</string>
       <key>/sbin/shutdown</key>
@@ -15435,6 +15425,8 @@
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/fax</key>
       <string>signaturenotvalid</string>
+      <key>/usr/libexec/cups/backend/hpfax</key>
+      <string>signaturevalid</string>
       <key>/usr/libexec/cups/backend/http</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/https</key>
@@ -16837,11 +16829,9 @@
       <key>/Applications/iBooks.app</key>
       <string>signatureapple</string>
       <key>/Applications/iTunes.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/Applications/iTunes.app/Contents/MacOS/iTunesHelper.app</key>
       <string>signatureapple</string>
-      <key>/Library/Application Support/VMware Tools/vmware-tools-daemon</key>
-      <string>signaturevalid</string>
       <key>/Library/CoreMediaIO/Plug-Ins/DAL/AppleCamera.plugin/Contents/Resources/AppleCameraAssistant</key>
       <string>signatureapple</string>
       <key>/Library/CoreMediaIO/Plug-Ins/DAL/iOSScreenCapture.plugin/Contents/Resources/iOSScreenCaptureAssistant</key>
@@ -17031,17 +17021,17 @@
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Remote Desktop Message.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Shared Screen Viewer.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/LockScreen.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/SSDragHelper.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/Share Screen Request.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/VNCPrivilegeProxy</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ScreensharingAgent.bundle</key>
@@ -17091,9 +17081,7 @@
       <key>/System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Spotlight.app</key>
-      <string>signaturenotvalid</string>
-      <key>/System/Library/CoreServices/Spotlight.app/Contents/XPCServices/com.apple.metadata.SpotlightNetHelper.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/SubmitDiagInfo</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/System Events.app</key>
@@ -17562,8 +17550,6 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AccountPolicy.framework/XPCServices/com.apple.AccountPolicyHelper.xpc</key>
       <string>signatureapple</string>
-      <key>/System/Library/PrivateFrameworks/AccountsDaemon.framework/XPCServices/DataclassOwnersManager copy.xpc</key>
-      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/AccountsDaemon.framework/XPCServices/DataclassOwnersManager.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/Resources/Calibration Assistant.app</key>
@@ -17750,8 +17736,6 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/IMTransferServices.framework/IMTransferAgent.app</key>
       <string>signatureapple</string>
-      <key>/System/Library/PrivateFrameworks/IMTransferServices.framework/XPCServices/IMTransferAgent.xpc</key>
-      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/InternetAccounts.framework/Versions/A/XPCServices/com.apple.internetaccounts.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/InternetAccounts.framework/Versions/A/XPCServices/com.apple.internetaccounts.xpc/Contents/XPCServices/com.apple.internetaccounts-sampler.xpc</key>
@@ -17789,8 +17773,6 @@
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbagent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbstated</key>
-      <string>signatureapple</string>
-      <key>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/PackageKit.framework/Resources/installd</key>
       <string>signatureapple</string>
@@ -17901,14 +17883,6 @@
       <key>/System/Library/Services/ImageCaptureService.app</key>
       <string>signatureapple</string>
       <key>/System/Library/Services/SummaryService.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/DatabaseProcess.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/NetworkProcess.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/PluginProcess.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/WebProcess.app</key>
       <string>signatureapple</string>
       <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Databases.xpc</key>
       <string>signatureapple</string>
@@ -18076,8 +18050,6 @@
       <string>signatureapple</string>
       <key>/sbin/mount_udf</key>
       <string>signatureapple</string>
-      <key>/sbin/mount_vmhgfs</key>
-      <string>signaturevalid</string>
       <key>/sbin/mount_webdav</key>
       <string>signatureapple</string>
       <key>/sbin/mpioutil</key>
@@ -18108,8 +18080,6 @@
       <string>signatureapple</string>
       <key>/sbin/route</key>
       <string>signatureapple</string>
-      <key>/sbin/rpctool</key>
-      <string>signaturevalid</string>
       <key>/sbin/rtsol</key>
       <string>signatureapple</string>
       <key>/sbin/shutdown</key>
@@ -20246,8 +20216,6 @@
       <string>signatureapple</string>
       <key>/usr/libexec/UserEventAgent</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/XProtectUpdater</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/airportd</key>
       <string>signatureapple</string>
       <key>/usr/libexec/amfid</key>
@@ -20303,7 +20271,7 @@
       <key>/usr/libexec/cups/backend/dnssd</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/epsonfax</key>
-      <string>signaturenotvalid</string>
+      <string>signaturevalid</string>
       <key>/usr/libexec/cups/backend/fax</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/http</key>
@@ -21258,7 +21226,7 @@
       <key>/AppleInternal/Applications/AirPlayDiagnostics.app/Contents/Resources/AirPlayDiagnosticsServer</key>
       <string>signaturenotvalid</string>
       <key>/Applications/App Store.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/Applications/Automator.app</key>
       <string>signatureapple</string>
       <key>/Applications/Automator.app/Contents/Resources/Application Stub.app</key>
@@ -21266,7 +21234,7 @@
       <key>/Applications/Calculator.app</key>
       <string>signatureapple</string>
       <key>/Applications/Calendar.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Chess.app</key>
       <string>signatureapple</string>
       <key>/Applications/Contacts.app</key>
@@ -21283,16 +21251,14 @@
       <string>signatureapple</string>
       <key>/Applications/Game Center.app</key>
       <string>signatureapple</string>
-      <key>/Applications/GarageBand.app</key>
-      <string>signaturevalid</string>
       <key>/Applications/Image Capture.app</key>
       <string>signatureapple</string>
       <key>/Applications/Launchpad.app</key>
       <string>signatureapple</string>
       <key>/Applications/Mail.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Maps.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Messages.app</key>
       <string>signatureapple</string>
       <key>/Applications/Mission Control.app</key>
@@ -21308,9 +21274,7 @@
       <key>/Applications/QuickTime Player.app</key>
       <string>signatureapple</string>
       <key>/Applications/Reminders.app</key>
-      <string>signaturenotvalid</string>
-      <key>/Applications/Remote Desktop.app</key>
-      <string>signaturevalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Safari.app</key>
       <string>signatureapple</string>
       <key>/Applications/Stickies.app</key>
@@ -21332,7 +21296,7 @@
       <key>/Applications/Utilities/Bluetooth File Exchange.app</key>
       <string>signatureapple</string>
       <key>/Applications/Utilities/Boot Camp Assistant.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Utilities/ColorSync Utility.app</key>
       <string>signatureapple</string>
       <key>/Applications/Utilities/Console.app</key>
@@ -21356,21 +21320,15 @@
       <key>/Applications/Utilities/Terminal.app</key>
       <string>signatureapple</string>
       <key>/Applications/Utilities/VoiceOver Utility.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Utilities/VoiceOver Utility.app/Contents/OtherBinaries/VoiceOverUtilityCacheBuilder.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/Utilities/X11.app</key>
       <string>signatureapple</string>
       <key>/Applications/iBooks.app</key>
       <string>signatureapple</string>
-      <key>/Applications/iMovie.app</key>
-      <string>signaturevalid</string>
-      <key>/Applications/iPhoto.app</key>
-      <string>signaturevalid</string>
-      <key>/Applications/iPhoto.app/Contents/Library/LoginItems/PhotoStreamAgent.app</key>
-      <string>signaturevalid</string>
       <key>/Applications/iTunes.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/Applications/iTunes.app/Contents/MacOS/iTunesHelper.app</key>
       <string>signatureapple</string>
       <key>/Library/CoreMediaIO/Plug-Ins/DAL/AppleCamera.plugin/Contents/Resources/AppleCameraAssistant</key>
@@ -21406,7 +21364,7 @@
       <key>/System/Library/CoreServices/Applications/Directory Utility.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Applications/Feedback Assistant.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/Applications/Feedback Assistant.app/Contents/Library/LaunchServices/fbahelperd</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Applications/Feedback Assistant.app/Contents/Library/LaunchServices/seedusaged</key>
@@ -21418,9 +21376,9 @@
       <key>/System/Library/CoreServices/Applications/Screen Sharing.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Applications/System Image Utility.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/CoreServices/Applications/Wireless Diagnostics.app</key>
       <string>signaturenotvalid</string>
+      <key>/System/Library/CoreServices/Applications/Wireless Diagnostics.app</key>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/AuthBrokerAgent</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Automator Runner.app</key>
@@ -21480,7 +21438,7 @@
       <key>/System/Library/CoreServices/FileSyncAgent.app/Contents/Resources/FileSyncAgent_sshd-keygen-wrapper</key>
       <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/Finder.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/FirmwareUpdateHelper.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Folder Actions Setup.app</key>
@@ -21502,9 +21460,9 @@
       <key>/System/Library/CoreServices/Installer.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Jar Launcher.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/Java Web Start.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/KernelEventAgent.bundle/Contents/Resources/FileSystemUIAgent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/KeyboardSetupAssistant.app</key>
@@ -21516,7 +21474,7 @@
       <key>/System/Library/CoreServices/LocationMenu.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/MRT.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/ManagedClient.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/ManagedClient.app/Contents/Resources/HomeSync.app</key>
@@ -21558,37 +21516,37 @@
       <key>/System/Library/CoreServices/Photo Library Migration Utility.app/Contents/Frameworks/iLifeSlideshow.framework/Versions/A/XPCServices/com.apple.iLifeSlideshow.MRXPCMovieServer.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/PowerChime.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/Problem Reporter.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RFBEventHelper.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RegisterPluginIMApp.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Remote Desktop Message.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Support/Shared Screen Viewer.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/LockScreen.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/SSDragHelper.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/Share Screen Request.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/AppleVNCServer.bundle/Contents/Support/VNCPrivilegeProxy</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/RemoteManagement/ScreensharingAgent.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ScreensharingAgent.bundle/Contents/Support/SSAssistanceCursor.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/ScreensharingAgent.bundle/Contents/Support/SSInvitationAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemoteManagement/screensharingd.bundle</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/CoreServices/RemotePairTool</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/ReportCrash</key>
@@ -21616,7 +21574,7 @@
       <key>/System/Library/CoreServices/Setup Assistant.app/Contents/Resources/mbusertrampoline</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/ShareBear.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/SocialPushAgent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Software Update.app</key>
@@ -21656,7 +21614,7 @@
       <key>/System/Library/CoreServices/UserNotificationCenter.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/VoiceOver.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/CoreServices/Weather.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/WiFiAgent.app</key>
@@ -21906,7 +21864,7 @@
       <key>/System/Library/Frameworks/QTKit.framework/Versions/A/XPCServices/com.apple.qtkitserver.xpc/Contents/XPCServices/com.apple.qtkittrustedmoviesservice.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/Quartz.framework/Frameworks/QuickLookUI.framework/Resources/QuickLookUIHelper.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/ImageKit.framework/Versions/A/XPCServices/com.apple.ImageKit.MediaLibraryService.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/ImageKit.framework/Versions/A/XPCServices/com.apple.ImageKit.RecentPictureService.xpc</key>
@@ -21916,19 +21874,19 @@
       <key>/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/PDFKit.framework/Versions/A/XPCServices/com.apple.PDFKit.PDFFileRefsValidator.xpc/Contents/XPCServices/com.apple.PDFKit.PDFFileRefsExtractor.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/QuickLookUI.framework/Versions/A/Resources/QuickLookUIHelper.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Resources/quicklookconfig</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Resources/quicklookd.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Resources/quicklookd32.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Versions/A/Resources/quicklookd.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Versions/A/Resources/quicklookd.app/Contents/XPCServices/QuickLookSatellite.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/QuickLook.framework/Versions/A/Resources/quicklookd32.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Frameworks/SceneKit.framework/Versions/A/XPCServices/com.apple.SceneKit.C3DColladaResourcesCoordinator.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/SceneKit.framework/Versions/A/XPCServices/com.apple.SceneKit.C3DColladaResourcesCoordinator.xpc/Contents/XPCServices/com.apple.SceneKit.C3DColladaResourcesChecker.xpc</key>
@@ -22022,7 +21980,7 @@
       <key>/System/Library/Image Capture/Support/Application/AutoImporter.app</key>
       <string>signatureapple</string>
       <key>/System/Library/Image Capture/Support/Image Capture Extension.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/Image Capture/Support/icdd</key>
       <string>signatureapple</string>
       <key>/System/Library/Input Methods/50onPaletteServer.app</key>
@@ -22068,7 +22026,7 @@
       <key>/System/Library/Input Methods/VietnameseIM.app</key>
       <string>signatureapple</string>
       <key>/System/Library/Java/Support/CoreDeploy.bundle/Contents/Download Java Components.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/BezelUI/BezelUIServer</key>
       <string>signatureapple</string>
       <key>/System/Library/PreferencePanes/Accounts.prefPane/Contents/XPCServices/com.apple.preferences.users.remoteservice.xpc</key>
@@ -22116,7 +22074,7 @@
       <key>/System/Library/PreferencePanes/UniversalAccessPref.prefPane/Contents/XPCServices/com.apple.preference.universalaccess.remoteservice.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PreferencePanes/iCloudPref.prefPane/Contents/XPCServices/com.apple.preferences.icloud.remoteservice.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AOSAccounts.framework/Versions/A/Resources/iCloudUserNotificationsd.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AOSKit.framework/Helpers/AOSHeartbeat.app</key>
@@ -22136,9 +22094,9 @@
       <key>/System/Library/PrivateFrameworks/AccountsDaemon.framework/XPCServices/DataclassOwnersManager.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/Resources/Calibration Assistant.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/XPCServices/com.apple.AmbientDisplayAgent.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ApplePushService.framework/apsctl</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ApplePushService.framework/apsd</key>
@@ -22158,7 +22116,7 @@
       <key>/System/Library/PrivateFrameworks/AuthKit.framework/Versions/A/Support/akd</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/BookKit.framework/Versions/A/XPCServices/com.apple.BKAgentService.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/BookKit.framework/Versions/A/XPCServices/com.apple.iBooksX-SecureUserDefaults.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/BookmarkDAV.framework/Helpers/SafariDAVClient</key>
@@ -22168,7 +22126,7 @@
       <key>/System/Library/PrivateFrameworks/CalendarAgent.framework/Executables/CalendarAgent</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CalendarAgent.framework/Versions/A/XPCServices/CalNCService.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistoryPluginHelper</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistorySyncHelper</key>
@@ -22192,9 +22150,9 @@
       <key>/System/Library/PrivateFrameworks/CloudServices.framework/Versions/A/XPCServices/com.apple.sbd.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Resources/LaterAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/LaterAgent.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/ReceiptInstaller</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/appstoreupdateagent</key>
@@ -22216,11 +22174,11 @@
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storelegacy</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storeuid.app</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/XPCServices/com.apple.CommerceKit.StoreAEService.xpc</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/XPCServices/com.apple.CommerceKit.TransactionService.xpc</key>
-      <string>signatureapple</string>
+      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/CommunicationsFilter.framework/CMFSyncAgent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreCDP.framework/Versions/A/Resources/cdpd</key>
@@ -22228,7 +22186,7 @@
       <key>/System/Library/PrivateFrameworks/CoreChineseEngine.framework/Versions/A/SharedSupport/CIMFindInputCodeTool.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Resources/FollowUpUI.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Support/followupd</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreRAID.framework/Resources/CoreRAIDServer</key>
@@ -22300,7 +22258,7 @@
       <key>/System/Library/PrivateFrameworks/FindMyMac.framework/XPCServices/com.apple.HasTRB.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/FinderKit.framework/Versions/A/XPCServices/CloudSharingInvitationViewService.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/GameCenterFoundation.framework/Versions/A/gamed</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/GameCenterUI.framework/XPCServices/com.apple.gamecenter.GameCenterUIService.xpc</key>
@@ -22354,7 +22312,7 @@
       <key>/System/Library/PrivateFrameworks/Mail.framework/Versions/A/XPCServices/com.apple.MailMigratorService.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MailService.framework/Versions/A/XPCServices/com.apple.MailServiceAgent.xpc</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/Mangrove.framework/Versions/A/XPCServices/com.apple.CGXPCServicesAgent.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MapsSupport.framework/navd</key>
@@ -22371,8 +22329,6 @@
       <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/Resources/usbmuxd</key>
       <string>signatureapple</string>
-      <key>/System/Library/PrivateFrameworks/Notes.framework/Versions/A/XPCServices/com.apple.NotesMigratorService.xpc</key>
-      <string>signaturenotvalid</string>
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbagent.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbstated</key>
@@ -22415,6 +22371,8 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/SafariSafeBrowsing.framework/com.apple.Safari.SafeBrowsing.Service</key>
       <string>signatureapple</string>
+      <key>/System/Library/PrivateFrameworks/SafariServices.framework/Versions/A/XPCServices/com.apple.SafariServices.ExtensionHelper.xpc</key>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/SafariServices.framework/Versions/A/XPCServices/com.apple.SafariServices.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.History.xpc</key>
@@ -22430,11 +22388,11 @@
       <key>/System/Library/PrivateFrameworks/ScreenReader.framework/Frameworks/ScreenReaderOutput.framework/Resources/scrod</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ScreenReader.framework/Resources/ScreenReaderUIServer.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ScreenReader.framework/Versions/A/Resources/ScreenReaderUIServer.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ScreenReader.framework/Versions/A/Resources/VoiceOver Quickstart.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/ShareKit.framework/Versions/A/XPCServices/com.apple.sharekit.EntitlementsHelper.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/SocialUI.framework/Versions/A/XPCServices/com.apple.messages.MapRenderingService.xpc</key>
@@ -22487,6 +22445,8 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/WeatherKit.framework/Versions/A/XPCServices/com.apple.WeatherKitService.xpc</key>
       <string>signatureapple</string>
+      <key>/System/Library/PrivateFrameworks/WebDriver.framework/Versions/A/XPCServices/com.apple.WebDriver.HTTPService.xpc</key>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/WirelessDiagnostics.framework/Support/awdd</key>
       <string>signatureapple</string>
       <key>/System/Library/QuickLook/iChat.qlgenerator/Contents/XPCServices/com.apple.messages.TranscriptRenderingService.xpc</key>
@@ -22496,6 +22456,28 @@
       <key>/System/Library/Services/ImageCaptureService.app</key>
       <string>signatureapple</string>
       <key>/System/Library/Services/SummaryService.app</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.History.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.ImageDecoder.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.SearchHelper.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.SocialHelper.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.WebFeedParser.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Databases.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Networking.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Plugin.32.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Plugin.64.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKitLegacy.framework/Versions/A/WebKitPluginHost.app</key>
       <string>signatureapple</string>
       <key>/System/Library/UserEventPlugins/BTMMPortInUseAgent.plugin/Contents/Resources/BTMMDisable.app</key>
       <string>signatureapple</string>
@@ -24225,8 +24207,6 @@
       <string>signatureshell</string>
       <key>/usr/bin/ruptime</key>
       <string>signatureapple</string>
-      <key>/usr/bin/rvictl</key>
-      <string>signatureapple</string>
       <key>/usr/bin/rview</key>
       <string>signatureapple</string>
       <key>/usr/bin/rvim</key>
@@ -24245,6 +24225,8 @@
       <string>signaturenotvalid</string>
       <key>/usr/bin/s2p5.18</key>
       <string>signaturenotvalid</string>
+      <key>/usr/bin/safaridriver</key>
+      <string>signatureapple</string>
       <key>/usr/bin/sample</key>
       <string>signatureapple</string>
       <key>/usr/bin/sampleproc</key>
@@ -24897,8 +24879,6 @@
       <string>signaturevalid</string>
       <key>/usr/libexec/cups/backend/fax</key>
       <string>signaturenotvalid</string>
-      <key>/usr/libexec/cups/backend/hpfax</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/http</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/cups/backend/https</key>
@@ -24979,8 +24959,6 @@
       <string>signatureapple</string>
       <key>/usr/libexec/cups/filter/rastertourf</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/cups/filter/thnucups</key>
-      <string>signaturevalid</string>
       <key>/usr/libexec/cups/filter/xhtmltopdf</key>
       <string>signatureapple</string>
       <key>/usr/libexec/cups/monitor/bcp</key>
@@ -25276,8 +25254,6 @@
       <key>/usr/libexec/rpc.rquotad</key>
       <string>signatureapple</string>
       <key>/usr/libexec/rpcsvchost</key>
-      <string>signatureapple</string>
-      <key>/usr/libexec/rpmuxd</key>
       <string>signatureapple</string>
       <key>/usr/libexec/rshd</key>
       <string>signatureapple</string>
@@ -25912,8 +25888,6 @@
       <string>signatureapple</string>
       <key>/Applications/Mission Control.app</key>
       <string>signatureapple</string>
-      <key>/Applications/NordVPN.app</key>
-      <string>signaturevalid</string>
       <key>/Applications/Notes.app</key>
       <string>signatureapple</string>
       <key>/Applications/Photo Booth.app</key>
@@ -25977,7 +25951,7 @@
       <key>/Applications/iBooks.app</key>
       <string>signatureapple</string>
       <key>/Applications/iTunes.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/Applications/iTunes.app/Contents/MacOS/iTunesHelper.app</key>
       <string>signatureapple</string>
       <key>/Library/CoreMediaIO/Plug-Ins/DAL/AppleCamera.plugin/Contents/Resources/AppleCameraAssistant</key>
@@ -26032,15 +26006,11 @@
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Applications/Wireless Diagnostics.app</key>
       <string>signatureapple</string>
-      <key>/System/Library/CoreServices/AuthBrokerAgent</key>
-      <string>signatureapple</string>
       <key>/System/Library/CoreServices/Automator Runner.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Bluetooth Setup Assistant.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/BluetoothUIServer.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/CoreServices/CFNetworkAgent</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/CSUserAgent</key>
       <string>signatureapple</string>
@@ -26115,8 +26085,6 @@
       <key>/System/Library/CoreServices/FolderActionsDispatcher.app</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/Games.app</key>
-      <string>signatureapple</string>
-      <key>/System/Library/CoreServices/HID/FirmwareUpdates/hidfud</key>
       <string>signatureapple</string>
       <key>/System/Library/CoreServices/HelpViewer.app</key>
       <string>signatureapple</string>
@@ -26441,6 +26409,10 @@
       <key>/System/Library/Frameworks/AudioToolbox.framework/XPCServices/com.apple.audio.SandboxHelper.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/AudioVideoBridging.framework/Versions/A/XPCServices/com.apple.avbloader.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/AuthBrokerAgent</key>
+      <string>signatureapple</string>
+      <key>/System/Library/Frameworks/CFNetwork.framework/Versions/A/Support/CFNetworkAgent</key>
       <string>signatureapple</string>
       <key>/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Plugins/PrinterProxy.app</key>
       <string>signatureapple</string>
