@@ -1,8 +1,7 @@
-//
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "KernelExtensionCollector.h"
@@ -24,14 +23,11 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"kernelextensions"];
   
-  if(self)
+  if(self != nil)
     {
     myExtensionsByLocation = [NSMutableDictionary new];
-    
-    self.name = @"kernelextensions";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -50,11 +46,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking kernel extensions", NULL)];
-
   // Collect all types of extensions.
   [self collectAllExtensions];
     
@@ -75,8 +68,6 @@
       [self.result appendString: @"\n"];
       }
     }
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect all extensions on the system.

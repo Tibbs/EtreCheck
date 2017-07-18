@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "NetworkUsageCollector.h"
@@ -20,12 +20,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"network"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"network";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -40,16 +38,12 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
   int version = [[Model model] majorOSVersion];
 
   if(version >= kSierra)
     {
-    [self
-      updateStatus:
-        NSLocalizedString(@"Sampling processes for network usage", NULL)];
-
     // Collect the average memory usage usage for all processes (5 times).
     NSArray * processes = [self collectNetwork];
     
@@ -58,8 +52,6 @@
     // Print the top processes.
     [self printTopProcesses: processes];
     }
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect processes' network usage.

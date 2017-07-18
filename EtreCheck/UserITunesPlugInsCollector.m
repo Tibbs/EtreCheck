@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "UserITunesPlugInsCollector.h"
@@ -12,29 +12,21 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"useritunesplugins"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"useritunesplugins";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
   [self
-    updateStatus:
-      NSLocalizedString(@"Checking user iTunes plug-ins", NULL)];
-
-  [self
     parseUserPlugins: NSLocalizedString(@"User iTunes Plug-ins:", NULL)
-    path:  @"/Library/iTunes/iTunes Plug-ins"];
-    
-  dispatch_semaphore_signal(self.complete);
+    path:  @"/Library/iTunes/iTunes Plug-ins"];    
   }
 
 @end

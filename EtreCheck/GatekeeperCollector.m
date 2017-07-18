@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "GatekeeperCollector.h"
@@ -26,24 +26,18 @@ GatekeeperSetting;
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"gatekeeper"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"gatekeeper";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking Gatekeeper information", NULL)];
-
   // Only check gatekeeper on Mountain Lion or later.
   if([[Model model] majorOSVersion] < kMountainLion)
     return;
@@ -71,8 +65,6 @@ GatekeeperSetting;
   [self printGatekeeperSetting: setting];
 
   [self.result appendCR];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect the Gatekeeper setting.

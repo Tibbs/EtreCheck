@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
@@ -35,8 +35,14 @@
 
 @property (readonly) CollectorModel * model;
 
+// Constructor.
+- (instancetype) initWithName: (NSString *) name;
+
 // Perform the collection.
 - (void) collect;
+
+// Perform the collection.
+- (void) performCollect;
 
 // Update status.
 - (void) updateStatus: (NSString *) status;

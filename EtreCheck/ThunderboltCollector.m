@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "ThunderboltCollector.h"
@@ -16,24 +16,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"thunderbolt"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"thunderbolt";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking Thunderbolt information", NULL)];
-
   NSArray * args =
     @[
       @"-xml",
@@ -73,8 +67,6 @@
   
   dataFound = [self collectSerialATA: dataFound];
   [self collectNVMExpress: dataFound];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect information about a single Thunderbolt device.

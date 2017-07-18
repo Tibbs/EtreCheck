@@ -24,28 +24,15 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"adware"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"adware";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-    
     [self loadSignatures];
     [self buildDatabases];
     }
     
   return self;
-  }
-
-// Perform the collection.
-- (void) collect
-  {
-  [self updateStatus: NSLocalizedString(@"Checking for adware", NULL)];
-
-  [self printAdware];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Load signatures from an obfuscated list of signatures.
@@ -176,7 +163,7 @@
   }
 
 // Print any adware found.
-- (void) printAdware
+- (void) performCollect
   {
   if([[Model model] possibleAdwareFound])
     {
@@ -280,7 +267,7 @@
           ++adwareCount;
           [self.result appendString: @"    "];
           [self.result
-            appendString: NSLocalizedString(type, NULL)
+            appendString: ESLocalizedString(type, NULL)
             attributes:
               @{
                 NSFontAttributeName : [[Utilities shared] boldFont],

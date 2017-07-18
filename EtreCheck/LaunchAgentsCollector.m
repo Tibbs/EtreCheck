@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "LaunchAgentsCollector.h"
@@ -13,24 +13,20 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"launchagents"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"launchagents";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Collect 3rd party launch agents.
-- (void) collect
+- (void) performCollect
   {
-  [self updateStatus: NSLocalizedString(@"Checking launch agents", NULL)];
-
   // Make sure the base class is setup.
-  [super collect];
+  [super performCollect];
   
   NSArray * args =
     @[
@@ -52,8 +48,6 @@
     }
     
   [subProcess release];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Should I hide Apple tasks?

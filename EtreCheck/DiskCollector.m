@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "DiskCollector.h"
@@ -32,23 +32,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"disk"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"disk";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
-
   BOOL dataFound = [self collectSerialATA];
   
   if([self collectNVMExpress: dataFound])
@@ -70,8 +65,6 @@
 
     [self.result appendCR];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Perform the collection for old Serial ATA controllers.
@@ -186,14 +179,14 @@
     
     NSString * trimString =
       [NSString
-        stringWithFormat: @" - TRIM: %@", NSLocalizedString(trim, NULL)];
+        stringWithFormat: @" - TRIM: %@", ESLocalizedString(trim, NULL)];
     
     NSString * info =
       [NSString
         stringWithFormat:
           @"(%@%@)",
           medium
-            ? NSLocalizedString(medium, NULL)
+            ? ESLocalizedString(medium, NULL)
             : @"",
           ([medium isEqualToString: @"Solid State"] && [trim length])
             ? trimString
@@ -251,7 +244,7 @@
     
     NSString * trimString =
       [NSString
-        stringWithFormat: @" - TRIM: %@", NSLocalizedString(trim, NULL)];
+        stringWithFormat: @" - TRIM: %@", ESLocalizedString(trim, NULL)];
     
     NSString * info =
       [NSString
@@ -400,7 +393,7 @@
   if([fileSystem length] > 0)
     fileSystemName =
       [NSString
-        stringWithFormat: @" - %@", NSLocalizedString(fileSystem, NULL)];
+        stringWithFormat: @" - %@", ESLocalizedString(fileSystem, NULL)];
     
   if([fileSystemName length] > 0)
     {

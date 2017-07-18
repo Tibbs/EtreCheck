@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "LaunchdCollector.h"
@@ -120,15 +120,12 @@
 #pragma mark - Launchd routines
 
 // Collect the status of all launchd items.
-- (void) collect
+- (void) performCollect
   {
   // Don't do this more than once.
   if([self.launchdStatus count])
     return;
     
-  [self
-    updateStatus: NSLocalizedString(@"Checking launchd information", NULL)];
-  
   // Collect all launchd items.
   [self collectLaunchdStatus: kSMDomainSystemLaunchd];
 
@@ -136,8 +133,6 @@
   
   // Add expected items that ship with the OS.
   [self setupExpectedItems];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect launchd status for a particular domain.

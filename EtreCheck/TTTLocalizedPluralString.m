@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "TTTLocalizedPluralString.h"
+#import "Utilities.h"
 
 // Source: Unicode Common Locale Data Repository Plural Rules
 // http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
@@ -454,7 +455,7 @@ NSString * TTTLocalizedPluralStringKeyForCountAndSingularNoun(NSUInteger count, 
 // Format a string using a plural rule.
 static NSString * formatPluralString(NSString * string, NSString * singular)
   {
-  NSString * localized = NSLocalizedString(string, NULL);
+  NSString * localized = ESLocalizedString(string, NULL);
   
   // Localization is the same, fallback.
   if([string isEqualToString: localized])

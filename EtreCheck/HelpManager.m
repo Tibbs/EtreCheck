@@ -7,6 +7,7 @@
 #import "HelpManager.h"
 #import "Model.h"
 #import "DiagnosticEvent.h"
+#import "Utilities.h"
 
 @interface PopoverManager ()
 
@@ -34,7 +35,7 @@
 // Show detail.
 - (void) showDetail: (NSString *) name
   {
-  NSString * helpText = NSLocalizedStringFromTable(name, @"Help", NULL);
+  NSString * helpText = ESLocalizedStringFromTable(name, @"Help", NULL);
   
   if(![helpText length])
     helpText = NSLocalizedString(@"No help available", NULL);
@@ -45,7 +46,7 @@
     [[NSAttributedString alloc] initWithString: adjustText];
     
   [super
-    showDetail: NSLocalizedStringFromTable(name, @"Collectors", NULL)
+    showDetail: ESLocalizedStringFromTable(name, @"Collectors", NULL)
     content: content];
     
   [content release];

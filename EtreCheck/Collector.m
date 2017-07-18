@@ -27,16 +27,19 @@
   }
 
 // Constructor.
-- (id) init
+- (instancetype) initWithName: (NSString *) name
   {
   self = [super init];
   
   if(self)
     {
+    myName = [name copy];
     myResult = [NSMutableAttributedString new];
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
     myModel = [CollectorModel new];
+    
+    self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -55,8 +58,19 @@
   [super dealloc];
   }
 
-// Perform the collection.
+// Do the collection.
 - (void) collect
+  {
+  [self
+    updateStatus: ESLocalizedStringFromTable(self.name, @"Status", NULL)];
+
+  [self performCollect];
+  
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Perform the collection.
+- (void) performCollect
   {
   // Derived classes must implement.
   }
@@ -78,7 +92,7 @@
     [NSString stringWithFormat: @"etrecheck://help/%@", self.name];
 
   [string
-    appendString: NSLocalizedString(self.title, NULL)
+    appendString: ESLocalizedString(self.title, NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "ConfigurationCollector.h"
@@ -22,12 +22,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"configurationfiles"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"configurationfiles";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -44,11 +42,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking configuration files", NULL)];
-
   [self checkExistingConfigFiles];
   
   bool haveChanges = [self.configFiles count] > 0;
@@ -86,9 +81,7 @@
     [self printOtherModifications];
       
     [self.result appendCR];
-    }
-    
-  dispatch_semaphore_signal(self.complete);
+    }    
   }
 
 // Find modified configuration files.

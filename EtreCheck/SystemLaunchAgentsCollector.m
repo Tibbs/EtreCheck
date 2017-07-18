@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "SystemLaunchAgentsCollector.h"
@@ -13,26 +13,20 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"systemlaunchagents"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"systemlaunchagents";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Collect system launch agents.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking system launch agents", NULL)];
- 
   // Make sure the base class is setup.
-  [super collect];
+  [super performCollect];
   
   NSArray * args =
     @[
@@ -54,8 +48,6 @@
     }
     
   [subProcess release];
-  
-  dispatch_semaphore_signal(self.complete);
   }
   
 @end

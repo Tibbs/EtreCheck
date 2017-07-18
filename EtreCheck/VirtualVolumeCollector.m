@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014-2017. All rights reserved.
+ ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
 #import "VirtualVolumeCollector.h"
@@ -26,12 +26,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"virtualvolume"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"virtualvolume";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     myVirtualVolumes = [NSMutableDictionary new];
     }
     
@@ -47,7 +45,7 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
   [self collectDiskUtil];
   [self collectStorage];

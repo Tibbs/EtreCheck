@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "SystemSoftwareCollector.h"
@@ -19,22 +19,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"systemsoftware"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"systemsoftware";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self updateStatus: NSLocalizedString(@"Checking system software", NULL)];
-    
   [self.result appendAttributedString: [self buildTitle]];
   
   BOOL dataFound = NO;
@@ -92,8 +88,6 @@
         
     [self.result appendCR];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Load Apple software.

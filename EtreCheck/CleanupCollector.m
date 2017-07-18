@@ -23,31 +23,23 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"cleanup"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"cleanup";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking for clean up opportuntities", NULL)];
-
   [self collectNotificationSPAM];
   
   BOOL hasMissingExecutables = [self printMissingExecutables];
   
   [self printNotificationSPAM: !hasMissingExecutables];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print any missing executables.

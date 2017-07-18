@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "SafariExtensionsCollector.h"
@@ -31,13 +31,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"safariextensions"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"safariextensions";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     myExtensions = [NSMutableDictionary new];
     myExtensionsByName = [NSMutableDictionary new];
     }
@@ -55,11 +52,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking Safari extensions", NULL)];
-
   [self collectArchives];
   [self collectCaches];
   [self collectModernExtensions];
@@ -83,8 +77,6 @@
     
     [self.result appendCR];
     }
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect extension archives.

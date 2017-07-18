@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014.-2017 All rights reserved.
  **********************************************************************/
 
 #import "UserAudioPlugInsCollector.h"
@@ -12,28 +12,21 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"useraudioplugins"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"useraudioplugins";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking user audio plug-ins", NULL)];
-
   [self
     parseUserPlugins: NSLocalizedString(@"User Audio Plug-ins:", NULL)
     path: @"/Library/Audio/Plug-ins"];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 @end

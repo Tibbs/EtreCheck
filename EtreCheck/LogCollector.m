@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "LogCollector.h"
@@ -18,29 +18,23 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"log"];
   
   if(self)
     {
     self.name = @"log";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking information from log files", NULL)];
-
   [self collectLogInformation];
   
   [self collectSystemLog];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect information from log files.

@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "VideoCollector.h"
@@ -17,23 +17,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"video"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"video";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Collect video information.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking video information", NULL)];
-
   NSArray * args =
     @[
       @"-xml",
@@ -57,8 +52,6 @@
     }
     
   [subProcess release];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print video information.

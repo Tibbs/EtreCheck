@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "TimeMachineCollector.h"
@@ -22,9 +22,9 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"timemachine"];
   
-  if(self)
+  if(self != nil)
     {
     formatter = [[ByteCountFormatter alloc] init];
     
@@ -36,9 +36,6 @@
     excludedPaths = [[NSMutableSet alloc] init];
     
     excludedVolumeUUIDs = [[NSMutableSet alloc] init];
-    
-    self.name = @"timemachine";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -56,12 +53,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking Time Machine information", NULL)];
-
   [self.result appendAttributedString: [self buildTitle]];
 
   if([[Model model] majorOSVersion] < kMountainLion)
@@ -95,8 +88,6 @@
   
   // Now I can continue.
   [self collectInformation];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect Time Machine information now that I know I should be able to

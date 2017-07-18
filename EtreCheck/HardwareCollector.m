@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "HardwareCollector.h"
@@ -37,13 +37,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"hardware"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"hardware";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-    
     // Do this in the constructor so the data is available before
     // collection starts.
     [self loadProperties];    
@@ -103,12 +100,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking hardware information", NULL)];
-
   [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
@@ -116,8 +109,6 @@
   [self collectiCloud];
     
   [self.result appendCR];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect bluetooth information.
@@ -544,7 +535,7 @@
   // Don't give up.
   if(!iconPath)
     {
-    iconPath = NSLocalizedStringFromTable(code, @"machineIcons", NULL);
+    iconPath = ESLocalizedStringFromTable(code, @"machineIcons", NULL);
     
     if(iconPath)
       {
@@ -969,7 +960,7 @@
             NSLocalizedString(
               @"    Battery: Health = %@ - Cycle count = %@\n",
               NULL),
-            NSLocalizedString(health, NULL), cycleCount]
+            ESLocalizedString(health, NULL), cycleCount]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -982,7 +973,7 @@
               NSLocalizedString(
                 @"    Battery: Health = %@ - Cycle count = %@\n",
                 NULL),
-              NSLocalizedString(health, NULL), cycleCount]];
+              ESLocalizedString(health, NULL), cycleCount]];
       
     [self.model setString: health forKey: @"batteryhealth"];
     [self.model setNumber: cycleCount forKey: @"batterycyclecount"];

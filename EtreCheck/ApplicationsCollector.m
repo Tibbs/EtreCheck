@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "ApplicationsCollector.h"
@@ -18,13 +18,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"applications"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"applications";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     genericApplication =
       [[NSWorkspace sharedWorkspace] iconForFileType: @".app"];
     }
@@ -33,10 +30,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self updateStatus: NSLocalizedString(@"Checking applications", NULL)];
-
   [self.result appendAttributedString: [self buildTitle]];
   
   // Get the applications.
@@ -54,8 +49,6 @@
   [self.result appendCR];
   [self.result
     deleteCharactersInRange: NSMakeRange(0, [self.result length])];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect applications.

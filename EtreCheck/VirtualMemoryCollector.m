@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "VirtualMemoryCollector.h"
@@ -25,13 +25,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"vm"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"vm";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
     formatter = [[ByteCountFormatter alloc] init];
 
     formatter.k1000 = 1024.0;
@@ -49,12 +46,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking virtual memory information", NULL)];
-
   NSDictionary * vminfo = [self collectVirtualMemoryInformation];
     
   [self.result appendAttributedString: [self buildTitle]];
@@ -66,8 +59,6 @@
   [self printVM: vminfo forKey: kSwapUsed];
 
   [self.result appendCR];
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect virtual memory information.
@@ -164,7 +155,7 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          NSLocalizedString(key, NULL)]];
+          ESLocalizedString(key, NULL)]];
   }
 
 // Print a VM value.
@@ -187,7 +178,7 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          NSLocalizedString(key, NULL)]
+          ESLocalizedString(key, NULL)]
     attributes: attributes];
   }
 
@@ -204,7 +195,7 @@
     
     [extra
       appendFormat:
-        NSLocalizedString(kFileCache, NULL),
+        ESLocalizedString(kFileCache, NULL),
         [formatter stringFromByteCount: (unsigned long long)cached]];
     
     [extra appendString: @")"];

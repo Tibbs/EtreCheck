@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "InstallCollector.h"
@@ -16,22 +16,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"install"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"install";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self updateStatus: NSLocalizedString(@"Checking installs", NULL)];
-
   NSArray * installs = [self collectInstalls];
   
   int printCount = 0;
@@ -80,8 +76,6 @@
       
     [self.result appendCR];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect installs.

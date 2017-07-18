@@ -34,7 +34,6 @@
 		A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3C19AC0AA3003084C8 /* Utilities.m */; };
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
 		A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A52820951DEB8750000B8EAA /* EtreCheckWindow.m */; };
-		A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A52986A71BB89C160040C63D /* HiddenAppsCollector.m */; };
 		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
 		A53EA3721C6E86B600F270B0 /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3711C6E86B600F270B0 /* UpdateManager.m */; };
 		A53EA3771C6FCF0200F270B0 /* NSDate+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3761C6FCF0200F270B0 /* NSDate+Etresoft.m */; };
@@ -71,6 +70,7 @@
 		A58B4D141EE0E4FB00415121 /* InstallCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A58B4D131EE0E4FB00415121 /* InstallCollector.m */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
+		A5A8D6831F1D548000276B70 /* Status.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5A8D6811F1D548000276B70 /* Status.strings */; };
 		A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */; };
 		A5B659231A16D57800476A76 /* DiagnosticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B659221A16D57800476A76 /* DiagnosticEvent.m */; };
 		A5B6BD5B19D7AAF900C48C37 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */; };
@@ -211,8 +211,6 @@
 		A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		A52820941DEB8750000B8EAA /* EtreCheckWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckWindow.h; sourceTree = "<group>"; };
 		A52820951DEB8750000B8EAA /* EtreCheckWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckWindow.m; sourceTree = "<group>"; };
-		A52986A61BB89C160040C63D /* HiddenAppsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiddenAppsCollector.h; sourceTree = "<group>"; };
-		A52986A71BB89C160040C63D /* HiddenAppsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HiddenAppsCollector.m; sourceTree = "<group>"; };
 		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLBuilder.h; sourceTree = "<group>"; };
@@ -284,6 +282,8 @@
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Etresoft.m"; sourceTree = "<group>"; };
+		A5A8D6821F1D548000276B70 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Status.strings; sourceTree = "<group>"; };
+		A5A8D6841F1D548800276B70 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
 		A5A9B8091C4FFD9A00D0EA71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/donate.rtf; sourceTree = "<group>"; };
 		A5A9B80B1C4FFDA200D0EA71 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/donate.rtf; sourceTree = "<group>"; };
 		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticEvent.h; sourceTree = "<group>"; };
@@ -492,8 +492,6 @@
 				A5C292EE19A039E700464E86 /* UserLaunchAgentsCollector.m */,
 				A50C9DC319A4052000BA6A25 /* LoginItemsCollector.h */,
 				A50C9DC419A4052000BA6A25 /* LoginItemsCollector.m */,
-				A52986A61BB89C160040C63D /* HiddenAppsCollector.h */,
-				A52986A71BB89C160040C63D /* HiddenAppsCollector.m */,
 				A50C9DC619A4063E00BA6A25 /* PlugInsCollector.h */,
 				A50C9DC719A4063E00BA6A25 /* PlugInsCollector.m */,
 				A50C9DC919A4065B00BA6A25 /* InternetPlugInsCollector.h */,
@@ -663,6 +661,7 @@
 				A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */,
 				A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */,
 				A5E9E2C91A2669A600309185 /* Collectors.strings */,
+				A5A8D6811F1D548000276B70 /* Status.strings */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
 				A55BC17615BF987D00D42EF1 /* InfoPlist.strings */,
 				A540C7001873D5F800497BDE /* Localizable.strings */,
@@ -792,6 +791,7 @@
 				A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */,
 				A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */,
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
+				A5A8D6831F1D548000276B70 /* Status.strings in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
 				A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
@@ -913,7 +913,6 @@
 				A51ED7671DB090B60026833B /* NumberFormatter.m in Sources */,
 				A5DF7D251EC27B7A002C9686 /* NetworkUsageCollector.m in Sources */,
 				A5C292F819A2220400464E86 /* SystemSoftwareCollector.m in Sources */,
-				A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,6 +1023,15 @@
 				A5716E101C4C41C700297727 /* fr */,
 			);
 			name = cleanuphelp.rtf;
+			sourceTree = "<group>";
+		};
+		A5A8D6811F1D548000276B70 /* Status.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5A8D6821F1D548000276B70 /* en */,
+				A5A8D6841F1D548800276B70 /* fr */,
+			);
+			name = Status.strings;
 			sourceTree = "<group>";
 		};
 		A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */ = {

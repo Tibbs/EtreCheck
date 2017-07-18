@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "UserInternetPlugInsCollector.h"
@@ -12,29 +12,21 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"userinternetplugins"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"userinternetplugins";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking user internet plug-ins", NULL)];
-
   [self
     parseUserPlugins: NSLocalizedString(@"User Internet Plug-ins:", NULL)
     path: @"Library/Internet Plug-Ins"];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 @end

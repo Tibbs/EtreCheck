@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "CPUUsageCollector.h"
@@ -13,23 +13,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"cpu"];
   
   if(self)
     {
-    self.name = @"cpu";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Sampling processes for CPU", NULL)];
-
   // Collect the average CPU usage for all processes (5 times).
   NSDictionary * avgCPU = [self collectAverageCPU];
   
@@ -40,8 +35,6 @@
   [self printTopProcesses: processesCPU];
   
   [self.result appendCR];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect the average CPU usage of all processes.

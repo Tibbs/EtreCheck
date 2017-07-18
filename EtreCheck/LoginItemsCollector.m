@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "LoginItemsCollector.h"
@@ -17,12 +17,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"loginitems"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"loginitems";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     myLoginItems = [NSMutableArray new];
     }
     
@@ -38,10 +36,8 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self updateStatus: NSLocalizedString(@"Checking login items", NULL)];
-
   [self collectOldLoginItems];
   [self collectModernLoginItems];
   
@@ -85,8 +81,6 @@
     
   if(count > 0)
     [self.result appendCR];
-
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect Mach init files.

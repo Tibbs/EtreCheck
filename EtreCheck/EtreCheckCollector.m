@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2016. All rights reserved.
+ ** Copyright (c) 2016-2017. All rights reserved.
  **********************************************************************/
 
 #import "EtreCheckCollector.h"
@@ -14,31 +14,17 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"etrecheckdeletedfiles"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"etrecheckdeletedfiles";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
-// Perform the collection.
-- (void) collect
-  {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Checking information from EtreCheck", NULL)];
-
-  [self collectEtreCheck];
-  
-  dispatch_semaphore_signal(self.complete);
-  }
-
 // Collect information from log files.
-- (void) collectEtreCheck
+- (void) performCollect
   {
   NSMutableArray * deletedFiles =
     [[[NSUserDefaults standardUserDefaults]

@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "USBCollector.h"
@@ -16,23 +16,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"usb"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"usb";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus: NSLocalizedString(@"Checking USB information", NULL)];
-
   NSArray * args =
     @[
       @"-xml",
@@ -67,8 +62,6 @@
     [self.result appendCR];
     
   [subProcess release];
-  
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print a single USB device.

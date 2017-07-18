@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "EnergyUsageCollector.h"
@@ -18,12 +18,10 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"energy"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"energy";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
@@ -38,16 +36,12 @@
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
   int version = [[Model model] majorOSVersion];
 
   if(version >= kMavericks)
     {
-    [self
-      updateStatus:
-        NSLocalizedString(@"Sampling processes for energy", NULL)];
-
     // Collect the average energy usage usage for all processes (5 times).
     NSMutableDictionary * avgEnergy = [self collectAverageEnergy];
     
@@ -65,8 +59,6 @@
     // Print the top processes.
     [self printTopProcesses: processesEnergy];
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect the average energy usage of all processes.

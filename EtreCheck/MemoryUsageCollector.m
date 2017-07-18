@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
 #import "MemoryUsageCollector.h"
@@ -15,24 +15,18 @@
 // Constructor.
 - (id) init
   {
-  self = [super init];
+  self = [super initWithName: @"memory"];
   
-  if(self)
+  if(self != nil)
     {
-    self.name = @"memory";
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;
   }
 
 // Perform the collection.
-- (void) collect
+- (void) performCollect
   {
-  [self
-    updateStatus:
-      NSLocalizedString(@"Sampling processes for memory", NULL)];
-
   // Collect the average memory usage usage for all processes (5 times).
   NSDictionary * avgMemory = [self collectAverageMemory];
   
@@ -41,8 +35,6 @@
   
   // Print the top processes.
   [self printTopProcesses: processesMemory];
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Collect the average CPU usage of all processes.
