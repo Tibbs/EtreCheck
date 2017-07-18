@@ -1,0 +1,47 @@
+/* 
+  Collectors.strings
+  EtreCheck
+
+  Created by John Daniel on 2014-11-26.
+  Copyright (c) 2014 Etresoft. All rights reserved.
+*/
+"hardware" = "Vérification du matériel";
+"video" = "Vérification des informations vidéo";
+"systemsoftware" = "Vérification du logiciel du système";
+"virtualvolume" = "Vérification des volumes virtuels";
+"disk" = "Vérification des informations des disques";
+"usb" = "Vérification des informations USB";
+"firewire" = "Vérification des informations Firewire";
+"thunderbolt" = "Vérification des informations Thunderbolt";
+"configurationfiles" = "Vérification des fichiers de configuration";
+"gatekeeper" = "Vérification des informations Gatekeeper";
+"kernelextensions" = "Vérification des extensions du noyau";
+"startupitems" = "Vérification des éléments de démarrage obsolètes";
+"systemlaunchagents" = "Vérification des agents de lancement du système";
+"systemlaunchdaemons" = "Vérification des daemons de lancement du système";
+"launchagents" = "Vérification des agents de lancement";
+"launchdaemons" = "Vérification des daemons de lancement";
+"userlaunchagents" = "Vérification des agents de lancement pour utilisateur";
+"loginitems" = "Vérification des éléments Ouverture";
+"internetplugins" = "Vérification des modules internet";
+"userinternetplugins" = "Vérification des modules internets pour utilisateur";
+"audioplugins" = "Vérification des modules audios";
+"useraudioplugins" = "Vérification des modules audio pour utilisateur";
+"itunesplugins" = "Vérification des modules iTunes";
+"useritunesplugins" = "Vérification des modules iTunes pour utilisateur";
+"safariextensions" = "Vérification des extensions de Safari";
+"preferencepanes" = "Vérification des panneaux de préférences";
+"fonts" = "Vérification des polices";
+"applications" = "Vérification des applications";
+"timemachine" = "Vérification des informations Time Machine";
+"cpu" = "Échantillonnage des processus pour CPU";
+"memory" = "Échantillonnage des processus pour la mémoire";
+"network" = "Échantillonnage des processus pour le réseau";
+"energy" = "Échantillonnage des processus pour l’énergie";
+"vm" = "Vérification des informations de la mémoire virtuelle";
+"install" = "Vérification des installations de logiciel";
+"diagnostics" = "Vérification des informations du diagnostic";
+"log" = "Vérification des fichiers d’historique";
+"adware" = "Vérification de l’adware";
+"cleanup" = "Vérification des opportunités de nettoyage";
+"etrecheckdeletedfiles" = "Vérification des fichiers enlevés par EtreCheck";
