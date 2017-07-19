@@ -454,12 +454,22 @@
     return YES;
     
   // Now check for /Library/*.
-  NSString * dirname = [executable stringByDeletingLastPathComponent];
-  
   if([executable hasPrefix: @"/Library/"])
+    {
+    NSString * dirname = [executable stringByDeletingLastPathComponent];
+  
     if([dirname isEqualToString: @"/Library"])
       if([[executable pathExtension] length] == 0)
         return YES;
+        
+    // Now check for /Library/*/*.
+    NSString * name = [executable lastPathComponent];
+    NSString * parent = [dirname lastPathComponent];
+    
+    if([name isEqualToString: parent])
+      if([[executable pathExtension] length] == 0)
+        return YES;
+    }
     
   NSArray * command = [info objectForKey: kCommand];
 
