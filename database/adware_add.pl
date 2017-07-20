@@ -36,7 +36,12 @@ foreach my $path (@paths)
   $path =~ s/^"(.+)"^/$1/
     if $path =~ /^".+"$/;
 
-  $insert->execute($category, basename($path));
+  eval
+    {
+    $insert->execute($category, basename($path));
+
+    $insert->finalize();
+    }
   }
 
 $db->disconnect;

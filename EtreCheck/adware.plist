@@ -66,6 +66,7 @@
     <string>com.LiveShoppers.agent.plist</string>
     <string>com.MTWB.Product.plist</string>
     <string>com.MacUpdater.agent.plist</string>
+    <string>com.My-ShopMate.agent.plist</string>
     <string>com.MyShopMate.agent.plist</string>
     <string>com.MySoftUpdate.agent.plist</string>
     <string>com.MyUpdater.agent.plist</string>
@@ -792,7 +793,9 @@
     <string>com.actualtechnologies.odbcdriver.atsqlsrv.plist</string>
     <string>com.actualtechnologies.odbcmanager.plist</string>
     <string>com.addigy.agent-postlogin.plist</string>
+    <string>com.addigy.agent-prelogin.plist</string>
     <string>com.addigy.agent.plist</string>
+    <string>com.addigy.block-macOS10.13.plist</string>
     <string>com.addigy.cache.plist</string>
     <string>com.addigy.collector.plist</string>
     <string>com.addigy.pblock.plist</string>
@@ -4173,6 +4176,7 @@
     <string>homebrew.mxcl.mongodb.plist</string>
     <string>homebrew.mxcl.mpd.plist</string>
     <string>homebrew.mxcl.mysql.plist</string>
+    <string>homebrew.mxcl.mysql55.plist</string>
     <string>homebrew.mxcl.mysql56.plist</string>
     <string>homebrew.mxcl.mysql@5.5.plist</string>
     <string>homebrew.mxcl.nginx-full.plist</string>
@@ -4200,6 +4204,7 @@
     <string>homebrew.mxcl.redis-in-memory.plist</string>
     <string>homebrew.mxcl.redis.plist</string>
     <string>homebrew.mxcl.rethinkdb.plist</string>
+    <string>homebrew.mxcl.samba.plist</string>
     <string>homebrew.mxcl.selenium-server-standalone.plist</string>
     <string>homebrew.mxcl.shadowsocks-libev.plist</string>
     <string>homebrew.mxcl.shrewsoft-vpn-client.plist</string>
@@ -4328,6 +4333,7 @@
     <string>myTuneSync-Launcher.plist</string>
     <string>mysql.agent.plist</string>
     <string>mysql.agent1.plist</string>
+    <string>n</string>
     <string>name.razzfazz.daemon.iScroll2.plist</string>
     <string>name.ridgewell.unlock.plist</string>
     <string>net.briankendall.forceFullDesktopBar.plist</string>
@@ -4591,6 +4597,7 @@
     <string>org.macports.logwatch.plist</string>
     <string>org.macports.macports-notifier.plist</string>
     <string>org.macports.mailman.plist</string>
+    <string>org.macports.mariadb-10.0-server.plist</string>
     <string>org.macports.mariadb-server.plist</string>
     <string>org.macports.memcached.plist</string>
     <string>org.macports.mongodb.plist</string>
@@ -4651,6 +4658,7 @@
     <string>org.neubot.notifier.plist</string>
     <string>org.neubot.plist</string>
     <string>org.ngircd.plist</string>
+    <string>org.ntp.ntpd-legacy.plist</string>
     <string>org.ntp.ntpd.plist</string>
     <string>org.ocsng.agent.plist</string>
     <string>org.openafs.filesystems.afs.plist</string>
@@ -4689,6 +4697,8 @@
     <string>org.samba.nmbd.plist</string>
     <string>org.samba.smbd.plist</string>
     <string>org.sane-project.saned.plist</string>
+    <string>org.sensuapp.sensu-api.plist</string>
+    <string>org.sensuapp.sensu-client.plist</string>
     <string>org.serviio.server.plist</string>
     <string>org.shoutcast.plist</string>
     <string>org.sickbeard.autostart01.plist</string>
