@@ -1033,10 +1033,10 @@ Gw
         </customView>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="wFy-Tx-jaS" userLabel="Window - TOU">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="592" height="471"/>
+            <rect key="contentRect" x="109" y="132" width="592" height="492"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1600" height="877"/>
-            <view key="contentView" id="Ujn-2V-eyq">
-                <rect key="frame" x="0.0" y="0.0" width="592" height="471"/>
+            <view key="contentView" misplaced="YES" id="Ujn-2V-eyq">
+                <rect key="frame" x="0.0" y="0.0" width="592" height="492"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" id="72w-pq-qYc">
@@ -1053,18 +1053,18 @@ Gw
                             <action selector="declineTOS:" target="Voe-Tx-rLC" id="QDb-Xm-czs"/>
                         </connections>
                     </button>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="4ci-fO-9KJ">
-                        <rect key="frame" x="-1" y="61" width="594" height="411"/>
+                    <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="4ci-fO-9KJ">
+                        <rect key="frame" x="-1" y="61" width="594" height="432"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" id="FLZ-Gn-pWz">
-                            <rect key="frame" x="1" y="1" width="592" height="409"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <rect key="frame" x="1" y="1" width="592" height="430"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="F9C-fa-au5">
-                                    <rect key="frame" x="0.0" y="0.0" width="592" height="409"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="592" height="430"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="592" height="409"/>
+                                    <size key="minSize" width="592" height="430"/>
                                     <size key="maxSize" width="594" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
@@ -1094,7 +1094,7 @@ DQ
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="363" y="57.5"/>
+            <point key="canvasLocation" x="363" y="47"/>
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="z9I-nc-r8L" userLabel="Window - Donate">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>

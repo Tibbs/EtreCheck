@@ -842,39 +842,25 @@ DQ
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="eqA-WK-Xkh" userLabel="Window - TOU">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="563" height="419"/>
+            <rect key="contentRect" x="109" y="132" width="594" height="457"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1600" height="877"/>
-            <view key="contentView" id="gjb-XA-03v">
-                <rect key="frame" x="0.0" y="0.0" width="563" height="419"/>
+            <view key="contentView" misplaced="YES" id="gjb-XA-03v">
+                <rect key="frame" x="0.0" y="0.0" width="594" height="457"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="YuL-9R-Wxy">
-                        <rect key="frame" x="14" y="13" width="82" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uax-hx-2Nu">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="declineTOS:" target="Voe-Tx-rLC" id="9dQ-RM-zG0"/>
-                        </connections>
-                    </button>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="l82-sm-bBb">
-                        <rect key="frame" x="-1" y="61" width="565" height="359"/>
+                    <scrollView misplaced="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="l82-sm-bBb">
+                        <rect key="frame" x="-1" y="61" width="596" height="397"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="VIQ-qK-qD0">
-                            <rect key="frame" x="1" y="1" width="563" height="357"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <rect key="frame" x="1" y="1" width="594" height="395"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1GW-8d-S16">
-                                    <rect key="frame" x="0.0" y="0.0" width="563" height="357"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="594" height="395"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="563" height="357"/>
-                                    <size key="maxSize" width="565" height="10000000"/>
+                                    <size key="minSize" width="594" height="395"/>
+                                    <size key="maxSize" width="594" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
@@ -889,7 +875,7 @@ Gw
                         </scroller>
                     </scrollView>
                     <button toolTip="Click to accept the terms of use" verticalHuggingPriority="750" id="6Wg-kO-rHz">
-                        <rect key="frame" x="459" y="13" width="90" height="32"/>
+                        <rect key="frame" x="490" y="13" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="I Accept" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6Ji-v2-9L0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -900,9 +886,23 @@ DQ
                         </buttonCell>
                         <accessibility description="I accept the terms of use"/>
                     </button>
+                    <button verticalHuggingPriority="750" misplaced="YES" id="YuL-9R-Wxy">
+                        <rect key="frame" x="36" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uax-hx-2Nu">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="declineTOS:" target="Voe-Tx-rLC" id="9dQ-RM-zG0"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="333.5" y="1345.5"/>
+            <point key="canvasLocation" x="307" y="1328.5"/>
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="JnU-dB-S5j" userLabel="Window - Donate">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
@@ -1745,7 +1745,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="GWf-gt-1FN">
                             <rect key="frame" x="1" y="0.0" width="526" height="206"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" headerView="KdD-aM-Pzy" id="5fT-L9-tTB">
                                     <rect key="frame" x="0.0" y="0.0" width="526" height="183"/>
