@@ -49,7 +49,8 @@
   {
   [self collectDiskUtil];
   [self collectStorage];
-  
+  [self collectDiskUtilAPFS];
+
   [self printVirtualVolumes];
   }
 
@@ -154,6 +155,69 @@
         
         if([device length] > 0)
           [self.virtualVolumes setObject: volume forKey: device];
+        }
+      }
+    }
+    
+  [subProcess release];
+  }
+
+// Collect disk util information.
+- (void) collectDiskUtilAPFS
+  {
+  NSArray * args =
+    @[
+      @"apfs",
+      @"list",
+      @"-plist"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/diskutil.xml"];
+
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
+    {
+    NSDictionary * plist =
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
+  
+    if((plist != nil) && ([plist count] > 0))
+      {
+      NSArray * containers = [plist objectForKey: @"Containers"];
+        
+      for(NSDictionary * container in containers)
+        {
+        NSString * physicalDevice =
+          [container objectForKey: @"DesignatedPhysicalStore"];
+
+        NSArray * volumes = [container objectForKey: @"Volumes"];
+        
+        if([volumes count] > 0)
+          for(NSMutableDictionary * volume in volumes)
+            {
+            NSString * device = [volume objectForKey: @"DeviceIdentifier"];
+            
+            if([device length] > 0)
+              {
+              NSMutableDictionary * virtualVolume =
+                [self.virtualVolumes objectForKey: device];
+                
+              if(virtualVolume != nil)
+                {
+                NSDictionary * physicalDrive =
+                  [volume objectForKey: @"physical_drive"];
+                
+                if(physicalDrive == nil)
+                  [virtualVolume
+                    setObject:
+                      [NSDictionary
+                        dictionaryWithObjectsAndKeys:
+                          physicalDevice, @"device_name", nil]
+                    forKey: @"physical_drive"];
+                }
+              }
+            }
         }
       }
     }
