@@ -764,7 +764,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           else
             [[Model model] setVerifiedEtreCheckVersion: YES];
             
-          if(kWhitelistDisabled)
+          if(!kWhitelistDisabled)
             {
             NSArray * whitelist = [attributes objectForKey: @"whitelist"];
             
