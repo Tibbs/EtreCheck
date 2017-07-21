@@ -6,10 +6,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface XMLException : NSException
-
-@end
-
 // Encapsulate each element.
 @interface XMLElement : NSObject
   {
@@ -78,5 +74,82 @@
 
 // The stack of elements.
 @property (retain) NSMutableArray * elements;
+
+// Start a new element.
+- (void) startElement: (NSString *) name;
+
+// Add a null attribute.
+- (void) addNullAttribute: (NSString *) name;
+
+// Add a string attribute.
+- (void) addStringAttribute: (NSString *) name value: (NSString *) value;
+
+// Add an NSObject attribute.
+- (void) addAttribute: (NSString *) name value: (NSObject *) value;
+
+// Add a boolen attribute.
+- (void) addBooleanAttribute: (NSString *) name value: (BOOL) value;
+
+// Add an integer attribute.
+- (void) addIntegerAttribute: (NSString *) name value: (NSInteger) value;
+
+// Add an unsigned integer attribute.
+- (void) addUnsignedIntegerAttribute: (NSString *) name 
+  value: (NSUInteger) value;
+
+// Add a long long attribute.
+- (void) addLongLongAttribute: (NSString *) name value: (long long) value;
+
+// Add a double attribute.
+- (void) addDoubleAttribute: (NSString *) name value: (double) value;
+
+// Add a date attribute.
+- (void) addDateAttribute: (NSString *) name value: (NSDate *) value;
+
+// Add a URL attribute.
+- (void) addURLAttribute: (NSString *) name value: (NSURL *) value;
+
+// Add a string to the current element's contents.
+- (void) addString: (NSString *) string;
+
+// Add a CDATA string.
+- (void) addCDATA: (NSString *) string;
+
+// Add a null element.
+- (void) addNullElement: (NSString *) name;
+
+// Add a string element.
+- (void) addStringElement: (NSString *) name value: (NSString *) value;
+
+// Add an NSObject element.
+- (void) addElement: (NSString *) name value: (NSObject *) value;
+
+// Add a boolen element.
+- (void) addBooleanElement: (NSString *) name value: (BOOL) value;
+
+// Add an integer element.
+- (void) addIntegerElement: (NSString *) name value: (NSInteger) value;
+
+// Add an unsigned integer element.
+- (void) addUnsignedIntegerElement: (NSString *) name 
+  value: (NSUInteger) value;
+
+// Add a long long element.
+- (void) addLongLongElement: (NSString *) name value: (long long) value;
+
+// Add a double element.
+- (void) addDoubleElement: (NSString *) name value: (double) value;
+
+// Add a date element.
+- (void) addDateElement: (NSString *) name value: (NSDate *) value;
+
+// Add a URL element.
+- (void) addURLElement: (NSString *) name value: (NSURL *) value;
+
+// Finish the specified element, finishing any open elements if necessary.
+- (void) endElement: (NSString *) name;
+
+// Finish the specified element if it is open.
+- (void) endOpenElement: (NSString *) name;
 
 @end

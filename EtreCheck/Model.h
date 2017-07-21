@@ -33,6 +33,7 @@
 #define kWhitelistDisabled NO
 
 @class DiagnosticEvent;
+@class XMLBuilder;
 
 // A singleton to keep track of system information.
 @interface Model : NSObject
@@ -81,6 +82,8 @@
   bool myCleanupRequired;
   NSMutableDictionary * myPathsForUUIDs;
   NSMutableDictionary * myNotificationSPAMs;
+  
+  XMLBuilder * myXMLBuilder;
   }
 
 // Keep track of the OS version.
@@ -221,6 +224,9 @@
 
 // Notification SPAM.
 @property (readonly) NSMutableDictionary * notificationSPAMs;
+
+// XML output.
+@property (readonly) XMLBuilder * xml;
 
 // Return the singeton of shared values.
 + (Model *) model;

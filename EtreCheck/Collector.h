@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class CollectorModel;
+@class XMLBuilder;
 
 // Base class for all collector activities. Also has values like current
 // OS version that may be needed by all collectors.
@@ -17,7 +17,6 @@
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
-  CollectorModel * myModel;
   }
 
 // The name of this collector.
@@ -33,7 +32,7 @@
 @property (assign) dispatch_semaphore_t complete;
 @property (readonly) bool done;
 
-@property (readonly) CollectorModel * model;
+@property (readonly) XMLBuilder * model;
 
 // Constructor.
 - (instancetype) initWithName: (NSString *) name;

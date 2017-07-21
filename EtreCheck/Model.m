@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "LaunchdCollector.h"
 #import "NSString+Etresoft.h"
+#import "XMLBuilder.h"
 
 @implementation Model
 
@@ -57,6 +58,7 @@
 @synthesize cleanupRequired = myCleanupRequired;
 @synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize notificationSPAMs = myNotificationSPAMs;
+@synthesize xml = myXMLBuilder;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -192,6 +194,7 @@
     myBlacklistMatches = [NSMutableSet new];
     myPathsForUUIDs = [NSMutableDictionary new];
     myNotificationSPAMs = [NSMutableDictionary new];
+    myXMLBuilder = [XMLBuilder new];
     }
     
   return self;
@@ -200,6 +203,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myXMLBuilder release];
   [myNotificationSPAMs release];
   [myPathsForUUIDs release];
   [mySerialCode release];

@@ -9,7 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SearchEngine.h"
-#import "CollectorModel.h"
+#import "XMLBuilder.h"
 
 @implementation Collector
 
@@ -18,8 +18,13 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
-@synthesize model = myModel;
+@dynamic model;
 
+- (XMLBuilder *) model
+  {
+  return [[Model model] xml];
+  }
+  
 // Is this collector complete?
 - (bool) done
   {
@@ -37,7 +42,6 @@
     myResult = [NSMutableAttributedString new];
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
-    myModel = [CollectorModel new];
     
     self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
@@ -48,7 +52,6 @@
 // Destructor.
 - (void) dealloc
   {
-  [myModel release];
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
@@ -64,7 +67,11 @@
   [self
     updateStatus: ESLocalizedStringFromTable(self.name, @"Status", NULL)];
 
+  [self.model startElement: self.name];
+  
   [self performCollect];
+  
+  [self.model endElement: self.name];
   
   dispatch_semaphore_signal(self.complete);
   }

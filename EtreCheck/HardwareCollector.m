@@ -14,7 +14,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "SubProcess.h"
 #import "ByteCountFormatter.h"
-#import "CollectorModel.h"
+#import "XMLBuilder.h"
 #import "NumberFormatter.h"
 
 // Some keys to be returned from machine lookuup.
@@ -87,13 +87,11 @@
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
-  [self.model setString: computerName forKey: @"computername"];
-  [self.model setString: hostName forKey: @"hostname"];
+  [self.model addStringElement: @"computername" value: computerName];
+  [self.model addStringElement: @"hostname" value: hostName];
   
   if(self.machineIcon != nil)
     [[Model model] setMachineIcon: self.machineIcon];
-  
-  [self.model setObject: self.machineIcon forKey: @"machineicon"];
   
   [computerName release];
   [hostName release];
@@ -157,17 +155,17 @@
               self.supportsLowEnergy =
                 [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
                 
-              [self.model
-                setBoolean: self.supportsHandoff
-                forKey: @"supportshandoff"];
+              [self.model 
+                addBooleanElement: @"supportshandoff" 
+                value: self.supportsHandoff];
 
               [self.model
-                setBoolean: self.supportsInstantHotspot
-                forKey: @"supportinstanthotspot"];
+                addBooleanElement: @"supportinstanthotspot" 
+                value: self.supportsInstantHotspot];
 
               [self.model
-                setBoolean: self.supportsLowEnergy
-                forKey: @"supportlowenergy"];
+                addBooleanElement: @"supportlowenergy" 
+                value: self.supportsLowEnergy];
               }
             }
       }
@@ -215,7 +213,7 @@
     {
     self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
     
-    [self.model setString: self.CPUCode forKey: @"cpucode"];
+    [self.model addStringElement: @"cpucode" value: self.CPUCode];
     }
   }
 
@@ -289,8 +287,8 @@
           NSLocalizedString(@"    %@ - %@: %@\n", NULL),
           name, NSLocalizedString(@"model", NULL), model]];
     
-  [self.model setString: name forKey: @"name"];
-  [self.model setString: model forKey: @"model"];
+  [self.model addStringElement: @"name" value: name];
+  [self.model addStringElement: @"model" value: model];
     
   [self.result
     appendString:
@@ -304,10 +302,10 @@
           self.CPUCode ? self.CPUCode : @"",
           core_count]];
     
-  [self.model setNumber: cpu_count forKey: @"cpucount"];
-  [self.model setString: speed forKey: @"speed"];
-  [self.model setString: cpu_type forKey: @"cpu_type"];
-  [self.model setNumber: core_count forKey: @"corecount"];
+  [self.model addElement: @"cpucount" value: cpu_count];
+  [self.model addStringElement: @"speed" value: speed];
+  [self.model addStringElement: @"cpu_type" value: cpu_type];
+  [self.model addElement: @"corecount" value: core_count];
 
   [self printMemory: memory];
   }
@@ -343,7 +341,7 @@
       [NSString
         stringWithFormat: @"    %@ \n", self.marketingName]];
       
-  [self.model setString: self.marketingName forKey: @"marketingname"];
+  [self.model addStringElement: @"marketingname" value: self.marketingName];
     
   NSString * language = NSLocalizedString(@"en", NULL);
 
@@ -360,8 +358,8 @@
             @"[Technical Specifications]", NULL)]];
 
   [self.model
-    setURL: [NSURL URLWithString: url]
-    forKey: @"technicalspecificationsurl"];
+    addURLElement: @"technicalspecificationsurl"
+    value: [NSURL URLWithString: url]];
 
   [self.result appendString: @" - "];
 
@@ -375,7 +373,8 @@
           NSLocalizedString(
             @"[User Guide]", NULL)]];
     
-  [self.model setURL: [NSURL URLWithString: url] forKey: @"userguideurl"];
+  [self.model 
+    addURLElement: @"userguideurl" value: [NSURL URLWithString: url]];
 
   [self.result appendString: @" - "];
 
@@ -390,7 +389,8 @@
             @"[Warranty & Service]", NULL)]];
 
   [self.model
-    setURL: [NSURL URLWithString: url] forKey: @"warrantyandserviceurl"];
+    addURLElement: @"warrantyandserviceurl"
+    value: [NSURL URLWithString: url]];
 
   [self.result appendString: @"\n"];
   }
@@ -595,14 +595,14 @@
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
   [self.model
-    setLongLong: [memory longLongValue] * 1024 * 1024 * 1024
-    forKey: @"ram"];
+    addLongLongElement: @"ram"
+    value: [memory longLongValue] * 1024 * 1024 * 1024];
   
   NSString * language = NSLocalizedString(@"en", NULL);
 
   NSString * url = [self memoryUpgradeURL: language];
   
-  [self.model setBoolean: upgradeable forKey: @"upgradeable"];
+  [self.model addBooleanElement: @"upgradeable" value: upgradeable];
   
   if(upgradeable)
     {
@@ -617,8 +617,8 @@
               @"[Instructions]\n", NULL)]];
       
     [self.model
-      setURL: [NSURL URLWithString: url]
-      forKey: @"memoryupgradeinstructionsurl"];
+      addURLElement: @"memoryupgradeinstructionsurl"
+      value: [NSURL URLWithString: url]];
     }
   else
     [self.result appendString: @"\n"];
@@ -665,6 +665,8 @@
 // Print memory banks.
 - (void) printMemoryBanks: (NSArray *) banks
   {
+  [self.model startElement: @"memorybanks"];
+  
   for(NSDictionary * bank in banks)
     {
     NSString * name = [bank objectForKey: @"_name"];
@@ -698,25 +700,18 @@
     [self.result appendString: @"\n"];
     [self.result appendString: currentBankInfo];
     
-    NSString * key =
-      [@"memorybanks" stringByAppendingPathComponent: currentBankID];
+    [self.model startElement: @"memorybank"];
     
-    [self.model
-      setString: size
-      forKey: [key stringByAppendingPathComponent: @"size"]];
+    [self.model addStringElement: @"identifier" value: currentBankID];
+    [self.model addStringElement: @"size" value: size];
+    [self.model addStringElement: @"type" value: type];
+    [self.model addStringElement: @"speed" value: speed];
+    [self.model addStringElement: @"status" value: status];
 
-    [self.model
-      setString: type
-      forKey: [key stringByAppendingPathComponent: @"type"]];
-
-    [self.model
-      setString: speed
-      forKey: [key stringByAppendingPathComponent: @"speed"]];
-
-    [self.model
-      setString: status
-      forKey: [key stringByAppendingPathComponent: @"status"]];
+    [self.model endElement: @"memorybank"];
     }
+
+  [self.model endElement: @"memorybanks"];
   }
 
 // Print information about bluetooth.
@@ -730,7 +725,7 @@
         stringWithFormat: 
           NSLocalizedString(@"    Bluetooth: %@\n", NULL), info]];
   
-  [self.model setString: info forKey: @"bluetooth"];
+  [self.model addStringElement: @"bluetooth" value: info];
   }
 
 // Collect bluetooth information.
@@ -864,12 +859,16 @@
           stringWithFormat: 
             NSLocalizedString(@"%@%@: %@\n", NULL), indent, name, modes]];
     
-    [self.model
-      setString: modes
-      forKey: [NSString stringWithFormat: @"wireless/%@", name]];
+    [self.model startElement: @"wireless"];
+
+    [self.model addStringElement: @"name" value: name];
+    [self.model addStringElement: @"modes" value: modes];
+
+    [self.model startElement: @"wireless"];
     }
     
   else if([name length] > 0)
+    {
     [self.result
       appendString:
         [NSString 
@@ -878,13 +877,24 @@
             indent, 
             name, 
             NSLocalizedString(@"Unknown", NULL)]];
+
+    [self.model startElement: @"wireless"];
+
+    [self.model addStringElement: @"name" value: name];
+
+    [self.model startElement: @"wireless"];
+    }
             
   else
+    {
     [self.result
       appendString:
         [NSString 
           stringWithFormat: 
             @"%@%@\n", indent, NSLocalizedString(@"Unknown", NULL)]];
+
+    [self.model addNullElement: @"wireless"];
+    }
   }
 
 // Print battery information.
@@ -975,9 +985,10 @@
                 NULL),
               ESLocalizedString(health, NULL), cycleCount]];
       
-    [self.model setString: health forKey: @"batteryhealth"];
-    [self.model setNumber: cycleCount forKey: @"batterycyclecount"];
-    [self.model setString: serialNumber forKey: @"batteryserialnumber"];
+    [self.model addStringElement: @"batteryhealth" value: health];
+    [self.model addElement: @"batterycyclecount" value: cycleCount];
+    [self.model 
+      addStringElement: @"batteryserialnumber" value: serialNumber];
     
     if(serialNumberInvalid)
       [self.result
@@ -1004,6 +1015,8 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSMutableArray * proxies = [NSMutableArray new];
+  
   if([subProcess execute: @"/usr/sbin/scutil" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -1029,13 +1042,23 @@
                 stringWithFormat:
                   NSLocalizedString(@"    Proxy: %@\n", NULL), proxy]];
           
-          [self.model
-            setBoolean: YES
-            forKey: [NSString stringWithFormat: @"proxies/%@", proxy]];
+          [proxies addObject: proxy];
           }
         }
       }
     }
+    
+  if(proxies.count > 0)
+    {
+    [self.model startElement: @"proxies"];
+    
+    for(NSString * proxy in proxies)
+      [self.model addStringElement: @"proxy" value: proxy];
+      
+    [self.model endElement: @"proxies"];
+    }
+    
+  [proxies release];
     
   [subProcess release];
   }
@@ -1132,7 +1155,7 @@
             NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
             iCloudFree]];
       
-    [self.model setLongLong: bytes forKey: @"icloudquota"];
+    [self.model addLongLongElement: @"icloudquota" value: bytes];
     
     if(bytes < 1024 * 1024 * 256)
       [self.result
@@ -1151,7 +1174,7 @@
     [self.result
       appendString: NSLocalizedString(@"    iCloud Status: ", NULL)];
       
-    [self.model setInteger: count forKey: @"icloudpendingfiles"];
+    [self.model addIntegerElement: @"icloudpendingfiles" value: count];
     
     if(count >= 10)
       [self.result

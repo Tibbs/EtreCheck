@@ -62,6 +62,7 @@
 		A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */; };
 		A565A3981EDF5DE90053264A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A565A3971EDF5DE90053264A /* libsqlite3.tbd */; };
 		A565A39B1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */; };
+		A56A393B1F22868F009BC90E /* XMLBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A53822391D5FF27200484388 /* XMLBuilder.m */; };
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */; };
 		A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* CleanupCollector.m */; };
@@ -852,6 +853,7 @@
 				A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */,
 				A5CDE7DA1EE1CF9100F1E095 /* CollectorModel.m in Sources */,
 				A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */,
+				A56A393B1F22868F009BC90E /* XMLBuilder.m in Sources */,
 				A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */,
 				A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */,
 				A5FC120619A5443500E81E9C /* ApplicationsCollector.m in Sources */,
