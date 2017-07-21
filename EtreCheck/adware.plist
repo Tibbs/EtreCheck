@@ -196,6 +196,7 @@
     <string>shopy-mate_updater.plist</string>
     <string>shopy-mate_updater.sh</string>
     <string>yeti.notification.plist</string>
+    <string>zrUpdater.plist</string>
   </array>
   <key>blacklist_match</key>
   <array>
