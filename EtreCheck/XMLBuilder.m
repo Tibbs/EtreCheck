@@ -219,6 +219,23 @@
   return nil;
   }
 
+// Constructor.
+- (instancetype) init
+  {
+  self = [super init];
+  
+  if(self != nil)
+    {
+    myAttributes = [NSMutableDictionary new];
+    myChildren = [NSMutableArray new];
+    myOpenChildren = [NSMutableArray new];
+    
+    return self;
+    }
+    
+  return nil;
+  }
+
 // Destructor.
 - (void) dealloc
   {
@@ -241,43 +258,54 @@
   {
   NSMutableString * XML = [NSMutableString string];
   
-  // Emit the start tag but room for attributes.
-  [XML appendFormat: @"%@<%@", [self startingIndent], self.name];
-  
-  // Add any attributes.
-  for(NSString * key in self.attributes)
+  if(self.parent == nil)
     {
-    NSString * value = [self.attributes objectForKey: key];
-    
-    if([value respondsToSelector: @selector(UTF8String)])
-      [XML appendFormat: @" %@=\"%@\"", key, value];
-    else
-      [XML appendFormat: @" %@", key];
-    }
-  
-  // Don't close the opening tag yet. If I don't have any children, I'll
-  // just want to make a self-closing tag.
-  
-  // Emit children - closed or open.
-  if(([self.children count] + [self.openChildren count]) > 0)
-    {
-    // Finish the opening tag.
-    [XML appendString: @">"];
-    
     // Add children.
     [XML appendString: [self XMLFragments: self.children]];
-    
+  
     // Add open children.
     [XML appendString: [self XMLFragments: self.openChildren]];
-    
-    // Add the closing tag.
-    [XML appendFormat: @"%@</%@>", [self endingIndent], self.name];
     }
-    
-  // I don't have any children, so turn the opening tag into a self-closing
-  // tag.
   else
-    [XML appendString: @"/>"];
+    {
+    // Emit the start tag but room for attributes.
+    [XML appendFormat: @"%@<%@", [self startingIndent], self.name];
+    
+    // Add any attributes.
+    for(NSString * key in self.attributes)
+      {
+      NSString * value = [self.attributes objectForKey: key];
+      
+      if([value respondsToSelector: @selector(UTF8String)])
+        [XML appendFormat: @" %@=\"%@\"", key, value];
+      else
+        [XML appendFormat: @" %@", key];
+      }
+    
+    // Don't close the opening tag yet. If I don't have any children, I'll
+    // just want to make a self-closing tag.
+    
+    // Emit children - closed or open.
+    if(([self.children count] + [self.openChildren count]) > 0)
+      {
+      // Finish the opening tag.
+      [XML appendString: @">"];
+      
+      // Add children.
+      [XML appendString: [self XMLFragments: self.children]];
+      
+      // Add open children.
+      [XML appendString: [self XMLFragments: self.openChildren]];
+      
+      // Add the closing tag.
+      [XML appendFormat: @"%@</%@>", [self endingIndent], self.name];
+      }
+      
+    // I don't have any children, so turn the opening tag into a self-closing
+    // tag.
+    else
+      [XML appendString: @"/>"];
+    }
     
   return XML;
   }
@@ -374,38 +402,6 @@
 
 @end
 
-// A root element.
-@implementation XMLRootElement
-
-// Constructor.
-- (instancetype) init
-  {
-  self = [super initWithName: nil];
-  
-  if(self != nil)
-    {
-    return self;
-    }
-    
-  return nil;
-  }
-
-// Emit an element as an XML fragment.
-- (NSString *) XMLFragment
-  {
-  NSMutableString * XML = [NSMutableString string];
-  
-  // Add children.
-  [XML appendString: [self XMLFragments: self.children]];
-  
-  // Add open children.
-  [XML appendString: [self XMLFragments: self.openChildren]];
-    
-  return XML;
-  }
-
-@end
-
 // A class for building an XML document.
 @implementation XMLBuilder
 
@@ -421,7 +417,7 @@
   
   if(self != nil)
     {
-    myRoot = [XMLRootElement new];
+    myRoot = [XMLElement new];
     myValid = YES;
     
     return self;
@@ -885,7 +881,23 @@
     self.valid = NO;
     }
 
+  // Don't move the root node.
+  if(xml.parent == nil)
+    {
+    XMLElement * child = [xml.openChildren lastObject];
+
+    if(child == nil)
+      child = [xml.children lastObject];
+      
+    if(child != nil)
+      xml = child;
+    }
+    
   [openChild.children addObject: xml];
+  
+  [xml.parent.openChildren removeObject: xml];
+  [xml.parent.children removeObject: xml];
+  xml.parent = openChild;
   }
   
 // MARK: Validation

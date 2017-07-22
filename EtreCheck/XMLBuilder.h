@@ -65,11 +65,6 @@
 
 @end
 
-// A root element.
-@interface XMLRootElement : XMLElement
-
-@end
-
 @interface XMLBuilder : NSObject
   {
   NSMutableString * myDocument;
