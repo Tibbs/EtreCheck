@@ -47,20 +47,34 @@
 #import "AdwareCollector.h"
 #import "CleanupCollector.h"
 #import "EtreCheckCollector.h"
+#import "XMLBuilder.h"
 
 // Perform the check.
 @implementation Checker
 
+@synthesize results = myResults;
+@synthesize completed = myCompleted;
+@synthesize queue = myQueue;
+
+// Destructor.
+- (void) dealloc
+  {
+  [myResults release];
+  [myCompleted release];
+  
+  [super dealloc];
+  }
+  
 // Do the check.
 - (NSAttributedString *) check
   {
   NSString * label = @"CheckQ";
   
-  queue =
+  myQueue =
     dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_CONCURRENT);
   
-  results = [NSMutableDictionary dictionary];
-  completed = [NSMutableDictionary dictionary];
+  myResults = [NSMutableDictionary new];
+  myCompleted = [NSMutableDictionary new];
   
   // Let the animations drive the show.
   
@@ -72,7 +86,7 @@
   [self checkStage1To: 30.0];
     
   dispatch_barrier_sync(
-    queue,
+    self.queue,
     ^{
       // As soon as the hardware collection finishes, move to software mode.
       [[NSNotificationCenter defaultCenter]
@@ -84,7 +98,7 @@
   [self checkStage2To: 50.0];
   
   dispatch_barrier_sync(
-    queue,
+    self.queue,
     ^{
     [[NSNotificationCenter defaultCenter]
       postNotificationName: kCollectionStatus
@@ -94,9 +108,11 @@
   // Finally do stage 3.
   [self checkStage3To: 100.0];
   
-  dispatch_release(queue);
+  dispatch_release(self.queue);
   
-  return [self collectResults];
+  NSAttributedString * report = [self collectResults];
+  
+  return report;
   }
 
 // Check stage 1.
@@ -132,7 +148,7 @@
   NSArray * machineIcons = [self findMachineIcons: hardwareCollector];
   
   dispatch_async(
-    queue,
+    self.queue,
     ^{
       for(NSImage * icon in machineIcons)
         {
@@ -233,7 +249,7 @@
 - (void) runApplicationsAnimation: (Collector *) lastCollector
   {
   dispatch_async(
-    queue,
+    self.queue,
     ^{
       [self performApplicationsAnimation: lastCollector];
     });
@@ -372,10 +388,10 @@
     
     [collector collect];
     
-    [results setObject: collector.result forKey: collector.name];
+    [self.results setObject: collector.result forKey: collector.name];
     
     // Keep a reference to the collector in case it is needed later.
-    [completed setObject: collector forKey: collector.name];
+    [self.completed setObject: collector forKey: collector.name];
     
     [pool drain];
     }
@@ -429,13 +445,64 @@
   [result
     appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];
   
+  [[[Model model] xml] startElement: @"etrecheck"];
+  
+  [[[Model model] xml] addFragment: [self getXML: @"hardware"]];
+  [[[Model model] xml] addFragment: [self getXML: @"video"]];
+  [[[Model model] xml] addFragment: [self getXML: @"disk"]];
+  [[[Model model] xml] addFragment: [self getXML: @"usb"]];
+  [[[Model model] xml] addFragment: [self getXML: @"firewire"]];
+  [[[Model model] xml] addFragment: [self getXML: @"thunderbolt"]];
+  [[[Model model] xml] addFragment: [self getXML: @"virtualvolume"]];
+  [[[Model model] xml] addFragment: [self getXML: @"systemsoftware"]];
+  [[[Model model] xml] addFragment: [self getXML: @"configurationfiles"]];
+  [[[Model model] xml] addFragment: [self getXML: @"gatekeeper"]];
+  [[[Model model] xml] addFragment: [self getXML: @"applications"]];
+  [[[Model model] xml] addFragment: [self getXML: @"adware"]];
+  [[[Model model] xml] addFragment: [self getXML: @"cleanup"]];
+  [[[Model model] xml] addFragment: [self getXML: @"kernelextensions"]];
+  [[[Model model] xml] addFragment: [self getXML: @"startupitems"]];
+  [[[Model model] xml] addFragment: [self getXML: @"systemlaunchagents"]];
+  [[[Model model] xml] addFragment: [self getXML: @"systemlaunchdaemons"]];
+  [[[Model model] xml] addFragment: [self getXML: @"launchagents"]];
+  [[[Model model] xml] addFragment: [self getXML: @"launchdaemons"]];
+  [[[Model model] xml] addFragment: [self getXML: @"userlaunchagents"]];
+  [[[Model model] xml] addFragment: [self getXML: @"loginitems"]];
+  [[[Model model] xml] addFragment: [self getXML: @"internetplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"userinternetplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"safariextensions"]];
+  [[[Model model] xml] addFragment: [self getXML: @"audioplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"useraudioplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"itunesplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"useritunesplugins"]];
+  [[[Model model] xml] addFragment: [self getXML: @"preferencepanes"]];
+  [[[Model model] xml] addFragment: [self getXML: @"fonts"]];
+  [[[Model model] xml] addFragment: [self getXML: @"timemachine"]];
+  [[[Model model] xml] addFragment: [self getXML: @"cpu"]];
+  [[[Model model] xml] addFragment: [self getXML: @"memory"]];
+  [[[Model model] xml] addFragment: [self getXML: @"network"]];
+  [[[Model model] xml] addFragment: [self getXML: @"energy"]];
+  [[[Model model] xml] addFragment: [self getXML: @"vm"]];
+  [[[Model model] xml] addFragment: [self getXML: @"install"]];
+  [[[Model model] xml] addFragment: [self getXML: @"diagnostics"]];
+  [[[Model model] xml] 
+    addFragment: [self getXML: @"etrecheckdeletedfiles"]]; 
+  
+  [[[Model model] xml] endElement: @"etrecheck"];
+
   return [result autorelease];
   }
 
 // Return an individual result.
 - (NSAttributedString *) getResult: (NSString *) key
   {
-  return [[completed objectForKey: key] result];
+  return [[self.completed objectForKey: key] result];
+  }
+
+// Return an individual XML fragment.
+- (XMLElement *) getXML: (NSString *) key
+  {
+  return [[[self.completed objectForKey: key] model] root];
   }
 
 @end

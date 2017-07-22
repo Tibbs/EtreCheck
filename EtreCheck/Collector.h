@@ -17,6 +17,7 @@
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
+  XMLBuilder * myModel;
   }
 
 // The name of this collector.

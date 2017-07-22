@@ -30,6 +30,7 @@
 #import "SubProcess.h"
 #import "CURLRequest.h"
 #import "EtreCheckWindow.h"
+#import "XMLBuilder.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -1950,6 +1951,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   // Beg for money.
   [self checkForDonation];
+  
+  NSString * path = [NSTemporaryDirectory() stringByAppendingPathComponent: @"output.xml"];
+  
+  [[[[Model model] xml] XML] writeToFile: path atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+  
+  NSLog(@"Wrote to %@", path);
   }
 
 // Update the run count.

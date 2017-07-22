@@ -18,13 +18,8 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
-@dynamic model;
+@synthesize model = myModel;
 
-- (XMLBuilder *) model
-  {
-  return [[Model model] xml];
-  }
-  
 // Is this collector complete?
 - (bool) done
   {
@@ -44,6 +39,10 @@
     myComplete = dispatch_semaphore_create(0);
     
     self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    
+    myModel = [XMLBuilder new];
+    
+    [self.model startElement: self.name];
     }
     
   return self;
@@ -52,6 +51,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myModel release];
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
@@ -67,13 +67,11 @@
   [self
     updateStatus: ESLocalizedStringFromTable(self.name, @"Status", NULL)];
 
-  [self.model startElement: self.name];
-  
   [self performCollect];
   
-  [self.model endElement: self.name];
-  
   dispatch_semaphore_signal(self.complete);
+
+  [self.model endElement: self.name];  
   }
 
 // Perform the collection.
