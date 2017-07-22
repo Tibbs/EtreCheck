@@ -675,8 +675,7 @@
     NSString * speed = [bank objectForKey: @"dimm_speed"];
     NSString * status = [bank objectForKey: @"dimm_status"];
     
-    NSString * currentBankID =
-      [NSString stringWithFormat: @"        %@", name];
+    NSString * currentBankID = name;
       
     if([size isEqualToString: @"(empty)"])
       size = @"empty";
@@ -696,6 +695,7 @@
         stringWithFormat:
           @"            %@ %@ %@ %@\n", size, type, speed, status];
       
+    [self.result appendString: @"        "];
     [self.result appendString: currentBankID];
     [self.result appendString: @"\n"];
     [self.result appendString: currentBankInfo];
