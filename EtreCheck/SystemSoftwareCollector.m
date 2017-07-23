@@ -12,6 +12,7 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "LaunchdCollector.h"
+#import "XMLBuilder.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -221,7 +222,13 @@
   if(![self parseOSVersion: version])
     return NO;
   
+  if(![self parseOSBuild: version])
+    return NO;
+
   NSString * marketingName = [self fallbackMarketingName: version];
+  
+  [self.model addElement: @"osversion" value: [[Model model] OSVersion]];
+  [self.model addElement: @"osbuild" value: [[Model model] OSBuild]];
   
   int days = 0;
   int hours = 0;
@@ -230,6 +237,8 @@
   
   if(!parsed)
     {
+    [self.model addElement: @"uptime" value: uptime];
+    
     [self.result
       appendString:
         [NSString
@@ -242,6 +251,12 @@
     return YES;
     }
     
+  [self.model 
+    addElement: @"uptime" 
+    intValue: (days * 24) + hours 
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"hours", @"units", nil]];
+
   NSString * dayString = TTTLocalizedPluralString(days, @"day", nil);
   NSString * hourString = TTTLocalizedPluralString(hours, @"hour", nil);
   
@@ -373,6 +388,41 @@
         [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
         
         [[Model model] setMinorOSVersion: ch - 'A'];
+        
+        return YES;
+        }
+      }
+    }
+    
+  return NO;
+  }
+
+// Parse the OS build.
+- (BOOL) parseOSBuild: (NSString *) profilerVersion
+  {
+  if(profilerVersion)
+    {
+    NSScanner * scanner = [NSScanner scannerWithString: profilerVersion];
+    
+    [scanner scanUpToString: @"10." intoString: NULL];
+
+    NSString * version = nil;
+    
+    bool found = [scanner scanUpToString: @" (" intoString: & version];
+    
+    if(found)
+      {
+      [[Model model] setOSVersion: version];
+      
+      [scanner scanString: @"(" intoString: NULL];
+      
+      NSString * build = nil;
+      
+      found = [scanner scanUpToString: @")" intoString: & build];
+      
+      if(found)
+        {
+        [[Model model] setOSBuild: build];
         
         return YES;
         }

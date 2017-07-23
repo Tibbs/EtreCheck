@@ -11,6 +11,7 @@
 #import "Model.h"
 #import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 @implementation VideoCollector
 
@@ -61,11 +62,15 @@
   
   for(NSDictionary * info in infos)
     {
+    [self.model startElement: @"gpu"];
+    
     NSString * name = [info objectForKey: @"sppci_model"];
     
     if(![name length])
       name = NSLocalizedString(@"Unknown", NULL);
       
+    [self.model addElement: @"name" value: name];
+    
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
     if([vramAmount length] == 0)
@@ -74,11 +79,15 @@
     NSString * vram = @"";
     
     if(vramAmount)
+      {
+      [self.model addElement: @"vram" valueWithUnits: vramAmount];
+
       vram =
         [NSString
           stringWithFormat:
             NSLocalizedString(@"VRAM: %@", NULL),
             [Utilities translateSize: vramAmount]];
+      }
       
     [self.result
       appendString:
@@ -91,8 +100,17 @@
       
     NSArray * displays = [info objectForKey: @"spdisplays_ndrvs"];
   
-    for(NSDictionary * display in displays)
-      [self printDisplayInfo: display];
+    if(displays.count > 0)
+      {
+      [self.model startElement: @"displays"];
+      
+      for(NSDictionary * display in displays)
+        [self printDisplayInfo: display];
+      
+      [self.model endElement: @"displays"];
+      }
+      
+    [self.model endElement: @"gpu"];
     }
     
   NSNumber * errors = [[Model model] gpuErrors];
@@ -118,6 +136,8 @@
 // Print information about a display.
 - (void) printDisplayInfo: (NSDictionary *) display
   {
+  [self.model startElement: @"display"];
+      
   NSString * name = [display objectForKey: @"_name"];
   
   if([name isEqualToString: @"spdisplays_display_connector"])
@@ -149,6 +169,14 @@
             @"        %@ %@\n",
             name ? name : @"Unknown",
             resolution ? resolution : @""]];
+      
+  if([name length] > 0)
+    [self.model addElement: @"name" value: name];
+    
+  if([resolution length] > 0)
+    [self.model addElement: @"resolution" value: resolution];
+
+  [self.model endElement: @"display"];
   }
 
 @end

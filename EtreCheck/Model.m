@@ -16,6 +16,8 @@
 
 @synthesize majorOSVersion = myMajorOSVersion;
 @synthesize minorOSVersion = myMinorOSVersion;
+@synthesize OSBuild = myOSBuild;
+@synthesize OSVersion = myOSVersion;
 @synthesize volumes = myVolumes;
 @synthesize physicalVolumes = myPhysicalVolumes;
 @synthesize diskErrors = myDiskErrors;

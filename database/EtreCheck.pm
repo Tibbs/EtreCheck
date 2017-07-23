@@ -144,7 +144,7 @@ sub processHeader
     {
     my $date = $1;
 
-    $self->printTag('date', $date);
+    $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
 
     $date =~ s/\s/_/;
     $date =~ s/://g;
@@ -156,7 +156,7 @@ sub processHeader
     {
     my $runtime = $1;
 
-    $self->printTag('runtime', $runtime);
+    $self->printTag('runtime', $runtime, 'units', 'mm:ss');
     }
   elsif($self->{line} =~ /^Performance:\s(.+)$/)
     {
@@ -196,7 +196,7 @@ sub processHardwareInformation
       $self->{line} =~ /^\s+(\d+)\s(.+\sGHz)\s(.+)\s\((.+)\)\sCPU:\s(\d+)-core/;
 
     $self->printTag('cpucount', $cpuCount);
-    $self->printTag('speed', $speed);
+    $self->printTag('speed', $speed, 'units', 'GHz');
     $self->printTag('chipname', $chipName);
     $self->printTag('chipcode', $chipCode);
     $self->printTag('corecount', $coreCount);
@@ -206,7 +206,7 @@ sub processHardwareInformation
     my ($RAM, $upgradeable) = 
       $self->{line} =~ /^\s+(\d+)\sGB\sRAM\s(Not\supgradeable|Upgradeable)/;
 
-    $self->printTag('ram', $RAM);
+    $self->printTag('ram', $RAM, 'units', 'GB');
     $self->printTag('upgradeable', $upgradeable);
     }
   elsif($self->{line} =~ /^\s+Battery:\sHealth\s=\s(.+)\s-\sCycle\scount\s=\s(\d+)/)
@@ -224,10 +224,11 @@ sub processVideoInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(.+)\s-\sVRAM:\s(.+)\s(?:MB|GB)/)
+  if($self->{line} =~ /^\s+(.+)\s-\sVRAM:\s(.+)\s(MB|GB)/)
     {
     my $gpu = $1;
     my $VRAM = $2;
+    my $VRAMUnits = $3;
 
     $self->popTag('displays')
       if $self->currentTag() eq 'displays';
@@ -237,7 +238,7 @@ sub processVideoInformation
 
     $self->pushTag('gpu');
     $self->printTag('name', $gpu);
-    $self->printTag('vram', $VRAM);
+    $self->printTag('vram', $VRAM, 'units', $VRAMUnits);
     }
   elsif($self->{line} =~ /^\s+(\S.+\S)\s*$/)
     {
@@ -292,7 +293,7 @@ sub printDisk
     $self->pushTag('disk');
     $self->printTag('model', $diskModel);
     $self->printTag('device', $device);
-    $self->printTag('size', floor($size));
+    $self->printTag('size', floor($size), 'units', 'B');
 
     $self->printTag('type', $type)
       if $type;
@@ -340,7 +341,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size));
+    $self->printTag('size', floor($size), 'units', 'B');
 
     $self->printTag('type', $type)
       if $type;
@@ -377,7 +378,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size));
+    $self->printTag('size', floor($size), 'units', 'B');
 
     $self->printTag('type', $type)
       if $type;
@@ -507,8 +508,8 @@ sub processVirtualDiskInformation
     $self->printTag('type', $type)
       if $type;
 
-    $self->printTag('size', floor($size));
-    $self->printTag('free', floor($free));
+    $self->printTag('size', floor($size), 'units', 'B');
+    $self->printTag('free', floor($free), 'units', 'B');
     }
   elsif($self->{line} =~ /^\s+Encrypted\sAES-XTS\s(.+)/)
     {
@@ -546,9 +547,9 @@ sub processVirtualDiskInformation
 
     $self->pushTag('physicaldisk');
     $self->printTag('name', $name);
-    $self->printTag('size', $size);
+    $self->printTag('size', $size, 'units', 'B');
 
-    $self->printTag('free', $free)
+    $self->printTag('free', $free, 'units', 'B')
       if $free;
     
     $self->printTag('status', $status)
@@ -584,7 +585,7 @@ sub processSystemSoftware
     $self->printTag('name', $osname);
     $self->printTag('version', $version);
     $self->printTag('build', $build);
-    $self->printTag('uptime', $uptime);
+    $self->printTag('uptime', $uptime, 'units', 'hours');
     }
   }
 
@@ -860,7 +861,7 @@ sub processLaunchdLine
         }
       }
 
-    $self->printTag('installdate', $date);
+    $self->printTag('installdate', $date, 'format', 'yyyy-MM-dd');
     $self->popTag('task');    
     }
   }
@@ -891,7 +892,7 @@ sub processUserLoginItems
     $self->printTag('signature', $signature)
       if $signature ne '? 0';
 
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     }
   elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)\s\((\S.+\S)\s-\sinstalled\s(\d{4}-\d\d-\d\d)\)/)
     {
@@ -910,7 +911,7 @@ sub processUserLoginItems
     $self->printTag('signature', $signature)
       if $signature ne '? 0';
 
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     }
   elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)\s-\s(Hidden)/)
     {
@@ -997,7 +998,7 @@ sub processPlugInLine
     $self->pushTag('plugin');
     $self->printTag('name', $name);
     $self->printTag('version', $version);
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     $self->popTag('plugin');
     }
   }
@@ -1020,7 +1021,7 @@ sub processSafariExtensions
     $self->printTag('status', $status);
     $self->printTag('developer', $developer);
     $self->printTag('url', $url);
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     $self->popTag('extension');
     }
   }
@@ -1037,7 +1038,7 @@ sub process3rdPartyPreferencePanes
 
     $self->pushTag('preferencepane');
     $self->printTag('name', $name);
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     $self->popTag('preferencepane');
     }
   }
@@ -1097,8 +1098,8 @@ sub processTimeMachine
 
     $self->pushTag('volume');
     $self->printTag('name', $name);
-    $self->printTag('size', floor($size));
-    $self->printTag('used', floor($used));
+    $self->printTag('size', floor($size), 'units', 'B');
+    $self->printTag('used', floor($used), 'units', 'B');
     $self->popTag('volume');
     }
   elsif($self->{currentSection}->{destinations})
@@ -1111,7 +1112,7 @@ sub processTimeMachine
       $size *= 1024
         if $sizeUnits eq 'TB';
 
-      $self->printTag('size', floor($size));
+      $self->printTag('size', floor($size), 'units', 'B');
       }
     elsif($self->{line} =~ /^\s+Total\snumber\sof\sbackups:\s(\d+)/)
       {
@@ -1123,14 +1124,16 @@ sub processTimeMachine
       {
       my $oldestBackup = $1;
 
-      $self->printTag('oldestbackup', $oldestBackup)
+      $self->printTag(
+        'oldestbackup', $oldestBackup, 'format', 'yyyy-MM-dd HH:mm a')
         if $oldestBackup ne '-';
       }
     elsif($self->{line} =~ /^\s+Last\sbackup:\s(-|\S.+\S)/)
       {
       my $lastBackup = $1;
 
-      $self->printTag('lastbackup', $lastBackup)
+      $self->printTag(
+        'lastbackup', $lastBackup, 'format', 'yyyy-MM-dd HH:mm a')
         if $lastBackup ne '-';
       }
     elsif($self->{line} =~ /^\s+Size\sof\sbackup\sdisk:\s\S+/)
@@ -1162,13 +1165,13 @@ sub processTopProcessesByCPU
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\d+%)\s+(.+)$/)
+  if($self->{line} =~ /^\s+(\d+)%\s+(.+)$/)
     {
     my $pct = $1;
     my $process = $2;
 
     $self->pushTag('process');
-    $self->printTag('cpupct', $pct);
+    $self->printTag('cpupct', $pct, 'units', '%');
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1195,7 +1198,7 @@ sub processTopProcessesByMemory
       if $sizeUnits eq 'GB';
 
     $self->pushTag('process');
-    $self->printTag('size', $size);
+    $self->printTag('size', $size, 'units', 'B');
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1233,8 +1236,8 @@ sub processTopProcessesByNetwork
       if $outputSizeUnits eq 'GB';
 
     $self->pushTag('process');
-    $self->printTag('inputsize', $inputSize);
-    $self->printTag('outputsize', $outputSize);
+    $self->printTag('inputsize', $inputSize, 'units', 'B');
+    $self->printTag('outputsize', $outputSize, 'units', 'B');
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1306,7 +1309,7 @@ sub processVirtualMemoryInformation
   $size *= 1024 * 1024 * 1024
     if $sizeUnits eq 'GB';
 
-  $self->printTag($type, floor($size));
+  $self->printTag($type, floor($size), 'units', 'B');
   }
 
 # Process software installs.
@@ -1326,7 +1329,7 @@ sub processSoftwareInstalls
     $self->printTag('version', $version)
       if $version;
 
-    $self->printTag('installdate', $installdate);
+    $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
     $self->popTag('package');
     }
   }
@@ -1352,7 +1355,7 @@ sub processDiagnosticsInformation
       if $self->currentTag() eq 'event';
 
     $self->pushTag('event');
-    $self->printTag('date', $date);
+    $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
     $self->printTag('type', $type);
     $self->printTag('app', $app);
     }
@@ -1373,7 +1376,7 @@ sub processDiagnosticsInformation
       if $self->currentTag() eq 'event';
 
     $self->pushTag('event');
-    $self->printTag('date', $date);
+    $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
     $self->printTag('type', $type);
     $self->printTag('code', $code);
     $self->printTag('description', $description);
@@ -1430,7 +1433,7 @@ sub processEtreCheckInformation
     my $file = $2;
 
     $self->pushTag('deletedfile');
-    $self->printTag('date', $date);
+    $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
     $self->printTag('file', $file);
     $self->popTag('deletedfile');
     }
@@ -1481,10 +1484,21 @@ sub printTag
 
   my $tag = shift;
   my $value = shift;
+  my %attributes = @_;
+
+  my $attr = '';
+
+  while(my ($key, $value) = each %attributes)
+    {
+    $attr .= ' '
+      if lenth($attr) > 0;
+
+    $attr .= qq{$key="$value"};
+    }
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent<$tag>$value</$tag>\n";
+  $self->{output} .= "$indent<$tag$attr>$value</$tag>\n";
   }
 
 # Print text.

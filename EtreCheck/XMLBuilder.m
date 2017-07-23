@@ -532,31 +532,75 @@
 
 // Add an element, value, and type.
 - (void) addElement: (NSString *) name
-  value: (NSString *) value type: (NSString *) type
+  value: (NSString *) value attributes: (NSDictionary *) attributes
   {
-  [self startElement: name];
+  [self startElement: name];  
   
-  if([value length] > 0)
+  for(NSString * key in attributes)
     {
-    //if(![name isEqualToString: type])
-    //  [self addAttribute: @"type" value: type];
+    NSObject * attributeValue = [attributes objectForKey: key];
     
-    [self addString: value];
+    if([attributeValue respondsToSelector: @selector(UTF8String)])
+      [self addAttribute: key value: (NSString *)attributeValue];
+    else
+      [self addElement: key];
     }
-    
+
+  [self addString: value];
+
   [self endElement: name];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name value: (NSString *) value
   {
-  [self addElement: name value: value type: @"string"];
+  [self addElement: name value: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  number: (NSNumber *) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"number", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name value: [value stringValue] attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+
+// Add an element and value with a convenience function. Parse units out
+// of the value and store as a number.
+- (void) addElement: (NSString *) name valueWithUnits: (NSString *) value
+  {
+  NSArray * parts = [value componentsSeparatedByString: @" "];
+  
+  if([parts count] == 2)
+    {
+    NSString * unitlessValue = [parts objectAtIndex: 0];
+    NSString * units = [parts objectAtIndex: 1];
+    
+    [self 
+      addElement: name 
+      value: unitlessValue 
+      attributes: 
+        [NSDictionary 
+          dictionaryWithObjectsAndKeys: 
+            @"number", @"type", units, @"units", nil]];
+    }
+  else  
+    [self addElement: name value: value];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name number: (NSNumber *) value
   {
-  [self addElement: name value: [value stringValue] type: @"number"];
+  [self addElement: name number: value attributes: nil];
   }
 
 // Add an element to the current element.
@@ -565,114 +609,287 @@
   [self
     addElement: name
     value: [self.dateFormatter stringFromDate: date]
-    type: @"date"];
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"date", @"type", nil]];
   }
 
-// Add an element and value with a conveneience function.
+// Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name url: (NSURL *) value;
   {
-  [self addElement: name value: value.absoluteString type: @"url"];
+  [self 
+    addElement: name 
+    value: value.absoluteString
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"url", @"type", nil]];
   }
   
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name boolValue: (BOOL) value;
   {
   [self
-    addElement: name value: value ? @"true" : @"false" type: @"boolean"];
+    addElement: name 
+    value: value ? @"true" : @"false" 
+    attributes: 
+      [NSDictionary 
+        dictionaryWithObjectsAndKeys: @"boolean", @"type", nil]];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  intValue: (int) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"integer", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%d", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name intValue: (int) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%d", value]
-    type: @"integer"];
+  [self addElement: name intValue: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  longValue: (long) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"long", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%ld", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name longValue: (long) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ld", value]
-    type: @"integer"];
+  [self addElement: name longValue: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  longlongValue: (long long) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"longlong", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%lld", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name longlongValue: (long long) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%lld", value]
-    type: @"integer"];
+  [self addElement: name longlongValue: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntValue: (unsigned int) value 
+  attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"unsigned" @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%u", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name
   unsignedIntValue: (unsigned int) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ud", value]
-    type: @"integer"];
+  [self addElement: name unsignedIntValue: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLongValue: (unsigned long) value 
+  attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"unsignedlong", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%lu", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name
   unsignedLongValue: (unsigned long) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%lud", value]
-    type: @"integer"];
+  [self addElement: name unsignedLongValue: value attributes: nil];
+  }
+
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedLongLongValue: (unsigned long long) value 
+  attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"unsignedlonglong", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%llu", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name
-  unsignedLonglongValue: (unsigned long long) value
+  unsignedLongLongValue: (unsigned long long) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%llu", value]
-    type: @"integer"];
+  [self addElement: name unsignedLongLongValue: value attributes: nil];
+  }
+
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  integerValue: (NSInteger) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"long", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%ld", (long)value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name integerValue: (NSInteger) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ld", (long)value]
-    type: @"integer"];
+  [self addElement: name integerValue: value attributes: nil];
+  }
+
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name
+  unsignedIntegerValue: (NSUInteger) value 
+  attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"unsignedlong", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%lld", (unsigned long long)value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
   }
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name
   unsignedIntegerValue: (NSUInteger) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%ld", (unsigned long)value]
-    type: @"integer"];
+  [self addElement: name unsignedIntegerValue: value attributes: nil];
+  }
+
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  floatValue: (float) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"float", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%f", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
   }
 
 // Add an element and value with a convenience function.
-- (void) addElement: (NSString *) name float: (float) value
+- (void) addElement: (NSString *) name floatValue: (float) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%f", value]
-    type: @"real"];
+  [self addElement: name floatValue: value attributes: nil];
   }
 
+// Add an element, value, and attributes with a convenience function.
+- (void) addElement: (NSString *) name 
+  doubleValue: (double) value attributes: (NSDictionary *) attributes
+  {
+  NSMutableDictionary * fullAttributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: @"double", @"type", nil];
+    
+  if(attributes != nil)
+    [fullAttributes addEntriesFromDictionary: attributes];
+  
+  [self 
+    addElement: name 
+    value: [NSString stringWithFormat: @"%f", value] 
+    attributes: fullAttributes];
+  
+  [fullAttributes release];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name doubleValue: (double) value
   {
-  [self
-    addElement: name
-    value: [NSString stringWithFormat: @"%f", value]
-    type: @"real"];
+  [self addElement: name doubleValue: value attributes: nil];
   }
 
 // Add an element and value with a convenience function.

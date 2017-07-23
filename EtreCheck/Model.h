@@ -40,6 +40,8 @@
   {
   int myMajorOSVersion;
   int myMinorOSVersion;
+  NSString * myOSBuild;
+  NSString * myOSVersion;
   NSMutableDictionary * myVolumes;
   NSMutableSet * myPhysicalVolumes;
   NSMutableDictionary * myDiskErrors;
@@ -89,6 +91,8 @@
 // Keep track of the OS version.
 @property (assign) int majorOSVersion;
 @property (assign) int minorOSVersion;
+@property (retain) NSString * OSBuild;
+@property (retain) NSString * OSVersion;
 
 // Keep track of system volumes.
 @property (retain) NSMutableDictionary * volumes;

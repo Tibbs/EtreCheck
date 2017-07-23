@@ -213,7 +213,7 @@
     {
     self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
     
-    [self.model addElement: @"cpucode" value: self.CPUCode];
+    [self.model addElement: @"cpucode" value: code];
     }
   }
 
@@ -303,7 +303,7 @@
           core_count]];
     
   [self.model addElement: @"cpucount" number: cpu_count];
-  [self.model addElement: @"speed" value: speed];
+  [self.model addElement: @"speed" valueWithUnits: speed];
   [self.model addElement: @"cpu_type" value: cpu_type];
   [self.model addElement: @"corecount" number: core_count];
 
@@ -596,7 +596,9 @@
 
   [self.model
     addElement: @"ram"
-    longlongValue: [memory longLongValue] * 1024 * 1024 * 1024];
+    longlongValue: [memory longLongValue] * 1024 * 1024 * 1024
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
   
   NSString * language = NSLocalizedString(@"en", NULL);
 
@@ -703,9 +705,9 @@
     [self.model startElement: @"memorybank"];
     
     [self.model addElement: @"identifier" value: currentBankID];
-    [self.model addElement: @"size" value: size];
+    [self.model addElement: @"size" valueWithUnits: size];
     [self.model addElement: @"type" value: type];
-    [self.model addElement: @"speed" value: speed];
+    [self.model addElement: @"speed" valueWithUnits: speed];
     [self.model addElement: @"status" value: status];
 
     [self.model endElement: @"memorybank"];
@@ -1154,7 +1156,11 @@
             NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
             iCloudFree]];
       
-    [self.model addElement: @"icloudquota" longlongValue: bytes];
+    [self.model 
+      addElement: @"icloudquota"
+      longlongValue: bytes 
+      attributes: 
+        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
     
     if(bytes < 1024 * 1024 * 256)
       [self.result
