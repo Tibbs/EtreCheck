@@ -12,6 +12,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "ByteCountFormatter.h"
+#import "XMLBuilder.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -264,6 +265,8 @@
 - (void) printVirtualVolume: (NSDictionary *) volume
   indent: (NSString *) indent
   {
+  [self.model startElement: @"volume"];
+  
   [self printVolume: volume indent: indent];
   
   indent = [indent stringByAppendingString: @"    "];
@@ -285,6 +288,8 @@
       printPhysicalDriveInformation: physicalDrive
       volume: volume
       indent: indent];
+      
+  [self.model endElement: @"volume"];
   }
 
 // Print Core Storage "lv" information about a volume.
@@ -305,6 +310,11 @@
     
   if([encrypted isEqualToString: @"yes"])
     {
+    [self.model startElement: @"encryption"];
+    
+    [self.model 
+      addElement: @"locked" boolValue: [locked isEqualToString: @"yes"]];
+    
     [self.result
       appendString:
         [NSString
@@ -317,8 +327,12 @@
               ? NSLocalizedString(@"Locked", NULL)
               : NSLocalizedString(@"Unlocked", NULL)]];
 
+    [self.model addElement: @"state" value: state];
+    
     [self printCoreStorageState: state];
       
+    [self.model endElement: @"encryption"];
+
     [self.result appendCR];
     }
   }
@@ -359,8 +373,12 @@
 - (void) printCoreStoragePvInformation: (NSArray *) pvs
   indent: (NSString *) indent
   {
+  [self.model startElement: @"physicaldisks"];
+  
   for(NSDictionary * pv in pvs)
     {
+    [self.model startElement: @"disk"];
+    
     NSString * name = [pv objectForKey: @"_name"];
     NSString * status =
       [pv objectForKey: @"com.apple.corestorage.pv.status"];
@@ -380,6 +398,16 @@
       [formatter release];
       }
 
+    [self.model addElement: @"name" value: name];
+    
+    [self.model 
+      addElement: @"size" 
+      number: pvSize 
+      attributes: 
+        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+        
+    [self.model addElement: @"status" value: status];
+    
     NSString * errors = [self errorsFor: name];
     
     status = [status stringByAppendingString: errors];
@@ -413,17 +441,40 @@
               status]];
 
     [self.result appendCR];
+    
+    [self.model endElement: @"disk"];
     }
+    
+  [self.model endElement: @"physicaldisks"];
   }
 
 // Print APFS physicalDrive information about a volume.
 - (void) printPhysicalDriveInformation: (NSDictionary *) physicalDrive
   volume: (NSDictionary *) volume indent: (NSString *) indent
   {
+  [self.model startElement: @"physicaldisk"];
+  
   NSString * name = [physicalDrive objectForKey: @"device_name"];
   NSString * volumeSize = [self volumeSize: volume];
   NSString * volumeFree = [self volumeFreeSpace: volume];
   
+  NSNumber * size = [volume objectForKey: @"size_in_bytes"];
+  NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
+
+  [self.model addElement: @"name" value: name];
+  
+  [self.model 
+    addElement: @"size" 
+    number: size 
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+      
+  [self.model 
+    addElement: @"free" 
+    number: free 
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+
   [self.result
     appendString:
       [NSString
@@ -436,6 +487,8 @@
           volumeFree]];
           
   [self.result appendCR];
+
+  [self.model endElement: @"physicaldisk"];
   }
 
 @end

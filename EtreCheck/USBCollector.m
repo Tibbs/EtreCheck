@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect information about USB devices.
 @implementation USBCollector
@@ -176,7 +177,13 @@
   
   if(volumes && [volumes count])
     for(NSDictionary * volume in volumes)
+      {
+      [self.model startElement: @"volume"];
+      
       [self printVolume: volume indent: indent];
+
+      [self.model endElement: @"volume"];
+      }
   }
 
 @end

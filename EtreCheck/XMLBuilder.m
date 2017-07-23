@@ -917,11 +917,14 @@
     self.valid = NO;
     }
 
-  XMLTextNode * textNode = [[XMLTextNode alloc] initWithText: string];
+  if(string != nil)
+    {
+    XMLTextNode * textNode = [[XMLTextNode alloc] initWithText: string];
     
-  [openChild.children addObject: textNode];
+    [openChild.children addObject: textNode];
   
-  [textNode release];
+    [textNode release];
+    }
   }
 
 // Add a null attribute.

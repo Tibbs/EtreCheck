@@ -12,6 +12,7 @@
 #import "NSArray+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -94,16 +95,25 @@
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      for(NSDictionary * controller in controllers)
-        if([self shouldPrintController: controller])
-          {
-          BOOL printed =
-            [self
-              printSerialATAController: controller dataFound: dataFound];
-            
-          if(printed)
-            dataFound = YES;
-          }
+      if(controllers.count > 0)
+        {
+        [self.model startElement: @"controllers"];
+        
+        for(NSDictionary * controller in controllers)
+          if([self shouldPrintController: controller])
+            {
+            BOOL printed =
+              [self 
+                printController: controller 
+                type: @"SerialATA" 
+                dataFound: dataFound];
+              
+            if(printed)
+              dataFound = YES;
+            }
+
+        [self.model endElement: @"controllers"];
+        }
       }
     }
 
@@ -135,16 +145,25 @@
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      for(NSDictionary * controller in controllers)
-        if([self shouldPrintController: controller])
-          {
-          BOOL printed =
-            [self
-              printNVMExpressController: controller dataFound: dataFound];
-          
-          if(printed)
-            dataFound = YES;
-          }
+      if(controllers.count > 0)
+        {
+        [self.model startElement: @"controllers"];
+        
+        for(NSDictionary * controller in controllers)
+          if([self shouldPrintController: controller])
+            {
+            BOOL printed =
+              [self 
+                printController: controller 
+                type: @"NVMExpress" 
+                dataFound: dataFound];
+            
+            if(printed)
+              dataFound = YES;
+            }
+
+        [self.model endElement: @"controllers"];
+        }
       }
     }
 
@@ -162,131 +181,104 @@
   return YES;
   }
 
-// Print disks attached to a single Serial ATA controller.
-- (BOOL) printSerialATAController: (NSDictionary *) controller
-  dataFound: (BOOL) dataFound
-  {
-  NSDictionary * disks = [controller objectForKey: @"_items"];
-  
-  for(NSDictionary * disk in disks)
-    {
-    NSString * diskName = [disk objectForKey: @"_name"];
-    NSString * diskDevice = [disk objectForKey: @"bsd_name"];
-    NSString * diskSize = [disk objectForKey: @"size"];
-    NSString * UUID = [disk objectForKey: @"volume_uuid"];
-    NSString * medium = [disk objectForKey: @"spsata_medium_type"];
-    NSString * trim = [disk objectForKey: @"spsata_trim_support"];
-    
-    NSString * trimString =
-      [NSString
-        stringWithFormat: @" - TRIM: %@", ESLocalizedString(trim, NULL)];
-    
-    NSString * info =
-      [NSString
-        stringWithFormat:
-          @"(%@%@)",
-          medium
-            ? ESLocalizedString(medium, NULL)
-            : @"",
-          ([medium isEqualToString: @"Solid State"] && [trim length])
-            ? trimString
-            : @""];
-      
-    if(!diskDevice)
-      diskDevice = @"";
-      
-    if(!diskSize)
-      diskSize = @"";
-    else
-      diskSize =
-        [NSString
-          stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
-
-    if(UUID)
-      [self.volumes setObject: disk forKey: UUID];
-      
-    if(!dataFound)
-      [self.result appendAttributedString: [self buildTitle]];
-      
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"    %@ %@%@ %@\n",
-            diskName ? diskName : @"-", diskDevice, diskSize, info]];
-    
-    [self collectSMARTStatus: disk indent: @"    "];
-    
-    [self printDiskVolumes: disk];
-    
-    [self.result appendCR];
-    
-    dataFound = YES;
-    }
-    
-  return dataFound;
-  }
-
 // Print disks attached to a single NVMExpress controller.
-- (BOOL) printNVMExpressController: (NSDictionary *) controller
-  dataFound: (BOOL) dataFound
+- (BOOL) printController: (NSDictionary *) controller
+  type: (NSString *) type dataFound: (BOOL) dataFound
   {
+  [self.model startElement: @"controller"];
+  
+  [self.model addElement: @"interfacetype" value: type];
+
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
-  for(NSDictionary * disk in disks)
+  if(disks.count > 0)
     {
-    NSString * diskName = [disk objectForKey: @"_name"];
-    NSString * diskDevice = [disk objectForKey: @"bsd_name"];
-    NSString * diskSize = [disk objectForKey: @"size"];
-    NSString * UUID = [disk objectForKey: @"volume_uuid"];
-    NSString * medium = @"Solid State";
-    NSString * trim = [disk objectForKey: @"spnvme_trim_support"];
+    [self.model startElement: @"disks"];
     
-    NSString * trimString =
-      [NSString
-        stringWithFormat: @" - TRIM: %@", ESLocalizedString(trim, NULL)];
-    
-    NSString * info =
-      [NSString
-        stringWithFormat:
-          @"(%@%@)",
-          medium
-            ? medium
-            : @"",
-          ([medium isEqualToString: @"Solid State"] && [trim length])
-            ? trimString
-            : @""];
+    for(NSDictionary * disk in disks)
+      {
+      [self.model startElement: @"disk"];
       
-    if(!diskDevice)
-      diskDevice = @"";
+      NSString * diskName = [disk objectForKey: @"_name"];
+      NSString * diskDevice = [disk objectForKey: @"bsd_name"];
+      NSString * diskSize = [disk objectForKey: @"size"];
+      NSString * UUID = [disk objectForKey: @"volume_uuid"];
+      NSString * medium = [disk objectForKey: @"spsata_medium_type"];
+      NSString * TRIM = [disk objectForKey: @"spnvme_trim_support"];
       
-    if(!diskSize)
-      diskSize = @"";
-    else
-      diskSize = [NSString stringWithFormat: @": (%@)", diskSize];
-
-    if(UUID)
-      [self.volumes setObject: disk forKey: UUID];
-
-    if(!dataFound)
-      [self.result appendAttributedString: [self buildTitle]];
+      NSString * TRIMString =
+        [NSString
+          stringWithFormat: @" - TRIM: %@", ESLocalizedString(TRIM, NULL)];
       
-    [self.result
-      appendString:
+      NSString * info =
         [NSString
           stringWithFormat:
-            @"    %@ %@%@ %@\n",
-            diskName ? diskName : @"-", diskDevice, diskSize, info]];
-    
-    [self collectSMARTStatus: disk indent: @"    "];
-    
-    [self printDiskVolumes: disk];
-    
-    [self.result appendCR];
-    
-    dataFound = YES;
+            @"(%@%@)",
+            medium
+              ? ESLocalizedString(medium, NULL)
+              : @"",
+            ([medium isEqualToString: @"Solid State"] && [TRIM length])
+              ? TRIMString
+              : @""];
+        
+      if([diskDevice length] > 0)
+        [self.model addElement: @"device" value: diskDevice];
+      else
+        diskDevice = @"";
+        
+      if([diskSize length] > 0)
+        {
+        [self.model addElement: @"size" valueWithUnits: diskSize];
+
+        diskSize =
+          [NSString
+            stringWithFormat: 
+              @": (%@)", [Utilities translateSize: diskSize]];
+        }
+      else
+        diskSize = @"";
+
+      if([UUID length] > 0)
+        {
+        [self.model addElement: @"UUID" value: UUID];
+        
+        [self.volumes setObject: disk forKey: UUID];
+        }
+        
+      if(!dataFound)
+        [self.result appendAttributedString: [self buildTitle]];
+        
+      if([diskName length] > 0)
+        [self.model addElement: @"name" value: diskName];
+
+      [self.model addElement: @"medium" value: medium];
+      
+      if([medium isEqualToString: @"Solid State"])
+        [self.model addElement: @"TRIM" value: TRIM];
+
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"    %@ %@%@ %@\n",
+              diskName ? diskName : @"-", diskDevice, diskSize, info]];
+      
+      [self collectSMARTStatus: disk indent: @"    "];
+      
+      [self printDiskVolumes: disk];
+      
+      [self.result appendCR];
+      
+      dataFound = YES;
+      
+      [self.model endElement: @"disk"];
+      }
+
+    [self.model endElement: @"disks"];
     }
     
+  [self.model endElement: @"controller"];
+
   return dataFound;
   }
 
@@ -295,9 +287,21 @@
   {
   NSArray * volumes = [disk objectForKey: @"volumes"];
   
-  if(volumes && [volumes count])
+  if([volumes count] > 0)
+    {
+    [self.model startElement: @"volumes"];
+    
     for(NSDictionary * volume in volumes)
+      {
+      [self.model startElement: @"volume"];
+      
       [self printVolume: volume indent: @"        "];
+      
+      [self.model endElement: @"volume"];
+      }
+      
+    [self.model endElement: @"volumes"];
+    }
   }
 
 // Get the SMART status for this disk.
@@ -309,6 +313,8 @@
   if(!smart_status)
     return;
     
+  [self.model addElement: @"smartstatus" value: smart_status];
+  
   bool smart_not_supported =
     [smart_status isEqualToString: @"Not Supported"];
   
@@ -364,25 +370,63 @@
   NSString * UUID = [volume objectForKey: @"volume_uuid"];
   NSString * fileSystem = [volume objectForKey: @"file_system"];
     
+  NSNumber * size = [volume objectForKey: @"size_in_bytes"];
+  NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
+
+  [self.model addElement: @"device" value: volumeDevice];
+  
+  if([volumeName length] > 0)
+    [self.model addElement: @"name" value: volumeName];
+  
+  if([volumeMountPoint length] > 0)
+    [self.model addElement: @"mountpoint" value: volumeMountPoint];
+  
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
     
   if(UUID)
+    {
+    [self.model addElement: @"UUID" value: UUID];
+    
     [self.volumes setObject: volume forKey: UUID];
+    }
+    
+  [self.model 
+    addElement: @"size" 
+    number: size 
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+      
+  if(free != nil)
+    [self.model 
+      addElement: @"free" 
+      number: free 
+      attributes: 
+        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+
+  if([fileSystem length] > 0)
+    [self.model addElement: @"filesystem" value: fileSystem];
 
   NSDictionary * stats = [self volumeStats: volume];
 
   NSDictionary * attributes = [stats objectForKey: kAttributes];
   
+  NSNumber * errorCount =
+    [[[Model model] diskErrors] objectForKey: volumeDevice];
+
   NSString * errors = [self errorsFor: volumeDevice];
   
   if([errors length])
+    {
     attributes =
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
         NSFontAttributeName : [[Utilities shared] boldFont]
       };
 
+    [self.model addElement: @"errors" number: errorCount];
+    }
+    
   NSString * status =
     [[stats objectForKey: kDiskStatus] stringByAppendingString: errors];
 
@@ -542,7 +586,10 @@
       };
     
   if([type length] > 0)
+    {
+    [self.model addElement: @"type" value: type];
     type = [NSString stringWithFormat: @" [%@]", type];
+    }
     
   if([status length] && ![attributes count])
     attributes =
