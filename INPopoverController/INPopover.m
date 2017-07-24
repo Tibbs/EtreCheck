@@ -13,9 +13,9 @@
 @implementation INPopover 
 
 @synthesize delegate = _delegate;
-@synthesize color = _color;
-@synthesize borderColor = _borderColor;
-@synthesize topHighlightColor = _topHighlightColor;
+@dynamic color;
+@dynamic borderColor;
+@dynamic topHighlightColor;
 @synthesize borderWidth = _borderWidth;
 @synthesize cornerRadius = _cornerRadius;
 @synthesize arrowSize = _arrowSize;
@@ -30,6 +30,9 @@
 @synthesize positionView = _positionView;
 @synthesize popoverWindow = _popoverWindow;
 @synthesize popoverIsVisible = _popoverIsVisible;
+
+#pragma mark -
+#pragma mark Properties
 
 #pragma mark -
 #pragma mark Initialization
@@ -53,10 +56,11 @@
 
 - (void)dealloc
 {
-  [_color release];
-  [_borderColor release];
-  [_topHighlightColor release];
-	[_popoverWindow.popover release];
+	//[_popoverWindow.popover release];
+  [_popoverWindow release];
+  self.contentViewController = nil;
+  [_positionView release];
+  
   [super dealloc];
 }
 
@@ -322,8 +326,9 @@
 	_popoverWindow.popover = self;
 
 	// set defaults like iCal popover
-	self.color = [[NSColor colorWithCalibratedWhite:0.94 alpha:0.92] retain];
-	self.borderColor = [[NSColor colorWithCalibratedWhite:1.0 alpha:0.92] retain];
+  self.color = [NSColor colorWithCalibratedWhite:0.94 alpha:0.92];
+  self.borderColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.92];
+    
 	self.borderWidth = 1.0;
 	self.closesWhenEscapeKeyPressed = YES;
 	self.closesWhenPopoverResignsKey = YES;

@@ -50,6 +50,7 @@
   NSWindow * myStartPanel;
   SlideshowView * myStartPanelAnimationView;
   NSWindow * myIntroPanel;
+  NSView * myIntroPanelView;
   NSUInteger myProblemIndex;
   NSPopUpButton * myChooseAProblemButton;
   NSMenuItem * myChooseAProblemPromptItem;
@@ -59,6 +60,7 @@
   NSButton * myOptionsButton;
   BOOL myOptionsVisible;
   NSWindow * myUserParametersPanel;
+  NSView * myUserParametersPanelView;
   
   NSView * myClipboardCopyToolbarItemView;
   NSButton * myClipboardCopyButton;
@@ -131,6 +133,7 @@
 @property (retain) IBOutlet NSWindow * startPanel;
 @property (retain) IBOutlet SlideshowView * startPanelAnimationView;
 @property (retain) IBOutlet NSWindow * introPanel;
+@property (retain) IBOutlet NSView * introPanelView;
 @property (assign) NSUInteger problemIndex;
 @property (retain) IBOutlet NSPopUpButton * chooseAProblemButton;
 @property (retain) IBOutlet NSMenuItem * chooseAProblemPromptItem;
@@ -141,6 +144,7 @@
 @property (retain) IBOutlet NSButton * optionsButton;
 @property (assign) BOOL optionsVisible;
 @property (retain) IBOutlet NSWindow * userParametersPanel;
+@property (retain) IBOutlet NSView * userParametersPanelView;
 @property (retain) IBOutlet NSView * shareToolbarItemView;
 @property (retain) IBOutlet NSButton * shareButton;
 @property (retain) IBOutlet NSView * clipboardCopyToolbarItemView;

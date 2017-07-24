@@ -239,6 +239,8 @@
   self.applications = nil;
   self.machineIcon = nil;
   self.processes = nil;
+  self.OSVersion = nil;
+  self.OSBuild = nil;
   
   [super dealloc];
   }

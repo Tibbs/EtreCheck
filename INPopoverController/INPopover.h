@@ -12,9 +12,6 @@
 @interface INPopover : NSObject
   {
   id <INPopoverDelegate> _delegate;
-  NSColor * _color;
-  NSColor * _borderColor;
-  NSColor * _topHighlightColor;
   CGFloat _borderWidth;
   CGFloat _cornerRadius;
   NSSize _arrowSize;

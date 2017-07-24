@@ -78,6 +78,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize startPanel = myStartPanel;
 @synthesize startPanelAnimationView = myStartPanelAnimationView;
 @synthesize introPanel = myIntroPanel;
+@synthesize introPanelView = myIntroPanelView;
 @synthesize problemIndex = myProblemIndex;
 @synthesize chooseAProblemButton = myChooseAProblemButton;
 @synthesize chooseAProblemPromptItem = myChooseAProblemPromptItem;
@@ -88,6 +89,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize optionsButton = myOptionsButton;
 @synthesize optionsVisible = myOptionsVisible;
 @synthesize userParametersPanel = myUserParametersPanel;
+@synthesize userParametersPanelView = myUserParametersPanelView;
 @synthesize clipboardCopyToolbarItemView = myClipboardCopyToolbarItemView;
 @synthesize clipboardCopyButton = myClipboardCopyButton;
 @synthesize shareToolbarItemView = myShareToolbarItemView;
@@ -267,6 +269,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.startPanel = nil;
   self.startPanelAnimationView = nil;
   self.introPanel = nil;
+  self.introPanelView = nil;
   self.chooseAProblemButton = nil;
   self.chooseAProblemPromptItem = nil;
   self.beachballItem = nil;
@@ -274,6 +277,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.problemDescriptionTextView = nil;
   self.optionsButton = nil;
   self.userParametersPanel = nil;
+  self.userParametersPanelView = nil;
   self.clipboardCopyToolbarItemView = nil;
   self.clipboardCopyButton = nil;
   self.shareToolbarItemView = nil;
@@ -419,8 +423,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) applicationWillTerminate: (NSNotification *) notification
   {
   [self autosave];
-  [self.introPanel.contentView release];
-  [self.userParametersPanel.contentView release];
+  self.introPanelView = nil;
+  self.userParametersPanelView = nil;
   }
 
 // Autosave the current report.
@@ -733,11 +737,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSString * appBundleId = [[NSBundle mainBundle] bundleIdentifier];
   
-  NSNumber * appVersion =
-    [numberFormatter
-      numberFromString:
-        [[[NSBundle mainBundle] infoDictionary]
-          objectForKey: @"CFBundleVersion"]];
+  NSString * appVersion =
+    [[[NSBundle mainBundle] infoDictionary]
+      objectForKey: @"CFBundleVersion"];
 
   NSDictionary * info = [NSDictionary readPropertyListData: data];
   
@@ -750,12 +752,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         
         if([appBundleId isEqualToString: bundleId])
           {
-          NSNumber * version =
-            [numberFormatter
-              numberFromString:
-                [attributes objectForKey: @"CFBundleVersion"]];
+          NSString * version = 
+            [attributes objectForKey: @"CFBundleVersion"];
           
-          if([version intValue] > [appVersion intValue])
+          if([version compare: appVersion] == NSOrderedAscending)
             [self
               presentUpdate:
                 [attributes
@@ -839,9 +839,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Setup the start message.
 - (void) setupStartMessage
   {
-  [self.introPanel.contentView retain];
-  [self.userParametersPanel.contentView retain];
-
+  self.introPanelView = self.introPanel.contentView;
+  self.userParametersPanelView = self.userParametersPanel.contentView;
+  
   [self.startPanelAnimationView
     transitionToView: self.introPanel.contentView];
 

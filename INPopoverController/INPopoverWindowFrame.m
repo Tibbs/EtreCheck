@@ -142,7 +142,8 @@
 - (void)setColor:(NSColor *)newColor
 {
 	if (_color != newColor) {
-		_color = newColor;
+    [_color release];
+		_color = [newColor retain];
 		[self setNeedsDisplay:YES];
 	}
 }
@@ -150,7 +151,8 @@
 - (void)setBorderColor:(NSColor *)newBorderColor
 {
 	if (_borderColor != newBorderColor) {
-		_borderColor = newBorderColor;
+    [_borderColor release];
+		_borderColor = [newBorderColor retain];
 		[self setNeedsDisplay:YES];
 	}
 }
