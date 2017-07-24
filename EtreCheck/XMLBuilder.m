@@ -405,7 +405,7 @@
 // A class for building an XML document.
 @implementation XMLBuilder
 
-@synthesize XML = myXML;
+@dynamic XML;
 @synthesize dateFormatter = myDateFormatter;
 @synthesize root = myRoot;
 @synthesize valid = myValid;

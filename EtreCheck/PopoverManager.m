@@ -87,7 +87,14 @@
     {
     [self.popover setContentViewController: self.popoverViewController];
     [self.popover setContentSize: self.minPopoverSize];
-    [self.popover setBehavior: NSPopoverBehaviorApplicationDefined];
+    
+    if([NSPopover class])
+      [(NSPopover *)self.popover 
+        setBehavior: NSPopoverBehaviorApplicationDefined];
+        
+    else
+      [(INPopover *)self.popover 
+        setBehavior: NSPopoverBehaviorApplicationDefined];
     }
   }
 

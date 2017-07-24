@@ -22,7 +22,7 @@
 @synthesize popover = _popover;
 
 // Borderless, transparent window
-- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
+- (id)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)windowStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)deferCreation
 {
 	if ((self = [super initWithContentRect:contentRect styleMask:NSNonactivatingPanelMask backing:bufferingType defer:deferCreation])) {
 		[self setOpaque:NO];
@@ -133,7 +133,7 @@
 	
 	// configure bounce-out animation
 	CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
-	[anim setDelegate:self];
+	[anim setDelegate:(id<CAAnimationDelegate>)self];
 	[anim setValues:[NSArray arrayWithObjects:[NSValue valueWithRect:startFrame], [NSValue valueWithRect:overshootFrame], [NSValue valueWithRect:endFrame], nil]];
 	[_zoomWindow setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:anim, @"frame", nil]];
 	
