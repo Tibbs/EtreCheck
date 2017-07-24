@@ -210,11 +210,9 @@
   [subProcess release];
   
   if([code length] > 0)
-    {
     self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
     
-    [self.model addElement: @"cpucode" value: code];
-    }
+  [self.model addElement: @"cpucode" value: code];
   }
 
 // Collect hardware information.

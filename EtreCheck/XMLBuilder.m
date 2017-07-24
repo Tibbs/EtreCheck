@@ -522,6 +522,25 @@
   [parent.openChildren removeLastObject];
   }
   
+// Add an empty element with attributes.
+- (void) addElement: (NSString *) name 
+  attributes: (NSDictionary *) attributes
+  {
+  [self startElement: name];
+  
+  for(NSString * key in attributes)
+    {
+    NSObject * attributeValue = [attributes objectForKey: key];
+    
+    if([attributeValue respondsToSelector: @selector(UTF8String)])
+      [self addAttribute: key value: (NSString *)attributeValue];
+    else
+      [self addElement: key];
+    }
+
+  [self endElement: name];
+  }
+
 // Add an empty element.
 - (void) addElement: (NSString *) name
   {
@@ -534,6 +553,9 @@
 - (void) addElement: (NSString *) name
   value: (NSString *) value attributes: (NSDictionary *) attributes
   {
+  if([value length] == 0)
+    return;
+    
   [self startElement: name];  
   
   for(NSString * key in attributes)

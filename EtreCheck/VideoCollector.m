@@ -78,16 +78,14 @@
 
     NSString * vram = @"";
     
+    [self.model addElement: @"vram" valueWithUnits: vramAmount];
+    
     if(vramAmount)
-      {
-      [self.model addElement: @"vram" valueWithUnits: vramAmount];
-
       vram =
         [NSString
           stringWithFormat:
             NSLocalizedString(@"VRAM: %@", NULL),
             [Utilities translateSize: vramAmount]];
-      }
       
     [self.result
       appendString:
@@ -170,11 +168,8 @@
             name ? name : @"Unknown",
             resolution ? resolution : @""]];
       
-  if([name length] > 0)
-    [self.model addElement: @"name" value: name];
-    
-  if([resolution length] > 0)
-    [self.model addElement: @"resolution" value: resolution];
+  [self.model addElement: @"name" value: name];
+  [self.model addElement: @"resolution" value: resolution];
 
   [self.model endElement: @"display"];
   }

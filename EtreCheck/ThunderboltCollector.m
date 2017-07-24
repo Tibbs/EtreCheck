@@ -157,8 +157,10 @@
         if([self shouldPrintController: controller])
           {
           BOOL printed =
-            [self
-              printSerialATAController: controller dataFound: dataFound];
+            [self 
+              printController: controller 
+              type: @"SerialATA" 
+              dataFound: dataFound];
               
           if(printed)
             dataFound = YES;
@@ -198,8 +200,10 @@
         if([self shouldPrintController: controller])
           {
           BOOL printed =
-            [self
-              printNVMExpressController: controller dataFound: dataFound];
+            [self 
+              printController: controller 
+              type: @"NVMExpress" 
+              dataFound: dataFound];
               
           if(printed)
             dataFound = YES;

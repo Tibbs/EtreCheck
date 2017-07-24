@@ -221,36 +221,28 @@
               ? TRIMString
               : @""];
         
-      if([diskDevice length] > 0)
-        [self.model addElement: @"device" value: diskDevice];
-      else
+      if([diskDevice length] == 0)
         diskDevice = @"";
         
-      if([diskSize length] > 0)
-        {
-        [self.model addElement: @"size" valueWithUnits: diskSize];
+      [self.model addElement: @"device" value: diskDevice];
+      [self.model addElement: @"size" valueWithUnits: diskSize];
+      [self.model addElement: @"UUID" value: UUID];
 
+      if([diskSize length] > 0)
         diskSize =
           [NSString
             stringWithFormat: 
               @": (%@)", [Utilities translateSize: diskSize]];
-        }
       else
         diskSize = @"";
 
       if([UUID length] > 0)
-        {
-        [self.model addElement: @"UUID" value: UUID];
-        
-        [self.volumes setObject: disk forKey: UUID];
-        }
+         [self.volumes setObject: disk forKey: UUID];
         
       if(!dataFound)
         [self.result appendAttributedString: [self buildTitle]];
         
-      if([diskName length] > 0)
-        [self.model addElement: @"name" value: diskName];
-
+      [self.model addElement: @"name" value: diskName];
       [self.model addElement: @"medium" value: medium];
       
       if([medium isEqualToString: @"Solid State"])
@@ -374,12 +366,8 @@
   NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
 
   [self.model addElement: @"device" value: volumeDevice];
-  
-  if([volumeName length] > 0)
-    [self.model addElement: @"name" value: volumeName];
-  
-  if([volumeMountPoint length] > 0)
-    [self.model addElement: @"mountpoint" value: volumeMountPoint];
+  [self.model addElement: @"name" value: volumeName];
+  [self.model addElement: @"mountpoint" value: volumeMountPoint];
   
   if(!volumeMountPoint)
     volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
@@ -404,8 +392,7 @@
       attributes: 
         [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
 
-  if([fileSystem length] > 0)
-    [self.model addElement: @"filesystem" value: fileSystem];
+  [self.model addElement: @"filesystem" value: fileSystem];
 
   NSDictionary * stats = [self volumeStats: volume];
 
@@ -585,11 +572,10 @@
         NSForegroundColorAttributeName : [[Utilities shared] gray]
       };
     
+  [self.model addElement: @"type" value: type];
+
   if([type length] > 0)
-    {
-    [self.model addElement: @"type" value: type];
     type = [NSString stringWithFormat: @" [%@]", type];
-    }
     
   if([status length] && ![attributes count])
     attributes =

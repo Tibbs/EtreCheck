@@ -152,6 +152,10 @@
 // Finish the current element.
 - (void) endElement: (NSString *) name;
   
+// Add an empty element with attributes.
+- (void) addElement: (NSString *) name 
+  attributes: (NSDictionary *) attributes;
+
 // Add an empty element.
 - (void) addElement: (NSString *) name;
 

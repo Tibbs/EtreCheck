@@ -69,6 +69,8 @@
 - (void) printUSBDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
+  [self.model startElement: @"node"];
+  
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"manufacturer"];
   NSString * size = [device objectForKey: @"size"];
@@ -78,6 +80,10 @@
 
   manufacturer = [Utilities cleanPath: manufacturer];
   name = [Utilities cleanPath: name];
+  
+  [self.model addElement: @"name" value: name];  
+  [self.model addElement: @"manufacturer" value: manufacturer];
+  [self.model addElement: @"size" value: size];
   
   if(!size)
     size = @"";
@@ -104,6 +110,8 @@
   
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
+  
+  [self.model endElement: @"node"];
   }
   
 // Print more devices.
@@ -133,38 +141,54 @@
   
   NSDictionary * disks = [controller objectForKey: @"Media"];
   
-  for(NSDictionary * disk in disks)
+  if([disks count] > 0)
     {
-    NSString * diskName = [disk objectForKey: @"_name"];
-    NSString * diskDevice = [disk objectForKey: @"bsd_name"];
-    NSString * diskSize = [disk objectForKey: @"size"];
-    NSString * UUID = [disk objectForKey: @"volume_uuid"];
+    [self.model startElement: @"disks"];
     
-    if(!diskDevice)
-      diskDevice = @"";
+    for(NSDictionary * disk in disks)
+      {
+      [self.model startElement: @"disk"];
       
-    if(!diskSize)
-      diskSize = @"";
-    else
-      diskSize =
-        [NSString
-          stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
+      NSString * diskName = [disk objectForKey: @"_name"];
+      NSString * diskDevice = [disk objectForKey: @"bsd_name"];
+      NSString * diskSize = [disk objectForKey: @"size"];
+      NSString * UUID = [disk objectForKey: @"volume_uuid"];
+      
+      [self.model addElement: @"name" value: diskName];
+      [self.model addElement: @"device" value: diskDevice];
+      [self.model addElement: @"size" valueWithUnits: diskSize];
+      [self.model addElement: @"UUID" value: UUID];
 
-    if(UUID)
-      [self.volumes setObject: disk forKey: UUID];
-
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"%@%@ %@%@\n",
-            indent, diskName ? diskName : @"-", diskDevice, diskSize]];
+      if([diskDevice length] == 0)
+        diskDevice = @"";
+        
+      if(!diskSize)
+        diskSize = @"";
+      else
+        diskSize =
+          [NSString
+            stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
+        
+      if(UUID)
+        [self.volumes setObject: disk forKey: UUID];
+        
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"%@%@ %@%@\n",
+              indent, diskName ? diskName : @"-", diskDevice, diskSize]];
+      
+      [self
+        printDiskVolumes: disk
+        indent: [indent stringByAppendingString: @"    "]];
+      
+      dataFound = YES;
+      
+      [self.model endElement: @"disk"];
+      }
     
-    [self
-      printDiskVolumes: disk
-      indent: [indent stringByAppendingString: @"    "]];
-    
-    dataFound = YES;
+    [self.model endElement: @"disks"];
     }
     
   return dataFound;
