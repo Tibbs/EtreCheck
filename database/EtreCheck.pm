@@ -11,6 +11,46 @@ use EtreCheckSection;
 
 our $VERSION = 1.00;
 
+our %sectionNames =
+  (
+  Header => 'header',
+  'Hardware Information' => 'hardware',
+  'Video Information' => 'video',
+  'Disk Information' => 'disk',
+  'USB Information' => 'usb',
+  'Firewire Information' => 'firewire',
+  'Thunderbolt Information' => 'thunderbolt',
+  'Virtual disks' => 'virtualvolume',
+  'System Software' => 'systemsoftware',
+  'Configuration files' => 'other',
+  Gatekeeper => 'other',
+  'Possible adware' => 'other',
+  'Clean up' => 'other',
+  'Kernel Extensions' => 'other',
+  'Startup Items' => 'other',
+  'System Launch Agents' => 'other',
+  'System Launch Daemons' => 'other',
+  'Launch Agents' => 'other',
+  'Launch Daemons' => 'other',
+  'User Launch Agents' => 'other',
+  'User Login Items' => 'other',
+  'Internet Plug-ins' => 'other',
+  'User internet Plug-ins' => 'other',
+  'Audio Plug-ins' => 'other',
+  'User audio Plug-ins' => 'other',
+  'Safari Extensions' => 'other',
+  '3rd Party Preference Panes' => 'other',
+  'Time Machine' => 'other',
+  'Top Processes by CPU' => 'other',
+  'Top Processes by Memory' => 'other',
+  'Top Processes by Network Use' => 'other',
+  'Top Processes by Energy Use' => 'other',
+  'Virtual Memory Information' => 'other',
+  'Software installs' => 'other',
+  'Diagnostics Information' => 'other',
+  'Files deleted by EtreCheck' => 'other'
+  );
+
 our %sections =
   (
   Header => \&processHeader,
@@ -64,7 +104,8 @@ sub new
     tags => [],
     input => '',
     output => '',
-    id => ''
+    id => '',
+    model => ''
     };
 
   bless $self, $class;
@@ -181,33 +222,44 @@ sub processHardwareInformation
     {
     my ($marketingName) = $self->{line} =~ /^\s+(\S.+\S)\s*$/;
 
-    $self->printTag('marketing_name', $marketingName);
+    $self->printTag('marketingname', $marketingName);
     }
   elsif($self->{index} == 3)
     {
-    my ($modelName, $modelCode) = $self->{line} =~ /^\s+(.+)\s-\smodel:\s(.+)$/;
+    my ($modelName, $modelCode) = 
+      $self->{line} =~ /^\s+(.+)\s-\smodel:\s(.+)$/;
 
-    $self->printTag('modelname', $modelName);
-    $self->printTag('modelcode', $modelCode);
+    $self->{model} = $modelCode;
+
+    $self->printTag('name', $modelName);
+    $self->printTag('model', $modelCode);
     }
   elsif($self->{index} == 4)
     {
     my ($cpuCount, $speed, $chipName, $chipCode, $coreCount) = 
-      $self->{line} =~ /^\s+(\d+)\s(.+\sGHz)\s(.+)\s\((.+)\)\sCPU:\s(\d+)-core/;
+      $self->{line} =~ 
+        /^\s+(\d+)\s(.+\sGHz)\s(.+)\s\((.+)\)\sCPU:\s(\d+)-core/;
 
-    $self->printTag('cpucount', $cpuCount);
-    $self->printTag('speed', $speed, 'units', 'GHz');
-    $self->printTag('chipname', $chipName);
-    $self->printTag('chipcode', $chipCode);
-    $self->printTag('corecount', $coreCount);
+    $self->printTag('cpucount', $cpuCount, 'type', 'number');
+    $self->printTagWithUnits('speed', $speed);
+    $self->printTag('cpu_type', $chipName);
+    $self->printTag('cpucode', $chipCode);
+    $self->printTag('corecount', $coreCount, 'type', 'number');
     }
   elsif($self->{index} == 5)
     {
     my ($RAM, $upgradeable) = 
       $self->{line} =~ /^\s+(\d+)\sGB\sRAM\s(Not\supgradeable|Upgradeable)/;
 
-    $self->printTag('ram', $RAM, 'units', 'GB');
-    $self->printTag('upgradeable', $upgradeable);
+    $self->printTag('ram', $RAM * 1024 * 1024 * 1024, 'units', 'B');
+
+    $self->printTag(
+      'upgradeable', 
+      $upgradeable eq 'Upgradeable' 
+        ? 'true' 
+        : 'false', 
+      'type', 
+      'boolean');
     }
   elsif($self->{line} =~ /^\s+Battery:\sHealth\s=\s(.+)\s-\sCycle\scount\s=\s(\d+)/)
     {
@@ -215,7 +267,66 @@ sub processHardwareInformation
     my $batteryCycleCount = $2;
 
     $self->printTag('batteryhealth', $batteryHealth);
-    $self->printTag('batterycyclecount', $batteryCycleCount);
+    $self->printTag(
+      'batterycyclecount', $batteryCycleCount, 'type', 'number');
+    }
+  elsif($self->{line} =~ /^\s+Bluetooth:\s(\S.+\S)/)
+    {
+    my $bluetooth = $1;
+
+    $self->popTag('memorybank')
+      if $self->currentTag() eq 'memorybank';
+
+    $self->popTag('memorybanks')
+      if $self->currentTag() eq 'memorybanks';
+
+    $self->printTag('bluetooth', $bluetooth);
+    }
+  elsif($self->{line} =~ /^\s+Wireless:\s+(\S+):\s+(\S.+\S)/)
+    {
+    my $name = $1;
+    my $modes = $2;
+
+    $self->pushTag('wireless');
+
+    $self->printTag('name', $name);
+    $self->printTag('modes', $modes);
+
+    $self->popTag('wireless');
+    }
+  elsif($self->{line} =~ /^\s+iCloud\sQuota:\s+(\S.+\s(?:MB|GB|TB))\savailable/)
+    {
+    my $quota = $1;
+
+    $self->printTagWithUnits('icloudquota', $quota, 'type', 'number');
+    }
+  elsif($self->{line} =~ /^\s+(BANK\s\d+\/DIMM\d+)$/)
+    {
+    my $identifier = $1;
+
+    $self->popTag('memorybank')
+      if $self->currentTag() eq 'memorybank';
+
+    $self->pushTag('memorybanks')
+      if $self->currentTag() ne 'memorybanks';
+    
+    $self->pushTag('memorybank');
+
+    $self->printTag('identifier', $identifier);
+    }
+  elsif($self->{line} =~ /^\s+(\d+\s(?:MB|GB))\s(\S+)\s(\d+\s\SHz)\s(\S.*\S)/)
+    {
+    my $size = $1;
+    my $type = $2;
+    my $speed = $3;
+    my $status = $4;
+
+    $self->printTagWithUnits('size', $size, 'type', 'number');
+    $self->printTag('type', $type);
+    $self->printTagWithUnits('speed', $speed, 'type', 'number');
+    $self->printTag('status', $status);    
+
+    $self->popTag('memorybank');
     }
   }
 
@@ -238,7 +349,7 @@ sub processVideoInformation
 
     $self->pushTag('gpu');
     $self->printTag('name', $gpu);
-    $self->printTag('vram', $VRAM, 'units', $VRAMUnits);
+    $self->printTag('vram', $VRAM, 'units', $VRAMUnits, 'type', 'number');
     }
   elsif($self->{line} =~ /^\s+(\S.+\S)\s*$/)
     {
@@ -284,13 +395,42 @@ sub printDisk
     $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
-    $self->popTag('partitions')
-      if $self->currentTag() eq 'partitions';
+    $self->popTag('volumes')
+      if $self->currentTag() eq 'volumes';
 
-    $self->popTag('disk')
-      if $self->currentTag() eq 'disk';
-    
-    $self->pushTag('disk');
+    if($self->currentTag() ne 'drives')
+      {
+      $self->pushTag('controllers');
+      $self->pushTag('controller');
+
+      my $NVMe = 0;
+
+      if($self->{model} =~ /MacBookPro(\d+)/)
+        {
+        my $code = $1;
+
+        $NVMe = $code > 11;
+        }
+      if($self->{model} =~ /MacBook(\d+)/)
+        {
+        my $code = $1;
+
+        $NVMe = $code >= 9;
+        }
+
+      if($NVMe)
+        {
+        $self->printTag('interfacetype', 'NVMExpress');
+        }
+      else
+        {
+        $self->printTag('interfacetype', 'SerialATA');
+        }
+
+      $self->pushTag('drives');
+      }
+
+    $self->pushTag('drive');
     $self->printTag('model', $diskModel);
     $self->printTag('device', $device);
     $self->printTag('size', floor($size), 'units', 'B');
@@ -328,10 +468,10 @@ sub printPartition
     $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
-    $self->pushTag('partitions')
-      if $self->currentTag() eq 'disk';
+    $self->pushTag('volumes')
+      if $self->currentTag() eq 'volumes';
     
-    $self->pushTag('partition');
+    $self->pushTag('volume');
 
     $self->printTag('name', $name)
       if $name;
@@ -341,7 +481,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size), 'units', 'B');
+    $self->printTag('size', floor($size), 'units', 'B', 'type', 'number');
 
     $self->printTag('type', $type)
       if $type;
@@ -349,7 +489,7 @@ sub printPartition
     $self->printTag('mountpoint', $mountPoint)
       if $mountPoint ne '<not mounted>';
 
-    $self->popTag('partition');
+    $self->popTag('volume');
 
     return 1;
     }
@@ -368,17 +508,17 @@ sub printPartition
     $size *= 1024 * 1024
       if $sizeUnits eq 'TB';
 
-    $self->pushTag('partitions')
+    $self->pushTag('volumes')
       if $self->currentTag() eq 'disk';
     
-    $self->pushTag('partition');
+    $self->pushTag('volume');
 
     $self->printTag('device', $device);
 
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size), 'units', 'B');
+    $self->printTag('size', floor($size), 'units', 'B', 'type', 'number');
 
     $self->printTag('type', $type)
       if $type;
@@ -386,7 +526,7 @@ sub printPartition
     $self->printTag('mountpoint', $mountPoint)
       if $mountPoint ne '<not mounted>';
 
-    $self->popTag('partition');
+    $self->popTag('volume');
 
     return 1;
     }
@@ -422,7 +562,7 @@ sub processBusInformation
       if($self->currentTag() eq 'disk');
 
     my $indent = length($1);
-    my $name = $2;
+    my $manufacturerAndName = $2;
 
     if(defined $self->{currentSection}->{indent})
       {
@@ -443,8 +583,19 @@ sub processBusInformation
       
     push @{$self->{currentSection}->{indent}}, $indent;
 
+    my ($manufacturer, $name) = $manufacturerAndName =~ /(Apple\sInc.)\s(.+)$/;
+
     $self->pushTag('node');
-    $self->printTag('name', $name);
+
+    if($manufacturer && $name)
+      {
+      $self->printTag('manufacturer', $manufacturer);
+      $self->printTag('name', $name);
+      }
+    else
+      {
+      $self->printTag('name', $manufacturerAndName);
+      }
     }
   }
 
@@ -1444,13 +1595,9 @@ sub sectionTag
   {
   my $self = shift;
 
-  my $name = lc shift;
+  my $name = shift;
 
-  $name =~ s/\s/_/g;
-  $name =~ s/-//g;
-  $name =~ s/^(\d)/_$1/;
-
-  return $name;
+  return $sectionNames{$name};
   }
 
 # Push a new tag.
@@ -1472,7 +1619,9 @@ sub currentTag
   {
   my $self = shift;
 
-  my $count = scalar(@{$self->{tags}}) - 1;
+  my $distance = shift || 1;
+
+  my $count = scalar(@{$self->{tags}}) - $distance;
 
   return $self->{tags}->[$count];
   }
@@ -1490,15 +1639,30 @@ sub printTag
 
   while(my ($key, $value) = each %attributes)
     {
-    $attr .= ' '
-      if lenth($attr) > 0;
-
-    $attr .= qq{$key="$value"};
+    $attr .= qq{ $key="$value"};
     }
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
   $self->{output} .= "$indent<$tag$attr>$value</$tag>\n";
+  }
+
+# Print a one-line tag whose value contains units.
+sub printTagWithUnits
+  {
+  my $self = shift;
+
+  my $tag = shift;
+  my $value = shift;
+  my %attributes = @_;
+
+  my @parts = split(' ', $value);
+
+  my $units = pop(@parts);
+
+  $value = join(' ', @parts);
+
+  $self->printTag($tag, $value, 'units', $units, %attributes);
   }
 
 # Print text.

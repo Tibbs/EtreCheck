@@ -193,11 +193,11 @@
   
   if(disks.count > 0)
     {
-    [self.model startElement: @"disks"];
+    [self.model startElement: @"drives"];
     
     for(NSDictionary * disk in disks)
       {
-      [self.model startElement: @"disk"];
+      [self.model startElement: @"drive"];
       
       NSString * diskName = [disk objectForKey: @"_name"];
       NSString * diskDevice = [disk objectForKey: @"bsd_name"];
@@ -242,7 +242,7 @@
       if(!dataFound)
         [self.result appendAttributedString: [self buildTitle]];
         
-      [self.model addElement: @"name" value: diskName];
+      [self.model addElement: @"model" value: diskName];
       [self.model addElement: @"medium" value: medium];
       
       if([medium isEqualToString: @"Solid State"])
@@ -263,10 +263,10 @@
       
       dataFound = YES;
       
-      [self.model endElement: @"disk"];
+      [self.model endElement: @"drive"];
       }
 
-    [self.model endElement: @"disks"];
+    [self.model endElement: @"drives"];
     }
     
   [self.model endElement: @"controller"];

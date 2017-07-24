@@ -10,10 +10,12 @@ use EtreCheck;
 
 my $help;
 my $force;
+my $debug;
 
 GetOptions(
   'help' => \$help,
-  'force' => \$force
+  'force' => \$force,
+  'debug' => \$debug
   );
 
 die usage()
@@ -30,13 +32,17 @@ if($@)
   {
   print "$etrecheck->{output}\n$@\n";
   }
+elsif($debug)
+  {
+  print $etrecheck->{output};
+  }
 else
   {
   my $input = "/Users/jdaniel/Programming/Reports-EtreCheck/originals/$etrecheck->{id}.txt";
 
   open(IN, ">$input");
 
-  print OUT $etrecheck->{input};
+  print IN $etrecheck->{input};
 
   close(IN);
 
@@ -61,6 +67,7 @@ sub usage
 Usage: reverse.pl  [options...]
   where [options...] are:
     --help = Show this help message
+    --debug = Dump to STDOUT
 
 Example usage: pbpaste | perl reverse.pl
 EOS

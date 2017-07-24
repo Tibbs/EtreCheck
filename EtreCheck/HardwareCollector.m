@@ -87,9 +87,6 @@
   [[Model model] setComputerName: computerName];
   [[Model model] setHostName: hostName];
   
-  [self.model addElement: @"computername" value: computerName];
-  [self.model addElement: @"hostname" value: hostName];
-  
   if(self.machineIcon != nil)
     [[Model model] setMachineIcon: self.machineIcon];
   
