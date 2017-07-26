@@ -249,7 +249,7 @@
         
       if(found)
         return
-          [NSString stringWithFormat: @" - OS X 10.%d", majorVersion - 4];
+          [NSString stringWithFormat: @"OS X 10.%d", majorVersion - 4];
       }
     }
     
@@ -286,7 +286,7 @@
         
       if(found)
         return
-          [NSString stringWithFormat: @" - SDK 10.%d", majorVersion - 4];
+          [NSString stringWithFormat: @"SDK 10.%d", majorVersion - 4];
       }
     }
     
@@ -315,7 +315,7 @@
           ([[Model model] majorOSVersion] -
             majorVersion);
       
-      return [NSString stringWithFormat: @" - SDK 10.%d", majorVersion - 4];
+      return [NSString stringWithFormat: @"SDK 10.%d", majorVersion - 4];
       }
     }
     

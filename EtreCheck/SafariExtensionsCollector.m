@@ -477,7 +477,7 @@
     [output appendString: @"    "];
   else
     {
-    NSString * statusString = NSLocalizedString(@"[unknown]", NULL);
+    NSString * statusString = NSLocalizedString(@"unknown", NULL);
     
     NSColor * color = [[Utilities shared] red];
     
@@ -485,22 +485,23 @@
     
     if([statusCode isEqualToString: kNotLoaded])
       {
-      statusString = NSLocalizedString(@"[extension not loaded]", NULL);
+      statusString = NSLocalizedString(@"not loaded", NULL);
       color = [[Utilities shared] gray];
       }
     else if([statusCode isEqualToString: kEnabled])
       {
-      statusString = NSLocalizedString(@"[enabled]", NULL);
+      statusString = NSLocalizedString(@"enabled", NULL);
       color = [[Utilities shared] green];
       }
     else if([statusCode isEqualToString: kDisabled])
       {
-      statusString = NSLocalizedString(@"[disabled]", NULL);
+      statusString = NSLocalizedString(@"disabled", NULL);
       color = [[Utilities shared] gray];
       }
     
     [output
-      appendString: [NSString stringWithFormat: @"    %@    ", statusString]
+      appendString: 
+        [NSString stringWithFormat: @"    [%@]    ", statusString]
       attributes:
         @{
           NSForegroundColorAttributeName : color,

@@ -11,6 +11,7 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 @implementation KernelExtensionCollector
 
@@ -612,6 +613,16 @@
 // Format a directory of extensions.
 - (NSArray *) formatExtensionDirectory: (NSString *) directory
   {
+  XMLBuilder * extensionsXML = [XMLBuilder new];
+  
+  [extensionsXML startElement: @"directory"];
+  
+  NSString * cleanPath = [Utilities cleanPath: directory];
+  
+  [extensionsXML addElement: @"path" value: cleanPath];
+    
+  [extensionsXML startElement: @"extensions"];
+
   NSMutableArray * extensions = [NSMutableArray array];
   
   NSArray * sortedExtensions =
@@ -620,13 +631,16 @@
 
   for(NSString * label in sortedExtensions)
     {
-    NSAttributedString * output = [self formatExtension: label];
+    NSAttributedString * output = 
+      [self formatExtension: label xmlBuilder: extensionsXML];
     
     // Outpt could be nil if this is an Apple extension.
     if(output)
       [extensions addObject: output];
     }
     
+  [extensionsXML endElement: @"extensions"];
+
   // If I found any non-nil extensions, insert a header for the directory.
   if([extensions count])
     {
@@ -638,8 +652,7 @@
     
     [string
       appendString:
-        [NSString
-          stringWithFormat: @"        %@", [Utilities cleanPath: directory]]
+        [NSString stringWithFormat: @"        %@", cleanPath]
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -648,13 +661,20 @@
     [extensions insertObject: string atIndex: 0];
       
     [string release];
+    
+    [extensionsXML endElement: @"directory"];
+  
+    [self.model addFragment: extensionsXML.root];
     }
     
+  [extensionsXML release];
+  
   return extensions;
   }
 
 // Format an extension for output.
-- (NSAttributedString *) formatExtension: (NSString *) label
+- (NSAttributedString *) formatExtension: (NSString *) label 
+  xmlBuilder: (XMLBuilder *) xmlBuilder
   {
   NSDictionary * extension = [self.extensions objectForKey: label];
   
@@ -669,23 +689,30 @@
 
   NSColor * color = [[Utilities shared] blue];
 
-  NSString * status = NSLocalizedString(@"[loaded]", NULL);
+  NSString * status = NSLocalizedString(@"loaded", NULL);
   
   if([self.unloadedExtensions objectForKey: label])
     {
-    status = NSLocalizedString(@"[not loaded]", NULL);
+    status = NSLocalizedString(@"not loaded", NULL);
     color = [[Utilities shared] gray];
 
     if([self ignoreUnloadedExtension: label])
       return nil;
     }
     
-  return [self formatBundle: label status: status color: color];
+  return 
+    [self 
+      formatBundle: label 
+      status: status 
+      color: color 
+      xmlBuilder: xmlBuilder];
   }
 
 // Return a formatted bundle.
 - (NSAttributedString *) formatBundle: (NSString * ) label
-  status: (NSString *) status color: (NSColor *) color
+  status: (NSString *) status 
+  color: (NSColor *) color
+  xmlBuilder: (XMLBuilder *) xmlBuilder
   {
   NSMutableAttributedString * formattedOutput =
     [[NSMutableAttributedString alloc] init];
@@ -701,11 +728,15 @@
   
   NSString * OSVersion = [self getOSVersion: bundle age: & age];
     
+  [xmlBuilder startElement: @"extension"];
+  
+  [xmlBuilder addElement: @"status" value: status];
+  
   [formattedOutput
     appendString:
       [NSString
         stringWithFormat:
-          @"    %@    ", status]
+          @"    [%@]    ", status]
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:
@@ -715,10 +746,25 @@
   version =
     [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
   
+  [xmlBuilder addElement: @"label" value: label];
+  [xmlBuilder addElement: @"version" value: version];
+  [xmlBuilder addElement: @"osversion" value: OSVersion];  
+  
+  [xmlBuilder endElement: @"extension"];
+  
+  NSMutableString * versionString = [NSMutableString new];
+  
+  [versionString appendString: version];
+  
+  if([OSVersion length] > 0)
+    [versionString appendFormat: @" - %@", OSVersion];
+  
   [formattedOutput
     appendString:
       [NSString
-        stringWithFormat: @"%@ (%@%@)", label, version, OSVersion]];
+        stringWithFormat: @"%@ (%@)", label, versionString]];
+        
+  [versionString release];
     
   [formattedOutput
     appendAttributedString: [self getSupportLink: bundle]];

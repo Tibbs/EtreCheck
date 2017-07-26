@@ -861,21 +861,7 @@ sub processKernelInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\s-\sSDK\s(\S+)\)/)
-    {
-    my $status = $1;
-    my $bundleID = $2;
-    my $version = $3;
-    my $SDKVersion = $4;
-
-    $self->pushTag('extension');
-    $self->printTag('bundleid', $bundleID);
-    $self->printTag('status', $status);
-    $self->printTag('version', $version);
-    $self->printTag('sdkversion', $SDKVersion);
-    $self->popTag('extension');
-    }
-  elsif($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\s-\sOS X\s(\S+)\)/)
+  if($self->{line} =~ /^\s+\[(.+)\]\s+([^(]+)\s+\((.+)\s-\s((?:OS\sX|SDK)\s\S+)\)/)
     {
     my $status = $1;
     my $bundleID = $2;

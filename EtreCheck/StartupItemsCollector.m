@@ -176,15 +176,15 @@
         {
         NSMutableString * compositeVersion = [NSMutableString string];
         
-        [compositeVersion
-          appendFormat: @"(%@", [appVersion length] ? appVersion : @""];
-        [compositeVersion
-          appendFormat:
-            @"%@%@)",
-            ([appVersion length] && [OSVersion length])
-              ? @" - "
-              : @"",
-            [OSVersion length] ? OSVersion : @""];
+        [compositeVersion appendString: @"("];
+        
+        if([appVersion length] > 0)
+          [compositeVersion appendString: appVersion];
+        
+        if([OSVersion length] > 0)
+          [compositeVersion appendFormat: @" - %@", OSVersion];
+
+        [compositeVersion appendString: @")"];
           
         version = compositeVersion;
         }

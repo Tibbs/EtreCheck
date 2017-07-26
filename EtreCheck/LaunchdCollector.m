@@ -1238,29 +1238,29 @@
 // Format a status string.
 - (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) info
   {
-  NSString * statusString = NSLocalizedString(@"[not loaded]", NULL);
+  NSString * statusString = NSLocalizedString(@"not loaded", NULL);
   NSColor * color = [[Utilities shared] gray];
   
   NSString * statusCode = [info objectForKey: kStatus];
   
   if([statusCode isEqualToString: kStatusLoaded])
     {
-    statusString = NSLocalizedString(@"[loaded]", NULL);
+    statusString = NSLocalizedString(@"loaded", NULL);
     color = [[Utilities shared] blue];
     }
   else if([statusCode isEqualToString: kStatusRunning])
     {
-    statusString = NSLocalizedString(@"[running]", NULL);
+    statusString = NSLocalizedString(@"running", NULL);
     color = [[Utilities shared] green];
     }
   else if([statusCode isEqualToString: kStatusFailed])
     {
-    statusString = NSLocalizedString(@"[failed]", NULL);
+    statusString = NSLocalizedString(@"failed", NULL);
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusUnknown])
     {
-    statusString = NSLocalizedString(@"[unknown]", NULL);
+    statusString = NSLocalizedString(@"unknown", NULL);
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusInvalid])
@@ -1270,7 +1270,7 @@
     }
   else if([statusCode isEqualToString: kStatusKilled])
     {
-    statusString = NSLocalizedString(@"[killed]", NULL);
+    statusString = NSLocalizedString(@"killed", NULL);
     color = [[Utilities shared] red];
     }
   
@@ -1278,7 +1278,7 @@
     [[NSMutableAttributedString alloc] init];
     
   [output
-    appendString: [NSString stringWithFormat: @"    %@    ", statusString]
+    appendString: [NSString stringWithFormat: @"    [%@]    ", statusString]
     attributes:
       @{
         NSForegroundColorAttributeName : color,
