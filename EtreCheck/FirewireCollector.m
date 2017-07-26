@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect information about Firewire devices.
 @implementation FirewireCollector
@@ -66,12 +67,18 @@
 - (void) printFirewireDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
+  [self.model startElement: @"node"];
+
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"device_manufacturer"];
   NSString * size = [device objectForKey: @"size"];
   NSString * max_device_speed = [device objectForKey: @"max_device_speed"];
   NSString * connected_speed = [device objectForKey: @"connected_speed"];
   
+  [self.model addElement: @"name" value: name];  
+  [self.model addElement: @"manufacturer" value: manufacturer];
+  [self.model addElement: @"size" value: size];
+
   if(!size)
     size = @"";
     
@@ -82,6 +89,9 @@
   if([connected_speed hasSuffix: @"_speed"])
     connected_speed =
       [connected_speed substringToIndex: [connected_speed length] - 6];
+
+  [self.model addElement: @"maxdevicespeed" value: max_device_speed];
+  [self.model addElement: @"connectedspeed" value: connected_speed];
 
   NSString * speed =
     (max_device_speed && connected_speed)
@@ -111,6 +121,8 @@
   
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
+
+  [self.model endElement: @"node"];
   }
 
 // Print more devices.

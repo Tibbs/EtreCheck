@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect information about Thunderbolt devices.
 @implementation ThunderboltCollector
@@ -73,9 +74,14 @@
 - (BOOL) printThunderboltDevice: (NSDictionary *) device
   indent: (NSString *) indent dataFound: (BOOL) dataFound
   {
+  [self.model startElement: @"node"];
+
   NSString * name = [device objectForKey: @"_name"];
   NSString * vendor_name = [device objectForKey: @"vendor_name_key"];
         
+  [self.model addElement: @"name" value: name];  
+  [self.model addElement: @"manufacturer" value: vendor_name];
+
   if(vendor_name)
     {
     if(!dataFound)
@@ -100,6 +106,8 @@
   dataFound =
     [self printMoreDevices: device indent: indent dataFound: dataFound];
     
+  [self.model endElement: @"node"];
+
   return dataFound;
   }
 

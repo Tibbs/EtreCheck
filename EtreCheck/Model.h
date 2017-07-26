@@ -14,6 +14,7 @@
 #define kYosemite     14
 #define kElCapitan    15
 #define kSierra       16
+#define kHighSierra   17
 
 // Adware
 #define kAdware @"adware"

@@ -123,6 +123,10 @@
       case kSierra:
         expectedSize = 1563;
         break;
+      // Placeholder. I don't know what this should be yet.
+      case kHighSierra:
+        expectedSize = 1563;
+        break;
       }
     
     // All the beta testers have an El Capitan file.
@@ -135,6 +139,7 @@
           case kYosemite:
           case kElCapitan:
           case kSierra:
+          case kHighSierra:
             if(attributes.fileSize == 1242)
               expectedSize = attributes.fileSize;
             else if(attributes.fileSize == 1275)

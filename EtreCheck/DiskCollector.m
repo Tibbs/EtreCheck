@@ -365,8 +365,11 @@
   NSNumber * size = [volume objectForKey: @"size_in_bytes"];
   NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
 
+  NSString * cleanName = 
+    [volumeName length] > 0 ? [Utilities cleanPath: volumeName] : @"";
+    
   [self.model addElement: @"device" value: volumeDevice];
-  [self.model addElement: @"name" value: volumeName];
+  [self.model addElement: @"name" value: cleanName];
   [self.model addElement: @"mountpoint" value: volumeMountPoint];
   
   if(!volumeMountPoint)
@@ -433,7 +436,7 @@
         stringWithFormat:
           NSLocalizedString(@"%@%@ (%@%@) %@ %@: %@ %@%@\n", NULL),
           indent,
-          volumeName ? [Utilities cleanPath: volumeName] : @"",
+          cleanName,
           volumeDevice,
           fileSystemName,
           volumeMountPoint,

@@ -225,8 +225,12 @@
   if(![self parseOSBuild: version])
     return NO;
 
-  NSString * marketingName = [self fallbackMarketingName: version];
+  NSString * OSName = nil;
   
+  NSString * marketingName = 
+    [self fallbackMarketingName: version name: & OSName];
+  
+  [self.model addElement: @"name" value: OSName];
   [self.model addElement: @"osversion" value: [[Model model] OSVersion]];
   [self.model addElement: @"osbuild" value: [[Model model] OSBuild]];
   
@@ -291,6 +295,7 @@
             language]];
   
   NSString * marketingName = [Utilities askAppleForMarketingName: url];
+  NSString * OSName = nil;
   
   if([marketingName length] && ([[Model model] majorOSVersion] >= kLion))
     {
@@ -299,17 +304,18 @@
         stringByAppendingString: [version substringFromIndex: 4]];
     }
   else
-    return [self fallbackMarketingName: version];
+    return [self fallbackMarketingName: version name: & OSName];
     
   return marketingName;
   }
 
 // Get a fallback marketing name.
-- (NSString *) fallbackMarketingName: (NSString *) version
+- (NSString *) fallbackMarketingName: (NSString *) version 
+  name: (NSString **) OSName
   {
   NSString * fallbackMarketingName = version;
   
-  NSString * OSName = @"OS X";
+  NSString * OSType = @"OS X";
   NSString * name = nil;
   int offset = 5;
   
@@ -342,18 +348,25 @@
       break;
       
     case kSierra:
-      OSName = @"macOS";
+      OSType = @"macOS";
       name = @"Sierra";
+      break;
+
+    case kHighSierra:
+      OSType = @"macOS";
+      name = @"High Sierra";
       break;
 
     default:
       return version;
     }
     
+  *OSName = [NSString stringWithFormat: @"%@ %@", OSType, name];
+  
   fallbackMarketingName =
     [NSString
       stringWithFormat:
-        @"%@ %@ %@", OSName, name, [version substringFromIndex: offset]];
+        @"%@ %@", *OSName, [version substringFromIndex: offset]];
   
   return fallbackMarketingName;
   }

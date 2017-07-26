@@ -312,9 +312,16 @@
     {
     [self.model startElement: @"encryption"];
     
-    [self.model 
-      addElement: @"locked" boolValue: [locked isEqualToString: @"yes"]];
-    
+    [self.model addElement: @"encrypted" boolValue: YES];
+    [self.model addElement: @"method" value: encryptionType];
+
+    NSString * status = 
+      [locked isEqualToString: @"yes"]
+        ? NSLocalizedString(@"Locked", NULL)
+        : NSLocalizedString(@"Unlocked", NULL);
+              
+    [self.model addElement: @"status" value: status];
+
     [self.result
       appendString:
         [NSString
@@ -323,9 +330,7 @@
             indent,
             NSLocalizedString(@"Encrypted", NULL),
             encryptionType,
-            [locked isEqualToString: @"yes"]
-              ? NSLocalizedString(@"Locked", NULL)
-              : NSLocalizedString(@"Unlocked", NULL)]];
+            status]];
 
     [self.model addElement: @"state" value: state];
     
@@ -377,7 +382,7 @@
   
   for(NSDictionary * pv in pvs)
     {
-    [self.model startElement: @"disk"];
+    [self.model startElement: @"physicaldisk"];
     
     NSString * name = [pv objectForKey: @"_name"];
     NSString * status =
@@ -442,7 +447,7 @@
 
     [self.result appendCR];
     
-    [self.model endElement: @"disk"];
+    [self.model endElement: @"physicaldisk"];
     }
     
   [self.model endElement: @"physicaldisks"];

@@ -240,11 +240,11 @@ sub processHardwareInformation
       $self->{line} =~ 
         /^\s+(\d+)\s(.+\sGHz)\s(.+)\s\((.+)\)\sCPU:\s(\d+)-core/;
 
-    $self->printTag('cpucount', $cpuCount, 'type', 'number');
+    $self->printTagNumber('cpucount', $cpuCount);
     $self->printTagWithUnits('speed', $speed);
     $self->printTag('cpu_type', $chipName);
     $self->printTag('cpucode', $chipCode);
-    $self->printTag('corecount', $coreCount, 'type', 'number');
+    $self->printTagNumber('corecount', $coreCount);
     }
   elsif($self->{index} == 5)
     {
@@ -267,8 +267,7 @@ sub processHardwareInformation
     my $batteryCycleCount = $2;
 
     $self->printTag('batteryhealth', $batteryHealth);
-    $self->printTag(
-      'batterycyclecount', $batteryCycleCount, 'type', 'number');
+    $self->printTagNumber('batterycyclecount', $batteryCycleCount);
     }
   elsif($self->{line} =~ /^\s+Bluetooth:\s(\S.+\S)/)
     {
@@ -349,7 +348,7 @@ sub processVideoInformation
 
     $self->pushTag('gpu');
     $self->printTag('name', $gpu);
-    $self->printTag('vram', $VRAM, 'units', $VRAMUnits, 'type', 'number');
+    $self->printTagNumber('vram', $VRAM, 'units', $VRAMUnits);
     }
   elsif($self->{line} =~ /^\s+(\S.+\S)\s*$/)
     {
@@ -481,7 +480,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size), 'units', 'B', 'type', 'number');
+    $self->printTagNumber('size', floor($size), 'units', 'B');
 
     $self->printTag('type', $type)
       if $type;
@@ -650,7 +649,7 @@ sub processVirtualDiskInformation
     $self->popTag('disk')
       if $self->currentTag() eq 'disk';
 
-    $self->pushTag('disk');
+    $self->pushTag('volume');
     $self->printTag('name', $diskName);
     $self->printTag('device', $device);
     $self->printTag('filesystem', $fileSystem);
@@ -659,15 +658,15 @@ sub processVirtualDiskInformation
     $self->printTag('type', $type)
       if $type;
 
-    $self->printTag('size', floor($size), 'units', 'B');
-    $self->printTag('free', floor($free), 'units', 'B');
+    $self->printTagNumber('size', floor($size), 'units', 'B');
+    $self->printTagNumber('free', floor($free), 'units', 'B');
     }
   elsif($self->{line} =~ /^\s+Encrypted\sAES-XTS\s(.+)/)
     {
     my $status = $1;
 
     $self->pushTag('encryption');
-    $self->printTag('encrypted', 'true');
+    $self->printTag('encrypted', 'true', 'type', 'boolean');
     $self->printTag('method', 'AES-XTS');
     $self->printTag('status', $status);
     $self->popTag('encryption');
@@ -698,9 +697,9 @@ sub processVirtualDiskInformation
 
     $self->pushTag('physicaldisk');
     $self->printTag('name', $name);
-    $self->printTag('size', $size, 'units', 'B');
+    $self->printTagNumber('size', $size, 'units', 'B');
 
-    $self->printTag('free', $free, 'units', 'B')
+    $self->printTagNumber('free', $free, 'units', 'B')
       if $free;
     
     $self->printTag('status', $status)
@@ -736,7 +735,7 @@ sub processSystemSoftware
     $self->printTag('name', $osname);
     $self->printTag('version', $version);
     $self->printTag('build', $build);
-    $self->printTag('uptime', $uptime, 'units', 'hours');
+    $self->printTag('uptime', $uptime, 'units', 'hours', 'type', 'integer');
     }
   }
 
@@ -1645,6 +1644,18 @@ sub printTag
   my $indent = '  ' x scalar(@{$self->{tags}});
 
   $self->{output} .= "$indent<$tag$attr>$value</$tag>\n";
+  }
+
+# Print a one-line tag with numeric value.
+sub printTagNumber
+  {
+  my $self = shift;
+
+  my $tag = shift;
+  my $value = shift;
+  my %attributes = @_;
+
+  $self->printTag($tag, $value, 'type', 'number', %attributes);
   }
 
 # Print a one-line tag whose value contains units.
