@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -150,6 +151,23 @@
           }
 
     if(attributes.fileSize != expectedSize)
+      {
+      [self.model startElement: @"unexpectedsudoerssize"];
+      
+      [self.model 
+        addElement: @"size" 
+        unsignedLongLongValue: attributes.fileSize 
+        attributes: 
+          [NSDictionary dictionaryWithObjectsAndKeys:@"B", @"units", nil]];
+
+      [self.model 
+        addElement: @"expectedsize" 
+        unsignedLongLongValue: expectedSize 
+        attributes: 
+          [NSDictionary dictionaryWithObjectsAndKeys:@"B", @"units", nil]];
+          
+      [self.model endElement: @"unexpectedsudoerssize"];
+          
       [files
         addObject:
           [NSString
@@ -160,6 +178,7 @@
               @"/etc/sudoers",
               attributes.fileSize,
               expectedSize]];
+      }
     }
   
   self.modifiedFiles = files;
@@ -174,11 +193,19 @@
   
   // See if /etc/sysctl.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/sysctl.conf"])
+    {
+    [self.model addElement: @"etcsysctlconfexists" boolValue: YES];
+    
     [files addObject: @"/etc/sysctl.conf"];
-  
+    }
+    
   // See if /etc/launchd.conf exists.
   if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
+    {
+    [self.model addElement: @"etclaunchdconfexists" boolValue: YES];
+
     [files addObject: @"/etc/launchd.conf"];
+    }
     
   self.configFiles = files;
   }
@@ -195,6 +222,9 @@
     if([status isEqualToString: @"enabled"])
       [[Model model] setSIP: YES];
     else
+      {
+      [self.model addElement: @"SIP" value: status];
+
       [otherModificiations
         addObject:
           [[[NSMutableAttributedString alloc]
@@ -209,6 +239,7 @@
                 dictionaryWithObjectsAndKeys:
                   [NSColor redColor], NSForegroundColorAttributeName, nil]]
             autorelease]];
+      }
     }
     
   self.modifications = otherModificiations;
@@ -417,6 +448,10 @@
           NSLocalizedString(@" - Count: %d", NULL), count];
     
   if((count > 10) || corrupt)
+    {
+    [self.model addElement: @"hostscount" unsignedIntegerValue: count];
+    [self.model addElement: @"hostscorrupt" boolValue: YES];
+    
     [self.result
       appendString:
         [NSString
@@ -427,13 +462,18 @@
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    }
   else if(count > 0)
+    {
+    [self.model addElement: @"hostscount" unsignedIntegerValue: count];
+
     [self.result
       appendString:
         [NSString
           stringWithFormat:
             NSLocalizedString(@"    /etc/hosts%@%@\n", NULL),
             countString, corruptString]];
+    }
   }
 
 @end

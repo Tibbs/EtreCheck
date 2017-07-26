@@ -22,7 +22,7 @@ our %sectionNames =
   'Thunderbolt Information' => 'thunderbolt',
   'Virtual disks' => 'virtualvolume',
   'System Software' => 'systemsoftware',
-  'Configuration files' => 'other',
+  'Configuration files' => 'configurationfiles',
   Gatekeeper => 'other',
   'Possible adware' => 'other',
   'Clean up' => 'other',
@@ -253,13 +253,11 @@ sub processHardwareInformation
 
     $self->printTag('ram', $RAM * 1024 * 1024 * 1024, 'units', 'B');
 
-    $self->printTag(
+    $self->printTagBoolean(
       'upgradeable', 
       $upgradeable eq 'Upgradeable' 
         ? 'true' 
-        : 'false', 
-      'type', 
-      'boolean');
+        : 'false');
     }
   elsif($self->{line} =~ /^\s+Battery:\sHealth\s=\s(.+)\s-\sCycle\scount\s=\s(\d+)/)
     {
@@ -666,7 +664,7 @@ sub processVirtualDiskInformation
     my $status = $1;
 
     $self->pushTag('encryption');
-    $self->printTag('encrypted', 'true', 'type', 'boolean');
+    $self->printTagBoolean('encrypted', 'true');
     $self->printTag('method', 'AES-XTS');
     $self->printTag('status', $status);
     $self->popTag('encryption');
@@ -744,15 +742,48 @@ sub processConfigurationFiles
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+\/etc\/hosts\s-\sCount:\s(\d+)$/)
+  if($self->{line} =~ /^\s+\/etc\/hosts\s-\sCount:\s(\d+)(\s+.+Corrupt!)?$/)
     {
     my $hosts = $1;
+    my $corrupt = $2;
 
-    $self->printTag('hostcounts', $hosts);
+    $self->printTag('hostscount', $hosts, 'type', 'unsignedlong');
+
+    $self->printTagBoolean('hostcorrupt', 'true')
+      if $corrupt;
     }
   elsif($self->{line} =~ /^\s+\/etc\/sysctl\.conf/)
     {
-    $self->printTag('etcsysctlconfexists', 'true');
+    $self->printTagBoolean('etcsysctlconfexists', 'true');
+    }
+  elsif($self->{line} =~ /^\s+\/etc\/launchd\.conf/)
+    {
+    $self->printTagBoolean('etclaunchdconfexists', 'true');
+    }
+  elsif($self->{line} =~ /^\s+\/etc\/sudoers,\sFile\ssize\s(\d+)\sbut\sexpected\s(\d+)/)
+    {
+    my $size = $1;
+    my $expectedSize = $2;
+
+    $self->pushTag('unexpectedsudoerssize');
+
+    $self->printTag('size', $size, 'type', 'unsignedlonglong', 'units', 'B');
+
+    $self->printTag(
+      'expectedsize', 
+      $expectedSize, 
+      'type', 
+      'unsignedlonglong', 
+      'units', 
+      'B');
+
+    $self->popTag('unexpectedsudoerssize');
+    }
+  if($self->{line} =~ /^\s+System\sIntegrity\sProtection\sstatus:\s(\S.+\S)/)
+    {
+    my $status = $1;
+
+    $self->printTag('SIP', $status);
     }
   }
 
@@ -1036,7 +1067,7 @@ sub processUserLoginItems
     $self->printTag('name', $name);
     $self->printTag('type', $type);
 
-    $self->printTag('hidden', 'true')
+    $self->printTagBoolean('hidden', 'true')
       if $hidden;
 
     $self->printTag('signature', $signature)
@@ -1076,7 +1107,7 @@ sub processUserLoginItems
     $self->printTag('name', $name);
     $self->printTag('type', $type);
 
-    $self->printTag('hidden', 'true')
+    $self->printTagBoolean('hidden', 'true')
       if $hidden;
     }
   elsif($self->{line} =~ /^\s+([^\s(].+\S)\s+(\S+)/)
@@ -1656,6 +1687,18 @@ sub printTagNumber
   my %attributes = @_;
 
   $self->printTag($tag, $value, 'type', 'number', %attributes);
+  }
+
+# Print a one-line tag with boolean value.
+sub printTagBoolean
+  {
+  my $self = shift;
+
+  my $tag = shift;
+  my $value = shift;
+  my %attributes = @_;
+
+  $self->printTag($tag, $value, 'type', 'boolean', %attributes);
   }
 
 # Print a one-line tag whose value contains units.
