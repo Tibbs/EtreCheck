@@ -23,32 +23,32 @@ our %sectionNames =
   'Virtual disks' => 'virtualvolume',
   'System Software' => 'systemsoftware',
   'Configuration files' => 'configurationfiles',
-  Gatekeeper => 'other',
-  'Possible adware' => 'other',
-  'Clean up' => 'other',
-  'Kernel Extensions' => 'other',
-  'Startup Items' => 'other',
-  'System Launch Agents' => 'other',
-  'System Launch Daemons' => 'other',
-  'Launch Agents' => 'other',
-  'Launch Daemons' => 'other',
-  'User Launch Agents' => 'other',
-  'User Login Items' => 'other',
-  'Internet Plug-ins' => 'other',
-  'User internet Plug-ins' => 'other',
-  'Audio Plug-ins' => 'other',
-  'User audio Plug-ins' => 'other',
-  'Safari Extensions' => 'other',
-  '3rd Party Preference Panes' => 'other',
-  'Time Machine' => 'other',
-  'Top Processes by CPU' => 'other',
-  'Top Processes by Memory' => 'other',
-  'Top Processes by Network Use' => 'other',
-  'Top Processes by Energy Use' => 'other',
-  'Virtual Memory Information' => 'other',
-  'Software installs' => 'other',
-  'Diagnostics Information' => 'other',
-  'Files deleted by EtreCheck' => 'other'
+  Gatekeeper => 'gatekeeper',
+  'Possible adware' => 'adware',
+  'Clean up' => 'cleanup',
+  'Kernel Extensions' => 'kernelextensions',
+  'Startup Items' => 'startupitems',
+  'System Launch Agents' => 'systemlaunchagents',
+  'System Launch Daemons' => 'systemlaunchdaemons',
+  'Launch Agents' => 'launchagents',
+  'Launch Daemons' => 'launchdaemons',
+  'User Launch Agents' => 'userlaunchagents',
+  'User Login Items' => 'loginitems',
+  'Internet Plug-ins' => 'internetplugins',
+  'User internet Plug-ins' => 'userinternetplugins',
+  'Audio Plug-ins' => 'audioplugins',
+  'User audio Plug-ins' => 'useraudioplugins',
+  'Safari Extensions' => 'safariextensions',
+  '3rd Party Preference Panes' => 'preferencepanes',
+  'Time Machine' => 'timemachine',
+  'Top Processes by CPU' => 'cpu',
+  'Top Processes by Memory' => 'memory',
+  'Top Processes by Network Use' => 'network',
+  'Top Processes by Energy Use' => 'energy',
+  'Virtual Memory Information' => 'vm',
+  'Software installs' => 'install',
+  'Diagnostics Information' => 'diagnostics',
+  'Files deleted by EtreCheck' => 'etrecheckdeletedfiles'
   );
 
 our %sections =
@@ -796,13 +796,13 @@ sub processGatekeeperInformation
     {
     my $gatekeeper = $1;
 
-    $self->printTag('gatekeeper', $gatekeeper);
+    $self->printTag('status', $gatekeeper);
     }
-  elsif($self->{line} =~ /^\s+(\S.+\S)$/)
+  elsif($self->{line} =~ /^\s+(\S.+\S)!?$/)
     {
     my $gatekeeper = $1;
 
-    $self->printTag('gatekeeper', $gatekeeper);
+    $self->printTag('status', $gatekeeper);
     }
   }
 

@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Gatekeeper settings.
 typedef enum
@@ -156,6 +157,10 @@ GatekeeperSetting;
   switch(setting)
     {
     case kMacAppStore:
+      [self.model 
+        addElement: @"status" 
+        value: NSLocalizedString(@"Mac App Store", NULL)];
+      
       [self.result
         appendString:
           [NSString
@@ -163,6 +168,12 @@ GatekeeperSetting;
               @"    %@\n", NSLocalizedString(@"Mac App Store", NULL)]];
       break;
     case kDeveloperID:
+      [self.model 
+        addElement: @"status" 
+        value: 
+          NSLocalizedString(
+            @"Mac App Store and identified developers", NULL)];
+
       [self.result
         appendString:
           [NSString
@@ -172,6 +183,10 @@ GatekeeperSetting;
                 @"Mac App Store and identified developers", NULL)]];
       break;
     case kDisabled:
+      [self.model 
+        addElement: @"status" 
+        value: NSLocalizedString(@"Anywhere", NULL)];
+
       [self.result
         appendString:
           [NSString
@@ -187,6 +202,10 @@ GatekeeperSetting;
       
     case kUnknown:
     default:
+      [self.model 
+        addElement: @"status" 
+        value: NSLocalizedString(@"Unknown", NULL)];
+
       [self.result
         appendString:
           [NSString
