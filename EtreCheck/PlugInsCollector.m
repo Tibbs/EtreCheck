@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -43,14 +44,32 @@
         [version
           stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
 
-      NSString * date = [self modificationDate: path];
+      NSDate * modificationDate = [Utilities modificationDate: path];
+      NSString * modificationDateString = @"";
+        
+      if(modificationDate)
+        {
+        modificationDateString =
+          [Utilities installDateAsString: modificationDate];
+        
+        modificationDateString =
+          [NSString stringWithFormat: @" (%@)", modificationDateString];
+        }
+        
+      [self.model startElement: @"plugin"];
+      
+      [self.model addElement: @"name" value: name];
+      [self.model addElement: @"version" value: version];
+      [self.model addElement: @"installdate" day: modificationDate];
+      
+      [self.model endElement: @"plugin"];
       
       [self.result
         appendString:
           [NSString
             stringWithFormat:
               NSLocalizedString(@"    %@: %@%@", NULL),
-              name, version, date]];
+              name, version, modificationDateString]];
  
       // Some plug-ins are special.
       if([name isEqualToString: @"JavaAppletPlugin"])
@@ -71,23 +90,6 @@
 
     [self.result appendString: @"\n"];
     }
-  }
-
-// Append the modification date.
-- (NSString *) modificationDate: (NSString *) path
-  {
-  NSDate * modificationDate = [Utilities modificationDate: path];
-    
-  if(modificationDate)
-    {
-    NSString * modificationDateString =
-      [Utilities installDateAsString: modificationDate];
-    
-    if(modificationDateString)
-      return [NSString stringWithFormat: @" (%@)", modificationDateString];
-    }
-    
-  return @"";
   }
 
 // Find all the plug-in bundles in the given path.
