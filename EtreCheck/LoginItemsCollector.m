@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#include "XMLBuilder.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -516,11 +517,33 @@
     
   bool isHidden = [hidden boolValue];
   
+  [self.model startElement: @"loginitem"];
+  
+  [self.model addElement: @"name" value: name];
+  [self.model addElement: @"type" value: kind];
+  
+  if(isHidden)
+    [self.model addElement: @"hidden" boolValue: isHidden];
+  
+  [self.model addElement: @"signature" value: developer];
+  
   NSString * modificationDateString = @"";
   
   if([path length] > 0)
-    modificationDateString = [self modificationDateString: path];
+    {
+    NSDate * modificationDate = [self modificationDate: path];
     
+    [self.model addElement: @"installdate" day: modificationDate];
+
+    if(modificationDate)
+      modificationDateString =
+        [Utilities installDateAsString: modificationDate];
+    }
+
+  [self.model addElement: @"path" value: path];
+
+  [self.model endElement: @"loginitem"];
+  
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
     
@@ -585,17 +608,6 @@
             safePath]];
     
   return YES;
-  }
-
-// Get the modification date string of a path.
-- (NSString *) modificationDateString: (NSString *) path
-  {
-  NSDate * modificationDate = [self modificationDate: path];
-  
-  if(modificationDate)
-    return [Utilities installDateAsString: modificationDate];
-    
-  return @"";
   }
 
 // Get the modification date of a file.
