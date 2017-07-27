@@ -950,7 +950,7 @@ sub processSystemLaunchdAgents
 
     $self->pushTag('appletasks');
     $self->printTag('status', $status);
-    $self->printTag('count', $count);
+    $self->printTag('count', $count, 'type', 'unsignedlong');
     $self->popTag('appletasks');    
     }
   else

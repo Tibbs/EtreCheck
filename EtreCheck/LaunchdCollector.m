@@ -14,6 +14,7 @@
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
 #import "SearchEngine.h"
+#import "XMLBuilder.h"
 
 @implementation LaunchdCollector
 
@@ -909,10 +910,16 @@
       return NO;
       }
       
+  [self.model startElement: @"task"];
+  
   NSString * filename = [info objectForKey: kFilename];
 
   // Format the status.
   [output appendAttributedString: [self formatPropertyListStatus: info]];
+  
+  NSString * cleanPath = [Utilities cleanPath: path];
+  
+  [self.model addElement: @"path" value: cleanPath];
   
   // Add the name.
   [output appendString: [Utilities prettyPath: filename]];
@@ -928,6 +935,8 @@
   NSMutableDictionary * status = [self.launchdStatus objectForKey: label];
   
   [status setObject: [NSNumber numberWithBool: YES] forKey: kPrinted];
+  
+  [self.model endElement: @"task"];
   
   return YES;
   }
@@ -1052,6 +1061,8 @@
   {
   if(count)
     {
+    [self.model startElement: @"appletasks"];
+    
     NSDictionary * status =
       [NSDictionary
         dictionaryWithObjectsAndKeys: statusString, kStatus, nil];
@@ -1059,11 +1070,15 @@
     [output
       appendAttributedString: [self formatPropertyListStatus: status]];
     
+    [self.model addElement: @"count" unsignedIntegerValue: count];
+    
     [output
       appendString: TTTLocalizedPluralString(count, @"applecount", nil)];
     
     [output appendString: @"\n"];
       
+    [self.model endElement: @"appletasks"];
+
     return YES;
     }
     
@@ -1277,6 +1292,8 @@
   NSMutableAttributedString * output =
     [[NSMutableAttributedString alloc] init];
     
+  [self.model addElement: @"status" value: statusString];
+  
   [output
     appendString: [NSString stringWithFormat: @"    [%@]    ", statusString]
     attributes:
@@ -1323,14 +1340,22 @@
     
     if([plistcrc length] == 0)
       plistcrc = @"?";
-      
+    else
+      [self.model addElement: @"plistcrc" value: plistcrc];
+
     NSString * execrc = [info objectForKey: kExecutableCRC];
     
     if([execrc length] == 0)
       execrc = @"?";
+    else
+      [self.model addElement: @"execrc" value: execrc];
       
+    [self.model addElement: @"signature" value: @"none"];
+    
     developer = [NSString stringWithFormat: @"? %@ %@", plistcrc, execrc];
     }
+  else
+    [self.model addElement: @"signature" value: developer];
     
   if([developer length] == 0)
     developer = NSLocalizedString(@"Unknown", NULL);
@@ -1338,6 +1363,8 @@
   NSDate * modificationDate =
     [info objectForKey: kModificationDate];
 
+  [self.model addElement: @"installdate" day: modificationDate];
+  
   NSString * modificationDateString =
     [Utilities installDateAsString: modificationDate];
   

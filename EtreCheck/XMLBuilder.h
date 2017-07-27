@@ -70,14 +70,16 @@
   NSMutableString * myDocument;
   XMLElement * myRoot;
   NSDateFormatter * myDateFormatter;
+  NSDateFormatter * myDayFormatter;
   BOOL myValid;
   }
 
 // The document root.
 @property (retain) XMLElement * root;
 
-// The date formatter.
+// The date formatters.
 @property (readonly) NSDateFormatter * dateFormatter;
+@property (readonly) NSDateFormatter * dayFormatter;
 
 // The XML content.
 @property (readonly) NSString * XML;
@@ -179,6 +181,7 @@
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name date: (NSDate *) value;
+- (void) addElement: (NSString *) name day: (NSDate *) date;
 
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name url: (NSURL *) value;
