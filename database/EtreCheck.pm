@@ -1015,7 +1015,8 @@ sub processLaunchdLine
 
       if($plistcrc)
         {
-        $self->printTag('signature', 'shellscript');
+        $self->printTag('signature', 'none');
+        $self->printTagBoolean('shellscript', 'true');
         $self->printTag('plistcrc', $plistcrc);
         }
       elsif($signature eq '? ? ?')
@@ -1031,6 +1032,8 @@ sub processLaunchdLine
     $self->printTag('installdate', $date, 'format', 'yyyy-MM-dd');
     $self->popTag('task');    
     }
+
+  # What about adware, unknown files, missing executables, or hidden?
   }
 
 # Process user login items.

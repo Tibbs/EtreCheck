@@ -765,6 +765,9 @@
     if([self isWhitelistException: info path: path])
       knownFile = YES;
     
+  if(!knownFile)
+    [self.model addElement: @"unknown" boolValue: YES];
+    
   [info
     setObject: [NSNumber numberWithBool: !knownFile] forKey: kUnknown];
   }
@@ -1323,8 +1326,13 @@
     
     if([crc length] == 0)
       crc = @"0";
+    else
+      [self.model addElement: @"plistcrc" value: crc];
       
-    developer =
+   [self.model addElement: @"signature" value: @"none"];
+   [self.model addElement: @"shellscript" boolValue: YES];
+
+   developer =
       [NSString
         stringWithFormat:
           @"%@ %@", NSLocalizedString(@"Shell Script", NULL), crc];
@@ -1354,7 +1362,7 @@
     
     developer = [NSString stringWithFormat: @"? %@ %@", plistcrc, execrc];
     }
-  else
+  else if(![signature isEqualToString: kShell])
     [self.model addElement: @"signature" value: developer];
     
   if([developer length] == 0)
@@ -1406,6 +1414,8 @@
 
   [extra appendString: @" "];
 
+  [self.model addElement: @"adware" boolValue: YES];
+  
   [extra
     appendString: NSLocalizedString(@"Adware!", NULL)
     attributes:
@@ -1428,6 +1438,8 @@
   if([executable length] > 0)
     if([[NSFileManager defaultManager] fileExistsAtPath: executable])
       {
+      [self.model addElement: @"executable" value: executable];
+      
       [extra appendString: @"\n        "];
       [extra appendString: [Utilities cleanPath: executable]];
       }
@@ -1466,11 +1478,17 @@
     NSString * executable = [info objectForKey: kExecutable];
   
     if([executable length])
+      {
+      executable = [Utilities cleanPath: executable];
+      
+      [self.model addElement: @"executablemissing" value: executable];
+      
       message =
         [NSString
           stringWithFormat:
             NSLocalizedString(@" - %@: Executable not found!", NULL),
-            [Utilities cleanPath: executable]];
+            executable];
+      }
     else
       message =
         [NSString
@@ -1563,12 +1581,18 @@
 
   // Show what is being hidden.
   if([[info objectForKey: kHidden] boolValue] || self.showExecutable)
+    {
+    if([[info objectForKey: kHidden] boolValue])
+     [self.model addElement: @"hidden" boolValue: YES];
+     
+    NSString * executable = 
+      [Utilities formatExecutable: [info objectForKey: kCommand]];
+           
+    [self.model addElement: @"executable" value: executable];
+    
     [extra appendString:
-      [NSString
-        stringWithFormat:
-          @"\n        %@",
-          [Utilities
-            formatExecutable: [info objectForKey: kCommand]]]];
+      [NSString stringWithFormat: @"\n        %@", executable]];
+    }
     
   return [extra autorelease];
   }
