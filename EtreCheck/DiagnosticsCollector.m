@@ -11,6 +11,7 @@
 #import "NSArray+Etresoft.h"
 #import "Model.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
@@ -551,9 +552,15 @@
   if(!hasOutput)
     [self.result appendAttributedString: [self buildTitle]];
   
+  [self.model startElement: @"event"];
+  
+  [self.model addElement: @"date" date: event.date];
+  [self.model addElement: @"type" value: [self getEventType: event.type]];
+
   switch(event.type)
     {
     case kSelfTestFail:
+      
       [self.result
         appendString:
           [NSString
@@ -569,6 +576,7 @@
       break;
     
     case kShutdown:
+      
       if(event.code < 0)
         [self.result
           appendString:
@@ -613,6 +621,8 @@
     
     if(fileExists)
       {
+      [self.model addElement: @"path" value: event.file];
+      
       NSAttributedString * openURL =
         [[Model model] getOpenURLFor: event.file];
 
@@ -634,6 +644,8 @@
     
   if([event.details length])
     {
+    [self.model addElement: @"details" valueAsCDATA: event.details];
+    
     NSAttributedString * detailsURL =
       [[Model model] getDetailsURLFor: name];
 
@@ -646,10 +658,14 @@
 
   [self.result appendString: @"\n"];
   
+  [self.model addElement: @"information" valueAsCDATA: event.information];
+  
   if([event.information length] > 0)
     [self.result appendString: event.information];
 
   hasOutput = YES;
+  
+  [self.model endElement: @"event"];
   }
 
 // Get an event name.
@@ -671,6 +687,9 @@
       
     case kShutdown:
       return NSLocalizedString(@"Last shutdown cause:", NULL);
+      
+    case kSelfTestFail:
+      return NSLocalizedString(@"Self test - failed", NULL);
       
     default:
       break;

@@ -1514,6 +1514,15 @@ sub processDiagnosticsInformation
   elsif($self->{line} =~ /^\s+Run\sas\san\sadministrator\saccount\sto\ssee\smore\sinformation\./)
     {
     }
+  elsif($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+Self\stest\s-\sfailed/)
+    {
+    my $date = $1;
+
+    $self->pushTag('event');
+    $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
+    $self->printTag('type', 'Self test - failed');
+    $self->popTag('event');
+    }
   elsif($self->{line} =~ /^\s+(\S.+\S)/)
     {
     my $text = $1;
@@ -1602,12 +1611,16 @@ sub printTag
 
   while(my ($key, $value) = each %attributes)
     {
-    $attr .= qq{ $key="$value"};
+    my $escapedValue = $self->escapeText($value);
+
+    $attr .= qq{ $key="$escapedValue"};
     }
+
+  my $escapedText = $self->escapeText($value);
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent<$tag$attr>$value</$tag>\n";
+  $self->{output} .= "$indent<$tag$attr>$escapedText</$tag>\n";
   }
 
 # Print a one-line tag with numeric value.
@@ -1672,8 +1685,10 @@ sub printTagWithUnits
 
   $value = join(' ', @parts);
 
+  my $escapedText = $self->escapeText($value);
+
   $self->printTag(
-    $tag, $value, 'units', $units, 'type', 'number', %attributes);
+    $tag, $escapedText, 'units', $units, 'type', 'number', %attributes);
   }
 
 # Print text.
@@ -1683,9 +1698,27 @@ sub printText
 
   my $text = shift;
 
+  my $escapedText = $self->escapeText($text);
+
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent$text\n";
+  $self->{output} .= "$indent$escapedText\n";
+  }
+
+# Escape text.
+sub escapeText
+  {
+  my $self = shift;
+
+  my $text = shift;
+
+  $text =~ s/&/&amp;/g;
+  $text =~ s/>/&gt;/g;
+  $text =~ s/</lt;/g;
+  $text =~ s/"/&quot;/g;
+  $text =~ s/'/&apos;/g;
+
+  return $text;
   }
 
 # Pop a specific tag, popping all intermediate tags to get there.

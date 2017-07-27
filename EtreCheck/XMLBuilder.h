@@ -155,6 +155,9 @@
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string;
 
+// Add a CDATA string to the current element's contents.
+- (void) addCDATA: (NSString *) string;
+
 // Finish the current element.
 - (void) endElement: (NSString *) name;
   
@@ -175,6 +178,11 @@
 // Add an element and value with a convenience function. Parse units out
 // of the value and store as a number.
 - (void) addElement: (NSString *) name valueWithUnits: (NSString *) value;
+
+// Add an element and value with a convenience function. 
+- (void) addElement: (NSString *) name 
+  valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes;
+- (void) addElement: (NSString *) name valueAsCDATA: (NSString *) value;
 
 // Add an element, value, and attributes with a convenience function.
 - (void) addElement: (NSString *) name 

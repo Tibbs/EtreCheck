@@ -35,7 +35,83 @@
   
   if(self != nil)
     {
-    myText = [text copy];
+    NSMutableString * escapedText = [NSMutableString new];
+    
+    [escapedText appendString: text];
+    
+    [escapedText 
+      replaceOccurrencesOfString: @"&" 
+      withString: @"&amp;"
+      options: 0
+      range: NSMakeRange(0, [escapedText length])];
+    
+    [escapedText 
+      replaceOccurrencesOfString: @">" 
+      withString: @"&gt;"
+      options: 0
+      range: NSMakeRange(0, [escapedText length])];
+
+    [escapedText 
+      replaceOccurrencesOfString: @"<" 
+      withString: @"&lt;"
+      options: 0
+      range: NSMakeRange(0, [escapedText length])];
+
+    [escapedText 
+      replaceOccurrencesOfString: @"\"" 
+      withString: @"&quot;"
+      options: 0
+      range: NSMakeRange(0, [escapedText length])];
+
+    [escapedText 
+      replaceOccurrencesOfString: @"'" 
+      withString: @"&apos;"
+      options: 0
+      range: NSMakeRange(0, [escapedText length])];
+
+    myText = [escapedText copy];
+    
+    [escapedText release];
+    
+    NSRange range =
+      [myText
+        rangeOfCharacterFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      
+    if(range.location == 0)
+      myLeadingWhitespace = YES;
+    
+    range =
+      [myText
+        rangeOfCharacterFromSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]
+        options: NSBackwardsSearch];
+
+    if(range.location != NSNotFound)
+      if(([myText length] - range.location) == range.length)
+        myTrailingWhitespace = YES;
+
+    range =
+      [myText
+        rangeOfCharacterFromSet: [NSCharacterSet newlineCharacterSet]];
+    
+    if(range.location != NSNotFound)
+      myMultiLine = YES;
+      
+    return self;
+    }
+    
+  return nil;
+  }
+
+// Constructor.
+- (instancetype) initWithCDATA: (NSString *) text
+  {
+  self = [super init];
+  
+  if(self != nil)
+    {
+    myText = [NSString stringWithFormat: @"<![CDATA[%@]]>", text];
     
     NSRange range =
       [myText
@@ -640,6 +716,35 @@
     [self addElement: name value: value];
   }
   
+// Add an element and value with a convenience function. 
+- (void) addElement: (NSString *) name 
+  valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes;
+  {
+  if([value length] == 0)
+    return;
+    
+  [self startElement: name];  
+  
+  for(NSString * key in attributes)
+    {
+    NSObject * attributeValue = [attributes objectForKey: key];
+    
+    if([attributeValue respondsToSelector: @selector(UTF8String)])
+      [self addAttribute: key value: (NSString *)attributeValue];
+    else
+      [self addElement: key];
+    }
+
+  [self addCDATA: value];
+
+  [self endElement: name];
+  }
+  
+- (void) addElement: (NSString *) name valueAsCDATA: (NSString *) value
+  {
+  [self addElement: name valueAsCDATA: value attributes: nil];
+  }
+  
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name number: (NSNumber *) value
   {
@@ -982,6 +1087,29 @@
     }
   }
 
+// Add a CDATA string to the current element's contents.
+- (void) addCDATA: (NSString *) string
+  {
+  // Find the currently open child.
+  XMLElement * openChild = [self.root openChild];
+  
+  // Make sure there is an open child.
+  if(openChild == nil)
+    {
+    NSLog(@"Cannot add text %@, no open element", string);
+    self.valid = NO;
+    }
+
+  if(string != nil)
+    {
+    XMLTextNode * textNode = [[XMLTextNode alloc] initWithCDATA: string];
+    
+    [openChild.children addObject: textNode];
+  
+    [textNode release];
+    }
+  }
+  
 // Add a null attribute.
 - (void) addAttribute: (NSString *) name
   {
