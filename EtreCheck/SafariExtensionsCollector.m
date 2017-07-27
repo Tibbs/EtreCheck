@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
@@ -376,6 +377,8 @@
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)
     {
+    [self.model startElement: @"extension"];
+  
     [self printExtensionDetails: extension];
     
     if(([archivePath length] == 0) && ([cachePath length] > 0))
@@ -385,6 +388,8 @@
     
     if(adware)
       {
+      [self.model addElement: @"adware" boolValue: adware];
+      
       [self.result appendString: @" "];
       
       // Add this adware extension under the "extension" category so only it
@@ -423,6 +428,8 @@
 
     [self.result appendString: @"\n"];
     
+    [self.model endElement: @"extension"];
+  
     return YES;
     }
     
@@ -442,6 +449,10 @@
   // Format the status.
   [self.result
     appendAttributedString: [self formatExtensionStatus: extension]];
+  
+  [self.model addElement: @"name" value: humanReadableName];
+  [self.model addElement: @"developer" value: author];
+  [self.model addElement: @"url" value: website];
   
   [self.result appendString: humanReadableName];
     
@@ -499,6 +510,8 @@
       color = [[Utilities shared] gray];
       }
     
+    [self.model addElement: @"status" value: statusString];
+    
     [output
       appendString: 
         [NSString stringWithFormat: @"    [%@]    ", statusString]
@@ -518,6 +531,8 @@
   NSDate * modificationDate =
     [Utilities modificationDate: [extension objectForKey: kArchivePath]];
     
+  [self.model addElement: @"installdate" day: modificationDate];
+  
   if(!modificationDate)
     modificationDate =
       [Utilities modificationDate: [extension objectForKey: kCachePath]];
