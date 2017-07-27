@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect install information.
 @implementation InstallCollector
@@ -53,6 +54,14 @@
           NSString * installDate =
             [Utilities installDateAsString: date];
 
+          [self.model startElement: @"package"];
+          
+          [self.model addElement: @"name" value: name];
+          [self.model addElement: @"version" value: version];
+          [self.model addElement: @"installdate" day: date];
+          
+          [self.model endElement: @"package"];
+          
           [self.result
             appendString:
               [NSString

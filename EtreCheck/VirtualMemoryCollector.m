@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kAvailableRAM @"availableram"
 #define kFreeRAM @"freeram"
@@ -148,6 +149,8 @@
   NSString * printString =
     [memoryString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+  
+  [self.model addElement: key value: memoryString];
   
   [self.result
     appendString:

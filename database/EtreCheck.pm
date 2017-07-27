@@ -1530,8 +1530,6 @@ sub processDiagnosticsInformation
 
     $self->popTag('event')
       if $self->currentTag() eq 'event';
-
-    $self->{section} = undef;
     }
   }
 
