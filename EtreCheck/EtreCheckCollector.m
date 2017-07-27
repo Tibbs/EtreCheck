@@ -7,6 +7,7 @@
 #import "EtreCheckCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "XMLBuilder.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -80,6 +81,14 @@
       if([path length] > 0)
         {
         NSString * safePath = [Utilities prettyPath: path];
+        
+        [self.model startElement: @"deletedfile"];
+
+        [self.model addElement: @"date" date: date];
+        [self.model addElement: @"path" value: safePath];
+        [self.model addElement: @"reason" value: reason];
+
+        [self.model endElement: @"deletedfile"];
         
         [self.result
           appendString:

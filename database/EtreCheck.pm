@@ -1547,14 +1547,22 @@ sub processEtreCheckInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s-\s(\S.+\S)\s-\s\S+$/)
+  if($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s-\s(\S.+\S)$/)
     {
     my $date = $1;
     my $file = $2;
+    my $reason;
+
+    if($file =~ /(\S.+\S)(?:\s-\s(\S.+\S))/)
+      {
+      $file = $1;
+      $reason = $2;
+      }
 
     $self->pushTag('deletedfile');
     $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
-    $self->printTag('file', $file);
+    $self->printTag('path', $file);
+    $self->printTag('reason', $reason);
     $self->popTag('deletedfile');
     }
   }
