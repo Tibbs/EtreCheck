@@ -9,6 +9,7 @@
 #import "SubProcess.h"
 #import "Utilities.h"
 #import "Model.h"
+#import "XMLBuilder.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -246,6 +247,18 @@
     [NSString
       stringWithFormat:
         @"%6.2f", power];
+
+   [self.model startElement: @"process"];
+  
+  [self.model 
+    addElement: @"amount" 
+    value: [NSString stringWithFormat: @"%.2f", power]
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"number", @"type", nil]];
+    
+  [self.model addElement: @"name" value: processName];
+  
+  [self.model endElement: @"process"];
 
   if(power > 100.0)
     [self.result

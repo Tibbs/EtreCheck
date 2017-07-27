@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "Model.h"
 #import "NumberFormatter.h"
+#import "XMLBuilder.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -276,6 +277,14 @@
   NSString * printBytesOutString =
     [bytesOutString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
+
+  [self.model startElement: @"process"];
+  
+  [self.model addElement: @"inputsize" valueWithUnits: bytesInString];
+  [self.model addElement: @"outputsize" valueWithUnits: bytesOutString];
+  [self.model addElement: @"name" value: processName];
+  
+  [self.model endElement: @"process"];
 
   [self.result
     appendString:

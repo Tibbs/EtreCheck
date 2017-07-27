@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "ByteCountFormatter.h"
 #import "Model.h"
+#import "XMLBuilder.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -129,6 +130,16 @@
   if([name length] == 0)
     name = NSLocalizedString(@"Unknown", NULL);
     
+  [self.model startElement: @"process"];
+  
+  [self.model addElement: @"size" valueWithUnits: memoryString];
+  [self.model addElement: @"name" value: name];
+  
+  if(count > 1)
+    [self.model addElement: @"count" intValue: count];
+  
+  [self.model endElement: @"process"];
+
   NSString * output =
     [NSString
       stringWithFormat: @"    %@\t%@%@\n", printString, name, countString];

@@ -1321,7 +1321,7 @@ sub processTopProcessesByCPU
     my $process = $2;
 
     $self->pushTag('process');
-    $self->printTag('cpupct', $pct, 'units', '%');
+    $self->printTagNumber('cpupct', $pct, 'units', '%');
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1332,14 +1332,17 @@ sub processTopProcessesByMemory
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+([0-9.]+\s(?:B|KB|MB|GB))\s+(.+)$/)
+  if($self->{line} =~ /^\s+([0-9.]+\s(?:B|KB|MB|GB))\s+(.+)(?:\((\d+)\))?$/)
     {
     my $size = $1;
     my $process = $2;
+    my $count = $3;
 
     $self->pushTag('process');
     $self->printTagWithUnits('size', $size);
     $self->printTag('name', $process);
+    $self->printTagNumber('count', $count);
+    
     $self->popTag('process');
     }
   }
@@ -1374,7 +1377,7 @@ sub processTopProcessesByEnergy
     my $process = $2;
 
     $self->pushTag('process');
-    $self->printTag('amount', $amount);
+    $self->printTagNumber('amount', $amount);
     $self->printTag('name', $process);
     $self->popTag('process');
     }

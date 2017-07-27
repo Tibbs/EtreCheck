@@ -6,6 +6,7 @@
 
 #import "CPUUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "XMLBuilder.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -103,13 +104,26 @@
       [usageString
         stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
+    NSString * name = [process objectForKey: @"command"];
+    
+    [self.model startElement: @"process"];
+    
+    [self.model 
+      addElement: @"cpupct" 
+      value: [NSString stringWithFormat: @"%.0lf", cpu]
+      attributes: 
+        [NSDictionary 
+          dictionaryWithObjectsAndKeys: 
+            @"%", @"units", @"number", @"type", nil]];
+        
+    [self.model addElement: @"name" value: name];
+    
+    [self.model endElement: @"process"];
+    
     NSString * output =
       [NSString
         stringWithFormat:
-          @"    %@\t%@%@\n",
-          printString,
-          [process objectForKey: @"command"],
-          countString];
+          @"    %@\t%@%@\n", printString, name, countString];
       
     if(cpu > 50.0)
       [self.result
