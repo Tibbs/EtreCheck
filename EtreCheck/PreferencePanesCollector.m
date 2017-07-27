@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect 3rd party preference panes.
 @implementation PreferencePanesCollector
@@ -80,6 +81,10 @@
 
   if([support isEqualToString: @"spprefpane_support_3rdParty"])
     {
+    [self.model startElement: @"preferencepane"];
+    
+    [self.model addElement: @"name" value: name];
+    
     [self.result
       appendString: [NSString stringWithFormat: @"    %@ ", name]];
       
@@ -93,6 +98,8 @@
       
     [self.result appendString: @"\n"];
     
+    [self.model endElement: @"preferencepane"];
+
     return YES;
     }
     
@@ -104,6 +111,8 @@
   {
   NSDate * modificationDate = [Utilities modificationDate: path];
     
+  [self.model addElement: @"installdate" day: modificationDate];
+  
   if(modificationDate)
     {
     NSString * modificationDateString =
