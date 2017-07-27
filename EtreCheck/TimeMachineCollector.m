@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -59,6 +60,8 @@
 
   if([[Model model] majorOSVersion] < kMountainLion)
     {
+    [self.model addElement: @"osversiontooold" boolValue: YES];
+    
     [self.result
       appendString:
         NSLocalizedString(@"timemachineneedsmountainlion", NULL)
@@ -75,6 +78,8 @@
   
   if(!tmutilExists)
     {
+    [self.model addElement: @"tmutilunavailable" boolValue: YES];
+
     [self.result
       appendString:
         NSLocalizedString(@"timemachineinformationnotavailable", NULL)
@@ -264,11 +269,6 @@
   NSDate * oldestBackup = nil;
   NSDate * lastBackup = nil;
   
-  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setDateStyle: NSDateFormatterShortStyle];
-  [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
-  [dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
-
   if([snapshots count])
     {
     snapshotCount =
@@ -291,17 +291,11 @@
     
   [destination setObject: snapshotCount forKey: kSnapshotcount];
   
-  if(oldestBackup)
-    [destination
-      setObject: [dateFormatter stringFromDate: oldestBackup]
-      forKey: kOldestBackup];
+  if(oldestBackup != nil)
+    [destination setObject: oldestBackup forKey: kOldestBackup];
     
-  if(lastBackup)
-    [destination
-      setObject: [dateFormatter stringFromDate: lastBackup]
-      forKey: kLastbackup];
-    
-  [dateFormatter release];
+  if(lastBackup != nil)
+    [destination setObject: lastBackup forKey: kLastbackup];
   }
 
 // Consolidate a single destination.
@@ -379,13 +373,11 @@
     [size unsignedLongLongValue] - [freespace unsignedLongLongValue];
   
   if(size)
-    {
     diskSize =
       [formatter stringFromByteCount: [size unsignedLongLongValue]];
     
-    spaceRequired = [formatter stringFromByteCount: used];
-    }
-
+  spaceRequired = [formatter stringFromByteCount: used];
+    
   [self.result
     appendString:
       [NSString
@@ -393,6 +385,12 @@
           NSLocalizedString(
             @"        %@: Disk size: %@ Disk used: %@\n", NULL),
           name, diskSize, spaceRequired]];
+
+  [self.model startElement: @"volume"];
+  [self.model addElement: @"name" value: name]; 
+  [self.model addElement: @"size" valueWithUnits: diskSize];
+  [self.model addElement: @"used" valueWithUnits: spaceRequired];
+  [self.model endElement: @"volume"];
 
   if(size)
     {
@@ -440,6 +438,9 @@
   NSNumber * skipSystemFiles =
     [settings objectForKey: @"SkipSystemFiles"];
 
+  [self.model 
+    addElement: @"skipsystemfiles" boolValue: [skipSystemFiles boolValue]];
+  
   if(skipSystemFiles)
     {
     bool skip = [skipSystemFiles boolValue];
@@ -468,6 +469,9 @@
   NSNumber * mobileBackups =
     [settings objectForKey: @"MobileBackups"];
 
+  [self.model 
+    addElement: @"mobilebackups" boolValue: [mobileBackups boolValue]];
+  
   if(mobileBackups)
     {
     bool mobile = [mobileBackups boolValue];
@@ -489,6 +493,8 @@
   {
   NSNumber * autoBackup =
     [settings objectForKey: @"AutoBackup"];
+
+  [self.model addElement: @"autobackup" boolValue: [autoBackup boolValue]];
 
   if(autoBackup)
     {
@@ -549,6 +555,8 @@
   
   if([backedupVolumeUUIDs count])
     {
+    [self.model startElement: @"volumesbeingbackedup"];
+    
     [self.result
       appendString:
         NSLocalizedString(@"    Volumes being backed up:\n", NULL)];
@@ -561,6 +569,8 @@
         
       [self printBackedupVolume: UUID];
       }
+
+    [self.model endElement: @"volumesbeingbackedup"];
     }
   }
 
@@ -572,6 +582,8 @@
 
   bool first = YES;
   
+  [self.model startElement: @"destinations"];
+  
   for(NSString * destinationID in destinations)
     {
     if(!first)
@@ -581,11 +593,15 @@
     
     first = NO;
     }
+
+  [self.model endElement: @"destinations"];
   }
 
 // Print a Time Machine destination.
 - (void) printDestination: (NSDictionary *) destination
   {
+  [self.model startElement: @"destination"];
+  
   // Print the destination description.
   [self printDestinationDescription: destination];
   
@@ -605,6 +621,8 @@
 
   // Print an overall analysis of the Time Machine size differential.
   [self printDestinationSizeAnalysis: totalSizeValue];
+
+  [self.model endElement: @"destination"];
   }
 
 // Print the destination description.
@@ -624,6 +642,12 @@
   if([last integerValue] == 1)
     lastused = NSLocalizedString(@"(Last used)", NULL);
 
+  [self.model addElement: @"name" value: safeName];
+  [self.model addElement: @"type" value: kind];
+  
+  if([last boolValue])
+    [self.model addElement: @"lastused" boolValue: [last boolValue]];
+  
   [self.result
     appendString:
       [NSString
@@ -637,6 +661,8 @@
   NSString * totalSize =
     [formatter stringFromByteCount: totalSizeValue];
 
+  [self.model addElement: @"size" valueWithUnits: totalSize];
+  
   [self.result
     appendString:
       [NSString
@@ -648,31 +674,45 @@
 // Print information about snapshots.
 - (void) printSnapshotInformation: (NSDictionary *) destination
   {
+  NSNumber * count = [destination objectForKey: kSnapshotcount];
+  
+  [self.model addElement: @"count" number: count];
+  
   [self.result
     appendString:
       [NSString
         stringWithFormat:
           NSLocalizedString(
-            @"        Total number of backups: %@ \n", NULL),
-          [destination objectForKey: kSnapshotcount]]];
+            @"        Total number of backups: %@ \n", NULL), count]];
   
   NSDate * oldestBackup = [destination objectForKey: kOldestBackup];
+
+  if(oldestBackup != nil)
+    {
+    [self.model addElement: @"oldestbackup" date: oldestBackup];
+    
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(
+              @"        Oldest backup: %@ \n", NULL),
+            [Utilities dateAsString: oldestBackup]]];
+    }
+    
   NSDate * lastBackup = [destination objectForKey: kLastbackup];
 
-  [self.result
-    appendString:
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(
-            @"        Oldest backup: %@ \n", NULL),
-          oldestBackup ? oldestBackup : @"-"]];
+  if(oldestBackup != nil)
+    {
+    [self.model addElement: @"lastbackup" date: lastBackup];
 
-  [self.result
-    appendString:
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(@"        Last backup: %@ \n", NULL),
-          lastBackup ? lastBackup : @"-"]];
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"        Last backup: %@ \n", NULL),
+            [Utilities dateAsString: lastBackup]]];
+    }
   }
 
 // Print an overall analysis of the Time Machine size differential.

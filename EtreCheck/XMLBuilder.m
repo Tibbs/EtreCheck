@@ -406,6 +406,8 @@
 @implementation XMLBuilder
 
 @dynamic XML;
+@synthesize dateFormat = myDateFormat;
+@synthesize dayFormat = myDayFormat;
 @synthesize dateFormatter = myDateFormatter;
 @synthesize dayFormatter = myDayFormatter;
 @synthesize root = myRoot;
@@ -420,6 +422,8 @@
     {
     myRoot = [XMLElement new];
     myValid = YES;
+    myDateFormat = @"yyyy-MM-dd HH:mm:ss";
+    myDayFormat = @"yyyy-MM-dd";
     
     return self;
     }
@@ -454,7 +458,7 @@
     {
     myDateFormatter = [[NSDateFormatter alloc] init];
     
-    [myDateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss Z"];
+    [myDateFormatter setDateFormat: self.dateFormat];
     [myDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
     [myDateFormatter
       setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
@@ -470,7 +474,7 @@
     {
     myDayFormatter = [[NSDateFormatter alloc] init];
     
-    [myDayFormatter setDateFormat: @"yyyy-MM-dd"];
+    [myDayFormatter setDateFormat: self.dayFormat];
     [myDayFormatter setTimeZone: [NSTimeZone localTimeZone]];
     [myDayFormatter
       setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
@@ -650,8 +654,7 @@
     value: [self.dateFormatter stringFromDate: date]
     attributes: 
       [NSDictionary 
-        dictionaryWithObjectsAndKeys: 
-          @"yyyy-MM-dd HH:mm:ss Z", @"format", nil]];
+        dictionaryWithObjectsAndKeys: self.dateFormat, @"format", nil]];
   }
 
 // Add an element to the current element.
@@ -662,7 +665,7 @@
     value: [self.dayFormatter stringFromDate: day]
     attributes: 
       [NSDictionary 
-        dictionaryWithObjectsAndKeys: @"yyyy-MM-dd", @"format", nil]];
+        dictionaryWithObjectsAndKeys: self.dayFormat, @"format", nil]];
   }
 
 // Add an element and value with a convenience function.

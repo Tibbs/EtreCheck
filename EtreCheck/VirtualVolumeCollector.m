@@ -403,14 +403,8 @@
       [formatter release];
       }
 
-    [self.model addElement: @"name" value: name];
-    
-    [self.model 
-      addElement: @"size" 
-      number: pvSize 
-      attributes: 
-        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
-        
+    [self.model addElement: @"name" value: name];    
+    [self.model addElement: @"size" valueWithUnits: size];
     [self.model addElement: @"status" value: status];
     
     NSString * errors = [self errorsFor: name];
@@ -463,22 +457,9 @@
   NSString * volumeSize = [self volumeSize: volume];
   NSString * volumeFree = [self volumeFreeSpace: volume];
   
-  NSNumber * size = [volume objectForKey: @"size_in_bytes"];
-  NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
-
   [self.model addElement: @"name" value: name];
-  
-  [self.model 
-    addElement: @"size" 
-    number: size 
-    attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
-      
-  [self.model 
-    addElement: @"free" 
-    number: free 
-    attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+  [self.model addElement: @"size" valueWithUnits: volumeSize];
+  [self.model addElement: @"free" valueWithUnits: volumeFree];
 
   [self.result
     appendString:

@@ -305,8 +305,6 @@
   if(!smart_status)
     return;
     
-  [self.model addElement: @"smartstatus" value: smart_status];
-  
   bool smart_not_supported =
     [smart_status isEqualToString: @"Not Supported"];
   
@@ -314,6 +312,9 @@
     [smart_status isEqualToString: @"Verified"];
 
   if(!smart_not_supported && !smart_verified)
+    {
+    [self.model addElement: @"smartstatus" value: smart_status];
+  
     [self.result
       appendString:
         [NSString
@@ -324,7 +325,8 @@
         [NSDictionary
           dictionaryWithObjectsAndKeys:
             [NSColor redColor], NSForegroundColorAttributeName, nil]];
-
+    }
+    
   NSString * device = [disk objectForKey: @"bsd_name"];
   
   NSMutableAttributedString * urlString =
@@ -362,9 +364,6 @@
   NSString * UUID = [volume objectForKey: @"volume_uuid"];
   NSString * fileSystem = [volume objectForKey: @"file_system"];
     
-  NSNumber * size = [volume objectForKey: @"size_in_bytes"];
-  NSNumber * free = [volume objectForKey: @"free_space_in_bytes"];
-
   NSString * cleanName = 
     [volumeName length] > 0 ? [Utilities cleanPath: volumeName] : @"";
     
@@ -382,19 +381,8 @@
     [self.volumes setObject: volume forKey: UUID];
     }
     
-  [self.model 
-    addElement: @"size" 
-    number: size 
-    attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
-      
-  if(free != nil)
-    [self.model 
-      addElement: @"free" 
-      number: free 
-      attributes: 
-        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
-
+  [self.model addElement: @"size" valueWithUnits: volumeSize];
+  [self.model addElement: @"free" valueWithUnits: volumeFree];
   [self.model addElement: @"filesystem" value: fileSystem];
 
   NSDictionary * stats = [self volumeStats: volume];
@@ -441,8 +429,14 @@
           fileSystemName,
           volumeMountPoint,
           [stats objectForKey: kDiskType],
-          volumeSize ? volumeSize : @"",
-          volumeFree ? volumeFree : @"",
+          volumeSize 
+            ? volumeSize 
+            : @"",
+          volumeFree 
+            ? [NSString
+                stringWithFormat:
+                NSLocalizedString(@"(%@ free)", NULL), volumeFree] 
+            : @"",
           status];
       
     [[[Model model] physicalVolumes] addObject: volumeDevice];
@@ -516,11 +510,6 @@
 
   if(!volumeFree)
     volumeFree = @"";
-  else
-    volumeFree =
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(@"(%@ free)", NULL), volumeFree];
     
   return volumeFree;
   }

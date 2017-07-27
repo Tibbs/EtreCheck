@@ -249,9 +249,9 @@ sub processHardwareInformation
   elsif($self->{index} == 5)
     {
     my ($RAM, $upgradeable) = 
-      $self->{line} =~ /^\s+(\d+)\sGB\sRAM\s(Not\supgradeable|Upgradeable)/;
+      $self->{line} =~ /^\s+(\d+\s(?:GB|TB))\sRAM\s(Not\supgradeable|Upgradeable)/;
 
-    $self->printTag('ram', $RAM * 1024 * 1024 * 1024, 'units', 'B');
+    $self->printTagWithUnits('ram', $RAM);
 
     $self->printTagBoolean(
       'upgradeable', 
@@ -295,7 +295,7 @@ sub processHardwareInformation
     {
     my $quota = $1;
 
-    $self->printTagWithUnits('icloudquota', $quota, 'type', 'number');
+    $self->printTagWithUnits('icloudfree', $quota);
     }
   elsif($self->{line} =~ /^\s+(BANK\s\d+\/DIMM\d+)$/)
     {
@@ -318,9 +318,9 @@ sub processHardwareInformation
     my $speed = $3;
     my $status = $4;
 
-    $self->printTagWithUnits('size', $size, 'type', 'number');
+    $self->printTagWithUnits('size', $size);
     $self->printTag('type', $type);
-    $self->printTagWithUnits('speed', $speed, 'type', 'number');
+    $self->printTagWithUnits('speed', $speed);
     $self->printTag('status', $status);    
 
     $self->popTag('memorybank');
@@ -377,20 +377,13 @@ sub printDisk
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+)\s(..)\)(?:\s\((Solid\sState|Rotational)(?:\s-\sTRIM:\s(.+))?\))?/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s(disk.+):\s\(([\d.]+\s..)\)(?:\s\((Solid\sState|Rotational)(?:\s-\sTRIM:\s(.+))?\))?/)
     {
     my $diskModel = $1;
     my $device = $2;
-    my $size = $3 * 1024 * 1024;
-    my $sizeUnits = $4;
-    my $type = $5;
-    my $TRIM = $6;
-
-    $size *= 1024
-      if $sizeUnits eq 'GB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'TB';
+    my $size = $3;
+    my $type = $4;
+    my $TRIM = $5;
 
     $self->popTag('volumes')
       if $self->currentTag() eq 'volumes';
@@ -430,7 +423,7 @@ sub printDisk
     $self->pushTag('drive');
     $self->printTag('model', $diskModel);
     $self->printTag('device', $device);
-    $self->printTag('size', floor($size), 'units', 'B');
+    $self->printTagWithUnits('size', $size);
 
     $self->printTag('type', $type)
       if $type;
@@ -449,21 +442,14 @@ sub printPartition
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+(\S.+\S)\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+)\s(..)/)
+  if($self->{line} =~ /^\s+(\S.+\S)\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+\s..)/)
     {
     my $name = $1;
     my $device = $2;
     my $fileSystem = $3;
     my $mountPoint = $4;
     my $type = $5;
-    my $size = $6 * 1024 * 1024;
-    my $sizeUnits = $7; 
-
-    $size *= 1024
-      if $sizeUnits eq 'GB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'TB';
+    my $size = $6;
 
     $self->pushTag('volumes')
       if $self->currentTag() eq 'volumes';
@@ -478,7 +464,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTagNumber('size', floor($size), 'units', 'B');
+    $self->printTagWithUnits('size', $size);
 
     $self->printTag('type', $type)
       if $type;
@@ -490,20 +476,13 @@ sub printPartition
 
     return 1;
     }
-  elsif($self->{line} =~ /^\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+)\s(..)/)
+  elsif($self->{line} =~ /^\s+\((disk\S+)(?:\s-\s(\S.+\S))?\)\s(\S(?:.+\S)?)\s+(?:\[(.+)\])?:\s([\d.]+\s..)/)
     {
     my $device = $1;
     my $fileSystem = $2;
     my $mountPoint = $3;
     my $type = $4;
-    my $size = $5 * 1024 * 1024;
-    my $sizeUnits = $6; 
-
-    $size *= 1024
-      if $sizeUnits eq 'GB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'TB';
+    my $size = $5;
 
     $self->pushTag('volumes')
       if $self->currentTag() eq 'disk';
@@ -515,7 +494,7 @@ sub printPartition
     $self->printTag('filesystem', $fileSystem)
       if $fileSystem;
 
-    $self->printTag('size', floor($size), 'units', 'B', 'type', 'number');
+    $self->printTagWithUnits('size', $size);
 
     $self->printTag('type', $type)
       if $type;
@@ -617,29 +596,15 @@ sub processVirtualDiskInformation
   {
   my $self = shift;
 
-  if($self->{line} =~ /\s+(\S.+\S)\s\((disk.+)\s-\s([^)]+)\)\s(\S(?:.+\S)?)\s+(?:\[(Startup|Recovery|EFI|KernelCoreDump)\])?:\s([\d.]+)\s(..)\s\(([\d.]+)\s(..)\sfree.*\)/)
+  if($self->{line} =~ /\s+(\S.+\S)\s\((disk.+)\s-\s([^)]+)\)\s(\S(?:.+\S)?)\s+(?:\[(Startup|Recovery|EFI|KernelCoreDump)\])?:\s([\d.]+\s..)\s\(([\d.]+\s..)\sfree.*\)/)
     {
     my $diskName = $1;
     my $device = $2;
     my $fileSystem = $3;
     my $mountPoint = $4;
     my $type = $5;
-    my $size = $6 * 1024 * 1024;
-    my $sizeUnits = $7;
-    my $free = $8 * 1024 * 1024;
-    my $freeUnits = $9;
-
-    $size *= 1024
-      if $sizeUnits eq 'GB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'TB';
-
-    $free *= 1024
-      if $freeUnits eq 'GB';
-
-    $free *= 1024 * 1024
-      if $freeUnits eq 'TB';
+    my $size = $6;
+    my $free = $7;
 
     $self->popTag('physicaldisks')
       if $self->currentTag() eq 'physicaldisks';
@@ -656,8 +621,8 @@ sub processVirtualDiskInformation
     $self->printTag('type', $type)
       if $type;
 
-    $self->printTagNumber('size', floor($size), 'units', 'B');
-    $self->printTagNumber('free', floor($free), 'units', 'B');
+    $self->printTagWithUnits('size', $size);
+    $self->printTagWithUnits('free', $free);
     }
   elsif($self->{line} =~ /^\s+Encrypted\sAES-XTS\s(.+)/)
     {
@@ -669,35 +634,21 @@ sub processVirtualDiskInformation
     $self->printTag('status', $status);
     $self->popTag('encryption');
     }
-  elsif($self->{line} =~ /^\s+Physical\sdisk:\s(\S.+\S)\s([\d.]+)\s(..)(?:\s\(([\d.]+)\s(..)\sfree\))?(?:\s(.+))?/)
+  elsif($self->{line} =~ /^\s+Physical\sdisk:\s(\S.+\S)\s([\d.]+\s..)(?:\s\(([\d.]+\s..)\sfree\))?(?:\s(.+))?/)
     {
     my $name = $1;
-    my $size = $2 * 1024 * 1024;
-    my $sizeUnits = $3;
-    my $free = $4 * 1024 * 1024;
-    my $freeUnits = $5;
-    my $status = $6;
-
-    $size *= 1024
-      if $sizeUnits eq 'GB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'TB';
-
-    $free *= 1024
-      if $freeUnits eq 'GB';
-
-    $free *= 1024 * 1024
-      if $freeUnits eq 'TB';
+    my $size = $2;
+    my $free = $3;
+    my $status = $4;
 
     $self->pushTag('physicaldisks')
       if $self->currentTag() ne 'physicaldisks';
 
     $self->pushTag('physicaldisk');
     $self->printTag('name', $name);
-    $self->printTagNumber('size', $size, 'units', 'B');
+    $self->printTagWithUnits('size', $size);
 
-    $self->printTagNumber('free', $free, 'units', 'B')
+    $self->printTagWithUnits('free', $free)
       if $free;
     
     $self->printTag('status', $status)
@@ -1257,19 +1208,19 @@ sub processTimeMachine
     {
     my $skipSystemFiles = $1;
 
-    $self->printTag('skipsystemfiles', $skipSystemFiles);
+    $self->printTagBoolean('skipsystemfiles', $skipSystemFiles);
     }
   elsif($self->{line} =~ /^\s+Mobile\sbackups:\s(\S+)/)
     {
     my $mobileBacksups = $1;
 
-    $self->printTag('mobilebackups', $mobileBacksups);
+    $self->printTagBoolean('mobilebackups', $mobileBacksups);
     }
   elsif($self->{line} =~ /^\s+Auto\sbackup:\s(\S+)/)
     {
     my $autoBackup = $1;
 
-    $self->printTag('autobackup', $autoBackup);
+    $self->printTagBoolean('autobackup', $autoBackup);
     }
   elsif($self->{line} =~ /^\s+Volumes\sbeing\sbacked\sup:/)
     {
@@ -1287,58 +1238,50 @@ sub processTimeMachine
     }
   elsif($self->{currentSection}->{volumesBeingBackedUp})
     {
-    $self->{line} =~ /^\s+(.+):\s+Disk\ssize:\s([0-9.]+)\s(GB|TB)\sDisk\sused:\s([0-9.]+)\s(GB|TB)/;
+    $self->{line} =~ /^\s+(.+):\s+Disk\ssize:\s([0-9.]+\s..)\sDisk\sused:\s([0-9.]+\s..)/;
 
     my $name = $1;
-    my $size = $2 * 1024 * 1024 * 1024;
-    my $sizeUnits = $3;
-    my $used = $4 * 1024 * 1024 * 1024;
-    my $usedUnits = $5;
-
-    $size *= 1024
-      if $sizeUnits eq 'TB';
-
-    $used *= 1024
-      if $usedUnits eq 'TB';
+    my $size = $2;
+    my $used = $3;
 
     $self->pushTag('volume');
     $self->printTag('name', $name);
-    $self->printTag('size', floor($size), 'units', 'B');
-    $self->printTag('used', floor($used), 'units', 'B');
+    $self->printTagWithUnits('size', $size);
+    
+    $self->printTagWithUnits('used', $used);
+    
     $self->popTag('volume');
     }
   elsif($self->{currentSection}->{destinations})
     {
-    if($self->{line} =~ /^\s+Total\ssize:\s([0-9.]+)\s(GB|TB)/)
+    if($self->{line} =~ /^\s+Total\ssize:\s([0-9.]+\s..)/)
       {
-      my $size = $1 * 1024 * 1024 * 1024;
-      my $sizeUnits = $2;
+      my $size = $1;
 
-      $size *= 1024
-        if $sizeUnits eq 'TB';
-
-      $self->printTag('size', floor($size), 'units', 'B');
+      $self->printTagWithUnits('size', $size);
       }
     elsif($self->{line} =~ /^\s+Total\snumber\sof\sbackups:\s(\d+)/)
       {
       my $count = $1;
 
-      $self->printTag('count', $count);
+      $self->printTagNumber('count', $count);
       }
     elsif($self->{line} =~ /^\s+Oldest\sbackup:\s(-|\S.+\S)/)
       {
       my $oldestBackup = $1;
 
+      # This format is wrong.
       $self->printTag(
-        'oldestbackup', $oldestBackup, 'format', 'yyyy-MM-dd HH:mm a')
+        'oldestbackup', $oldestBackup, 'format', 'yyyy-MM-dd HH:mm:ss')
         if $oldestBackup ne '-';
       }
     elsif($self->{line} =~ /^\s+Last\sbackup:\s(-|\S.+\S)/)
       {
       my $lastBackup = $1;
 
+      # This format is wrong.
       $self->printTag(
-        'lastbackup', $lastBackup, 'format', 'yyyy-MM-dd HH:mm a')
+        'lastbackup', $lastBackup, 'format', 'yyyy-MM-dd HH:mm:ss')
         if $lastBackup ne '-';
       }
     elsif($self->{line} =~ /^\s+Size\sof\sbackup\sdisk:\s\S+/)
@@ -1357,6 +1300,8 @@ sub processTimeMachine
       $self->pushTag('destination');
       $self->printTag('name', $name);
       $self->printTag('type', $type);
+
+      # (Last used) should be checked here (and fixed).
       }
     else
       {
@@ -1387,23 +1332,13 @@ sub processTopProcessesByMemory
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)\s+(.+)$/)
+  if($self->{line} =~ /^\s+([0-9.]+\s(?:B|KB|MB|GB))\s+(.+)$/)
     {
     my $size = $1;
-    my $sizeUnits = $2;
-    my $process = $3;
-
-    $size *= 1024
-      if $sizeUnits eq 'KB';
-
-    $size *= 1024 * 1024
-      if $sizeUnits eq 'MB';
-
-    $size *= 1024 * 1024 * 1024
-      if $sizeUnits eq 'GB';
+    my $process = $2;
 
     $self->pushTag('process');
-    $self->printTag('size', $size, 'units', 'B');
+    $self->printTagWithUnits('size', $size);
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1414,35 +1349,15 @@ sub processTopProcessesByNetwork
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)\s+([0-9.]+)\s(B|KB|MB|GB)\s+(.+)$/)
+  if($self->{line} =~ /^\s+([0-9.]+\s(?:B|KB|MB|GB))\s+([0-9.]+\s(?:B|KB|MB|GB))\s+(.+)$/)
     {
     my $inputSize = $1;
-    my $inputSizeUnits = $2;
-    my $outputSize = $3;
-    my $outputSizeUnits = $4;
-    my $process = $5;
-
-    $inputSize *= 1024
-      if $inputSizeUnits eq 'KB';
-
-    $inputSize *= 1024 * 1024
-      if $inputSizeUnits eq 'MB';
-
-    $inputSize *= 1024 * 1024 * 1024
-      if $inputSizeUnits eq 'GB';
-
-    $outputSize *= 1024
-      if $outputSizeUnits eq 'KB';
-
-    $outputSize *= 1024 * 1024
-      if $outputSizeUnits eq 'MB';
-
-    $outputSize *= 1024 * 1024 * 1024
-      if $outputSizeUnits eq 'GB';
+    my $outputSize = $2;
+    my $process = $3;
 
     $self->pushTag('process');
-    $self->printTag('inputsize', $inputSize, 'units', 'B');
-    $self->printTag('outputsize', $outputSize, 'units', 'B');
+    $self->printTagWithUnits('inputsize', $inputSize);
+    $self->printTagWithUnits('outputsize', $outputSize);
     $self->printTag('name', $process);
     $self->popTag('process');
     }
@@ -1474,10 +1389,9 @@ sub processVirtualMemoryInformation
   my $sizeUnits;
   my $type;
 
-  if($self->{line} =~ /^\s+([0-9.]+)\s(B|KB|MB|GB)/)
+  if($self->{line} =~ /^\s+([0-9.]+\s(?:B|KB|MB|GB))/)
     {
     $size = $1;
-    $sizeUnits = $2;
     }
 
   if($self->{line} =~ /Available\sRAM/)
@@ -1505,16 +1419,7 @@ sub processVirtualMemoryInformation
     return;
     }
 
-  $size *= 1024
-    if $sizeUnits eq 'KB';
-
-  $size *= 1024 * 1024
-    if $sizeUnits eq 'MB';
-
-  $size *= 1024 * 1024 * 1024
-    if $sizeUnits eq 'GB';
-
-  $self->printTag($type, floor($size), 'units', 'B');
+  $self->printTagWithUnits($type, $size);
   }
 
 # Process software installs.
@@ -1725,7 +1630,30 @@ sub printTagBoolean
   my $value = shift;
   my %attributes = @_;
 
-  $self->printTag($tag, $value, 'type', 'boolean', %attributes);
+  my $booleanValue = 'false';
+
+  $booleanValue = 'true'
+     if defined($value) && ($value > 0);
+ 
+  $booleanValue = 'true'
+    if $value eq 'true';
+ 
+  $booleanValue = 'false'
+    if $value eq 'false';
+ 
+  $booleanValue = 'true'
+    if $value eq 'YES';
+ 
+  $booleanValue = 'false'
+     if $value eq 'NO';
+
+  $booleanValue = 'true'
+    if $value eq 'ON';
+ 
+  $booleanValue = 'false'
+     if $value eq 'OFF';
+
+  $self->printTag($tag, $booleanValue, 'type', 'boolean', %attributes);
   }
 
 # Print a one-line tag whose value contains units.
@@ -1743,7 +1671,8 @@ sub printTagWithUnits
 
   $value = join(' ', @parts);
 
-  $self->printTag($tag, $value, 'units', $units, %attributes);
+  $self->printTag(
+    $tag, $value, 'units', $units, 'type', 'number', %attributes);
   }
 
 # Print text.

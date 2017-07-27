@@ -589,11 +589,7 @@
         [NSString
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
-  [self.model
-    addElement: @"ram"
-    longlongValue: [memory longLongValue] * 1024 * 1024 * 1024
-    attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+  [self.model addElement: @"ram" valueWithUnits: memory];
   
   NSString * language = NSLocalizedString(@"en", NULL);
 
@@ -1151,11 +1147,7 @@
             NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
             iCloudFree]];
       
-    [self.model 
-      addElement: @"icloudquota"
-      longlongValue: bytes 
-      attributes: 
-        [NSDictionary dictionaryWithObjectsAndKeys: @"B", @"units", nil]];
+    [self.model addElement: @"icloudfee" valueWithUnits: iCloudFree];
     
     if(bytes < 1024 * 1024 * 256)
       [self.result

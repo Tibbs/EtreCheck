@@ -69,6 +69,8 @@
   {
   NSMutableString * myDocument;
   XMLElement * myRoot;
+  NSString * myDateFormat;
+  NSString * myDayFormat;
   NSDateFormatter * myDateFormatter;
   NSDateFormatter * myDayFormatter;
   BOOL myValid;
@@ -78,6 +80,8 @@
 @property (retain) XMLElement * root;
 
 // The date formatters.
+@property (readonly) NSString * dateFormat;
+@property (readonly) NSString * dayFormat;
 @property (readonly) NSDateFormatter * dateFormatter;
 @property (readonly) NSDateFormatter * dayFormatter;
 
