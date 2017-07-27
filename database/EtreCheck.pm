@@ -815,13 +815,30 @@ sub processPossibleAdware
     {
     my $path = $1;
 
-    $self->printTag('adware', $path);
+    $self->popTag('unknownfile')
+      if $self->currentTag() eq 'unknownfile';
+
+    $self->printTag('adwarefile', $path);
     }
   elsif($self->{line} =~ /^\s+Unknown file:\s+(\S.+\S)$/)
     {
     my $path = $1;
 
-    $self->printTag('unknownfile', $path);
+    $self->popTag('unknownfile')
+      if $self->currentTag() eq 'unknownfile';
+
+    $self->pushTag('unknownfile');
+
+    $self->printTag('path', $path);
+    }
+  elsif($self->{line} =~ /adware\sfiles\sfound/)
+    {
+    }
+  elsif($self->{line} =~ /^\s+(\S.+\S)\s*$/)
+    {
+    my $executable = $1;
+
+    $self->printTag('executable', $executable);
     }
   }
 
@@ -996,10 +1013,19 @@ sub processLaunchdLine
     my $name = $2;
     my $signature = $3;
     my $date = $4;
+    my $hidden;
+
+    if($name =~ /^(\S.+\S)\s\(hidden\)/)
+      {
+      $name = $1;
+
+      $hidden = 'true';
+      }
 
     $self->pushTag('task');
     $self->printTag('path', "$prefix$name");
     $self->printTag('status', $status);
+    $self->printTagBoolean('hidden', $hidden);
     
     my ($plistcrc, $execrc) = $signature =~ /\?\s([0-9a-f]+)\s([0-9a-f]+)/;
     
@@ -1030,10 +1056,19 @@ sub processLaunchdLine
       }
 
     $self->printTag('installdate', $date, 'format', 'yyyy-MM-dd');
+
+    $self->printTagBoolean('adware', 'true')
+      if $self->{line} =~ /\sAdware!/;
+   
+    if($self->{line} =~ /\[Lookup\]\s-\s(\S.+\S):\sExecutable\snot\sfound!/)
+      {
+      my $path = $1;
+
+      $self->printTag('executablemissing', $path);
+      }
+
     $self->popTag('task');    
     }
-
-  # What about adware, unknown files, missing executables, or hidden?
   }
 
 # Process user login items.
@@ -1653,6 +1688,9 @@ sub printTag
   my $tag = shift;
   my $value = shift;
   my %attributes = @_;
+
+  return
+    if !defined($value);
 
   my $attr = '';
 

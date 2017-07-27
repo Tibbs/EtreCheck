@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
+#import "XMLBuilder.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -273,8 +274,11 @@
                 NSFontAttributeName : [[Utilities shared] boldFont],
                 NSForegroundColorAttributeName : [[Utilities shared] red],
               }];
+              
+          NSString * prettyPath = [Utilities prettyPath: name];
+          
           [self.result
-            appendString: [Utilities prettyPath: name]
+            appendString: prettyPath
             attributes:
               @{
                 NSFontAttributeName : [[Utilities shared] boldFont],
@@ -291,6 +295,18 @@
                 }];
             
           [self.result appendString: @"\n"];
+          
+          if([type isEqualToString: @"adwarefile"])
+            [self.model addElement: @"adwarefile" value: prettyPath];
+          else
+            {
+            [self.model startElement: @"unknownfile"];
+            
+            [self.model addElement: @"path" value: prettyPath];
+            [self.model addElement: @"executable" value: executable];
+           
+            [self.model endElement: @"unknownfile"];
+            }
           }];
       
     NSString * message =

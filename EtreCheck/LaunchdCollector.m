@@ -765,9 +765,6 @@
     if([self isWhitelistException: info path: path])
       knownFile = YES;
     
-  if(!knownFile)
-    [self.model addElement: @"unknown" boolValue: YES];
-    
   [info
     setObject: [NSNumber numberWithBool: !knownFile] forKey: kUnknown];
   }
@@ -1544,6 +1541,9 @@
           NSForegroundColorAttributeName : [[Utilities shared] red],
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
+    
+  if([[info objectForKey: kUnknown] boolValue])
+    [self.model addElement: @"unknown" boolValue: YES];
     
   return extra;
   }
