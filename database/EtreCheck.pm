@@ -211,6 +211,15 @@ sub processHeader
 
     $self->printTag('problem', $problem);
     }
+  elsif($self->{line} =~ /^Description:/)
+    {
+    $self->pushTag('problemdescription')
+    }
+  elsif($self->{line})
+    {
+    $self->printText($self->{line})
+      if $self->currentTag() eq 'problemdescription';
+    }
   }
 
 # Process hardware information.

@@ -445,8 +445,27 @@
   [result
     appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];
   
+  return [result autorelease];
+  }
+
+// Return an individual result.
+- (NSAttributedString *) getResult: (NSString *) key
+  {
+  return [[self.completed objectForKey: key] result];
+  }
+
+// Return an individual XML fragment.
+- (XMLElement *) getXML: (NSString *) key
+  {
+  return [[[self.completed objectForKey: key] model] root];
+  }
+
+// Collect output.
+- (void) collectOutput
+  {
   [[[Model model] xml] startElement: @"etrecheck"];
   
+  [[[Model model] xml] addFragment: [[[Model model] header] root]];
   [[[Model model] xml] addFragment: [self getXML: @"hardware"]];
   [[[Model model] xml] addFragment: [self getXML: @"video"]];
   [[[Model model] xml] addFragment: [self getXML: @"disk"]];
@@ -489,20 +508,6 @@
     addFragment: [self getXML: @"etrecheckdeletedfiles"]]; 
   
   [[[Model model] xml] endElement: @"etrecheck"];
-
-  return [result autorelease];
   }
-
-// Return an individual result.
-- (NSAttributedString *) getResult: (NSString *) key
-  {
-  return [[self.completed objectForKey: key] result];
-  }
-
-// Return an individual XML fragment.
-- (XMLElement *) getXML: (NSString *) key
-  {
-  return [[[self.completed objectForKey: key] model] root];
-  }
-
+  
 @end

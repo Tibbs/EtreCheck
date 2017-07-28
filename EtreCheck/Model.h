@@ -87,6 +87,7 @@
   NSMutableDictionary * myNotificationSPAMs;
   
   XMLBuilder * myXMLBuilder;
+  XMLBuilder * myXMLHeader;
   }
 
 // Keep track of the OS version.
@@ -232,6 +233,7 @@
 
 // XML output.
 @property (readonly) XMLBuilder * xml;
+@property (readonly) XMLBuilder * header;
 
 // Return the singeton of shared values.
 + (Model *) model;

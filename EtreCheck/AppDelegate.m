@@ -1313,6 +1313,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
       [self.log appendAttributedString: results];
   
+      [checker collectOutput];
+      
       [self displayOutput];
     });
     
@@ -1327,16 +1329,31 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   NSBundle * bundle = [NSBundle mainBundle];
   
+  NSString * version = 
+    [bundle objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+
+  NSString * build = 
+    [bundle objectForInfoDictionaryKey: @"CFBundleVersion"];
+
+  NSDate * date = [NSDate date];
+  
+  NSString * currentDate = [Utilities dateAsString: date];
+              
+  [[[Model model] header] startElement: @"header"];
+
+  [[[Model model] header] addElement: @"version" value: version];
+  [[[Model model] header] addElement: @"build" value: build];
+  [[[Model model] header] addElement: @"date" date: date];
+
   [self.log
     appendString:
       [NSString
         stringWithFormat:
           NSLocalizedString(
             @"EtreCheck version: %@ (%@)\nReport generated %@\n", NULL),
-            [bundle
-              objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
-            [bundle objectForInfoDictionaryKey: @"CFBundleVersion"],
-            [self currentDate]]
+            version,
+            build,
+            currentDate]
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -1356,11 +1373,19 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [self.log appendString: @"\n"];
   
+  NSString * runtime = [self elapsedTime];
+  
+  [[[Model model] header] 
+    addElement: @"runtime" 
+    value: runtime 
+    attributes: 
+      [NSDictionary dictionaryWithObjectsAndKeys: @"mm:ss", @"unit", nil]];
+
   [self.log
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"Runtime: %@\n", NULL), [self elapsedTime]]
+          NSLocalizedString(@"Runtime: %@\n", NULL), runtime]
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -1374,6 +1399,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self printOptions];
   [self printErrors];
   [self printProblem];
+
+  [[[Model model] header] endElement: @"header"];
   }
 
 // Print performance.
@@ -1390,8 +1417,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(interval > (60 * 10))
     {
+    NSString * performance = NSLocalizedString(@"poorperformance", NULL);
+    
+    [[[Model model] header] addElement: @"performance" value: performance];
+    
     [self.log
-      appendString: NSLocalizedString(@"poorperformance", NULL)
+      appendString: performance
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -1400,8 +1431,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 5))
     {
+    NSString * performance = 
+      NSLocalizedString(@"belowaverageperformance", NULL);
+    
+    [[[Model model] header] addElement: @"performance" value: performance];
+    
     [self.log
-      appendString: NSLocalizedString(@"belowaverageperformance", NULL)
+      appendString: performance
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -1410,8 +1446,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else if(interval > (60 * 3))
     {
+    NSString * performance = 
+      NSLocalizedString(@"goodperformance", NULL);
+    
+    [[[Model model] header] addElement: @"performance" value: performance];
+    
     [self.log
-      appendString: NSLocalizedString(@"goodperformance", NULL)
+      appendString: performance
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -1419,8 +1460,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   else
     {
+    NSString * performance = 
+      NSLocalizedString(@"excellentperformance", NULL);
+    
+    [[[Model model] header] addElement: @"performance" value: performance];
+    
     [self.log
-      appendString: NSLocalizedString(@"excellentperformance", NULL)
+       appendString: performance
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -1576,12 +1622,19 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         [self.chooseAProblemButton.menu.itemArray
           objectAtIndex: self.problemIndex];
       
+      [[[Model model] header] 
+        addElement: @"runtime" value: selectedItem.title];
+
       [self.log appendString: selectedItem.title];
       [self.log appendString: @"\n"];
       }
     
   if(self.problemDescription)
     {
+    [[[Model model] header] 
+      addElement: @"problemdescription" 
+      value: self.problemDescription.string];
+
     [self.log
       appendString: NSLocalizedString(@"Description:\n", NULL)
       attributes:
@@ -1593,12 +1646,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
     
   [self.log appendString: @"\n"];
-  }
-
-// Get the current date as a string.
-- (NSString *) currentDate
-  {
-  return [Utilities dateAsString: [NSDate date]];
   }
 
 // Get the current file name as a string.

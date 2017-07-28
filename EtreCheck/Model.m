@@ -61,6 +61,7 @@
 @synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize notificationSPAMs = myNotificationSPAMs;
 @synthesize xml = myXMLBuilder;
+@synthesize header = myXMLHeader;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -197,6 +198,7 @@
     myPathsForUUIDs = [NSMutableDictionary new];
     myNotificationSPAMs = [NSMutableDictionary new];
     myXMLBuilder = [XMLBuilder new];
+    myXMLHeader = [XMLBuilder new];
     }
     
   return self;
@@ -205,6 +207,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myXMLHeader release];
   [myXMLBuilder release];
   [myNotificationSPAMs release];
   [myPathsForUUIDs release];

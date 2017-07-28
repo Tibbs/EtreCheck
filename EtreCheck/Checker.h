@@ -21,4 +21,7 @@
 // Do the check and return the report.
 - (NSAttributedString *) check;
 
+// Collect output.
+- (void) collectOutput;
+
 @end
