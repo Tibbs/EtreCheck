@@ -103,7 +103,7 @@ sub new
     index => 0,
     tags => [],
     input => '',
-    output => '',
+    output => qq{<?xml version="1.0" encoding="UTF-8"?>\n},
     id => '',
     model => ''
     };
@@ -119,6 +119,10 @@ sub reverse
 
   my $fh = shift;
 
+  my $topLevelSection = new EtreCheckSection();
+
+  $self->{currentSection} = $topLevelSection;
+
   $self->pushTag('etrecheck');
   $self->pushTag('header');
 
@@ -131,7 +135,15 @@ sub reverse
     $self->processLine();
     }
 
+  $self->{output} .= $self->{currentSection}->{output}
+    if $self->{currentSection}->{hasTags};
+
+  $self->{currentSection} = $topLevelSection;
+  $self->{currentSection}->{output} = '';
+
   $self->popTag('etrecheck');
+
+  $self->{output} .= $self->{currentSection}->{output};
   }
 
 # Process a single line according to the current section.
@@ -151,12 +163,15 @@ sub processLine
     # Start a new section.
     $self->{section} = $1;
     $self->{index} = 0;
-    
+
     $name = $self->sectionTag($self->{section});
 
-    $self->pushTag($name);
+    $self->{output} .= $self->{currentSection}->{output}
+      if $self->{currentSection}->{hasTags};
 
     $self->{currentSection} = new EtreCheckSection();
+
+    $self->pushTag($name);
 
     return;
     }
@@ -361,10 +376,23 @@ sub processVideoInformation
     {
     my $display = $1;
 
+    my $resolution;
+
+    if($display =~ /(\S.+\S)\s(\d+\s+x\s\d+)/)
+      {
+      $display = $1;
+      $resolution = $2;
+      }
+
     $self->pushTag('displays')
       if $self->currentTag() ne 'displays';
 
-    $self->printTag('display', $display);
+    $self->pushTag('display');
+
+    $self->printTag('name', $display);
+    $self->printTag('resolution', $resolution);
+
+    $self->popTag('display');
     }
   }
 
@@ -437,7 +465,7 @@ sub printDisk
     $self->printTag('type', $type)
       if $type;
 
-    $self->printTag('trim', $TRIM)
+    $self->printTag('TRIM', $TRIM)
       if $TRIM;
 
     return 1;
@@ -461,7 +489,7 @@ sub printPartition
     my $size = $6;
 
     $self->pushTag('volumes')
-      if $self->currentTag() eq 'volumes';
+      if $self->currentTag() ne 'volumes';
     
     $self->pushTag('volume');
 
@@ -498,6 +526,7 @@ sub printPartition
     
     $self->pushTag('volume');
 
+    $self->printTag('name', $device);
     $self->printTag('device', $device);
 
     $self->printTag('filesystem', $fileSystem)
@@ -626,12 +655,11 @@ sub processVirtualDiskInformation
     $self->printTag('device', $device);
     $self->printTag('filesystem', $fileSystem);
     $self->printTag('mountpoint', $mountPoint);
+    $self->printTagWithUnits('size', $size);
+    $self->printTagWithUnits('free', $free);
 
     $self->printTag('type', $type)
       if $type;
-
-    $self->printTagWithUnits('size', $size);
-    $self->printTagWithUnits('free', $free);
     }
   elsif($self->{line} =~ /^\s+Encrypted\sAES-XTS\s(.+)/)
     {
@@ -684,7 +712,7 @@ sub processSystemSoftware
     $uptime = 1
       if $uptime eq 'one';
 
-    $uptime = 0.5
+    $uptime = 1
       if $uptime eq 'an';
 
     $uptime *= 24
@@ -983,17 +1011,19 @@ sub processLaunchdLine
       }
 
     $self->pushTag('task');
-    $self->printTag('path', "$prefix$name");
     $self->printTag('status', $status);
-    $self->printTagBoolean('hidden', $hidden);
+    $self->printTag('path', "$prefix$name");
+
+    $self->printTagBoolean('hidden', $hidden)
+      if $hidden eq 'true';
     
     my ($plistcrc, $execrc) = $signature =~ /\?\s([0-9a-f]+)\s([0-9a-f]+)/;
     
     if(defined($plistcrc) && defined($execrc))
       {
-      $self->printTag('signature', 'none');
       $self->printTag('plistcrc', $plistcrc);
       $self->printTag('execrc', $execrc);
+      $self->printTag('signature', 'none');
       }
     else
       {
@@ -1001,9 +1031,9 @@ sub processLaunchdLine
 
       if($plistcrc)
         {
+        $self->printTag('plistcrc', $plistcrc);
         $self->printTag('signature', 'none');
         $self->printTagBoolean('shellscript', 'true');
-        $self->printTag('plistcrc', $plistcrc);
         }
       elsif($signature eq '? ? ?')
         {
@@ -1173,7 +1203,7 @@ sub processSafariExtensions
   {
   my $self = shift;
 
-  if($self->{line} =~ /^\s+\[(.+)\]\s+(\S.+\S)\s-\s(\S.+\S)\s-\s(\S+)\s\(installed\s(\d{4}-\d\d-\d\d)\)/)
+  if($self->{line} =~ /^\s+\[(.+)\]\s+(\S.+?\S)\s-\s(\S.+\S)\s-\s(http\S+)\s\(installed\s(\d{4}-\d\d-\d\d)\)/)
     {
     my $status = $1;
     my $name = $2;
@@ -1182,8 +1212,8 @@ sub processSafariExtensions
     my $installdate = $5;
 
     $self->pushTag('extension');
-    $self->printTag('name', $name);
     $self->printTag('status', $status);
+    $self->printTag('name', $name);
     $self->printTag('developer', $developer);
     $self->printTag('url', $url);
     $self->printTag('installdate', $installdate, 'format', 'yyyy-MM-dd');
@@ -1420,7 +1450,7 @@ sub processVirtualMemoryInformation
     }
   elsif($self->{line} =~ /Cached\sfiles/)
     {
-    $type = 'cachedfiles';
+    $type = 'filecache';
     }
   elsif($self->{line} =~ /Swap\sUsed/)
     {
@@ -1480,6 +1510,7 @@ sub processDiagnosticsInformation
     $self->printTag('date', $date, 'format', 'yyyy-MM-dd HH:mm:ss');
     $self->printTag('type', $type);
     $self->printTag('app', $app);
+    $self->{currentSection}->{hasDiagnosticEvents} = 1;
     }
   elsif($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+Last\sshutdown\scause:\s(\d+)\s-\s(.+)/)
     {
@@ -1503,6 +1534,7 @@ sub processDiagnosticsInformation
     $self->printTag('code', $code);
     $self->printTag('description', $description);
     $self->popTag('event');
+    $self->{currentSection}->{hasDiagnosticEvents} = 1;
     }
   elsif($self->{line} =~ /^\s+Cause:\s+(.+)/)
     {
@@ -1595,7 +1627,7 @@ sub pushTag
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent<$tag>\n";
+  $self->{currentSection}->{output} .= "$indent<$tag>\n";
 
   push @{$self->{tags}}, $tag;
   }
@@ -1626,8 +1658,12 @@ sub printTag
 
   my $attr = '';
 
-  while(my ($key, $value) = each %attributes)
+  my @sortedAttributes = sort keys %attributes;
+
+  foreach my $key (@sortedAttributes)
     {
+    my $value = $attributes{$key};
+
     my $escapedValue = $self->escapeText($value);
 
     $attr .= qq{ $key="$escapedValue"};
@@ -1637,7 +1673,10 @@ sub printTag
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent<$tag$attr>$escapedText</$tag>\n";
+  $self->{currentSection}->{output} .= 
+    "$indent<$tag$attr>$escapedText</$tag>\n";
+
+  $self->{currentSection}->{hasTags} = 1;
   }
 
 # Print a one-line tag with numeric value.
@@ -1719,7 +1758,7 @@ sub printText
 
   my $indent = '  ' x scalar(@{$self->{tags}});
 
-  $self->{output} .= "$indent$escapedText\n";
+  $self->{currentSection}->{output} .= "$indent$escapedText\n";
   }
 
 # Escape text.
@@ -1753,9 +1792,9 @@ sub popTag
 
     my $indent = '  ' x scalar(@{$self->{tags}});
 
-    $self->{output} .= "$indent</$foundTag>\n";
+    $self->{currentSection}->{output} .= "$indent</$foundTag>\n";
 
-    die "Failed to find tag $tag\n$self->{output}\n"
+    die "Failed to find tag $tag\n$self->{currentSection}->{output}\n"
       if not defined $foundTag;
 
     last 

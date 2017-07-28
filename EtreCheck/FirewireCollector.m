@@ -75,8 +75,8 @@
   NSString * max_device_speed = [device objectForKey: @"max_device_speed"];
   NSString * connected_speed = [device objectForKey: @"connected_speed"];
   
-  [self.model addElement: @"name" value: name];  
   [self.model addElement: @"manufacturer" value: manufacturer];
+  [self.model addElement: @"name" value: name];  
   [self.model addElement: @"size" value: size];
 
   if(!size)

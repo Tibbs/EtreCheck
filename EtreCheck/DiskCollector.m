@@ -204,8 +204,11 @@
       NSString * diskSize = [disk objectForKey: @"size"];
       NSString * UUID = [disk objectForKey: @"volume_uuid"];
       NSString * medium = [disk objectForKey: @"spsata_medium_type"];
-      NSString * TRIM = [disk objectForKey: @"spnvme_trim_support"];
+      NSString * TRIM = [disk objectForKey: @"spsata_trim_support"];
       
+      if([TRIM length] == 0)
+        TRIM = [disk objectForKey: @"spnvme_trim_support"];
+        
       NSString * TRIMString =
         [NSString
           stringWithFormat: @" - TRIM: %@", ESLocalizedString(TRIM, NULL)];
@@ -224,9 +227,10 @@
       if([diskDevice length] == 0)
         diskDevice = @"";
         
+      [self.model addElement: @"model" value: diskName];
       [self.model addElement: @"device" value: diskDevice];
       [self.model addElement: @"size" valueWithUnits: diskSize];
-      [self.model addElement: @"UUID" value: UUID];
+      //[self.model addElement: @"UUID" value: UUID];
 
       if([diskSize length] > 0)
         diskSize =
@@ -242,8 +246,7 @@
       if(!dataFound)
         [self.result appendAttributedString: [self buildTitle]];
         
-      [self.model addElement: @"model" value: diskName];
-      [self.model addElement: @"medium" value: medium];
+      [self.model addElement: @"type" value: medium];
       
       if([medium isEqualToString: @"Solid State"])
         [self.model addElement: @"TRIM" value: TRIM];
@@ -367,8 +370,9 @@
   NSString * cleanName = 
     [volumeName length] > 0 ? [Utilities cleanPath: volumeName] : @"";
     
-  [self.model addElement: @"device" value: volumeDevice];
   [self.model addElement: @"name" value: cleanName];
+  [self.model addElement: @"device" value: volumeDevice];
+  [self.model addElement: @"filesystem" value: fileSystem];
   [self.model addElement: @"mountpoint" value: volumeMountPoint];
   
   if(!volumeMountPoint)
@@ -376,14 +380,13 @@
     
   if(UUID)
     {
-    [self.model addElement: @"UUID" value: UUID];
+    //[self.model addElement: @"UUID" value: UUID];
     
     [self.volumes setObject: volume forKey: UUID];
     }
     
   [self.model addElement: @"size" valueWithUnits: volumeSize];
   [self.model addElement: @"free" valueWithUnits: volumeFree];
-  [self.model addElement: @"filesystem" value: fileSystem];
 
   NSDictionary * stats = [self volumeStats: volume];
 

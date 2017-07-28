@@ -150,7 +150,7 @@
     [memoryString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
   
-  [self.model addElement: key value: memoryString];
+  [self.model addElement: key valueWithUnits: memoryString];
   
   [self.result
     appendString:

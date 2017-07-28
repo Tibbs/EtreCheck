@@ -81,8 +81,8 @@
   manufacturer = [Utilities cleanPath: manufacturer];
   name = [Utilities cleanPath: name];
   
-  [self.model addElement: @"name" value: name];  
   [self.model addElement: @"manufacturer" value: manufacturer];
+  [self.model addElement: @"name" value: name];  
   [self.model addElement: @"size" value: size];
   
   if(!size)

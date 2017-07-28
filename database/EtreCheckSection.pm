@@ -13,6 +13,8 @@ sub new
 
   my $self = 
     {
+    output => '',
+    hasTags => 0
     };
 
   bless $self, $class;

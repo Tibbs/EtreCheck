@@ -79,8 +79,8 @@
   NSString * name = [device objectForKey: @"_name"];
   NSString * vendor_name = [device objectForKey: @"vendor_name_key"];
         
-  [self.model addElement: @"name" value: name];  
   [self.model addElement: @"manufacturer" value: vendor_name];
+  [self.model addElement: @"name" value: name];  
 
   if(vendor_name)
     {

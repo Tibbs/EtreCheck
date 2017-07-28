@@ -347,8 +347,12 @@
     // Emit the start tag but room for attributes.
     [XML appendFormat: @"%@<%@", [self startingIndent], self.name];
     
+    NSArray * sortedAttributes = 
+      [self.attributes.allKeys 
+        sortedArrayUsingSelector: @selector(compare:)];
+    
     // Add any attributes.
-    for(NSString * key in self.attributes)
+    for(NSString * key in sortedAttributes)
       {
       NSString * value = [self.attributes objectForKey: key];
       
@@ -1296,11 +1300,14 @@
       xml = child;
     }
     
-  [openChild.children addObject: xml];
-  
-  [xml.parent.openChildren removeObject: xml];
-  [xml.parent.children removeObject: xml];
-  xml.parent = openChild;
+  if(([xml.openChildren count] + [xml.children count]) > 0)
+    {
+    [openChild.children addObject: xml];
+    
+    [xml.parent.openChildren removeObject: xml];
+    [xml.parent.children removeObject: xml];
+    xml.parent = openChild;
+    }
   }
   
 // MARK: Validation

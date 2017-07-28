@@ -1379,7 +1379,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     addElement: @"runtime" 
     value: runtime 
     attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"mm:ss", @"unit", nil]];
+      [NSDictionary dictionaryWithObjectsAndKeys: @"mm:ss", @"units", nil]];
 
   [self.log
     appendString:
@@ -1623,7 +1623,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           objectAtIndex: self.problemIndex];
       
       [[[Model model] header] 
-        addElement: @"runtime" value: selectedItem.title];
+        addElement: @"problem" value: selectedItem.title];
 
       [self.log appendString: selectedItem.title];
       [self.log appendString: @"\n"];

@@ -728,10 +728,6 @@
   
   NSString * OSVersion = [self getOSVersion: bundle age: & age];
     
-  [xmlBuilder startElement: @"extension"];
-  
-  [xmlBuilder addElement: @"status" value: status];
-  
   [formattedOutput
     appendString:
       [NSString
@@ -746,7 +742,10 @@
   version =
     [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
   
-  [xmlBuilder addElement: @"label" value: label];
+  [xmlBuilder startElement: @"extension"];
+  
+  [xmlBuilder addElement: @"bundleid" value: label];
+  [xmlBuilder addElement: @"status" value: status];
   [xmlBuilder addElement: @"version" value: version];
   [xmlBuilder addElement: @"osversion" value: OSVersion];  
   

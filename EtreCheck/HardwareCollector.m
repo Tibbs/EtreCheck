@@ -152,7 +152,7 @@
               self.supportsLowEnergy =
                 [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
                 
-              [self.model 
+              /* [self.model 
                 addElement: @"supportshandoff" 
                 boolValue: self.supportsHandoff];
 
@@ -162,7 +162,7 @@
 
               [self.model
                 addElement: @"supportlowenergy" 
-                boolValue: self.supportsLowEnergy];
+                boolValue: self.supportsLowEnergy]; */
               }
             }
       }
@@ -207,9 +207,7 @@
   [subProcess release];
   
   if([code length] > 0)
-    self.CPUCode = [NSString stringWithFormat: @" (%@)", code];
-    
-  [self.model addElement: @"cpucode" value: code];
+    self.CPUCode = code;
   }
 
 // Collect hardware information.
@@ -285,6 +283,11 @@
   [self.model addElement: @"name" value: name];
   [self.model addElement: @"model" value: model];
     
+  NSString * code = @"";
+  
+  if([self.CPUCode length] > 0)
+    code = [NSString stringWithFormat: @" (%@)", self.CPUCode];
+    
   [self.result
     appendString:
       [NSString
@@ -294,12 +297,13 @@
           cpu_count,
           speed,
           cpu_type ? cpu_type : @"",
-          self.CPUCode ? self.CPUCode : @"",
+          code,
           core_count]];
     
   [self.model addElement: @"cpucount" number: cpu_count];
   [self.model addElement: @"speed" valueWithUnits: speed];
-  [self.model addElement: @"cpu_type" value: cpu_type];
+  [self.model addElement: @"cpu_type" value: cpu_type];      
+  [self.model addElement: @"cpucode" value: self.CPUCode];
   [self.model addElement: @"corecount" number: core_count];
 
   [self printMemory: memory];
@@ -352,9 +356,9 @@
           NSLocalizedString(
             @"[Technical Specifications]", NULL)]];
 
-  [self.model
+  /* [self.model
     addElement: @"technicalspecificationsurl"
-    url: [NSURL URLWithString: url]];
+    url: [NSURL URLWithString: url]]; */
 
   [self.result appendString: @" - "];
 
@@ -368,8 +372,8 @@
           NSLocalizedString(
             @"[User Guide]", NULL)]];
     
-  [self.model 
-    addElement: @"userguideurl" url: [NSURL URLWithString: url]];
+  /* [self.model 
+    addElement: @"userguideurl" url: [NSURL URLWithString: url]]; */
 
   [self.result appendString: @" - "];
 
@@ -383,9 +387,9 @@
           NSLocalizedString(
             @"[Warranty & Service]", NULL)]];
 
-  [self.model
+  /* [self.model
     addElement: @"warrantyandserviceurl"
-    url: [NSURL URLWithString: url]];
+    url: [NSURL URLWithString: url]]; */
 
   [self.result appendString: @"\n"];
   }
@@ -978,9 +982,11 @@
                 NULL),
               ESLocalizedString(health, NULL), cycleCount]];
       
-    [self.model addElement: @"batteryhealth" value: health];
+    [self.model 
+      addElement: @"batteryhealth" value: ESLocalizedString(health, NULL)];
+    
     [self.model addElement: @"batterycyclecount" number: cycleCount];
-    [self.model addElement: @"batteryserialnumber" value: serialNumber];
+    //[self.model addElement: @"batteryserialnumber" value: serialNumber];
     
     if(serialNumberInvalid)
       [self.result
@@ -1147,7 +1153,7 @@
             NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
             iCloudFree]];
       
-    [self.model addElement: @"icloudfee" valueWithUnits: iCloudFree];
+    [self.model addElement: @"icloudfree" valueWithUnits: iCloudFree];
     
     if(bytes < 1024 * 1024 * 256)
       [self.result

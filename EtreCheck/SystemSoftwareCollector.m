@@ -231,8 +231,8 @@
     [self fallbackMarketingName: version name: & OSName];
   
   [self.model addElement: @"name" value: OSName];
-  [self.model addElement: @"osversion" value: [[Model model] OSVersion]];
-  [self.model addElement: @"osbuild" value: [[Model model] OSBuild]];
+  [self.model addElement: @"version" value: [[Model model] OSVersion]];
+  [self.model addElement: @"build" value: [[Model model] OSBuild]];
   
   int days = 0;
   int hours = 0;
@@ -255,9 +255,14 @@
     return YES;
     }
     
+  int uptimeValue = (days * 24);
+  
+  if(uptimeValue == 0)
+    uptimeValue += hours;
+    
   [self.model 
     addElement: @"uptime" 
-    intValue: (days * 24) + hours 
+    intValue: uptimeValue
     attributes: 
       [NSDictionary dictionaryWithObjectsAndKeys: @"hours", @"units", nil]];
 
