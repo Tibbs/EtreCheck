@@ -661,11 +661,11 @@
     [extensions insertObject: string atIndex: 0];
       
     [string release];
-    
-    [extensionsXML endElement: @"directory"];
-  
-    [self.model addFragment: extensionsXML.root];
     }
+    
+  [extensionsXML endElement: @"directory"];
+  
+  [self.model addFragment: extensionsXML.root];
     
   [extensionsXML release];
   

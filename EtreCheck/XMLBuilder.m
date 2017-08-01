@@ -111,7 +111,7 @@
   
   if(self != nil)
     {
-    myText = [NSString stringWithFormat: @"<![CDATA[%@]]>", text];
+    myText = [[NSString alloc] initWithFormat: @"<![CDATA[%@]]>", text];
     
     NSRange range =
       [myText
@@ -722,7 +722,7 @@
   
 // Add an element and value with a convenience function. 
 - (void) addElement: (NSString *) name 
-  valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes;
+  valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes
   {
   if([value length] == 0)
     return;

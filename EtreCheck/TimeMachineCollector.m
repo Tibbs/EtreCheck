@@ -361,7 +361,6 @@
   NSString * name = [volume objectForKey: @"_name"];
 
   NSString * diskSize = NSLocalizedString(@"Unknown", NULL);
-  NSString * spaceRequired = NSLocalizedString(@"Unknown", NULL);
 
   if(!name)
     name = NSLocalizedString(@"Unknown", NULL);
@@ -376,7 +375,7 @@
     diskSize =
       [formatter stringFromByteCount: [size unsignedLongLongValue]];
     
-  spaceRequired = [formatter stringFromByteCount: used];
+  NSString * spaceRequired = [formatter stringFromByteCount: used];
     
   [self.result
     appendString:
