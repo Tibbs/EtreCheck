@@ -432,10 +432,10 @@
           fileSystemName,
           volumeMountPoint,
           [stats objectForKey: kDiskType],
-          volumeSize 
+          [volumeSize length] > 0
             ? volumeSize 
             : @"",
-          volumeFree 
+          [volumeFree length] > 0
             ? [NSString
                 stringWithFormat:
                 NSLocalizedString(@"(%@ free)", NULL), volumeFree] 
