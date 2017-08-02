@@ -642,7 +642,7 @@
   [extensionsXML endElement: @"extensions"];
 
   // If I found any non-nil extensions, insert a header for the directory.
-  if([extensions count])
+  if([extensions count] > 0)
     {
     NSMutableAttributedString * string =
       [[NSMutableAttributedString alloc] initWithString: @""];
@@ -665,7 +665,8 @@
     
   [extensionsXML endElement: @"directory"];
   
-  [self.model addFragment: extensionsXML.root];
+  if([extensions count] > 0)
+    [self.model addFragment: extensionsXML.root];
     
   [extensionsXML release];
   
