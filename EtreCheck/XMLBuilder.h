@@ -23,16 +23,12 @@
 @interface XMLTextNode : XMLNode
   {
   NSString * myText;
-  BOOL myLeadingWhitespace;
-  BOOL myTrailingWhitespace;
-  BOOL myMultiLine;
+  BOOL myIsCDATA;
   }
 
 // The node's text.
 @property (retain) NSString * text;
-@property (assign) BOOL leadingWhitespace;
-@property (assign) BOOL trailingWhitespace;
-@property (assign) BOOL multiLine;
+@property (assign) BOOL isCDATA;
 
 // Constructor.
 - (instancetype) initWithText: (NSString *) text;

@@ -24,9 +24,6 @@
 @implementation XMLTextNode
 
 @synthesize text = myText;
-@synthesize leadingWhitespace = myLeadingWhitespace;
-@synthesize trailingWhitespace = myTrailingWhitespace;
-@synthesize multiLine = myMultiLine;
 
 // Constructor.
 - (instancetype) initWithText: (NSString *) text
@@ -79,7 +76,7 @@
           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
     if(range.location == 0)
-      myLeadingWhitespace = YES;
+      myIsCDATA = YES;
     
     range =
       [myText
@@ -89,14 +86,14 @@
 
     if(range.location != NSNotFound)
       if(([myText length] - range.location) == range.length)
-        myTrailingWhitespace = YES;
+        myIsCDATA = YES;
 
     range =
       [myText
         rangeOfCharacterFromSet: [NSCharacterSet newlineCharacterSet]];
     
     if(range.location != NSNotFound)
-      myMultiLine = YES;
+      myIsCDATA = YES;
       
     return self;
     }
@@ -113,31 +110,8 @@
     {
     myText = [[NSString alloc] initWithFormat: @"<![CDATA[%@]]>", text];
     
-    NSRange range =
-      [myText
-        rangeOfCharacterFromSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      
-    if(range.location == 0)
-      myLeadingWhitespace = YES;
+    myIsCDATA = YES;
     
-    range =
-      [myText
-        rangeOfCharacterFromSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]
-        options: NSBackwardsSearch];
-
-    if(range.location != NSNotFound)
-      if(([myText length] - range.location) == range.length)
-        myTrailingWhitespace = YES;
-
-    range =
-      [myText
-        rangeOfCharacterFromSet: [NSCharacterSet newlineCharacterSet]];
-    
-    if(range.location != NSNotFound)
-      myMultiLine = YES;
-      
     return self;
     }
     
@@ -162,8 +136,8 @@
 // a text node.
 - (NSString *) XMLFragment
   {
-  // If the text is has leading or trailing whitespace, put it in a CDATA.
-  if(self.leadingWhitespace || self.trailingWhitespace)
+  // If I know this should be CDATA, emit as such.
+  if(self.isCDATA)
     return [self XMLFragmentAsCDATA: self.text];
     
   // Try to escape it.

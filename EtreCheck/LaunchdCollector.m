@@ -917,12 +917,12 @@
   // Format the status.
   [output appendAttributedString: [self formatPropertyListStatus: info]];
   
-  NSString * cleanPath = [Utilities cleanPath: path];
+  NSString * prettyFilename = [Utilities prettyPath: filename];
   
-  [self.model addElement: @"path" value: cleanPath];
+  [self.model addElement: @"name" value: prettyFilename];
   
   // Add the name.
-  [output appendString: [Utilities prettyPath: filename]];
+  [output appendString: prettyFilename];
   
   // Add any extra content.
   [output

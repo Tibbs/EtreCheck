@@ -382,7 +382,7 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(
-            @"        %@: Disk size: %@ Disk used: %@\n", NULL),
+            @"        %@: Disk size: %@ - Disk used: %@\n", NULL),
           name, diskSize, spaceRequired]];
 
   [self.model startElement: @"volume"];

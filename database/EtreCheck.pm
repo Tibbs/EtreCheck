@@ -737,7 +737,7 @@ sub processConfigurationFiles
 
     $self->printTag('hostscount', $hosts, 'type', 'unsignedlong');
 
-    $self->printTagBoolean('hostcorrupt', 'true')
+    $self->printTagBoolean('hostscorrupt', 'true')
       if $corrupt;
     }
   elsif($self->{line} =~ /^\s+\/etc\/sysctl\.conf/)
@@ -1277,7 +1277,7 @@ sub processTimeMachine
     }
   elsif($self->{currentSection}->{volumesBeingBackedUp})
     {
-    $self->{line} =~ /^\s+(.+):\s+Disk\ssize:\s([0-9.]+\s..)\sDisk\sused:\s([0-9.]+\s..)/;
+    $self->{line} =~ /^\s+(.+):\s+Disk\ssize:\s([0-9.]+\s..)\s-\sDisk\sused:\s([0-9.]+\s..)/;
 
     my $name = $1;
     my $size = $2;
