@@ -551,6 +551,7 @@
   [self.model startElement: @"event"];
   
   [self.model addElement: @"date" date: event.date];
+  [self.model addElement: @"name" value: event.name];
   [self.model addElement: @"type" value: [self getEventType: event.type]];
 
   switch(event.type)
@@ -617,8 +618,6 @@
     
     if(fileExists)
       {
-      [self.model addElement: @"path" value: event.file];
-      
       NSAttributedString * openURL =
         [[Model model] getOpenURLFor: event.file];
 
