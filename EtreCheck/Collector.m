@@ -74,6 +74,12 @@
   [self.model endElement: self.name];  
   }
 
+// Simulate the collection.
+- (void) simulate
+  {
+  [self collect];
+  }
+
 // Perform the collection.
 - (void) performCollect
   {

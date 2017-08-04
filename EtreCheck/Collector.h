@@ -41,6 +41,9 @@
 // Perform the collection.
 - (void) collect;
 
+// Simulate a collection.
+- (void) simulate;
+
 // Perform the collection.
 - (void) performCollect;
 

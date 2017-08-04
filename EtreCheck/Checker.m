@@ -382,13 +382,22 @@
     postNotificationName: kProgressUpdate
     object: [NSNumber numberWithDouble: to]];
   
+  NSDictionary * environment = [[NSProcessInfo processInfo] environment];
+  
+  bool simulate =
+    [[environment objectForKey: @"ETRECHECK_SIMULATE"] boolValue];
+    
   for(Collector * collector in collectors)
     {
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
     
-    [collector collect];
+    if(simulate)
+      [collector simulate];
+    else
+      [collector collect];
     
-    [self.results setObject: collector.result forKey: collector.name];
+    if(collector.result != nil)
+      [self.results setObject: collector.result forKey: collector.name];
     
     // Keep a reference to the collector in case it is needed later.
     [self.completed setObject: collector forKey: collector.name];
