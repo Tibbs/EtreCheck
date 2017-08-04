@@ -1171,7 +1171,10 @@
     }
     
   if(self.simulating)
+    {
+    count = 34;
     pendingFiles = @"34 simulated pending files";
+    }
     
   if([pendingFiles length] > 0)
     {
