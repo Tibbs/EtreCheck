@@ -24,6 +24,7 @@
 @implementation XMLTextNode
 
 @synthesize text = myText;
+@synthesize isCDATA = myIsCDATA;
 
 // Constructor.
 - (instancetype) initWithText: (NSString *) text
@@ -108,7 +109,7 @@
   
   if(self != nil)
     {
-    myText = [[NSString alloc] initWithFormat: @"<![CDATA[%@]]>", text];
+    myText = [text copy];
     
     myIsCDATA = YES;
     
