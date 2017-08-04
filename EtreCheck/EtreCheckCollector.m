@@ -67,7 +67,7 @@
       
     NSDate * date = [deletedFile objectForKey: @"date"];
   
-    if([then compare: date] == NSOrderedAscending)
+    if(self.simulating || ([then compare: date] == NSOrderedAscending))
       {
       if(!hasOutput)
         {

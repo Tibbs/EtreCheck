@@ -524,12 +524,14 @@
         }];
     
   NSDate * then =
-    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 3];
+    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
   
   for(NSString * name in sortedKeys)
     {
     DiagnosticEvent * event = [events objectForKey: name];
     
+    BOOL since7Days = [then compare: event.date] == NSOrderedAscending;
+  
     switch(event.type)
       {
       case kPanic:
@@ -539,7 +541,7 @@
         break;
         
       default:
-        if([then compare: event.date] == NSOrderedAscending)
+        if(self.simulating || since7Days)
           [self printDiagnosticEvent: event name: name];
       }
     }
