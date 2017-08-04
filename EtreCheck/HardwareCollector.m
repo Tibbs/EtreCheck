@@ -150,19 +150,7 @@
                 [generalSupportsInstantHotspot
                   isEqualToString: @"attrib_Yes"];
               self.supportsLowEnergy =
-                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
-                
-              /* [self.model 
-                addElement: @"supportshandoff" 
-                boolValue: self.supportsHandoff];
-
-              [self.model
-                addElement: @"supportinstanthotspot" 
-                boolValue: self.supportsInstantHotspot];
-
-              [self.model
-                addElement: @"supportlowenergy" 
-                boolValue: self.supportsLowEnergy]; */
+                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];                
               }
             }
       }
@@ -268,6 +256,9 @@
   [[Model model]
     setPhysicalRAM: [self parseMemory: memory]];
 
+  if(self.simulating)
+    memory = @"2 GB";
+    
   [[Model model] setSerialCode: [serial substringFromIndex: 8]];
 
   // Print the human readable machine name, if I can find one.
@@ -319,6 +310,9 @@
   if(![scanner scanInt: & physicalMemory])
     physicalMemory = 0;
 
+  if(self.simulating)
+    physicalMemory = 2;
+    
   return physicalMemory;
   }
 
@@ -356,9 +350,9 @@
           NSLocalizedString(
             @"[Technical Specifications]", NULL)]];
 
-  /* [self.model
+  [self.model
     addElement: @"technicalspecificationsurl"
-    url: [NSURL URLWithString: url]]; */
+    url: [NSURL URLWithString: url]];
 
   [self.result appendString: @" - "];
 
@@ -372,8 +366,8 @@
           NSLocalizedString(
             @"[User Guide]", NULL)]];
     
-  /* [self.model 
-    addElement: @"userguideurl" url: [NSURL URLWithString: url]]; */
+  [self.model 
+    addElement: @"userguideurl" url: [NSURL URLWithString: url]];
 
   [self.result appendString: @" - "];
 
@@ -387,9 +381,9 @@
           NSLocalizedString(
             @"[Warranty & Service]", NULL)]];
 
-  /* [self.model
+  [self.model
     addElement: @"warrantyandserviceurl"
-    url: [NSURL URLWithString: url]]; */
+    url: [NSURL URLWithString: url]];
 
   [self.result appendString: @"\n"];
   }
@@ -564,8 +558,11 @@
     
     upgradeable = [isUpgradeable boolValue];
     
+    if(self.simulating)
+      upgradeable = true;
+      
     // Snow Leopoard doesn't seem to report this.
-    if(isUpgradeable)
+    if(isUpgradeable != nil)
       upgradeableString =
         upgradeable
           ? NSLocalizedString(@"Upgradeable", NULL)
@@ -957,6 +954,9 @@
       }
     }
     
+  if(self.simulating)
+    health = @"Poor";
+    
   if(cycleCount && [health length])
     {
     if([health isEqualToString: @"Poor"])
@@ -1045,6 +1045,9 @@
         }
       }
     }
+    
+  if(self.simulating)
+    [proxies addObject: @"Simulated proxy"];
     
   if(proxies.count > 0)
     {
@@ -1166,6 +1169,9 @@
       
     [self.result appendString: @"\n"];
     }
+    
+  if(self.simulating)
+    pendingFiles = @"34 simulated pending files";
     
   if([pendingFiles length] > 0)
     {

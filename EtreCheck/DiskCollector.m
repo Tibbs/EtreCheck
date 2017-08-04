@@ -308,6 +308,9 @@
   if(!smart_status)
     return;
     
+  if(self.simulating)
+    smart_status = @"Simulated";
+    
   bool smart_not_supported =
     [smart_status isEqualToString: @"Not Supported"];
   
@@ -448,12 +451,13 @@
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@(%@) %@ %@: %@\n", NULL),
+          NSLocalizedString(@"%@(%@) %@ %@: %@%@\n", NULL),
           indent,
           volumeDevice,
           volumeMountPoint,
           [stats objectForKey: kDiskType],
-          volumeSize];
+          volumeSize,
+          status];
     
   if(attributes)
     [self.result appendString: volumeInfo attributes: attributes];
@@ -527,6 +531,9 @@
     [[volume objectForKey: @"free_space_in_bytes"] unsignedLongLongValue];
   NSString * filesystem = [volume objectForKey: @"file_system"];
   
+  if(self.simulating)
+    free = 12;
+    
   NSString * type = NSLocalizedString(@"", NULL);
   NSString * status = NSLocalizedString(@"", NULL);
   NSDictionary * attributes = @{};
@@ -595,6 +602,9 @@
     
   int errorCount = [errors intValue];
   
+  if(self.simulating)
+    errorCount = 5;
+    
   if(errorCount)
     return
       [NSString

@@ -130,6 +130,9 @@
         break;
       }
     
+    if(self.simulating)
+      expectedSize = 42;
+      
     // All the beta testers have an El Capitan file.
     // I guess this is permanently broken.
     if([[Model model] ignoreKnownAppleFailures])
@@ -191,8 +194,14 @@
   
   NSFileManager * fileManager = [NSFileManager defaultManager];
   
+  BOOL etcsysctlExists = 
+    [fileManager fileExistsAtPath: @"/etc/sysctl.conf"];
+  
+  BOOL etclaunchdExists = 
+    [fileManager fileExistsAtPath: @"/etc/launchd.conf"];
+  
   // See if /etc/sysctl.conf exists.
-  if([fileManager fileExistsAtPath: @"/etc/sysctl.conf"])
+  if(etcsysctlExists || self.simulating)
     {
     [self.model addElement: @"etcsysctlconfexists" boolValue: YES];
     
@@ -200,7 +209,7 @@
     }
     
   // See if /etc/launchd.conf exists.
-  if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
+  if(etclaunchdExists || self.simulating)
     {
     [self.model addElement: @"etclaunchdconfexists" boolValue: YES];
 
@@ -219,6 +228,9 @@
     {
     NSString * status = [self checkRootlessStatus];
   
+    if(self.simulating)
+      status = @"Simulated";
+      
     if([status isEqualToString: @"enabled"])
       [[Model model] setSIP: YES];
     else
@@ -345,6 +357,12 @@
     
   if(corrupt && (broadcasthostCount < 1))
     *corrupt = YES;
+    
+  if(self.simulating)
+    {
+    corrupt = YES;
+    count = 1024;
+    }
     
   return count;
   }

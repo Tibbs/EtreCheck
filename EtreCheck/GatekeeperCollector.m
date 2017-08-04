@@ -95,6 +95,9 @@ GatekeeperSetting;
       if([trimmedLine isEqualToString: @""])
         continue;
 
+      if(self.simulating)
+        trimmedLine = @"assessments disabled";
+        
       if([trimmedLine isEqualToString: @"assessments disabled"])
         setting = kDisabled;
       else if([trimmedLine isEqualToString: @"developer id enabled"])
