@@ -1511,6 +1511,7 @@ sub processDiagnosticsInformation
     $self->printTag('type', $type);
     $self->printTag('app', $app);
     $self->{currentSection}->{hasDiagnosticEvents} = 1;
+    $self->{currentSection}->{type} = $type;
     }
   elsif($self->{line} =~ /^\s+(\d{4}-\d\d-\d\d\s\d\d:\d\d:\d\d)\s+Last\sshutdown\scause:\s(\d+)\s-\s(.+)/)
     {
@@ -1535,13 +1536,7 @@ sub processDiagnosticsInformation
     $self->printTag('description', $description);
     $self->popTag('event');
     $self->{currentSection}->{hasDiagnosticEvents} = 1;
-    }
-  elsif($self->{line} =~ /^\s+Cause:\s+(.+)/)
-    {
-    my $text = $1;
-
-    $self->pushTag('cause');
-    $self->printText($text);
+    $self->{currentSection}->{type} = $type;
     }
   elsif($self->{line} =~ /^\s+3rd\sParty\sKernel\sExtensions:/)
     {
@@ -1567,6 +1562,9 @@ sub processDiagnosticsInformation
   elsif($self->{line} =~ /^\s+(\S.+\S)/)
     {
     my $text = $1;
+
+    $self->pushTag('cause')
+      if $type =~ /^Crash|High\sCPU\suse|Hang$/;
 
     $self->printText($text);
     }
