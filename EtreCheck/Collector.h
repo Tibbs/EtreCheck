@@ -18,6 +18,7 @@
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
   XMLBuilder * myModel;
+  BOOL mySimulating;
   }
 
 // The name of this collector.
@@ -33,7 +34,11 @@
 @property (assign) dispatch_semaphore_t complete;
 @property (readonly) bool done;
 
+// An XML model for this collector.
 @property (readonly) XMLBuilder * model;
+
+// Am I simulating?
+@property (assign) BOOL simulating;
 
 // Constructor.
 - (instancetype) initWithName: (NSString *) name;

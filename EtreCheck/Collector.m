@@ -77,6 +77,8 @@
 // Simulate the collection.
 - (void) simulate
   {
+  self.simulating = YES;
+  
   [self collect];
   }
 
