@@ -757,7 +757,7 @@
   {
   [self 
     addElement: name 
-    value: value.absoluteString
+    valueAsCDATA: value.absoluteString
     attributes: 
       [NSDictionary dictionaryWithObjectsAndKeys: @"url", @"type", nil]];
   }
