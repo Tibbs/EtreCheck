@@ -295,7 +295,6 @@
 "High CPU use" = "Taux d’usage du CPU élevé";
 "Hang" = "Bloqué";
 "[Open]" = "[Ouvrir]";
-"Cause:" = "La cause :";
 "Kernel" = "Noyau";
 "Panic" = "Erreur grave";
 "Last shutdown cause:" = "La cause du dernier arrêt :";

@@ -393,13 +393,7 @@
                   [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
           
         else if([line hasPrefix: @"Application Specific Information:"])
-          {
           capturingInformation = YES;
-          
-          [information
-            appendFormat:
-              @"        %@", NSLocalizedString(@"Cause:", NULL)];
-          }
           
         else if([line hasPrefix: @"loaded kexts:"])
           capturingInformation = YES;
