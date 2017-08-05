@@ -482,4 +482,16 @@
   [alert release];
   }
 
+// Disable a single launchd file.
+- (void) disableFile: (NSString *) file
+  {
+  NSLog(@"Disable %@", file);
+  }
+  
+// Enable a single launchd file.
+- (void) enableFile: (NSString *) file
+  {
+  NSLog(@"Enable %@", file);
+  }
+  
 @end

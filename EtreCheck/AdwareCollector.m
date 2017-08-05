@@ -166,7 +166,7 @@
 // Print any adware found.
 - (void) performCollect
   {
-  if([[Model model] possibleAdwareFound])
+  if([[Model model] adwareFound])
     {
     NSMutableArray * possibleAdwareFiles = [NSMutableArray array];
     
@@ -178,55 +178,6 @@
           dictionaryWithObjectsAndKeys:
             adwareFile, @"key",
             @"adwarefile", @"type",
-            @"", @"executable",
-            nil];
-        
-      [possibleAdwareFiles addObject: possibleAdware];
-      }
-      
-    // Add the possible adware.
-    for(NSString * unknownFile in [[Model model] unknownLaunchdFiles])
-      {
-      NSDictionary * info =
-        [[[Model model] unknownLaunchdFiles] objectForKey: unknownFile];
-      
-      NSString * signature = [info objectForKey: kSignature];
-      
-      // This will go into clean up instead.
-      if([signature isEqualToString: kExecutableMissing])
-        continue;
-        
-      NSString * executable =
-        [Utilities formatExecutable: [info objectForKey: kCommand]];
-      
-      if(!executable)
-        executable = @"";
-      
-      // Try to guess if this is adware.
-      NSString * type = @"unknownfile";
-      
-      if([[info objectForKey: kProbableAdware] boolValue])
-        type = @"probableadware";
-        
-      NSDictionary * possibleAdware =
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            unknownFile, @"key",
-            type, @"type",
-            executable, @"executable",
-            nil];
-        
-      [possibleAdwareFiles addObject: possibleAdware];
-      }
-
-    // Add more possible adware.
-    for(NSString * unknownFile in [[Model model] unknownFiles])
-      {
-      NSDictionary * possibleAdware =
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            unknownFile, @"key",
-            @"unknownfile", @"type",
             @"", @"executable",
             nil];
         
@@ -257,7 +208,6 @@
         ^(id obj, NSUInteger idx, BOOL * stop)
           {
           NSString * name = [obj objectForKey: @"key"];
-          NSString * type = [obj objectForKey: @"type"];
           NSString * executable = [obj objectForKey: @"executable"];
           
           NSString * extra =
@@ -267,13 +217,6 @@
             
           ++adwareCount;
           [self.result appendString: @"    "];
-          [self.result
-            appendString: ESLocalizedString(type, NULL)
-            attributes:
-              @{
-                NSFontAttributeName : [[Utilities shared] boldFont],
-                NSForegroundColorAttributeName : [[Utilities shared] red],
-              }];
               
           NSString * prettyPath = [Utilities prettyPath: name];
           
@@ -296,17 +239,7 @@
             
           [self.result appendString: @"\n"];
           
-          if([type isEqualToString: @"adwarefile"])
-            [self.model addElement: @"adwarefile" value: prettyPath];
-          else
-            {
-            [self.model startElement: @"unknownfile"];
-            
-            [self.model addElement: @"path" value: prettyPath];
-            [self.model addElement: @"executable" value: executable];
-           
-            [self.model endElement: @"unknownfile"];
-            }
+          [self.model addElement: @"adwarefile" value: prettyPath];
           }];
       
     NSString * message =

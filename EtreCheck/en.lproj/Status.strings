@@ -43,5 +43,6 @@
 "diagnostics" = "Checking diagnostic information";
 "log" = "Checking information from log files";
 "adware" = "Checking for adware";
+"unsigned" = "Checking for unsigned files";
 "cleanup" = "Checking for clean up opportuntities";
 "etrecheckdeletedfiles" = "Checking file deleted by EtreCheck";

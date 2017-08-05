@@ -55,4 +55,10 @@
 // Remove files.
 - (IBAction) removeFiles: (id) sender;
 
+// Disable a single launchd file.
+- (void) disableFile: (NSString *) file;
+
+// Enable a single launchd file.
+- (void) enableFile: (NSString *) file;
+
 @end

@@ -45,6 +45,7 @@
 #import "Model.h"
 #import "LogCollector.h"
 #import "AdwareCollector.h"
+#import "UnsignedCollector.h"
 #import "CleanupCollector.h"
 #import "EtreCheckCollector.h"
 #import "XMLBuilder.h"
@@ -341,6 +342,7 @@
   [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
 
   [collectors addObject: adwareCollector];
+  [collectors addObject: [[UnsignedCollector new] autorelease]];
   [collectors addObject: [[CleanupCollector new] autorelease]];
   [collectors addObject: [[EtreCheckCollector new] autorelease]];
 
@@ -425,6 +427,7 @@
   [result appendAttributedString: [self getResult: @"gatekeeper"]];
   [result appendAttributedString: [self getResult: @"applications"]];
   [result appendAttributedString: [self getResult: @"adware"]];
+  [result appendAttributedString: [self getResult: @"unsigned"]];
   [result appendAttributedString: [self getResult: @"cleanup"]];
   [result appendAttributedString: [self getResult: @"kernelextensions"]];
   [result appendAttributedString: [self getResult: @"startupitems"]];
@@ -487,6 +490,7 @@
   [[[Model model] xml] addFragment: [self getXML: @"gatekeeper"]];
   [[[Model model] xml] addFragment: [self getXML: @"applications"]];
   [[[Model model] xml] addFragment: [self getXML: @"adware"]];
+  [[[Model model] xml] addFragment: [self getXML: @"unsigned"]];
   [[[Model model] xml] addFragment: [self getXML: @"cleanup"]];
   [[[Model model] xml] addFragment: [self getXML: @"kernelextensions"]];
   [[[Model model] xml] addFragment: [self getXML: @"startupitems"]];

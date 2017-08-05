@@ -29,8 +29,7 @@
 "gatekeeper" = "Vos paramètres actuels de Gatekeeper. Cela devrait se régler sur «Mac App Store et développeurs identifiés»";
 "diagnostics" = "Fichiers récents de diagnostic générés par votre système. EtreCheck inclut crash, hang et les rapports de CPU pour les trois derniers jours. Tous les rapports de panique du noyau sont également inclus, ainsi que vos plus récents résultats d‘autoexamen. Pour les résultats les meilleurs, exécutez EtreCheck en tant qu’administrateur (c’est le réglage par défaut).";
 "adware" = "Publiciel identifié comme tel par les recherches propres d’Etresoft et par les contributions de ses utilisateurs.";
-"unknownfiles" = "Ce sont des fichiers absents de la liste blanche d’EtreCheck, qui répertorie des logiciels bien connus et sûrs. Ce sont peut-être des publiciels ou des maliciels. Mais il est également possible que ce soit simplement quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck.";
-"hiddenapps" = "Les autres logiciels qui tournent, parfois en tâche de fond.";
+"unsigned" = "Ce sont des fichiers qui manquent de signature numérique d’Apple.";
 "etrecheckdeletedfiles" = "Ce sont les fichiers, récemment signalés comme logiciels inconnus par EtreCheck, que l’utilisateur a retirés.";
 "install" = "Installations de logiciel de tiers pendant les 30 derniers jours";
 "virtualvolume" = "Les volumes sur des disques modernes Mac sont peut-être virtuels pour le cryptage, les disques Fusion, or les nouveaux systèmes de fichiers.";

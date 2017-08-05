@@ -2049,11 +2049,13 @@
   }
 
 // Extract the most significant name from a bundle file name.
-+ (NSString *) bundleName: (NSString *) file
++ (NSString *) bundleName: (NSString *) path
   {
-  if([file length] == 0)
+  if([path length] == 0)
     return nil;
     
+  NSString * file = [path lastPathComponent];
+  
   NSString * base = [file stringByDeletingPathExtension];
   
   NSArray * parts = [base componentsSeparatedByString: @"."];

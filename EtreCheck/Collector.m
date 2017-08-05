@@ -402,7 +402,7 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Remove/Report]", NULL)
+    appendString: NSLocalizedString(@"[Remove]", NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

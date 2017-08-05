@@ -647,6 +647,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       }
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager show];
+    else if([manager isEqualToString: @"unsigned"])
+      {
+      NSString * file = 
+        [[url query] 
+          stringByReplacingPercentEscapesUsingEncoding: 
+            NSUTF8StringEncoding];
+      
+      if([relativePath isEqualToString: @"disable"])
+        [self.adwareManager disableFile: file];
+      else if([relativePath isEqualToString: @"enable"])
+        [self.adwareManager enableFile: file];
+      }
     else if([manager isEqualToString: @"smart"])
       [self.smartManager showDetail: relativePath];
     else if([manager isEqualToString: @"license"])
@@ -1486,7 +1498,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           [[NSBundle mainBundle]
             pathForResource: @"linkhelp" ofType: @"rtf"]]];
 
-  if([[Model model] possibleAdwareFound])
+  if([[Model model] adwareFound])
     [self.log
       appendRTFData:
         [NSData
@@ -1494,6 +1506,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
     
+  if([[Model model] unsignedFound])
+    [self.log
+      appendRTFData:
+        [NSData
+          dataWithContentsOfFile:
+            [[NSBundle mainBundle]
+              pathForResource: @"unsignedhelp" ofType: @"rtf"]]];
+
   if([[Model model] cleanupRequired])
     [self.log
       appendRTFData:

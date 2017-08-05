@@ -141,8 +141,11 @@
 // Host name.
 @property (retain) NSString * hostName;
 
-// Did I find any possible adware?
-@property (readonly) bool possibleAdwareFound;
+// Did I find any adware?
+@property (readonly) bool adwareFound;
+
+// Did I find any unsigned files?
+@property (readonly) bool unsignedFound;
 
 // Adware files, whether launchd-based or not.
 @property (readonly) NSMutableDictionary * adwareFiles;

@@ -43,5 +43,6 @@
 "diagnostics" = "Vérification des informations du diagnostic";
 "log" = "Vérification des fichiers d’historique";
 "adware" = "Vérification de l’adware";
+"unsigned" = "Vérification des signatures";
 "cleanup" = "Vérification des opportunités de nettoyage";
 "etrecheckdeletedfiles" = "Vérification des fichiers enlevés par EtreCheck";

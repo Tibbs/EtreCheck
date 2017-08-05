@@ -39,7 +39,8 @@
 "systemlaunchagents" = "System Launch Agents:";
 "systemlaunchdaemons" = "System Launch Daemons:";
 "userlaunchagents" = "User Launch Agents:";
-"adware" = "Possible adware:";
+"adware" = "Adware:";
+"unsigned" = "Unsigned files:";
 "cleanup" = "Clean up:";
 "hiddenapps" = "Other Apps:";
 "etrecheckdeletedfiles" = "Files deleted by EtreCheck:";

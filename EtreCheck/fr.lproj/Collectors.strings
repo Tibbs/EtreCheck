@@ -39,7 +39,8 @@
 "systemlaunchagents" = "Agents de lancement systèmes :";
 "systemlaunchdaemons" = "Daemons de lancement systèmes :";
 "userlaunchagents" = "Agents de lancement pour l’utilisateur :";
-"adware" = "Peut-être l’adware :";
+"adware" = "Adware :";
+"unsigned" = "Fichiers qui manquent de signature :";
 "cleanup" = "Nettoyage :";
 "hiddenapps" = "Autres apps :";
 "etrecheckdeletedfiles" = "Fichiers enlevés par EtreCheck :";

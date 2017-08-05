@@ -68,6 +68,8 @@
 		A5716E151C4C5A6E00297727 /* CleanupCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* CleanupCollector.m */; };
 		A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* AdwareManager.m */; };
 		A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */; };
+		A58792BC1F364E0100BB7DBB /* UnsignedCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A58792BB1F364E0100BB7DBB /* UnsignedCollector.m */; };
+		A58792C01F36544600BB7DBB /* unsignedhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A58792BD1F36544600BB7DBB /* unsignedhelp.rtf */; };
 		A58B4D141EE0E4FB00415121 /* InstallCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A58B4D131EE0E4FB00415121 /* InstallCollector.m */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
@@ -278,6 +280,10 @@
 		A5716E141C4C5A6E00297727 /* AdwareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdwareManager.m; sourceTree = "<group>"; };
 		A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsCollector.h; sourceTree = "<group>"; };
 		A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsCollector.m; sourceTree = "<group>"; };
+		A58792BA1F364E0100BB7DBB /* UnsignedCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnsignedCollector.h; sourceTree = "<group>"; };
+		A58792BB1F364E0100BB7DBB /* UnsignedCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnsignedCollector.m; sourceTree = "<group>"; };
+		A58792BE1F36544600BB7DBB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/unsignedhelp.rtf; sourceTree = "<group>"; };
+		A58792BF1F36544600BB7DBB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/unsignedhelp.rtf; sourceTree = "<group>"; };
 		A58B4D121EE0E4FB00415121 /* InstallCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallCollector.h; sourceTree = "<group>"; };
 		A58B4D131EE0E4FB00415121 /* InstallCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCollector.m; sourceTree = "<group>"; };
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
@@ -537,6 +543,8 @@
 				A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */,
 				A5CF26E61A279DAD002386F0 /* AdwareCollector.h */,
 				A5CF26E71A279DAD002386F0 /* AdwareCollector.m */,
+				A58792BA1F364E0100BB7DBB /* UnsignedCollector.h */,
+				A58792BB1F364E0100BB7DBB /* UnsignedCollector.m */,
 				A5716E111C4C5A6E00297727 /* CleanupCollector.h */,
 				A5716E121C4C5A6E00297727 /* CleanupCollector.m */,
 				A51906791D49B092009AA835 /* EtreCheckCollector.h */,
@@ -672,6 +680,7 @@
 				A54DF6561BD70A3C00753E87 /* TOU.rtf */,
 				A55BC17C15BF987D00D42EF1 /* Credits.rtf */,
 				A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */,
+				A58792BD1F36544600BB7DBB /* unsignedhelp.rtf */,
 				A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */,
 				A546BFB91A5348880032C354 /* linkhelp.rtf */,
 				A5C9E0801DBDD1DA0099288B /* smartctl */,
@@ -786,6 +795,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A58792C01F36544600BB7DBB /* unsignedhelp.rtf in Resources */,
 				A5B6BD5B19D7AAF900C48C37 /* Media.xcassets in Resources */,
 				A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */,
 				A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */,
@@ -854,6 +864,7 @@
 				A5CDE7DA1EE1CF9100F1E095 /* CollectorModel.m in Sources */,
 				A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */,
 				A56A393B1F22868F009BC90E /* XMLBuilder.m in Sources */,
+				A58792BC1F364E0100BB7DBB /* UnsignedCollector.m in Sources */,
 				A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */,
 				A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */,
 				A5FC120619A5443500E81E9C /* ApplicationsCollector.m in Sources */,
@@ -1025,6 +1036,15 @@
 				A5716E101C4C41C700297727 /* fr */,
 			);
 			name = cleanuphelp.rtf;
+			sourceTree = "<group>";
+		};
+		A58792BD1F36544600BB7DBB /* unsignedhelp.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A58792BE1F36544600BB7DBB /* en */,
+				A58792BF1F36544600BB7DBB /* fr */,
+			);
+			name = unsignedhelp.rtf;
 			sourceTree = "<group>";
 		};
 		A5A8D6811F1D548000276B70 /* Status.strings */ = {

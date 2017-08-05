@@ -31,7 +31,8 @@
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize launchdFiles = myLaunchdFiles;
 @synthesize processes = myProcesses;
-@synthesize possibleAdwareFound = myPossibleAdwareFound;
+@synthesize adwareFound = myAdwareFound;
+@synthesize unsignedFound = myUnsignedFound;
 @synthesize adwareFiles = myAdwareFiles;
 @synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
@@ -78,14 +79,19 @@
   return [[files copy] autorelease];
   }
 
-- (bool) possibleAdwareFound
+- (bool) adwareFound
   {
   if([self.adwareLaunchdFiles count] > 0)
     return YES;
     
   if([self.adwareFiles count] > 0)
     return YES;
-    
+
+  return NO;
+  }
+
+- (bool) unsignedFound
+  {
   if([self.unknownLaunchdFiles count] > 0)
     return YES;
 

@@ -183,7 +183,9 @@
 "Poor" = "À remplacer de suite";
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
-"[Remove/Report]" = "[Enlever/Signaler]";
+"[Remove]" = "[Enlever]";
+"[Disable]" = "[Désactiver]";
+"[Enable]" = "[Activer]";
 "[Clean up]" = "[Nettoyer]";
 "More adware files" = "Davantage de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous n’ont pas été finalisées.";
