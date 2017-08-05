@@ -1360,7 +1360,7 @@ sub processTopProcessesByCPU
     my $process = $2;
 
     $self->pushTag('process');
-    $self->printTagNumber('cpupct', $pct, 'units', '%');
+    $self->printTagNumber('usage', $pct, 'units', '%');
     $self->printTag('name', $process);
     $self->popTag('process');
     }

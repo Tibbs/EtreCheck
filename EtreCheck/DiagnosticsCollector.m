@@ -444,7 +444,7 @@
                 [extensions addObject: trimmedLine];
               }
             else
-              [information appendFormat: @"        %@\n", trimmedLine];
+              [information appendFormat: @"%@\n", trimmedLine];
             }
           else
             capturingInformation = NO;
@@ -461,8 +461,7 @@
     
     [information
       appendFormat:
-        @"        %@",
-        NSLocalizedString(@"3rd Party Kernel Extensions: ", NULL)];
+        @"%@", NSLocalizedString(@"3rd Party Kernel Extensions: ", NULL)];
       
     if([extensions count] == 0)
       {
@@ -474,7 +473,7 @@
       [information appendString: @"\n"];
       
       for(NSString * extension in extensions)
-        [information appendFormat: @"                %@\n", extension];
+        [information appendFormat: @"%@\n", extension];
       }
     }
   else if(event.type == kCPU)
@@ -656,7 +655,8 @@
   [self.model addElement: @"information" valueAsCDATA: event.information];
   
   if([event.information length] > 0)
-    [self.result appendString: event.information];
+    [self.result 
+      appendString: [Utilities indent: event.information by: @"        "]];
 
   hasOutput = YES;
   

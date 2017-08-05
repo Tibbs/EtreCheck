@@ -229,4 +229,7 @@
 // Get parent bundle of a path.
 + (NSString *) getParentBundle: (NSString *) path;
 
+// Indent a block of text.
++ (NSString *) indent: (NSString *) text by: (NSString *) indent;
+
 @end

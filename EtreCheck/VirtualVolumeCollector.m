@@ -407,7 +407,13 @@
     [self.model addElement: @"size" valueWithUnits: size];
     [self.model addElement: @"status" value: status];
     
-    NSString * errors = [self errorsFor: name];
+    NSNumber * errorCount =
+      [[[Model model] diskErrors] objectForKey: name];
+
+    if(self.simulating)
+      errorCount = [NSNumber numberWithInt: 4];
+      
+    NSString * errors = [self errorsFor: errorCount];
     
     status = [status stringByAppendingString: errors];
     

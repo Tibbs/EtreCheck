@@ -29,7 +29,7 @@
 - (NSString *) volumeFreeSpace: (NSDictionary *) volume;
 
 // Get more information about a device.
-- (NSString *) errorsFor: (NSString *) name;
+- (NSString *) errorsFor: (NSNumber *) errors;
 
 // Print disks attached to a single NVMExpress controller.
 - (BOOL) printController: (NSDictionary *) controller

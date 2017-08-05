@@ -398,7 +398,10 @@
   NSNumber * errorCount =
     [[[Model model] diskErrors] objectForKey: volumeDevice];
 
-  NSString * errors = [self errorsFor: volumeDevice];
+  if(self.simulating)
+    errorCount = [NSNumber numberWithInt: 4];
+    
+  NSString * errors = [self errorsFor: errorCount];
   
   if([errors length])
     {
@@ -595,16 +598,10 @@
   }
 
 // Get more information about a device.
-- (NSString *) errorsFor: (NSString *) name
+- (NSString *) errorsFor: (NSNumber *) errors
   {
-  NSNumber * errors =
-    [[[Model model] diskErrors] objectForKey: name];
-    
   int errorCount = [errors intValue];
   
-  if(self.simulating)
-    errorCount = 5;
-    
   if(errorCount)
     return
       [NSString

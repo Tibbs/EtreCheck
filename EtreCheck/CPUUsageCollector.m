@@ -109,7 +109,7 @@
     [self.model startElement: @"process"];
     
     [self.model 
-      addElement: @"cpupct" 
+      addElement: @"usage" 
       value: [NSString stringWithFormat: @"%.0lf", cpu]
       attributes: 
         [NSDictionary 

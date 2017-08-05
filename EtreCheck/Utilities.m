@@ -2161,4 +2161,33 @@
   return path;
   }
 
+// Indent a block of text.
++ (NSString *) indent: (NSString *) text by: (NSString *) indent
+  {
+  NSMutableArray * parts = 
+    [NSMutableArray 
+      arrayWithArray: [text componentsSeparatedByString: @"\n"]];
+  
+  NSString * lastPart = [parts lastObject];
+  
+  [parts removeLastObject];
+  
+  NSMutableString * indented = [NSMutableString string];
+  
+  for(NSString * part in parts)
+    {
+    [indented appendString: indent];
+    [indented appendString: part];
+    [indented appendString: @"\n"];
+    }
+    
+  if([lastPart length] > 0)
+    {
+    [indented appendString: indent];
+    [indented appendString: lastPart];
+    }
+    
+  return indented;
+  }
+  
 @end

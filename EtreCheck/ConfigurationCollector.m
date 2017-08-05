@@ -360,7 +360,7 @@
     
   if(self.simulating)
     {
-    corrupt = YES;
+    *corrupt = YES;
     count = 1024;
     }
     
