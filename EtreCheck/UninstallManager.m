@@ -11,6 +11,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import "CURLRequest.h"
+#import "SubProcess.h"
 
 @implementation UninstallManager
 
@@ -485,13 +486,89 @@
 // Disable a single launchd file.
 - (void) disableFile: (NSString *) file
   {
-  NSLog(@"Disable %@", file);
+  NSString * homeDirectory = NSHomeDirectory();
+  
+  NSString * path = [file stringByExpandingTildeInPath];
+  
+  if(![path hasPrefix: homeDirectory])
+    [self launchdctlInUserSpace: @"unload" path: path];
+  else
+    [self launchdctl: @"unload" path: path];
   }
   
 // Enable a single launchd file.
 - (void) enableFile: (NSString *) file
   {
-  NSLog(@"Enable %@", file);
+  NSString * homeDirectory = NSHomeDirectory();
+  
+  NSString * path = [file stringByExpandingTildeInPath];
+  
+  if(![path hasPrefix: homeDirectory])
+    [self launchdctlInUserSpace: @"load" path: path];
+  else
+    [self launchdctl: @"load" path: path];
+  }
+  
+// Load launchd tasks in userspace.
+- (void) launchdctlInUserSpace: (NSString *) action path: (NSString *) path
+  {
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: action];
+  [args addObject: @"-wF"];
+  [args addObject: path];
+  
+  if([args count] > 1)
+    {
+    SubProcess * launchctl = [[SubProcess alloc] init];
+
+    [launchctl execute: @"/bin/launchctl" arguments: args];
+
+    [launchctl release];
+    }
+  }
+
+// Load launchd tasks in userspace.
+- (void) launchdctl: (NSString *) action path: (NSString *) path
+  {
+  NSString * command =
+    [NSString stringWithFormat: @"/bin/launchctl %@ -wF %@", action, path];
+
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"-e"];
+  [args addObject: 
+    [NSString
+      stringWithFormat:
+        @"do shell script(\"%@\") with administrator privileges",
+        command]];
+    
+  SubProcess * subProcess = [[SubProcess alloc] init];
+
+  [subProcess execute: @"/usr/bin/osascript" arguments: args];
+
+  [subProcess release];
+  }
+
+// Filter out any tasks that are in the user's home directory.
++ (NSArray *) rootLaunchdTasks: (NSArray *) tasks
+  {
+  NSString * homeDirectory = NSHomeDirectory();
+  
+  NSMutableArray * rootTasks = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
+    {
+    // Try to unload with any other status, including failed.
+    NSString * path = [info objectForKey: kPath];
+    
+    // Make sure the path is rooted in the user's home directory.
+    // This will also guarantee its validity.
+    if(![path hasPrefix: homeDirectory])
+      [rootTasks addObject: info];
+    }
+    
+  return rootTasks;
   }
   
 @end

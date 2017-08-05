@@ -167,12 +167,12 @@
             
           [self.result appendString: @"\n"];
           
-          [self.model startElement: @"unsigned"];
+          [self.model startElement: @"unsignedfile"];
           
           [self.model addElement: @"path" value: prettyPath];
           [self.model addElement: @"executable" value: executable];
          
-          [self.model endElement: @"unsigned"];
+          [self.model endElement: @"unsignedfile"];
           }];
       
     NSString * message =
