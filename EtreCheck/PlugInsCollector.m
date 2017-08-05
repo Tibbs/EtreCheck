@@ -62,10 +62,10 @@
         [version
           stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
 
-      NSDate * modificationDate = [Utilities modificationDate: path];
+      NSDate * modificationDate = [plugin objectForKey: @"date"];
       NSString * modificationDateString = @"";
         
-      if(modificationDate)
+      if(modificationDate != nil)
         {
         modificationDateString =
           [Utilities installDateAsString: modificationDate];
@@ -113,7 +113,8 @@
 // Find all the plug-in bundles in the given path.
 - (NSDictionary *) parseFiles: (NSString *) path
   {
-  NSArray * args = @[ path, @"-iname", @"*.plugin" ];
+  NSArray * args = 
+    @[ path, @"-iname", @"*.plugin", @"-or", @"-iname", @"*.plugin"];
   
   NSMutableDictionary * bundles = [NSMutableDictionary dictionary];
 
@@ -141,6 +142,11 @@
 
       NSMutableDictionary * bundle =
         [NSMutableDictionary dictionaryWithDictionary: plist];
+      
+      NSDate * modificationDate = [Utilities modificationDate: path];
+
+      if(modificationDate != nil)
+        [bundle setObject: modificationDate forKey: @"date"];
       
       [bundle setObject: [Utilities cleanPath: path] forKey: @"path"];
       

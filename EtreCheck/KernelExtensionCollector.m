@@ -737,7 +737,9 @@
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:
-          color, NSForegroundColorAttributeName, nil]];
+          color, NSForegroundColorAttributeName, 
+          [[Utilities shared] boldFont], NSFontAttributeName,
+          nil]];
 
   // Fix the version to get past ASC spam filters.
   version =
