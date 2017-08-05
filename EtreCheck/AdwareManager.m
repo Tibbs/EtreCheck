@@ -172,6 +172,17 @@
       }
     }
   
+  NSArray * sortedFilesToRemove =
+    [[filesToRemove allKeys] sortedArrayUsingSelector: @selector(compare:)];
+  
+  for(NSString * file in sortedFilesToRemove)
+    {
+    NSMutableDictionary * item = [filesToRemove objectForKey: file];
+    
+    if(item)
+      [self.filesToRemove addObject: item];
+    }
+
   [filesToRemove release];
   
   [self.tableView reloadData];

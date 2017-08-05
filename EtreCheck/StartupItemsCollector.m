@@ -11,6 +11,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "Model.h"
+#import "XMLBuilder.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -57,6 +58,16 @@
       {
       NSArray * items = [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
+      if(self.simulating && ([items count] == 0))
+        items = 
+          [NSArray arrayWithObject: 
+            [NSDictionary 
+              dictionaryWithObjectsAndKeys:
+                @"Simulated startup item", @"_name", 
+                @"/Library/StartupItems/SimItem", @"spstartupitem_location", 
+                @"1.0", @"CFBundleShortVersionString",
+                nil]];
+      
       if([items count])
         {
         if(!startupItemsFound)
@@ -92,6 +103,9 @@
 
   NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];
   
+  if(self.simulating && ([machInitFiles count] == 0))
+    machInitFiles = [NSArray arrayWithObject: @"/Library/SimMacInit"];
+
   if([machInitFiles count] == 0)
     return;
     
@@ -102,16 +116,28 @@
     }
 
   for(NSString * file in machInitFiles)
+    {
+    NSString * cleanPath = [Utilities cleanPath: file];
+    
+    [self.model startElement: @"startupitem"];
+    
+    [self.model addElement: @"name" value: [cleanPath lastPathComponent]];
+    [self.model addElement: @"path" value: cleanPath];
+    [self.model addElement: @"type" value: @"machinit"];
+    
     [self.result
       appendString:
         [NSString
           stringWithFormat:
             NSLocalizedString(@"    %@\n", NULL),
-            [Utilities cleanPath: file]]
+            cleanPath]
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
         }];
+        
+    [self.model endElement: @"startupitem"];
+    }
     
   [self.result
     appendString: NSLocalizedString(@"machinitdeprecated", NULL)
@@ -160,7 +186,7 @@
             @"/Library/StartupItems/SimItem", @"spstartupitem_location", 
             @"1.0", @"CFBundleShortVersionString",
             nil] 
-      forKey: @"/Library/StartupItems/SimulatedItem"];
+      forKey: @"/Library/StartupItems/SimItem"];
     
   return bundles;
   }
@@ -201,12 +227,23 @@
         }
       }
     
+  NSString * cleanPath = [Utilities cleanPath: path];
+
+  [self.model startElement: @"startupitem"];
+  
+  [self.model addElement: @"name" value: name];
+  [self.model addElement: @"path" value: cleanPath];
+  [self.model addElement: @"type" value: @"startupitem"];
+  [self.model addElement: @"version" value: version];
+  
+  [self.model endElement: @"startupitem"];
+  
   [self.result
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"    %@: %@Path: %@\n", NULL),
-          name, version, path]
+          NSLocalizedString(@"    %@: %@ Path: %@\n", NULL),
+          name, version, cleanPath]
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
