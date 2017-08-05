@@ -38,19 +38,15 @@
       {
       NSString * name = [font objectForKey: @"_name"];
       NSString * path = [font objectForKey: @"path"];
-      NSNumber * valid = [font objectForKey: @"valid"];
 
-      if(![valid boolValue])
-        {
-        [self.result
-          appendString:
-            [NSString
-              stringWithFormat:
-                NSLocalizedString(
-                  @"    %@: %@\n", NULL),
-                name,
-                [Utilities cleanPath: path]]];
-        }
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"    %@: %@\n", NULL),
+              name,
+              [Utilities cleanPath: path]]];
       }
       
     [self.result appendCR];
@@ -83,8 +79,12 @@
       if([fonts count])
         for(NSDictionary * font in fonts)
           {
+          NSString * name = [font objectForKey: @"_name"];
           NSNumber * valid = [font objectForKey: @"valid"];
  
+          if(self.simulating && [name hasPrefix: @"Arial"])
+            valid = nil;
+          
           if(![valid boolValue])
             [badFonts addObject: font];
           }

@@ -293,4 +293,7 @@
 // Is this a known Apple executable but not a shell script?
 - (BOOL) isKnownAppleNonShellExecutable: (NSString *) path;
 
+// Simulate adware.
+- (void) simulateAdware;
+
 @end

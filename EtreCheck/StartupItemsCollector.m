@@ -151,6 +151,17 @@
     
   [subProcess release];
   
+  if(self.simulating)
+    [bundles 
+      setObject: 
+        [NSDictionary 
+          dictionaryWithObjectsAndKeys:
+            @"Simulated startup item", @"_name", 
+            @"/Library/StartupItems/SimItem", @"spstartupitem_location", 
+            @"1.0", @"CFBundleShortVersionString",
+            nil] 
+      forKey: @"/Library/StartupItems/SimulatedItem"];
+    
   return bundles;
   }
 

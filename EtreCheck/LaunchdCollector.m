@@ -123,6 +123,9 @@
 // Collect the status of all launchd items.
 - (void) performCollect
   {
+  if(self.simulating)
+    [[Model model] simulateAdware];
+    
   // Don't do this more than once.
   if([self.launchdStatus count])
     return;

@@ -21,6 +21,24 @@
   // Find all the plug-in bundles in the given path.
   NSDictionary * bundles = [self parseFiles: path];
   
+  if(self.simulating && ([bundles count] == 0))
+    {
+    NSString * pluginPath = 
+      [path stringByAppendingPathComponent: @"Simulated.plugin"];
+      
+    NSString * name = [pluginPath lastPathComponent];
+    
+    bundles = 
+      [NSDictionary 
+        dictionaryWithObject: 
+          [NSDictionary 
+            dictionaryWithObjectsAndKeys:
+            [Utilities cleanPath: pluginPath], @"path", 
+            @"1.0", @"CFBundleShortVersionString", 
+            nil] 
+        forKey: name];
+    }
+    
   if([bundles count])
     {
     [self.result appendAttributedString: [self buildTitle]];
@@ -124,7 +142,7 @@
       NSMutableDictionary * bundle =
         [NSMutableDictionary dictionaryWithDictionary: plist];
       
-      [bundle setObject: path forKey: @"path"];
+      [bundle setObject: [Utilities cleanPath: path] forKey: @"path"];
       
       [bundles setObject: bundle forKey: filename];
       }

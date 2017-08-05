@@ -89,6 +89,10 @@
   {
   NSArray * machInitFiles = [Utilities checkMachInit: path];
   
+  if(self.simulating && ([machInitFiles count] == 0))
+    machInitFiles = 
+      [NSArray arrayWithObject: @"/Library/Application Support/SimMacInit"];
+    
   for(NSString * file in machInitFiles)
     {
     NSString * developer = [self getDeveloper: path];
@@ -173,62 +177,42 @@
    
   NSArray * lines = [Utilities formatLines: tty];
 
-  NSString * loginHook = nil;
-  NSString * logoutHook = nil;
+  NSString * loginHooks = nil;
   
+  if(self.simulating)
+    {
+    NSMutableArray * simulatedLines = 
+      [NSMutableArray arrayWithArray: lines];
+      
+    [simulatedLines 
+      addObject: 
+        @"#console "
+        @"\"dummy -LoginHook /Library/App\\ Support/SimLoginHook/ "
+        @"-LogoutHook /Library/App\\ Support/SimLogoutHook/\" "
+        @"vt100 on dummy "];
+        
+    lines = simulatedLines;
+    }
+    
   for(NSString * line in lines)
     {
     NSRange tagRange = [line rangeOfString: @"-LoginHook"];
     
     if(tagRange.location != NSNotFound)
-      {
-      NSString * script = [line substringFromIndex: tagRange.location];
-      
-      NSScanner * scanner = [NSScanner scannerWithString: script];
-      
-      [scanner scanString: @"-LoginHook" intoString: NULL];
-      [scanner
-        scanUpToCharactersFromSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]
-        intoString: & loginHook];
-        
-      if([loginHook length] > 0)
-        loginHook = [loginHook substringToIndex: [loginHook length] - 1];
-      }
-      
-    tagRange = [line rangeOfString: @"-LogoutHook"];
+      tagRange = [line rangeOfString: @"-LogoutHook"];
     
     if(tagRange.location != NSNotFound)
-      {
-      NSString * script = [line substringFromIndex: tagRange.location];
-      
-      NSScanner * scanner = [NSScanner scannerWithString: script];
-      
-      [scanner scanString: @"-LogoutHook" intoString: NULL];
-      [scanner
-        scanUpToCharactersFromSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]
-        intoString: & logoutHook];
-        
-      if([logoutHook length] > 0)
-        logoutHook = [logoutHook substringToIndex: [logoutHook length] - 1];
-      }
+      loginHooks = line;
     }
     
-  if([loginHook length])
+  if([loginHooks length])
     {
-    NSString * developer = [self getDeveloper: loginHook];
-    
-    if([developer length] == 0)
-      developer = @"";
-      
     NSDictionary * item =
       [NSDictionary dictionaryWithObjectsAndKeys:
         @"/etc/ttys", @"name",
-        loginHook, @"path",
+        loginHooks, @"path",
         @"LoginHook", @"kind",
         [NSNumber numberWithBool: YES], @"hidden",
-        developer, @"developer",
         nil];
       
     [self.loginItems addObject: item];

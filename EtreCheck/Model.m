@@ -784,6 +784,14 @@
   return NO;
   }
 
+// Simulate adware.
+- (void) simulateAdware
+  {
+  [self.whitelistFiles removeObject: @"com.oracle.java.Java-Updater.plist"];
+  [self.whitelistFiles removeObject: @"com.google.keystone.agent.plist"];
+  [self.blacklistFiles addObject: @"com.google.keystone.agent.plist"];
+  }
+  
 // Associate a path with a UUID to hide it.
 - (NSString *) createUUIDForPath: (NSString *) path
   {
