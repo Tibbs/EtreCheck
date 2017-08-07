@@ -13,6 +13,7 @@
 #import "LaunchdCollector.h"
 #import <sqlite3.h>
 #import <unistd.h>
+#import "XMLBuilder.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -47,8 +48,23 @@
   {
   NSDictionary * orphanLaunchdFiles = [[Model model] orphanLaunchdFiles];
   
+  if(self.simulating && ([orphanLaunchdFiles count] == 0))
+    orphanLaunchdFiles = 
+      [NSDictionary
+        dictionaryWithObject: 
+          [NSDictionary 
+            dictionaryWithObjectsAndKeys:
+              [NSArray 
+                arrayWithObject: @"/Library/Application Support/nothing"], 
+              kCommand,
+              kExecutableMissing, kSignature,
+              nil] 
+        forKey: @"/Library/LaunchAgents/SimulatedMissingExe.plist"];
+    
   if([orphanLaunchdFiles count] > 0)
     {
+    [self.model startElement: @"missingexecutables"];
+    
     [self.result appendAttributedString: [self buildTitle]];
     
     NSArray * sortedUnknownLaunchdFiles =
@@ -59,23 +75,30 @@
       enumerateObjectsUsingBlock:
         ^(id obj, NSUInteger idx, BOOL * stop)
           {
-          [self.result
-            appendString:
-              [NSString
-                stringWithFormat: @"    %@", [Utilities prettyPath: obj]]];
-
           NSDictionary * info = [orphanLaunchdFiles objectForKey: obj];
           
+          NSString * path = [Utilities prettyPath: obj];
+          NSString * executablePath = 
+            [Utilities formatExecutable: [info objectForKey: kCommand]];
+                    
+          [self.result
+            appendString:
+              [NSString stringWithFormat: @"    %@", path]];
+
           NSString * signature = [info objectForKey: kSignature];
           
           [self.result
             appendString:
               [NSString
-                stringWithFormat:
-                  @"\n        %@\n",
-                  [Utilities
-                    formatExecutable: [info objectForKey: kCommand]]]];
+                stringWithFormat: @"\n        %@\n", executablePath]];
 
+          [self.model startElement: @"missingexecutable"];
+          
+          [self.model addElement: @"path" value: path];
+          [self.model addElement: @"executable" value: executablePath];
+          
+          [self.model endElement: @"missingexecutable"];
+          
           // Report a missing executable.
           if([signature isEqualToString: kExecutableMissing])
             {
@@ -119,6 +142,8 @@
     [self.result appendCR];
     
     [[Model model] setCleanupRequired: YES];
+    
+    [self.model endElement: @"missingexecutable"];
     
     return YES;
     }
@@ -276,6 +301,22 @@
 // Print notification SPAM.
 - (void) printNotificationSPAM: (BOOL) printTitle
   {
+  if(self.simulating)
+    [[[Model model] notificationSPAMs]
+      setObject: 
+        [NSArray 
+          arrayWithObjects: 
+          [NSDictionary 
+            dictionaryWithObject: @2 forKey: kNotificationNoteID],
+          [NSDictionary 
+            dictionaryWithObject: @3 forKey: kNotificationNoteID],
+          [NSDictionary 
+            dictionaryWithObject: @4 forKey: kNotificationNoteID],
+          [NSDictionary 
+            dictionaryWithObject: @5 forKey: kNotificationNoteID],
+          nil]
+      forKey: @"com.spammer.simulated"];
+    
   for(NSString * spammer in [[Model model] notificationSPAMs])
     {
     NSMutableArray * notifications =
@@ -289,6 +330,15 @@
     if(count < 3)
       continue;
       
+    [self.model startElement: @"notificationspam"];
+    
+    [self.model startElement: @"spammer"];
+    
+    [self.model addElement: @"name" value: spammer];
+    [self.model addElement: @"count" unsignedIntegerValue: count];
+    
+    [self.model endElement: @"spammer"];
+    
     [notifications
       sortUsingComparator:
         ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
@@ -348,6 +398,8 @@
         }
       
       [self.result appendCR];
+      
+      [self.model endElement: @"notificationspam"];
       }
     }
   }
