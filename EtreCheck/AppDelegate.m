@@ -2019,11 +2019,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // Beg for money.
   [self checkForDonation];
   
-  NSString * path = [NSTemporaryDirectory() stringByAppendingPathComponent: @"output.xml"];
+  NSDictionary * environment = [[NSProcessInfo processInfo] environment];
+
+  if([[environment objectForKey: @"ETRECHECK_SIMULATE"] boolValue])
+    {
+    NSString * path = 
+      [[@"~/Desktop/EtreCheck4" stringByExpandingTildeInPath] 
+        stringByAppendingPathComponent: @"test.etrecheck"];
   
-  [[[[Model model] xml] XML] writeToFile: path atomically: YES encoding: NSUTF8StringEncoding error: NULL];
-  
-  NSLog(@"Wrote to %@", path);
+    [[[[Model model] xml] XML] 
+      writeToFile: path 
+      atomically: YES 
+      encoding: NSUTF8StringEncoding 
+      error: NULL];
+    }
   }
 
 // Update the run count.
