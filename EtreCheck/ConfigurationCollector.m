@@ -135,7 +135,7 @@
       
     // All the beta testers have an El Capitan file.
     // I guess this is permanently broken.
-    if([[Model model] ignoreKnownAppleFailures])
+    if(!self.simulating && [[Model model] ignoreKnownAppleFailures])
       if((version >= kYosemite) && (attributes.fileSize != expectedSize))
         switch(version)
           {

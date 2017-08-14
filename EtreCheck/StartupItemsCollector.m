@@ -213,16 +213,12 @@
         {
         NSMutableString * compositeVersion = [NSMutableString string];
         
-        [compositeVersion appendString: @"("];
-        
         if([appVersion length] > 0)
           [compositeVersion appendString: appVersion];
         
         if([OSVersion length] > 0)
           [compositeVersion appendFormat: @" - %@", OSVersion];
 
-        [compositeVersion appendString: @")"];
-          
         version = compositeVersion;
         }
       }
@@ -243,7 +239,11 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(@"    %@: %@ Path: %@\n", NULL),
-          name, version, cleanPath]
+          name, 
+          [version length] > 0
+            ? [NSString stringWithFormat: @"(%@)", version]
+            : @"", 
+          cleanPath]
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],

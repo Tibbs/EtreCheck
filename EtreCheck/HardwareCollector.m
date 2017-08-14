@@ -30,9 +30,6 @@
 @synthesize marketingName = myMarketingName;
 @synthesize EnglishMarketingName = myEnglishMarketingName;
 @synthesize CPUCode = myCPUCode;
-@synthesize supportsHandoff = mySupportsHandoff;
-@synthesize supportsInstantHotspot = mySupportsInstantHotspot;
-@synthesize supportsLowEnergy = mySupportsLowEnergy;
 
 // Constructor.
 - (id) init
@@ -97,66 +94,12 @@
 // Perform the collection.
 - (void) performCollect
   {
-  [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
   [self collectNetwork];
   [self collectiCloud];
     
   [self.result appendCR];
-  }
-
-// Collect bluetooth information.
-- (void) collectBluetooth
-  {
-  NSArray * args =
-    @[
-      @"-xml",
-      @"SPBluetoothDataType"
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
-    {
-    NSArray * plist =
-      [NSArray readPropertyListData: subProcess.standardOutput];
-  
-    if(plist && [plist count])
-      {
-      NSArray * infos =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos respondsToSelector: @selector(objectAtIndex:)])
-        if([infos count])
-          for(NSDictionary * info in infos)
-            {
-            if([info respondsToSelector: @selector(objectForKey:)])
-              {
-              NSDictionary * localInfo =
-                [info objectForKey: @"local_device_title"];
-              
-              NSString * generalSupportsHandoff =
-                [localInfo objectForKey: @"general_supports_handoff"];
-              NSString * generalSupportsInstantHotspot =
-                [localInfo
-                  objectForKey: @"general_supports_instantHotspot"];
-              NSString * generalSupportsLowEnergy =
-                [localInfo objectForKey: @"general_supports_lowEnergy"];
-                
-              self.supportsHandoff =
-                [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
-              self.supportsInstantHotspot =
-                [generalSupportsInstantHotspot
-                  isEqualToString: @"attrib_Yes"];
-              self.supportsLowEnergy =
-                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];                
-              }
-            }
-      }
-    }
-    
-  [subProcess release];
   }
 
 // Collect sysctl information.
@@ -226,7 +169,6 @@
         for(NSDictionary * info in infos)
           [self printMachineInformation: info];
           
-        [self printBluetoothInformation];
         [self printWirelessInformation];
         [self printBatteryInformation];
         }
@@ -706,85 +648,6 @@
     }
 
   [self.model endElement: @"memorybanks"];
-  }
-
-// Print information about bluetooth.
-- (void) printBluetoothInformation
-  {
-  NSString * info = [self collectBluetoothInformation];
-  
-  [self.result
-    appendString:
-      [NSString 
-        stringWithFormat: 
-          NSLocalizedString(@"    Bluetooth: %@\n", NULL), info]];
-  
-  [self.model addElement: @"bluetooth" value: info];
-  }
-
-// Collect bluetooth information.
-- (NSString *) collectBluetoothInformation
-  {
-  if([self supportsContinuity])
-    return NSLocalizedString(@"Good - Handoff/Airdrop2 supported", NULL);
-              
-  return NSLocalizedString(@"Old - Handoff/Airdrop2 not supported", NULL);
-  }
-
-// Is continuity supported?
-- (bool) supportsContinuity
-  {
-  if(self.supportsHandoff)
-    return YES;
-    
-  NSString * model = [[Model model] model];
-  
-  NSString * specificModel = nil;
-  int target = 0;
-  int number = 0;
-  
-  if([model hasPrefix: @"MacBookPro"])
-    {
-    specificModel = @"MacBookPro";
-    target = 9;
-    }
-  else if([model hasPrefix: @"iMac"])
-    {
-    specificModel = @"iMac";
-    target = 13;
-    }
-  else if([model hasPrefix: @"MacPro"])
-    {
-    specificModel = @"MacPro";
-    target = 6;
-    }
-  else if([model hasPrefix: @"MacBookAir"])
-    {
-    specificModel = @"MacBookAir";
-    target = 5;
-    }
-  else if([model hasPrefix: @"MacBook"])
-    {
-    specificModel = @"MacBook";
-    target = 8;
-    }
-  else if([model hasPrefix: @"Macmini"])
-    {
-    specificModel = @"Macmini";
-    target = 6;
-    }
-    
-  if(specificModel)
-    {
-    NSScanner * scanner = [NSScanner scannerWithString: model];
-    
-    if([scanner scanString: specificModel intoString: NULL])
-      if([scanner scanInt: & number])
-        if(number >= target)
-          self.supportsHandoff = YES;
-    }
-    
-  return self.supportsHandoff;
   }
 
 // Print wireless information.
