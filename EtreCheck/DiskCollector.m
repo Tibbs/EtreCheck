@@ -249,7 +249,8 @@
       [self.model addElement: @"type" value: medium];
       
       if([medium isEqualToString: @"Solid State"])
-        [self.model addElement: @"TRIM" value: TRIM];
+        [self.model 
+          addElement: @"TRIM" boolValue: [TRIM isEqualToString: @"Yes"]];
 
       [self.result
         appendString:

@@ -403,7 +403,7 @@
       [formatter release];
       }
 
-    [self.model addElement: @"name" value: name];    
+    [self.model addElement: @"device" value: name];    
     [self.model addElement: @"size" valueWithUnits: size];
     [self.model addElement: @"status" value: status];
     
