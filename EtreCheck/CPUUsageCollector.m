@@ -117,6 +117,7 @@
             @"%", @"units", @"number", @"type", nil]];
         
     [self.model addElement: @"name" value: name];
+    [self.model addElement: @"count" intValue: count];
     
     [self.model endElement: @"process"];
     

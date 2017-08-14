@@ -134,9 +134,7 @@
   
   [self.model addElement: @"size" valueWithUnits: memoryString];
   [self.model addElement: @"name" value: name];
-  
-  if(count > 1)
-    [self.model addElement: @"count" intValue: count];
+  [self.model addElement: @"count" intValue: count];
   
   [self.model endElement: @"process"];
 
