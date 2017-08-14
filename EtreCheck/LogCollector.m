@@ -94,6 +94,9 @@
   // I could do this on Sierra:
   // log show --predicate '(process == "kernel") && (eventMessage endswith ": I/O error.")'
   // but it would take forever.
+    
+  if(self.simulating)
+    [self parseShutdownCode: -100];
   }
 
 // Collect results from the kernel log entry.
@@ -357,6 +360,8 @@
 // Collect results from the ioreg_output_description log entry.
 - (void) collectIOReg: (NSString *) content
   {
+  BOOL found = NO;
+  
   NSArray * lines = [content componentsSeparatedByString: @"\n"];
   
   for(NSString * line in lines)
@@ -378,7 +383,10 @@
       int shutdownCause = 0;
       
       if([scanner scanInt: & shutdownCause])
+        {
         [self parseShutdownCode: shutdownCause];
+        found = YES;
+        }
       }
     }
   }

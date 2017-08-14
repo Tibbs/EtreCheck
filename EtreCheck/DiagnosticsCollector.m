@@ -108,6 +108,15 @@
     for(NSDictionary * result in results)
       [self collectDiagnosticResult: result];
     }
+    
+  if(self.simulating)
+    [self 
+      collectDiagnosticResult: 
+        [NSDictionary dictionaryWithObjectsAndKeys:
+          @"spdiags_post_value", @"_name", 
+          @"spdiags_simulated_value", @"spdiags_result_key", 
+          [NSDate date], @"spdiags_last_run_key",
+          nil]];
   }
 
 // Collect a single diagnostic result.
@@ -561,7 +570,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@     - %@",
+              @"    %@\t%@",
               [Utilities dateAsString: event.date],
               event.name]
         attributes:
@@ -578,7 +587,7 @@
           appendString:
             [NSString
               stringWithFormat:
-                @"    %@    %@ %@",
+                @"    %@\t%@ %@",
                 [Utilities dateAsString: event.date],
                 [self getEventType: event.type],
                 event.name]
@@ -592,7 +601,7 @@
           appendString:
             [NSString
               stringWithFormat:
-                @"    %@    %@ %@",
+                @"    %@\t%@ %@",
                 [Utilities dateAsString: event.date],
                 [self getEventType: event.type],
                 event.name]];
@@ -603,7 +612,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@    %@ %@",
+              @"    %@\t%@ %@",
               [Utilities dateAsString: event.date],
               event.name,
               [self getEventType: event.type]]];
@@ -681,7 +690,7 @@
       return NSLocalizedString(@"Panic", NULL);
       
     case kShutdown:
-      return NSLocalizedString(@"Last shutdown cause:", NULL);
+      return NSLocalizedString(@"Last shutdown cause", NULL);
       
     case kSelfTestFail:
       return NSLocalizedString(@"Self test - failed", NULL);
