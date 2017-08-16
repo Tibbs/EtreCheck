@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "XMLBuilder.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -39,14 +40,20 @@
       NSString * name = [font objectForKey: @"_name"];
       NSString * path = [font objectForKey: @"path"];
 
+      NSString * cleanPath = [Utilities cleanPath: path];
+      
+      [self.model startElement: @"font"];
+      
+      [self.model addElement: @"name" value: name];
+      [self.model addElement: @"path" value: cleanPath];
+      
+      [self.model endElement: @"font"];
+      
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(
-                @"    %@: %@\n", NULL),
-              name,
-              [Utilities cleanPath: path]]];
+              NSLocalizedString(@"    %@: %@\n", NULL), name, cleanPath]];
       }
       
     [self.result appendCR];
