@@ -728,18 +728,18 @@
     appendString:
       [NSString 
         stringWithFormat: 
-          NSLocalizedString(@"    Bluetooth: %@\n", NULL), info]];
+          NSLocalizedString(@"    Handoff/Airdrop2: %@\n", NULL), info]];
   
-  [self.model setString: info forKey: @"bluetooth"];
+  [self.model setString: info forKey: @"continuity"];
   }
 
 // Collect bluetooth information.
 - (NSString *) collectBluetoothInformation
   {
   if([self supportsContinuity])
-    return NSLocalizedString(@"Good - Handoff/Airdrop2 supported", NULL);
+    return NSLocalizedString(@"supported", NULL);
               
-  return NSLocalizedString(@"Old - Handoff/Airdrop2 not supported", NULL);
+  return NSLocalizedString(@"not supported", NULL);
   }
 
 // Is continuity supported?

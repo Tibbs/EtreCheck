@@ -139,8 +139,8 @@
 "%d hour (plural rule: other)" = "environ %d heures";
 "Upgradeable" = "Extensible";
 "Not upgradeable" = "Pas extensible";
-"Good - Handoff/Airdrop2 supported" = "Bon - Handoff/Airdrop2 disponible";
-"Old - Handoff/Airdrop2 not supported" = "Obsolète - Handoff/Airdrop2 non disponible";
+"supported" = "disponible";
+"not supported" = "non disponible";
 "%d interface (plural rule: zero)" = "aucune interface\n";
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
