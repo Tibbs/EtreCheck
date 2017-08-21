@@ -754,7 +754,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
               numberFromString:
                 [attributes objectForKey: @"CFBundleVersion"]];
           
-          if([version intValue] > [appVersion intValue])
+          if(YES || [version intValue] > [appVersion intValue])
             [self
               presentUpdate:
                 [attributes
