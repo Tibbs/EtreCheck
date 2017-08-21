@@ -66,15 +66,13 @@
     
   [subProcess release];
     
-  // There should always be data found.
-  if(dataFound)
-    {
-    // Now that I know what OS version I have, load the software signatures
-    // and expected launchd files.
-    [self loadAppleSoftware];
-    [self loadAppleLaunchd];
-    }
-  else
+  // Load the software signatures and expected launchd files. Even if no
+  // data was found, we will assume 10.12.6 just to keep the output clean 
+  // and still print a failure message next.
+  [self loadAppleSoftware];
+  [self loadAppleLaunchd];
+  
+  if(!dataFound)
     {
     [self.result
       appendString:
@@ -346,40 +344,94 @@
 // Parse the OS version.
 - (BOOL) parseOSVersion: (NSString *) profilerVersion
   {
-  if(profilerVersion)
+  if([profilerVersion length] > 0)
     {
-    NSScanner * scanner = [NSScanner scannerWithString: profilerVersion];
+    NSScanner * scanner = 
+      [[NSScanner alloc] initWithString: profilerVersion];
     
     [scanner scanUpToString: @"(" intoString: NULL];
     [scanner scanString: @"(" intoString: NULL];
     
-    int majorVersion = 0;
+    NSString * buildVersion = nil;
+      
+    bool found = [scanner scanUpToString: @")" intoString: & buildVersion];
+      
+    if(found)
+      found = [self parseBuildVersion: buildVersion];
     
-    bool found = [scanner scanInt: & majorVersion];
+    [scanner release];
+    
+    if(found)
+      return YES;
+    }
+    
+  // Sometimes this doesn't work in extreme cases. Keep trying.
+  
+  BOOL result = NO;
+  
+  NSArray * args = @[@"-buildVersion"];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/bin/sw_vers" arguments: args])
+    {
+    NSString * buildVersion = 
+      [[NSString alloc] 
+        initWithData: subProcess.standardOutput 
+        encoding: NSUTF8StringEncoding];
+     
+    if([buildVersion length] > 0)
+      result = [self parseBuildVersion: buildVersion];
+      
+    [buildVersion release];
+    }
+    
+  [subProcess release];
+  
+  // If I have a system version, set the verification flag.
+  if(result)
+    [[Model model] setVerifiedSystemVersion: YES];
+    
+  // Otherwise, just pick Sierra but keep the flag off.
+  else
+    {
+    [[Model model] setMajorOSVersion: 16];
+    [[Model model] setMinorOSVersion: 6];
+    }
+    
+  return result;
+  }
+
+// Parse a build version.
+- (bool) parseBuildVersion: (NSString *) buildVersion
+  {
+  NSScanner * scanner = [[NSScanner alloc] initWithString: buildVersion];
+    
+  int majorVersion = 0;
+  
+  bool found = [scanner scanInt: & majorVersion];
+  
+  if(found)
+    {
+    [[Model model] setMajorOSVersion: majorVersion];
+    
+    NSString * minorVersion = nil;
+    
+    found = [scanner scanUpToString: @")" intoString: & minorVersion];
     
     if(found)
       {
-      [[Model model]
-        setMajorOSVersion: majorVersion];
+      unichar ch;
       
-      NSString * minorVersion = nil;
+      [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
       
-      found = [scanner scanUpToString: @")" intoString: & minorVersion];
-      
-      if(found)
-        {
-        unichar ch;
-        
-        [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
-        
-        [[Model model] setMinorOSVersion: ch - 'A'];
-        
-        return YES;
-        }
+      [[Model model] setMinorOSVersion: ch - 'A'];
       }
     }
     
-  return NO;
+  [scanner release];
+  
+  return found;
   }
 
 // Parse system uptime.
