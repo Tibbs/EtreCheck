@@ -135,8 +135,8 @@
 "%d hour (plural rule: other)" = "environ %d heures";
 "Upgradeable" = "Extensible";
 "Not upgradeable" = "Pas extensible";
-"Good - Handoff/Airdrop2 supported" = "Bon - Handoff/Airdrop2 disponible";
-"Old - Handoff/Airdrop2 not supported" = "Obsolète - Handoff/Airdrop2 non disponible";
+"supported" = "disponible";
+"not supported" = "non disponible";
 "%d interface (plural rule: zero)" = "aucune interface\n";
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
@@ -263,6 +263,7 @@
 "oldetrecheckversion" = "Votre version d’EtreCheck est obsolète. Cette opération nécessite une version récente d’EtreCheck.";
 "Unverified EtreCheck version!" = "Version d’EtreCheck non vérifiée !";
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version récente d’EtreCheck. Si vous utilisez un pare-feu, veuillez svp autoriser l’accès aux serveurs EtreCheck.";
+"unverifiedsystemversion" = "Impossible de vérifier votre version de macOS. Cette opération nécessite une version de macOS vérifiée.";
 " (cache only)" = " (seulement en cache)";
 "donateurl" = "etrecheck.com/donate_fr.php?invoice=%@";
 "Remove" = "Enlever";

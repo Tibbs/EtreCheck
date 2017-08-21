@@ -76,6 +76,7 @@
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
+  bool myVerifiedSystemVersion;
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
@@ -212,6 +213,9 @@
 
 // Do I have a verified EtreCheck version?
 @property (assign) bool verifiedEtreCheckVersion;
+
+// Do I have a verified System version?
+@property (assign) bool verifiedSystemVersion;
 
 // Apple software.
 @property (retain) NSDictionary * appleSoftware;

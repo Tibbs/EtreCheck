@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
@@ -860,7 +860,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="594" height="395"/>
-                                    <size key="maxSize" width="594" height="10000000"/>
+                                    <size key="maxSize" width="596" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
@@ -1965,27 +1965,26 @@ Gw
             <point key="canvasLocation" x="178" y="1988"/>
         </window>
         <window title="Update Available" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="alertPanel" frameAutosaveName="" id="gjM-qW-zLi" userLabel="Update Window">
-            <windowStyleMask key="styleMask" titled="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="450" height="264"/>
+            <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
+            <rect key="contentRect" x="152" y="158" width="585" height="294"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
-            <view key="contentView" id="Qyl-m9-O1R">
-                <rect key="frame" x="0.0" y="0.0" width="450" height="264"/>
+            <view key="contentView" misplaced="YES" id="Qyl-m9-O1R">
+                <rect key="frame" x="0.0" y="0.0" width="585" height="294"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="JmD-TL-KmC">
-                        <rect key="frame" x="20" y="61" width="410" height="100"/>
+                    <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="JmD-TL-KmC">
+                        <rect key="frame" x="20" y="61" width="545" height="130"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="aA3-fg-DCT">
-                            <rect key="frame" x="1" y="1" width="408" height="98"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <rect key="frame" x="1" y="1" width="543" height="128"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" baseWritingDirection="leftToRight" findStyle="panel" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
-                                    <rect key="frame" x="0.0" y="0.0" width="408" height="98"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="543" height="128"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="408" height="98"/>
-                                    <size key="maxSize" width="528" height="10000000"/>
+                                    <size key="minSize" width="543" height="128"/>
+                                    <size key="maxSize" width="543" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 </textView>
                             </subviews>
@@ -1995,12 +1994,12 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="O1a-D6-VFw">
-                            <rect key="frame" x="363" y="1" width="16" height="81"/>
+                            <rect key="frame" x="528" y="1" width="16" height="128"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                     <button toolTip="Quit EtreCheck and download the new version" verticalHuggingPriority="750" id="uHS-SL-O9E">
-                        <rect key="frame" x="255" y="13" width="181" height="32"/>
+                        <rect key="frame" x="390" y="13" width="181" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Quit and go to update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2014,8 +2013,8 @@ DQ
                             <action selector="quitAndUpdate:" target="bfz-hP-xHF" id="vcr-jD-xJ6"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" id="nUF-9K-mgf">
-                        <rect key="frame" x="104" y="180" width="318" height="64"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" allowsCharacterPickerTouchBarItem="NO" id="nUF-9K-mgf">
+                        <rect key="frame" x="104" y="210" width="463" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and open the website to download the new version?" id="EHD-pu-5o0">
                             <font key="font" metaFont="systemBold"/>
@@ -2024,7 +2023,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ru2-44-hOI">
-                        <rect key="frame" x="20" y="180" width="64" height="64"/>
+                        <rect key="frame" x="20" y="210" width="64" height="64"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="sxh-Ky-eB6"/>
                     </imageView>
@@ -2045,7 +2044,7 @@ Gw
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="75" y="1880"/>
+            <point key="canvasLocation" x="142.5" y="1895"/>
         </window>
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="EtreCheck Preferences" animationBehavior="default" id="2C0-eF-sJO" userLabel="Preferences Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>

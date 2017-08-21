@@ -1623,6 +1623,29 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       
       [self.log appendString: @"\n\n"];
       }
+      
+  if([NSLocalizedString(@"downloadetrecheck", NULL) length] == 17)
+    {
+    NSString * message = @"Failed to load language resources!";
+    
+    NSLocale * locale = [NSLocale currentLocale];
+  
+    NSString * language =
+      [[locale objectForKey: NSLocaleLanguageCode] lowercaseString];
+
+    if([language isEqualToString: @"fr"])
+      message = @"Échec de chargement des ressources linguistiques"; 
+
+    [self.log
+      appendString: message
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+    [self.log appendString: @"\n\n"];
+    }
   }
 
 // Print the problem from the user.

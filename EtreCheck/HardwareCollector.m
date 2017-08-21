@@ -646,8 +646,88 @@
 
     [self.model endElement: @"memorybank"];
     }
+  }
 
-  [self.model endElement: @"memorybanks"];
+// Print information about bluetooth.
+- (void) printBluetoothInformation
+  {
+  NSString * info = [self collectBluetoothInformation];
+  
+  [self.result
+    appendString:
+      [NSString 
+        stringWithFormat: 
+          NSLocalizedString(@"    Handoff/Airdrop2: %@\n", NULL), info]];
+  
+  [self.model setString: info forKey: @"continuity"];
+  }
+
+// Collect bluetooth information.
+- (NSString *) collectBluetoothInformation
+  {
+  [self.model 
+    addElement: @"continuity" boolValue: [self supportsContinuity]];
+
+  if([self supportsContinuity])
+    return NSLocalizedString(@"supported", NULL);
+              
+  return NSLocalizedString(@"not supported", NULL);
+  }
+
+// Is continuity supported?
+- (bool) supportsContinuity
+  {
+  if(self.supportsHandoff)
+    return YES;
+    
+  NSString * model = [[Model model] model];
+  
+  NSString * specificModel = nil;
+  int target = 0;
+  int number = 0;
+  
+  if([model hasPrefix: @"MacBookPro"])
+    {
+    specificModel = @"MacBookPro";
+    target = 9;
+    }
+  else if([model hasPrefix: @"iMac"])
+    {
+    specificModel = @"iMac";
+    target = 13;
+    }
+  else if([model hasPrefix: @"MacPro"])
+    {
+    specificModel = @"MacPro";
+    target = 6;
+    }
+  else if([model hasPrefix: @"MacBookAir"])
+    {
+    specificModel = @"MacBookAir";
+    target = 5;
+    }
+  else if([model hasPrefix: @"MacBook"])
+    {
+    specificModel = @"MacBook";
+    target = 8;
+    }
+  else if([model hasPrefix: @"Macmini"])
+    {
+    specificModel = @"Macmini";
+    target = 6;
+    }
+    
+  if(specificModel)
+    {
+    NSScanner * scanner = [NSScanner scannerWithString: model];
+    
+    if([scanner scanString: specificModel intoString: NULL])
+      if([scanner scanInt: & number])
+        if(number >= target)
+          self.supportsHandoff = YES;
+    }
+    
+  return self.supportsHandoff;
   }
 
 // Print wireless information.
