@@ -215,6 +215,16 @@
                         dictionaryWithObjectsAndKeys:
                           physicalDevice, @"device_name", nil]
                     forKey: @"physical_drive"];
+                
+                NSNumber * encryption = [volume objectForKey: @"Encryption"];
+                NSNumber * locked = [volume objectForKey: @"Locked"];
+            
+                if((encryption != nil) && (locked != nil))
+                  {
+                  [virtualVolume
+                    setObject: encryption forKey: @"encrypted"];
+                  [virtualVolume setObject: locked forKey: @"locked"];
+                  }
                 }
               }
             }
@@ -278,6 +288,13 @@
   if(pvs)
     [self printCoreStoragePvInformation: pvs indent: indent];
     
+  NSDictionary * encrypted = [volume objectForKey: @"encrypted"];
+  
+  if([encrypted respondsToSelector: @selector(boolValue)])
+    [self
+      printEncryptionInformationForVolume: volume
+      indent: indent];
+
   NSDictionary * physicalDrive = [volume objectForKey: @"physical_drive"];
   
   if([physicalDrive respondsToSelector: @selector(objectForKey:)])
@@ -309,7 +326,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"%@%@ %@ %@",
+            @"%@%@ %@ (%@)",
             indent,
             NSLocalizedString(@"Encrypted", NULL),
             encryptionType,
@@ -411,6 +428,31 @@
               name,
               size,
               status]];
+
+    [self.result appendCR];
+    }
+  }
+
+// Print APFS encryption information about a volume.
+- (void) printEncryptionInformationForVolume: (NSDictionary *) volume
+  indent: (NSString *) indent
+  {
+  NSNumber * encrypted = [volume objectForKey: @"encrypted"];
+  NSNumber * locked = [volume objectForKey: @"locked"];
+
+  if([encrypted boolValue])
+    {
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"%@%@ %@ (%@)",
+            indent,
+            NSLocalizedString(@"Encrypted:", NULL),
+            NSLocalizedString(@"Yes", NULL),
+            [locked boolValue]
+              ? NSLocalizedString(@"Locked", NULL)
+              : NSLocalizedString(@"Unlocked", NULL)]];
 
     [self.result appendCR];
     }

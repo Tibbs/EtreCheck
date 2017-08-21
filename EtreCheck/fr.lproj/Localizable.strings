@@ -145,7 +145,7 @@
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
 "Report complete" = "Rapport complet";
-"Encrypted" = "Crypté";
+"Encrypted:" = "Crypté :";
 "Locked" = "Fermé";
 "Unlocked" = "Ouvert";
 "VRAM: %@" = "VRAM : %@";
