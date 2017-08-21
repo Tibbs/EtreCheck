@@ -67,6 +67,7 @@
     <string>com.MTWB.Product.plist</string>
     <string>com.MacUpdater.agent.plist</string>
     <string>com.My-ShopMate.agent.plist</string>
+    <string>com.MyMacUpdater.agent.plist</string>
     <string>com.MyShopMate.agent.plist</string>
     <string>com.MySoftUpdate.agent.plist</string>
     <string>com.MyUpdater.agent.plist</string>
