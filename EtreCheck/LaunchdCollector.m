@@ -221,6 +221,8 @@
     addObject: @"com.apple.SafariBookmarksSyncer.plist"];
   [self.knownAppleFailures
     addObject: @"com.apple.postfix.newaliases.plist"];
+  [self.knownAppleFailures 
+    addObject: @"com.apple.installer.cleanupinstaller.plist"];
   }
 
 #pragma mark - Collection
@@ -323,7 +325,12 @@
       // deleted.
       else if([signature isEqualToString: kExecutableMissing])
         {
-        [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
+        // Should I ignore this failure?
+        if([self ignoreFailuresOnFile: filename])
+          [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
+          
+        else
+          [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
 
         return info;
         }
@@ -904,7 +911,7 @@
   info: (NSMutableDictionary *) info
   output: (NSMutableAttributedString *) output
   {
-  // Apples file get special treatment.
+  // Apple file get special treatment.
   if([[info objectForKey: kApple] boolValue])
     if(![self formatApplePropertyListFile: path info: info])
       {
@@ -1003,7 +1010,18 @@
         
       // These are errors.
       else if([signature isEqualToString: kExecutableMissing])
+        {
+        // Should I ignore this failure?
+        if([self ignoreFailuresOnFile: file])
+          {
+          [status setObject: ignore forKey: kIgnored];
+
+          if(hideAppleTasks)
+            return NO;
+          }
+          
         return YES;
+        }
         
       // Anything else will cause the item to be printed.
       else if((signature != nil) && [[Model model] showSignatureFailures])
