@@ -789,6 +789,9 @@
   if(![[NSFileManager defaultManager] fileExistsAtPath: path])
     return kExecutableMissing;
       
+  if([Utilities isShellExecutable: path])
+    return kShell;
+
   // Get the app path.
   path = [Utilities resolveBundlePath: path];
     
@@ -1039,6 +1042,9 @@
   else if([name isEqualToString: @"php"])
     shell = YES;
 
+  else if([name isEqualToString: @"osascript"])
+    shell = YES;
+
   return shell;
   }
 
@@ -1066,6 +1072,9 @@
     shell = YES;
 
   else if([path hasSuffix: @".php"])
+    shell = YES;
+
+  else if([path hasSuffix: @".scpt"])
     shell = YES;
 
   // Check for shebang.
