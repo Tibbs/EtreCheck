@@ -344,6 +344,8 @@
 // Parse the OS version.
 - (BOOL) parseOSVersion: (NSString *) profilerVersion
   {
+  BOOL result = NO;
+  
   if([profilerVersion length] > 0)
     {
     NSScanner * scanner = 
@@ -362,32 +364,32 @@
     [scanner release];
     
     if(found)
-      return YES;
+      result = YES;
     }
     
   // Sometimes this doesn't work in extreme cases. Keep trying.
-  
-  BOOL result = NO;
-  
-  NSArray * args = @[@"-buildVersion"];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/sw_vers" arguments: args])
+  if(!result)
     {
-    NSString * buildVersion = 
-      [[NSString alloc] 
-        initWithData: subProcess.standardOutput 
-        encoding: NSUTF8StringEncoding];
-     
-    if([buildVersion length] > 0)
-      result = [self parseBuildVersion: buildVersion];
+    NSArray * args = @[@"-buildVersion"];
+    
+    SubProcess * subProcess = [[SubProcess alloc] init];
+    
+    if([subProcess execute: @"/usr/bin/sw_vers" arguments: args])
+      {
+      NSString * buildVersion = 
+        [[NSString alloc] 
+          initWithData: subProcess.standardOutput 
+          encoding: NSUTF8StringEncoding];
+       
+      if([buildVersion length] > 0)
+        result = [self parseBuildVersion: buildVersion];
+        
+      [buildVersion release];
+      }
       
-    [buildVersion release];
+    [subProcess release];
     }
     
-  [subProcess release];
-  
   // If I have a system version, set the verification flag.
   if(result)
     [[Model model] setVerifiedSystemVersion: YES];
