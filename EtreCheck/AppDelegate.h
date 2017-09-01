@@ -103,6 +103,7 @@
   BOOL myDonationVerified;
   
   BOOL myCopyDisabled;
+  BOOL myActive;
   }
   
 @property (retain) IBOutlet EtreCheckWindow * window;
@@ -179,6 +180,7 @@
 @property (assign) BOOL donationVerified;
 @property (readonly) NSTextView * currentTextView;
 @property (assign) BOOL copyDisabled;
+@property (assign) BOOL active;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
