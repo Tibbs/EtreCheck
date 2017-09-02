@@ -560,6 +560,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.helpButton.image = self.helpButtonInactiveImage;
   self.donateButton.image = self.donateButtonInactiveImage;
   
+  [self.collectionStatusLabel
+    setTextColor: [NSColor disabledControlTextColor]];
+  
   [self.reportView setContentFilters: @[grayscale, gamma]];
   
   if(self.animationView)
@@ -592,6 +595,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.helpButton.image = self.helpButtonImage;
   self.donateButton.image = self.donateButtonImage;
   
+  [self.collectionStatusLabel setTextColor: [NSColor controlTextColor]];
+
   [self.reportView setContentFilters: @[]];
 
   if(self.animationView)

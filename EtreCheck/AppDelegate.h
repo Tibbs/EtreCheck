@@ -47,6 +47,7 @@
   NSImageView * myDemonImage;
   NSImageView * myAgentImage;
   NSString * myCollectionStatus;
+  NSTextField * myCollectionStatusLabel;
   NSWindow * myStartPanel;
   SlideshowView * myStartPanelAnimationView;
   NSWindow * myIntroPanel;
@@ -129,6 +130,7 @@
 @property (retain) IBOutlet NSImageView * demonImage;
 @property (retain) IBOutlet NSImageView * agentImage;
 @property (retain) NSString * collectionStatus;
+@property (retain) IBOutlet NSTextField * collectionStatusLabel;
 @property (retain) IBOutlet NSWindow * startPanel;
 @property (retain) IBOutlet SlideshowView * startPanelAnimationView;
 @property (retain) IBOutlet NSWindow * introPanel;
