@@ -44,8 +44,8 @@
 		A54A9EF51DC0684200F92CA3 /* INPopoverController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */; };
 		A54A9EF61DC0684200F92CA3 /* INPopoverController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A54A9EF91DC3139A00F92CA3 /* VerticalScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */; };
-		A54A9EFC1DC5535400F92CA3 /* inpopover.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = A54A9EFA1DC5535400F92CA3 /* inpopover.txt */; };
-		A54A9EFD1DC5535400F92CA3 /* smartmontools.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = A54A9EFB1DC5535400F92CA3 /* smartmontools.txt */; };
+		A54A9EFC1DC5535400F92CA3 /* inpopover.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = A54A9EFA1DC5535400F92CA3 /* inpopover.html */; };
+		A54A9EFD1DC5535400F92CA3 /* smartmontools.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = A54A9EFB1DC5535400F92CA3 /* smartmontools.html */; };
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
 		A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A54DF6561BD70A3C00753E87 /* TOU.rtf */; };
@@ -147,8 +147,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				A54A9EFC1DC5535400F92CA3 /* inpopover.txt in CopyFiles */,
-				A54A9EFD1DC5535400F92CA3 /* smartmontools.txt in CopyFiles */,
+				A54A9EFC1DC5535400F92CA3 /* inpopover.html in CopyFiles */,
+				A54A9EFD1DC5535400F92CA3 /* smartmontools.html in CopyFiles */,
 				A5C9E0811DBDD1DA0099288B /* smartctl in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,8 +229,8 @@
 		A54A9EF41DC0684200F92CA3 /* INPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = INPopoverController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A54A9EF71DC3139A00F92CA3 /* VerticalScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalScrollView.h; sourceTree = "<group>"; };
 		A54A9EF81DC3139A00F92CA3 /* VerticalScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalScrollView.m; sourceTree = "<group>"; };
-		A54A9EFA1DC5535400F92CA3 /* inpopover.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = inpopover.txt; path = licenses/inpopover.txt; sourceTree = "<group>"; };
-		A54A9EFB1DC5535400F92CA3 /* smartmontools.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = smartmontools.txt; path = licenses/smartmontools.txt; sourceTree = "<group>"; };
+		A54A9EFA1DC5535400F92CA3 /* inpopover.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = inpopover.html; path = licenses/inpopover.html; sourceTree = "<group>"; };
+		A54A9EFB1DC5535400F92CA3 /* smartmontools.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = smartmontools.html; path = licenses/smartmontools.html; sourceTree = "<group>"; };
 		A54B87331A1D4F1900F25213 /* HelpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpManager.h; sourceTree = "<group>"; };
 		A54B87341A1D4F1900F25213 /* HelpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpManager.m; sourceTree = "<group>"; };
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
@@ -547,8 +547,8 @@
 		A54A9EFE1DC5536000F92CA3 /* Licenses */ = {
 			isa = PBXGroup;
 			children = (
-				A54A9EFA1DC5535400F92CA3 /* inpopover.txt */,
-				A54A9EFB1DC5535400F92CA3 /* smartmontools.txt */,
+				A54A9EFA1DC5535400F92CA3 /* inpopover.html */,
+				A54A9EFB1DC5535400F92CA3 /* smartmontools.html */,
 			);
 			name = Licenses;
 			sourceTree = "<group>";
