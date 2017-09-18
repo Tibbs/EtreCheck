@@ -177,8 +177,12 @@
         case kElCapitan:
           [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
           break;
-        default:
+        case kSierra:
           [self loadAppleLaunchd: [plist objectForKey: @"10.12"]];
+          break;
+        case kHighSierra:
+        default:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.13"]];
           break;
         }
       }
@@ -327,6 +331,11 @@
     case kSierra:
       OSName = @"macOS";
       name = @"Sierra";
+      break;
+
+    case kHighSierra:
+      OSName = @"macOS";
+      name = @"High Sierra";
       break;
 
     default:

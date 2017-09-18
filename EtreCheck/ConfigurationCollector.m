@@ -121,6 +121,7 @@
         expectedSize = 2299;
         break;
       case kSierra:
+      case kHighSierra:
         expectedSize = 1563;
         break;
       }
@@ -135,6 +136,7 @@
           case kYosemite:
           case kElCapitan:
           case kSierra:
+          case kHighSierra:
             if(attributes.fileSize == 1242)
               expectedSize = attributes.fileSize;
             else if(attributes.fileSize == 1275)
