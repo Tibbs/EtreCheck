@@ -286,17 +286,17 @@
     lastBackup = [destination objectForKey: @"BACKUP_COMPLETED_DATE"];
     }
     
-  if(!snapshotCount)
+  if(snapshotCount == nil)
     snapshotCount = @0;
     
   [destination setObject: snapshotCount forKey: kSnapshotcount];
   
-  if(oldestBackup)
+  if(oldestBackup != nil)
     [destination
       setObject: [dateFormatter stringFromDate: oldestBackup]
       forKey: kOldestBackup];
     
-  if(lastBackup)
+  if(lastBackup != nil)
     [destination
       setObject: [dateFormatter stringFromDate: lastBackup]
       forKey: kLastbackup];
@@ -322,13 +322,13 @@
       NSNumber * lastDestination =
         [destination objectForKey: @"LastDestination"];
       
-      if(!kind)
+      if(kind.length == 0)
         kind = NSLocalizedString(@"Unknown", NULL);
         
-      if(!name)
+      if(name.length == 0)
         name = destinationID;
         
-      if(!lastDestination)
+      if(lastDestination == nil)
         lastDestination = @0;
         
       [destination setObject: kind forKey: @"Kind"];
@@ -340,35 +340,34 @@
   }
 
 // Print a volume being backed up.
-- (void) printBackedupVolume: (NSString *) UUID root: (BOOL) root
+- (void) printBackedupVolume: (NSString *) UUID
   {
   NSDictionary * volume =
     [[[Model model] volumes] objectForKey: UUID];
   
-  if(!volume)
+  if(volume.count == 0)
     return;
     
   NSString * mountPoint = [volume objectForKey: @"mount_point"];
   
   // See if this volume is excluded. If so, skip it.
-  if(mountPoint)
+  if(mountPoint.length > 0)
     if([excludedPaths containsObject: mountPoint])
       return;
 
   if([excludedVolumeUUIDs containsObject: UUID])
     return;
     
-  NSString * name = [volume objectForKey: @"_name"];
-
-  if(root)
-    name = NSLocalizedString(@"[redacted]", NULL);
-    
-  [self printVolume: volume name: name];
+  [self printVolume: volume];
   }
 
 // Print the volume.
-- (void) printVolume: (NSDictionary *) volume name: (NSString *) name
+- (void) printVolume: (NSDictionary *) volume
   {
+  NSString * name = [volume objectForKey: @"_name"];
+
+  NSString * volumeName = [Utilities cleanPath: name];
+  
   NSString * diskSize = NSLocalizedString(@"Unknown", NULL);
   NSString * spaceRequired = NSLocalizedString(@"Unknown", NULL);
 
@@ -395,7 +394,7 @@
         stringWithFormat:
           NSLocalizedString(
             @"        %@: Disk size: %@ Disk used: %@\n", NULL),
-          name, diskSize, spaceRequired]];
+          volumeName, diskSize, spaceRequired]];
 
   if(size)
     {
@@ -523,7 +522,7 @@
   // It can be specified directly in settings.
   NSString * root = [settings objectForKey: @"RootVolumeUUID"];
 
-  if(root.length)
+  if(root)
     [backedupVolumeUUIDs addObject: root];
 
   // Or it can be in each destination.
@@ -534,7 +533,7 @@
     // Root always gets backed up.
     root = [destination objectForKey: @"RootVolumeUUID"];
   
-    if(root.length)
+    if(root)
       [backedupVolumeUUIDs addObject: root];
     }
     
@@ -562,7 +561,7 @@
       if([excludedVolumeUUIDs containsObject: UUID])
         continue;
         
-      [self printBackedupVolume: UUID root: [root isEqualToString: UUID]];
+      [self printBackedupVolume: UUID];
       }
     }
   }

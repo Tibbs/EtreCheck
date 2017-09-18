@@ -562,6 +562,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [self.collectionStatusLabel
     setTextColor: [NSColor disabledControlTextColor]];
+    
+  [self.textSizeButton setEnabled: NO];
   
   [self.reportView setContentFilters: @[grayscale, gamma]];
   
@@ -596,6 +598,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.donateButton.image = self.donateButtonImage;
   
   [self.collectionStatusLabel setTextColor: [NSColor controlTextColor]];
+
+  [self.textSizeButton setEnabled: YES];
 
   [self.reportView setContentFilters: @[]];
 

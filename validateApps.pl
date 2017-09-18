@@ -44,6 +44,14 @@ foreach
   next 
     if $bundle =~ /\.(plist|so|dylib|dylib\..+)$/;
     
+  # Skip over string files.
+  next 
+    if $bundle =~ /\.strings$/;
+
+  # Skip ealf files.
+  next
+    if $bundle =~ /\.ealf$/;
+
   # Hack for MiniTerm.
   $bundle = '/usr/libexec/MiniTerm.app'
     if $bundle eq '/usr/libexec/MiniTerm.app/Contents/MacOS/MiniTerm';

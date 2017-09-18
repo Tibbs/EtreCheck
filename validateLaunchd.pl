@@ -427,7 +427,7 @@ sub getManualAdditions
     programArguments => ['/System/Library/CoreServices/HID/FirmwareUpdates/hidfud'],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -438,7 +438,7 @@ sub getManualAdditions
     programArguments => [],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -449,7 +449,7 @@ sub getManualAdditions
     programArguments => [],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -460,7 +460,7 @@ sub getManualAdditions
     programArguments => [],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -471,7 +471,7 @@ sub getManualAdditions
     programArguments => [],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -482,7 +482,7 @@ sub getManualAdditions
     programArguments => ['/macOS Install Data/Locked Files/cleanup_installer'],
     signature => 'executablemissing'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -490,7 +490,7 @@ sub getManualAdditions
     path => '/System/Library/LaunchDaemons/com.apple.jetsamproperties.Mac.plist',
     signature => 'executablemissing'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   return @additions;
   }
