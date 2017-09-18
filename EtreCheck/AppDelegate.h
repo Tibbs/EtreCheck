@@ -47,6 +47,7 @@
   NSImageView * myDemonImage;
   NSImageView * myAgentImage;
   NSString * myCollectionStatus;
+  NSTextField * myCollectionStatusLabel;
   NSWindow * myStartPanel;
   SlideshowView * myStartPanelAnimationView;
   NSWindow * myIntroPanel;
@@ -103,6 +104,7 @@
   BOOL myDonationVerified;
   
   BOOL myCopyDisabled;
+  BOOL myActive;
   }
   
 @property (retain) IBOutlet EtreCheckWindow * window;
@@ -128,6 +130,7 @@
 @property (retain) IBOutlet NSImageView * demonImage;
 @property (retain) IBOutlet NSImageView * agentImage;
 @property (retain) NSString * collectionStatus;
+@property (retain) IBOutlet NSTextField * collectionStatusLabel;
 @property (retain) IBOutlet NSWindow * startPanel;
 @property (retain) IBOutlet SlideshowView * startPanelAnimationView;
 @property (retain) IBOutlet NSWindow * introPanel;
@@ -179,6 +182,7 @@
 @property (assign) BOOL donationVerified;
 @property (readonly) NSTextView * currentTextView;
 @property (assign) BOOL copyDisabled;
+@property (assign) BOOL active;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
