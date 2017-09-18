@@ -340,7 +340,7 @@
   }
 
 // Print a volume being backed up.
-- (void) printBackedupVolume: (NSString *) UUID
+- (void) printBackedupVolume: (NSString *) UUID root: (BOOL) root
   {
   NSDictionary * volume =
     [[[Model model] volumes] objectForKey: UUID];
@@ -358,14 +358,17 @@
   if([excludedVolumeUUIDs containsObject: UUID])
     return;
     
-  [self printVolume: volume];
+  NSString * name = [volume objectForKey: @"_name"];
+
+  if(root)
+    name = NSLocalizedString(@"[redacted]", NULL);
+    
+  [self printVolume: volume name: name];
   }
 
 // Print the volume.
-- (void) printVolume: (NSDictionary *) volume
+- (void) printVolume: (NSDictionary *) volume name: (NSString *) name
   {
-  NSString * name = [volume objectForKey: @"_name"];
-
   NSString * diskSize = NSLocalizedString(@"Unknown", NULL);
   NSString * spaceRequired = NSLocalizedString(@"Unknown", NULL);
 
@@ -520,7 +523,7 @@
   // It can be specified directly in settings.
   NSString * root = [settings objectForKey: @"RootVolumeUUID"];
 
-  if(root)
+  if(root.length)
     [backedupVolumeUUIDs addObject: root];
 
   // Or it can be in each destination.
@@ -531,7 +534,7 @@
     // Root always gets backed up.
     root = [destination objectForKey: @"RootVolumeUUID"];
   
-    if(root)
+    if(root.length)
       [backedupVolumeUUIDs addObject: root];
     }
     
@@ -559,7 +562,7 @@
       if([excludedVolumeUUIDs containsObject: UUID])
         continue;
         
-      [self printBackedupVolume: UUID];
+      [self printBackedupVolume: UUID root: [root isEqualToString: UUID]];
       }
     }
   }
