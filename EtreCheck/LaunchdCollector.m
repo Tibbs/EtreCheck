@@ -506,7 +506,8 @@
   if([command count] > 0)
     {
     // Get the executable.
-    NSString * executable = [self collectLaunchdItemExecutable: command];
+    NSString * executable = 
+      [self collectLaunchdItemExecutable: command info: info];
   
     if([executable length])
       {
@@ -558,6 +559,7 @@
 
 // Collect the actual executable from a command.
 - (NSString *) collectLaunchdItemExecutable: (NSArray *) command
+  info: (NSMutableDictionary *) info
   {
   NSString * executable = [command firstObject];
   
@@ -567,7 +569,7 @@
   if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
     return [self resolveSandboxExec: command executable: executable];
   else if([executable isEqualToString: @"/usr/bin/open"])
-    return [self resolveOpen: command executable: executable];
+    return [self resolveOpen: command executable: executable info: info];
     
   return executable;
   }
@@ -603,6 +605,7 @@
 // Resolve an open executable.
 - (NSString *) resolveOpen: (NSArray *) command
   executable: (NSString *) executable
+  info: (NSMutableDictionary *) info
   {
   NSUInteger argumentCount = command.count;
   
@@ -618,18 +621,45 @@
       continue;
     else if([argument isEqualToString: @"-F"])
       continue;
+    else if([argument isEqualToString: @"--fresh"])
+      continue;
     else if([argument isEqualToString: @"-W"])
+      continue;
+    else if([argument isEqualToString: @"--wait-apps"])
       continue;
     else if([argument isEqualToString: @"-R"])
       continue;
+    else if([argument isEqualToString: @"--reveal"])
+      continue;
     else if([argument isEqualToString: @"-n"])
+      continue;
+    else if([argument isEqualToString: @"--new"])
       continue;
     else if([argument isEqualToString: @"-g"])
       continue;
+    else if([argument isEqualToString: @"--background"])
+      {
+      [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
+      continue;
+      }
+    else if([argument isEqualToString: @"-j"])
+      {
+      [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
+      continue;
+      }
+    else if([argument isEqualToString: @"--hide"])
+      {
+      [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
+      continue;
+      }
     else if([argument isEqualToString: @"-h"])
+      continue;
+    else if([argument isEqualToString: @"--header"])
       continue;
     else if([argument isEqualToString: @"-a"])
       continue;
+    else if([argument isEqualToString: @"--args"])
+      break;
     else if([argument isEqualToString: @"-s"])
       ++i;
     else if([argument isEqualToString: @"-b"])

@@ -82,8 +82,8 @@
 // Collect the command of the launchd item.
 - (NSArray *) collectLaunchdItemCommand: (NSDictionary *) plist;
 
-// Collect the actual executable from a command.
-- (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
+- (NSString *) collectLaunchdItemExecutable: (NSArray *) command
+  info: (NSMutableDictionary *) info;
 
 // Update a funky new dynamic task.
 - (void) updateDynamicTask: (NSMutableDictionary *) info;
