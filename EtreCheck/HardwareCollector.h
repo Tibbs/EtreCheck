@@ -15,6 +15,9 @@
   NSString * myMarketingName;
   NSString * myEnglishMarketingName;
   NSString * myCPUCode;
+  BOOL mySupportsHandoff;
+  BOOL mySupportsInstantHotspot;
+  BOOL mySupportsLowEnergy;
   }
 
 // Machine properties.
@@ -35,6 +38,15 @@
 
 // The CPU code.
 @property (retain) NSString * CPUCode;
+
+// Does the machine support handoff?
+@property (assign) BOOL supportsHandoff;
+
+// Does the machien support instant hotspot?
+@property (assign) BOOL supportsInstantHotspot;
+
+// Does the machien support low energy?
+@property (assign) BOOL supportsLowEnergy;
 
 // Find a machine icon.
 - (NSImage *) findMachineIcon: (NSString *) code;

@@ -30,6 +30,9 @@
 @synthesize marketingName = myMarketingName;
 @synthesize EnglishMarketingName = myEnglishMarketingName;
 @synthesize CPUCode = myCPUCode;
+@synthesize supportsHandoff = mySupportsHandoff;
+@synthesize supportsInstantHotspot = mySupportsInstantHotspot;
+@synthesize supportsLowEnergy = mySupportsLowEnergy;
 
 // Constructor.
 - (id) init
@@ -94,12 +97,66 @@
 // Perform the collection.
 - (void) performCollect
   {
+  [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
   [self collectNetwork];
   [self collectiCloud];
     
   [self.result appendCR];
+  }
+
+// Collect bluetooth information.
+- (void) collectBluetooth
+  {
+  NSArray * args =
+    @[
+      @"-xml",
+      @"SPBluetoothDataType"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+    {
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
+  
+    if(plist && [plist count])
+      {
+      NSArray * infos =
+        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+        
+      if([infos respondsToSelector: @selector(objectAtIndex:)])
+        if([infos count])
+          for(NSDictionary * info in infos)
+            {
+            if([info respondsToSelector: @selector(objectForKey:)])
+              {
+              NSDictionary * localInfo =
+                [info objectForKey: @"local_device_title"];
+              
+              NSString * generalSupportsHandoff =
+                [localInfo objectForKey: @"general_supports_handoff"];
+              NSString * generalSupportsInstantHotspot =
+                [localInfo
+                  objectForKey: @"general_supports_instantHotspot"];
+              NSString * generalSupportsLowEnergy =
+                [localInfo objectForKey: @"general_supports_lowEnergy"];
+                
+              self.supportsHandoff =
+                [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
+              self.supportsInstantHotspot =
+                [generalSupportsInstantHotspot
+                  isEqualToString: @"attrib_Yes"];
+              self.supportsLowEnergy =
+                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];                
+              }
+            }
+      }
+    }
+    
+  [subProcess release];
   }
 
 // Collect sysctl information.
@@ -169,6 +226,7 @@
         for(NSDictionary * info in infos)
           [self printMachineInformation: info];
           
+        [self printBluetoothInformation];
         [self printWirelessInformation];
         [self printBatteryInformation];
         }
@@ -646,6 +704,8 @@
 
     [self.model endElement: @"memorybank"];
     }
+
+  [self.model endElement: @"memorybanks"];
   }
 
 // Print information about bluetooth.
@@ -658,8 +718,6 @@
       [NSString 
         stringWithFormat: 
           NSLocalizedString(@"    Handoff/Airdrop2: %@\n", NULL), info]];
-  
-  [self.model setString: info forKey: @"continuity"];
   }
 
 // Collect bluetooth information.

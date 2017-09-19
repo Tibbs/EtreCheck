@@ -800,36 +800,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           else
             [[Model model] setVerifiedEtreCheckVersion: YES];
             
-          if(!kWhitelistDisabled)
-            {
-            NSArray * whitelist = [attributes objectForKey: @"whitelist"];
-            
-            if([whitelist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToWhitelist: whitelist];
+          NSArray * whitelist = [attributes objectForKey: @"whitelist"];
+          
+          if([whitelist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToWhitelist: whitelist];
 
-            NSArray * whitelistPrefixes =
-              [attributes objectForKey: @"whitelist_prefixes"];
-            
-            if([whitelist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
+          NSArray * whitelistPrefixes =
+            [attributes objectForKey: @"whitelist_prefixes"];
+          
+          if([whitelist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
 
-            NSArray * blacklist = [attributes objectForKey: @"blacklist"];
-            
-            if([blacklist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToBlacklist: blacklist];
+          NSArray * blacklist = [attributes objectForKey: @"blacklist"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklist: blacklist];
 
-            NSArray * blacklistSuffix =
-              [attributes objectForKey: @"blacklist_suffix"];
-            
-            if([blacklist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToBlacklistSuffixes: blacklistSuffix];
+          NSArray * blacklistSuffix =
+            [attributes objectForKey: @"blacklist_suffix"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklistSuffixes: blacklistSuffix];
 
-            NSArray * blacklistMatch =
-              [attributes objectForKey: @"blacklist_match"];
-            
-            if([blacklist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToBlacklistMatches: blacklistMatch];
-            }
+          NSArray * blacklistMatch =
+            [attributes objectForKey: @"blacklist_match"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklistMatches: blacklistMatch];
           }
       }
     
@@ -1632,20 +1629,19 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.log appendString: @"\n"];
     }
     
-  if(!kWhitelistDisabled)
-    if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
-      {
-      [self.log
-        appendString:
-          NSLocalizedString(@"Failed to read adware signatures!", NULL)
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-      
-      [self.log appendString: @"\n\n"];
-      }
+  if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(@"Failed to read adware signatures!", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+    [self.log appendString: @"\n\n"];
+    }
       
   if([NSLocalizedString(@"downloadetrecheck", NULL) length] == 17)
     {

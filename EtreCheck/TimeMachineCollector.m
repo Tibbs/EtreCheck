@@ -384,13 +384,8 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(
-<<<<<<< HEAD
             @"        %@: Disk size: %@ - Disk used: %@\n", NULL),
-          name, diskSize, spaceRequired]];
-=======
-            @"        %@: Disk size: %@ Disk used: %@\n", NULL),
           volumeName, diskSize, spaceRequired]];
->>>>>>> master
 
   [self.model startElement: @"volume"];
   [self.model addElement: @"name" value: name]; 

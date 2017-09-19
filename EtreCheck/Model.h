@@ -31,7 +31,6 @@
 #define kHighCache @"highcache"
 
 #define kMinimumWhitelistSize 1000
-#define kWhitelistDisabled NO
 
 @class DiagnosticEvent;
 @class XMLBuilder;
@@ -86,6 +85,7 @@
   bool myCleanupRequired;
   NSMutableDictionary * myPathsForUUIDs;
   NSMutableDictionary * myNotificationSPAMs;
+  bool myUseWhitelist;
   
   XMLBuilder * myXMLBuilder;
   XMLBuilder * myXMLHeader;
@@ -237,6 +237,9 @@
 
 // Notification SPAM.
 @property (readonly) NSMutableDictionary * notificationSPAMs;
+
+// Should I use the whitelist or show unsigned files?
+@property (readonly) bool useWhitelist;
 
 // XML output.
 @property (readonly) XMLBuilder * xml;

@@ -62,6 +62,7 @@
 @synthesize cleanupRequired = myCleanupRequired;
 @synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize notificationSPAMs = myNotificationSPAMs;
+@synthesize useWhitelist = myUseWhitelist;
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
 
@@ -719,9 +720,8 @@
 // Is this file in the whitelist?
 - (bool) isWhitelistFile: (NSString *) name
   {
-  if(!kWhitelistDisabled)
-    if([self.whitelistFiles count] < kMinimumWhitelistSize)
-      return YES;
+  if(!self.useWhitelist)
+    return NO;
     
   if([self.whitelistFiles containsObject: name])
     return YES;

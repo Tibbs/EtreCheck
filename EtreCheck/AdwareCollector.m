@@ -66,7 +66,7 @@
     
     NSDictionary * plist = [Utilities readPropertyListData: plistData];
   
-    if(!kWhitelistDisabled && plist)
+    if(plist != nil)
       {
       [self
         addSignatures: [plist objectForKey: kWhitelistKey]

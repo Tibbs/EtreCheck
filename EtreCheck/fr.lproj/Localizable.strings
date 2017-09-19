@@ -32,7 +32,7 @@
 "Yes" = "Oui";
 "NO - Auto backup turned off\n" = "NON - Sauvegarde automatique désactivée\n";
 "    Volumes being backed up:\n" = "    Disques sauvegardés :\n";
-"        %@: Disk size: %@ Disk used: %@\n" = "        %@ : Taille du disque : %@ Disque utilisé : %@\n";
+"        %@: Disk size: %@ - Disk used: %@\n" = "        %@ : Taille du disque : %@ - Disque utilisé : %@\n";
 "        Total size: %@ \n" = "        Taille totale : %@ \n";
 "        Total number of backups: %@ \n" = "        Nombre total de sauvegardes : %@ \n";
 "        Oldest backup: %@ \n" = "        Sauvegarde la plus ancienne : %@ \n";

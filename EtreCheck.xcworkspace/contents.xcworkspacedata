@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:EtreCheck.xcodeproj">
+      location = "group:INPopoverController.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:INPopoverController.xcodeproj">
+      location = "container:EtreCheck.xcodeproj">
    </FileRef>
 </Workspace>
