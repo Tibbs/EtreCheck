@@ -427,7 +427,62 @@ sub getManualAdditions
     programArguments => ['/System/Library/CoreServices/HID/FirmwareUpdates/hidfud'],
     signature => 'signatureapple'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchAgents/com.apple.SafariCloudHistoryPushAgent.plist',
+    label => 'com.apple.SafariCloudHistoryPushAgent',
+    program => '/usr/libexec/SafariCloudHistoryPushAgent',
+    programArguments => [],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.(?:12|13)/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchAgents/com.apple.SafariNotificationAgent.plist',
+    label => 'com.apple.SafariNotificationAgent',
+    program => '/usr/libexec/SafariNotificationAgent',
+    programArguments => [],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.(?:12|13)/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchAgents/com.apple.SafariPlugInUpdateNotifier.plist',
+    label => 'com.apple.SafariPlugInUpdateNotifier',
+    program => '/usr/libexec/SafariPlugInUpdateNotifier',
+    programArguments => [],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.(?:12|13)/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchAgents/com.apple.webinspectord.plist',
+    label => 'com.apple.webinspectord',
+    program => '/usr/libexec/webinspectord',
+    programArguments => [],
+    signature => 'signatureapple'
+    }
+    if $OSVersion =~ /^10\.(?:12|13)/;
+
+  push 
+    @additions,
+    {
+    path => '/System/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist',
+    label => 'com.apple.installer.cleanupinstaller',
+    program => '/macOS Install Data/Locked Files/cleanup_installer',
+    programArguments => ['/macOS Install Data/Locked Files/cleanup_installer'],
+    signature => 'executablemissing'
+    }
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   push 
     @additions,
@@ -435,7 +490,7 @@ sub getManualAdditions
     path => '/System/Library/LaunchDaemons/com.apple.jetsamproperties.Mac.plist',
     signature => 'executablemissing'
     }
-    if $OSVersion =~ /^10\.12/;
+    if $OSVersion =~ /^10\.(?:12|13)/;
 
   return @additions;
   }

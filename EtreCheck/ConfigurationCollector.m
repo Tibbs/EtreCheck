@@ -122,6 +122,7 @@
         expectedSize = 2299;
         break;
       case kSierra:
+      case kHighSierra:
         expectedSize = 1563;
         break;
       // Placeholder. I don't know what this should be yet.

@@ -127,6 +127,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donationVerified = myDonationVerified;
 @dynamic currentTextView;
 @synthesize copyDisabled= myCopyDisabled;
+@synthesize active = myActive;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic showSignatureFailures;
@@ -410,6 +411,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     andSelector: @selector(handleQuitEvent:withReplyEvent:)
     forEventClass: kCoreEventClass
     andEventID: kAEQuitApplication];
+    
+  self.active = YES;
   }
 
 // Handler for the quit apple event
@@ -540,6 +543,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Dim the display on deactivate.
 - (void) applicationDidResignActive: (NSNotification *) notification
   {
+  self.active = NO;
+  
   NSNumber * curScreenNum =
     [self.window.screen.deviceDescription objectForKey: @"NSScreenNumber"];
 
@@ -559,6 +564,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   self.helpButton.image = self.helpButtonInactiveImage;
   self.donateButton.image = self.donateButtonInactiveImage;
+  
+  [self.collectionStatusLabel
+    setTextColor: [NSColor disabledControlTextColor]];
+    
+  [self.textSizeButton setEnabled: NO];
   
   [self.reportView setContentFilters: @[grayscale, gamma]];
   
@@ -581,6 +591,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Un-dim the display on activate.
 - (void) applicationWillBecomeActive: (NSNotification *) notification
   {
+  self.active = YES;
+  
   NSNumber * curScreenNum =
     [self.window.screen.deviceDescription objectForKey: @"NSScreenNumber"];
 
@@ -590,13 +602,24 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.helpButton.image = self.helpButtonImage;
   self.donateButton.image = self.donateButtonImage;
   
+  [self.collectionStatusLabel setTextColor: [NSColor controlTextColor]];
+
+  [self.textSizeButton setEnabled: YES];
+
   [self.reportView setContentFilters: @[]];
 
   if(self.animationView)
     {
     [self.animationView setContentFilters: @[]];
     [self.magnifyingGlassShade setContentFilters: @[]];
-    [self.progress setNeedsDisplay: YES];
+    
+    double progress = [self.progress doubleValue];
+    
+    if(progress > 1.0)
+      {
+      [self.progress setDoubleValue: progress - 1.0];
+      [self.progress setDoubleValue: progress];
+      }
     }
   }
 
@@ -2011,6 +2034,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [NSAnimationContext beginGrouping];
   
   self.toolbar.visible = YES;
+
+  if(self.active)
+    {
+    self.helpButton.image = self.helpButtonImage;
+    self.donateButton.image = self.donateButtonImage;
+    }
+  else
+    {
+    self.helpButton.image = self.helpButtonInactiveImage;
+    self.donateButton.image = self.donateButtonInactiveImage;
+    }
+    
   self.reportAvailable = YES;
   [self.toolbar validateVisibleItems];
   

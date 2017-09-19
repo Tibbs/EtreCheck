@@ -286,7 +286,7 @@
     lastBackup = [destination objectForKey: @"BACKUP_COMPLETED_DATE"];
     }
     
-  if(!snapshotCount)
+  if(snapshotCount == nil)
     snapshotCount = @0;
     
   [destination setObject: snapshotCount forKey: kSnapshotcount];
@@ -316,13 +316,13 @@
       NSNumber * lastDestination =
         [destination objectForKey: @"LastDestination"];
       
-      if(!kind)
+      if(kind.length == 0)
         kind = NSLocalizedString(@"Unknown", NULL);
         
-      if(!name)
+      if(name.length == 0)
         name = destinationID;
         
-      if(!lastDestination)
+      if(lastDestination == nil)
         lastDestination = @0;
         
       [destination setObject: kind forKey: @"Kind"];
@@ -339,13 +339,13 @@
   NSDictionary * volume =
     [[[Model model] volumes] objectForKey: UUID];
   
-  if(!volume)
+  if(volume.count == 0)
     return;
     
   NSString * mountPoint = [volume objectForKey: @"mount_point"];
   
   // See if this volume is excluded. If so, skip it.
-  if(mountPoint)
+  if(mountPoint.length > 0)
     if([excludedPaths containsObject: mountPoint])
       return;
 
@@ -360,6 +360,8 @@
   {
   NSString * name = [volume objectForKey: @"_name"];
 
+  NSString * volumeName = [Utilities cleanPath: name];
+  
   NSString * diskSize = NSLocalizedString(@"Unknown", NULL);
 
   if(!name)
@@ -382,8 +384,13 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(
+<<<<<<< HEAD
             @"        %@: Disk size: %@ - Disk used: %@\n", NULL),
           name, diskSize, spaceRequired]];
+=======
+            @"        %@: Disk size: %@ Disk used: %@\n", NULL),
+          volumeName, diskSize, spaceRequired]];
+>>>>>>> master
 
   [self.model startElement: @"volume"];
   [self.model addElement: @"name" value: name]; 
