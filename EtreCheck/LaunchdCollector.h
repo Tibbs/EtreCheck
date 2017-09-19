@@ -7,40 +7,6 @@
 #import <Foundation/Foundation.h>
 #import "Collector.h"
 
-#define kStatus @"status"
-#define kPID @"PID"
-#define kHidden @"hidden"
-#define kPrinted @"printed"
-#define kIgnored @"ignored"
-#define kUnknown @"unknown"
-#define kModernLoginItem @"modernloginitem"
-#define kSignature @"signature"
-#define kDeveloper @"developer"
-#define kApple @"apple"
-#define kProbableAdware @"probableadware"
-#define kPath @"path"
-#define kFilename @"filename"
-#define kExecutable @"executable"
-#define kCommand @"command"
-#define kLaunchdFileContents @"launchdfilecontents"
-#define kLabel @"Label"
-#define kApp @"app"
-#define kSupportURL @"supporturl"
-#define kDetailsURL @"detailsurl"
-#define kPlist @"plist"
-#define kModificationDate @"modificationdate"
-#define kPlistCRC @"plistcrc"
-#define kExecutableCRC @"executablecrc"
-
-#define kStatusUnknown @"unknown"
-#define kStatusNotLoaded @"notloaded"
-#define kStatusLoaded @"loaded"
-#define kStatusRunning @"running"
-#define kStatusFailed @"failed"
-#define kStatusInvalid @"invalid"
-#define kStatusKilled @"killed"
-#define kStatusDuplicate @"duplicate"
-
 @interface LaunchdCollector : Collector
   {
   NSMutableDictionary * myHiddenItems;

@@ -5,10 +5,7 @@
  **********************************************************************/
 
 #import "AdwareManager.h"
-#import "Model.h"
-#import "NSMutableAttributedString+Etresoft.h"
-#import "Utilities.h"
-#import "LaunchdCollector.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 #import "CURLRequest.h"
 
 #define kRemove @"remove"

@@ -1,18 +1,18 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2012-2014. All rights reserved.
+ ** Copyright (c) 2012-2017. All rights reserved.
  **********************************************************************/
 
 #import "NSArray+Etresoft.h"
-#import "Utilities.h"
+#import "NSObject+Etresoft.h"
 
 @implementation NSArray (Etresoft)
 
 // Read from a property list file or data and make sure it is an array.
 + (NSArray *) readPropertyList: (NSString *) path
   {
-  NSArray * array = [Utilities readPropertyList: path];
+  NSArray * array = [NSObject readPropertyList: path];
   
   if([array respondsToSelector: @selector(objectAtIndex:)])
     return array;
@@ -22,7 +22,7 @@
 
 + (NSArray *) readPropertyListData: (NSData *) data
   {
-  NSArray * array = [Utilities readPropertyListData: data];
+  NSArray * array = [NSObject readPropertyListData: data];
   
   if([array respondsToSelector: @selector(objectAtIndex:)])
     return array;

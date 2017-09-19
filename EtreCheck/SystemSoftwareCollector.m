@@ -9,10 +9,12 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
-#import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
+#import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "EtreCheckConstants.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -100,7 +102,7 @@
   
   if(plistData)
     {
-    NSDictionary * plist = [Utilities readPropertyListData: plistData];
+    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
   
     if(plist)
       {
@@ -152,7 +154,7 @@
   
   if(plistData)
     {
-    NSDictionary * plist = [Utilities readPropertyListData: plistData];
+    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
   
     if(plist)
       {

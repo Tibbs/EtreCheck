@@ -11,6 +11,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
+#import "NSDictionary+Etresoft.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -64,7 +65,7 @@
     
     [[NSFileManager defaultManager] removeItemAtPath: tempDir error: NULL];
     
-    NSDictionary * plist = [Utilities readPropertyListData: plistData];
+    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
   
     if(plist != nil)
       {

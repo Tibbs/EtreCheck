@@ -12,6 +12,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "NSDictionary+Etresoft.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -100,7 +101,7 @@
 - (void) collectInformation
   {
   NSDictionary * settings =
-    [Utilities
+    [NSDictionary
       readPropertyList:
         @"/Library/Preferences/com.apple.TimeMachine.plist"];
 

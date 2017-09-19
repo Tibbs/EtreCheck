@@ -6,7 +6,6 @@
 
 #import "CURLRequest.h"
 #import <curl/curl.h>
-#import "NumberFormatter.h"
 
 static size_t callback(
   void * contents, size_t size, size_t nmemb, void * context);

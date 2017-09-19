@@ -8,7 +8,6 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
-#import "SearchEngine.h"
 #import "XMLBuilder.h"
 
 @implementation Collector

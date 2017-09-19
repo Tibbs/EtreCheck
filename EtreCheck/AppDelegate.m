@@ -5,20 +5,14 @@
  **********************************************************************/
 
 #import "AppDelegate.h"
-#import "NSMutableAttributedString+Etresoft.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 #import <ServiceManagement/ServiceManagement.h>
 #import <unistd.h>
 #import <CarbonCore/BackupCore.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-#import "Utilities.h"
-#import "Checker.h"
 #import "SlideshowView.h"
 #import <QuartzCore/CAAnimation.h>
 #import <QuartzCore/CoreImage.h>
-#import "LaunchdCollector.h"
-#import "Model.h"
-#import "NSAttributedString+Etresoft.h"
-#import "NSDictionary+Etresoft.h"
 #import "DetailManager.h"
 #import "SMARTManager.h"
 #import "HelpManager.h"
@@ -27,10 +21,8 @@
 #import "NotificationSPAMCleanupManager.h"
 #import "AdwareManager.h"
 #import "UpdateManager.h"
-#import "SubProcess.h"
 #import "CURLRequest.h"
 #import "EtreCheckWindow.h"
-#import "XMLBuilder.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -1351,7 +1343,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     });
     
   [checker release];
-  [LaunchdCollector cleanup];
   
   [pool drain];
   }

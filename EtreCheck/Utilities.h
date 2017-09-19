@@ -95,10 +95,6 @@
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data;
 
-// Read a property list to an array.
-+ (id) readPropertyList: (NSString *) path;
-+ (id) readPropertyListData: (NSData *) data;
-
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path;
 
@@ -231,5 +227,8 @@
 
 // Indent a block of text.
 + (NSString *) indent: (NSString *) text by: (NSString *) indent;
+
+// Purge notification SPAM.
++ (BOOL) purgeNotificationSPAM: (NSArray *) note_ids;
 
 @end

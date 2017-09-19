@@ -1,10 +1,7 @@
-//
-//  VerticalScrollView.h
-//  EtreCheck
-//
-//  Created by John Daniel on 2016-10-27.
-//  Copyright © 2016 Etresoft. All rights reserved.
-//
+/***********************************************************************
+ ** Etresoft, Inc.
+ ** Copyright (c) 2016-2017. All rights reserved.
+ **********************************************************************/
 
 #import <Cocoa/Cocoa.h>
 

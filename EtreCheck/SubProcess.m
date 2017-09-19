@@ -201,7 +201,7 @@ extern char **environ;
   fcntl(master, F_SETFL, O_NONBLOCK);
 
   fd_set fds;
-  int nfds;
+  int nfds = 0;
     
   size_t bufferSize = 65536;
   char * buffer = (char *)malloc(bufferSize);
@@ -292,7 +292,7 @@ extern char **environ;
     return NO;
     }
     
-  pid_t pid;
+  pid_t pid = 0;
   
   posix_spawn_file_actions_t child_fd_actions;
   
@@ -347,7 +347,7 @@ extern char **environ;
   fcntl(errorPipe[0], F_SETFL, O_NONBLOCK);
 
   fd_set fds;
-  int nfds;
+  int nfds = 0;
     
   size_t bufferSize = 65536;
   char * buffer = (char *)malloc(bufferSize);

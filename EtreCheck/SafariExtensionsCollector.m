@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "NSDictionary+Etresoft.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
@@ -671,7 +672,7 @@
       stringByAppendingPathComponent: @"Extensions.plist"];
 
   NSDictionary * settings =
-    [Utilities readPropertyList: extensionPlistPath];
+    [NSDictionary readPropertyList: extensionPlistPath];
   
   if(settings)
     {

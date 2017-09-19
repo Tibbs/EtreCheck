@@ -14,6 +14,9 @@
 #import "LaunchdCollector.h"
 #import "SubProcess.h"
 #import "CRC32.h"
+#import "EtreCheckConstants.h"
+#import <sqlite3.h>
+#import <unistd.h>
 
 // Assorted utilities.
 @implementation Utilities
@@ -239,45 +242,6 @@
     }
     
   return result;
-  }
-
-// Read a property list.
-+ (id) readPropertyList: (NSString *) path
-  {
-  NSString * resolvedPath = [path stringByResolvingSymlinksInPath];
-  
-  NSData * data = [NSData dataWithContentsOfFile: resolvedPath];
-  
-  if(([path length] > 0) && ([data length] > 0))
-    {
-    NSMutableDictionary * info =
-      [[[Model model] launchdFiles] objectForKey: path];
-      
-    [info setObject: data forKey: kLaunchdFileContents];
-    
-    return [self readPropertyListData: data];
-    }
-    
-  return nil;
-  }
-  
-// Read a property list.
-+ (id) readPropertyListData: (NSData *) data
-  {
-  if(data)
-    {
-    NSError * error;
-    NSPropertyListFormat format;
-    
-    return
-      [NSPropertyListSerialization
-        propertyListWithData: data
-        options: NSPropertyListImmutable
-        format: & format
-        error: & error];
-    }
-    
-  return nil;
   }
 
 // Redact any user names in a path.
@@ -2201,4 +2165,96 @@
   return indented;
   }
   
+// Purge notification SPAM.
++ (BOOL) purgeNotificationSPAM: (NSArray *) note_ids
+  {
+  if([note_ids count] == 0)
+    return NO;
+    
+  BOOL success = NO;
+  
+  char user_dir[1024];
+  
+  size_t size = confstr(_CS_DARWIN_USER_DIR, user_dir, 1024);
+  
+  if(size >= 1023)
+    return NO;
+  
+  NSString * path =
+    [[NSString stringWithUTF8String: user_dir]
+      stringByAppendingPathComponent:
+        @"com.apple.notificationcenter/db/db"];
+  
+  sqlite3 * handle = NULL;
+  
+  int result = sqlite3_open(path.fileSystemRepresentation, & handle);
+  
+  if(result == SQLITE_OK)
+    {
+    NSString * arguments = [note_ids componentsJoinedByString: @","];
+    
+    NSString * SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from notifications where note_id in (%@);", arguments];
+    
+    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    
+    if(result == SQLITE_OK)
+      success = YES;
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from scheduled_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from presented_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from presented_alerts where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from today_summary_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from tomorrow_summary_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from notification_source where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    }
+    
+  sqlite3_close(handle);
+  
+  return success;
+  }
+
 @end

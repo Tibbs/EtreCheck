@@ -5,10 +5,7 @@
  **********************************************************************/
 
 #import "NotificationSPAMCleanupManager.h"
-#import "Model.h"
-#import "TTTLocalizedPluralString.h"
-#import "CleanupCollector.h"
-#import "Utilities.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 
 #define kRemove @"remove"
 #define kKeep @"keep"
@@ -184,7 +181,7 @@
     }
 
   // Remove the notifications.
-  [CleanupCollector purgeNotificationSPAM: note_ids];
+  [Utilities purgeNotificationSPAM: note_ids];
 
   // Now remove the notifications from the model in case the user clicks
   // again.

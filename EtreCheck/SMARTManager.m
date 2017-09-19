@@ -5,9 +5,7 @@
  **********************************************************************/
 
 #import "SMARTManager.h"
-#import "Model.h"
-#import "DiagnosticEvent.h"
-#import "SubProcess.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 
 @interface PopoverManager ()
 

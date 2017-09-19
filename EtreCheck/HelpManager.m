@@ -5,9 +5,7 @@
  **********************************************************************/
 
 #import "HelpManager.h"
-#import "Model.h"
-#import "DiagnosticEvent.h"
-#import "Utilities.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 
 @interface PopoverManager ()
 

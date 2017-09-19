@@ -11,6 +11,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
+#import "EtreCheckConstants.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"

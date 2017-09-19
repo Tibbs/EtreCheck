@@ -15,6 +15,7 @@
 #import "SubProcess.h"
 #import "SearchEngine.h"
 #import "XMLBuilder.h"
+#import "EtreCheckConstants.h"
 
 @implementation LaunchdCollector
 

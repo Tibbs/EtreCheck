@@ -5,8 +5,6 @@
  **********************************************************************/
 
 #import "UpdateManager.h"
-#import "NSMutableAttributedString+Etresoft.h"
-#import "Utilities.h"
 
 @implementation UpdateManager
 

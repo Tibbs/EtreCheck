@@ -11,6 +11,7 @@
 #import "LaunchdCollector.h"
 #import "NSString+Etresoft.h"
 #import "XMLBuilder.h"
+#import "EtreCheckConstants.h"
 
 @implementation Model
 

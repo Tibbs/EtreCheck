@@ -63,6 +63,8 @@
   [myResults release];
   [myCompleted release];
   
+  [LaunchdCollector cleanup];
+
   [super dealloc];
   }
   

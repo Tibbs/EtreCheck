@@ -5,13 +5,8 @@
  **********************************************************************/
 
 #import "UninstallManager.h"
-#import "Model.h"
-#import "NSMutableAttributedString+Etresoft.h"
-#import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
-#import "LaunchdCollector.h"
+#import "LibEtreCheck/LibEtreCheck.h"
 #import "CURLRequest.h"
-#import "SubProcess.h"
 
 @implementation UninstallManager
 
