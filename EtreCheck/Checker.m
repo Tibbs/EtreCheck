@@ -55,7 +55,6 @@
 
 @synthesize results = myResults;
 @synthesize completed = myCompleted;
-@synthesize queue = myQueue;
 
 @synthesize startSection = myStartSection;
 @synthesize completeSection = myCompleteSection;
@@ -71,7 +70,6 @@
   {
   [myResults release];
   [myCompleted release];
-  dispatch_release(self.queue);
   
   [myStartSection release];
   [myCompleteSection release];
@@ -88,160 +86,129 @@
 // Do the check.
 - (NSAttributedString *) check
   {
-  NSString * label = @"CheckQ";
-  
-  myQueue =
-    dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_CONCURRENT);
-  
   myResults = [NSMutableDictionary new];
   myCompleted = [NSMutableDictionary new];
   
-  // Let the animations drive the show.
-  
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kCollectionStatus
-    object: NSLocalizedString(@"Checking hardware", NULL)];
-
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Checking hardware", NULL));
-    
-  // Run stage 1.
-  [self checkStage1To: 30.0];
-    
-  dispatch_barrier_sync(
-    self.queue,
-    ^{
-      // As soon as the hardware collection finishes, move to software mode.
-      [[NSNotificationCenter defaultCenter]
-        postNotificationName: kCollectionStatus
-        object: NSLocalizedString(@"Checking software", NULL)];
-
-      if(self.status != nil)
-        self.status(NSLocalizedString(@"Checking software", NULL));
-    });
-  
-  // Now do stage 2.
-  [self checkStage2To: 50.0];
-  
-  dispatch_barrier_sync(
-    self.queue,
-    ^{
-    [[NSNotificationCenter defaultCenter]
-      postNotificationName: kCollectionStatus
-      object: NSLocalizedString(@"Checking daemons and agents", NULL)];
-
-    if(self.status != nil)
-      self.status(NSLocalizedString(@"Checking daemons and agents", NULL));
-    });
-
-  // Finally do stage 3.
-  [self checkStage3To: 100.0];
-  
-  dispatch_release(self.queue);
-  
-  NSAttributedString * report = [self collectResults];
-  
-  return report;
-  }
-
-// Check stage 1.
-- (void) checkStage1To: (double) to
-  {
-  NSMutableArray * collectors = [NSMutableArray array];
+  int collectorCount = 39;
+  double increment = 100.0/collectorCount;
   
   HardwareCollector * hardwareCollector =
     [[HardwareCollector new] autorelease];
-    
-  // Collect items that will be needed by other collectors.
-  [collectors addObject: [[SystemSoftwareCollector new] autorelease]];
-  [collectors addObject: [[ApplicationsCollector new] autorelease]];
-  [collectors addObject: hardwareCollector];
-  [collectors addObject: [[LogCollector new] autorelease]];
-  [collectors addObject: [[DiskCollector new] autorelease]];
-  [collectors addObject: [[VideoCollector new] autorelease]];
-  [collectors addObject: [[USBCollector new] autorelease]];
-  [collectors addObject: [[FirewireCollector new] autorelease]];
-  [collectors addObject: [[ThunderboltCollector new] autorelease]];
-  [collectors addObject: [[VirtualVolumeCollector new] autorelease]];
-  [collectors addObject: [[TimeMachineCollector new] autorelease]];
-  
-  [self performCollections: collectors to: to];
-  }
 
-// Check stage 2.
-- (void) checkStage2To: (double) to
-  {
-  NSMutableArray * collectors = [NSMutableArray array];
-  
-  // Start the application animation.
-  
-  Collector * lastCollector = [[DiagnosticsCollector new] autorelease];
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Starting up", NULL));
     
-  // This searches through applications, and takes some time, so it is
-  // somewhat related to applications.
-  [collectors addObject: [[KernelExtensionCollector new] autorelease]];
-  [collectors addObject: [[ConfigurationCollector new] autorelease]];
-  [collectors addObject: [[GatekeeperCollector new] autorelease]];
-  [collectors addObject: [[PreferencePanesCollector new] autorelease]];
-  [collectors addObject: [[FontsCollector new] autorelease]];
-  [collectors addObject: [[CPUUsageCollector new] autorelease]];
-  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
-  [collectors addObject: [[NetworkUsageCollector new] autorelease]];
-  [collectors addObject: [[EnergyUsageCollector new] autorelease]];
-  [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
-  [collectors addObject: [[InstallCollector new] autorelease]];
-  [collectors addObject: lastCollector];
-  
-  [self performCollections: collectors to: to];
-  }
+  ApplicationsCollector * applicationsCollector = 
+    [[ApplicationsCollector new] autorelease];
+    
+  [self 
+    performCollections: 
+      @[
+        [[SystemSoftwareCollector new] autorelease],
+        applicationsCollector
+      ]
+    increment: increment];
+    
+  if(self.applicationIcon != nil)
+    {
+    NSArray * icons = [applicationsCollector applicationIcons];
+    
+    for(NSImage * icon in icons)
+      self.applicationIcon(icon);
+    }
 
-// Check stage 3.
-- (void) checkStage3To: (double) to
-  {
-  NSMutableArray * collectors = [NSMutableArray array];
-  
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Checking hardware", NULL));
+
+  [self 
+    performCollections: 
+      @[
+        hardwareCollector,
+        [[LogCollector new] autorelease],
+        [[DiskCollector new] autorelease],
+        [[VideoCollector new] autorelease],
+        [[USBCollector new] autorelease],
+        [[FirewireCollector new] autorelease],
+        [[ThunderboltCollector new] autorelease],
+        [[VirtualVolumeCollector new] autorelease]
+      ]
+    increment: increment];
+
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Checking software", NULL));
+
   // In order to find adware in Safari extensions, the Adware collector has
   // to be created first, but then the Safari extension collection has to
   // run fist. Such is life.
   AdwareCollector * adwareCollector = [[AdwareCollector new] autorelease];
   
-  [collectors addObject: [[SafariExtensionsCollector new] autorelease]];
+  [self 
+    performCollections: 
+      @[
+        [[SafariExtensionsCollector new] autorelease],
+        [[KernelExtensionCollector new] autorelease],
+        [[PreferencePanesCollector new] autorelease],
+        [[StartupItemsCollector new] autorelease],
+        [[SystemLaunchAgentsCollector new] autorelease],
+        [[SystemLaunchDaemonsCollector new] autorelease],
+        [[LaunchAgentsCollector new] autorelease],
+        [[LaunchDaemonsCollector new] autorelease],
+        [[UserLaunchAgentsCollector new] autorelease],
+        [[LoginItemsCollector new] autorelease],
+        [[InternetPlugInsCollector new] autorelease],
+        [[UserInternetPlugInsCollector new] autorelease],
+        [[AudioPlugInsCollector new] autorelease],
+        [[UserAudioPlugInsCollector new] autorelease],
+        [[ITunesPlugInsCollector new] autorelease],
+        [[UserITunesPlugInsCollector new] autorelease],
+        adwareCollector,
+        [[UnsignedCollector new] autorelease],
+        [[CleanupCollector new] autorelease],
+        [[EtreCheckCollector new] autorelease]
+      ]
+    increment: increment];
+
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Checking system configuration", NULL));
+
+  [self 
+    performCollections: 
+      @[
+        [[TimeMachineCollector new] autorelease],
+        [[ConfigurationCollector new] autorelease],
+        [[FontsCollector new] autorelease],
+        [[InstallCollector new] autorelease],
+        [[DiagnosticsCollector new] autorelease],
+        [[GatekeeperCollector new] autorelease]
+      ]
+    increment: increment];
+
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Checking performance", NULL));
+
+  [self 
+    performCollections: 
+      @[
+        [[CPUUsageCollector new] autorelease],
+        [[MemoryUsageCollector new] autorelease],
+        [[NetworkUsageCollector new] autorelease],
+        [[EnergyUsageCollector new] autorelease],
+        [[VirtualMemoryCollector new] autorelease]
+      ]
+    increment: increment];
   
-  // Run the rest of the collectors.
-  [collectors addObject: [[StartupItemsCollector new] autorelease]];
-  [collectors addObject: [[SystemLaunchAgentsCollector new] autorelease]];
-  [collectors addObject: [[SystemLaunchDaemonsCollector new] autorelease]];
-  [collectors addObject: [[LaunchAgentsCollector new] autorelease]];
-  [collectors addObject: [[LaunchDaemonsCollector new] autorelease]];
-  [collectors addObject: [[UserLaunchAgentsCollector new] autorelease]];
-  [collectors addObject: [[LoginItemsCollector new] autorelease]];
-  [collectors addObject: [[InternetPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserInternetPlugInsCollector new] autorelease]];
-  [collectors addObject: [[AudioPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserAudioPlugInsCollector new] autorelease]];
-  [collectors addObject: [[ITunesPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
-
-  [collectors addObject: adwareCollector];
-  [collectors addObject: [[UnsignedCollector new] autorelease]];
-  [collectors addObject: [[CleanupCollector new] autorelease]];
-  [collectors addObject: [[EtreCheckCollector new] autorelease]];
-
-  [self performCollections: collectors to: to];
-
+  NSAttributedString * report = [self collectResults];
+  
   if(self.complete)
     self.complete();
+
+  return report;
   }
 
 // Perform some collections.
-- (void) performCollections: (NSArray *) collectors to: (double) to
+- (void) performCollections: (NSArray *) collectors 
+  increment: (double) increment
   {
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kProgressUpdate
-    object: [NSNumber numberWithDouble: to]];
-  
-  double increment = (to - self.currentProgress) / collectors.count;
-  
   NSDictionary * environment = [[NSProcessInfo processInfo] environment];
   
   bool simulate =
@@ -249,6 +216,9 @@
     
   for(Collector * collector in collectors)
     {
+    if(self.progress)
+      self.progress(self.currentProgress += increment);    
+
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
     
     if(self.startSection)
@@ -259,13 +229,8 @@
     else
       [collector collect];
     
-    [self reportApplicationIcons: collector];
-    
     if(self.completeSection)
       self.completeSection([collector name]);
-
-    if(self.progress)
-      self.progress(self.currentProgress += increment);    
 
     if(collector.result != nil)
       [self.results setObject: collector.result forKey: collector.name];
@@ -275,25 +240,8 @@
     
     [pool drain];
     }
-
-  if(self.progress)
-    self.progress(to);    
   }
 
-// Report application icons.
-- (void) reportApplicationIcons: (Collector *) collector
-  {
-  if([collector respondsToSelector: @selector(applicationIcons)])
-    if(self.applicationIcon != nil)
-      {
-      NSArray * icons = 
-        [(ApplicationsCollector *)collector applicationIcons];
-      
-      for(NSImage * icon in icons)
-        self.applicationIcon(icon);
-      }
-  }
-  
 // Collect the results in report order.
 - (NSAttributedString *) collectResults
   {

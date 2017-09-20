@@ -23,7 +23,6 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
   {
   NSMutableDictionary * myResults;
   NSMutableDictionary * myCompleted;
-  dispatch_queue_t myQueue;
   
   SectionCallback myStartSection;
   SectionCallback myCompleteSection;
@@ -37,7 +36,6 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
 
 @property (retain) NSMutableDictionary * results;
 @property (retain) NSMutableDictionary * completed;
-@property dispatch_queue_t queue;
 
 // The section start callback.
 @property (copy) SectionCallback startSection;
