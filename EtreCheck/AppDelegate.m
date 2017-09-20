@@ -36,12 +36,6 @@
 
 NSComparisonResult compareViews(id view1, id view2, void * context);
 
-@interface AppDelegate ()
-
-- (void) collectInfo;
-
-@end
-
 @implementation AppDelegate
 
 @synthesize window;
@@ -59,12 +53,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize progressTimer = myProgressTimer;
 @synthesize machineIcon = myMachineIcon;
 @synthesize applicationIcon = myApplicationIcon;
+@synthesize applicationIcons = myApplicationIcons;
 @synthesize magnifyingGlass = myMagnifyingGlass;
 @synthesize magnifyingGlassShade = myMagnifyingGlassShade;
 @synthesize finderIcon = myFinderIcon;
 @synthesize demonImage = myDemonImage;
 @synthesize agentImage = myAgentImage;
 @synthesize collectionStatus = myCollectionStatus;
+@synthesize collectionStatusLabel = myCollectionStatusLabel;
 @synthesize reportView = myReportView;
 @synthesize animationView = myAnimationView;
 @synthesize startPanel = myStartPanel;
@@ -125,6 +121,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @dynamic showSignatureFailures;
 @dynamic hideAppleTasks;
 @dynamic canSubmitDonationLookup;
+
+@synthesize collectionStarted = myCollectionStarted;
+@synthesize haveApplications = myHaveApplications;
+@synthesize animationsComplete = myAnimationsComplete;
 
 + (NSSet *) keyPathsForValuesAffectingProblemSelected
   {
@@ -251,12 +251,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.progressTimer = nil;
   self.machineIcon = nil;
   self.applicationIcon = nil;
+  self.applicationIcons = nil;
   self.magnifyingGlass = nil;
   self.magnifyingGlassShade = nil;
   self.finderIcon = nil;
   self.demonImage = nil;
   self.agentImage = nil;
   self.collectionStatus = nil;
+  self.collectionStatusLabel = nil;
   self.reportView = nil;
   self.animationView = nil;
   self.startPanel = nil;
@@ -303,6 +305,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.donationLookupEmail = nil;
   self.window = nil;
   
+  dispatch_release(self.collectionStarted);
+  dispatch_release(self.haveApplications);
+  dispatch_release(self.animationsComplete);
+  
   [super dealloc];
   }
 
@@ -334,6 +340,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.applicationIcon updateSubviewsWithTransition: kCATransitionPush];
   [self.applicationIcon
     transitionToImage: [[Utilities shared] genericApplicationIcon]];
+    
+  myApplicationIcons = [NSMutableArray new];
+  
+  self.collectionStarted = dispatch_semaphore_create(0);
+  self.haveApplications = dispatch_semaphore_create(0);
+  self.animationsComplete = dispatch_semaphore_create(0);
         
   [self.magnifyingGlass setHidden: NO];
     
@@ -1229,6 +1241,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
     ^{
+      [self runAnimations];
+    });
+
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+    ^{
       [self collectInfo];
     });
     
@@ -1312,11 +1330,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   return YES;
   }
 
-// Fire it up.
-- (void) collectInfo
+// Fire up the animations.
+- (void) runAnimations
   {
-  NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-  
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
@@ -1324,13 +1340,257 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.spinner startAnimation: self];
     });
 
-  [self setupNotificationHandlers];
+  [self runMachineAnimation];
   
+  [self runApplicationIconAnimation];
+  
+  [self runAgentsAndDaemonsAnimation];
+  
+  dispatch_semaphore_signal(self.animationsComplete);
+  }
+
+// Run the machine animation.
+- (void) runMachineAnimation
+  {
+  dispatch_semaphore_wait(self.collectionStarted, DISPATCH_TIME_FOREVER);
+  
+  NSArray * machineIcons = [self findMachineIcons];
+  
+  struct timespec tm;
+  
+  tm.tv_sec = 0;
+  tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
+  
+  for(NSImage * icon in machineIcons)
+    {
+    nanosleep(& tm, NULL);
+    
+    [self showMachineIcon: icon];
+    }
+  
+  nanosleep(& tm, NULL);
+
+  // Make sure there is some image, even if a generic question mark.
+  NSImage * icon = [NSImage imageNamed: NSImageNameComputer];
+  
+  [icon setSize: NSMakeSize(1024.0, 1024.0)];
+  
+  [self showMachineIcon: icon];
+  }
+
+// Find some interesting machine icons.
+- (NSArray *) findMachineIcons
+  {
+  NSArray * machines =
+    @[
+      @"MacBookPro7,1",
+      @"MacBookPro8,2",
+      @"MacBookPro8,3",
+      @"iMac13,1",
+      @"iMac13,2",
+      @"MacBookPro10,2",
+      @"MacBookPro11,2",
+      @"Macmini1,1",
+      @"Macmini4,1",
+      @"Macmini5,1",
+      @"MacBook5,2",
+      @"MacBook8,1",
+      @"MacPro2,1",
+      @"MacPro6,1",
+      @"MacBookAir3,1",
+      @"MacBookAir3,2" 
+    ];
+    
+  NSMutableArray * machineIcons = [NSMutableArray array];
+  
+  for(NSString * code in machines)
+    {
+    NSImage * machineIcon = [Utilities findMachineIcon: code];
+  
+    if(machineIcon)
+      [machineIcons addObject: machineIcon];
+    }
+    
+  return machineIcons;
+  }
+
+// Run the applications animation.
+- (void) runApplicationIconAnimation
+  {
+  dispatch_semaphore_wait(self.haveApplications, DISPATCH_TIME_FOREVER);
+  
+  __block NSImage * icon = nil;
+
+  struct timespec tm;
+  
+  tm.tv_sec = 0;
+  tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
+  
+  __block bool done = false;
+  
+  while(!done)
+    {
+    dispatch_sync(
+      dispatch_get_main_queue(),
+      ^{
+        if(self.applicationIcons.count > 0)
+          {
+          icon = [self.applicationIcons objectAtIndex: 0];
+        
+          [icon retain];
+
+          [self.applicationIcons removeObjectAtIndex: 0];              
+          }
+        else
+          done = true;
+      });
+  
+    if(done)
+      break;
+      
+    nanosleep(& tm, NULL);
+  
+    if(icon != nil)
+      [self showApplicationIcon: icon];
+      
+    [icon release];
+    }
+
+  nanosleep(& tm, NULL);
+
+  // Show the EtreCheck icon.
+  icon = [NSImage imageNamed: NSImageNameApplicationIcon];
+  
+  [icon setSize: NSMakeSize(128.0, 128.0)];
+  
+  [self showApplicationIcon: icon];
+  }
+
+// Run the agents and daemons animation.
+- (void) runAgentsAndDaemonsAnimation
+  {
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      NSRect demonStartFrame = [self.demonImage frame];
+      NSRect demonEndFrame = demonStartFrame;
+      
+      demonEndFrame.origin.x -= 45;
+
+      NSRect agentStartFrame = [self.agentImage frame];
+      NSRect agentEndFrame = agentStartFrame;
+      
+      agentEndFrame.origin.x += 45;
+
+      [self animateDemon: demonEndFrame];
+      [self animateDemon: demonStartFrame agent: agentEndFrame];
+      [self animateAgent: agentStartFrame];
+    });
+  }
+
+// Show the demon.
+- (void) animateDemon: (NSRect) demonEndFrame
+  {
+  dispatch_after(
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)),
+    dispatch_get_main_queue(),
+    ^{
+      [NSAnimationContext beginGrouping];
+      
+      [[NSAnimationContext currentContext] setDuration: 0.5];
+      
+      [[self.demonImage animator] setFrame: demonEndFrame];
+      
+      [NSAnimationContext endGrouping];
+    });
+  }
+
+// Hide the demon and show the agent.
+- (void) animateDemon: (NSRect) demonStartFrame agent: (NSRect) agentEndFrame
+  {
+  dispatch_after(
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)),
+    dispatch_get_main_queue(),
+    ^{
+      [NSAnimationContext beginGrouping];
+      
+      [[NSAnimationContext currentContext] setDuration: 0.5];
+      
+      [[self.demonImage animator] setFrame: demonStartFrame];
+      [[self.agentImage animator] setFrame: agentEndFrame];
+
+      [NSAnimationContext endGrouping];
+    });
+  }
+
+// Hide the agent.
+- (void) animateAgent: (NSRect) agentStartFrame
+  {
+  dispatch_after(
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(21 * NSEC_PER_SEC)),
+    dispatch_get_main_queue(),
+    ^{
+      [NSAnimationContext beginGrouping];
+      
+      [[NSAnimationContext currentContext] setDuration: 0.5];
+      
+      [[self.agentImage animator] setFrame: agentStartFrame];
+
+      [NSAnimationContext endGrouping];
+    });
+  }
+
+// Start the collection.
+- (void) collectInfo
+  {
   Checker * checker = [Checker new];
   
+  checker.startSection = 
+    ^(NSString * sectionName) 
+      {
+      [self setStatus: sectionName];
+      };
+  
+  checker.progress = 
+    ^(double progress) 
+      {
+      [self setCurrentProgress: progress];
+      };
+  
+  checker.status = 
+    ^(NSString * status) 
+      {
+      [self updateCollectionStatus: status];
+      };
+  
+  checker.applicationIcon = 
+    ^(NSImage * icon) 
+      {
+      __block bool start = false;
+      
+      dispatch_async(
+        dispatch_get_main_queue(),
+        ^{
+          start = self.applicationIcons.count == 0;
+            
+          [self.applicationIcons addObject: icon];
+
+          if(start)
+            dispatch_semaphore_signal(self.haveApplications);
+        });
+      };
+
+  checker.complete = 
+    ^{
+    };
+  
+  dispatch_semaphore_signal(self.collectionStarted);
+
   NSAttributedString * results = [checker check];
   
-  dispatch_async(
+  dispatch_semaphore_wait(self.animationsComplete, DISPATCH_TIME_FOREVER);
+  
+  dispatch_sync(
     dispatch_get_main_queue(),
     ^{
       [self printEtreCheckHeader];
@@ -1343,8 +1603,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     });
     
   [checker release];
-  
-  [pool drain];
   }
 
 // Print the EtreCheck header.
@@ -1733,57 +1991,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         @"%ld:%02ld", (unsigned long)minutes, (unsigned long)seconds];
   }
 
-// Setup notification handlers.
-- (void) setupNotificationHandlers
-  {
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(statusUpdated:)
-    name: kStatusUpdate
-    object: nil];
-
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(progressUpdated:)
-    name: kProgressUpdate
-    object: nil];
-
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(applicationFound:)
-    name: kFoundApplication
-    object: nil];
-
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(showMachineIcon:)
-    name: kShowMachineIcon
-    object: nil];
-
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(showCollectionStatus:)
-    name: kCollectionStatus
-    object: nil];
-
-  [[NSNotificationCenter defaultCenter]
-    addObserver: self
-    selector: @selector(showDemonAgent:)
-    name: kShowDemonAgent
-    object: nil];
-  }
-
-// Handle a status update.
-- (void) statusUpdated: (NSNotification *) notification
+// Set the status.
+- (void) setStatus: (NSString *) sectionName
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
       NSMutableAttributedString * status = [self.displayStatus mutableCopy];
       
+      NSString * currentStatus = 
+        ESLocalizedStringFromTable(sectionName, @"Status", NULL);
+      
       [status
         appendString:
-          [NSString stringWithFormat: @"%@\n", [notification object]]];
+          [NSString stringWithFormat: @"%@\n", currentStatus]];
 
       self.displayStatus = status;
 
@@ -1795,16 +2016,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     });  
   }
   
-// Handle a progress update.
-- (void) progressUpdated: (NSNotification *) notification
+// Set the progress.
+- (void) setCurrentProgress: (double) value
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      self.nextProgressIncrement = [[notification object] doubleValue];
+      self.nextProgressIncrement = value;
     });
   }
-
+  
 - (void) updateProgress: (double) amount
   {
   // Try to make Snow Leopard update.
@@ -1822,35 +2043,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[[NSApplication sharedApplication] dockTile] display];
   }
 
-// Handle an application found.
-- (void) applicationFound: (NSNotification *) notification
+// Show an application icon.
+- (void) showApplicationIcon: (NSImage *) icon
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      [self.applicationIcon transitionToImage: [notification object]];
+      [self.applicationIcon transitionToImage: icon];
     });
   }
-
+  
 // Show a machine icon.
-- (void) showMachineIcon: (NSNotification *) notification
+- (void) showMachineIcon: (NSImage *) icon
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      [self.machineIcon transitionToImage: [notification object]];
+      [self.machineIcon transitionToImage: icon];
     });
   }
 
-// Show the coarse collection status.
-- (void) showCollectionStatus: (NSNotification *) notification
+// Set the collection status.
+- (void) updateCollectionStatus: (NSString *) status
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
       // Move the spinner to make room for the status.
-      NSString * status = [notification object];
-      
       NSRect oldRect =
         [self.collectionStatus
           boundingRectWithSize: NSMakeSize(1000, 1000)
@@ -1884,84 +2103,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.spinner setFrame: frame];
       [self.spinner setHidden: NO];
       
-      self.collectionStatus = [notification object];
+      self.collectionStatus = status;
     });
   }
-
-// Show the demon and agent animation.
-- (void) showDemonAgent: (NSNotification *) notification
-  {
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      NSRect demonStartFrame = [self.demonImage frame];
-      NSRect demonEndFrame = demonStartFrame;
-      
-      demonEndFrame.origin.x -= 45;
-
-      NSRect agentStartFrame = [self.agentImage frame];
-      NSRect agentEndFrame = agentStartFrame;
-      
-      agentEndFrame.origin.x += 45;
-
-      [self animateDemon: demonEndFrame];
-      [self animateDemon: demonStartFrame agent: agentEndFrame];
-      [self animateAgent: agentStartFrame];
-    });
-  }
-
-// Show the demon.
-- (void) animateDemon: (NSRect) demonEndFrame
-  {
-  dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)),
-    dispatch_get_main_queue(),
-    ^{
-      [NSAnimationContext beginGrouping];
-      
-      [[NSAnimationContext currentContext] setDuration: 0.5];
-      
-      [[self.demonImage animator] setFrame: demonEndFrame];
-      
-      [NSAnimationContext endGrouping];
-    });
-  }
-
-// Hide the demon and show the agent.
-- (void) animateDemon: (NSRect) demonStartFrame agent: (NSRect) agentEndFrame
-  {
-  dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)),
-    dispatch_get_main_queue(),
-    ^{
-      [NSAnimationContext beginGrouping];
-      
-      [[NSAnimationContext currentContext] setDuration: 0.5];
-      
-      [[self.demonImage animator] setFrame: demonStartFrame];
-      [[self.agentImage animator] setFrame: agentEndFrame];
-
-      [NSAnimationContext endGrouping];
-    });
-  }
-
-// Hide the agent.
-- (void) animateAgent: (NSRect) agentStartFrame
-  {
-  dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(21 * NSEC_PER_SEC)),
-    dispatch_get_main_queue(),
-    ^{
-      [NSAnimationContext beginGrouping];
-      
-      [[NSAnimationContext currentContext] setDuration: 0.5];
-      
-      [[self.agentImage animator] setFrame: agentStartFrame];
-
-      [NSAnimationContext endGrouping];
-    });
-  }
-
+  
 // Show the output pane.
 - (void) displayOutput
   {

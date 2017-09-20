@@ -231,4 +231,7 @@
 // Purge notification SPAM.
 + (BOOL) purgeNotificationSPAM: (NSArray *) note_ids;
 
+// Find a machine icon.
++ (NSImage *) findMachineIcon: (NSString *) code;
+
 @end

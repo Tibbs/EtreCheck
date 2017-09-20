@@ -131,7 +131,7 @@
             [[[Model model] diskErrors]
               objectForKey: disk];
             
-          if(!errorCount)
+          if(errorCount == nil)
             errorCount = [NSNumber numberWithUnsignedInteger: 0];
             
           errorCount =
@@ -174,7 +174,7 @@
     NSNumber * errorCount =
       [[Model model] gpuErrors];
       
-    if(!errorCount)
+    if(errorCount == nil)
       errorCount = [NSNumber numberWithUnsignedInteger: 0];
       
     errorCount =
@@ -360,7 +360,7 @@
 // Collect results from the ioreg_output_description log entry.
 - (void) collectIOReg: (NSString *) content
   {
-  BOOL found = NO;
+  //BOOL found = NO;
   
   NSArray * lines = [content componentsSeparatedByString: @"\n"];
   
@@ -385,7 +385,7 @@
       if([scanner scanInt: & shutdownCause])
         {
         [self parseShutdownCode: shutdownCause];
-        found = YES;
+        //found = YES;
         }
       }
     }

@@ -359,7 +359,9 @@
     
   if(self.simulating)
     {
-    *corrupt = YES;
+    if(corrupt != NULL)
+      *corrupt = YES;
+    
     count = 1024;
     }
     

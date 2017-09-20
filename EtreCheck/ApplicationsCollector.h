@@ -12,4 +12,7 @@
   NSImage * genericApplication;
   }
 
+// Get the application icons.
+- (NSArray *) applicationIcons;
+
 @end

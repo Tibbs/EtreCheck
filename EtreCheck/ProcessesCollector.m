@@ -223,10 +223,10 @@
         NSNumber * value1 = [process1 objectForKey: key];
         NSNumber * value2 = [process2 objectForKey: key];
         
-        if(!value1 && value2)
+        if((value1 == nil) && (value2 != nil))
           return (NSComparisonResult)NSOrderedDescending;
         
-        if(value1 && !value2)
+        if((value1 != nil) && (value2 == nil))
           return (NSComparisonResult)NSOrderedAscending;
 
         if([value1 doubleValue] < [value2 doubleValue])

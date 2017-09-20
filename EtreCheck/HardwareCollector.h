@@ -48,7 +48,4 @@
 // Does the machien support low energy?
 @property (assign) BOOL supportsLowEnergy;
 
-// Find a machine icon.
-- (NSImage *) findMachineIcon: (NSString *) code;
-
 @end

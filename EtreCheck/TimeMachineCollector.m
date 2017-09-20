@@ -374,7 +374,7 @@
   unsigned long long used =
     [size unsignedLongLongValue] - [freespace unsignedLongLongValue];
   
-  if(size)
+  if(size != nil)
     diskSize =
       [formatter stringFromByteCount: [size unsignedLongLongValue]];
     
@@ -394,7 +394,7 @@
   [self.model addElement: @"used" valueWithUnits: spaceRequired];
   [self.model endElement: @"volume"];
 
-  if(size)
+  if(size != nil)
     {
     minimumBackupSize += used;
     maximumBackupSize += [size unsignedLongLongValue];
@@ -443,7 +443,7 @@
   [self.model 
     addElement: @"skipsystemfiles" boolValue: [skipSystemFiles boolValue]];
   
-  if(skipSystemFiles)
+  if(skipSystemFiles != nil)
     {
     bool skip = [skipSystemFiles boolValue];
 
@@ -474,7 +474,7 @@
   [self.model 
     addElement: @"mobilebackups" boolValue: [mobileBackups boolValue]];
   
-  if(mobileBackups)
+  if(mobileBackups != nil)
     {
     bool mobile = [mobileBackups boolValue];
 
@@ -498,7 +498,7 @@
 
   [self.model addElement: @"autobackup" boolValue: [autoBackup boolValue]];
 
-  if(autoBackup)
+  if(autoBackup != nil)
     {
     bool backup = [autoBackup boolValue];
 

@@ -171,10 +171,10 @@
         [status setObject: [NSNumber numberWithBool: NO] forKey: kPrinted];
         [status setObject: [NSNumber numberWithBool: NO] forKey: kIgnored];
         
-        if(lastExitStatus)
+        if(lastExitStatus != nil)
           [status setObject: lastExitStatus forKey: @"LastExitStatus"];
     
-        if(PID)
+        if(PID != nil)
           [status setObject: PID forKey: @"PID"];
 
         [self.launchdStatus setObject: status forKey: label];
@@ -406,7 +406,7 @@
   
   NSString * jobStatus = kStatusUnknown;
 
-  if(pid)
+  if(pid != nil)
     jobStatus = kStatusRunning;
   else if(exitStatus == 172)
     {

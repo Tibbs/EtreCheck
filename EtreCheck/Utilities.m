@@ -2257,4 +2257,16 @@
   return success;
   }
 
+// Find a machine icon.
++ (NSImage *) findMachineIcon: (NSString *) code
+  {
+  // Load the machine image.
+  NSString * iconPath = NSLocalizedStringFromTable(code, @"machineIcons", NULL);
+  
+  if(!iconPath)
+    return nil;
+
+  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
+  }
+
 @end

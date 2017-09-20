@@ -283,4 +283,44 @@
   return [NSString stringWithFormat: @": %@%@", version, OSVersion];
   }
 
+// Get the application icons.
+- (NSArray *) applicationIcons
+  {
+  NSMutableArray * icons = [NSMutableArray array];
+  
+  NSDictionary * applications = [[Model model] applications];
+  
+  for(NSString * name in applications)
+    {
+    NSDictionary * application = [applications objectForKey: name];
+    
+    if(application != nil)
+      {
+      NSImage * icon = [self applicationIcon: application];
+    
+      if(icon != nil)
+        [icons addObject: icon];
+      }
+    }  
+    
+  return icons;
+  }
+
+// Get an application icon.
+- (NSImage *) applicationIcon: (NSDictionary *) application
+  {
+  NSString * iconPath = [application objectForKey: @"iconPath"];
+  
+  if(!iconPath)
+    return nil;
+    
+  // Only report 3rd party applications.
+  NSString * obtained_from = [application objectForKey: @"obtained_from"];
+  
+  if([obtained_from isEqualToString: @"apple"])
+    return nil;
+      
+  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
+  }
+
 @end

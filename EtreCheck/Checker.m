@@ -57,11 +57,28 @@
 @synthesize completed = myCompleted;
 @synthesize queue = myQueue;
 
+@synthesize startSection = myStartSection;
+@synthesize completeSection = myCompleteSection;
+@synthesize progress = myProgress;
+@synthesize applicationIcon = myApplicationIcon;
+@synthesize complete = myComplete;
+@synthesize status = myStatus;
+
+@synthesize currentProgress = myCurrentProgress;
+
 // Destructor.
 - (void) dealloc
   {
   [myResults release];
   [myCompleted release];
+  dispatch_release(self.queue);
+  
+  [myStartSection release];
+  [myCompleteSection release];
+  [myProgress release];
+  [myApplicationIcon release];
+  [myComplete release];
+  [myStatus release];
   
   [LaunchdCollector cleanup];
 
@@ -85,6 +102,9 @@
     postNotificationName: kCollectionStatus
     object: NSLocalizedString(@"Checking hardware", NULL)];
 
+  if(self.status != nil)
+    self.status(NSLocalizedString(@"Checking hardware", NULL));
+    
   // Run stage 1.
   [self checkStage1To: 30.0];
     
@@ -95,6 +115,9 @@
       [[NSNotificationCenter defaultCenter]
         postNotificationName: kCollectionStatus
         object: NSLocalizedString(@"Checking software", NULL)];
+
+      if(self.status != nil)
+        self.status(NSLocalizedString(@"Checking software", NULL));
     });
   
   // Now do stage 2.
@@ -106,6 +129,9 @@
     [[NSNotificationCenter defaultCenter]
       postNotificationName: kCollectionStatus
       object: NSLocalizedString(@"Checking daemons and agents", NULL)];
+
+    if(self.status != nil)
+      self.status(NSLocalizedString(@"Checking daemons and agents", NULL));
     });
 
   // Finally do stage 3.
@@ -128,10 +154,10 @@
     
   // Collect items that will be needed by other collectors.
   [collectors addObject: [[SystemSoftwareCollector new] autorelease]];
+  [collectors addObject: [[ApplicationsCollector new] autorelease]];
   [collectors addObject: hardwareCollector];
   [collectors addObject: [[LogCollector new] autorelease]];
   [collectors addObject: [[DiskCollector new] autorelease]];
-  [collectors addObject: [[ApplicationsCollector new] autorelease]];
   [collectors addObject: [[VideoCollector new] autorelease]];
   [collectors addObject: [[USBCollector new] autorelease]];
   [collectors addObject: [[FirewireCollector new] autorelease]];
@@ -139,83 +165,7 @@
   [collectors addObject: [[VirtualVolumeCollector new] autorelease]];
   [collectors addObject: [[TimeMachineCollector new] autorelease]];
   
-  // Start the machine animation.
-  [self runMachineAnimation: hardwareCollector];
-  
   [self performCollections: collectors to: to];
-  }
-
-// Run the machine animation.
-- (void) runMachineAnimation: (HardwareCollector *) hardwareCollector
-  {
-  NSArray * machineIcons = [self findMachineIcons: hardwareCollector];
-  
-  dispatch_async(
-    self.queue,
-    ^{
-      for(NSImage * icon in machineIcons)
-        {
-        [[NSNotificationCenter defaultCenter]
-          postNotificationName: kShowMachineIcon
-          object: icon];
-          
-        struct timespec tm;
-        
-        tm.tv_sec = 0;
-        tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
-        
-        nanosleep(& tm, NULL);
-        
-        if(hardwareCollector.done)
-          break;
-        }
-      
-      // Make sure there is some image, even if a generic question mark.
-      NSImage * machineIcon = hardwareCollector.machineIcon;
-      
-      if(!machineIcon)
-        machineIcon = [[Utilities shared] machineNotFoundIcon];
-      
-      [[NSNotificationCenter defaultCenter]
-        postNotificationName: kShowMachineIcon
-        object: machineIcon];
-    });
-  }
-
-// Find some interesting machine icons.
-- (NSArray *) findMachineIcons: (HardwareCollector *) hardwareCollector
-  {
-  NSArray * machines =
-    @[
-      @"MacBookPro7,1",
-      @"MacBookPro8,2",
-      @"MacBookPro8,3",
-      @"iMac13,1",
-      @"iMac13,2",
-      @"MacBookPro10,2",
-      @"MacBookPro11,2",
-      @"Macmini1,1",
-      @"Macmini4,1",
-      @"Macmini5,1",
-      @"MacBook5,2",
-      @"MacBook8,1",
-      @"MacPro2,1",
-      @"MacPro6,1",
-      @"MacBookAir3,1",
-      @"MacBookAir3,2" 
-    ];
-    
-  NSMutableArray * machineIcons = [NSMutableArray array];
-  
-  for(NSString * code in machines)
-    {
-    NSImage * machineIcon = [hardwareCollector findMachineIcon: code];
-  
-    if(machineIcon)
-      [machineIcons addObject: machineIcon];
-    }
-    
-  return machineIcons;
   }
 
 // Check stage 2.
@@ -242,78 +192,7 @@
   [collectors addObject: [[InstallCollector new] autorelease]];
   [collectors addObject: lastCollector];
   
-  // Start the machine animation.
-  [self runApplicationsAnimation: lastCollector];
-  
   [self performCollections: collectors to: to];
-  }
-
-// Run the applications animation.
-- (void) runApplicationsAnimation: (Collector *) lastCollector
-  {
-  dispatch_async(
-    self.queue,
-    ^{
-      [self performApplicationsAnimation: lastCollector];
-    });
-  }
-
-// Perform applications animation.
-- (void) performApplicationsAnimation: (Collector *) lastCollector
-  {
-  NSDictionary * applications =
-    [[Model model] applications];
-  
-  int count = 0;
-  
-  for(NSString * name in applications)
-    {
-    if([name isEqualToString: @"EtreCheck"])
-      continue;
-     
-    NSImage * icon =
-      [self applicationIcon: [applications objectForKey: name]];
-    
-    if(!icon)
-      continue;
-      
-    [[NSNotificationCenter defaultCenter]
-      postNotificationName: kFoundApplication object: icon];
-
-    struct timespec tm;
-    
-    tm.tv_sec = 0;
-    tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
-    
-    nanosleep(& tm, NULL);
-    
-    // Wait to see if the collection finishes. If it does, exit
-    // early.
-    if(count++ > 10)
-      if(lastCollector.done)
-        break;
-    }
-
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kFoundApplication
-    object: [[Utilities shared] EtreCheckIcon]];
-  }
-
-// Get an application icon.
-- (NSImage *) applicationIcon: (NSDictionary *) application
-  {
-  NSString * iconPath = [application objectForKey: @"iconPath"];
-  
-  if(!iconPath)
-    return nil;
-    
-  // Only report 3rd party applications.
-  NSString * obtained_from = [application objectForKey: @"obtained_from"];
-  
-  if([obtained_from isEqualToString: @"apple"])
-    return nil;
-      
-  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
   }
 
 // Check stage 3.
@@ -348,35 +227,10 @@
   [collectors addObject: [[CleanupCollector new] autorelease]];
   [collectors addObject: [[EtreCheckCollector new] autorelease]];
 
-  // Start the agents and daemons animation.
-  dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];
-    
   [self performCollections: collectors to: to];
 
-  // Wait for the animation to finish.
-  dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-  
-  dispatch_release(semaphore);
-  }
-
-// Run the applications animation.
-- (dispatch_semaphore_t) runAgentsAndDaemonsAnimation
-  {
-  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-  
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-    ^{
-      [[NSNotificationCenter defaultCenter]
-        postNotificationName: kShowDemonAgent
-        object: nil];
-      
-      sleep(40);
-      
-      dispatch_semaphore_signal(semaphore);
-    });
-
-  return semaphore;
+  if(self.complete)
+    self.complete();
   }
 
 // Perform some collections.
@@ -385,6 +239,8 @@
   [[NSNotificationCenter defaultCenter]
     postNotificationName: kProgressUpdate
     object: [NSNumber numberWithDouble: to]];
+  
+  double increment = (to - self.currentProgress) / collectors.count;
   
   NSDictionary * environment = [[NSProcessInfo processInfo] environment];
   
@@ -395,11 +251,22 @@
     {
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
     
+    if(self.startSection)
+      self.startSection([collector name]);
+      
     if(simulate)
       [collector simulate];
     else
       [collector collect];
     
+    [self reportApplicationIcons: collector];
+    
+    if(self.completeSection)
+      self.completeSection([collector name]);
+
+    if(self.progress)
+      self.progress(self.currentProgress += increment);    
+
     if(collector.result != nil)
       [self.results setObject: collector.result forKey: collector.name];
     
@@ -408,8 +275,25 @@
     
     [pool drain];
     }
+
+  if(self.progress)
+    self.progress(to);    
   }
 
+// Report application icons.
+- (void) reportApplicationIcons: (Collector *) collector
+  {
+  if([collector respondsToSelector: @selector(applicationIcons)])
+    if(self.applicationIcon != nil)
+      {
+      NSArray * icons = 
+        [(ApplicationsCollector *)collector applicationIcons];
+      
+      for(NSImage * icon in icons)
+        self.applicationIcon(icon);
+      }
+  }
+  
 // Collect the results in report order.
 - (NSAttributedString *) collectResults
   {

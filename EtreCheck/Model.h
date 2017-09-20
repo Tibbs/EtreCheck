@@ -57,7 +57,8 @@
   NSMutableSet * myProcesses;
   NSString * myComputerName;
   NSString * myHostName;
-  bool myPossibleAdwareFound;
+  bool myAdwareFound;
+  bool myUnsignedFound;
   NSMutableDictionary * myAdwareFiles;
   NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;

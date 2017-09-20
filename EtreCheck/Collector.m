@@ -18,6 +18,7 @@
 @synthesize complete = myComplete;
 @dynamic done;
 @synthesize model = myModel;
+@synthesize simulating = mySimulating;
 
 // Is this collector complete?
 - (bool) done

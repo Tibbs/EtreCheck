@@ -477,7 +477,7 @@
   NSNumber * sizeInBytes =
     [volume objectForKey: @"size_in_bytes"];
   
-  if(sizeInBytes)
+  if(sizeInBytes != nil)
     {
     ByteCountFormatter * formatter = [ByteCountFormatter new];
     
@@ -505,7 +505,7 @@
   NSNumber * freeSpaceInBytes =
     [volume objectForKey: @"free_space_in_bytes"];
   
-  if(freeSpaceInBytes)
+  if(freeSpaceInBytes != nil)
     {
     ByteCountFormatter * formatter = [ByteCountFormatter new];
     

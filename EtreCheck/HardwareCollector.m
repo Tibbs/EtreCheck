@@ -516,33 +516,6 @@
   return icon;
   }
 
-// Find a machine icon.
-- (NSImage *) findMachineIcon: (NSString *) code
-  {
-  NSDictionary * machineInformation = [self.properties objectForKey: code];
-      
-  // Load the machine image.
-  NSString * iconPath =
-    [machineInformation objectForKey: @"hardwareImageName"];
-  
-  // Don't give up.
-  if(!iconPath)
-    {
-    iconPath = ESLocalizedStringFromTable(code, @"machineIcons", NULL);
-    
-    if(iconPath)
-      {
-      if(![[NSFileManager defaultManager] fileExistsAtPath: iconPath])
-        iconPath = nil;
-      }
-    }
-    
-  if(!iconPath)
-    return nil;
-
-  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
-  }
-
 // Print memory, flagging insufficient amounts.
 - (void) printMemory: (NSString *) memory
   {

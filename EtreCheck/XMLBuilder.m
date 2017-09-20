@@ -579,8 +579,15 @@
     self.valid = NO;
     }
   
-  // And it should be the element beingn closed.
-  if(![name isEqualToString: openChild.name])
+  // There should be at least one.
+  if(openChild.name == nil)
+    {
+    NSLog(@"Cannot close element %@, Invalid open element.", name);
+    self.valid = NO;
+    }
+
+  // And it should be the element being closed.
+  else if(![name isEqualToString: openChild.name])
     {
     NSLog(  
       @"Cannot close element %@, Current element is %@", 

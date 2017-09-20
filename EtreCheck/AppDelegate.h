@@ -41,6 +41,7 @@
   NSTimer * myProgressTimer;
   SlideshowView * myMachineIcon;
   SlideshowView * myApplicationIcon;
+  NSMutableArray * myApplicationIcons;
   NSImageView * myMagnifyingGlass;
   NSImageView * myMagnifyingGlassShade;
   NSImageView * myFinderIcon;
@@ -107,6 +108,10 @@
   
   BOOL myCopyDisabled;
   BOOL myActive;
+  
+  dispatch_semaphore_t myCollectionStarted;
+  dispatch_semaphore_t myHaveApplications;
+  dispatch_semaphore_t myAnimationsComplete;
   }
   
 @property (retain) IBOutlet EtreCheckWindow * window;
@@ -126,6 +131,7 @@
 @property (retain) NSTimer * progressTimer;
 @property (retain) IBOutlet SlideshowView * machineIcon;
 @property (retain) IBOutlet SlideshowView * applicationIcon;
+@property (retain) IBOutlet NSMutableArray * applicationIcons;
 @property (retain) IBOutlet NSImageView * magnifyingGlass;
 @property (retain) IBOutlet NSImageView * magnifyingGlassShade;
 @property (retain) IBOutlet NSImageView * finderIcon;
@@ -187,6 +193,9 @@
 @property (readonly) NSTextView * currentTextView;
 @property (assign) BOOL copyDisabled;
 @property (assign) BOOL active;
+@property (assign) dispatch_semaphore_t collectionStarted;
+@property (assign) dispatch_semaphore_t haveApplications;
+@property (assign) dispatch_semaphore_t animationsComplete;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

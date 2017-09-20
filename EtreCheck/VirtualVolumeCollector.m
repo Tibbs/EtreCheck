@@ -410,7 +410,7 @@
     
     NSString * size = @"";
     
-    if(pvSize)
+    if(pvSize != nil)
       {
       ByteCountFormatter * formatter = [ByteCountFormatter new];
       
