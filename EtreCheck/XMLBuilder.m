@@ -6,6 +6,59 @@
 #import "XMLBuilder.h"
 
 // An XML node.
+@interface XMLNode : NSObject
+  {
+  XMLElement * myParent;
+  }
+
+// The node's parent.
+@property (assign) XMLElement * parent;
+
+@end
+
+// An XML text node.
+@interface XMLTextNode : XMLNode
+  {
+  NSString * myText;
+  BOOL myIsCDATA;
+  }
+
+// The node's text.
+@property (retain) NSString * text;
+@property (assign) BOOL isCDATA;
+
+// Constructor.
+- (instancetype) initWithText: (NSString *) text;
+
+@end
+
+// Encapsulate each element.
+@interface XMLElement : XMLNode
+  {
+  NSString * myName;
+  NSMutableDictionary * myAttributes;
+  NSMutableArray * myChildren;
+  NSMutableArray * myOpenChildren;
+  }
+
+// The name of the element.
+@property (retain) NSString * name;
+
+// The element's attributes.
+@property (retain) NSMutableDictionary * attributes;
+
+// The stack of closed children.
+@property (retain) NSMutableArray * children;
+
+// The stack of open children.
+@property (retain) NSMutableArray * openChildren;
+
+// Constructor with name and indent.
+- (instancetype) initWithName: (NSString *) name;
+
+@end
+
+// An XML node.
 @implementation XMLNode
 
 @synthesize parent = myParent;

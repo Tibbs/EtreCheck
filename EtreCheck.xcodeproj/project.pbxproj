@@ -339,7 +339,7 @@
 		A552A3161818BC7F00829BA3 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		A552A3181818BD1F00829BA3 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
 		A552A31B1818BD8300829BA3 /* CarbonCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarbonCore.framework; path = ../../../../System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework; sourceTree = "<group>"; };
-		A55BC16915BF987D00D42EF1 /* EtreCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EtreCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A55BC16915BF987D00D42EF1 /* EtreCheck-10.6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EtreCheck-10.6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A55BC16D15BF987D00D42EF1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A55BC17015BF987D00D42EF1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A55BC17115BF987D00D42EF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -705,7 +705,7 @@
 		A55BC16A15BF987D00D42EF1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A55BC16915BF987D00D42EF1 /* EtreCheck.app */,
+				A55BC16915BF987D00D42EF1 /* EtreCheck-10.6.app */,
 				A5F43C0C1EC2547A008723CC /* EtreCheckTests.xctest */,
 				A589CD1E1F71644500D66592 /* LibEtreCheck.framework */,
 				A589CD261F71644500D66592 /* LibEtreCheckTests.xctest */,
@@ -928,9 +928,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A55BC16815BF987D00D42EF1 /* EtreCheck */ = {
+		A55BC16815BF987D00D42EF1 /* EtreCheck-10.6 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck" */;
+			buildConfigurationList = A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck-10.6" */;
 			buildPhases = (
 				A55BC16515BF987D00D42EF1 /* Sources */,
 				A55BC16615BF987D00D42EF1 /* Frameworks */,
@@ -944,9 +944,9 @@
 			dependencies = (
 				A589CD321F71644500D66592 /* PBXTargetDependency */,
 			);
-			name = EtreCheck;
+			name = "EtreCheck-10.6";
 			productName = EtreCheck;
-			productReference = A55BC16915BF987D00D42EF1 /* EtreCheck.app */;
+			productReference = A55BC16915BF987D00D42EF1 /* EtreCheck-10.6.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A589CD1D1F71644500D66592 /* LibEtreCheck */ = {
@@ -1051,7 +1051,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A55BC16815BF987D00D42EF1 /* EtreCheck */,
+				A55BC16815BF987D00D42EF1 /* EtreCheck-10.6 */,
 				A5F43C0B1EC2547A008723CC /* EtreCheckTests */,
 				A589CD1D1F71644500D66592 /* LibEtreCheck */,
 				A589CD251F71644500D66592 /* LibEtreCheckTests */,
@@ -1120,7 +1120,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SIZE=$(/usr/bin/gzip --stdout $SRCROOT/$PRODUCT_NAME/adware.plist | /usr/bin/wc -c)\nSHORT=`expr $SIZE - 3`\n/usr/bin/gzip --stdout $SRCROOT/$PRODUCT_NAME/adware.plist | tail -c $SHORT > $TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/adware.plist";
+			shellScript = "SIZE=$(/usr/bin/gzip --stdout \"$SRCROOT/EtreCheck/adware.plist\" | /usr/bin/wc -c)\nSHORT=`expr $SIZE - 3`\n/usr/bin/gzip --stdout \"$SRCROOT/EtreCheck/adware.plist\" | tail -c $SHORT > \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/adware.plist\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1245,7 +1245,7 @@
 		};
 		A589CD2B1F71644500D66592 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A55BC16815BF987D00D42EF1 /* EtreCheck */;
+			target = A55BC16815BF987D00D42EF1 /* EtreCheck-10.6 */;
 			targetProxy = A589CD2A1F71644500D66592 /* PBXContainerItemProxy */;
 		};
 		A589CD321F71644500D66592 /* PBXTargetDependency */ = {
@@ -1255,7 +1255,7 @@
 		};
 		A5F43C121EC2547A008723CC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A55BC16815BF987D00D42EF1 /* EtreCheck */;
+			target = A55BC16815BF987D00D42EF1 /* EtreCheck-10.6 */;
 			targetProxy = A5F43C111EC2547A008723CC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1506,6 +1506,7 @@
 					"$(PROJECT_DIR)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.etresoft.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "EtreCheck-10.6";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -1526,6 +1527,7 @@
 					"$(PROJECT_DIR)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.etresoft.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "EtreCheck-10.6";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -1767,7 +1769,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck" */ = {
+		A55BC18715BF987D00D42EF1 /* Build configuration list for PBXNativeTarget "EtreCheck-10.6" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A55BC18815BF987D00D42EF1 /* Debug */,

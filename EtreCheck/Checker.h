@@ -9,9 +9,6 @@
 // A callback for section progress.
 typedef void (^SectionCallback)(NSString * sectionName);
 
-// A callback for status progress.
-typedef void (^StatusCallback)(NSString * status);
-
 // A callback for overall progress.
 typedef void (^ProgressCallback)(double progress);
 
@@ -29,7 +26,6 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
   ProgressCallback myProgress;
   ApplicationIconCallback myApplicationIcon;
   dispatch_block_t myComplete;
-  StatusCallback myStatus;
   
   double myCurrentProgress;
   }
@@ -51,9 +47,6 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
 
 // The completion callback.
 @property (copy) dispatch_block_t complete;
-
-// The status callback.
-@property (copy) StatusCallback status;
 
 // The current progress.
 @property (assign) double currentProgress;

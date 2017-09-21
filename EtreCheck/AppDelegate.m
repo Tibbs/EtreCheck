@@ -1549,18 +1549,25 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     ^(NSString * sectionName) 
       {
       [self setStatus: sectionName];
+      
+      if([sectionName isEqualToString: @"hardware"])   
+        [self updateCollectionStatus:
+          NSLocalizedString(@"Checking hardware", NULL)];
+      else if([sectionName isEqualToString: @"safariextensions"])   
+        [self updateCollectionStatus:
+          NSLocalizedString(@"Checking software", NULL)];
+      else if([sectionName isEqualToString: @"timemachine"])   
+        [self updateCollectionStatus:
+          NSLocalizedString(@"Checking system configuration", NULL)];
+      else if([sectionName isEqualToString: @"cpu"])   
+        [self updateCollectionStatus:
+          NSLocalizedString(@"Checking performance", NULL)];
       };
   
   checker.progress = 
     ^(double progress) 
       {
       [self setCurrentProgress: progress];
-      };
-  
-  checker.status = 
-    ^(NSString * status) 
-      {
-      [self updateCollectionStatus: status];
       };
   
   checker.applicationIcon = 

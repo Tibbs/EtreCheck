@@ -61,7 +61,6 @@
 @synthesize progress = myProgress;
 @synthesize applicationIcon = myApplicationIcon;
 @synthesize complete = myComplete;
-@synthesize status = myStatus;
 
 @synthesize currentProgress = myCurrentProgress;
 
@@ -76,7 +75,6 @@
   [myProgress release];
   [myApplicationIcon release];
   [myComplete release];
-  [myStatus release];
   
   [LaunchdCollector cleanup];
 
@@ -95,9 +93,6 @@
   HardwareCollector * hardwareCollector =
     [[HardwareCollector new] autorelease];
 
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Starting up", NULL));
-    
   ApplicationsCollector * applicationsCollector = 
     [[ApplicationsCollector new] autorelease];
     
@@ -117,9 +112,6 @@
       self.applicationIcon(icon);
     }
 
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Checking hardware", NULL));
-
   [self 
     performCollections: 
       @[
@@ -133,9 +125,6 @@
         [[VirtualVolumeCollector new] autorelease]
       ]
     increment: increment];
-
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Checking software", NULL));
 
   // In order to find adware in Safari extensions, the Adware collector has
   // to be created first, but then the Safari extension collection has to
@@ -168,9 +157,6 @@
       ]
     increment: increment];
 
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Checking system configuration", NULL));
-
   [self 
     performCollections: 
       @[
@@ -182,9 +168,6 @@
         [[GatekeeperCollector new] autorelease]
       ]
     increment: increment];
-
-  if(self.status != nil)
-    self.status(NSLocalizedString(@"Checking performance", NULL));
 
   [self 
     performCollections: 
