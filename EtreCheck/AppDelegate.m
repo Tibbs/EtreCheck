@@ -1241,7 +1241,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       
   [[Model model] setProblem: selectedItem.title];
 
-  if(self.problemDescription)
+  if(self.problemDescription != nil)
     [[Model model] setProblemDescription: self.problemDescription];
 
   self.reportStartTime = [NSDate date];

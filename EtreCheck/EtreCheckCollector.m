@@ -367,8 +367,7 @@
         NSFontAttributeName : [[Utilities shared] boldFont]
       }];
   
-  [[[Model model] header] 
-    addElement: @"problem" value: [[Model model] problem]];
+  [self.model addElement: @"problem" value: [[Model model] problem]];
 
   [self.result appendString: [[Model model] problem]];
   [self.result appendString: @"\n"];
@@ -376,11 +375,10 @@
   NSAttributedString * problemDescription = 
     [[Model model] problemDescription];
   
-  if(problemDescription.length)
+  if(problemDescription.string.length > 0)
     {
-    [[[Model model] header] 
-      addElement: @"problemdescription" 
-      value: problemDescription.string];
+    [self.model
+      addElement: @"problemdescription" value: problemDescription.string];
 
     [self.result
       appendString: NSLocalizedString(@"Description:\n", NULL)
