@@ -633,6 +633,7 @@
         {
         [self.result appendString: @" "];
         [self.result appendAttributedString: openURL];
+        [self.model addElement: @"path" value: event.file];
         }
       }
     else
