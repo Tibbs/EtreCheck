@@ -282,8 +282,8 @@
 		A51BD14C1A7D7784000AAABA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A51ED75F1DAAF9B60026833B /* CURLRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CURLRequest.h; sourceTree = "<group>"; };
 		A51ED7601DAAF9B60026833B /* CURLRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CURLRequest.m; sourceTree = "<group>"; };
-		A51ED7651DB090B60026833B /* NumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NumberFormatter.h; path = ../EtreCheck/NumberFormatter.h; sourceTree = "<group>"; };
-		A51ED7661DB090B60026833B /* NumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NumberFormatter.m; path = ../EtreCheck/NumberFormatter.m; sourceTree = "<group>"; };
+		A51ED7651DB090B60026833B /* NumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NumberFormatter.h; path = ../LibEtreCheck/NumberFormatter.h; sourceTree = "<group>"; };
+		A51ED7661DB090B60026833B /* NumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NumberFormatter.m; path = ../LibEtreCheck/NumberFormatter.m; sourceTree = "<group>"; };
 		A52006A01A292A2200644C40 /* PopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverManager.h; sourceTree = "<group>"; };
 		A52006A11A292A2200644C40 /* PopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverManager.m; sourceTree = "<group>"; };
 		A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UninstallManager.m; sourceTree = "<group>"; };
@@ -296,21 +296,21 @@
 		A5257D3019AB5251003084C8 /* CPUUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPUUsageCollector.m; sourceTree = "<group>"; };
 		A5257D3219AB525D003084C8 /* MemoryUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUsageCollector.h; sourceTree = "<group>"; };
 		A5257D3319AB525D003084C8 /* MemoryUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryUsageCollector.m; sourceTree = "<group>"; };
-		A5257D3519AB53FF003084C8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../EtreCheck/Model.h; sourceTree = "<group>"; };
-		A5257D3619AB53FF003084C8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Model.m; path = ../EtreCheck/Model.m; sourceTree = "<group>"; };
+		A5257D3519AB53FF003084C8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = "..//LibEtreCheck/Model.h"; sourceTree = "<group>"; };
+		A5257D3619AB53FF003084C8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Model.m; path = ../LibEtreCheck/Model.m; sourceTree = "<group>"; };
 		A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMemoryCollector.h; sourceTree = "<group>"; };
 		A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMemoryCollector.m; sourceTree = "<group>"; };
-		A5257D3B19AC0AA3003084C8 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utilities.h; path = ../EtreCheck/Utilities.h; sourceTree = "<group>"; };
-		A5257D3C19AC0AA3003084C8 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utilities.m; path = ../EtreCheck/Utilities.m; sourceTree = "<group>"; };
-		A5257D3E19AC10E3003084C8 /* Checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Checker.h; path = ../EtreCheck/Checker.h; sourceTree = "<group>"; };
-		A5257D3F19AC10E3003084C8 /* Checker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Checker.m; path = ../EtreCheck/Checker.m; sourceTree = "<group>"; };
+		A5257D3B19AC0AA3003084C8 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utilities.h; path = ../LibEtreCheck/Utilities.h; sourceTree = "<group>"; };
+		A5257D3C19AC0AA3003084C8 /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utilities.m; path = ../LibEtreCheck/Utilities.m; sourceTree = "<group>"; };
+		A5257D3E19AC10E3003084C8 /* Checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Checker.h; path = ../LibEtreCheck/Checker.h; sourceTree = "<group>"; };
+		A5257D3F19AC10E3003084C8 /* Checker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Checker.m; path = ../LibEtreCheck/Checker.m; sourceTree = "<group>"; };
 		A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		A52820941DEB8750000B8EAA /* EtreCheckWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckWindow.h; sourceTree = "<group>"; };
 		A52820951DEB8750000B8EAA /* EtreCheckWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckWindow.m; sourceTree = "<group>"; };
 		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
-		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLBuilder.h; path = ../EtreCheck/XMLBuilder.h; sourceTree = "<group>"; };
-		A53822391D5FF27200484388 /* XMLBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMLBuilder.m; path = ../EtreCheck/XMLBuilder.m; sourceTree = "<group>"; };
+		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLBuilder.h; path = ../LibEtreCheck/XMLBuilder.h; sourceTree = "<group>"; };
+		A53822391D5FF27200484388 /* XMLBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMLBuilder.m; path = ../LibEtreCheck/XMLBuilder.m; sourceTree = "<group>"; };
 		A53EA3701C6E86B600F270B0 /* UpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateManager.h; sourceTree = "<group>"; };
 		A53EA3711C6E86B600F270B0 /* UpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateManager.m; sourceTree = "<group>"; };
 		A53EA3751C6FCF0200F270B0 /* NSDate+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Etresoft.h"; sourceTree = "<group>"; };
@@ -358,8 +358,8 @@
 		A55BC1C815C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A55BC1C915C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A55BC1CA15C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
-		A55CBF431ED49CB300A43C84 /* CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRC32.h; path = ../EtreCheck/CRC32.h; sourceTree = "<group>"; };
-		A55CBF441ED49CB300A43C84 /* CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRC32.m; path = ../EtreCheck/CRC32.m; sourceTree = "<group>"; };
+		A55CBF431ED49CB300A43C84 /* CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRC32.h; path = ../LibEtreCheck/CRC32.h; sourceTree = "<group>"; };
+		A55CBF441ED49CB300A43C84 /* CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRC32.m; path = ../LibEtreCheck/CRC32.m; sourceTree = "<group>"; };
 		A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcurl.4.dylib; sourceTree = "<group>"; };
 		A565A3971EDF5DE90053264A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A565A3991EDF6B4E0053264A /* NotificationSPAMCleanupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSPAMCleanupManager.h; sourceTree = "<group>"; };
@@ -387,7 +387,7 @@
 		A589CD691F7165AC00D66592 /* NSObject+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Etresoft.m"; sourceTree = "<group>"; };
 		A589CD6D1F71685300D66592 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		A589CD6F1F71686000D66592 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		A589CD8C1F716FE900D66592 /* EtreCheckConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EtreCheckConstants.h; path = EtreCheck/EtreCheckConstants.h; sourceTree = SOURCE_ROOT; };
+		A589CD8C1F716FE900D66592 /* EtreCheckConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EtreCheckConstants.h; sourceTree = "<group>"; };
 		A58B4D121EE0E4FB00415121 /* InstallCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstallCollector.h; sourceTree = "<group>"; };
 		A58B4D131EE0E4FB00415121 /* InstallCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCollector.m; sourceTree = "<group>"; };
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
@@ -397,8 +397,8 @@
 		A5A8D6841F1D548800276B70 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
 		A5A9B8091C4FFD9A00D0EA71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/donate.rtf; sourceTree = "<group>"; };
 		A5A9B80B1C4FFDA200D0EA71 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/donate.rtf; sourceTree = "<group>"; };
-		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiagnosticEvent.h; path = ../EtreCheck/DiagnosticEvent.h; sourceTree = "<group>"; };
-		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiagnosticEvent.m; path = ../EtreCheck/DiagnosticEvent.m; sourceTree = "<group>"; };
+		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiagnosticEvent.h; path = ../LibEtreCheck/DiagnosticEvent.h; sourceTree = "<group>"; };
+		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiagnosticEvent.m; path = ../LibEtreCheck/DiagnosticEvent.m; sourceTree = "<group>"; };
 		A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		A5C00A2619BFF2D500140404 /* NSAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A5C00A2719BFF2D500140404 /* NSAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Etresoft.m"; sourceTree = "<group>"; };
@@ -439,16 +439,16 @@
 		A5D0877819ECACF6004F52C2 /* NSArray+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Etresoft.m"; sourceTree = "<group>"; };
 		A5D0877A19ECAD4E004F52C2 /* NSDictionary+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Etresoft.h"; sourceTree = "<group>"; };
 		A5D0877B19ECAD4E004F52C2 /* NSDictionary+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Etresoft.m"; sourceTree = "<group>"; };
-		A5D25B2B19C4D11F006728B8 /* TTTLocalizedPluralString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTLocalizedPluralString.h; path = EtreCheck/TTTLocalizedPluralString.h; sourceTree = "<group>"; };
-		A5D25B2C19C4D11F006728B8 /* TTTLocalizedPluralString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTLocalizedPluralString.m; path = EtreCheck/TTTLocalizedPluralString.m; sourceTree = "<group>"; };
-		A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubProcess.h; path = ../EtreCheck/SubProcess.h; sourceTree = "<group>"; };
-		A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubProcess.m; path = ../EtreCheck/SubProcess.m; sourceTree = "<group>"; };
+		A5D25B2B19C4D11F006728B8 /* TTTLocalizedPluralString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTLocalizedPluralString.h; path = LibEtreCheck/TTTLocalizedPluralString.h; sourceTree = "<group>"; };
+		A5D25B2C19C4D11F006728B8 /* TTTLocalizedPluralString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTLocalizedPluralString.m; path = LibEtreCheck/TTTLocalizedPluralString.m; sourceTree = "<group>"; };
+		A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubProcess.h; path = ../LibEtreCheck/SubProcess.h; sourceTree = "<group>"; };
+		A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubProcess.m; path = ../LibEtreCheck/SubProcess.m; sourceTree = "<group>"; };
 		A5DF7D231EC27B7A002C9686 /* NetworkUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUsageCollector.h; sourceTree = "<group>"; };
 		A5DF7D241EC27B7A002C9686 /* NetworkUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUsageCollector.m; sourceTree = "<group>"; };
 		A5DF7D261EC29372002C9686 /* EnergyUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyUsageCollector.h; sourceTree = "<group>"; };
 		A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyUsageCollector.m; sourceTree = "<group>"; };
-		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteCountFormatter.h; path = ../EtreCheck/ByteCountFormatter.h; sourceTree = "<group>"; };
-		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ByteCountFormatter.m; path = ../EtreCheck/ByteCountFormatter.m; sourceTree = "<group>"; };
+		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteCountFormatter.h; path = ../LibEtreCheck/ByteCountFormatter.h; sourceTree = "<group>"; };
+		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ByteCountFormatter.m; path = ../LibEtreCheck/ByteCountFormatter.m; sourceTree = "<group>"; };
 		A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualVolumeCollector.h; sourceTree = "<group>"; };
 		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
 		A5E9E2C11A2522A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Help.strings; sourceTree = "<group>"; };
@@ -554,7 +554,7 @@
 				A523580F1EDC7B02008511BA /* NSString+Etresoft.m */,
 			);
 			name = Categories;
-			path = ../EtreCheck;
+			path = ../LibEtreCheck;
 			sourceTree = "<group>";
 		};
 		A51BD1481A7D776A000AAABA /* Managers */ = {
@@ -683,7 +683,7 @@
 				A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */,
 			);
 			name = Collectors;
-			path = ../EtreCheck;
+			path = ../LibEtreCheck;
 			sourceTree = "<group>";
 		};
 		A54A9EFE1DC5536000F92CA3 /* Licenses */ = {
