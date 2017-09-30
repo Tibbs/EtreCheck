@@ -5,6 +5,9 @@
       location = "group:INPopoverController.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:LibEtreCheck.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "container:EtreCheck.xcodeproj">
    </FileRef>
 </Workspace>
