@@ -47,6 +47,7 @@
 #import "AdwareCollector.h"
 #import "UnsignedCollector.h"
 #import "CleanupCollector.h"
+#import "EtreCheckDeletedFilesCollector.h"
 #import "EtreCheckCollector.h"
 #import "XMLBuilder.h"
 
@@ -90,6 +91,10 @@
   int collectorCount = 39;
   double increment = 100.0/collectorCount;
   
+  // These are all special.
+  EtreCheckCollector * etrecheckCollector = 
+    [[EtreCheckCollector new] autorelease];
+    
   HardwareCollector * hardwareCollector =
     [[HardwareCollector new] autorelease];
 
@@ -153,7 +158,7 @@
         adwareCollector,
         [[UnsignedCollector new] autorelease],
         [[CleanupCollector new] autorelease],
-        [[EtreCheckCollector new] autorelease]
+        [[EtreCheckDeletedFilesCollector new] autorelease]
       ]
     increment: increment];
 
@@ -180,6 +185,8 @@
       ]
     increment: increment];
   
+  [self performCollections: @[etrecheckCollector] increment: increment];
+
   NSAttributedString * report = [self collectResults];
   
   if(self.complete)
@@ -230,6 +237,7 @@
   {
   NSMutableAttributedString * result = [NSMutableAttributedString new];
 
+  [result appendAttributedString: [self getResult: @"header"]];
   [result appendAttributedString: [self getResult: @"hardware"]];
   [result appendAttributedString: [self getResult: @"video"]];
   [result appendAttributedString: [self getResult: @"disk"]];
@@ -295,6 +303,7 @@
   [[[Model model] xml] startElement: @"etrecheck"];
   
   [[[Model model] xml] addFragment: [[[Model model] header] root]];
+  [[[Model model] xml] addFragment: [self getXML: @"header"]];
   [[[Model model] xml] addFragment: [self getXML: @"hardware"]];
   [[[Model model] xml] addFragment: [self getXML: @"video"]];
   [[[Model model] xml] addFragment: [self getXML: @"disk"]];

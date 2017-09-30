@@ -42,6 +42,8 @@
   int myMinorOSVersion;
   NSString * myOSBuild;
   NSString * myOSVersion;
+  NSString * myProblem;
+  NSAttributedString * myProblemDescription;
   NSMutableDictionary * myVolumes;
   NSMutableSet * myPhysicalVolumes;
   NSMutableDictionary * myDiskErrors;
@@ -97,6 +99,10 @@
 @property (assign) int minorOSVersion;
 @property (retain) NSString * OSBuild;
 @property (retain) NSString * OSVersion;
+
+// The problem and description (if any).
+@property (retain) NSString * problem;
+@property (retain) NSAttributedString * problemDescription;
 
 // Keep track of system volumes.
 @property (retain) NSMutableDictionary * volumes;

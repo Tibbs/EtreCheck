@@ -7,5 +7,11 @@
 #import "Collector.h"
 
 @interface EtreCheckCollector : Collector
+  {
+  NSDate * myStartTime;
+  }
+  
+// The starting time.
+@property (strong) NSDate * startTime;
 
 @end
