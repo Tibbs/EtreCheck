@@ -538,8 +538,8 @@
   if(self.simulating)
     free = 12;
     
-  NSString * type = NSLocalizedString(@"", NULL);
-  NSString * status = NSLocalizedString(@"", NULL);
+  NSString * type = @"";
+  NSString * status = @"";
   NSDictionary * attributes = @{};
   
   if([mountPoint isEqualToString: @"/"])

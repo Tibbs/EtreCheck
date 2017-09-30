@@ -13,7 +13,6 @@
 #import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
-#import "SearchEngine.h"
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
 
