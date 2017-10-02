@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import "ByteCountFormatter.h"
+#import "LocalizedString.h"
 
 @implementation ByteCountFormatter
 
@@ -25,8 +26,8 @@
 - (NSString *) stringFromByteCount: (unsigned long long) byteCount
   {
   NSArray * unitValues =
-    [NSLocalizedString(@"B KB MB GB TB", NULL)
-      componentsSeparatedByString: @" "];
+    [ECLocalizedString(@"B KB MB GB TB") componentsSeparatedByString: @" "];
+    
   int precisionValues[] = { 0, 0, 0, 2, 2};
   NSUInteger unitsIndex = 0;
   

@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "Model.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -187,7 +188,7 @@
     return nil;
     
   if([process length] == 0)
-    process = NSLocalizedString(@"Unknown", NULL);
+    process = ECLocalizedString(@"Unknown");
 
   return
     [NSMutableDictionary
@@ -236,7 +237,7 @@
     processName = [process objectForKey: @"process"];
   
   if([processName length] == 0)
-    processName = NSLocalizedString(@"Unknown", NULL);
+    processName = ECLocalizedString(@"Unknown");
     
   if([processName hasPrefix: @"EtreCheck"])
     return;

@@ -9,6 +9,7 @@
 #import "ByteCountFormatter.h"
 #import "Model.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -128,7 +129,7 @@
   NSString * name = [process objectForKey: @"command"];
   
   if([name length] == 0)
-    name = NSLocalizedString(@"Unknown", NULL);
+    name = ECLocalizedString(@"Unknown");
     
   [self.model startElement: @"process"];
   

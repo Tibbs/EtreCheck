@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import "UserInternetPlugInsCollector.h"
+#import "LocalizedString.h"
 
 // Collect user internet plug-ins.
 @implementation UserInternetPlugInsCollector
@@ -25,7 +26,7 @@
 - (void) performCollect
   {
   [self
-    parseUserPlugins: NSLocalizedString(@"User Internet Plug-ins:", NULL)
+    parseUserPlugins: ECLocalizedString(@"User Internet Plug-ins:")
     path: @"Library/Internet Plug-Ins"];
   }
 

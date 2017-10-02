@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A503BF9E1F82B9F300473A24 /* TTTLocalizedPluralString.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BF9D1F82B9F300473A24 /* TTTLocalizedPluralString.m */; };
+		A503BFA31F82BB5800473A24 /* Status.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BFA01F82BB5800473A24 /* Status.strings */; };
 		A518C4661C4814740094D7CC /* Help in Resources */ = {isa = PBXBuildFile; fileRef = A518C4641C4814740094D7CC /* Help */; };
 		A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */; };
 		A51ED7611DAAF9B60026833B /* CURLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A51ED7601DAAF9B60026833B /* CURLRequest.m */; };
@@ -92,6 +94,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A503BF9C1F82B9F300473A24 /* TTTLocalizedPluralString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTLocalizedPluralString.h; sourceTree = "<group>"; };
+		A503BF9D1F82B9F300473A24 /* TTTLocalizedPluralString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTLocalizedPluralString.m; sourceTree = "<group>"; };
+		A503BFA11F82BB5800473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Status.strings; sourceTree = "<group>"; };
+		A503BFA21F82BB5800473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
 		A518C4651C4814740094D7CC /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = en.lproj/Help; sourceTree = "<group>"; };
 		A518C4671C4814870094D7CC /* fr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fr; path = fr.lproj/Help; sourceTree = "<group>"; };
 		A51BD14A1A7D7782000AAABA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
@@ -201,6 +207,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A503BF9F1F82B9FB00473A24 /* 3rd Party */ = {
+			isa = PBXGroup;
+			children = (
+				A503BF9C1F82B9F300473A24 /* TTTLocalizedPluralString.h */,
+				A503BF9D1F82B9F300473A24 /* TTTLocalizedPluralString.m */,
+			);
+			name = "3rd Party";
+			path = EtreCheck;
+			sourceTree = "<group>";
+		};
 		A51BD1481A7D776A000AAABA /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				A54A9EFE1DC5536000F92CA3 /* Licenses */,
+				A503BF9F1F82B9FB00473A24 /* 3rd Party */,
 				A55BC17315BF987D00D42EF1 /* EtreCheck */,
 				A5F43C0D1EC2547A008723CC /* EtreCheckTests */,
 				A55BC16C15BF987D00D42EF1 /* Frameworks */,
@@ -317,6 +334,7 @@
 				A59429411D2AD97B003E594D /* appleSoftware.plist */,
 				A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
+				A503BFA01F82BB5800473A24 /* Status.strings */,
 				A55BC17615BF987D00D42EF1 /* InfoPlist.strings */,
 				A540C7001873D5F800497BDE /* Localizable.strings */,
 				A55BC17915BF987D00D42EF1 /* main.m */,
@@ -441,6 +459,7 @@
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
 				A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */,
 				A518C4661C4814740094D7CC /* Help in Resources */,
+				A503BFA31F82BB5800473A24 /* Status.strings in Resources */,
 				A5E9E2C01A2522A600309185 /* Help.strings in Resources */,
 				A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */,
 				A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */,
@@ -480,6 +499,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A565A39B1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m in Sources */,
+				A503BF9E1F82B9F300473A24 /* TTTLocalizedPluralString.m in Sources */,
 				A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */,
 				A55BC17A15BF987D00D42EF1 /* main.m in Sources */,
 				A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */,
@@ -519,6 +539,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A503BFA01F82BB5800473A24 /* Status.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A503BFA11F82BB5800473A24 /* en */,
+				A503BFA21F82BB5800473A24 /* fr */,
+			);
+			name = Status.strings;
+			sourceTree = "<group>";
+		};
 		A518C4641C4814740094D7CC /* Help */ = {
 			isa = PBXVariantGroup;
 			children = (

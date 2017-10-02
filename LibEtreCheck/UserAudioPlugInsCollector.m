@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import "UserAudioPlugInsCollector.h"
+#import "LocalizedString.h"
 
 // Collect user audio plug-ins.
 @implementation UserAudioPlugInsCollector
@@ -25,7 +26,7 @@
 - (void) performCollect
   {
   [self
-    parseUserPlugins: NSLocalizedString(@"User Audio Plug-ins:", NULL)
+    parseUserPlugins: ECLocalizedString(@"User Audio Plug-ins:")
     path: @"/Library/Audio/Plug-ins"];
   }
 

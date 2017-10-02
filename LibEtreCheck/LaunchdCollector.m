@@ -10,11 +10,11 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
-#import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 @implementation LaunchdCollector
 
@@ -473,7 +473,7 @@
     [NSString
       stringWithFormat:
         @"%@%@%@%@",
-        NSLocalizedString(@"ascsearch", NULL),
+        ECLocalizedString(@"ascsearch"),
         @"type=discussion&showAnsweredFirst=true&q=",
         bundleID,
         @"&sort=updatedDesc&currentPage=1&includeResultCount=true"];
@@ -850,8 +850,8 @@
     if(self.pressureKilledCount)
       [self.result
         appendString:
-          TTTLocalizedPluralString(
-            self.pressureKilledCount, @"pressurekilledcount", nil)
+          ECLocalizedPluralString(
+            self.pressureKilledCount, @"pressurekilledcount")
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -861,8 +861,8 @@
     if(!self.launchdStatus)
       [self.result
         appendString:
-          NSLocalizedString(
-            @"    Launchd job status not available.\n", NULL)
+          ECLocalizedString(
+            @"    Launchd job status not available.\n")
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -1123,8 +1123,7 @@
     
     [self.model addElement: @"count" unsignedIntegerValue: count];
     
-    [output
-      appendString: TTTLocalizedPluralString(count, @"applecount", nil)];
+    [output appendString: ECLocalizedPluralString(count, @"applecount")];
     
     [output appendString: @"\n"];
       
@@ -1304,39 +1303,39 @@
 // Format a status string.
 - (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) info
   {
-  NSString * statusString = NSLocalizedString(@"not loaded", NULL);
+  NSString * statusString = ECLocalizedString(@"not loaded");
   NSColor * color = [[Utilities shared] gray];
   
   NSString * statusCode = [info objectForKey: kStatus];
   
   if([statusCode isEqualToString: kStatusLoaded])
     {
-    statusString = NSLocalizedString(@"loaded", NULL);
+    statusString = ECLocalizedString(@"loaded");
     color = [[Utilities shared] blue];
     }
   else if([statusCode isEqualToString: kStatusRunning])
     {
-    statusString = NSLocalizedString(@"running", NULL);
+    statusString = ECLocalizedString(@"running");
     color = [[Utilities shared] green];
     }
   else if([statusCode isEqualToString: kStatusFailed])
     {
-    statusString = NSLocalizedString(@"failed", NULL);
+    statusString = ECLocalizedString(@"failed");
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusUnknown])
     {
-    statusString = NSLocalizedString(@"unknown", NULL);
+    statusString = ECLocalizedString(@"unknown");
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusInvalid])
     {
-    statusString = NSLocalizedString(@"invalid?", NULL);
+    statusString = ECLocalizedString(@"invalid?");
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusKilled])
     {
-    statusString = NSLocalizedString(@"killed", NULL);
+    statusString = ECLocalizedString(@"killed");
     color = [[Utilities shared] red];
     }
   
@@ -1383,7 +1382,7 @@
    developer =
       [NSString
         stringWithFormat:
-          @"%@ %@", NSLocalizedString(@"Shell Script", NULL), crc];
+          @"%@ %@", ECLocalizedString(@"Shell Script"), crc];
     }
   else if([signature isEqualToString: kSignatureApple])
     developer = @"Apple, Inc.";
@@ -1414,7 +1413,7 @@
     [self.model addElement: @"signature" value: developer];
     
   if([developer length] == 0)
-    developer = NSLocalizedString(@"Unknown", NULL);
+    developer = ECLocalizedString(@"Unknown");
     
   NSDate * modificationDate =
     [info objectForKey: kModificationDate];
@@ -1465,7 +1464,7 @@
   [self.model addElement: @"adware" boolValue: YES];
   
   [extra
-    appendString: NSLocalizedString(@"Adware!", NULL)
+    appendString: ECLocalizedString(@"Adware!")
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -1534,23 +1533,20 @@
       message =
         [NSString
           stringWithFormat:
-            NSLocalizedString(@" - %@: Executable not found!", NULL),
+            ECLocalizedString(@" - %@: Executable not found!"),
             executable];
       }
     else
-      message =
-        [NSString
-          stringWithFormat:
-            NSLocalizedString(@" - Executable not found!", NULL)];
+      message = ECLocalizedString(@" - Executable not found!");
     }
   else if([signature isEqualToString: kNotSigned])
-    message = NSLocalizedString(@" - No signature!", NULL);
+    message = ECLocalizedString(@" - No signature!");
   else if([signature isEqualToString: kShell])
-    message = NSLocalizedString(@" - Shell script!", NULL);
+    message = ECLocalizedString(@" - Shell script!");
   else if([signature isEqualToString: kCodesignFailed])
-    message = NSLocalizedString(@" - codesign failed!", NULL);
+    message = ECLocalizedString(@" - codesign failed!");
   else
-    message = NSLocalizedString(@" - Invalid signature!", NULL);
+    message = ECLocalizedString(@" - Invalid signature!");
     
   // If this is an Apple file things are complicated.
   if([[info objectForKey: kApple] boolValue])
@@ -1611,7 +1607,7 @@
     [extra appendString: @" "];
 
     [extra
-      appendString: NSLocalizedString(@"[Lookup]", NULL)
+      appendString: ECLocalizedString(@"[Lookup]")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],

@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect install information.
 @implementation InstallCollector
@@ -66,7 +67,7 @@
             appendString:
               [NSString
                 stringWithFormat:
-                  NSLocalizedString(@"    %@: %@ (%@)\n", NULL),
+                  ECLocalizedString(@"    %@: %@ (%@)\n"),
                   name,
                   version,
                   installDate]];
@@ -80,7 +81,7 @@
       [self.result appendString: @"\n"];
       
       [self.result
-        appendString: NSLocalizedString(@"installsincomplete", NULL)];
+        appendString: ECLocalizedString(@"installsincomplete")];
       }
       
     [self.result appendCR];

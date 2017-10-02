@@ -8,6 +8,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "SubProcess.h"
+#import "LocalizedString.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
@@ -39,7 +40,7 @@
         parsePs: line mem: & mem cpu: & cpu pid: & pid command: & command];
 
       if([command length] == 0)
-        command = NSLocalizedString(@"Unknown", NULL);
+        command = ECLocalizedString(@"Unknown");
         
       // Ignore EtreCheck itself.
       if([command hasPrefix: @"EtreCheck"])

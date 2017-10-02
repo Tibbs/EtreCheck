@@ -11,6 +11,7 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
+#import "LocalizedString.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
@@ -75,7 +76,7 @@
         ++count;
     
     if(!count)
-      [self.result appendString: NSLocalizedString(@"    None\n", NULL)];
+      [self.result appendString: ECLocalizedString(@"    None\n")];
     
     [self.result appendCR];
     }
@@ -383,7 +384,7 @@
     [self printExtensionDetails: extension];
     
     if(([archivePath length] == 0) && ([cachePath length] > 0))
-      [self.result appendString: NSLocalizedString(@" (cache only)", NULL)];
+      [self.result appendString: ECLocalizedString(@" (cache only)")];
       
     [self appendModificationDate: extension];
     
@@ -410,7 +411,7 @@
       [info release];
       
       [self.result
-        appendString: NSLocalizedString(@"Adware!", NULL)
+        appendString: ECLocalizedString(@"Adware!")
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -489,7 +490,7 @@
     [output appendString: @"    "];
   else
     {
-    NSString * statusString = NSLocalizedString(@"unknown", NULL);
+    NSString * statusString = ECLocalizedString(@"unknown");
     
     NSColor * color = [[Utilities shared] red];
     
@@ -497,17 +498,17 @@
     
     if([statusCode isEqualToString: kNotLoaded])
       {
-      statusString = NSLocalizedString(@"not loaded", NULL);
+      statusString = ECLocalizedString(@"not loaded");
       color = [[Utilities shared] gray];
       }
     else if([statusCode isEqualToString: kEnabled])
       {
-      statusString = NSLocalizedString(@"enabled", NULL);
+      statusString = ECLocalizedString(@"enabled");
       color = [[Utilities shared] green];
       }
     else if([statusCode isEqualToString: kDisabled])
       {
-      statusString = NSLocalizedString(@"disabled", NULL);
+      statusString = ECLocalizedString(@"disabled");
       color = [[Utilities shared] gray];
       }
     

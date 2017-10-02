@@ -14,7 +14,6 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 // In this header, you should import all the public headers of your 
 // framework using statements like #import <LibEtreCheck/PublicHeader.h>
 
-#import <LibEtreCheck/TTTLocalizedPluralString.h>
 #import <LibEtreCheck/Utilities.h>
 #import <LibEtreCheck/Collector.h>
 #import <LibEtreCheck/SubProcess.h>

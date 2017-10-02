@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -174,9 +175,8 @@
         addObject:
           [NSString
             stringWithFormat:
-              NSLocalizedString(
-                @"    %@, File size %llu but expected %llu\n",
-                NULL),
+              ECLocalizedString(
+                @"    %@, File size %llu but expected %llu\n"),
               @"/etc/sudoers",
               attributes.fileSize,
               expectedSize]];
@@ -242,8 +242,8 @@
             initWithString:
               [NSString
                 stringWithFormat:
-                  NSLocalizedString(
-                    @"System Integrity Protection status: %@", NULL),
+                  ECLocalizedString(
+                    @"System Integrity Protection status: %@"),
                   status]
             attributes:
               [NSDictionary
@@ -263,7 +263,7 @@
     [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/csrutil"];
     
   if(!csrutilExists)
-    return NSLocalizedString(@"/usr/bin/csrutil missing", NULL);
+    return ECLocalizedString(@"/usr/bin/csrutil missing");
     
   // Now consolidate destination information.
   NSArray * args =
@@ -293,15 +293,14 @@
       result =
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"/usr/bin/csrutil returned \"%@\"", NULL),
-            status];
+            ECLocalizedString(@"/usr/bin/csrutil returned \"%@\""), status];
     
     [status release];
     
     return result;
     }
     
-  return NSLocalizedString(@"missing", NULL);
+  return ECLocalizedString(@"missing");
   }
 
 // Collect the number of changes to /etc/hosts and its status.
@@ -431,8 +430,7 @@
     [self.result
       appendString:
         [NSString stringWithFormat:
-          NSLocalizedString(
-            @"    %@ - File exists but not expected\n", NULL),
+          ECLocalizedString(@"    %@ - File exists but not expected\n"),
           configFile]];
   }
 
@@ -456,15 +454,14 @@
   NSString * corruptString = @"";
   
   if(corrupt)
-    corruptString = NSLocalizedString(@" - Corrupt!", NULL);
+    corruptString = ECLocalizedString(@" - Corrupt!");
     
   NSString * countString = @"";
   
   if(count > 0)
     countString =
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(@" - Count: %d", NULL), count];
+      [NSString 
+        stringWithFormat: ECLocalizedString(@" - Count: %d"), count];
     
   if((count > 10) || corrupt)
     {

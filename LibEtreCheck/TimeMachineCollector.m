@@ -13,6 +13,7 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
+#import "LocalizedString.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -65,7 +66,7 @@
     
     [self.result
       appendString:
-        NSLocalizedString(@"timemachineneedsmountainlion", NULL)
+        ECLocalizedString(@"timemachineneedsmountainlion")
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -83,7 +84,7 @@
 
     [self.result
       appendString:
-        NSLocalizedString(@"timemachineinformationnotavailable", NULL)
+        ECLocalizedString(@"timemachineinformationnotavailable")
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -134,7 +135,7 @@
 
   [self.result
     appendString:
-      NSLocalizedString(@"    Time Machine not configured!\n\n", NULL)
+      ECLocalizedString(@"    Time Machine not configured!\n\n")
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:
@@ -318,7 +319,7 @@
         [destination objectForKey: @"LastDestination"];
       
       if(kind.length == 0)
-        kind = NSLocalizedString(@"Unknown", NULL);
+        kind = ECLocalizedString(@"Unknown");
         
       if(name.length == 0)
         name = destinationID;
@@ -363,10 +364,10 @@
 
   NSString * volumeName = [Utilities cleanPath: name];
   
-  NSString * diskSize = NSLocalizedString(@"Unknown", NULL);
+  NSString * diskSize = ECLocalizedString(@"Unknown");
 
   if(!name)
-    name = NSLocalizedString(@"Unknown", NULL);
+    name = ECLocalizedString(@"Unknown");
 
   NSNumber * size = [volume objectForKey: @"size_in_bytes"];
   NSNumber * freespace = [volume objectForKey: @"free_space_in_bytes"];
@@ -384,8 +385,8 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"        %@: Disk size: %@ - Disk used: %@\n", NULL),
+          ECLocalizedString(
+            @"        %@: Disk size: %@ - Disk used: %@\n"),
           volumeName, diskSize, spaceRequired]];
 
   [self.model startElement: @"volume"];
@@ -448,15 +449,15 @@
     bool skip = [skipSystemFiles boolValue];
 
     [self.result
-      appendString: NSLocalizedString(@"    Skip System Files: ", NULL)];
+      appendString: ECLocalizedString(@"    Skip System Files: ")];
 
     if(!skip)
-      [self.result appendString: NSLocalizedString(@"NO\n", NULL)];
+      [self.result appendString: ECLocalizedString(@"NO\n")];
     else
       [self.result
         appendString:
-          NSLocalizedString(
-            @"YES - System files not being backed up\n", NULL)
+          ECLocalizedString(
+            @"YES - System files not being backed up\n")
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -479,12 +480,12 @@
     bool mobile = [mobileBackups boolValue];
 
     [self.result
-      appendString: NSLocalizedString(@"    Mobile backups: ", NULL)];
+      appendString: ECLocalizedString(@"    Mobile backups: ")];
 
     if(mobile)
-      [self.result appendString: NSLocalizedString(@"ON\n", NULL)];
+      [self.result appendString: ECLocalizedString(@"ON\n")];
     else
-      [self.result appendString: NSLocalizedString(@"OFF\n", NULL)];
+      [self.result appendString: ECLocalizedString(@"OFF\n")];
     }
     
     // TODO: Can I get the size of mobile backups?
@@ -503,14 +504,14 @@
     bool backup = [autoBackup boolValue];
 
     [self.result
-      appendString: NSLocalizedString(@"    Auto backup: ", NULL)];
+      appendString: ECLocalizedString(@"    Auto backup: ")];
 
     if(backup)
-      [self.result appendString: NSLocalizedString(@"YES\n", NULL)];
+      [self.result appendString: ECLocalizedString(@"YES\n")];
     else
       [self.result
         appendString:
-          NSLocalizedString(@"NO - Auto backup turned off\n", NULL)
+          ECLocalizedString(@"NO - Auto backup turned off\n")
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -561,7 +562,7 @@
     
     [self.result
       appendString:
-        NSLocalizedString(@"    Volumes being backed up:\n", NULL)];
+        ECLocalizedString(@"    Volumes being backed up:\n")];
 
     for(NSString * UUID in backedupVolumeUUIDs)
       {
@@ -580,7 +581,7 @@
 - (void) printDestinations: (NSDictionary *) settings
   {
   [self.result
-    appendString: NSLocalizedString(@"    Destinations:\n", NULL)];
+    appendString: ECLocalizedString(@"    Destinations:\n")];
 
   bool first = YES;
   
@@ -642,7 +643,7 @@
   NSString * lastused = @"";
 
   if([last integerValue] == 1)
-    lastused = NSLocalizedString(@"(Last used)", NULL);
+    lastused = ECLocalizedString(@"(Last used)");
 
   [self.model addElement: @"name" value: safeName];
   [self.model addElement: @"type" value: kind];
@@ -669,7 +670,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"        Total size: %@ \n", NULL),
+          ECLocalizedString(@"        Total size: %@ \n"),
           totalSize]];
   }
 
@@ -684,8 +685,8 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"        Total number of backups: %@ \n", NULL), count]];
+          ECLocalizedString(
+            @"        Total number of backups: %@ \n"), count]];
   
   NSDate * oldestBackup = [destination objectForKey: kOldestBackup];
 
@@ -697,8 +698,8 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(
-              @"        Oldest backup: %@ \n", NULL),
+            ECLocalizedString(
+              @"        Oldest backup: %@ \n"),
             [Utilities dateAsString: oldestBackup]]];
     }
     
@@ -712,7 +713,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"        Last backup: %@ \n", NULL),
+            ECLocalizedString(@"        Last backup: %@ \n"),
             [Utilities dateAsString: lastBackup]]];
     }
   }
@@ -722,7 +723,7 @@
   {
   [self.result
     appendString:
-      NSLocalizedString(@"        Size of backup disk: ", NULL)];
+      ECLocalizedString(@"        Size of backup disk: ")];
 
   NSString * analysis = nil;
   
@@ -730,8 +731,8 @@
     analysis =
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"            Backup size %@ > (Disk size %@ X 3)", NULL),
+          ECLocalizedString(
+            @"            Backup size %@ > (Disk size %@ X 3)"),
           [formatter stringFromByteCount: totalSizeValue],
           [formatter stringFromByteCount: maximumBackupSize]];
     
@@ -739,8 +740,8 @@
     analysis =
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"            Backup size %@ > (Disk used %@ X 3)", NULL),
+          ECLocalizedString(
+            @"            Backup size %@ > (Disk used %@ X 3)"),
           [formatter stringFromByteCount: totalSizeValue],
           [formatter stringFromByteCount: minimumBackupSize]];
     
@@ -748,8 +749,8 @@
     analysis =
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"            Backup size %@ < (Disk used %@ X 3)", NULL),
+          ECLocalizedString(
+            @"            Backup size %@ < (Disk used %@ X 3)"),
           [formatter stringFromByteCount: totalSizeValue],
           [formatter stringFromByteCount: minimumBackupSize]];
   
@@ -766,20 +767,20 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"Excellent\n%@\n", NULL), analysis]];
+            ECLocalizedString(@"Excellent\n%@\n"), analysis]];
     
   else if(totalSizeValue >= (minimumBackupSize * 3))
     [self.result
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"Adequate\n%@\n", NULL), analysis]];
+            ECLocalizedString(@"Adequate\n%@\n"), analysis]];
   else
     [self.result
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"Too small\n%@\n", NULL), analysis]
+            ECLocalizedString(@"Too small\n%@\n"), analysis]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -810,7 +811,7 @@
       NSString * exclusion =
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"    %@ excluded from backup!\n", NULL),
+            ECLocalizedString(@"    %@ excluded from backup!\n"),
             importantPath];
 
       [self.result

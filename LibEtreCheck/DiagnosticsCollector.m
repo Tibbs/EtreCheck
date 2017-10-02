@@ -12,6 +12,7 @@
 #import "Model.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
@@ -63,8 +64,8 @@
       [self.result appendString: @"\n"];
       [self.result
         appendString:
-          NSLocalizedString(
-            @"/Library/Logs/DiagnosticReports permissions", NULL)];
+          ECLocalizedString(
+            @"/Library/Logs/DiagnosticReports permissions")];
       }
     
     [self.result appendCR];
@@ -141,7 +142,7 @@
       event.date = lastRun;
     
       event.type = kSelfTestFail;
-      event.name = NSLocalizedString(@"Self test - failed", NULL);
+      event.name = ECLocalizedString(@"Self test - failed");
       event.details = details;
       
       [[[Model model] diagnosticEvents]
@@ -333,7 +334,7 @@
   [safeParts removeLastObject];
   [safeParts
     addObject:
-      [NSLocalizedString(@"[redacted]", NULL)
+      [ECLocalizedString(@"[redacted]")
         stringByAppendingPathExtension: extension]];
   
   if(name)
@@ -466,15 +467,15 @@
   if(event.type == kPanic)
     {
     event.details = contents;
-    event.name = NSLocalizedString(@"Kernel", NULL);
+    event.name = ECLocalizedString(@"Kernel");
     
     [information
       appendFormat:
-        @"%@", NSLocalizedString(@"3rd Party Kernel Extensions: ", NULL)];
+        @"%@", ECLocalizedString(@"3rd Party Kernel Extensions: ")];
       
     if([extensions count] == 0)
       {
-      [information appendString: NSLocalizedString(@"None", NULL)];
+      [information appendString: ECLocalizedString(@"None")];
       [information appendString: @"\n"];
       }
     else
@@ -638,7 +639,7 @@
       }
     else
       [self.result
-        appendString: NSLocalizedString(@" Missing!", NULL)
+        appendString: ECLocalizedString(@" Missing!")
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -679,28 +680,28 @@
   switch(eventType)
     {
     case kCrash:
-      return NSLocalizedString(@"Crash", NULL);
+      return ECLocalizedString(@"Crash");
       
     case kCPU:
-      return NSLocalizedString(@"High CPU use", NULL);
+      return ECLocalizedString(@"High CPU use");
 
     case kHang:
-      return NSLocalizedString(@"Hang", NULL);
+      return ECLocalizedString(@"Hang");
       
     case kPanic:
-      return NSLocalizedString(@"Panic", NULL);
+      return ECLocalizedString(@"Panic");
       
     case kShutdown:
-      return NSLocalizedString(@"Last shutdown cause", NULL);
+      return ECLocalizedString(@"Last shutdown cause");
       
     case kSelfTestFail:
-      return NSLocalizedString(@"Self test - failed", NULL);
+      return ECLocalizedString(@"Self test - failed");
       
     default:
       break;
     }
     
-  return NSLocalizedString(@"Unknown", NULL);
+  return ECLocalizedString(@"Unknown");
   }
 
 @end

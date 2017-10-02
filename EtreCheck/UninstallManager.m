@@ -7,6 +7,7 @@
 #import "UninstallManager.h"
 #import "LibEtreCheck/LibEtreCheck.h"
 #import "CURLRequest.h"
+#import "TTTLocalizedPluralString.h"
 
 @implementation UninstallManager
 

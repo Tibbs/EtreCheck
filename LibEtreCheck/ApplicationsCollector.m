@@ -11,6 +11,7 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
+#import "LocalizedString.h"
 
 // Collect installed applications.
 @implementation ApplicationsCollector
@@ -80,7 +81,7 @@
           NSString * name = [application objectForKey: @"_name"];
           
           if(!name)
-            name = NSLocalizedString(@"[Unknown]", NULL);
+            name = ECLocalizedString(@"[Unknown]");
 
           NSDictionary * details =
             [self collectApplicationDetails: application];
@@ -102,7 +103,7 @@
   NSString * path = [application objectForKey: @"path"];
   
   if(!path)
-    path = NSLocalizedString(@"[Unknown]", NULL);
+    path = ECLocalizedString(@"[Unknown]");
     
   // TODO: Grep executable for SMLoginItemSetEnabled
   // Perform /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -dump

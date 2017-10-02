@@ -15,6 +15,7 @@
 #import "SubProcess.h"
 #import "CRC32.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 #import <sqlite3.h>
 #import <unistd.h>
 
@@ -270,13 +271,13 @@
     return
       [NSString
         stringWithFormat:
-          @"%@@me.com", NSLocalizedString(@"[redacted]", NULL)];
+          @"%@@me.com", ECLocalizedString(@"[redacted]")];
 
   if([string hasSuffix: @"@mac.com"])
     return
       [NSString
         stringWithFormat:
-          @"%@@mac.com", NSLocalizedString(@"[redacted]", NULL)];
+          @"%@@mac.com", ECLocalizedString(@"[redacted]")];
 
   // See if the full user name is in the computer name.
   NSString * computerName = [[Model model] computerName];
@@ -348,7 +349,7 @@
       stringWithFormat:
         @"%@%@%@",
         [string substringToIndex: range.location],
-        NSLocalizedString(@"[redacted]", NULL),
+        ECLocalizedString(@"[redacted]"),
         [string substringFromIndex: range.location + range.length]];
   }
 
@@ -394,7 +395,7 @@
     cleanPath =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@ (hidden)", NULL), cleanPath];
+          ECLocalizedString(@"%@ (hidden)"), cleanPath];
 
   // Silly Apple.
   else if([name hasPrefix: @"com.apple.CSConfigDotMacCert-"])
@@ -456,7 +457,7 @@
         [NSString
           stringWithFormat:
           @"com.apple.CSConfigDotMacCert-%@%@.com-%@",
-          NSLocalizedString(@"[redacted]", NULL),
+          ECLocalizedString(@"[redacted]"),
           domain,
           suffix]];
   }
@@ -476,7 +477,7 @@
   [scanner scanUpToString: @".plist" intoString: NULL];
 
   return
-    NSLocalizedString(@"com.facebook.videochat.[redacted].plist", NULL);
+    ECLocalizedString(@"com.facebook.videochat.[redacted].plist");
   }
 
 // Uncompress some data.
@@ -1773,7 +1774,7 @@
     
   return
     [NSString
-      stringWithFormat: NSLocalizedString(@"installed %@", NULL),
+      stringWithFormat: ECLocalizedString(@"installed %@"),
       modificationDateString];
   }
 
@@ -1920,7 +1921,7 @@
   NSString * emailString =
     [NSString
       stringWithFormat:
-        NSLocalizedString(@"addtowhitelistemail", NULL),
+        ECLocalizedString(@"addtowhitelistemail"),
         subject, bodyText, @"Etresoft support", toAddress ];
 
 
@@ -2004,19 +2005,19 @@
 + (NSString *) translateSizeSuffix: (NSString *) size
   {
   if([size hasSuffix: @" GB"])
-    return NSLocalizedString(@"GB", NULL);
+    return ECLocalizedString(@"GB");
     
   else if([size hasSuffix: @" MB"])
-    return NSLocalizedString(@"MB", NULL);
+    return ECLocalizedString(@"MB");
     
   else if([size hasSuffix: @" TB"])
-    return NSLocalizedString(@"TB", NULL);
+    return ECLocalizedString(@"TB");
     
   else if([size hasSuffix: @" KB"])
-    return NSLocalizedString(@"KB", NULL);
+    return ECLocalizedString(@"KB");
     
   else if([size hasSuffix: @" B"])
-    return NSLocalizedString(@"B", NULL);
+    return ECLocalizedString(@"B");
     
   return nil;
   }
@@ -2261,7 +2262,7 @@
 + (NSImage *) findMachineIcon: (NSString *) code
   {
   // Load the machine image.
-  NSString * iconPath = NSLocalizedStringFromTable(code, @"machineIcons", NULL);
+  NSString * iconPath = ECLocalizedStringFromTable(code, @"machineIcons");
   
   if(!iconPath)
     return nil;

@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 #define kAvailableRAM @"availableram"
 #define kFreeRAM @"freeram"
@@ -158,7 +159,7 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          NSLocalizedString(key, NULL)]];
+          ECLocalizedString(key)]];
   }
 
 // Print a VM value.
@@ -181,7 +182,7 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          NSLocalizedString(key, NULL)]
+          ECLocalizedString(key)]
     attributes: attributes];
   }
 

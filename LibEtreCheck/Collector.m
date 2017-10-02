@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 @implementation Collector
 
@@ -23,7 +24,7 @@
 // Provide easy access to localized collector titles.
 + (NSString *) title: (NSString *) name
   {
-  return NSLocalizedStringFromTable(name, @"Collectors", NULL);
+  return ECLocalizedStringFromTable(name, @"Collectors");
   }
   
 // Is this collector complete?
@@ -44,7 +45,7 @@
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
     
-    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    self.title = ECLocalizedStringFromTable(self.name, @"Collectors");
     
     myModel = [XMLBuilder new];
     
@@ -70,9 +71,6 @@
 // Do the collection.
 - (void) collect
   {
-  [self
-    updateStatus: NSLocalizedStringFromTable(self.name, @"Status", NULL)];
-
   [self performCollect];
   
   dispatch_semaphore_signal(self.complete);
@@ -92,13 +90,6 @@
 - (void) performCollect
   {
   // Derived classes must implement.
-  }
-
-// Update status.
-- (void) updateStatus: (NSString *) status
-  {
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kStatusUpdate object: status];
   }
 
 // Construct a title with a bold, blue font using a given anchor into
@@ -122,7 +113,7 @@
   [string appendString: @" "];
   
   [string
-    appendString: NSLocalizedString(@"info", NULL)
+    appendString: ECLocalizedString(@"info")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] italicFont],
@@ -154,7 +145,7 @@
     [NSString
       stringWithFormat:
         @"%@%@%@%@",
-        NSLocalizedString(@"ascsearch", NULL),
+        ECLocalizedString(@"ascsearch"),
         @"type=discussion&showAnsweredFirst=true&q=",
         bundleID,
         @"&sort=updatedDesc&currentPage=1&includeResultCount=true"];
@@ -162,7 +153,7 @@
   [url appendString: @" "];
 
   [url
-    appendString: NSLocalizedString(@"[Lookup]", NULL)
+    appendString: ECLocalizedString(@"[Lookup]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -409,7 +400,7 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Remove]", NULL)
+    appendString: ECLocalizedString(@"[Remove]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

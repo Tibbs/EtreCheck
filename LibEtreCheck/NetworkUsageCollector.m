@@ -12,6 +12,7 @@
 #import "Model.h"
 #import "NumberFormatter.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -210,9 +211,9 @@
       [NSString
         stringWithFormat:
           @"    %@\t%@\t%@\n",
-          NSLocalizedString(@"Input     ", NULL),
-          NSLocalizedString(@"Output    ", NULL),
-          NSLocalizedString(@"Process name", NULL)]
+          ECLocalizedString(@"Input     "),
+          ECLocalizedString(@"Output    "),
+          ECLocalizedString(@"Process name")]
     attributes:
       @{ NSFontAttributeName : [[Utilities shared] boldFont] }];
 
@@ -256,7 +257,7 @@
     processName = [process objectForKey: @"process"];
   
   if([processName length] == 0)
-    processName = NSLocalizedString(@"Unknown", NULL);
+    processName = ECLocalizedString(@"Unknown");
     
   if([processName hasPrefix: @"EtreCheck"])
     return;

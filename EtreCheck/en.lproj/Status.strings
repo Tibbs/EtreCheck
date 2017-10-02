@@ -1,0 +1,49 @@
+/* 
+  Collectors.strings
+  EtreCheck
+
+  Created by John Daniel on 2014-11-26.
+  Copyright (c) 2014 Etresoft. All rights reserved.
+*/
+"hardware" = "Checking hardware information";
+"video" = "Checking video information";
+"systemsoftware" = "Checking system software";
+"virtualvolume" = "Checking virtual volumes";
+"disk" = "Checking disk information";
+"usb" = "Checking USB information";
+"firewire" = "Checking Firewire information";
+"thunderbolt" = "Checking Thunderbolt information";
+"configurationfiles" = "Checking configuration files";
+"gatekeeper" = "Checking Gatekeeper information";
+"kernelextensions" = "Checking kernel extensions";
+"startupitems" = "Checking obsolete startup items";
+"systemlaunchagents" = "Checking system launch agents";
+"systemlaunchdaemons" = "Checking system launch daemons";
+"launchagents" = "Checking launch agents";
+"launchdaemons" = "Checking launch daemons";
+"userlaunchagents" = "Checking user launch agents";
+"loginitems" = "Checking login items";
+"internetplugins" = "Checking internet plug-ins";
+"userinternetplugins" = "Checking user internet plug-ins";
+"audioplugins" = "Checking audio plug-ins";
+"useraudioplugins" = "Checking user audio plug-ins";
+"itunesplugins" = "Checking iTunes plug-ins";
+"useritunesplugins" = "Checking user iTunes plug-ins";
+"safariextensions" = "Checking Safari extensions";
+"preferencepanes" = "Checking preference panes";
+"fonts" = "Checking fonts";
+"applications" = "Checking applications";
+"timemachine" = "Checking Time Machine information";
+"cpu" = "Sampling processes for CPU";
+"memory" = "Sampling processes for memory";
+"network" = "Sampling processes for network usage";
+"energy" = "Sampling processes for energy usage";
+"vm" = "Checking virtual memory information";
+"install" = "Checking installs";
+"diagnostics" = "Checking diagnostic information";
+"log" = "Checking information from log files";
+"adware" = "Checking for adware";
+"unsigned" = "Checking for unsigned files";
+"cleanup" = "Checking for clean up opportuntities";
+"etrecheckdeletedfiles" = "Checking file deleted by EtreCheck";
+"header" = "Adding header information";

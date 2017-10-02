@@ -9,9 +9,9 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "Model.h"
-#import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 @implementation VideoCollector
 
@@ -67,7 +67,7 @@
     NSString * name = [info objectForKey: @"sppci_model"];
     
     if(![name length])
-      name = NSLocalizedString(@"Unknown", NULL);
+      name = ECLocalizedString(@"Unknown");
       
     [self.model addElement: @"name" value: name];
     
@@ -84,7 +84,7 @@
       vram =
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"VRAM: %@", NULL),
+            ECLocalizedString(@"VRAM: %@"),
             [Utilities translateSize: vramAmount]];
       
     [self.result
@@ -120,8 +120,8 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"GPU failure! - %@\n", NULL),
-            TTTLocalizedPluralString(errorCount, @"error", NULL)]
+            ECLocalizedString(@"GPU failure! - %@\n"),
+            ECLocalizedPluralString(errorCount, @"error")]
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -147,7 +147,7 @@
     }
     
   if([name isEqualToString: @"spdisplays_display"])
-    name = NSLocalizedString(@"Display", NULL);
+    name = ECLocalizedString(@"Display");
     
   NSString * resolution = [display objectForKey: @"spdisplays_resolution"];
 

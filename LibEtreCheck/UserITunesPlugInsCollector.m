@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import "UserITunesPlugInsCollector.h"
+#import "LocalizedString.h"
 
 // Collect user iTunes plug-ins.
 @implementation UserITunesPlugInsCollector
@@ -25,7 +26,7 @@
 - (void) performCollect
   {
   [self
-    parseUserPlugins: NSLocalizedString(@"User iTunes Plug-ins:", NULL)
+    parseUserPlugins: ECLocalizedString(@"User iTunes Plug-ins:")
     path:  @"/Library/iTunes/iTunes Plug-ins"];    
   }
 

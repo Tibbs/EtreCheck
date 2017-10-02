@@ -55,9 +55,6 @@
 // Perform the collection.
 - (void) performCollect;
 
-// Update status.
-- (void) updateStatus: (NSString *) status;
-
 // Construct a title with a bold, blue font using a given anchor into
 // the online help.
 - (NSAttributedString *) buildTitle;

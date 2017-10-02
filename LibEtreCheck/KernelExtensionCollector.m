@@ -12,6 +12,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 @implementation KernelExtensionCollector
 
@@ -690,11 +691,11 @@
 
   NSColor * color = [[Utilities shared] blue];
 
-  NSString * status = NSLocalizedString(@"loaded", NULL);
+  NSString * status = ECLocalizedString(@"loaded");
   
   if([self.unloadedExtensions objectForKey: label])
     {
-    status = NSLocalizedString(@"not loaded", NULL);
+    status = ECLocalizedString(@"not loaded");
     color = [[Utilities shared] gray];
 
     if([self ignoreUnloadedExtension: label])

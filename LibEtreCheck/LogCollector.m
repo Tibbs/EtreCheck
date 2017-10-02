@@ -11,6 +11,7 @@
 #import "DiagnosticEvent.h"
 #import "SubProcess.h"
 #import "DiagnosticsCollector.h"
+#import "LocalizedString.h"
 
 // Collect information from log files.
 @implementation LogCollector
@@ -250,7 +251,7 @@
   
   DiagnosticEvent * event = [DiagnosticEvent new];
   
-  event.name = NSLocalizedString(@"Kernel", NULL);
+  event.name = ECLocalizedString(@"Kernel");
   event.date = date;
   event.type = kPanic;
   event.file = file;
@@ -289,7 +290,7 @@
   [safeParts removeLastObject];
   [safeParts
     addObject:
-      [NSLocalizedString(@"[redacted]", NULL)
+      [ECLocalizedString(@"[redacted]")
         stringByAppendingPathExtension: extension]];
   
   if(name)
@@ -392,60 +393,60 @@
 // Parse a shutdown code.
 - (void) parseShutdownCode: (int) shutdownCause
   {
-  NSString * shutdownString = NSLocalizedString(@"Unknown", NULL);
+  NSString * shutdownString = ECLocalizedString(@"Unknown");
   
   switch(shutdownCause)
     {
     case 5:
-      //shutdownString = NSLocalizedString(@"Normal", NULL);
+      //shutdownString = ECLocalizedString(@"Normal");
       return;
       
     case 3:
-      shutdownString = NSLocalizedString(@"Hard shutdown", NULL);
+      shutdownString = ECLocalizedString(@"Hard shutdown");
       break;
       
     case 0:
-      shutdownString = NSLocalizedString(@"Power loss", NULL);
+      shutdownString = ECLocalizedString(@"Power loss");
       break;
       
     case -3:
     case -86:
-      shutdownString = NSLocalizedString(@"Overheating", NULL);
+      shutdownString = ECLocalizedString(@"Overheating");
       break;
       
     case -60:
-      shutdownString = NSLocalizedString(@"Corrupt filesystem", NULL);
+      shutdownString = ECLocalizedString(@"Corrupt filesystem");
       break;
     
     case -61:
     case -62:
-      shutdownString = NSLocalizedString(@"System unresponsive", NULL);
+      shutdownString = ECLocalizedString(@"System unresponsive");
       break;
     
     case -71:
-      shutdownString = NSLocalizedString(@"RAM overheating", NULL);
+      shutdownString = ECLocalizedString(@"RAM overheating");
       break;
     
     case -74:
-      shutdownString = NSLocalizedString(@"Battery overheating", NULL);
+      shutdownString = ECLocalizedString(@"Battery overheating");
       break;
     
     case -75:
     case -78:
-      shutdownString = NSLocalizedString(@"Power supply failure", NULL);
+      shutdownString = ECLocalizedString(@"Power supply failure");
       break;
     
     case -79:
     case -103:
-      shutdownString = NSLocalizedString(@"Battery failure", NULL);
+      shutdownString = ECLocalizedString(@"Battery failure");
       break;
     
     case -95:
-      shutdownString = NSLocalizedString(@"CPU overheating", NULL);
+      shutdownString = ECLocalizedString(@"CPU overheating");
       break;
     
     case -100:
-      shutdownString = NSLocalizedString(@"Power supply overheating", NULL);
+      shutdownString = ECLocalizedString(@"Power supply overheating");
       break;
     }
     

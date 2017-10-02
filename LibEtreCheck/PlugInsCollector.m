@@ -11,6 +11,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -55,7 +56,7 @@
         [plugin objectForKey: @"CFBundleShortVersionString"];
 
       if(!version)
-        version = NSLocalizedString(@"Unknown", NULL);
+        version = ECLocalizedString(@"Unknown");
         
       // Fix the version to get past ASC spam filters.
       version =
@@ -86,7 +87,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(@"    %@: %@%@", NULL),
+              ECLocalizedString(@"    %@: %@%@"),
               name, version, modificationDateString]];
  
       // Some plug-ins are special.
@@ -140,7 +141,7 @@
         plist =
           @{
             @"CFBundleShortVersionString" :
-              NSLocalizedString(@"Unknown", NULL)
+              ECLocalizedString(@"Unknown")
             };
 
       NSMutableDictionary * bundle =
@@ -169,8 +170,8 @@
     [[NSMutableAttributedString alloc] initWithString: @""];
 
   NSString * url =
-    NSLocalizedString(
-      @"https://www.java.com/en/download/installed.jsp", NULL);
+    ECLocalizedString(
+      @"https://www.java.com/en/download/installed.jsp");
   
   if([[Model model] majorOSVersion] < 11)
     url = @"https://support.apple.com/kb/dl1572";
@@ -178,7 +179,7 @@
   [string appendString: @" "];
 
   [string
-    appendString: NSLocalizedString(@"Check version", NULL)
+    appendString: ECLocalizedString(@"Check version")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -200,7 +201,7 @@
   if(!currentVersion)
     return
       [[[NSMutableAttributedString alloc]
-        initWithString: NSLocalizedString(@" Cannot contact Adobe", NULL)
+        initWithString: ECLocalizedString(@" Cannot contact Adobe")
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -262,7 +263,7 @@
   
   NSAttributedString * outdated =
     [[NSAttributedString alloc]
-      initWithString: NSLocalizedString(@"Outdated!", NULL)
+      initWithString: ECLocalizedString(@"Outdated!")
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -273,7 +274,7 @@
   [string appendString: @" "];
   
   [string
-    appendString: NSLocalizedString(@"Update", NULL)
+    appendString: ECLocalizedString(@"Update")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -295,7 +296,7 @@
   [extra appendString: @" "];
 
   [extra
-    appendString: NSLocalizedString(@"Adware!", NULL)
+    appendString: ECLocalizedString(@"Adware!")
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],

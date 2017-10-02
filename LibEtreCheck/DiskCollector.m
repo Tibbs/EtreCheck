@@ -10,9 +10,9 @@
 #import "Utilities.h"
 #import "ByteCountFormatter.h"
 #import "NSArray+Etresoft.h"
-#import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -57,7 +57,7 @@
 
     [self.result
       appendString:
-        NSLocalizedString(@"    Disk information not found!\n", NULL)
+        ECLocalizedString(@"    Disk information not found!\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -213,14 +213,14 @@
         [NSString
           stringWithFormat: 
             @" - TRIM: %@", 
-            NSLocalizedStringFromTable(TRIM, @"System", NULL)];
+            ECLocalizedStringFromTable(TRIM, @"System")];
       
       NSString * info =
         [NSString
           stringWithFormat:
             @"(%@%@)",
             medium
-              ? NSLocalizedStringFromTable(medium, @"System", NULL)
+              ? ECLocalizedStringFromTable(medium, @"System")
               : @"",
             ([medium isEqualToString: @"Solid State"] && [TRIM length])
               ? TRIMString
@@ -328,7 +328,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"%@S.M.A.R.T. Status: %@\n", NULL),
+            ECLocalizedString(@"%@S.M.A.R.T. Status: %@\n"),
             indent, smart_status]
       attributes:
         [NSDictionary
@@ -346,7 +346,7 @@
     [urlString
       appendString:
         [NSString stringWithFormat:
-          NSLocalizedString(@"%@[Show SMART report]", NULL), indent]
+          ECLocalizedString(@"%@[Show SMART report]"), indent]
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -382,7 +382,7 @@
   [self.model addElement: @"mountpoint" value: volumeMountPoint];
   
   if(!volumeMountPoint)
-    volumeMountPoint = NSLocalizedString(@"<not mounted>", NULL);
+    volumeMountPoint = ECLocalizedString(@"<not mounted>");
     
   if(UUID)
     {
@@ -429,14 +429,14 @@
       [NSString 
         stringWithFormat: 
           @" - %@", 
-          NSLocalizedStringFromTable(fileSystem, @"System", NULL)];
+          ECLocalizedStringFromTable(fileSystem, @"System")];
     
   if([fileSystemName length] > 0)
     {
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@%@ (%@%@) %@ %@: %@ %@%@\n", NULL),
+          ECLocalizedString(@"%@%@ (%@%@) %@ %@: %@ %@%@\n"),
           indent,
           cleanName,
           volumeDevice,
@@ -449,7 +449,7 @@
           [volumeFree length] > 0
             ? [NSString
                 stringWithFormat:
-                NSLocalizedString(@"(%@ free)", NULL), volumeFree] 
+                ECLocalizedString(@"(%@ free)"), volumeFree] 
             : @"",
           status];
       
@@ -459,7 +459,7 @@
     volumeInfo =
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"%@(%@) %@ %@: %@%@\n", NULL),
+          ECLocalizedString(@"%@(%@) %@ %@: %@%@\n"),
           indent,
           volumeDevice,
           volumeMountPoint,
@@ -496,7 +496,7 @@
     size = [volume objectForKey: @"size"];
 
   if(!size)
-    size = NSLocalizedString(@"Size unknown", NULL);
+    size = ECLocalizedString(@"Size unknown");
     
   return size;
   }
@@ -548,22 +548,22 @@
   
   if([mountPoint isEqualToString: @"/"])
     {
-    type = NSLocalizedString(@"Startup", NULL);
+    type = ECLocalizedString(@"Startup");
 
     unsigned long long GB = 1024 * 1024 * 1024;
 
     if(free < (GB * 15))
-      status = NSLocalizedString(@" (Low!)", NULL);
+      status = ECLocalizedString(@" (Low!)");
     }
   
   else if([name isEqualToString: @"Recovery HD"])
-    type = NSLocalizedString(@"Recovery", NULL);
+    type = ECLocalizedString(@"Recovery");
     
   else if([name isEqualToString: @"EFI"])
-    type = NSLocalizedString(@"EFI", NULL);
+    type = ECLocalizedString(@"EFI");
     
   else if([name isEqualToString: @"KernelCoreDump"])
-    type = NSLocalizedString(@"KernelCoreDump", NULL);
+    type = ECLocalizedString(@"KernelCoreDump");
 
   else if([filesystem length] == 0)
     {
@@ -571,9 +571,9 @@
       type = [iocontent substringFromIndex: 6];
     
     if([type isEqualToString: @"APFS"])
-      type = NSLocalizedString(@"APFS Container", NULL);
+      type = ECLocalizedString(@"APFS Container");
     else if([type isEqualToString: @"CoreStorage"])
-      type = NSLocalizedString(@"CoreStorage Container", NULL);
+      type = ECLocalizedString(@"CoreStorage Container");
     }
 
   if([mountPoint length] == 0)
@@ -611,8 +611,8 @@
     return
       [NSString
         stringWithFormat:
-          NSLocalizedString(@" - %@ Drive failure!", NULL),
-          TTTLocalizedPluralString(errorCount, @"error", NULL)];
+          ECLocalizedString(@" - %@ Drive failure!"),
+          ECLocalizedPluralString(errorCount, @"error")];
 
   return @"";
   }

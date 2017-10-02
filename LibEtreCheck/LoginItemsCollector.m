@@ -8,7 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "SubProcess.h"
-#include "XMLBuilder.h"
+#import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -63,7 +64,7 @@
   if(machItemCount > 0)
     {
     [self.result
-      appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+      appendString: ECLocalizedString(@"machinitdeprecated")
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -73,7 +74,7 @@
   if(loginHookCount > 0)
     {
     [self.result
-      appendString: NSLocalizedString(@"loginhookdeprecated", NULL)
+      appendString: ECLocalizedString(@"loginhookdeprecated")
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -554,7 +555,7 @@
     }
     
   if([developer length] == 0)
-    developer = NSLocalizedString(@"Unknown", NULL);
+    developer = ECLocalizedString(@"Unknown");
     
   NSString * appInfo = @"";
   
@@ -572,7 +573,7 @@
             @"    %@    %@%@ %@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
+            isHidden ? ECLocalizedString(@" - Hidden") : @"",
             appInfo,
             safePath]
       attributes:
@@ -587,7 +588,7 @@
             @"    %@    %@%@ %@\n        (%@)\n",
             safeName,
             kind,
-            isHidden ? NSLocalizedString(@" - Hidden", NULL) : @"",
+            isHidden ? ECLocalizedString(@" - Hidden") : @"",
             appInfo,
             safePath]];
     
@@ -655,7 +656,7 @@
       return
         [NSString
           stringWithFormat:
-            @"%@ %@", NSLocalizedString(@"Shell Script", NULL), crc];
+            @"%@ %@", ECLocalizedString(@"Shell Script"), crc];
       }
     }
     

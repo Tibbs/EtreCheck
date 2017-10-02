@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect information about EtreCheck deleted files.
 @implementation EtreCheckDeletedFilesCollector
@@ -63,7 +64,7 @@
     NSString * reason = [deletedFile objectForKey: @"reason"];
     
     if([reason length] == 0)
-      reason = NSLocalizedString(@"Unknown", NULL);
+      reason = ECLocalizedString(@"Unknown");
       
     NSDate * date = [deletedFile objectForKey: @"date"];
   

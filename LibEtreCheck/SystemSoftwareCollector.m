@@ -8,13 +8,13 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "SubProcess.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -79,8 +79,8 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(
-          @"    Operating system information not found!\n", NULL)
+        ECLocalizedString(
+          @"    Operating system information not found!\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -251,7 +251,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
+            ECLocalizedString(@"    %@ - Uptime: %@%@\n"),
             marketingName,
             @"",
             uptime]];
@@ -270,8 +270,8 @@
     attributes: 
       [NSDictionary dictionaryWithObjectsAndKeys: @"hours", @"units", nil]];
 
-  NSString * dayString = TTTLocalizedPluralString(days, @"day", nil);
-  NSString * hourString = TTTLocalizedPluralString(hours, @"hour", nil);
+  NSString * dayString = ECLocalizedPluralString(days, @"day");
+  NSString * hourString = ECLocalizedPluralString(hours, @"hour");
   
   if(days > 0)
     hourString = @"";
@@ -280,7 +280,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
+          ECLocalizedString(@"    %@ - Uptime: %@%@\n"),
           marketingName,
           dayString,
           hourString]];
@@ -292,7 +292,7 @@
 // Don't even bother with this.
 - (NSString *) marketingName: (NSString *) version
   {
-  NSString * language = NSLocalizedString(@"en", NULL);
+  NSString * language = ECLocalizedString(@"en");
   
   NSURL * url =
     [NSURL

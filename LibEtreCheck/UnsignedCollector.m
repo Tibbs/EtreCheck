@@ -8,10 +8,10 @@
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -177,7 +177,7 @@
           }];
       
     NSString * message =
-      TTTLocalizedPluralString(adwareCount, @"unsigned file", NULL);
+      ECLocalizedPluralString(adwareCount, @"unsigned file");
 
     [self.result appendString: @"    "];
     [self.result appendString: message];  
@@ -203,7 +203,7 @@
       stringWithFormat: @"etrecheck://unsigned/disable?%@", encodedPath];
 
   [urlString
-    appendString: NSLocalizedString(@"[Disable]", NULL)
+    appendString: ECLocalizedString(@"[Disable]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -229,7 +229,7 @@
       stringWithFormat: @"etrecheck://unsigned/enable?%@", encodedPath];
   
   [urlString
-    appendString: NSLocalizedString(@"[Enable]", NULL)
+    appendString: ECLocalizedString(@"[Enable]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

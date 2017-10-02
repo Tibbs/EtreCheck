@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Gatekeeper settings.
 typedef enum
@@ -52,7 +53,7 @@ GatekeeperSetting;
     {
     [self.result
       appendString:
-        NSLocalizedString(@"gatekeeperneedslion", NULL)
+        ECLocalizedString(@"gatekeeperneedslion")
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -162,39 +163,39 @@ GatekeeperSetting;
     case kMacAppStore:
       [self.model 
         addElement: @"status" 
-        value: NSLocalizedString(@"Mac App Store", NULL)];
+        value: ECLocalizedString(@"Mac App Store")];
       
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@\n", NSLocalizedString(@"Mac App Store", NULL)]];
+              @"    %@\n", ECLocalizedString(@"Mac App Store")]];
       break;
     case kDeveloperID:
       [self.model 
         addElement: @"status" 
         value: 
-          NSLocalizedString(
-            @"Mac App Store and identified developers", NULL)];
+          ECLocalizedString(
+            @"Mac App Store and identified developers")];
 
       [self.result
         appendString:
           [NSString
             stringWithFormat:
               @"    %@\n",
-              NSLocalizedString(
-                @"Mac App Store and identified developers", NULL)]];
+              ECLocalizedString(
+                @"Mac App Store and identified developers")]];
       break;
     case kDisabled:
       [self.model 
         addElement: @"status" 
-        value: NSLocalizedString(@"Anywhere", NULL)];
+        value: ECLocalizedString(@"Anywhere")];
 
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@ ", NSLocalizedString(@"Anywhere", NULL)]
+              @"    %@ ", ECLocalizedString(@"Anywhere")]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -207,13 +208,13 @@ GatekeeperSetting;
     default:
       [self.model 
         addElement: @"status" 
-        value: NSLocalizedString(@"Unknown", NULL)];
+        value: ECLocalizedString(@"Unknown")];
 
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              @"    %@\n", NSLocalizedString(@"Unknown!", NULL)]
+              @"    %@\n", ECLocalizedString(@"Unknown!")]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -229,7 +230,7 @@ GatekeeperSetting;
     [[NSMutableAttributedString alloc] initWithString: @""];
     
   [urlString
-    appendString: NSLocalizedString(@"[Fix Gatekeeper security]", NULL)
+    appendString: ECLocalizedString(@"[Fix Gatekeeper security]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

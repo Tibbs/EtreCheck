@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "Model.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -73,8 +74,8 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"EtreCheck version: %@ (%@)\nReport generated %@\n", NULL),
+          ECLocalizedString(
+            @"EtreCheck version: %@ (%@)\nReport generated %@\n"),
             version,
             build,
             currentDate]
@@ -84,7 +85,7 @@
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
     
   [self.result
-    appendString: NSLocalizedString(@"downloadetrecheck", NULL)
+    appendString: ECLocalizedString(@"downloadetrecheck")
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -109,7 +110,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"Runtime: %@\n", NULL), runtime]
+          ECLocalizedString(@"Runtime: %@\n"), runtime]
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -129,7 +130,7 @@
 - (void) printPerformance
   {
   [self.result
-    appendString: NSLocalizedString(@"Performance: ", NULL)
+    appendString: ECLocalizedString(@"Performance: ")
     attributes:
       [NSDictionary
        dictionaryWithObjectsAndKeys:
@@ -139,7 +140,7 @@
   
   if(interval > (60 * 10))
     {
-    NSString * performance = NSLocalizedString(@"poorperformance", NULL);
+    NSString * performance = ECLocalizedString(@"poorperformance");
     
     [self.model addElement: @"performance" value: performance];
     
@@ -154,7 +155,7 @@
   else if(interval > (60 * 5))
     {
     NSString * performance = 
-      NSLocalizedString(@"belowaverageperformance", NULL);
+      ECLocalizedString(@"belowaverageperformance");
     
     [self.model addElement: @"performance" value: performance];
     
@@ -169,7 +170,7 @@
   else if(interval > (60 * 3))
     {
     NSString * performance = 
-      NSLocalizedString(@"goodperformance", NULL);
+      ECLocalizedString(@"goodperformance");
     
     [self.model addElement: @"performance" value: performance];
     
@@ -183,7 +184,7 @@
   else
     {
     NSString * performance = 
-      NSLocalizedString(@"excellentperformance", NULL);
+      ECLocalizedString(@"excellentperformance");
     
     [self.model addElement: @"performance" value: performance];
     
@@ -244,8 +245,8 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(
-          @"Show signature failures: Enabled\n", NULL)
+        ECLocalizedString(
+          @"Show signature failures: Enabled\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -258,8 +259,8 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(
-          @"Ignore expected failures in Apple tasks: Disabled\n", NULL)
+        ECLocalizedString(
+          @"Ignore expected failures in Apple tasks: Disabled\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -272,8 +273,8 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(
-          @"Hide Apple tasks: Disabled\n", NULL)
+        ECLocalizedString(
+          @"Hide Apple tasks: Disabled\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -295,8 +296,8 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(
-          @"The following internal tasks failed to complete:\n", NULL)
+        ECLocalizedString(
+          @"The following internal tasks failed to complete:\n")
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -323,7 +324,7 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(@"Failed to read adware signatures!", NULL)
+        ECLocalizedString(@"Failed to read adware signatures!")
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -333,7 +334,7 @@
     [self.result appendString: @"\n\n"];
     }
       
-  if([NSLocalizedString(@"downloadetrecheck", NULL) length] == 17)
+  if([ECLocalizedString(@"downloadetrecheck") length] == 17)
     {
     NSString * message = @"Failed to load language resources!";
     
@@ -361,7 +362,7 @@
 - (void) printProblem
   {
   [self.result
-    appendString: NSLocalizedString(@"Problem: ", NULL)
+    appendString: ECLocalizedString(@"Problem: ")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont]
@@ -381,7 +382,7 @@
       addElement: @"problemdescription" value: problemDescription.string];
 
     [self.result
-      appendString: NSLocalizedString(@"Description:\n", NULL)
+      appendString: ECLocalizedString(@"Description:\n")
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]

@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -53,7 +54,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(@"    %@: %@\n", NULL), name, cleanPath]];
+              ECLocalizedString(@"    %@: %@\n"), name, cleanPath]];
       }
       
     [self.result appendCR];

@@ -13,6 +13,7 @@
 #import "SubProcess.h"
 #import "ByteCountFormatter.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -334,8 +335,8 @@
 
     NSString * status = 
       [locked isEqualToString: @"yes"]
-        ? NSLocalizedString(@"Locked", NULL)
-        : NSLocalizedString(@"Unlocked", NULL);
+        ? ECLocalizedString(@"Locked")
+        : ECLocalizedString(@"Unlocked");
               
     [self.model addElement: @"status" value: status];
 
@@ -345,7 +346,7 @@
           stringWithFormat:
             @"%@%@ %@ (%@)",
             indent,
-            NSLocalizedString(@"Encrypted", NULL),
+            ECLocalizedString(@"Encrypted"),
             encryptionType,
             status]];
 
@@ -441,7 +442,7 @@
             stringWithFormat:
               @"%@%@ %@ %@ %@",
               indent,
-              NSLocalizedString(@"Physical disk:", NULL),
+              ECLocalizedString(@"Physical disk:"),
               name,
               size,
               status]
@@ -457,7 +458,7 @@
             stringWithFormat:
               @"%@%@ %@ %@ %@",
               indent,
-              NSLocalizedString(@"Physical disk:", NULL),
+              ECLocalizedString(@"Physical disk:"),
               name,
               size,
               status]];
@@ -485,8 +486,8 @@
 
     NSString * status = 
       [locked boolValue]
-        ? NSLocalizedString(@"Locked", NULL)
-        : NSLocalizedString(@"Unlocked", NULL);
+        ? ECLocalizedString(@"Locked")
+        : ECLocalizedString(@"Unlocked");
               
     [self.model addElement: @"status" value: status];
 
@@ -498,11 +499,11 @@
           stringWithFormat:
             @"%@%@ %@ (%@)",
             indent,
-            NSLocalizedString(@"Encrypted:", NULL),
-            NSLocalizedString(@"Yes", NULL),
+            ECLocalizedString(@"Encrypted:"),
+            ECLocalizedString(@"Yes"),
             [locked boolValue]
-              ? NSLocalizedString(@"Locked", NULL)
-              : NSLocalizedString(@"Unlocked", NULL)]];
+              ? ECLocalizedString(@"Locked")
+              : ECLocalizedString(@"Unlocked")]];
 
     [self.result appendCR];
     }
@@ -528,7 +529,7 @@
         stringWithFormat:
           @"%@%@ %@ %@ %@",
           indent,
-          NSLocalizedString(@"Physical disk:", NULL),
+          ECLocalizedString(@"Physical disk:"),
           name,
           volumeSize,
           volumeFree]];

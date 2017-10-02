@@ -12,6 +12,7 @@
 #import "NSString+Etresoft.h"
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 @implementation Model
 
@@ -355,7 +356,7 @@
     [NSString stringWithFormat: @"etrecheck://detail/%@", query];
   
   [urlString
-    appendString: NSLocalizedString(@"[Details]", NULL)
+    appendString: ECLocalizedString(@"[Details]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -379,7 +380,7 @@
     [NSString stringWithFormat: @"etrecheck://open/%@", UUID];
   
   [urlString
-    appendString: NSLocalizedString(@"[Open]", NULL)
+    appendString: ECLocalizedString(@"[Open]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

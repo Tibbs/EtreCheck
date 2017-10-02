@@ -8,10 +8,10 @@
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
+#import "LocalizedString.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -243,8 +243,8 @@
           [self.model addElement: @"adwarefile" value: prettyPath];
           }];
       
-    NSString * message =
-      TTTLocalizedPluralString(adwareCount, @"adware file", NULL);
+    NSString * message = 
+      ECLocalizedPluralString(adwareCount, @"adware file");
 
     [self.result appendString: @"    "];
     [self.result

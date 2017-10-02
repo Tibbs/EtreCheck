@@ -8,7 +8,6 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import <SystemConfiguration/SystemConfiguration.h>
@@ -16,6 +15,7 @@
 #import "ByteCountFormatter.h"
 #import "XMLBuilder.h"
 #import "NumberFormatter.h"
+#import "LocalizedString.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -68,14 +68,14 @@
   // First look for a machine attributes file.
   self.properties =
     [NSDictionary
-      readPropertyList: NSLocalizedString(@"machineattributes", NULL)];
+      readPropertyList: ECLocalizedString(@"machineattributes")];
     
   // Don't give up yet. Try the old one too.
   if(!self.properties)
     self.properties =
       [NSDictionary
         readPropertyList:
-          NSLocalizedString(@"oldmachineattributes", NULL)];
+          ECLocalizedString(@"oldmachineattributes")];
     
   // This is as good a place as any to collect this.
   NSString * computerName =
@@ -268,8 +268,8 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"    %@ - %@: %@\n", NULL),
-          name, NSLocalizedString(@"model", NULL), model]];
+          ECLocalizedString(@"    %@ - %@: %@\n"),
+          name, ECLocalizedString(@"model"), model]];
     
   [self.model addElement: @"name" value: name];
   [self.model addElement: @"model" value: model];
@@ -283,8 +283,8 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(
-            @"    %@ %@ %@%@ CPU: %@-core\n", NULL),
+          ECLocalizedString(
+            @"    %@ %@ %@%@ CPU: %@-core\n"),
           cpu_count,
           speed,
           cpu_type ? cpu_type : @"",
@@ -336,7 +336,7 @@
       
   [self.model addElement: @"marketingname" value: self.marketingName];
     
-  NSString * language = NSLocalizedString(@"en", NULL);
+  NSString * language = ECLocalizedString(@"en");
 
   [self.result appendString: @"    "];
   
@@ -347,8 +347,8 @@
       [Utilities
         buildURL: url
         title:
-          NSLocalizedString(
-            @"[Technical Specifications]", NULL)]];
+          ECLocalizedString(
+            @"[Technical Specifications]")]];
 
   [self.model
     addElement: @"technicalspecificationsurl"
@@ -363,8 +363,8 @@
       [Utilities
         buildURL: url
         title:
-          NSLocalizedString(
-            @"[User Guide]", NULL)]];
+          ECLocalizedString(
+            @"[User Guide]")]];
     
   [self.model 
     addElement: @"userguideurl" url: [NSURL URLWithString: url]];
@@ -378,8 +378,8 @@
       [Utilities
         buildURL: url
         title:
-          NSLocalizedString(
-            @"[Warranty & Service]", NULL)]];
+          ECLocalizedString(
+            @"[Warranty & Service]")]];
 
   [self.model
     addElement: @"warrantyandserviceurl"
@@ -391,7 +391,7 @@
 // Try to get the marketing name directly from Apple.
 - (void) askAppleForMarketingName
   {
-  NSString * language = NSLocalizedString(@"en", NULL);
+  NSString * language = ECLocalizedString(@"en");
   
   self.marketingName = [self askAppleForMarketingName: language];
   
@@ -538,8 +538,8 @@
     if(isUpgradeable != nil)
       upgradeableString =
         upgradeable
-          ? NSLocalizedString(@"Upgradeable", NULL)
-          : NSLocalizedString(@"Not upgradeable", NULL);
+          ? ECLocalizedString(@"Upgradeable")
+          : ECLocalizedString(@"Not upgradeable");
     }
     
   if([[Model model] physicalRAM] < 4)
@@ -550,7 +550,7 @@
           stringWithFormat:
             @"    %@ RAM - %@ %@",
             memory,
-            NSLocalizedString(@"insufficientram", NULL),
+            ECLocalizedString(@"insufficientram"),
             upgradeableString]
       attributes:
         [NSDictionary
@@ -565,7 +565,7 @@
 
   [self.model addElement: @"ram" valueWithUnits: memory];
   
-  NSString * language = NSLocalizedString(@"en", NULL);
+  NSString * language = ECLocalizedString(@"en");
 
   NSString * url = [self memoryUpgradeURL: language];
   
@@ -580,8 +580,8 @@
         [Utilities
           buildURL: url
           title:
-            NSLocalizedString(
-              @"[Instructions]\n", NULL)]];
+            ECLocalizedString(
+              @"[Instructions]\n")]];
       
     [self.model
       addElement: @"memoryupgradeinstructionsurl"
@@ -647,7 +647,7 @@
     if([size isEqualToString: @"(empty)"])
       size = @"empty";
       
-    NSString * empty = NSLocalizedString(@"Empty", NULL);
+    NSString * empty = ECLocalizedString(@"Empty");
     
     if([size isEqualToString: @"empty"])
       {
@@ -690,7 +690,7 @@
     appendString:
       [NSString 
         stringWithFormat: 
-          NSLocalizedString(@"    Handoff/Airdrop2: %@\n", NULL), info]];
+          ECLocalizedString(@"    Handoff/Airdrop2: %@\n"), info]];
   }
 
 // Collect bluetooth information.
@@ -700,9 +700,9 @@
     addElement: @"continuity" boolValue: [self supportsContinuity]];
 
   if([self supportsContinuity])
-    return NSLocalizedString(@"supported", NULL);
+    return ECLocalizedString(@"supported");
               
-  return NSLocalizedString(@"not supported", NULL);
+  return ECLocalizedString(@"not supported");
   }
 
 // Is continuity supported?
@@ -796,8 +796,8 @@
               appendString:
                 [NSString
                   stringWithFormat:
-                    NSLocalizedString(@"    Wireless: %@", NULL),
-                    TTTLocalizedPluralString(count, @"interface", nil)]];
+                    ECLocalizedString(@"    Wireless: %@"),
+                    ECLocalizedPluralString(count, @"interface")]];
           
           for(NSDictionary * interface in interfaces)
             [self
@@ -825,7 +825,7 @@
       appendString:
         [NSString 
           stringWithFormat: 
-            NSLocalizedString(@"%@%@: %@\n", NULL), indent, name, modes]];
+            ECLocalizedString(@"%@%@: %@\n"), indent, name, modes]];
     
     [self.model startElement: @"wireless"];
 
@@ -841,10 +841,10 @@
       appendString:
         [NSString 
           stringWithFormat: 
-            NSLocalizedString(@"%@%@: %@\n", NULL), 
+            ECLocalizedString(@"%@%@: %@\n"), 
             indent, 
             name, 
-            NSLocalizedString(@"Unknown", NULL)]];
+            ECLocalizedString(@"Unknown")]];
 
     [self.model startElement: @"wireless"];
 
@@ -859,7 +859,7 @@
       appendString:
         [NSString 
           stringWithFormat: 
-            @"%@%@\n", indent, NSLocalizedString(@"Unknown", NULL)]];
+            @"%@%@\n", indent, ECLocalizedString(@"Unknown")]];
 
     [self.model addElement: @"wireless"];
     }
@@ -938,10 +938,9 @@
         appendString:
           [NSString
             stringWithFormat:
-            NSLocalizedString(
-              @"    Battery: Health = %@ - Cycle count = %@\n",
-              NULL),
-            NSLocalizedStringFromTable(health, @"System", NULL), cycleCount]
+            ECLocalizedString(
+              @"    Battery: Health = %@ - Cycle count = %@\n"),
+            ECLocalizedStringFromTable(health, @"System"), cycleCount]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -951,10 +950,9 @@
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(
-                @"    Battery: Health = %@ - Cycle count = %@\n",
-                NULL),
-              NSLocalizedStringFromTable(health, @"System", NULL), 
+              ECLocalizedString(
+                @"    Battery: Health = %@ - Cycle count = %@\n"),
+              ECLocalizedStringFromTable(health, @"System"), 
               cycleCount]];
       
     [self.model addElement: @"batteryhealth" value: health];
@@ -967,8 +965,8 @@
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(
-                @"        Battery serial number %@ invalid\n", NULL),
+              ECLocalizedString(
+                @"        Battery serial number %@ invalid\n"),
                 serialNumber]
         attributes:
           [NSDictionary
@@ -1012,7 +1010,7 @@
             appendString:
               [NSString
                 stringWithFormat:
-                  NSLocalizedString(@"    Proxy: %@\n", NULL), proxy]];
+                  ECLocalizedString(@"    Proxy: %@\n"), proxy]];
           
           [proxies addObject: proxy];
           }
@@ -1078,7 +1076,7 @@
       }
       
     if(count > 0)
-      pendingFiles = TTTLocalizedPluralString(count, @"pending file", nil);
+      pendingFiles = ECLocalizedPluralString(count, @"pending file");
     }
     
   [subProcess release];
@@ -1127,14 +1125,14 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"    iCloud Quota: %@ available", NULL),
+            ECLocalizedString(@"    iCloud Quota: %@ available"),
             iCloudFree]];
       
     [self.model addElement: @"icloudfree" valueWithUnits: iCloudFree];
     
     if(bytes < 1024 * 1024 * 256)
       [self.result
-        appendString: NSLocalizedString(@" (Low!)", NULL)
+        appendString: ECLocalizedString(@" (Low!)")
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -1153,7 +1151,7 @@
   if([pendingFiles length] > 0)
     {
     [self.result
-      appendString: NSLocalizedString(@"    iCloud Status: ", NULL)];
+      appendString: ECLocalizedString(@"    iCloud Status: ")];
       
     [self.model addElement: @"icloudpendingfiles" intValue: count];
     

@@ -12,6 +12,7 @@
 #import "SubProcess.h"
 #import "Model.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -80,7 +81,7 @@
           [self printStartupItem: item];
           
         [self.result
-          appendString: NSLocalizedString(@"startupitemsdeprecated", NULL)
+          appendString: ECLocalizedString(@"startupitemsdeprecated")
           attributes:
             @{
               NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -136,7 +137,7 @@
     }
     
   [self.result
-    appendString: NSLocalizedString(@"machinitdeprecated", NULL)
+    appendString: ECLocalizedString(@"machinitdeprecated")
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -234,7 +235,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"    %@: %@ Path: %@\n", NULL),
+          ECLocalizedString(@"    %@: %@ Path: %@\n"),
           name, 
           [version length] > 0
             ? [NSString stringWithFormat: @"(%@)", version]

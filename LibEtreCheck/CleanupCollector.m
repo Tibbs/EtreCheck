@@ -9,12 +9,12 @@
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 #import <sqlite3.h>
 #import <unistd.h>
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -104,11 +104,8 @@
           if([signature isEqualToString: kExecutableMissing])
             {
             [self.result
-              appendString:
-                [NSString
-                  stringWithFormat:
-                    NSLocalizedString(
-                      @"        Executable not found!\n", NULL)]
+              appendString: 
+                ECLocalizedString(@"        Executable not found!\n")
               attributes:
                 @{
                   NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -118,8 +115,7 @@
           }];
       
     NSString * message =
-      TTTLocalizedPluralString(
-        [orphanLaunchdFiles count], @"orphan file", NULL);
+      ECLocalizedPluralString([orphanLaunchdFiles count], @"orphan file");
 
     [self.result appendString: @"    "];
     
@@ -376,7 +372,7 @@
         }
         
       NSString * message =
-        TTTLocalizedPluralString(count, @"SPAM notification", NULL);
+        ECLocalizedPluralString(count, @"SPAM notification");
 
       [self.result appendString: @"    "];
       
@@ -414,7 +410,7 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Clean up]", NULL)
+    appendString: ECLocalizedString(@"[Clean up]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
@@ -435,7 +431,7 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"[Clean up]", NULL)
+    appendString: ECLocalizedString(@"[Clean up]")
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

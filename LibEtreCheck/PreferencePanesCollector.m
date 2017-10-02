@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "LocalizedString.h"
 
 // Collect 3rd party preference panes.
 @implementation PreferencePanesCollector
@@ -59,7 +60,7 @@
           
         if(!count)
           [self.result
-            appendString: NSLocalizedString(@"    None\n", NULL)];
+            appendString: ECLocalizedString(@"    None\n")];
           
         [self.result appendCR];
         }

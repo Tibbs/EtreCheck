@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A503BF851F829BC200473A24 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF821F829BC200473A24 /* Collectors.strings */; };
-		A503BF891F829BCC00473A24 /* Status.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF861F829BCC00473A24 /* Status.strings */; };
 		A503BF8C1F829CEF00473A24 /* System.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF8E1F829CEF00473A24 /* System.strings */; };
+		A503BF9A1F82AD8D00473A24 /* LocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BF981F82AD8D00473A24 /* LocalizedString.h */; };
+		A503BF9B1F82AD8D00473A24 /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BF991F82AD8D00473A24 /* LocalizedString.m */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -158,10 +159,10 @@
 /* Begin PBXFileReference section */
 		A503BF831F829BC200473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
 		A503BF841F829BC200473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Collectors.strings; sourceTree = "<group>"; };
-		A503BF871F829BCC00473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Status.strings; sourceTree = "<group>"; };
-		A503BF881F829BCC00473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
 		A503BF8D1F829CEF00473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/System.strings; sourceTree = "<group>"; };
 		A503BF8F1F829CF100473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/System.strings; sourceTree = "<group>"; };
+		A503BF981F82AD8D00473A24 /* LocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedString.h; sourceTree = "<group>"; };
+		A503BF991F82AD8D00473A24 /* LocalizedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalizedString.m; sourceTree = "<group>"; };
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
 		A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupItemsCollector.m; sourceTree = "<group>"; };
 		A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCollector.h; sourceTree = "<group>"; };
@@ -522,6 +523,8 @@
 				A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
+				A503BF981F82AD8D00473A24 /* LocalizedString.h */,
+				A503BF991F82AD8D00473A24 /* LocalizedString.m */,
 				A5257D3B19AC0AA3003084C8 /* Utilities.h */,
 				A5257D3C19AC0AA3003084C8 /* Utilities.m */,
 				A53822381D5FF27200484388 /* XMLBuilder.h */,
@@ -531,7 +534,6 @@
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
 				A589CD211F71644500D66592 /* Info.plist */,
-				A503BF861F829BCC00473A24 /* Status.strings */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
 				A5F65E6C1F806FDB0062FA87 /* Localizable.strings */,
@@ -570,6 +572,7 @@
 				A589CDAD1F71749E00D66592 /* SystemLaunchDaemonsCollector.h in Headers */,
 				A589CDBF1F7174FD00D66592 /* DiagnosticsCollector.h in Headers */,
 				A589CD6A1F7165AC00D66592 /* NSObject+Etresoft.h in Headers */,
+				A503BF9A1F82AD8D00473A24 /* LocalizedString.h in Headers */,
 				A589CDB51F7174B900D66592 /* AudioPlugInsCollector.h in Headers */,
 				A589CDA01F71749E00D66592 /* VideoCollector.h in Headers */,
 				A589CDB11F7174B900D66592 /* LoginItemsCollector.h in Headers */,
@@ -713,7 +716,6 @@
 			files = (
 				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,
 				A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */,
-				A503BF891F829BCC00473A24 /* Status.strings in Resources */,
 				A503BF8C1F829CEF00473A24 /* System.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -790,6 +792,7 @@
 				A589CD601F7164C900D66592 /* VirtualMemoryCollector.m in Sources */,
 				A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */,
 				A589CD5A1F7164C900D66592 /* TimeMachineCollector.m in Sources */,
+				A503BF9B1F82AD8D00473A24 /* LocalizedString.m in Sources */,
 				A589CD641F7164C900D66592 /* AdwareCollector.m in Sources */,
 				A589CD5E1F7164C900D66592 /* NetworkUsageCollector.m in Sources */,
 				A589CD3E1F7164C900D66592 /* SystemSoftwareCollector.m in Sources */,
@@ -824,15 +827,6 @@
 				A503BF841F829BC200473A24 /* fr */,
 			);
 			name = Collectors.strings;
-			sourceTree = "<group>";
-		};
-		A503BF861F829BCC00473A24 /* Status.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A503BF871F829BCC00473A24 /* en */,
-				A503BF881F829BCC00473A24 /* fr */,
-			);
-			name = Status.strings;
 			sourceTree = "<group>";
 		};
 		A503BF8E1F829CEF00473A24 /* System.strings */ = {
