@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A503BF851F829BC200473A24 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF821F829BC200473A24 /* Collectors.strings */; };
+		A503BF891F829BCC00473A24 /* Status.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF861F829BCC00473A24 /* Status.strings */; };
+		A503BF8C1F829CEF00473A24 /* System.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF8E1F829CEF00473A24 /* System.strings */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,7 +99,7 @@
 		A589CD9B1F71748400D66592 /* Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A5257D3B19AC0AA3003084C8 /* Utilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A589CD9C1F71748700D66592 /* XMLBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = A53822381D5FF27200484388 /* XMLBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A589CD9D1F71748C00D66592 /* EtreCheckConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD8C1F716FE900D66592 /* EtreCheckConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A589CD9E1F71749E00D66592 /* Collector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292DE19A02B2700464E86 /* Collector.h */; };
+		A589CD9E1F71749E00D66592 /* Collector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292DE19A02B2700464E86 /* Collector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A589CD9F1F71749E00D66592 /* HardwareCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292F019A13D0800464E86 /* HardwareCollector.h */; };
 		A589CDA01F71749E00D66592 /* VideoCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292F319A2214E00464E86 /* VideoCollector.h */; };
 		A589CDA11F71749E00D66592 /* SystemSoftwareCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292F619A2220400464E86 /* SystemSoftwareCollector.h */; };
@@ -139,6 +142,7 @@
 		A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */; };
 		A5F65E5C1F7F20290062FA87 /* EtreCheckCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */; };
 		A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */; };
+		A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5F65E6C1F806FDB0062FA87 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +156,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A503BF831F829BC200473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
+		A503BF841F829BC200473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Collectors.strings; sourceTree = "<group>"; };
+		A503BF871F829BCC00473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Status.strings; sourceTree = "<group>"; };
+		A503BF881F829BCC00473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
+		A503BF8D1F829CEF00473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/System.strings; sourceTree = "<group>"; };
+		A503BF8F1F829CF100473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/System.strings; sourceTree = "<group>"; };
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
 		A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupItemsCollector.m; sourceTree = "<group>"; };
 		A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCollector.h; sourceTree = "<group>"; };
@@ -276,6 +286,8 @@
 		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
 		A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
 		A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckCollector.h; sourceTree = "<group>"; };
+		A5F65E6B1F806FDB0062FA87 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A5F65E6D1F806FDE0062FA87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A5FC11EC19A4BFDC00E81E9C /* AudioPlugInsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlugInsCollector.h; sourceTree = "<group>"; };
 		A5FC11ED19A4BFDC00E81E9C /* AudioPlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlugInsCollector.m; sourceTree = "<group>"; };
 		A5FC11EF19A4BFF500E81E9C /* UserAudioPlugInsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAudioPlugInsCollector.h; sourceTree = "<group>"; };
@@ -519,6 +531,10 @@
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
 				A589CD211F71644500D66592 /* Info.plist */,
+				A503BF861F829BCC00473A24 /* Status.strings */,
+				A503BF821F829BC200473A24 /* Collectors.strings */,
+				A503BF8E1F829CEF00473A24 /* System.strings */,
+				A5F65E6C1F806FDB0062FA87 /* Localizable.strings */,
 			);
 			path = LibEtreCheck;
 			sourceTree = "<group>";
@@ -695,6 +711,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,
+				A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */,
+				A503BF891F829BCC00473A24 /* Status.strings in Resources */,
+				A503BF8C1F829CEF00473A24 /* System.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,6 +815,45 @@
 			targetProxy = A589CD281F71644500D66592 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A503BF821F829BC200473A24 /* Collectors.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A503BF831F829BC200473A24 /* en */,
+				A503BF841F829BC200473A24 /* fr */,
+			);
+			name = Collectors.strings;
+			sourceTree = "<group>";
+		};
+		A503BF861F829BCC00473A24 /* Status.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A503BF871F829BCC00473A24 /* en */,
+				A503BF881F829BCC00473A24 /* fr */,
+			);
+			name = Status.strings;
+			sourceTree = "<group>";
+		};
+		A503BF8E1F829CEF00473A24 /* System.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A503BF8D1F829CEF00473A24 /* en */,
+				A503BF8F1F829CF100473A24 /* fr */,
+			);
+			name = System.strings;
+			sourceTree = "<group>";
+		};
+		A5F65E6C1F806FDB0062FA87 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5F65E6B1F806FDB0062FA87 /* fr */,
+				A5F65E6D1F806FDE0062FA87 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A55BC18515BF987D00D42EF1 /* Debug */ = {

@@ -22,8 +22,6 @@
   
   if(self)
     {
-    self.name = @"log";
-    self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
     }
     
   return self;

@@ -6,18 +6,18 @@
 #import "XMLBuilder.h"
 
 // An XML node.
-@interface XMLNode : NSObject
+@interface XMLBuilderNode : NSObject
   {
-  XMLElement * myParent;
+  XMLBuilderElement * myParent;
   }
 
 // The node's parent.
-@property (assign) XMLElement * parent;
+@property (assign) XMLBuilderElement * parent;
 
 @end
 
 // An XML text node.
-@interface XMLTextNode : XMLNode
+@interface XMLBuilderTextNode : XMLBuilderNode
   {
   NSString * myText;
   BOOL myIsCDATA;
@@ -33,7 +33,7 @@
 @end
 
 // Encapsulate each element.
-@interface XMLElement : XMLNode
+@interface XMLBuilderElement : XMLBuilderNode
   {
   NSString * myName;
   NSMutableDictionary * myAttributes;
@@ -59,7 +59,7 @@
 @end
 
 // An XML node.
-@implementation XMLNode
+@implementation XMLBuilderNode
 
 @synthesize parent = myParent;
 
@@ -74,7 +74,7 @@
 @end
 
 // An XML text node.
-@implementation XMLTextNode
+@implementation XMLBuilderTextNode
 
 @synthesize text = myText;
 @synthesize isCDATA = myIsCDATA;
@@ -298,7 +298,7 @@
 @end
 
 // Encapsulate each element.
-@implementation XMLElement
+@implementation XMLBuilderElement
 
 @synthesize name = myName;
 @synthesize attributes = myAttributes;
@@ -421,7 +421,7 @@
 // Get the starting indent.
 - (NSString *) startingIndent
   {
-  XMLNode * current = (XMLNode *)self;
+  XMLBuilderNode * current = (XMLBuilderNode *)self;
   
   NSMutableString * indent = [NSMutableString string];
   
@@ -452,14 +452,14 @@
   {
   BOOL onlyTextNodes = YES;
   
-  for(XMLNode * child in self.children)
+  for(XMLBuilderNode * child in self.children)
     if(![child respondsToSelector: @selector(isXMLTextNode)])
       onlyTextNodes = NO;
   
   if(onlyTextNodes)
     return @"";
     
-  XMLNode * current = (XMLNode *)self;
+  XMLBuilderNode * current = (XMLBuilderNode *)self;
   
   NSMutableString * indent = [NSMutableString string];
   
@@ -484,19 +484,19 @@
   {
   NSMutableString * XML = [NSMutableString string];
 
-  for(XMLNode * child in children)
+  for(XMLBuilderNode * child in children)
     [XML appendString: [child XMLFragment]];
     
   return XML;
   }
 
 // Get the last currently open child.
-- (XMLElement *) openChild
+- (XMLBuilderElement *) openChild
   {
   // Walk down through the open children and find the last one.
-  XMLElement * openElement = [self.openChildren lastObject];
+  XMLBuilderElement * openElement = [self.openChildren lastObject];
   
-  XMLElement * nextOpenElement = openElement;
+  XMLBuilderElement * nextOpenElement = openElement;
   
   while(nextOpenElement)
     {
@@ -528,7 +528,7 @@
   
   if(self != nil)
     {
-    myRoot = [XMLElement new];
+    myRoot = [XMLBuilderElement new];
     myValid = YES;
     myDateFormat = @"yyyy-MM-dd HH:mm:ss";
     myDayFormat = @"yyyy-MM-dd";
@@ -602,14 +602,15 @@
     }
     
   // Add the new element onto the end of the last open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
   
   // If there is no open child, use root.
   if(openChild == nil)
     openChild = self.root;
     
   // Create the element.
-  XMLElement * newChild = [[XMLElement alloc] initWithName: name];
+  XMLBuilderElement * newChild = 
+    [[XMLBuilderElement alloc] initWithName: name];
   
   // Connect it to the parent.
   newChild.parent = openChild;
@@ -623,7 +624,7 @@
 - (void) endElement: (NSString *) name
   {
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
   
   // There should be at least one.
   if(openChild == nil)
@@ -652,7 +653,7 @@
     
   // Move the element being closed from its parent's open list to its
   // parent's closed list.
-  XMLElement * parent = openChild.parent;
+  XMLBuilderElement * parent = openChild.parent;
   
   [parent.children addObject: openChild];
   [parent.openChildren removeLastObject];
@@ -1107,7 +1108,7 @@
 - (void) addString: (NSString *) string
   {
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
   
   // Make sure there is an open child.
   if(openChild == nil)
@@ -1118,7 +1119,8 @@
 
   if(string != nil)
     {
-    XMLTextNode * textNode = [[XMLTextNode alloc] initWithText: string];
+    XMLBuilderTextNode * textNode = 
+      [[XMLBuilderTextNode alloc] initWithText: string];
     
     [openChild.children addObject: textNode];
   
@@ -1130,7 +1132,7 @@
 - (void) addCDATA: (NSString *) string
   {
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
   
   // Make sure there is an open child.
   if(openChild == nil)
@@ -1141,7 +1143,8 @@
 
   if(string != nil)
     {
-    XMLTextNode * textNode = [[XMLTextNode alloc] initWithCDATA: string];
+    XMLBuilderTextNode * textNode = 
+      [[XMLBuilderTextNode alloc] initWithCDATA: string];
     
     [openChild.children addObject: textNode];
   
@@ -1160,7 +1163,7 @@
     }
 
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
 
   // Make sure there is an open child.
   if(openChild == nil)
@@ -1195,7 +1198,7 @@
     }
 
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
 
   // Make sure there is an open child.
   if(openChild == nil)
@@ -1311,10 +1314,10 @@
   }
 
 // Add a fragment from another XMLBuilder.
-- (void) addFragment: (XMLElement *) xml
+- (void) addFragment: (XMLBuilderElement *) xml
   {
   // Find the currently open child.
-  XMLElement * openChild = [self.root openChild];
+  XMLBuilderElement * openChild = [self.root openChild];
   
   // Make sure there is an open child.
   if(openChild == nil)
@@ -1326,7 +1329,7 @@
   // Don't move the root node.
   if(xml.parent == nil)
     {
-    XMLElement * child = [xml.openChildren lastObject];
+    XMLBuilderElement * child = [xml.openChildren lastObject];
 
     if(child == nil)
       child = [xml.children lastObject];

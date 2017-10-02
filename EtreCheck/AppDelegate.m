@@ -1636,7 +1636,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       NSMutableAttributedString * status = [self.displayStatus mutableCopy];
       
       NSString * currentStatus = 
-        ESLocalizedStringFromTable(sectionName, @"Status", NULL);
+        NSLocalizedStringFromTable(sectionName, @"Status", NULL);
       
       [status
         appendString:

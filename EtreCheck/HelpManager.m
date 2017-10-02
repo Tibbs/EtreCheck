@@ -33,7 +33,7 @@
 // Show detail.
 - (void) showDetail: (NSString *) name
   {
-  NSString * helpText = ESLocalizedStringFromTable(name, @"Help", NULL);
+  NSString * helpText = NSLocalizedStringFromTable(name, @"Help", NULL);
   
   if(![helpText length])
     helpText = NSLocalizedString(@"No help available", NULL);
@@ -43,9 +43,7 @@
   NSAttributedString * content =
     [[NSAttributedString alloc] initWithString: adjustText];
     
-  [super
-    showDetail: ESLocalizedStringFromTable(name, @"Collectors", NULL)
-    content: content];
+  [super showDetail: [Collector title: name] content: content];
     
   [content release];
   }

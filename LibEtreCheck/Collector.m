@@ -20,6 +20,12 @@
 @synthesize model = myModel;
 @synthesize simulating = mySimulating;
 
+// Provide easy access to localized collector titles.
++ (NSString *) title: (NSString *) name
+  {
+  return NSLocalizedStringFromTable(name, @"Collectors", NULL);
+  }
+  
 // Is this collector complete?
 - (bool) done
   {
@@ -38,7 +44,7 @@
     myFormatter = [NSNumberFormatter new];
     myComplete = dispatch_semaphore_create(0);
     
-    self.title = ESLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     
     myModel = [XMLBuilder new];
     
@@ -65,7 +71,7 @@
 - (void) collect
   {
   [self
-    updateStatus: ESLocalizedStringFromTable(self.name, @"Status", NULL)];
+    updateStatus: NSLocalizedStringFromTable(self.name, @"Status", NULL)];
 
   [self performCollect];
   
@@ -104,8 +110,9 @@
   NSString * url =
     [NSString stringWithFormat: @"etrecheck://help/%@", self.name];
 
+  // This has already been localized.
   [string
-    appendString: ESLocalizedString(self.title, NULL)
+    appendString: self.title
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

@@ -1,0 +1,32 @@
+/* 
+  System.strings
+  LibEtreCheck
+
+  Created by John Daniel on 2017-10-02.
+  Copyright © 2017 Etresoft. All rights reserved.
+*/
+
+// TRIM values
+// system_profiler -xml SPNVMeDataType spsata_trim_support
+// system_profiler -xml SPSerialATADataType spsata_trim_support
+"Yes" = "Oui";
+"No" = "Non";
+
+// medium values
+// system_profiler -xml SPNVMeDataType spsata_medium_type
+// system_profiler -xml SPSerialATADataType spsata_medium_type
+"Solid State" = "SSD";
+
+// File system values
+// system_profiler -xml SPNVMeDataType file_system
+// system_profiler -xml SPSerialATADataType file_system
+"Journaled HFS+" = "HFS+ journalisé";
+
+// Battery
+// system_profiler -xml SPPowerDataType sppower_battery_health
+"Good" = "Satisfaisant";
+"Fair" = "À remplacer bientôt";
+"Poor" = "À remplacer de suite";
+
+
+

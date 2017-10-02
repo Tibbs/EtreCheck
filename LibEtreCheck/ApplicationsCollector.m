@@ -244,8 +244,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"        %@%@", NULL),
-          name, [self formatVersionString: application]]];
+          @"        %@%@", name, [self formatVersionString: application]]];
     
   [output appendAttributedString: supportLink];
   [output appendString: @" "];

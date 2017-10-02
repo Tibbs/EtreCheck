@@ -941,7 +941,7 @@
             NSLocalizedString(
               @"    Battery: Health = %@ - Cycle count = %@\n",
               NULL),
-            ESLocalizedString(health, NULL), cycleCount]
+            NSLocalizedStringFromTable(health, @"System", NULL), cycleCount]
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -954,10 +954,10 @@
               NSLocalizedString(
                 @"    Battery: Health = %@ - Cycle count = %@\n",
                 NULL),
-              ESLocalizedString(health, NULL), cycleCount]];
+              NSLocalizedStringFromTable(health, @"System", NULL), 
+              cycleCount]];
       
-    [self.model 
-      addElement: @"batteryhealth" value: ESLocalizedString(health, NULL)];
+    [self.model addElement: @"batteryhealth" value: health];
     
     [self.model addElement: @"batterycyclecount" number: cycleCount];
     //[self.model addElement: @"batteryserialnumber" value: serialNumber];

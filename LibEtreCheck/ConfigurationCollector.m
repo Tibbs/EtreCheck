@@ -263,7 +263,7 @@
     [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/csrutil"];
     
   if(!csrutilExists)
-    return NSLocalizedString(@"/usr/bin/crutil missing", NULL);
+    return NSLocalizedString(@"/usr/bin/csrutil missing", NULL);
     
   // Now consolidate destination information.
   NSArray * args =
@@ -475,8 +475,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"    /etc/hosts%@%@\n", NULL),
-            countString, corruptString]
+            @"    /etc/hosts%@%@\n", countString, corruptString]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -490,8 +489,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            NSLocalizedString(@"    /etc/hosts%@%@\n", NULL),
-            countString, corruptString]];
+            @"    /etc/hosts%@%@\n", countString, corruptString]];
     }
   }
 

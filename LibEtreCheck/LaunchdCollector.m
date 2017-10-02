@@ -1331,7 +1331,7 @@
     }
   else if([statusCode isEqualToString: kStatusInvalid])
     {
-    statusString = NSLocalizedString(@"[invalid?]", NULL);
+    statusString = NSLocalizedString(@"invalid?", NULL);
     color = [[Utilities shared] red];
     }
   else if([statusCode isEqualToString: kStatusKilled])

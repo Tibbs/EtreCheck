@@ -211,14 +211,16 @@
         
       NSString * TRIMString =
         [NSString
-          stringWithFormat: @" - TRIM: %@", ESLocalizedString(TRIM, NULL)];
+          stringWithFormat: 
+            @" - TRIM: %@", 
+            NSLocalizedStringFromTable(TRIM, @"System", NULL)];
       
       NSString * info =
         [NSString
           stringWithFormat:
             @"(%@%@)",
             medium
-              ? ESLocalizedString(medium, NULL)
+              ? NSLocalizedStringFromTable(medium, @"System", NULL)
               : @"",
             ([medium isEqualToString: @"Solid State"] && [TRIM length])
               ? TRIMString
@@ -423,9 +425,11 @@
   NSString * fileSystemName = @"";
   
   if([fileSystem length] > 0)
-    fileSystemName =
-      [NSString
-        stringWithFormat: @" - %@", ESLocalizedString(fileSystem, NULL)];
+    fileSystemName = 
+      [NSString 
+        stringWithFormat: 
+          @" - %@", 
+          NSLocalizedStringFromTable(fileSystem, @"System", NULL)];
     
   if([fileSystemName length] > 0)
     {
@@ -610,7 +614,7 @@
           NSLocalizedString(@" - %@ Drive failure!", NULL),
           TTTLocalizedPluralString(errorCount, @"error", NULL)];
 
-  return NSLocalizedString(@"", NULL);
+  return @"";
   }
 
 @end

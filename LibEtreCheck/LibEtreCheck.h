@@ -16,6 +16,7 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 
 #import <LibEtreCheck/TTTLocalizedPluralString.h>
 #import <LibEtreCheck/Utilities.h>
+#import <LibEtreCheck/Collector.h>
 #import <LibEtreCheck/SubProcess.h>
 #import <LibEtreCheck/DiagnosticEvent.h>
 #import <LibEtreCheck/Model.h>

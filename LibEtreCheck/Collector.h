@@ -21,6 +21,9 @@
   BOOL mySimulating;
   }
 
+// Provide easy access to localized collector titles.
++ (NSString *) title: (NSString *) name;
+
 // The name of this collector.
 @property (retain) NSString * name;
 

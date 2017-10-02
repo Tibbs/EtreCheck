@@ -455,7 +455,7 @@ NSString * TTTLocalizedPluralStringKeyForCountAndSingularNoun(NSUInteger count, 
 // Format a string using a plural rule.
 static NSString * formatPluralString(NSString * string, NSString * singular)
   {
-  NSString * localized = ESLocalizedString(string, NULL);
+  NSString * localized = NSLocalizedString(string, NULL);
   
   // Localization is the same, fallback.
   if([string isEqualToString: localized])

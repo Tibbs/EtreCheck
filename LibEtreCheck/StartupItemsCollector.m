@@ -126,11 +126,7 @@
     [self.model addElement: @"type" value: @"machinit"];
     
     [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            NSLocalizedString(@"    %@\n", NULL),
-            cleanPath]
+      appendString: [NSString stringWithFormat: @"    %@\n", cleanPath]
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],

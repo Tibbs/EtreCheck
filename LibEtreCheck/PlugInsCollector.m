@@ -173,7 +173,7 @@
       @"https://www.java.com/en/download/installed.jsp", NULL);
   
   if([[Model model] majorOSVersion] < 11)
-    url = NSLocalizedString(@"https://support.apple.com/kb/dl1572", NULL);
+    url = @"https://support.apple.com/kb/dl1572";
 
   [string appendString: @" "];
 

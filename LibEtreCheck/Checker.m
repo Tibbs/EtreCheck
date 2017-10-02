@@ -292,7 +292,7 @@
   }
 
 // Return an individual XML fragment.
-- (XMLElement *) getXML: (NSString *) key
+- (XMLBuilderElement *) getXML: (NSString *) key
   {
   return [[[self.completed objectForKey: key] model] root];
   }

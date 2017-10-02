@@ -13,7 +13,6 @@
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */; };
 		A52820961DEB8750000B8EAA /* EtreCheckWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A52820951DEB8750000B8EAA /* EtreCheckWindow.m */; };
-		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
 		A53EA3721C6E86B600F270B0 /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3711C6E86B600F270B0 /* UpdateManager.m */; };
 		A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A540C7001873D5F800497BDE /* Localizable.strings */; };
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
@@ -40,7 +39,6 @@
 		A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* AdwareManager.m */; };
 		A58792C01F36544600BB7DBB /* unsignedhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A58792BD1F36544600BB7DBB /* unsignedhelp.rtf */; };
 		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
-		A5A8D6831F1D548000276B70 /* Status.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5A8D6811F1D548000276B70 /* Status.strings */; };
 		A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */; };
 		A5B6BD5B19D7AAF900C48C37 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */; };
 		A5C1492519B88192002890F1 /* SlideshowView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C1492419B88192002890F1 /* SlideshowView.m */; };
@@ -50,7 +48,6 @@
 		A5CF26EB1A27FB21002386F0 /* CleanupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CF26EA1A27FB21002386F0 /* CleanupManager.m */; };
 		A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5CC608C19B4BF52006D7E94 /* Carbon.framework */; };
 		A5E9E2C01A2522A600309185 /* Help.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C21A2522A600309185 /* Help.strings */; };
-		A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5E9E2C91A2669A600309185 /* Collectors.strings */; };
 		A5F43C0F1EC2547A008723CC /* EtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */; };
 		A5F65E661F805DFC0062FA87 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F65E651F805DFC0062FA87 /* LibEtreCheck.framework */; };
 		A5F65E671F805DFC0062FA87 /* LibEtreCheck.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A5F65E651F805DFC0062FA87 /* LibEtreCheck.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -107,8 +104,6 @@
 		A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UninstallManager.h; sourceTree = "<group>"; };
 		A52820941DEB8750000B8EAA /* EtreCheckWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckWindow.h; sourceTree = "<group>"; };
 		A52820951DEB8750000B8EAA /* EtreCheckWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckWindow.m; sourceTree = "<group>"; };
-		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
-		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A53EA3701C6E86B600F270B0 /* UpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateManager.h; sourceTree = "<group>"; };
 		A53EA3711C6E86B600F270B0 /* UpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateManager.m; sourceTree = "<group>"; };
 		A540C6FF1873D5F800497BDE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -160,8 +155,6 @@
 		A58792BF1F36544600BB7DBB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/unsignedhelp.rtf; sourceTree = "<group>"; };
 		A589CD6D1F71685300D66592 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
-		A5A8D6821F1D548000276B70 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Status.strings; sourceTree = "<group>"; };
-		A5A8D6841F1D548800276B70 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Status.strings; sourceTree = "<group>"; };
 		A5A9B8091C4FFD9A00D0EA71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/donate.rtf; sourceTree = "<group>"; };
 		A5A9B80B1C4FFDA200D0EA71 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/donate.rtf; sourceTree = "<group>"; };
 		A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
@@ -176,8 +169,6 @@
 		A5CF26EA1A27FB21002386F0 /* CleanupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanupManager.m; sourceTree = "<group>"; };
 		A5E9E2C11A2522A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Help.strings; sourceTree = "<group>"; };
 		A5E9E2C31A2522A800309185 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Help.strings; sourceTree = "<group>"; };
-		A5E9E2C81A2669A600309185 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
-		A5E9E2CA1A2669A700309185 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Collectors.strings; sourceTree = "<group>"; };
 		A5F43C0C1EC2547A008723CC /* EtreCheckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EtreCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5F43C0E1EC2547A008723CC /* EtreCheckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EtreCheckTests.m; sourceTree = "<group>"; };
 		A5F43C101EC2547A008723CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -325,9 +316,6 @@
 				A54DA5711A3117E100F09B19 /* adware.plist */,
 				A59429411D2AD97B003E594D /* appleSoftware.plist */,
 				A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */,
-				A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */,
-				A5E9E2C91A2669A600309185 /* Collectors.strings */,
-				A5A8D6811F1D548000276B70 /* Status.strings */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
 				A55BC17615BF987D00D42EF1 /* InfoPlist.strings */,
 				A540C7001873D5F800497BDE /* Localizable.strings */,
@@ -446,11 +434,8 @@
 				A58792C01F36544600BB7DBB /* unsignedhelp.rtf in Resources */,
 				A5B6BD5B19D7AAF900C48C37 /* Media.xcassets in Resources */,
 				A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */,
-				A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */,
-				A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */,
 				A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */,
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
-				A5A8D6831F1D548000276B70 /* Status.strings in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
 				A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
@@ -552,15 +537,6 @@
 			name = adwarehelp.rtf;
 			sourceTree = "<group>";
 		};
-		A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A52C62BD1BCAD4D100B8C364 /* en */,
-				A52C62BF1BCAD4D900B8C364 /* fr */,
-			);
-			name = machineIcons.strings;
-			sourceTree = "<group>";
-		};
 		A540C7001873D5F800497BDE /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -633,15 +609,6 @@
 			name = unsignedhelp.rtf;
 			sourceTree = "<group>";
 		};
-		A5A8D6811F1D548000276B70 /* Status.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A5A8D6821F1D548000276B70 /* en */,
-				A5A8D6841F1D548800276B70 /* fr */,
-			);
-			name = Status.strings;
-			sourceTree = "<group>";
-		};
 		A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -658,15 +625,6 @@
 				A5E9E2C31A2522A800309185 /* fr */,
 			);
 			name = Help.strings;
-			sourceTree = "<group>";
-		};
-		A5E9E2C91A2669A600309185 /* Collectors.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A5E9E2C81A2669A600309185 /* en */,
-				A5E9E2CA1A2669A700309185 /* fr */,
-			);
-			name = Collectors.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -158,7 +158,7 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          ESLocalizedString(key, NULL)]];
+          NSLocalizedString(key, NULL)]];
   }
 
 // Print a VM value.
@@ -181,30 +181,8 @@
         stringWithFormat:
           @"    %@\t%@\n",
           printString,
-          ESLocalizedString(key, NULL)]
+          NSLocalizedString(key, NULL)]
     attributes: attributes];
-  }
-
-// Format cached files.
-- (NSString *) formatCachedFiles: (NSDictionary *) vminfo
-  {
-  double cached = [[vminfo objectForKey: kFileCache] doubleValue];
- 
-  NSMutableString * extra = [NSMutableString string];
-  
-  if(cached > 0)
-    {
-    [extra appendString: @"("];
-    
-    [extra
-      appendFormat:
-        ESLocalizedString(kFileCache, NULL),
-        [formatter stringFromByteCount: (unsigned long long)cached]];
-    
-    [extra appendString: @")"];
-    }
-    
-  return extra;
   }
 
 // Format output from vm_stats into something useable.

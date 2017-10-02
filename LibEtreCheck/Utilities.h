@@ -27,16 +27,6 @@
 #define kValidSignatureIndicator @"validsignatureindicator"
 #define kShellScriptIndicator @"shellscriptindicator"
 
-// Apple's macros can only be used with string literals.
-#define ESLocalizedString(key, comment) \
-	    [NSBundle.mainBundle localizedStringForKey:(key) value:@"" table:nil]
-#define ESLocalizedStringFromTable(key, tbl, comment) \
-	    [NSBundle.mainBundle localizedStringForKey:(key) value:@"" table:(tbl)]
-#define ESLocalizedStringFromTableInBundle(key, tbl, bundle, comment) \
-	    [bundle localizedStringForKey:(key) value:@"" table:(tbl)]
-#define ESLocalizedStringWithDefaultValue(key, tbl, bundle, val, comment) \
-	    [bundle localizedStringForKey:(key) value:(val) table:(tbl)]
-
 // Assorted utilities.
 @interface Utilities : NSObject
   {

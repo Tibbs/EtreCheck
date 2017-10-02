@@ -6,12 +6,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class XMLElement;
+@class XMLBuilderElement;
 
 @interface XMLBuilder : NSObject
   {
   NSMutableString * myDocument;
-  XMLElement * myRoot;
+  XMLBuilderElement * myRoot;
   NSString * myDateFormat;
   NSString * myDayFormat;
   NSDateFormatter * myDateFormatter;
@@ -20,7 +20,7 @@
   }
 
 // The document root.
-@property (retain) XMLElement * root;
+@property (retain) XMLBuilderElement * root;
 
 // The date formatters.
 @property (readonly) NSString * dateFormat;
@@ -226,6 +226,6 @@
 - (void) addElement: (NSString *) name UTF8StringValue: (char *) value;
 
 // Add a fragment from another XMLBuilder.
-- (void) addFragment: (XMLElement *) xml;
+- (void) addFragment: (XMLBuilderElement *) xml;
 
 @end
