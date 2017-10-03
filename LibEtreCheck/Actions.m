@@ -134,6 +134,12 @@
     }
   }
   
+// Open a file in the default app.
++ (void) openFile: (NSString *) file
+  {
+  [[NSWorkspace sharedWorkspace] openFile: file];
+  }
+  
 #pragma mark - Private methods
 
 // Build an AppleScript statement to trash a list of files.

@@ -19,4 +19,7 @@
 // Reveal a file in the Finder.
 + (void) revealFile: (NSString *) file;
 
+// Open a file in the default app.
++ (void) openFile: (NSString *) file;
+
 @end
