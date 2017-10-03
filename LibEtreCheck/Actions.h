@@ -16,9 +16,7 @@
 // Trash files.
 + (void) trashFiles: (NSArray *) files;
 
-#pragma mark - Legacy methods to be re-done.
-
-// Uninstall launchd tasks.
-+ (void) uninstallLaunchdTasks: (NSArray *) tasks;
+// Reveal a file in the Finder.
++ (void) revealFile: (NSString *) file;
 
 @end

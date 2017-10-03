@@ -102,6 +102,38 @@
   [self recordTrashedFiles: files];
   }
 
+// Reveal a file in the Finder.
++ (void) revealFile: (NSString *) file
+  {
+  // See if the file is a directory.
+  BOOL isDirectory = NO;
+  
+  BOOL exists = 
+    [[NSFileManager defaultManager] 
+      fileExistsAtPath: file isDirectory: & isDirectory];
+  
+  if(!exists)
+    return;
+    
+  // If the file is a directory, just open it.
+  if(isDirectory)
+    [[NSWorkspace sharedWorkspace] openFile: file];
+    
+  // Otherwise, open the parent and select the file.
+  else
+    {
+    NSURL * url = [[NSURL alloc] initFileURLWithPath: file];
+    
+    NSArray * urls = [[NSArray alloc] initWithObjects: url, nil];
+    
+    [url release];
+    
+    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs: urls];
+    
+    [urls release];
+    }
+  }
+  
 #pragma mark - Private methods
 
 // Build an AppleScript statement to trash a list of files.
