@@ -6,16 +6,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Major OS versions.
-#define kSnowLeopard  10
-#define kLion         11
-#define kMountainLion 12
-#define kMavericks    13
-#define kYosemite     14
-#define kElCapitan    15
-#define kSierra       16
-#define kHighSierra   17
-
 // Adware
 #define kAdware @"adware"
 #define kAdwareType @"adwaretype"

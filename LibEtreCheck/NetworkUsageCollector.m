@@ -13,6 +13,7 @@
 #import "NumberFormatter.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector

@@ -49,10 +49,10 @@
 - (void) collectHeaderInformation
   {
   // Do something clever to get the app bundle from a framework.
-  Class appDelegate = [NSClassFromString(@"AppDelegate") new];
+  Class appDelegate = NSClassFromString(@"AppDelegate");
   
   if(appDelegate == nil)
-    appDelegate = [NSClassFromString(@"EtreCheckAppDelegate") new];
+    appDelegate = NSClassFromString(@"EtreCheckAppDelegate");
   
   NSBundle * bundle = [NSBundle bundleForClass: appDelegate];
   

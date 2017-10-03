@@ -11,6 +11,7 @@
 #import "Model.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector

@@ -14,6 +14,7 @@
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"

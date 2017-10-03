@@ -11,6 +11,14 @@
 		A503BF8C1F829CEF00473A24 /* System.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF8E1F829CEF00473A24 /* System.strings */; };
 		A503BF9A1F82AD8D00473A24 /* LocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BF981F82AD8D00473A24 /* LocalizedString.h */; };
 		A503BF9B1F82AD8D00473A24 /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BF991F82AD8D00473A24 /* LocalizedString.m */; };
+		A503BFAD1F83DF9B00473A24 /* Actions.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFAB1F83DF9B00473A24 /* Actions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A503BFAE1F83DF9B00473A24 /* Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFAC1F83DF9B00473A24 /* Actions.m */; };
+		A503BFB11F83F67300473A24 /* Launchd.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFAF1F83F67300473A24 /* Launchd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A503BFB21F83F67300473A24 /* Launchd.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB01F83F67300473A24 /* Launchd.m */; };
+		A503BFB51F83F9F400473A24 /* OSVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB31F83F9F400473A24 /* OSVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A503BFB61F83F9F400473A24 /* OSVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB41F83F9F400473A24 /* OSVersion.m */; };
+		A503BFB91F84118600473A24 /* LaunchdTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB71F84118600473A24 /* LaunchdTask.h */; };
+		A503BFBA1F84118600473A24 /* LaunchdTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB81F84118600473A24 /* LaunchdTask.m */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -163,6 +171,14 @@
 		A503BF8F1F829CF100473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/System.strings; sourceTree = "<group>"; };
 		A503BF981F82AD8D00473A24 /* LocalizedString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedString.h; sourceTree = "<group>"; };
 		A503BF991F82AD8D00473A24 /* LocalizedString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalizedString.m; sourceTree = "<group>"; };
+		A503BFAB1F83DF9B00473A24 /* Actions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Actions.h; sourceTree = "<group>"; };
+		A503BFAC1F83DF9B00473A24 /* Actions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Actions.m; sourceTree = "<group>"; };
+		A503BFAF1F83F67300473A24 /* Launchd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Launchd.h; sourceTree = "<group>"; };
+		A503BFB01F83F67300473A24 /* Launchd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Launchd.m; sourceTree = "<group>"; };
+		A503BFB31F83F9F400473A24 /* OSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSVersion.h; sourceTree = "<group>"; };
+		A503BFB41F83F9F400473A24 /* OSVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSVersion.m; sourceTree = "<group>"; };
+		A503BFB71F84118600473A24 /* LaunchdTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdTask.h; sourceTree = "<group>"; };
+		A503BFB81F84118600473A24 /* LaunchdTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdTask.m; sourceTree = "<group>"; };
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
 		A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupItemsCollector.m; sourceTree = "<group>"; };
 		A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCollector.h; sourceTree = "<group>"; };
@@ -533,6 +549,14 @@
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
+				A503BFB31F83F9F400473A24 /* OSVersion.h */,
+				A503BFB41F83F9F400473A24 /* OSVersion.m */,
+				A503BFB71F84118600473A24 /* LaunchdTask.h */,
+				A503BFB81F84118600473A24 /* LaunchdTask.m */,
+				A503BFAF1F83F67300473A24 /* Launchd.h */,
+				A503BFB01F83F67300473A24 /* Launchd.m */,
+				A503BFAB1F83DF9B00473A24 /* Actions.h */,
+				A503BFAC1F83DF9B00473A24 /* Actions.m */,
 				A589CD211F71644500D66592 /* Info.plist */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
@@ -597,6 +621,7 @@
 				A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */,
 				A589CDBB1F7174F200D66592 /* FontsCollector.h in Headers */,
 				A589CDAB1F71749E00D66592 /* LaunchdCollector.h in Headers */,
+				A503BFAD1F83DF9B00473A24 /* Actions.h in Headers */,
 				A589CDC01F7174FD00D66592 /* LogCollector.h in Headers */,
 				A589CDA71F71749E00D66592 /* ConfigurationCollector.h in Headers */,
 				A589CD971F71747400D66592 /* CRC32.h in Headers */,
@@ -611,6 +636,7 @@
 				A589CDC31F7174FD00D66592 /* CleanupCollector.h in Headers */,
 				A589CD931F71745F00D66592 /* NSDate+Etresoft.h in Headers */,
 				A589CDA91F71749E00D66592 /* KernelExtensionCollector.h in Headers */,
+				A503BFB51F83F9F400473A24 /* OSVersion.h in Headers */,
 				A589CDC11F7174FD00D66592 /* AdwareCollector.h in Headers */,
 				A589CD9F1F71749E00D66592 /* HardwareCollector.h in Headers */,
 				A589CDA51F71749E00D66592 /* FirewireCollector.h in Headers */,
@@ -618,6 +644,8 @@
 				A589CD991F71747B00D66592 /* SubProcess.h in Headers */,
 				A589CDBE1F7174FD00D66592 /* InstallCollector.h in Headers */,
 				A589CDBC1F7174FD00D66592 /* EnergyUsageCollector.h in Headers */,
+				A503BFB91F84118600473A24 /* LaunchdTask.h in Headers */,
+				A503BFB11F83F67300473A24 /* Launchd.h in Headers */,
 				A589CD9B1F71748400D66592 /* Utilities.h in Headers */,
 				A589CD8E1F71743000D66592 /* TTTLocalizedPluralString.h in Headers */,
 				A589CD901F71744900D66592 /* NSMutableAttributedString+Etresoft.h in Headers */,
@@ -750,7 +778,9 @@
 				A589CD581F7164C900D66592 /* FontsCollector.m in Sources */,
 				A589CD871F71690C00D66592 /* CRC32.m in Sources */,
 				A589CD5D1F7164C900D66592 /* MemoryUsageCollector.m in Sources */,
+				A503BFB61F83F9F400473A24 /* OSVersion.m in Sources */,
 				A589CD631F7164C900D66592 /* LogCollector.m in Sources */,
+				A503BFBA1F84118600473A24 /* LaunchdTask.m in Sources */,
 				A589CD491F7164C900D66592 /* SystemLaunchAgentsCollector.m in Sources */,
 				A589CD591F7164C900D66592 /* ApplicationsCollector.m in Sources */,
 				A589CD7E1F7168E900D66592 /* NSObject+Etresoft.m in Sources */,
@@ -767,11 +797,13 @@
 				A589CD551F7164C900D66592 /* UserITunesPlugInsCollector.m in Sources */,
 				A589CD671F7164C900D66592 /* EtreCheckDeletedFilesCollector.m in Sources */,
 				A589CD4A1F7164C900D66592 /* SystemLaunchDaemonsCollector.m in Sources */,
+				A503BFB21F83F67300473A24 /* Launchd.m in Sources */,
 				A589CD4C1F7164C900D66592 /* LaunchDaemonsCollector.m in Sources */,
 				A589CD421F7164C900D66592 /* FirewireCollector.m in Sources */,
 				A589CD611F7164C900D66592 /* InstallCollector.m in Sources */,
 				A589CD561F7164C900D66592 /* SafariExtensionsCollector.m in Sources */,
 				A589CD801F7168E900D66592 /* NSDictionary+Etresoft.m in Sources */,
+				A503BFAE1F83DF9B00473A24 /* Actions.m in Sources */,
 				A589CD521F7164C900D66592 /* AudioPlugInsCollector.m in Sources */,
 				A589CD651F7164C900D66592 /* UnsignedCollector.m in Sources */,
 				A589CD401F7164C900D66592 /* DiskCollector.m in Sources */,

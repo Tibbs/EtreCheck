@@ -11,11 +11,12 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 // Gatekeeper settings.
 typedef enum
   {
-  kUnknown,
+  kSettingUnknown,
   kDisabled,
   kDeveloperID,
   kMacAppStore
@@ -78,7 +79,7 @@ GatekeeperSetting;
       @"--verbose"
     ];
   
-  GatekeeperSetting setting = kUnknown;
+  GatekeeperSetting setting = kSettingUnknown;
     
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -112,7 +113,7 @@ GatekeeperSetting;
   
   // Perhaps I am on Mountain Lion and need to check the old debug
   // command line argument.
-  if(setting == kUnknown)
+  if(setting == kSettingUnknown)
     setting = [self collectMountainLionGatekeeperSetting];
     
   return setting;
@@ -121,7 +122,7 @@ GatekeeperSetting;
 // Collect the Mountain Lion Gatekeeper setting.
 - (GatekeeperSetting) collectMountainLionGatekeeperSetting
   {
-  GatekeeperSetting setting = kUnknown;
+  GatekeeperSetting setting = kSettingUnknown;
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -204,7 +205,7 @@ GatekeeperSetting;
       [self.result appendString: @"\n"];
       break;
       
-    case kUnknown:
+    case kSettingUnknown:
     default:
       [self.model 
         addElement: @"status" 

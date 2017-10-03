@@ -15,6 +15,7 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 // framework using statements like #import <LibEtreCheck/PublicHeader.h>
 
 #import <LibEtreCheck/Utilities.h>
+#import <LibEtreCheck/Actions.h>
 #import <LibEtreCheck/Collector.h>
 #import <LibEtreCheck/SubProcess.h>
 #import <LibEtreCheck/DiagnosticEvent.h>

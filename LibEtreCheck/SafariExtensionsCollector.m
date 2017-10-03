@@ -12,6 +12,7 @@
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"

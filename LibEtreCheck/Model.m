@@ -256,6 +256,8 @@
   self.processes = nil;
   self.OSVersion = nil;
   self.OSBuild = nil;
+  self.problem = nil;
+  self.problemDescription = nil;
   
   [super dealloc];
   }

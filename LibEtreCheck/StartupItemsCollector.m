@@ -13,6 +13,7 @@
 #import "Model.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector

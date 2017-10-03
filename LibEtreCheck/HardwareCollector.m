@@ -16,6 +16,7 @@
 #import "XMLBuilder.h"
 #import "NumberFormatter.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"

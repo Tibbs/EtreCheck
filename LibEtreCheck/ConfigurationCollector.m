@@ -11,6 +11,7 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "EtreCheckConstants.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
