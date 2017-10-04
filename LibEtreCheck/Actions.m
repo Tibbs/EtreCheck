@@ -140,6 +140,12 @@
   [[NSWorkspace sharedWorkspace] openFile: file];
   }
   
+// Open a URL in the default web browser.
++ (void) openURL: (NSURL *) url
+  {
+  [[NSWorkspace sharedWorkspace] openURL: url];
+  }
+  
 #pragma mark - Private methods
 
 // Build an AppleScript statement to trash a list of files.

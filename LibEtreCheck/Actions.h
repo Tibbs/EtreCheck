@@ -22,4 +22,7 @@
 // Open a file in the default app.
 + (void) openFile: (NSString *) file;
 
+// Open a URL in the default web browser.
++ (void) openURL: (NSURL *) url;
+
 @end
