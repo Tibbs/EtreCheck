@@ -5,20 +5,47 @@
 
 #import <Foundation/Foundation.h>
 
+#define kLaunchdAppleContext @"apple"
+#define kLaunchdSystemContext @"system"
+#define kLaunchdUserContext @"user"
+#define kLaunchdUnknownContext @"unknown"
+
+#define kLaunchdSystemDomain @"system"
+#define kLaunchdUserDomain @"user"
+#define kLaunchdUnknownDomain @"unknown"
+
+#define kLaunchdServiceManagementSource @"sm"
+#define kLaunchdOldLaunchctlSource @"oldlaunchctl"
+#define kLaunchdNewLaunchctlSource @"newlaunchctl"
+#define kLaunchdLaunchctlListingSource @"list"
+#define kLaunchdFileSource @"file"
+
 // A wrapper around a launchd task.
 @interface LaunchdTask : NSObject
   {
-  // The launchd domain.
+  // Path to the config script.
+  NSString * myPath;
+  
+  // Is the config script valid?
+  BOOL myConfigScriptValid;
+  
+  // The launchd context. (apple, system, user)
+  NSString * myContext;
+  
+  // The launchd domain. 
   NSString * myDomain;
+  
+  // The query source. (sm, oldlaunchd, newlaunchd, list, file)
+  NSString * mySource;
   
   // The launchd label.
   NSString * myLabel;
   
   // The process ID.
-  long myPID;
+  NSString * myPID;
   
   // The last exit code.
-  long myLastExitCode;
+  NSString * myLastExitCode;
   
   // The executable or script.
   NSString * myExecutable;
@@ -33,36 +60,63 @@
   NSString * myDeveloper;
   }
 
-// The launchd domain.
-@property (readonly, nonnull) NSString * domain;
+// Path to the config script.
+@property (readonly, nullable) NSString * path;
+
+// Is the config script valid?
+@property (readonly) BOOL configScriptValid;
+
+// The launchd context. (apple, system, user)
+@property (readonly, nullable) NSString * context;
+
+// The launchd domain. 
+@property (readonly, nullable) NSString * domain;
+  
+// The query source. (oldlaunchd, newlaunchd, list, file)
+@property (readonly, nonnull) NSString * source;
 
 // The launchd label.
-@property (readonly, nonnull) NSString * label;
+@property (readonly, nullable) NSString * label;
 
-// The process ID.
-@property (readonly) long PID;
+// The process ID. Sometimes, these are strings in Apple-land.
+@property (readonly, nullable) NSString * PID;
 
-// The last exit code.
-@property (readonly) long lastExitCode;
+// The last exit code. Sometimes, these are strings in Apple-land.
+@property (readonly, nullable) NSString * lastExitCode;
 
 // The executable or script.
-@property (readonly, nonnull) NSString * executable;
+@property (readonly, nullable) NSString * executable;
 
 // The arguments.
-@property (readonly, nonnull) NSArray * arguments;
+@property (readonly, nullable) NSArray * arguments;
 
 // The signature.
-@property (readonly, nonnull) NSString * signature;
+@property (readonly, nullable) NSString * signature;
 
 // The developer.
 @property (readonly, nullable) NSString * developer;
 
 // Constructor with NSDictionary.
-- (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict
-  inDomain: (nonnull NSString *) domain;
+- (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict;
 
 // Constructor with new 10.10 launchd output.
-- (nullable instancetype) initWithLaunchd: (nullable NSString *) plist
-  inDomain: (nonnull NSString *) domain;
+- (nullable instancetype) initWithNewLaunchdData: (nonnull NSData *) data;
+
+// Constructor with old launchd output.
+- (nullable instancetype) initWithOldLaunchdData: (nonnull NSData *) data;
+
+// Constructor with label.
+- (nullable instancetype) initWithLabel: (nonnull NSString *) label
+  PID: (nonnull NSString *) PID
+  lastExitCode: (nonnull NSString *) lastExitCode;
+
+// Constructor with path.
+- (nullable instancetype) initWithPath: (nonnull NSString *) path;
+
+// Load a launchd task.
+- (void) load;
+
+// Unload a launchd task.
+- (void) unload;
 
 @end

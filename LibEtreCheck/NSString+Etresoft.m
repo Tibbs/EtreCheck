@@ -23,4 +23,23 @@
   return [result autorelease];
   }
   
+// Remove quotes, if present, from a string.
+- (nonnull NSString *) stringByRemovingQuotes
+  {
+  NSRange firstQuote = [self rangeOfString: @"\""];
+  
+  if(firstQuote.location == 0)
+    {
+    NSRange lastQuote =
+      [self rangeOfString: @"\"" options: NSBackwardsSearch];
+      
+    if(firstQuote.location != lastQuote.location)
+      if(lastQuote.location == ([self length] - 1))
+        return
+          [self substringWithRange: NSMakeRange(1, lastQuote.location - 1)];
+    }
+    
+  return [[self copy] autorelease];
+  }
+
 @end

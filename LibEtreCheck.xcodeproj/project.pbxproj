@@ -13,11 +13,11 @@
 		A503BF9B1F82AD8D00473A24 /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BF991F82AD8D00473A24 /* LocalizedString.m */; };
 		A503BFAD1F83DF9B00473A24 /* Actions.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFAB1F83DF9B00473A24 /* Actions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A503BFAE1F83DF9B00473A24 /* Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFAC1F83DF9B00473A24 /* Actions.m */; };
-		A503BFB11F83F67300473A24 /* Launchd.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFAF1F83F67300473A24 /* Launchd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A503BFB11F83F67300473A24 /* Launchd.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFAF1F83F67300473A24 /* Launchd.h */; };
 		A503BFB21F83F67300473A24 /* Launchd.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB01F83F67300473A24 /* Launchd.m */; };
 		A503BFB51F83F9F400473A24 /* OSVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB31F83F9F400473A24 /* OSVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A503BFB61F83F9F400473A24 /* OSVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB41F83F9F400473A24 /* OSVersion.m */; };
-		A503BFB91F84118600473A24 /* LaunchdTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB71F84118600473A24 /* LaunchdTask.h */; };
+		A503BFB91F84118600473A24 /* LaunchdTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB71F84118600473A24 /* LaunchdTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A503BFBA1F84118600473A24 /* LaunchdTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB81F84118600473A24 /* LaunchdTask.m */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
@@ -708,13 +708,12 @@
 				TargetAttributes = {
 					A589CD1D1F71644500D66592 = {
 						CreatedOnToolsVersion = 8.3.3;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = U87NE528LC;
+						ProvisioningStyle = Manual;
 					};
 					A589CD251F71644500D66592 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = U87NE528LC;
-						ProvisioningStyle = Automatic;
-						TestTargetID = A55BC16815BF987D00D42EF1;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -987,12 +986,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Etresoft, Inc. (U87NE528LC)";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = U87NE528LC;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1006,6 +1005,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.LibEtreCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1027,12 +1027,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Etresoft, Inc. (U87NE528LC)";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = U87NE528LC;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1047,6 +1047,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.LibEtreCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1069,10 +1070,9 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = U87NE528LC;
+				DEVELOPMENT_TEAM = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = LibEtreCheckTests/Info.plist;
@@ -1081,8 +1081,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.LibEtreCheckTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EtreCheck.app/Contents/MacOS/EtreCheck";
 			};
 			name = Debug;
 		};
@@ -1101,10 +1101,9 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = U87NE528LC;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1114,8 +1113,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.etresoft.LibEtreCheckTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EtreCheck.app/Contents/MacOS/EtreCheck";
 			};
 			name = Release;
 		};

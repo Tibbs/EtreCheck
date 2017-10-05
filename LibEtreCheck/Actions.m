@@ -6,6 +6,7 @@
 #import "Actions.h"
 #import "Launchd.h"
 #import "SubProcess.h"
+#import "OSVersion.h"
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import <Carbon/Carbon.h>
@@ -563,19 +564,21 @@
 // Query the status of a process.
 + (NSString *) ps: (NSNumber *) pid
   {
-  SubProcess * subProcess = [[SubProcess alloc] init];
+  NSString * line = nil;
   
-  [subProcess autorelease];
-
-  if([subProcess execute: @"/bin/ps" arguments: @[ [pid stringValue] ]])
+  SubProcess * ps = [[SubProcess alloc] init];
+  
+  if([ps execute: @"/bin/ps" arguments: @[ [pid stringValue] ]])
     {
-    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    NSArray * lines = [Utilities formatLines: ps.standardOutput];
     
     if([lines count] > 1)
-      return [lines objectAtIndex: 1];
+      line = [[lines objectAtIndex: 1] autorelease];
     }
     
-  return nil;
+  [ps release];
+  
+  return line;
   }
 
 @end

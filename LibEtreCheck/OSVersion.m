@@ -66,58 +66,45 @@
 // Set the OS version.
 - (void) setOSVersion
   {
-  SubProcess * subProcess = [[SubProcess alloc] init];
+  SubProcess * sw_vers = [[SubProcess alloc] init];
   
   NSArray * args =
     @[
-      @"/usr/bin/sw_vers",
-      @"-productVersion"
+      @"-buildVersion"
     ];
 
-  [subProcess autorelease];
-
-  if([subProcess execute: @"/bin/launchctl" arguments: args])
+  if([sw_vers execute: @"/usr/bin/sw_vers" arguments: args])
     {
     NSString * version =
       [[NSString alloc]
-        initWithData: subProcess.standardOutput
+        initWithData: sw_vers.standardOutput
         encoding: NSUTF8StringEncoding];
       
-    if([version hasPrefix: @"10."])
+    if(version.length >= 3)
       {
-      NSString * key = [version substringFromIndex: 3];
+      NSString * major = 
+        [version substringWithRange: NSMakeRange(0, 2)];
       
-      NSRange range = [key rangeOfString: @"."];
-      
-      if(range.location != NSNotFound)
-        {
-        NSString * major = 
-          [key substringWithRange: NSMakeRange(0, range.location)];
-        
-        NSString * minor = 
-          [key 
-            substringWithRange: 
-              NSMakeRange(
-                range.location + 1, key.length - range.location - 1)];
+      NSString * minor = 
+        [version substringWithRange: NSMakeRange(2, 1)];
                 
-        [self willChangeValueForKey: @"major"];
-        [self willChangeValueForKey: @"minor"];
+      [self willChangeValueForKey: @"major"];
+      [self willChangeValueForKey: @"minor"];
         
-        myMajor = 
-          [[[NumberFormatter sharedNumberFormatter] 
-            convertFromString: major] intValue];
+      myMajor = 
+        [[[NumberFormatter sharedNumberFormatter] 
+          convertFromString: major] intValue];
             
-        myMinor = 
-          [[[NumberFormatter sharedNumberFormatter] 
-            convertFromString: minor] intValue];
+      myMinor = [minor characterAtIndex: 0] - 'A';
 
-        [self didChangeValueForKey: @"minor"];
-        [self didChangeValueForKey: @"major"];        
-        }
+      [self didChangeValueForKey: @"minor"];
+      [self didChangeValueForKey: @"major"];        
       }
       
     [version release];
     }
+    
+  [sw_vers release];
   }
   
 @end
