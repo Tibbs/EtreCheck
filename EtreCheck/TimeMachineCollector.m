@@ -264,11 +264,6 @@
   NSDate * oldestBackup = nil;
   NSDate * lastBackup = nil;
   
-  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setDateStyle: NSDateFormatterShortStyle];
-  [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
-  [dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
-
   if([snapshots count])
     {
     snapshotCount =
@@ -292,16 +287,10 @@
   [destination setObject: snapshotCount forKey: kSnapshotcount];
   
   if(oldestBackup != nil)
-    [destination
-      setObject: [dateFormatter stringFromDate: oldestBackup]
-      forKey: kOldestBackup];
+    [destination setObject: oldestBackup forKey: kOldestBackup];
     
   if(lastBackup != nil)
-    [destination
-      setObject: [dateFormatter stringFromDate: lastBackup]
-      forKey: kLastbackup];
-    
-  [dateFormatter release];
+    [destination setObject: lastBackup forKey: kLastbackup];
   }
 
 // Consolidate a single destination.
@@ -661,20 +650,52 @@
   NSDate * oldestBackup = [destination objectForKey: kOldestBackup];
   NSDate * lastBackup = [destination objectForKey: kLastbackup];
 
-  [self.result
-    appendString:
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(
-            @"        Oldest backup: %@ \n", NULL),
-          oldestBackup ? oldestBackup : @"-"]];
+  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setDateStyle: NSDateFormatterShortStyle];
+  [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
+  [dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
+  
+  NSString * oldestBackupString = 
+    (oldestBackup == nil)
+      ? @"-"
+      : [dateFormatter stringFromDate: oldestBackup];
+
+  NSString * lastBackupString = 
+    (lastBackup == nil)
+      ? @"-"
+      : [dateFormatter stringFromDate: lastBackup];
 
   [self.result
     appendString:
       [NSString
         stringWithFormat:
-          NSLocalizedString(@"        Last backup: %@ \n", NULL),
-          lastBackup ? lastBackup : @"-"]];
+          NSLocalizedString(
+            @"        Oldest backup: %@ \n", NULL), oldestBackupString]];
+
+  NSDate * then =
+    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 10];
+  
+  if([lastBackup compare: then] != NSOrderedDescending)
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"        Last backup: %@ \n", NULL),
+            lastBackupString]
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+  else
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"        Last backup: %@ \n", NULL),
+            lastBackupString]];
+            
+  [dateFormatter release];
   }
 
 // Print an overall analysis of the Time Machine size differential.

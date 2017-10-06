@@ -226,7 +226,7 @@ extern char **environ;
 
     int result = select(nfds, & fds, NULL, NULL, & tv);
 
-    if(result == -1)
+    if((result == -1) && (errno != EINTR))
       break;
       
     else if(result == 0)
@@ -383,7 +383,7 @@ extern char **environ;
 
     int result = select(nfds, & fds, NULL, NULL, & tv);
 
-    if(result == -1)
+    if((result == -1) && (errno != EINTR))
       break;
       
     else if(result == 0)
