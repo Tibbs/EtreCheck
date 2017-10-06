@@ -8,7 +8,7 @@
 "applications" = "Applications :";
 "configurationfiles" = "Fichiers de configuration :";
 "cpu" = "Utilisation du processeur par opération :";
-"diagnostics" = "Informations du diagnostic :";
+"diagnostics" = "Événements du diagnostic (3 dernier jours si pas grave):";
 "disk" = "Informations des disques :";
 "firewire" = "Informations Firewire :";
 "fonts" = "Mauvaises polices :";
@@ -44,5 +44,5 @@
 "cleanup" = "Nettoyage :";
 "hiddenapps" = "Autres apps :";
 "etrecheckdeletedfiles" = "Fichiers enlevés par EtreCheck :";
-"install" = "Installations de logiciel :";
+"install" = "Installations de logiciel (30 derniers jours) :";
 "virtualvolume" = "Disques virtuels :";

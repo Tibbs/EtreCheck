@@ -708,14 +708,30 @@
 
   if(oldestBackup != nil)
     {
+    NSDate * then =
+      [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 10];
+  
     [self.model addElement: @"lastbackup" date: lastBackup];
 
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            ECLocalizedString(@"        Last backup: %@ \n"),
-            [Utilities dateAsString: lastBackup]]];
+    if([lastBackup compare: then] != NSOrderedDescending)
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              ECLocalizedString(@"        Last backup: %@ \n"),
+              [Utilities dateAsString: lastBackup]]
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+    else
+      [self.result
+        appendString:
+          [NSString
+            stringWithFormat:
+              ECLocalizedString(@"        Last backup: %@ \n"),
+              [Utilities dateAsString: lastBackup]]];
     }
   }
 

@@ -8,7 +8,7 @@
 "applications" = "Applications:";
 "configurationfiles" = "Configuration files:";
 "cpu" = "Top Processes by CPU:";
-"diagnostics" = "Diagnostics Information:";
+"diagnostics" = "Diagnostics Events (last 3 days for minor events):";
 "disk" = "Disk Information:";
 "firewire" = "Firewire Information:";
 "fonts" = "Bad Fonts:";
@@ -44,5 +44,5 @@
 "cleanup" = "Clean up:";
 "hiddenapps" = "Other Apps:";
 "etrecheckdeletedfiles" = "Files deleted by EtreCheck:";
-"install" = "Software installs:";
+"install" = "Software installs (last 30 days):";
 "virtualvolume" = "Virtual disks:";
