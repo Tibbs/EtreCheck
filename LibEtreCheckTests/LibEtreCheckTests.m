@@ -5,7 +5,8 @@
 
 #import <XCTest/XCTest.h>
 #import "Launchd.h"
-#import "LaunchdTask.h"
+#import "LaunchdFile.h"
+#import "LaunchdLoadedTask.h"
 #import "EtreCheckConstants.h"
 
 @interface LibEtreCheckTests : XCTestCase
@@ -34,10 +35,56 @@
   [[Launchd shared] load];
   
   NSLog(
-    @"Found %lu tasks", (unsigned long)[[[Launchd shared] tasks] count]);
+    @"Found %lu tasks", 
+    (unsigned long)[[[Launchd shared] tasksByPath] count]);
   
-  for(LaunchdTask * task in [[Launchd shared] tasks])
-    NSLog(@"Found task %@", task.label);
+  NSArray * paths = 
+    [[[[Launchd shared] tasksByPath] allKeys] 
+      sortedArrayUsingSelector: @selector(compare:)];
+  
+  for(NSString * path in paths)
+    {
+    LaunchdFile * file = 
+      [[[Launchd shared] tasksByPath] objectForKey: path];
+      
+    NSString * validity =
+      file.configScriptValid
+        ? @""
+        : @"(invalid) ";
+        
+    NSLog(
+      @"Found file %@ %@(%lu loaded tasks)", 
+      file.path, validity, (unsigned long)file.loadedTasks.count);
+      
+    NSMutableSet * labels = [NSMutableSet new];
+    
+    for(LaunchdLoadedTask * task in file.loadedTasks)
+      [labels addObject: task.label];
+      
+    bool different = false;
+    
+    for(NSString * label in labels)
+      if(![file.label isEqualToString: label])
+        different = true;
+        
+    if(different)
+      for(LaunchdLoadedTask * task in file.loadedTasks)
+        NSLog(
+          @"    %@", task.label);
+    }
+      
+  NSUInteger ephemeralCount = [[[Launchd shared] ephemeralTasks] count];
+  
+  if(ephemeralCount > 0)
+    {
+    NSLog(
+      @"Still have %lu ephemeral tasks", (unsigned long)ephemeralCount);
+    
+    for(LaunchdLoadedTask * task in [[Launchd shared] ephemeralTasks])
+      {
+      NSLog(@"Found %@ task %@", task.domain, task.label);
+      }
+    }
   }
 
 - (void) testPerformanceExample 

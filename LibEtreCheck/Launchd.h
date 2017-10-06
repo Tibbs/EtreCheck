@@ -8,15 +8,31 @@
 // A wrapper around all things launchd.
 @interface Launchd : NSObject
   {
-  // Launchd tasks. Tasks are not unique by either label or path.
-  NSMutableArray * myTasks;
+  // Launchd tasks keyed by config file path. 
+  // Values are task objects since they are guaranteed to be unique.
+  NSMutableDictionary * myTasksByPath;
+  
+  // Launchd tasks keyed by label. 
+  // Values are NSMutableArrays since they might not be unique.
+  NSMutableDictionary * myTasksByLabel;
+
+  // Array of loaded launchd tasks.
+  NSMutableArray * myEphemeralTasks;
   }
   
 // Return the singeton.
 + (nonnull Launchd *) shared;
 
-// Launchd tasks. Tasks are not unique by either label or path.
-@property (readonly, nonnull) NSMutableArray * tasks;
+// Launchd tasks keyed by config file path. 
+// Values are task objects since they are guaranteed to be unique.
+@property (readonly, nonnull) NSMutableDictionary * tasksByPath;
+
+// Launchd tasks keyed by label. 
+// Values are NSMutableArrays since they might not be unique.
+@property (readonly, nonnull) NSMutableDictionary * tasksByLabel;
+
+// Array of loaded launchd tasks.
+@property (readonly, nonnull) NSMutableArray * ephemeralTasks;
 
 // Load all entries.
 - (void) load;

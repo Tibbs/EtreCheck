@@ -383,7 +383,7 @@ extern char **environ;
 
     int result = select(nfds, & fds, NULL, NULL, & tv);
 
-    if(result == -1)
+    if((result == -1) && (errno != EINTR))
       break;
       
     else if(result == 0)
@@ -398,7 +398,9 @@ extern char **environ;
         {
         ssize_t amount = read(outputPipe[0], buffer, bufferSize);
         
-        if(amount < 1)
+        if(amount < 0)
+          stdoutOpen = NO;
+        else if(amount < 1)
           stdoutOpen = NO;
         else
           [myStandardOutput appendBytes: buffer length: amount];
@@ -408,7 +410,9 @@ extern char **environ;
         {
         ssize_t amount = read(errorPipe[0], buffer, bufferSize);
         
-        if(amount < 1)
+        if(amount < 0)
+          stderrOpen = NO;
+        else if(amount < 1)
           stderrOpen = NO;
         else
           [myStandardError appendBytes: buffer length: amount];

@@ -4,17 +4,27 @@
  **********************************************************************/
 
 #import "Launchd.h"
-#import "LaunchdTask.h"
+#import "LaunchdFile.h"
+#import "LaunchdLoadedTask.h"
 #import "OSVersion.h"
 #import "SubProcess.h"
+#import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import <ServiceManagement/ServiceManagement.h>
 
 // A wrapper around all things launchd.
 @implementation Launchd
 
-// Launchd tasks. Tasks are not unique by either label or path.
-@synthesize tasks = myTasks;
+// Launchd tasks keyed by config file path. 
+// Values are task objects since they are guaranteed to be unique.
+@synthesize tasksByPath = myTasksByPath;
+
+/// Launchd tasks keyed by label. 
+// Values are NSMutableArrays since they might not be unique.
+@synthesize tasksByLabel = myTasksByLabel;
+
+// Array of loaded launchd tasks.
+@synthesize ephemeralTasks = myEphemeralTasks;
 
 // Return the singeton.
 + (nonnull Launchd *) shared
@@ -39,7 +49,9 @@
   
   if(self != nil)
     {
-    myTasks = [NSMutableArray new];
+    myTasksByPath = [NSMutableDictionary new];
+    myTasksByLabel = [NSMutableDictionary new];
+    myEphemeralTasks = [NSMutableArray new];
     }
     
   return self;
@@ -48,7 +60,9 @@
 // Destructor.
 - (void) dealloc
   {
-  [myTasks release];
+  [myTasksByPath release];
+  [myTasksByLabel release];
+  [myEphemeralTasks release];
   
   [super dealloc];
   }
@@ -56,51 +70,96 @@
 // Load all entries.
 - (void) load
   {
-  [self loadServiceManagement];
-
-  if([[OSVersion shared] major] >= kYosemite)
-    [self newLoad];
-  else
-    [self oldLoad];
+  // Load "truth" files.
+  [self loadTruthFiles];
+  
+  // Now load "reality" data.
+  [self loadEphemeralTasks];
+  
+  // Reconcile all the data.
+  [self reconcileTasks];
   }
   
-// Load Service Management jobs.
-- (void) loadServiceManagement
+// Load all "truth" files. Later, I will compare with reality.
+- (void) loadTruthFiles
   {
-  if(& SMCopyAllJobDictionaries != NULL)
+  [self loadDirectory: @"/System/Library/LaunchDaemons"];
+  
+  [self loadDirectory: @"/System/Library/LaunchAgents"];
+  
+  [self loadDirectory: @"/Library/LaunchDaemons"];
+  
+  [self 
+    loadDirectory: @"/Library/LaunchAgents"];
+  
+  [self 
+    loadDirectory: 
+      [NSHomeDirectory() 
+        stringByAppendingPathComponent: @"/Library/LaunchAgents"]];
+  }
+  
+// Load all config files in a directory.
+- (void) loadDirectory: (NSString *) directory
+  {
+  NSArray * args =
+    @[
+      directory,
+      @"-type", @"f",
+      @"-or",
+      @"-type", @"l"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    CFArrayRef systemJobs = 
-      SMCopyAllJobDictionaries(kSMDomainSystemLaunchd);
+    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
     
-    CFArrayRef userJobs = SMCopyAllJobDictionaries(kSMDomainUserLaunchd);
+    for(NSString * file in files)
+      [self addFileAtPath: file];
+    }
     
-    for(NSDictionary * dict in (NSArray *)systemJobs)
-      {
-      LaunchdTask * task = [[LaunchdTask alloc] initWithDictionary: dict];
+  [subProcess release];
+  }
+  
+// Add a task at a path.
+- (void) addFileAtPath: (NSString *) path 
+  {
+  NSString * safePath = [path stringByAbbreviatingWithTildeInPath];
+  
+  if(safePath.length > 0)
+    {
+    LaunchdFile * file = [[LaunchdFile alloc] initWithPath: safePath];
+  
+    if(file != nil)
+      [self.tasksByPath setObject: file forKey: safePath];
       
-      if(task != nil)
-        [self.tasks addObject: task];
-      }
-
-    for(NSDictionary * dict in (NSArray *)userJobs)
-      {
-      LaunchdTask * task = [[LaunchdTask alloc] initWithDictionary: dict];
-      
-      if(task != nil)
-        [self.tasks addObject: task];
-      }
+    if(file.label.length > 0)
+      [self.tasksByLabel setObject: file forKey: file.label];
+  
+    [file release];
     }
   }
   
-// New load all entries.
-- (void) newLoad
+// Load "reality" data.
+- (void) loadEphemeralTasks
   {
-  [self newLoadSystem];
-  [self newLoadUser];
+  if([[OSVersion shared] major] >= kYosemite)
+    [self loadLaunchdTasks];
+  else
+    [self loadServiceManagementTasks];
   }
   
-// New load all system domain tasks.
-- (void) newLoadSystem
+// New load all entries.
+- (void) loadLaunchdTasks
+  {
+  [self loadSystemLaunchdTasks];
+  [self loadUserLaunchdTasks];
+  [self loadGUILaunchdTasks];
+  }
+  
+// Load all system domain tasks.
+- (void) loadSystemLaunchdTasks
   {
   SubProcess * launchctl = [[SubProcess alloc] init];
   
@@ -113,14 +172,16 @@
   
   if([launchctl execute: @"/bin/launchctl" arguments: arguments])
     if(launchctl.standardOutput.length > 0)
-      [self parseNewList: launchctl.standardOutput];
+      [self 
+        parseLaunchdOutput: launchctl.standardOutput 
+        inDomain: kLaunchdSystemDomain];
       
   [arguments release];
   [launchctl release];
   }
 
-// New load all user domain tasks.
-- (void) newLoadUser
+// Load all user domain tasks.
+- (void) loadUserLaunchdTasks
   {
   SubProcess * launchctl = [[SubProcess alloc] init];
   
@@ -135,14 +196,40 @@
   
   if([launchctl execute: @"/bin/launchctl" arguments: arguments])
     if(launchctl.standardOutput.length > 0)
-      [self parseNewList: launchctl.standardOutput];
+      [self 
+        parseLaunchdOutput: launchctl.standardOutput 
+        inDomain: kLaunchdUserDomain];
       
   [arguments release];
   [launchctl release];
   }
 
-// Parse a new launchctl listing.
-- (void) parseNewList: (NSData *) data
+// Load all gui domain tasks.
+- (void) loadGUILaunchdTasks
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  uid_t uid = getuid();
+    
+  NSString * target = [[NSString alloc] initWithFormat: @"gui/%d/", uid];
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"print", target, nil];
+    
+  [target release];
+  
+  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
+    if(launchctl.standardOutput.length > 0)
+      [self 
+        parseLaunchdOutput: launchctl.standardOutput 
+        inDomain: kLaunchdGUIDomain];
+      
+  [arguments release];
+  [launchctl release];
+  }
+
+// Parse a launchctl output.
+- (void) parseLaunchdOutput: (NSData *) data inDomain: (NSString *) domain
   {
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
@@ -162,7 +249,7 @@
       if([line isEqualToString: @"	}"])
         break;        
     
-      [self parseLine: line];
+      [self parseLine: line inDomain: domain];
       }
       
     else if([line isEqualToString: @"	services = {"])
@@ -173,7 +260,7 @@
   }
   
 // Parse a line from a launchd listing.
-- (void) parseLine: (NSString *) line
+- (void) parseLine: (NSString *) line inDomain: (NSString *) domain
   {
   NSString * trimmedLine =
     [line
@@ -210,57 +297,106 @@
           intoString: & label];
   
       if(success && ![PID isEqualToString: @"PID"])
-        [self loadTaskWithLabel: label PID: PID lastExitCode: lastExitCode];
+        [self loadTaskWithLabel: label inDomain: domain];
       }
     }
     
   [scanner release];
   }
   
-// Old load all entries.
-- (void) oldLoad
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = [[NSArray alloc] initWithObjects: @"list",nil];
-    
-  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
-    if(launchctl.standardOutput.length > 0)
-      [self parseOldList: launchctl.standardOutput];
-    
-  [arguments release];
-  [launchctl release];
-  }
-
-// Parse an old launchctl listing.
-- (void) parseOldList: (NSData *) data
-  {
-  NSString * plist = 
-    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-  
-  // Split lines by new lines.
-  NSArray * lines = [plist componentsSeparatedByString: @"\n"];
-  
-  for(NSString * line in lines)
-    [self parseLine: line];
-    
-  [plist release];
-  }
-
 // Load a task. Just do my best.
-- (void) loadTaskWithLabel: (NSString *) label
-  PID: (NSString *) PID lastExitCode: (NSString *) lastExitCode
+- (void) loadTaskWithLabel: (NSString *) label inDomain: (NSString *) domain
   {
-  LaunchdTask * task = nil;
-  
-  task =
-    [[LaunchdTask alloc] 
-      initWithLabel: label PID: PID lastExitCode: lastExitCode];
-    
+  LaunchdLoadedTask * task = 
+    [[LaunchdLoadedTask alloc] initWithLabel: label inDomain: domain];
+   
   if(task != nil)
-    [self.tasks addObject: task];
+    [self.ephemeralTasks addObject: task];
     
   [task release];
+  }
+  
+// Load Service Management jobs.
+- (void) loadServiceManagementTasks
+  {
+  if(& SMCopyAllJobDictionaries != NULL)
+    {
+    CFArrayRef systemJobs = 
+      SMCopyAllJobDictionaries(kSMDomainSystemLaunchd);
+    
+    for(NSDictionary * dict in (NSArray *)systemJobs)
+      {
+      NSString * label = dict[@"Label"];
+      
+      if(label.length == 0)
+        label = @"";
+        
+      LaunchdLoadedTask * task = 
+        [[LaunchdLoadedTask alloc] 
+          initWithDictionary: dict inDomain: kLaunchdSystemDomain];
+      
+      if(task != nil)
+        [self.ephemeralTasks addObject: task];
+      
+      [task release];
+      }
+
+    CFArrayRef userJobs = SMCopyAllJobDictionaries(kSMDomainUserLaunchd);
+    
+    for(NSDictionary * dict in (NSArray *)userJobs)
+      {
+      NSString * label = dict[@"Label"];
+      
+      if(label.length == 0)
+        label = @"";
+        
+      LaunchdLoadedTask * task = 
+        [[LaunchdLoadedTask alloc] 
+          initWithDictionary: dict inDomain: kLaunchdUserDomain];
+      
+      if(task != nil)
+        [self.ephemeralTasks addObject: task];
+      
+      [task release];
+      }
+    }
+  }
+  
+// Reconcile all the tasks.
+- (void) reconcileTasks
+  {
+  NSMutableArray * orphanTasks = [NSMutableArray new];
+  
+  for(LaunchdLoadedTask * task in self.ephemeralTasks)
+    {
+    if(task.path.length > 0)
+      {
+      LaunchdFile * truth = [self.tasksByPath objectForKey: task.path];
+      
+      if(truth != nil)
+        {
+        [truth.loadedTasks addObject: task];
+        
+        continue;
+        }
+      }
+      
+    // Labels could have a UUID tacked onto the end. 
+    LaunchdFile * truth = [self.tasksByLabel objectForKey: task.baseLabel];
+    
+    if(truth != nil)
+      {
+      [truth.loadedTasks addObject: task];
+      
+      continue;
+      }
+      
+    [orphanTasks addObject: task];
+    }
+    
+  [self.ephemeralTasks setArray: orphanTasks];
+    
+  [orphanTasks release];
   }
   
 @end

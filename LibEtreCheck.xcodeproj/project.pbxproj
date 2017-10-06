@@ -19,6 +19,10 @@
 		A503BFB61F83F9F400473A24 /* OSVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB41F83F9F400473A24 /* OSVersion.m */; };
 		A503BFB91F84118600473A24 /* LaunchdTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BFB71F84118600473A24 /* LaunchdTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A503BFBA1F84118600473A24 /* LaunchdTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A503BFB81F84118600473A24 /* LaunchdTask.m */; };
+		A50C9C0F1F86CCAC00144335 /* LaunchdFile.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9C0D1F86CCAC00144335 /* LaunchdFile.h */; };
+		A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */; };
+		A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */; };
+		A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -179,6 +183,10 @@
 		A503BFB41F83F9F400473A24 /* OSVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSVersion.m; sourceTree = "<group>"; };
 		A503BFB71F84118600473A24 /* LaunchdTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdTask.h; sourceTree = "<group>"; };
 		A503BFB81F84118600473A24 /* LaunchdTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdTask.m; sourceTree = "<group>"; };
+		A50C9C0D1F86CCAC00144335 /* LaunchdFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdFile.h; sourceTree = "<group>"; };
+		A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdFile.m; sourceTree = "<group>"; };
+		A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdLoadedTask.h; sourceTree = "<group>"; };
+		A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdLoadedTask.m; sourceTree = "<group>"; };
 		A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupItemsCollector.h; sourceTree = "<group>"; };
 		A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupItemsCollector.m; sourceTree = "<group>"; };
 		A50C9DAE19A2DFDB00BA6A25 /* DiskCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCollector.h; sourceTree = "<group>"; };
@@ -553,6 +561,10 @@
 				A503BFB41F83F9F400473A24 /* OSVersion.m */,
 				A503BFB71F84118600473A24 /* LaunchdTask.h */,
 				A503BFB81F84118600473A24 /* LaunchdTask.m */,
+				A50C9C0D1F86CCAC00144335 /* LaunchdFile.h */,
+				A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */,
+				A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */,
+				A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */,
 				A503BFAF1F83F67300473A24 /* Launchd.h */,
 				A503BFB01F83F67300473A24 /* Launchd.m */,
 				A503BFAB1F83DF9B00473A24 /* Actions.h */,
@@ -609,6 +621,7 @@
 				A589CD911F71744F00D66592 /* NSArray+Etresoft.h in Headers */,
 				A589CDB31F7174B900D66592 /* InternetPlugInsCollector.h in Headers */,
 				A589CDA21F71749E00D66592 /* VirtualVolumeCollector.h in Headers */,
+				A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */,
 				A589CDAA1F71749E00D66592 /* StartupItemsCollector.h in Headers */,
 				A589CD951F71746700D66592 /* ByteCountFormatter.h in Headers */,
 				A589CDC41F7174FD00D66592 /* EtreCheckDeletedFilesCollector.h in Headers */,
@@ -618,6 +631,7 @@
 				A589CD941F71746400D66592 /* NSString+Etresoft.h in Headers */,
 				A589CDC21F7174FD00D66592 /* UnsignedCollector.h in Headers */,
 				A589CD9E1F71749E00D66592 /* Collector.h in Headers */,
+				A50C9C0F1F86CCAC00144335 /* LaunchdFile.h in Headers */,
 				A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */,
 				A589CDBB1F7174F200D66592 /* FontsCollector.h in Headers */,
 				A589CDAB1F71749E00D66592 /* LaunchdCollector.h in Headers */,
@@ -770,6 +784,7 @@
 				A589CD441F7164C900D66592 /* ConfigurationCollector.m in Sources */,
 				A589CD431F7164C900D66592 /* ThunderboltCollector.m in Sources */,
 				A589CD7C1F7168E900D66592 /* NSAttributedString+Etresoft.m in Sources */,
+				A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */,
 				A589CD3D1F7164C900D66592 /* VideoCollector.m in Sources */,
 				A589CD5F1F7164C900D66592 /* EnergyUsageCollector.m in Sources */,
 				A589CD811F7168E900D66592 /* NSDate+Etresoft.m in Sources */,
@@ -785,6 +800,7 @@
 				A589CD7E1F7168E900D66592 /* NSObject+Etresoft.m in Sources */,
 				A589CD571F7164C900D66592 /* PreferencePanesCollector.m in Sources */,
 				A589CD8A1F71694200D66592 /* TTTLocalizedPluralString.m in Sources */,
+				A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */,
 				A589CD7D1F7168E900D66592 /* NSMutableAttributedString+Etresoft.m in Sources */,
 				A589CD8D1F71729C00D66592 /* Checker.m in Sources */,
 				A589CD481F7164C900D66592 /* LaunchdCollector.m in Sources */,

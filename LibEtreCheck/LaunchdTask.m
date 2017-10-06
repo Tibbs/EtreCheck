@@ -4,12 +4,7 @@
  **********************************************************************/
 
 #import "LaunchdTask.h"
-#import "Utilities.h"
-#import "OSVersion.h"
-#import "SubProcess.h"
-#import "EtreCheckConstants.h"
 #import "NSString+Etresoft.h"
-#import <unistd.h>
 
 // A wrapper around a launchd task.
 @implementation LaunchdTask
@@ -17,38 +12,14 @@
 // Path to the config script.
 @synthesize path = myPath;
 
-// Is the config script valid?
-@synthesize configScriptValid = myConfigScriptValid;
-
-// The launchd context.
-@synthesize context = myContext;
-
-// The launchd domain. 
-@synthesize domain = myDomain;
-  
-// The query source. (oldlaunchd, newlaunchd, list, file)
-@synthesize source = mySource;
-
 // The launchd label.
 @synthesize label = myLabel;
-
-// The process ID.
-@synthesize PID = myPID;
-
-// The last exit code.
-@synthesize lastExitCode = myLastExitCode;
 
 // The executable or script.
 @synthesize executable = myExecutable;
 
 // The arguments.
 @synthesize arguments = myArguments;
-
-// The signature.
-@synthesize signature = mySignature;
-
-// The developer.
-@synthesize developer = myDeveloper;
 
 // Constructor with NSDictionary.
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict
@@ -59,57 +30,7 @@
     
     if(self != nil)
       {
-      mySource = kLaunchdServiceManagementSource;
-      
       [self parseDictionary: dict];
-
-      [self readSignature];
-
-      [self findContext];  
-      }
-    }
-    
-  return self;
-  }
-
-// Constructor with new 10.10 launchd output.
-- (nullable instancetype) initWithNewLaunchdData: (nonnull NSData *) data
-  {
-  if(data.length > 0)
-    {
-    self = [super init];
-    
-    if(self != nil)
-      {
-      mySource = kLaunchdNewLaunchctlSource;
-
-      [self parseNewPlistData: data];
-
-      [self readSignature];
-
-      [self findContext];  
-      }
-    }
-    
-  return self;
-  }
-  
-// Constructor with old launchd output.
-- (nullable instancetype) initWithOldLaunchdData: (nonnull NSData *) data
-  {
-  if(data.length > 0)
-    {
-    self = [super init];
-    
-    if(self != nil)
-      {
-      mySource = kLaunchdOldLaunchctlSource;
-
-      [self parseOldPlistData: data];
-
-      [self readSignature];
-
-      [self findContext];  
       }
     }
     
@@ -118,43 +39,17 @@
   
 // Constructor with label.
 - (nullable instancetype) initWithLabel: (nonnull NSString *) label
-  PID: (nonnull NSString *) PID
-  lastExitCode: (nonnull NSString *) lastExitCode
+  data: (nonnull NSData *) data
   {
-  if(label.length > 0)
+  if((label.length > 0) && (data.length > 0))
     {
     self = [super init];
     
     if(self != nil)
       {
-      mySource = kLaunchdLaunchctlListingSource;
-
       myLabel = [label retain];
-      myPID = [PID retain];
-      myLastExitCode = [lastExitCode retain];
-      myContext = kLaunchdUnknownContext;
-      }
-    }
-    
-  return self;
-  }
-  
-// Constructor with path.
-- (nullable instancetype) initWithPath: (nonnull NSString *) path
-  {
-  if(path.length > 0)
-    {
-    self = [super init];
-    
-    if(self != nil)
-      {
-      mySource = kLaunchdFileSource;
-
-      [self parseFromPath: path];
-
-      [self readSignature];
-
-      [self findContext];  
+      
+      [self parseData: data];
       }
     }
     
@@ -164,50 +59,34 @@
 // Destructor.
 - (void) dealloc
   {
-  [myContext release];
+  [myPath release];
   [myLabel release];
   [myExecutable release];
   [myArguments release];
-  [mySignature release];
   
   [super dealloc];
   }
   
-#pragma mark - Parse "old" dictionary
-
 // Parse a dictionary.
 - (void) parseDictionary: (NSDictionary *) dict 
   {
   NSString * label = dict[@"Label"];
-  id PID = dict[@"PID"];
-  id lastExitStatus = dict[@"LastExitStatus"];
   NSString * program = dict[@"Program"];
   NSArray * arguments = dict[@"ProgramArguments"];
   
   if(label.length > 0)
     myLabel = [label retain];
     
-  myPID = 
-    [PID respondsToSelector: @selector(longValue)]
-      ? [PID stringValue]
-      : [PID retain];
-      
-  myLastExitCode = 
-    [lastExitStatus respondsToSelector: @selector(longValue)]
-      ? [lastExitStatus stringValue]
-      : [lastExitStatus retain];
-  
   [self parseExecutable: program arguments: arguments];  
   }
   
-#pragma mark - Parse "new" text output
-
-// Parse a new plist.
-- (void) parseNewPlistData: (nonnull NSData *) data 
+// Parse launchctl data.
+- (void) parseData: (NSData *) data
   {
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
+  NSString * program = nil;
   NSMutableArray * arguments = [NSMutableArray new];
   
   // Split lines by new lines.
@@ -240,19 +119,16 @@
       }
       
     else if([key isEqualToString: @"program"])
-      myExecutable = [value retain];
-    
-    else if([key isEqualToString: @"pid"])
-      myPID = [value retain];
-    
-    else if([key isEqualToString: @"last exit code"])
-      myLastExitCode = [value retain];
+      program = [value retain];
     
     else if([line isEqualToString: @"	arguments = {"])
       parsingArguments = true;
     }
     
+  [self parseExecutable: program arguments: arguments];  
+
   [arguments release];
+  [program release];
   [plist release];
   }
   
@@ -290,260 +166,6 @@
   value = [value stringByRemovingQuotes];
   
   return [NSArray arrayWithObjects: key, value, nil];
-  }
-  
-// Parse an old plist.
-- (void) parseOldPlistData: (nonnull NSData *) data 
-  {
-  NSString * plist = 
-    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-  
-  NSMutableArray * arguments = [NSMutableArray new];
-  
-  // Split lines by new lines.
-  NSArray * lines = [plist componentsSeparatedByString: @"\n"];
-  
-  // Am I parsing arguments now?
-  bool parsingArguments = false;
-  
-  for(NSString * line in lines)
-    {
-    NSArray * parts = [self parseOldLine: line];
-
-    NSString * key = [parts firstObject];
-    NSString * value = 
-      parts.count == 1
-        ? nil
-        : [parts lastObject];
-    
-    if(key.length == 0)
-      continue;
-      
-    // If I am parsing arguments, look for the end indicator.
-    if(parsingArguments)
-      {
-      // An argument could be a bare "}". Do a string check with whitespace.
-      if([line isEqualToString: @"	);"])
-        parsingArguments = false;        
-      else
-        [arguments addObject: key];
-      }
-      
-    else if([key isEqualToString: @"Label"])
-      myLabel = [value retain];
-    
-    else if([key isEqualToString: @"Program"])
-      myExecutable = [value retain];
-    
-    else if([key isEqualToString: @"PID"])
-      myPID = [value retain];
-    
-    else if([key isEqualToString: @"LastExitStatus"])
-      myLastExitCode = [value retain];
-    
-    else if([line isEqualToString: @"	\"ProgramArguments\" = ("])
-      parsingArguments = true;
-    }
-    
-  [arguments release];
-  [plist release];
-  }
-
-// Parse a key/value pair line in old launchd output.
-- (NSArray *) parseOldLine: (NSString *) string
-  {
-  if([string hasSuffix: @";"])
-    return [self parseLine: [string substringToIndex: string.length - 1]];
-    
-  return [self parseLine: string];
-  }
-  
-// Reload new launchd data from a label.
-- (void) newReloadFromLabel: (nonnull NSString *) label 
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSString * target = nil;
-  
-  if([self.context isEqualToString: kLaunchdUserContext])
-    {
-    uid_t uid = getuid();
-    
-    target = [[NSString alloc] initWithFormat: @"user/%d/%@", uid, label];
-    }
-  else
-    target = [[NSString alloc] initWithFormat: @"system/%@", label];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"print", target, nil];
-    
-  [target release];
-  
-  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
-    if(launchctl.standardOutput.length > 0)
-      {
-      myLabel = [label retain];
-      
-      [self parseNewPlistData: launchctl.standardOutput];
-      }
-    
-  [arguments release];
-  [launchctl release];
-  }
-
-// Parse old launchd data from a label.
-- (void) oldReloadFromLabel: (nonnull NSString *) label 
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"list", label, nil];
-    
-  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
-    if(launchctl.standardOutput.length > 0)
-      [self parseOldPlistData: launchctl.standardOutput];
-    
-  [arguments release];
-  [launchctl release];
-  }
-
-// Parse from a path.
-- (void) parseFromPath: (nonnull NSString *) path 
-  {
-  if([[OSVersion shared] major] >= kYosemite)
-    [self newParseFromPath: path];
-  else
-    [self oldParseFromPath: path];
-  }
-
-// Parse new launchd data from a path.
-- (void) newParseFromPath: (nonnull NSString *) path 
-  {
-  NSData * data = [[NSData alloc] initWithContentsOfFile: path];
-  
-  [self parseNewPlistData: data];
-  
-  [data release];
-  }
-  
-// Parse old launchd data from a path.
-- (void) oldParseFromPath: (nonnull NSString *) path 
-  {
-  NSData * data = [[NSData alloc] initWithContentsOfFile: path];
-  
-  [self parseOldPlistData: data];
-  
-  [data release];
-  }
-  
-// Load a launchd task.
-- (void) load
-  {
-  if([[OSVersion shared] major] >= kYosemite)
-    [self newLoad];
-  else
-    [self oldLoad];
-  }
-
-// Load new launchd data from a label.
-- (void) newLoad
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSString * target = nil;
-  
-  if([self.context isEqualToString: kLaunchdUserContext])
-    {
-    uid_t uid = getuid();
-    
-    target = 
-      [[NSString alloc] initWithFormat: @"user/%d/%@", uid, self.label];
-    }
-  else
-    target = [[NSString alloc] initWithFormat: @"system/%@", self.label];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"enable", target, nil];
-    
-  [target release];
-  
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-  
-  [self newReloadFromLabel: self.label];
-  }
-
-// Load old launchd data from a label.
-- (void) oldLoad
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"load", @"-wF", self.path, nil];
-    
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-
-  [self oldReloadFromLabel: self.label];
-  }
-
-// Unload a launchd task.
-- (void) unload
-  {
-  if([[OSVersion shared] major] >= kYosemite)
-    [self newUnload];
-  else
-    [self oldUnload];
-  }
-  
-// Unload new launchd data from a label.
-- (void) newUnload
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSString * target = nil;
-  
-  if([self.context isEqualToString: kLaunchdUserContext])
-    {
-    uid_t uid = getuid();
-    
-    target = 
-      [[NSString alloc] initWithFormat: @"user/%d/%@", uid, self.label];
-    }
-  else
-    target = [[NSString alloc] initWithFormat: @"system/%@", self.label];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"disable", target, nil];
-    
-  [target release];
-  
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-  
-  [self newReloadFromLabel: self.label];
-  }
-
-// Unload old launchd data from a label.
-- (void) oldUnload
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"unload", @"-wF", self.path, nil];
-    
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-
-  [self oldReloadFromLabel: self.label];
   }
 
 #pragma mark - Executable
@@ -749,34 +371,4 @@
     }
   }
 
-#pragma mark - Signature
-
-// Read the signature.
-- (void) readSignature
-  {
-  }
-  
-#pragma mark - Context
-
-// Find the context based on the path.
-- (void) findContext
-  {
-  if([self.path hasPrefix: @"/System/Library/"])
-    myContext = kLaunchdAppleContext;
-  else if([self.path hasPrefix: @"/Library/"])
-    myContext = kLaunchdSystemContext;
-  else if([self.path hasPrefix: @"~/Library/"])
-    myContext = kLaunchdUserContext;
-  else
-    {
-    NSString * libraryPath = 
-      [NSHomeDirectory() stringByAppendingPathComponent: @"Library"];
-      
-    if([self.path hasPrefix: libraryPath])
-      myContext = kLaunchdUserContext;
-    else 
-      myContext = kLaunchdUnknownContext;
-    }
-  }
-  
 @end
