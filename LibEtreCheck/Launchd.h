@@ -18,6 +18,9 @@
 
   // Array of loaded launchd tasks.
   NSMutableArray * myEphemeralTasks;
+  
+  // Only load once.
+  BOOL myLoaded;
   }
   
 // Return the singeton.
@@ -33,6 +36,9 @@
 
 // Array of loaded launchd tasks.
 @property (readonly, nonnull) NSMutableArray * ephemeralTasks;
+
+// Only load once.
+@property (readonly) BOOL loaded;
 
 // Load all entries.
 - (void) load;

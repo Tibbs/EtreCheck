@@ -26,6 +26,9 @@
 // Array of loaded launchd tasks.
 @synthesize ephemeralTasks = myEphemeralTasks;
 
+// Only load once.
+@synthesize loaded = myLoaded;
+
 // Return the singeton.
 + (nonnull Launchd *) shared
   {
@@ -70,6 +73,11 @@
 // Load all entries.
 - (void) load
   {
+  if(self.loaded)
+    return;
+    
+  myLoaded = YES;
+  
   // Load "truth" files.
   [self loadTruthFiles];
   
