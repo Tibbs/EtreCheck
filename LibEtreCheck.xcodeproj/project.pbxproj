@@ -39,7 +39,6 @@
 		A589CD451F7164C900D66592 /* GatekeeperCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DBE19A36CC400BA6A25 /* GatekeeperCollector.m */; };
 		A589CD461F7164C900D66592 /* KernelExtensionCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DC119A36F3D00BA6A25 /* KernelExtensionCollector.m */; };
 		A589CD471F7164C900D66592 /* StartupItemsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */; };
-		A589CD481F7164C900D66592 /* LaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292DC19A02A8800464E86 /* LaunchdCollector.m */; };
 		A589CD491F7164C900D66592 /* SystemLaunchAgentsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292E219A039AB00464E86 /* SystemLaunchAgentsCollector.m */; };
 		A589CD4A1F7164C900D66592 /* SystemLaunchDaemonsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292E519A039BD00464E86 /* SystemLaunchDaemonsCollector.m */; };
 		A589CD4B1F7164C900D66592 /* LaunchAgentsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292E819A039CB00464E86 /* LaunchAgentsCollector.m */; };
@@ -125,7 +124,6 @@
 		A589CDA81F71749E00D66592 /* GatekeeperCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DBD19A36CC400BA6A25 /* GatekeeperCollector.h */; };
 		A589CDA91F71749E00D66592 /* KernelExtensionCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DC019A36F3D00BA6A25 /* KernelExtensionCollector.h */; };
 		A589CDAA1F71749E00D66592 /* StartupItemsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */; };
-		A589CDAB1F71749E00D66592 /* LaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292DB19A02A8800464E86 /* LaunchdCollector.h */; };
 		A589CDAC1F71749E00D66592 /* SystemLaunchAgentsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */; };
 		A589CDAD1F71749E00D66592 /* SystemLaunchDaemonsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292E419A039BD00464E86 /* SystemLaunchDaemonsCollector.h */; };
 		A589CDAE1F7174B900D66592 /* LaunchAgentsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292E719A039CB00464E86 /* LaunchAgentsCollector.h */; };
@@ -152,6 +150,8 @@
 		A589CDC31F7174FD00D66592 /* CleanupCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5716E111C4C5A6E00297727 /* CleanupCollector.h */; };
 		A589CDC41F7174FD00D66592 /* EtreCheckDeletedFilesCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A51906791D49B092009AA835 /* EtreCheckDeletedFilesCollector.h */; };
 		A589CDC51F71750100D66592 /* Checker.h in Headers */ = {isa = PBXBuildFile; fileRef = A5257D3E19AC10E3003084C8 /* Checker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A5E742C11F89972800DA94CE /* LaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5E742BF1F89972800DA94CE /* LaunchdCollector.h */; };
+		A5E742C21F89972800DA94CE /* LaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C01F89972800DA94CE /* LaunchdCollector.m */; };
 		A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */; };
 		A5F65E5C1F7F20290062FA87 /* EtreCheckCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */; };
 		A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */; };
@@ -268,8 +268,8 @@
 		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiagnosticEvent.m; path = ../LibEtreCheck/DiagnosticEvent.m; sourceTree = "<group>"; };
 		A5C00A2619BFF2D500140404 /* NSAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A5C00A2719BFF2D500140404 /* NSAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Etresoft.m"; sourceTree = "<group>"; };
-		A5C292DB19A02A8800464E86 /* LaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdCollector.h; sourceTree = "<group>"; };
-		A5C292DC19A02A8800464E86 /* LaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdCollector.m; sourceTree = "<group>"; };
+		A5C292DB19A02A8800464E86 /* OldLaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OldLaunchdCollector.h; sourceTree = "<group>"; };
+		A5C292DC19A02A8800464E86 /* OldLaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OldLaunchdCollector.m; sourceTree = "<group>"; };
 		A5C292DE19A02B2700464E86 /* Collector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collector.h; sourceTree = "<group>"; };
 		A5C292DF19A02B2700464E86 /* Collector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collector.m; sourceTree = "<group>"; };
 		A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemLaunchAgentsCollector.h; sourceTree = "<group>"; };
@@ -307,6 +307,8 @@
 		A5DF7D271EC29372002C9686 /* EnergyUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyUsageCollector.m; sourceTree = "<group>"; };
 		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteCountFormatter.h; path = ../LibEtreCheck/ByteCountFormatter.h; sourceTree = "<group>"; };
 		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ByteCountFormatter.m; path = ../LibEtreCheck/ByteCountFormatter.m; sourceTree = "<group>"; };
+		A5E742BF1F89972800DA94CE /* LaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdCollector.h; sourceTree = "<group>"; };
+		A5E742C01F89972800DA94CE /* LaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdCollector.m; sourceTree = "<group>"; };
 		A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualVolumeCollector.h; sourceTree = "<group>"; };
 		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
 		A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
@@ -413,8 +415,10 @@
 				A50C9DC119A36F3D00BA6A25 /* KernelExtensionCollector.m */,
 				A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */,
 				A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */,
-				A5C292DB19A02A8800464E86 /* LaunchdCollector.h */,
-				A5C292DC19A02A8800464E86 /* LaunchdCollector.m */,
+				A5E742BF1F89972800DA94CE /* LaunchdCollector.h */,
+				A5E742C01F89972800DA94CE /* LaunchdCollector.m */,
+				A5C292DB19A02A8800464E86 /* OldLaunchdCollector.h */,
+				A5C292DC19A02A8800464E86 /* OldLaunchdCollector.m */,
 				A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */,
 				A5C292E219A039AB00464E86 /* SystemLaunchAgentsCollector.m */,
 				A5C292E419A039BD00464E86 /* SystemLaunchDaemonsCollector.h */,
@@ -634,8 +638,8 @@
 				A50C9C0F1F86CCAC00144335 /* LaunchdFile.h in Headers */,
 				A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */,
 				A589CDBB1F7174F200D66592 /* FontsCollector.h in Headers */,
-				A589CDAB1F71749E00D66592 /* LaunchdCollector.h in Headers */,
 				A503BFAD1F83DF9B00473A24 /* Actions.h in Headers */,
+				A5E742C11F89972800DA94CE /* LaunchdCollector.h in Headers */,
 				A589CDC01F7174FD00D66592 /* LogCollector.h in Headers */,
 				A589CDA71F71749E00D66592 /* ConfigurationCollector.h in Headers */,
 				A589CD971F71747400D66592 /* CRC32.h in Headers */,
@@ -778,6 +782,7 @@
 				A589CD661F7164C900D66592 /* CleanupCollector.m in Sources */,
 				A589CD5C1F7164C900D66592 /* CPUUsageCollector.m in Sources */,
 				A589CD4D1F7164C900D66592 /* UserLaunchAgentsCollector.m in Sources */,
+				A5E742C21F89972800DA94CE /* LaunchdCollector.m in Sources */,
 				A589CD861F71690900D66592 /* NumberFormatter.m in Sources */,
 				A589CD501F7164C900D66592 /* InternetPlugInsCollector.m in Sources */,
 				A589CD531F7164C900D66592 /* UserAudioPlugInsCollector.m in Sources */,
@@ -803,7 +808,6 @@
 				A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */,
 				A589CD7D1F7168E900D66592 /* NSMutableAttributedString+Etresoft.m in Sources */,
 				A589CD8D1F71729C00D66592 /* Checker.m in Sources */,
-				A589CD481F7164C900D66592 /* LaunchdCollector.m in Sources */,
 				A589CD4E1F7164C900D66592 /* LoginItemsCollector.m in Sources */,
 				A589CD831F7168EF00D66592 /* Model.m in Sources */,
 				A589CD821F7168E900D66592 /* NSString+Etresoft.m in Sources */,
