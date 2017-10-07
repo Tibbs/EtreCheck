@@ -21,6 +21,9 @@
 // The arguments.
 @synthesize arguments = myArguments;
 
+// The executable signature.
+@synthesize signature = mySignature;
+
 // Constructor with NSDictionary.
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict
   {
@@ -63,6 +66,7 @@
   [myLabel release];
   [myExecutable release];
   [myArguments release];
+  [mySignature release];
   
   [super dealloc];
   }
