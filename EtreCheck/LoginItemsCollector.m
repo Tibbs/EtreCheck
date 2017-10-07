@@ -367,17 +367,28 @@
               absolutePathForAppBundleWithIdentifier: identifier];
           }
         }
-      else if([trimmedLine hasPrefix: @"flags:"])
+      else 
         {
-        NSRange range = [trimmedLine rangeOfString: @"bg-only"];
+        BOOL checkFlags = NO;
         
-        if(range.location != NSNotFound)
-          backgroundItem = YES;
+        if([trimmedLine hasPrefix: @"flags:"])
+          checkFlags = YES;
           
-        range = [trimmedLine rangeOfString: @"ui-element"];
-        
-        if(range.location != NSNotFound)
-          backgroundItem = YES;
+        if([trimmedLine hasPrefix: @"bundle flags:"])
+          checkFlags = YES;
+
+        if(checkFlags)
+          {
+          NSRange range = [trimmedLine rangeOfString: @"bg-only"];
+          
+          if(range.location != NSNotFound)
+            backgroundItem = YES;
+            
+          range = [trimmedLine rangeOfString: @"ui-element"];
+          
+          if(range.location != NSNotFound)
+            backgroundItem = YES;
+          }
         }
       }
 
