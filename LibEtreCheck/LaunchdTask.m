@@ -184,13 +184,13 @@
     [myExecutable release];
     
     myExecutable = [program retain];
-    
-    [self parseArguments: arguments];
     }
     
-  // OK, I've found the executable, but it could be some script interpreter
-  // or similar. I need to try to dereference those again.
-  [self dereferenceExecutable];
+  if(self.executable.length)
+  
+    // OK, I've found the executable, but it could be some script 
+    // interpreter or similar. I need to try to dereference those again.
+    [self dereferenceExecutable];
   }
   
 // Parse an executable from an arguments array.
@@ -215,11 +215,12 @@
     {
     [myExecutable release];
     
-    myExecutable = [arguments firstObject];
+    myExecutable = [[arguments firstObject] retain];
     }
     
-  myArguments = 
-    [arguments subarrayWithRange: NSMakeRange(1, arguments.count - 1)];
+  if(arguments.count > 0)
+    myArguments = 
+      [arguments subarrayWithRange: NSMakeRange(1, arguments.count - 1)];
   }
   
 // Try to find the "true" executable, not some script interpreter.

@@ -4,13 +4,17 @@
  **********************************************************************/
 
 #import "LaunchdLoadedTask.h"
-//#import "Utilities.h"
-//#import "OSVersion.h"
 #import "SubProcess.h"
-//#import "EtreCheckConstants.h"
 #import "NSString+Etresoft.h"
-//#import "NSDictionary+Etresoft.h"
-//#import <unistd.h>
+
+// A wrapper around a launchd task.
+@interface LaunchdTask ()
+
+// Parse an executable.
+- (void) parseExecutable: (NSString *) program 
+  arguments: (NSArray *) arguments;
+
+@end
 
 // A wrapper around a launchd task.
 @implementation LaunchdLoadedTask
@@ -124,11 +128,16 @@
 // Parse a new plist.
 - (void) parseData: (nonnull NSData *) data 
   {
+  NSString * program = nil;
+  NSMutableArray * arguments = [NSMutableArray new];
+  
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
   // Split lines by new lines.
   NSArray * lines = [plist componentsSeparatedByString: @"\n"];
+  
+  bool parsingArguments = false;
   
   for(NSString * line in lines)
     {
@@ -143,7 +152,23 @@
     if(key.length == 0)
       continue;
       
-    if([key isEqualToString: @"pid"])
+    // If I am parsing arguments, look for the end indicator.
+    if(parsingArguments)
+      {
+      // An argument could be a bare "}". Do a string check with whitespace.
+      if([line isEqualToString: @"	}"])
+        parsingArguments = false;        
+      else
+        [arguments addObject: key];
+      }
+      
+    else if([key isEqualToString: @"program"])
+      program = [value retain];
+    
+    else if([line isEqualToString: @"	arguments = {"])
+      parsingArguments = true;
+
+    else if([key isEqualToString: @"pid"])
       myPID = [value retain];
     
     else if([key isEqualToString: @"last exit code"])
@@ -153,6 +178,10 @@
       self.path = [value stringByAbbreviatingWithTildeInPath];
     }
     
+  [self parseExecutable: program arguments: arguments];  
+
+  [arguments release];
+  [program release];
   [plist release];
   }
   

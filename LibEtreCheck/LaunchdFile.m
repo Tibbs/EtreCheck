@@ -4,6 +4,8 @@
  **********************************************************************/
 
 #import "LaunchdFile.h"
+#import "NumberFormatter.h"
+#import "LaunchdLoadedTask.h"
 #import "OSVersion.h"
 #import "SubProcess.h"
 #import "EtreCheckConstants.h"
@@ -32,6 +34,29 @@
 // Loaded tasks.
 @synthesize loadedTasks = myLoadedTasks;
 
+// Overall status.
+@dynamic status;
+
+// Overall status.
+- (NSString *) status
+  {
+  if(self.loadedTasks.count == 0)
+    return kStatusNotLoaded;
+  
+  NSString * status = kStatusLoaded;
+  
+  for(LaunchdLoadedTask * task in self.loadedTasks)
+    {
+    NSNumber * pid = 
+      [[NumberFormatter sharedNumberFormatter] convertFromString: task.PID];
+      
+    if([pid longValue] > 0)
+      return kStatusRunning;
+    }
+    
+  return status;
+  }
+  
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path
   {

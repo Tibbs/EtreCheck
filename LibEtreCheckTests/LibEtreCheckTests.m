@@ -53,8 +53,13 @@
         : @"(invalid) ";
         
     NSLog(
-      @"Found file %@ %@(%lu loaded tasks)", 
-      file.path, validity, (unsigned long)file.loadedTasks.count);
+      @"%@ %@ %@(%lu loaded tasks)", 
+      file.status,
+      file.path, 
+      validity, 
+      (unsigned long)file.loadedTasks.count);
+      
+    NSLog(@"    %@", file.executable);
       
     NSMutableSet * labels = [NSMutableSet new];
     
@@ -83,6 +88,11 @@
     for(LaunchdLoadedTask * task in [[Launchd shared] ephemeralTasks])
       {
       NSLog(@"Found %@ task %@", task.domain, task.label);
+      
+      if(task.path.length > 0)
+        NSLog(@"    %@", task.path);
+        
+      NSLog(@"    %@", task.executable);
       }
     }
   }

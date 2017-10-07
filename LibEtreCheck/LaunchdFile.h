@@ -36,6 +36,9 @@
 // Loaded tasks.
 @property (readonly, nonnull) NSMutableArray * loadedTasks;
 
+// Over all status.
+@property (readonly, nonnull) NSString * status;
+
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;
 
