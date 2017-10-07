@@ -573,7 +573,7 @@
     NSArray * lines = [Utilities formatLines: ps.standardOutput];
     
     if([lines count] > 1)
-      line = [[lines objectAtIndex: 1] autorelease];
+      line = [lines objectAtIndex: 1];
     }
     
   [ps release];

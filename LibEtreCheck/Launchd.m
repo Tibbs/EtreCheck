@@ -334,11 +334,6 @@
     
     for(NSDictionary * dict in (NSArray *)systemJobs)
       {
-      NSString * label = dict[@"Label"];
-      
-      if(label.length == 0)
-        label = @"";
-        
       LaunchdLoadedTask * task = 
         [[LaunchdLoadedTask alloc] 
           initWithDictionary: dict inDomain: kLaunchdSystemDomain];
@@ -349,15 +344,13 @@
       [task release];
       }
 
+    if(systemJobs != NULL)
+      CFRelease(systemJobs);
+      
     CFArrayRef userJobs = SMCopyAllJobDictionaries(kSMDomainUserLaunchd);
     
     for(NSDictionary * dict in (NSArray *)userJobs)
       {
-      NSString * label = dict[@"Label"];
-      
-      if(label.length == 0)
-        label = @"";
-        
       LaunchdLoadedTask * task = 
         [[LaunchdLoadedTask alloc] 
           initWithDictionary: dict inDomain: kLaunchdUserDomain];
@@ -367,6 +360,9 @@
       
       [task release];
       }
+      
+    if(userJobs != NULL)
+      CFRelease(userJobs);
     }
   }
   

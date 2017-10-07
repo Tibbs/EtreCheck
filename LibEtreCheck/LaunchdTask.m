@@ -123,8 +123,12 @@
       }
       
     else if([key isEqualToString: @"program"])
+      {
+      [program release];
+      
       program = [value retain];
-    
+      }
+      
     else if([line isEqualToString: @"	arguments = {"])
       parsingArguments = true;
     }
@@ -355,19 +359,13 @@
       }
     }
     
-  NSString * resolvedExecutable = nil;
-  
+  NSString * resolvedExecutable = 
+    [self.executable 
+      stringByReplacingOccurrencesOfString: @"//" withString: @"/"];
+    
   // Clean up URLs and quasi-URLs.
   if([self.executable hasPrefix: @"file:"])
-    resolvedExecutable = [self.executable substringFromIndex: 5];
-    
-  resolvedExecutable = 
-    [self.executable 
-      stringByReplacingOccurrencesOfString: @"//" withString: @"/"];
-      
-  resolvedExecutable = 
-    [self.executable 
-      stringByReplacingOccurrencesOfString: @"//" withString: @"/"];
+    resolvedExecutable = [resolvedExecutable substringFromIndex: 5];
     
   if(resolvedExecutable.length > 0)
     {

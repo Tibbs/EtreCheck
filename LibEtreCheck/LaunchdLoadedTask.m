@@ -163,8 +163,12 @@
       }
       
     else if([key isEqualToString: @"program"])
+      {
+      [program release];
+      
       program = [value retain];
-    
+      }
+      
     else if([line isEqualToString: @"	arguments = {"])
       parsingArguments = true;
 
