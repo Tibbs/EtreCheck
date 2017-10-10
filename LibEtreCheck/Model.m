@@ -13,6 +13,9 @@
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
+#import "Launchd.h"
+#import "LaunchdFile.h"
+#import "Safari.h"
 
 @implementation Model
 
@@ -33,7 +36,8 @@
 @synthesize model = myModel;
 @synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
-@synthesize launchdFiles = myLaunchdFiles;
+@synthesize launchd = myLaunchd;
+@synthesize safari = mySafari;
 @synthesize processes = myProcesses;
 @synthesize adwareFound = myAdwareFound;
 @synthesize unsignedFound = myUnsignedFound;
@@ -74,9 +78,9 @@
   {
   NSMutableDictionary * files = [NSMutableDictionary dictionary];
   
-  for(NSString * path in self.launchdFiles)
+  for(NSString * path in self.launchd.tasksByPath)
     {
-    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
     
     if([[info objectForKey: kAdware] boolValue])
       [files setObject: info forKey: path];
@@ -111,9 +115,9 @@
   {
   NSMutableDictionary * files = [NSMutableDictionary dictionary];
   
-  for(NSString * path in self.launchdFiles)
+  for(NSString * path in self.launchd.tasksByPath)
     {
-    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
     
     // Skip Apple files.
     if([[info objectForKey: kApple] boolValue])
@@ -133,9 +137,9 @@
   {
   NSMutableDictionary * files = [NSMutableDictionary dictionary];
   
-  for(NSString * path in self.launchdFiles)
+  for(NSString * path in self.launchd.tasksByPath)
     {
-    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
     
     if([[info objectForKey: kUnknown] boolValue])
       {
@@ -189,11 +193,13 @@
     {
     myLegitimateStrings = [NSMutableSet new];
     myUnknownFiles = [NSMutableArray new];
-    myLaunchdFiles = [NSMutableDictionary new];
+    myLaunchd = [Launchd new];
     myVolumes = [NSMutableDictionary new];
     myPhysicalVolumes = [NSMutableSet new];
     myDiskErrors = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
+    myLaunchd = [Launchd new];
+    mySafari = [Safari new];
     myAdwareFiles = [NSMutableDictionary new];
     myProcesses = [NSMutableSet new];
     myPotentialAdwareTrioFiles = [NSMutableDictionary new];
@@ -247,8 +253,10 @@
   self.terminatedTasks = nil;
   self.potentialAdwareTrioFiles = nil;
   self.processes = nil;
-  self.launchdFiles = nil;
+  self.launchd = nil;
   self.diagnosticEvents = nil;
+  self.launchd = nil;
+  self.safari = nil;
   self.diskErrors = nil;
   self.volumes = nil;
   self.applications = nil;
@@ -393,289 +401,6 @@
   return [urlString autorelease];
   }
 
-// Is this file an adware file?
-- (bool) checkForAdware: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  if([path length] == 0)
-    return NO;
-    
-  if([self isWhitelistFile: [path lastPathComponent]])
-    return NO;
-
-  bool adware = NO;
-  
-  NSMutableDictionary * newFileInfo = nil;
-  NSMutableDictionary * fileInfo = [self.adwareFiles objectForKey: path];
-  
-  if(fileInfo)
-    adware = YES;
-    
-  if(!fileInfo)
-    {
-    newFileInfo = [NSMutableDictionary new];
-    fileInfo = newFileInfo;
-    }
-    
-  if([self isAdwareSuffix: path info: fileInfo])
-    adware = YES;
-  else if([self isAdwarePattern: info])
-    adware = YES;
-  else if([self isAdwareMatch: path info: fileInfo])
-    adware = YES;
-  else if([self isAdwareTrio: path info: fileInfo])
-    adware = YES;
-    
-  if(adware)
-    {
-    if([self.adwareFiles objectForKey: path] == nil)
-      [self.adwareFiles setObject: fileInfo forKey: path];
-      
-    NSMutableDictionary * launchdInfo =
-      [self.launchdFiles objectForKey: path];
-    
-    if(launchdInfo)
-      {
-      [launchdInfo removeObjectForKey: kUnknown];
-      [launchdInfo
-        setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
-    
-      [fileInfo setObject: launchdInfo forKey: kAdwareLaunchdInfo];
-      }
-    }
-    
-  [newFileInfo release];
-  
-  return adware;
-  }
-
-// Is this an adware suffix file?
-- (bool) isAdwareSuffix: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  for(NSString * suffix in self.blacklistSuffixes)
-    if([path hasSuffix: suffix])
-      {
-      NSString * name = [path lastPathComponent];
-      
-      NSString * tag =
-        [name substringToIndex: [name length] - [suffix length]];
-      
-      [info setObject: [tag lowercaseString] forKey: kAdwareType];
-      
-      return YES;
-      }
-    
-  return NO;
-  }
-
-// Do the plist file contents look like adware?
-- (bool) isAdwarePattern: (NSMutableDictionary *) info
-  {
-  // First check for /etc/*.sh files.
-  NSString * executable = [info objectForKey: kExecutable];
-  
-  if([executable hasPrefix: @"/etc/"] && [executable hasSuffix: @".sh"])
-    return YES;
-    
-  // Now check for /Library/*.
-  if([executable hasPrefix: @"/Library/"])
-    {
-    NSString * dirname = [executable stringByDeletingLastPathComponent];
-  
-    if([dirname isEqualToString: @"/Library"])
-      if([[executable pathExtension] length] == 0)
-        return YES;
-        
-    // Now check for /Library/*/*.
-    NSString * name = [executable lastPathComponent];
-    NSString * parent = [dirname lastPathComponent];
-    
-    if([name isEqualToString: parent])
-      if([[executable pathExtension] length] == 0)
-        return YES;
-    }
-    
-  NSArray * command = [info objectForKey: kCommand];
-
-  if([command count] >= 5)
-    {
-    NSString * arg1 =
-      [[[command objectAtIndex: 0] lowercaseString] lastPathComponent];
-    
-    NSString * commandString =
-      [NSString
-        stringWithFormat:
-          @"%@ %@ %@ %@ %@",
-          arg1,
-          [[command objectAtIndex: 1] lowercaseString],
-          [[command objectAtIndex: 2] lowercaseString],
-          [[command objectAtIndex: 3] lowercaseString],
-          [[command objectAtIndex: 4] lowercaseString]];
-    
-    if([commandString hasPrefix: @"installer -evnt agnt -oprid "])
-      return YES;
-    }
-    
-  NSString * app = [executable lastPathComponent];
-  
-  if([app hasPrefix: @"App"] && ([app length] == 5))
-    if([command count] >= 2)
-      {
-      NSString * trigger = [command objectAtIndex: 1];
-      
-      if([trigger isEqualToString: @"-trigger"])
-        return YES;
-      }
-
-  // This is good enough for now.
-  return NO;
-  }
-
-// Is this an adware match file?
-- (bool) isAdwareMatch: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  NSString * name = [path lastPathComponent];
-  
-  for(NSString * match in self.blacklistFiles)
-    {
-    if([name isEqualToString: match])
-      {
-      [info setObject: name forKey: kAdwareType];
-      
-      return YES;
-      }
-    }
-    
-  for(NSString * match in self.blacklistMatches)
-    {
-    NSRange range = [name rangeOfString: match];
-    
-    if(range.location != NSNotFound)
-      {
-      NSString * tag = [name substringWithRange: range];
-      
-      [info setObject: [tag lowercaseString] forKey: kAdwareType];
-      
-      return YES;
-      }
-    }
-    
-  return NO;
-  }
-
-// Is this an adware trio of daemon/agent/helper?
-- (bool) isAdwareTrio: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  NSString * name = [path lastPathComponent];
-  
-  NSString * prefix = name;
-  
-  if([name hasSuffix: @".daemon.plist"])
-    {
-    prefix = [name substringToIndex: [name length] - 13];
-    
-    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"daemon"];
-    }
-    
-  if([name hasSuffix: @".agent.plist"])
-    {
-    prefix = [name substringToIndex: [name length] - 12];
-    
-    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"agent"];
-    }
-    
-  if([name hasSuffix: @".helper.plist"])
-    {
-    prefix = [name substringToIndex: [name length] - 13];
-    
-    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"helper"];
-    }
-    
-  NSDictionary * trioFiles =
-    [self.potentialAdwareTrioFiles objectForKey: prefix];
-
-  BOOL hasDaemon = [trioFiles objectForKey: @"daemon"] != nil;
-  BOOL hasAgent = [trioFiles objectForKey: @"agent"] != nil;
-  BOOL hasHelper = [trioFiles objectForKey: @"helper"] != nil;
-  
-  if(hasDaemon && hasAgent && hasHelper)
-    {
-    NSArray * parts = [prefix componentsSeparatedByString: @"."];
-    
-    if([parts count] > 1)
-      prefix = [parts objectAtIndex: 1];
-      
-    for(NSString * type in trioFiles)
-      {
-      NSString * trioPath = [trioFiles objectForKey: type];
-      
-      [info setObject: [prefix lowercaseString] forKey: kAdwareType];
-
-      NSMutableDictionary * launchdInfo =
-        [self.launchdFiles objectForKey: trioPath];
-      
-      if(launchdInfo)
-        {
-        [launchdInfo removeObjectForKey: kUnknown];
-        [launchdInfo
-          setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
-        }
-      }
-
-    return YES;
-    }
-    
-  return NO;
-  }
-
-// Add a potential adware trio file.
-- (void) addPotentialAdwareTrioFile: (NSString *) path
-  prefix: (NSString *) prefix type: (NSString *) type
-  {
-  NSMutableDictionary * trioFiles =
-    [self.potentialAdwareTrioFiles objectForKey: prefix];
-    
-  if(!trioFiles)
-    {
-    trioFiles = [NSMutableDictionary dictionary];
-    
-    [self.potentialAdwareTrioFiles setObject: trioFiles forKey: prefix];
-    }
-  
-  [trioFiles setObject: path forKey: type];
-  }
-
-// Is this file an adware extension?
-- (bool) isAdwareExtension: (NSString *) name path: (NSString *) path
-  {
-  if(([name length] > 0) && ([path length] > 0))
-    {
-    NSString * search = [path lowercaseString];
-    
-    for(NSString * extension in self.adwareExtensions)
-      if([search rangeOfString: extension].location != NSNotFound)
-        return YES;
-
-    for(NSString * match in self.blacklistMatches)
-      {
-      NSRange range = [path rangeOfString: match];
-      
-      if(range.location != NSNotFound)
-        return YES;
-
-      range = [name rangeOfString: match];
-      
-      if(range.location != NSNotFound)
-        return YES;
-      }
-    }
-    
-  return NO;
-  }
-
 // Add files to the whitelist.
 - (void) appendToWhitelist: (NSArray *) names;
   {
@@ -712,7 +437,8 @@
   if([self isWhitelistFile: name])
     return YES;
     
-  NSMutableDictionary * info = [self.launchdFiles objectForKey: path];
+  NSMutableDictionary * info = 
+    [self.launchd.tasksByPath objectForKey: path];
   
   if([self checkForAdware: path info: info])
     return YES;

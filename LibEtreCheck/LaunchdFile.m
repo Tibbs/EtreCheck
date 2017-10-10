@@ -35,26 +35,51 @@
 @synthesize loadedTasks = myLoadedTasks;
 
 // Overall status.
-@dynamic status;
+@synthesize status = myStatus;
 
 // Overall status.
 - (NSString *) status
   {
-  if(self.loadedTasks.count == 0)
-    return kStatusNotLoaded;
-  
-  NSString * status = kStatusLoaded;
-  
-  for(LaunchdLoadedTask * task in self.loadedTasks)
+  if(myStatus == nil)
     {
-    NSNumber * pid = 
-      [[NumberFormatter sharedNumberFormatter] convertFromString: task.PID];
+    if(self.loadedTasks.count == 0)
+      myStatus = kStatusNotLoaded;
+    else
+      {
+      myStatus = kStatusLoaded;
       
-    if([pid longValue] > 0)
-      return kStatusRunning;
+      for(LaunchdLoadedTask * task in self.loadedTasks)
+        {
+        if(task.PID.length > 0)
+          {
+          NSNumber * pid = 
+            [[NumberFormatter sharedNumberFormatter] 
+              convertFromString: task.PID];
+            
+          if([pid longValue] > 0)
+            myStatus = kStatusRunning;
+          }
+          
+        if(task.lastExitCode.length > 0)
+          if(![task.lastExitCode isEqualToString: @"-"])
+            {
+            if([task.lastExitCode isEqualToString: @"127"])
+              myStatus = kStatusKilled;
+            else 
+              {
+              NSNumber * lastExitCode = 
+                [[NumberFormatter sharedNumberFormatter] 
+                  convertFromString: task.lastExitCode];
+                
+              if([lastExitCode longValue] != 0)
+                myStatus = kStatusFailed;
+              }
+            }
+        }
+      }
     }
     
-  return status;
+  return myStatus;
   }
   
 // Constructor with path.
@@ -83,6 +108,7 @@
   [myContext release];
   [myPlist release];
   [myLoadedTasks release];
+  [myStatus release];
   
   [super dealloc];
   }

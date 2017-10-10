@@ -28,26 +28,7 @@
   // Make sure the base class is setup.
   [super performCollect];
   
-  NSArray * args =
-    @[
-      @"/Library/LaunchDaemons",
-      @"-type", @"f",
-      @"-or",
-      @"-type", @"l"
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/find" arguments: args])
-    {
-    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
-    
-    NSArray * plists = [self collectPropertyListFiles: files];
-    
-    [self printPropertyLists: plists];
-    }
-    
-  [subProcess release];
+  [self printFilesInDirectory: @"/Library/LaunchDaemons/"];
   }
   
 // Should I hide Apple tasks?

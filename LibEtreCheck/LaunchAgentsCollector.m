@@ -28,26 +28,7 @@
   // Make sure the base class is setup.
   [super performCollect];
   
-  NSArray * args =
-    @[
-      @"/Library/LaunchAgents",
-      @"-type", @"f",
-      @"-or",
-      @"-type", @"l"
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/find" arguments: args])
-    {
-    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
-    
-    NSArray * plists = [self collectPropertyListFiles: files];
-    
-    [self printPropertyLists: plists];
-    }
-    
-  [subProcess release];
+  [self printFilesInDirectory: @"/Library/LaunchAgents/"];
   }
 
 // Should I hide Apple tasks?

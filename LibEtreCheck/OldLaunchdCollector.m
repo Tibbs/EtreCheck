@@ -4,7 +4,7 @@
  ** Copyright (c) 2014-2017. All rights reserved.
  **********************************************************************/
 
-#import "LaunchdCollector.h"
+#import "OldLaunchdCollector.h"
 #import <ServiceManagement/ServiceManagement.h>
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
@@ -16,7 +16,7 @@
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
 
-@implementation LaunchdCollector
+@implementation OldLaunchdCollector
 
 // These need to be shared by all launchd collector objects.
 @dynamic launchdStatus;

@@ -22,6 +22,9 @@
   
   // The launchd context. (apple, system, user)
   NSString * myContext;
+  
+  // The overall status.
+  NSString * myStatus;
   }
 
 // The config script contents.

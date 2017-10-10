@@ -29,22 +29,6 @@
 // Only load once.
 @synthesize loaded = myLoaded;
 
-// Return the singeton.
-+ (nonnull Launchd *) shared
-  {
-  static Launchd * launchd = nil;
-  
-  static dispatch_once_t onceToken;
-  
-  dispatch_once(
-    & onceToken,
-    ^{
-      launchd = [Launchd new];
-    });
-    
-  return launchd;
-  }
-
 // Constructor.
 - (instancetype) init
   {

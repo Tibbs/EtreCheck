@@ -12,6 +12,9 @@
 #import "XMLBuilder.h"
 #import "NSDictionary+Etresoft.h"
 #import "LocalizedString.h"
+#import "LaunchdFile.h"
+#import "Launchd.h"
+#import "EtreCheckConstants.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -20,8 +23,18 @@
 #define kBlacklistSuffixKey @"blacklist_suffix"
 #define kBlacklistMatchKey @"blacklist_match"
 
+#define kAdwareTrioDaemon @"daemon"
+#define kAdwareTrioAgent @"agent"
+#define kAdwareTrioHelper @"helper"
+
 // Collect information about adware.
 @implementation AdwareCollector
+
+// Launcd adware files.
+@synthesize launchdAdwareFiles = myLaunchdAdwareFiles;
+
+// Safari extension adware files.
+@synthesize safariExtensionAdwareFiles = mySafariExtensionAdwareFiles;
 
 // Constructor.
 - (id) init
@@ -32,11 +45,23 @@
     {
     [self loadSignatures];
     [self buildDatabases];
+    
+    myLaunchdAdwareFiles = [NSMutableArray new];
+    mySafariExtensionAdwareFiles = [NSMutableArray new];
     }
     
   return self;
   }
 
+// Destructor.
+- (void) dealloc
+  {
+  [myLaunchdAdwareFiles release];
+  [mySafariExtensionAdwareFiles release];
+  
+  [super dealloc];
+  }
+  
 // Load signatures from an obfuscated list of signatures.
 - (void) loadSignatures
   {
@@ -145,27 +170,256 @@
     }
   }
 
-// Identify adware files.
-- (NSArray *) identifyAdwareFiles: (NSArray *) files
-  {
-  NSMutableArray * adwareFiles = [NSMutableArray array];
-  
-  for(NSString * file in files)
-    {
-    NSString * fullPath = [file stringByExpandingTildeInPath];
-    
-    bool exists =
-      [[NSFileManager defaultManager] fileExistsAtPath: fullPath];
-      
-    if(exists)
-      [adwareFiles addObject: fullPath];
-    }
-    
-  return adwareFiles;
-  }
-
 // Print any adware found.
 - (void) performCollect
+  {
+  [self collectLaunchdAdware];
+  
+  [self collectSafariExtensionAdware];
+  
+  [self printLaunchdAdwareFiles];
+  
+  [self printSafariExtensionAdwareFiles];
+  }
+  
+// Collect launchd adware.
+- (void) collectLaunchdAdware
+  {
+  Launchd * launchd = [[Model model] launchd];
+  
+  // I will have already filtered out launchd files specific to this 
+  // context.
+  for(NSString * path in [launchd tasksByPath])
+    {
+    LaunchdFile * file = [[launchd tasksByPath] objectForKey: path];
+    
+    if(file != nil)
+      [self checkAdware: file];
+    }
+  }
+  
+// Collect the adware status of a launchd file.
+- (void) checkAdware: (LaunchdFile *) file 
+  {
+  bool adware = NO;
+
+  // Check for a known adware suffix.
+  if([self isAdwareSuffix: file])
+    adware = true;
+    
+  // Check for hidden data.
+  else if([self isHiddenAdware: file])
+    adware = true;
+    
+  // Check for a known adware pattern.
+  else if([self isAdwarePattern: file])
+    adware = true;
+    
+  // Check for a known adware file.
+  else if([self isAdwareMatch: file])
+    adware = true;
+    
+  // Check for a known adware pattern of matching files.
+  else if([self isAdwareTrio: file])
+    adware = true;
+  
+  if(adware)
+    [self.launchdAdwareFiles addObject: file];
+  }
+
+// Is this an adware suffix file?
+- (bool) isAdwareSuffix: (LaunchdFile *) file
+  {
+  for(NSString * suffix in [[Model model] blacklistSuffixes])
+    if([file.path hasSuffix: suffix])
+      return true;
+    
+  return false;
+  }
+
+// Is this hidden adware plist config file?
+- (bool) isHiddenAdware: (LaunchdFile *) file
+  {
+  // If the config file is valid, then it can't be hidden.
+  if(file.configScriptValid)
+    return false;
+    
+  // I would expect a not loaded status from an invalid script.
+  if([file.status isEqualToString: kStatusNotLoaded])
+    return false;
+    
+  // How did it get loaded then?
+  return true;
+  }
+
+// Do the plist file contents look like adware?
+- (bool) isAdwarePattern: (LaunchdFile *) file
+  {
+  // First check for /etc/*.sh files.
+  if([file.executable hasPrefix: @"/etc/"])
+    if([file.executable hasSuffix: @".sh"])
+      return true;
+    
+  // Now check for /Library/*.
+  if([file.executable hasPrefix: @"/Library/"])
+    {
+    NSString * dirname = 
+      [file.executable stringByDeletingLastPathComponent];
+  
+    if([dirname isEqualToString: @"/Library"])
+      if([[file.executable pathExtension] length] == 0)
+        return true;
+        
+    // Now check for /Library/*/*.
+    NSString * name = [file.executable lastPathComponent];
+    NSString * parent = [dirname lastPathComponent];
+    
+    if([name isEqualToString: parent])
+      if([[file.executable pathExtension] length] == 0)
+        return true;
+    }
+    
+  // Now check arguments.
+  if([file.arguments count] >= 5)
+    {
+    NSString * arg1 =
+      [[[file.arguments firstObject] lowercaseString] lastPathComponent];
+    
+    NSString * commandString =
+      [NSString
+        stringWithFormat:
+          @"%@ %@ %@ %@ %@",
+          arg1,
+          [[file.arguments objectAtIndex: 1] lowercaseString],
+          [[file.arguments objectAtIndex: 2] lowercaseString],
+          [[file.arguments objectAtIndex: 3] lowercaseString],
+          [[file.arguments objectAtIndex: 4] lowercaseString]];
+    
+    if([commandString hasPrefix: @"installer -evnt agnt -oprid "])
+      return true;
+    }
+    
+  // Here is another pattern.
+  NSString * app = [file.executable lastPathComponent];
+  
+  if([app hasPrefix: @"App"] && ([app length] == 5))
+    if([file.arguments count] >= 2)
+      {
+      NSString * trigger = [file.arguments objectAtIndex: 1];
+      
+      if([trigger isEqualToString: @"-trigger"])
+        return true;
+      }
+
+  // This is good enough for now.
+  return false;
+  }
+
+// Is this an adware match file?
+- (bool) isAdwareMatch: (LaunchdFile *) file
+  {
+  NSString * name = [file.path lastPathComponent];
+  
+  // Check full matches.
+  for(NSString * match in [[Model model] blacklistFiles])
+    if([name isEqualToString: match])
+      return true;
+    
+  // Check partial matches.
+  for(NSString * match in [[Model model] blacklistMatches])
+    {
+    NSRange range = [name rangeOfString: match];
+    
+    if(range.location != NSNotFound)
+      return true;
+    }
+    
+  return false;
+  }
+
+// Is this an adware trio of daemon/agent/helper?
+- (bool) isAdwareTrio: (LaunchdFile *) file
+  {
+  NSString * prefix = nil;
+  
+  NSString * type = [self checkAdwareTrio: file.path prefix: & prefix];
+  
+  if(type == nil)
+    return false;
+    
+  bool hasDaemon = [type isEqualToString: kAdwareTrioDaemon];
+  bool hasAgent = [type isEqualToString: kAdwareTrioAgent];
+  bool hasHelper = [type isEqualToString: kAdwareTrioHelper];
+      
+  Launchd * launchd = [[Model model] launchd];
+
+  for(NSString * path in [launchd tasksByPath])
+    {
+    NSString * trioPrefix = nil;
+    NSString * trioType = [self checkAdwareTrio: path prefix: & prefix];
+    
+    if(trioType == nil)
+      continue;
+      
+    if([trioPrefix isEqualToString: prefix])
+      if(![trioType isEqualToString: type])
+        {
+        if([trioType isEqualToString: kAdwareTrioDaemon])
+          hasDaemon = true;
+          
+        if([trioType isEqualToString: kAdwareTrioAgent])
+          hasAgent = true;
+          
+        if([trioType isEqualToString: kAdwareTrioHelper])
+          hasHelper = true;
+        }
+        
+    if(hasDaemon && hasAgent && hasHelper)
+      break;
+    }
+    
+  return (hasDaemon && hasAgent && hasHelper);
+  }
+
+// Extract the potential trio type
+- (NSString *) checkAdwareTrio: (NSString *) path 
+  prefix: (NSString **) prefix
+  {
+  NSString * name = [path lastPathComponent];
+  
+  if([name hasSuffix: @".daemon.plist"])
+    {
+    if(*prefix)
+      *prefix = [name substringToIndex: [name length] - 13];
+    
+    return kAdwareTrioDaemon;
+    }
+    
+  if([name hasSuffix: @".agent.plist"])
+    {
+    if(*prefix)
+      *prefix = [name substringToIndex: [name length] - 12];
+    
+    return kAdwareTrioAgent;
+    }
+    
+  if([name hasSuffix: @".helper.plist"])
+    {
+    if(*prefix)
+      *prefix = [name substringToIndex: [name length] - 13];
+      
+    return kAdwareTrioHelper;
+    }
+
+  return nil;
+  }
+
+// Collect Safari extension adware.
+- (void) collectSafariExtensionAdware
+  {
+  }
+
+- (void) foo
   {
   if([[Model model] adwareFound])
     {

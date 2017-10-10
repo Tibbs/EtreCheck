@@ -1,13 +1,21 @@
-//
-//  LaunchdCollector.h
-//  LibEtreCheck
-//
-//  Created by John Daniel on 2017-10-07.
-//  Copyright © 2017 Etresoft. All rights reserved.
-//
+/***********************************************************************
+ ** Etresoft, Inc.
+ ** Copyright (c) 2017. All rights reserved.
+ **********************************************************************/
 
-#import <LibEtreCheck/LibEtreCheck.h>
+#import "Collector.h"
 
+// Collect all sorts of launchd information.
 @interface LaunchdCollector : Collector
+  {
+  // Additional attributes indexed by path.
+  NSMutableDictionary * myAttributes;
+  }
+  
+// Additional attributes indexed by path.
+@property (readonly, nonnull) NSMutableDictionary * attributes;
+
+// Print files in a given directory.
+- (void) printFilesInDirectory: (nonnull NSString *) directory;
 
 @end

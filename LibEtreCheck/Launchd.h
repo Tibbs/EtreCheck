@@ -23,9 +23,6 @@
   BOOL myLoaded;
   }
   
-// Return the singeton.
-+ (nonnull Launchd *) shared;
-
 // Launchd tasks keyed by config file path. 
 // Values are task objects since they are guaranteed to be unique.
 @property (readonly, nonnull) NSMutableDictionary * tasksByPath;

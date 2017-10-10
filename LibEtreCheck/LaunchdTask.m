@@ -21,9 +21,6 @@
 // The arguments.
 @synthesize arguments = myArguments;
 
-// The executable signature.
-@synthesize signature = mySignature;
-
 // Constructor with NSDictionary.
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict
   {
@@ -66,7 +63,6 @@
   [myLabel release];
   [myExecutable release];
   [myArguments release];
-  [mySignature release];
   
   [super dealloc];
   }
@@ -74,9 +70,9 @@
 // Parse a dictionary.
 - (void) parseDictionary: (NSDictionary *) dict 
   {
-  NSString * label = dict[@"Label"];
-  NSString * program = dict[@"Program"];
-  NSArray * arguments = dict[@"ProgramArguments"];
+  NSString * label = [dict objectForKey: @"Label"];
+  NSString * program = [dict objectForKey: @"Program"];
+  NSArray * arguments = [dict objectForKey: @"ProgramArguments"];
   
   if(label.length > 0)
     myLabel = [label retain];

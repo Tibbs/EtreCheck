@@ -25,6 +25,7 @@
 #define kModernLoginItem @"modernloginitem"
 #define kSignature @"signature"
 #define kDeveloper @"developer"
+#define kAdware @"adware"
 #define kApple @"apple"
 #define kProbableAdware @"probableadware"
 #define kPath @"path"

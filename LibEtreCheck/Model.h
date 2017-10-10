@@ -24,6 +24,8 @@
 
 @class DiagnosticEvent;
 @class XMLBuilder;
+@class Launchd;
+@class Safari;
 
 // A singleton to keep track of system information.
 @interface Model : NSObject
@@ -45,14 +47,14 @@
   NSString * myModel;
   NSString * mySerialCode;
   NSMutableDictionary * myDiagnosticEvents;
-  NSMutableDictionary * myLaunchdFiles;
+  Launchd * myLaunchd;
+  Safari * mySafari;
   NSMutableSet * myProcesses;
   NSString * myComputerName;
   NSString * myHostName;
   bool myAdwareFound;
   bool myUnsignedFound;
   NSMutableDictionary * myAdwareFiles;
-  NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;
   NSMutableSet * myWhitelistFiles;
   NSMutableSet * myWhitelistPrefixes;
@@ -127,8 +129,11 @@
 // Diagnostic events.
 @property (retain) NSMutableDictionary * diagnosticEvents;
 
-// All launchd files, whether loaded or not.
-@property (retain) NSMutableDictionary * launchdFiles;
+// All launchd data.
+@property (retain) Launchd * launchd;
+
+// All Safari data.
+@property (retain) Safari * safari;
 
 // All processes.
 @property (retain) NSMutableSet * processes;
@@ -256,13 +261,6 @@
 
 // Create an open URL for a file.
 - (NSAttributedString *) getOpenURLFor: (NSString *) path;
-
-// Is this file an adware file?
-- (bool) checkForAdware: (NSString *) path
-  info: (NSMutableDictionary *) info;
-
-// Is this file an adware extension?
-- (bool) isAdwareExtension: (NSString *) name path: (NSString *) path;
 
 // Add files to the whitelist.
 - (void) appendToWhitelist: (NSArray *) names;

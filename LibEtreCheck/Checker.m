@@ -77,8 +77,6 @@
   [myApplicationIcon release];
   [myComplete release];
   
-  [LaunchdCollector cleanup];
-
   [super dealloc];
   }
   

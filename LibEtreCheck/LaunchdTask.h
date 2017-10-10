@@ -19,9 +19,6 @@
   
   // The arguments.
   NSArray * myArguments;
-  
-  // The executable signature.
-  NSString * mySignature;
   }
 
 // Path to the config script.
@@ -35,9 +32,6 @@
 
 // The arguments.
 @property (readonly, nullable) NSArray * arguments;
-
-// The executable signature.
-@property (strong, nullable) NSString * signature;
 
 // Constructor with NSDictionary (via ServiceManagement).
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict;

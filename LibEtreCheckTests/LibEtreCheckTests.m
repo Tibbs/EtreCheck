@@ -4,9 +4,13 @@
  **********************************************************************/
 
 #import <XCTest/XCTest.h>
+#import "Model.h"
 #import "Launchd.h"
 #import "LaunchdFile.h"
 #import "LaunchdLoadedTask.h"
+#import "LaunchdCollector.h"
+#import "SystemLaunchDaemonsCollector.h"
+#import "SafariExtensionsCollector.h"
 #import "EtreCheckConstants.h"
 
 @interface LibEtreCheckTests : XCTestCase
@@ -32,20 +36,21 @@
 
 - (void) testLaunchdFunctionality 
   {
-  [[Launchd shared] load];
+  Launchd * launchd = [[Model model] launchd];
+  
+  [launchd load];
   
   NSLog(
     @"Found %lu tasks", 
-    (unsigned long)[[[Launchd shared] tasksByPath] count]);
+    (unsigned long)[[launchd tasksByPath] count]);
   
   NSArray * paths = 
-    [[[[Launchd shared] tasksByPath] allKeys] 
+    [[[launchd tasksByPath] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   for(NSString * path in paths)
     {
-    LaunchdFile * file = 
-      [[[Launchd shared] tasksByPath] objectForKey: path];
+    LaunchdFile * file = [[launchd tasksByPath] objectForKey: path];
       
     NSString * validity =
       file.configScriptValid
@@ -78,14 +83,14 @@
           @"    %@", task.label);
     }
       
-  NSUInteger ephemeralCount = [[[Launchd shared] ephemeralTasks] count];
+  NSUInteger ephemeralCount = [[launchd ephemeralTasks] count];
   
   if(ephemeralCount > 0)
     {
     NSLog(
       @"Still have %lu ephemeral tasks", (unsigned long)ephemeralCount);
     
-    for(LaunchdLoadedTask * task in [[Launchd shared] ephemeralTasks])
+    for(LaunchdLoadedTask * task in [launchd ephemeralTasks])
       {
       NSLog(@"Found %@ task %@", task.domain, task.label);
       
@@ -95,6 +100,30 @@
       NSLog(@"    %@", task.executable);
       }
     }
+  }
+
+- (void) testLaunchdCollector 
+  {
+  SystemLaunchDaemonsCollector * collector = 
+    [SystemLaunchDaemonsCollector new];
+  
+  [collector collect];
+  
+  NSAttributedString * result = collector.result;
+  
+  NSLog(@"Output: %@", result.string);
+  }
+
+- (void) testSafariCollector 
+  {
+  SafariExtensionsCollector * collector = 
+    [SafariExtensionsCollector new];
+  
+  [collector collect];
+  
+  NSAttributedString * result = collector.result;
+  
+  NSLog(@"Output: %@", result.string);
   }
 
 - (void) testPerformanceExample 

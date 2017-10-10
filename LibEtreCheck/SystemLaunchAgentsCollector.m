@@ -5,8 +5,7 @@
  **********************************************************************/
 
 #import "SystemLaunchAgentsCollector.h"
-#import "Utilities.h"
-#import "SubProcess.h"
+#import "Launchd.h"
 
 @implementation SystemLaunchAgentsCollector
 
@@ -28,26 +27,7 @@
   // Make sure the base class is setup.
   [super performCollect];
   
-  NSArray * args =
-    @[
-      @"/System/Library/LaunchAgents",
-      @"-type", @"f",
-      @"-or",
-      @"-type", @"l"
-    ];
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  if([subProcess execute: @"/usr/bin/find" arguments: args])
-    {
-    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
-    
-    NSArray * plists = [self collectPropertyListFiles: files];
-    
-    [self printPropertyLists: plists];
-    }
-    
-  [subProcess release];
+  [self printFilesInDirectory: @"/System/Library/LaunchAgents/"];
   }
   
 @end

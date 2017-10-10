@@ -118,11 +118,18 @@
 // Parse a dictionary.
 - (void) parseDictionary: (NSDictionary *) dict 
   {
-  NSString * PID = dict[@"PID"];
-  NSString * lastExitCode = dict[@"LastExitStatus"];
+  id PID = [dict objectForKey: @"PID"];
+  id lastExitCode = [dict objectForKey: @"LastExitStatus"];
   
-  myPID = [PID retain];
-  myLastExitCode = [lastExitCode retain];
+  if([PID respondsToSelector: @selector(stringValue)])
+    myPID = [PID stringValue];
+  else
+    myPID = [PID retain];
+    
+  if([lastExitCode respondsToSelector: @selector(stringValue)])
+    myLastExitCode = [lastExitCode stringValue];
+  else
+    myLastExitCode = [lastExitCode retain];
   }
 
 // Parse a new plist.

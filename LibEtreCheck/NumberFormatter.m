@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2013. All rights reserved.
+ ** Copyright (c) 2013-2017. All rights reserved.
  **********************************************************************/
 
 #import "NumberFormatter.h"
@@ -39,9 +39,12 @@
   {
   NSString * string = nil;
   
-  @synchronized(self.formatter)
+  if(number != nil)
     {
-    string = [self.formatter stringFromNumber: number];
+    @synchronized(self.formatter)
+      {
+      string = [self.formatter stringFromNumber: number];
+      }
     }
   
   return string;
@@ -52,9 +55,12 @@
   {
   NSNumber * number = nil;
   
-  @synchronized(self.formatter)
+  if(string.length > 0)
     {
-    number = [self.formatter numberFromString: string];
+    @synchronized(self.formatter)
+      {
+      number = [self.formatter numberFromString: string];
+      }
     }
   
   return number;

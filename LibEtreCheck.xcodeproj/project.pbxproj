@@ -152,6 +152,10 @@
 		A589CDC51F71750100D66592 /* Checker.h in Headers */ = {isa = PBXBuildFile; fileRef = A5257D3E19AC10E3003084C8 /* Checker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5E742C11F89972800DA94CE /* LaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5E742BF1F89972800DA94CE /* LaunchdCollector.h */; };
 		A5E742C21F89972800DA94CE /* LaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C01F89972800DA94CE /* LaunchdCollector.m */; };
+		A5E742C61F8BF91900DA94CE /* Safari.h in Headers */ = {isa = PBXBuildFile; fileRef = A5E742C41F8BF91900DA94CE /* Safari.h */; };
+		A5E742C71F8BF91900DA94CE /* Safari.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C51F8BF91900DA94CE /* Safari.m */; };
+		A5E742CA1F8BFA9100DA94CE /* SafariExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = A5E742C81F8BFA9100DA94CE /* SafariExtension.h */; };
+		A5E742CB1F8BFA9100DA94CE /* SafariExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C91F8BFA9100DA94CE /* SafariExtension.m */; };
 		A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */; };
 		A5F65E5C1F7F20290062FA87 /* EtreCheckCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */; };
 		A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */; };
@@ -221,8 +225,8 @@
 		A5257D3019AB5251003084C8 /* CPUUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPUUsageCollector.m; sourceTree = "<group>"; };
 		A5257D3219AB525D003084C8 /* MemoryUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUsageCollector.h; sourceTree = "<group>"; };
 		A5257D3319AB525D003084C8 /* MemoryUsageCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryUsageCollector.m; sourceTree = "<group>"; };
-		A5257D3519AB53FF003084C8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = "..//LibEtreCheck/Model.h"; sourceTree = "<group>"; };
-		A5257D3619AB53FF003084C8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Model.m; path = ../LibEtreCheck/Model.m; sourceTree = "<group>"; };
+		A5257D3519AB53FF003084C8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		A5257D3619AB53FF003084C8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
 		A5257D3819ABE02A003084C8 /* VirtualMemoryCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualMemoryCollector.h; sourceTree = "<group>"; };
 		A5257D3919ABE02A003084C8 /* VirtualMemoryCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualMemoryCollector.m; sourceTree = "<group>"; };
 		A5257D3B19AC0AA3003084C8 /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utilities.h; path = ../LibEtreCheck/Utilities.h; sourceTree = "<group>"; };
@@ -309,6 +313,10 @@
 		A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ByteCountFormatter.m; path = ../LibEtreCheck/ByteCountFormatter.m; sourceTree = "<group>"; };
 		A5E742BF1F89972800DA94CE /* LaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchdCollector.h; sourceTree = "<group>"; };
 		A5E742C01F89972800DA94CE /* LaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchdCollector.m; sourceTree = "<group>"; };
+		A5E742C41F8BF91900DA94CE /* Safari.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Safari.h; sourceTree = "<group>"; };
+		A5E742C51F8BF91900DA94CE /* Safari.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Safari.m; sourceTree = "<group>"; };
+		A5E742C81F8BFA9100DA94CE /* SafariExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SafariExtension.h; sourceTree = "<group>"; };
+		A5E742C91F8BFA9100DA94CE /* SafariExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SafariExtension.m; sourceTree = "<group>"; };
 		A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualVolumeCollector.h; sourceTree = "<group>"; };
 		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
 		A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
@@ -549,8 +557,6 @@
 				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
 				A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */,
 				A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */,
-				A5257D3519AB53FF003084C8 /* Model.h */,
-				A5257D3619AB53FF003084C8 /* Model.m */,
 				A503BF981F82AD8D00473A24 /* LocalizedString.h */,
 				A503BF991F82AD8D00473A24 /* LocalizedString.m */,
 				A5257D3B19AC0AA3003084C8 /* Utilities.h */,
@@ -558,19 +564,12 @@
 				A53822381D5FF27200484388 /* XMLBuilder.h */,
 				A53822391D5FF27200484388 /* XMLBuilder.m */,
 				A589CD8C1F716FE900D66592 /* EtreCheckConstants.h */,
+				A5E742C31F8BF8CC00DA94CE /* Model */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
 				A503BFB31F83F9F400473A24 /* OSVersion.h */,
 				A503BFB41F83F9F400473A24 /* OSVersion.m */,
-				A503BFB71F84118600473A24 /* LaunchdTask.h */,
-				A503BFB81F84118600473A24 /* LaunchdTask.m */,
-				A50C9C0D1F86CCAC00144335 /* LaunchdFile.h */,
-				A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */,
-				A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */,
-				A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */,
-				A503BFAF1F83F67300473A24 /* Launchd.h */,
-				A503BFB01F83F67300473A24 /* Launchd.m */,
 				A503BFAB1F83DF9B00473A24 /* Actions.h */,
 				A503BFAC1F83DF9B00473A24 /* Actions.m */,
 				A589CD211F71644500D66592 /* Info.plist */,
@@ -598,6 +597,27 @@
 			);
 			name = "3rd party";
 			path = ..;
+			sourceTree = "<group>";
+		};
+		A5E742C31F8BF8CC00DA94CE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A503BFB71F84118600473A24 /* LaunchdTask.h */,
+				A503BFB81F84118600473A24 /* LaunchdTask.m */,
+				A50C9C0D1F86CCAC00144335 /* LaunchdFile.h */,
+				A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */,
+				A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */,
+				A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */,
+				A503BFAF1F83F67300473A24 /* Launchd.h */,
+				A503BFB01F83F67300473A24 /* Launchd.m */,
+				A5E742C81F8BFA9100DA94CE /* SafariExtension.h */,
+				A5E742C91F8BFA9100DA94CE /* SafariExtension.m */,
+				A5E742C41F8BF91900DA94CE /* Safari.h */,
+				A5E742C51F8BF91900DA94CE /* Safari.m */,
+				A5257D3519AB53FF003084C8 /* Model.h */,
+				A5257D3619AB53FF003084C8 /* Model.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -657,7 +677,9 @@
 				A503BFB51F83F9F400473A24 /* OSVersion.h in Headers */,
 				A589CDC11F7174FD00D66592 /* AdwareCollector.h in Headers */,
 				A589CD9F1F71749E00D66592 /* HardwareCollector.h in Headers */,
+				A5E742CA1F8BFA9100DA94CE /* SafariExtension.h in Headers */,
 				A589CDA51F71749E00D66592 /* FirewireCollector.h in Headers */,
+				A5E742C61F8BF91900DA94CE /* Safari.h in Headers */,
 				A589CDC51F71750100D66592 /* Checker.h in Headers */,
 				A589CD991F71747B00D66592 /* SubProcess.h in Headers */,
 				A589CDBE1F7174FD00D66592 /* InstallCollector.h in Headers */,
@@ -801,6 +823,8 @@
 				A589CD631F7164C900D66592 /* LogCollector.m in Sources */,
 				A503BFBA1F84118600473A24 /* LaunchdTask.m in Sources */,
 				A589CD491F7164C900D66592 /* SystemLaunchAgentsCollector.m in Sources */,
+				A5E742C71F8BF91900DA94CE /* Safari.m in Sources */,
+				A5E742CB1F8BFA9100DA94CE /* SafariExtension.m in Sources */,
 				A589CD591F7164C900D66592 /* ApplicationsCollector.m in Sources */,
 				A589CD7E1F7168E900D66592 /* NSObject+Etresoft.m in Sources */,
 				A589CD571F7164C900D66592 /* PreferencePanesCollector.m in Sources */,

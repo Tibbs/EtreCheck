@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "Collector.h"
 
-@interface LaunchdCollector : Collector
+@interface OldLaunchdCollector : Collector
   {
   NSMutableDictionary * myHiddenItems;
   bool myShowExecutable;
