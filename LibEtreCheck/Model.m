@@ -529,6 +529,7 @@
   [self.whitelistFiles removeObject: @"com.oracle.java.Java-Updater.plist"];
   [self.whitelistFiles removeObject: @"com.google.keystone.agent.plist"];
   [self.blacklistFiles addObject: @"com.google.keystone.agent.plist"];
+  [self.blacklistMatches addObject: @"ASCPowerTools2"];
   }
   
 // Associate a path with a UUID to hide it.

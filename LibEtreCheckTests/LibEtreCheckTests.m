@@ -10,7 +10,9 @@
 #import "LaunchdLoadedTask.h"
 #import "LaunchdCollector.h"
 #import "SystemLaunchDaemonsCollector.h"
+#import "LaunchDaemonsCollector.h"
 #import "SafariExtensionsCollector.h"
+#import "AdwareCollector.h"
 #import "EtreCheckConstants.h"
 
 @interface LibEtreCheckTests : XCTestCase
@@ -131,6 +133,32 @@
   NSLog(@"Output: %@", result.string);
   }
 
+- (void) testAdwareCollector 
+  {
+  Model * model = [Model model];
+  
+  [model simulateAdware];
+  
+  LaunchDaemonsCollector * launchdCollector = 
+    [LaunchDaemonsCollector new];
+  
+  [launchdCollector collect];
+
+  SafariExtensionsCollector * safariCollector = 
+    [SafariExtensionsCollector new];
+  
+  [safariCollector collect];
+  
+  AdwareCollector * adwareCollector = 
+    [AdwareCollector new];
+  
+  [adwareCollector collect];
+
+  NSAttributedString * result = adwareCollector.result;
+  
+  NSLog(@"Output: %@", result.string);
+  }
+  
 - (void) testPerformanceExample 
   {
   // This is an example of a performance test case.

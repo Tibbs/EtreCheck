@@ -14,6 +14,7 @@
 #import "Utilities.h"
 #import "LocalizedString.h"
 #import "XMLBuilder.h"
+#import "NSDate+Etresoft.h"
 
 // A wrapper around a launchd task.
 @interface LaunchdTask ()
@@ -99,6 +100,8 @@
       
       [self parseFromPath: path];
 
+      [self getModificationDate];
+      
       [self findContext];  
       }
     }
@@ -196,6 +199,22 @@
   [launchctl release];
   }
 
+// Get the modification date.
+- (void) getModificationDate
+  {
+  self.modificationDate = [Utilities modificationDate: self.path];
+
+  if(self.executable.length > 0)
+    if([[NSFileManager defaultManager] fileExistsAtPath: self.executable])
+      {
+      NSDate * executableModificationDate = 
+        [Utilities modificationDate:self.executable];
+        
+      if([executableModificationDate isLaterThan: self.modificationDate])
+        self.modificationDate = executableModificationDate;
+      }
+  }
+  
 #pragma mark - Context
 
 // Find the context based on the path.
