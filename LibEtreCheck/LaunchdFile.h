@@ -22,9 +22,6 @@
   
   // The launchd context. (apple, system, user)
   NSString * myContext;
-  
-  // The overall status.
-  NSString * myStatus;
   }
 
 // The config script contents.
@@ -38,9 +35,6 @@
 
 // Loaded tasks.
 @property (readonly, nonnull) NSMutableArray * loadedTasks;
-
-// Over all status.
-@property (readonly, nonnull) NSString * status;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

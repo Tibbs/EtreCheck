@@ -19,6 +19,9 @@
   
   // The arguments.
   NSArray * myArguments;
+  
+  // The overall status.
+  NSString * myStatus;
   }
 
 // Path to the config script.
@@ -32,6 +35,12 @@
 
 // The arguments.
 @property (readonly, nullable) NSArray * arguments;
+
+// Over all status.
+@property (strong, nonnull) NSString * status;
+
+// Format a status value.
++ (nonnull NSAttributedString *) formatStatus: (nonnull NSString *) status;
 
 // Constructor with NSDictionary (via ServiceManagement).
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict;

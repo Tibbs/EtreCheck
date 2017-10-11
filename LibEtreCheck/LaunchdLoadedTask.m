@@ -6,6 +6,8 @@
 #import "LaunchdLoadedTask.h"
 #import "SubProcess.h"
 #import "NSString+Etresoft.h"
+#import "NumberFormatter.h"
+#import "EtreCheckConstants.h"
 
 // A wrapper around a launchd task.
 @interface LaunchdTask ()
@@ -77,6 +79,7 @@
       myDomain = [domain retain];
       
       [self parseDictionary: dict];
+      [self getStatus];
       }
     }
     
@@ -99,6 +102,7 @@
       myDomain = [domain retain];
       
       [self parseData: data];
+      [self getStatus];
       }
     }
     
@@ -183,7 +187,7 @@
       myPID = [value retain];
     
     else if([key isEqualToString: @"last exit code"])
-      myLastExitCode = [value retain];
+      myLastExitCode = [[self parseLastExitCode: value] retain];
 
     else if([key isEqualToString: @"path"])
       self.path = [value stringByAbbreviatingWithTildeInPath];
@@ -232,6 +236,17 @@
   return [NSArray arrayWithObjects: key, value, nil];
   }
   
+// Parse a last exit code.
+- (NSString *) parseLastExitCode: (NSString *) value
+  {
+  NSRange range = [value rangeOfString: @":"];
+  
+  if(range.location == NSNotFound)
+    return value;
+    
+  return [value substringToIndex: range.location];
+  }
+  
 // Reload new launchd data from a label.
 + (NSData *) loadDataWithLabel: (nonnull NSString *) label 
   inDomain: (NSString *) domain
@@ -278,4 +293,36 @@
   [self parseData: data];
   }
   
+// Get thes status.
+- (void) getStatus
+  {
+  self.status = kStatusLoaded;
+  
+  if(self.PID.length > 0)
+    {
+    NSNumber * pid = 
+      [[NumberFormatter sharedNumberFormatter] 
+        convertFromString: self.PID];
+      
+    if([pid longValue] > 0)
+      self.status = kStatusRunning;
+    }
+    
+  if(self.lastExitCode.length > 0)
+    if(![self.lastExitCode isEqualToString: @"-"])
+      {
+      if([self.lastExitCode isEqualToString: @"127"])
+        self.status = kStatusKilled;
+      else 
+        {
+        NSNumber * lastExitCode = 
+          [[NumberFormatter sharedNumberFormatter] 
+            convertFromString: self.lastExitCode];
+          
+        if([lastExitCode longValue] != 0)
+          self.status = kStatusFailed;
+        }
+      }
+  }
+
 @end

@@ -24,6 +24,8 @@
 		A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */; };
 		A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */; };
 		A542792F1F8D4D64009E7D29 /* PrintableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A542792E1F8D4D64009E7D29 /* PrintableItem.m */; };
+		A54279331F8E6F8D009E7D29 /* SystemLaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */; };
+		A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -241,6 +243,8 @@
 		A53EA3761C6FCF0200F270B0 /* NSDate+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Etresoft.m"; sourceTree = "<group>"; };
 		A542792D1F8D4BCD009E7D29 /* PrintableItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrintableItem.h; sourceTree = "<group>"; };
 		A542792E1F8D4D64009E7D29 /* PrintableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintableItem.m; sourceTree = "<group>"; };
+		A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemLaunchdCollector.h; sourceTree = "<group>"; };
+		A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemLaunchdCollector.m; sourceTree = "<group>"; };
 		A549C6751C75198700283F7F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A55BC16D15BF987D00D42EF1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A55BC17015BF987D00D42EF1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -430,6 +434,8 @@
 				A5E742C01F89972800DA94CE /* LaunchdCollector.m */,
 				A5C292DB19A02A8800464E86 /* OldLaunchdCollector.h */,
 				A5C292DC19A02A8800464E86 /* OldLaunchdCollector.m */,
+				A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */,
+				A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */,
 				A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */,
 				A5C292E219A039AB00464E86 /* SystemLaunchAgentsCollector.m */,
 				A5C292E419A039BD00464E86 /* SystemLaunchDaemonsCollector.h */,
@@ -678,6 +684,7 @@
 				A589CDBA1F7174B900D66592 /* PreferencePanesCollector.h in Headers */,
 				A589CDC31F7174FD00D66592 /* CleanupCollector.h in Headers */,
 				A589CD931F71745F00D66592 /* NSDate+Etresoft.h in Headers */,
+				A54279331F8E6F8D009E7D29 /* SystemLaunchdCollector.h in Headers */,
 				A589CDA91F71749E00D66592 /* KernelExtensionCollector.h in Headers */,
 				A503BFB51F83F9F400473A24 /* OSVersion.h in Headers */,
 				A589CDC11F7174FD00D66592 /* AdwareCollector.h in Headers */,
@@ -810,6 +817,7 @@
 				A589CD5C1F7164C900D66592 /* CPUUsageCollector.m in Sources */,
 				A589CD4D1F7164C900D66592 /* UserLaunchAgentsCollector.m in Sources */,
 				A5E742C21F89972800DA94CE /* LaunchdCollector.m in Sources */,
+				A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */,
 				A589CD861F71690900D66592 /* NumberFormatter.m in Sources */,
 				A589CD501F7164C900D66592 /* InternetPlugInsCollector.m in Sources */,
 				A589CD531F7164C900D66592 /* UserAudioPlugInsCollector.m in Sources */,

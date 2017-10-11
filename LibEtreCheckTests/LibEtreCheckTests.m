@@ -10,7 +10,10 @@
 #import "LaunchdLoadedTask.h"
 #import "LaunchdCollector.h"
 #import "SystemLaunchDaemonsCollector.h"
+#import "SystemLaunchAgentsCollector.h"
 #import "LaunchDaemonsCollector.h"
+#import "LaunchAgentsCollector.h"
+#import "UserLaunchAgentsCollector.h"
 #import "SafariExtensionsCollector.h"
 #import "AdwareCollector.h"
 #import "EtreCheckConstants.h"
@@ -111,14 +114,38 @@
 
 - (void) testLaunchdCollector 
   {
-  SystemLaunchDaemonsCollector * collector = 
+  SystemLaunchDaemonsCollector * systemDaemons = 
     [SystemLaunchDaemonsCollector new];
   
-  [collector collect];
+  [systemDaemons collect];
   
-  NSAttributedString * result = collector.result;
+  SystemLaunchAgentsCollector * systemAgents = 
+    [SystemLaunchAgentsCollector new];
   
-  NSLog(@"Output: %@", result.string);
+  [systemAgents collect];
+
+  LaunchDaemonsCollector * daemons = 
+    [LaunchDaemonsCollector new];
+  
+  [daemons collect];
+  
+  LaunchAgentsCollector * agents = 
+    [LaunchAgentsCollector new];
+  
+  [agents collect];
+
+  UserLaunchAgentsCollector * userAgents = 
+    [UserLaunchAgentsCollector new];
+  
+  [userAgents collect];
+
+  NSLog(@"%@", systemDaemons.result.string);
+  NSLog(@"%@", systemAgents.result.string);
+
+  NSLog(@"%@", daemons.result.string);
+  NSLog(@"%@", agents.result.string);
+
+  NSLog(@"%@", userAgents.result.string);
   }
 
 - (void) testSafariCollector 

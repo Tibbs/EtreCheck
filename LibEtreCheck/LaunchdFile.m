@@ -4,7 +4,6 @@
  **********************************************************************/
 
 #import "LaunchdFile.h"
-#import "NumberFormatter.h"
 #import "LaunchdLoadedTask.h"
 #import "OSVersion.h"
 #import "SubProcess.h"
@@ -38,11 +37,8 @@
 
 // Loaded tasks.
 @synthesize loadedTasks = myLoadedTasks;
-
-// Overall status.
-@synthesize status = myStatus;
-
-// Overall status.
+  
+// Get the status.
 - (NSString *) status
   {
   if(myStatus == nil)
@@ -51,42 +47,28 @@
       myStatus = kStatusNotLoaded;
     else
       {
-      myStatus = kStatusLoaded;
-      
       for(LaunchdLoadedTask * task in self.loadedTasks)
         {
-        if(task.PID.length > 0)
-          {
-          NSNumber * pid = 
-            [[NumberFormatter sharedNumberFormatter] 
-              convertFromString: task.PID];
-            
-          if([pid longValue] > 0)
-            myStatus = kStatusRunning;
-          }
+        if([task.status isEqualToString: kStatusRunning])
+          myStatus = task.status;
           
-        if(task.lastExitCode.length > 0)
-          if(![task.lastExitCode isEqualToString: @"-"])
-            {
-            if([task.lastExitCode isEqualToString: @"127"])
-              myStatus = kStatusKilled;
-            else 
-              {
-              NSNumber * lastExitCode = 
-                [[NumberFormatter sharedNumberFormatter] 
-                  convertFromString: task.lastExitCode];
-                
-              if([lastExitCode longValue] != 0)
-                myStatus = kStatusFailed;
-              }
-            }
+        else if(myStatus == nil)
+          {
+          if([task.status isEqualToString: kStatusKilled])
+            myStatus = task.status;
+          else if([task.status isEqualToString: kStatusFailed])
+            myStatus = task.status;
+          }
         }
+        
+      if(myStatus == nil)
+        myStatus = kStatusLoaded;
       }
     }
     
   return myStatus;
   }
-  
+
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path
   {
@@ -115,7 +97,6 @@
   [myContext release];
   [myPlist release];
   [myLoadedTasks release];
-  [myStatus release];
   
   [super dealloc];
   }
@@ -260,38 +241,12 @@
 // Append the file status.
 - (void) appendFileStatus: (NSMutableAttributedString *) attributedString
   {
-  NSString * statusString = ECLocalizedString(@"not loaded");
+  [attributedString appendString: @"    "];
   
-  NSColor * color = [[Utilities shared] gray];
+  [attributedString 
+    appendAttributedString: [LaunchdTask formatStatus: self.status]];
   
-  if([self.status isEqualToString: kStatusLoaded])
-    {
-    statusString = ECLocalizedString(@"loaded");
-    color = [[Utilities shared] blue];
-    }
-  else if([self.status isEqualToString: kStatusRunning])
-    {
-    statusString = ECLocalizedString(@"running");
-    color = [[Utilities shared] green];
-    }
-  else if([self.status isEqualToString: kStatusFailed])
-    {
-    statusString = ECLocalizedString(@"failed");
-    color = [[Utilities shared] red];
-    }
-  else if([self.status isEqualToString: kStatusKilled])
-    {
-    statusString = ECLocalizedString(@"killed");
-    color = [[Utilities shared] red];
-    }
-  
-  [attributedString
-    appendString: [NSString stringWithFormat: @"    [%@]    ", statusString]
-    attributes:
-      @{
-        NSForegroundColorAttributeName : color,
-        NSFontAttributeName : [[Utilities shared] boldFont]
-      }];
+  [attributedString appendString: @"    "];
   }
   
 // Append the signature.

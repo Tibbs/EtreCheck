@@ -5,6 +5,10 @@
 
 #import "LaunchdTask.h"
 #import "NSString+Etresoft.h"
+#import "LocalizedString.h"
+#import "Utilities.h"
+#import "EtreCheckConstants.h"
+#import "NSMutableAttributedString+Etresoft.h"
 
 // A wrapper around a launchd task.
 @implementation LaunchdTask
@@ -20,6 +24,50 @@
 
 // The arguments.
 @synthesize arguments = myArguments;
+
+// Overall status.
+@synthesize status = myStatus;
+
+// Append the file status.
++ (NSAttributedString *) formatStatus: (NSString *) status
+  {
+  NSString * statusString = ECLocalizedString(@"not loaded");
+  
+  NSColor * color = [[Utilities shared] gray];
+  
+  if([status isEqualToString: kStatusLoaded])
+    {
+    statusString = ECLocalizedString(@"loaded");
+    color = [[Utilities shared] blue];
+    }
+  else if([status isEqualToString: kStatusRunning])
+    {
+    statusString = ECLocalizedString(@"running");
+    color = [[Utilities shared] green];
+    }
+  else if([status isEqualToString: kStatusFailed])
+    {
+    statusString = ECLocalizedString(@"failed");
+    color = [[Utilities shared] red];
+    }
+  else if([status isEqualToString: kStatusKilled])
+    {
+    statusString = ECLocalizedString(@"killed");
+    color = [[Utilities shared] red];
+    }
+  
+  NSMutableAttributedString * result = [NSMutableAttributedString new];
+  
+  [result
+    appendString: [NSString stringWithFormat: @"[%@]", statusString]
+    attributes:
+      @{
+        NSForegroundColorAttributeName : color,
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
+      
+  return [result autorelease];
+  }
 
 // Constructor with NSDictionary.
 - (nullable instancetype) initWithDictionary: (nonnull NSDictionary *) dict
@@ -63,6 +111,7 @@
   [myLabel release];
   [myExecutable release];
   [myArguments release];
+  [myStatus release];
   
   [super dealloc];
   }
