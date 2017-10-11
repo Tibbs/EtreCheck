@@ -253,7 +253,9 @@ extern char **environ;
 
   free(buffer);
   
-  waitpid(pid, & myResult, 0);
+  while(waitpid(pid, & myResult, 0) == -1)
+    if(errno != EINTR)
+      break;
     
   posix_spawn_file_actions_destroy(& child_fd_actions);
 
@@ -283,7 +285,7 @@ extern char **environ;
   
   if(pipe(outputPipe) == -1)
     return NO;
-
+    
   if(pipe(errorPipe) == -1)
     {
     close(outputPipe[0]);
@@ -425,8 +427,12 @@ extern char **environ;
 
   free(buffer);
   
-  waitpid(pid, & myResult, 0);
-    
+  while(waitpid(pid, & myResult, 0) == -1)
+    if(errno != EINTR)
+      break;
+  
+  posix_spawn_file_actions_destroy(& child_fd_actions);
+
   return !self.timedout;
   }
 

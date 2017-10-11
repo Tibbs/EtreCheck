@@ -6,6 +6,11 @@
 #import "SafariExtension.h"
 #import "SubProcess.h"
 #import "Utilities.h"
+#import "XMLBuilder.h"
+#import "OSVersion.h"
+#import "NSMutableAttributedString+Etresoft.h"
+#import "EtreCheckConstants.h"
+#import "LocalizedString.h"
 
 // Wrapper around a Safari extension.
 @implementation SafariExtension
@@ -28,9 +33,6 @@
 // Enabled status.
 @synthesize enabled = myEnabled;
 
-// Developer name.
-@synthesize developerName = myDeveloperName;
-
 // Developer web site.
 @synthesize developerWebSite = myDeveloperWebSite;
 
@@ -45,6 +47,8 @@
       {
       self = [super init];
       
+      self.modificationDate = [Utilities modificationDate: path];
+
       self.path = path;
       
       [self parseName];
@@ -63,8 +67,8 @@
   {
   self.path = nil;
   self.name = nil;
+  self.displayName = nil;
   self.identifier = nil;
-  self.developerName = nil;
   self.developerWebSite = nil;
   
   [super dealloc];
@@ -153,6 +157,8 @@
           format: & format
           error: & error];
       }
+      
+    [data release];
     }
     
   [subProcess release];
@@ -191,8 +197,126 @@
     
   self.loaded = NO;
   
-  self.developerName = [dict objectForKey: @"Author"];
+  self.authorName = [dict objectForKey: @"Author"];
   self.developerWebSite = [dict objectForKey: @"Website"];
   }
 
+// Build the attributedString value.
+- (void) buildAttributedStringValue: 
+  (NSMutableAttributedString *) attributedString
+  {
+  // Print the status.
+  [self appendStatus: attributedString];
+  
+  // Print the name.
+  [attributedString appendString: self.displayName];
+  
+  // Print the signature.
+  [self appendSignature: attributedString];
+  
+  // Add the modification date.
+  [self appendModificationDate: attributedString];
+  }
+  
+// Format a status string.
+- (void) appendStatus: (NSMutableAttributedString *) attributedString
+  {
+  if([[OSVersion shared] major] == kYosemite)
+    [attributedString appendString: @"    "];
+  else
+    {
+    NSString * statusString = nil;
+    
+    NSColor * color = nil;
+    
+    if(!self.loaded)
+      {
+      statusString = ECLocalizedString(@"not loaded");
+      color = [[Utilities shared] gray];
+      }
+    else if(self.enabled)
+      {
+      statusString = ECLocalizedString(@"enabled");
+      color = [[Utilities shared] green];
+      }
+    else 
+      {
+      statusString = ECLocalizedString(@"disabled");
+      color = [[Utilities shared] gray];
+      }
+    
+    [attributedString
+      appendString: 
+        [NSString stringWithFormat: @"    [%@]    ", statusString]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : color,
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  }
+
+// Print extension details
+- (void) appendSignature: (NSMutableAttributedString *) attributedString
+  {
+  if(self.authorName.length > 0)
+    [attributedString
+      appendString:
+        [NSString stringWithFormat: @" - %@", self.authorName]];
+  
+  if(self.developerWebSite.length > 0)
+    {
+    [attributedString appendString: @" - "];
+    
+    [attributedString
+      appendString: self.developerWebSite
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] blue],
+          NSLinkAttributeName : self.developerWebSite
+        }];
+    }
+  }
+
+// Append the modification date.
+- (void) appendModificationDate: 
+  (NSMutableAttributedString *) attributedString
+  {
+  if(self.modificationDate)
+    {
+    NSString * modificationDateString =
+      [Utilities installDateAsString: self.modificationDate];
+    
+    if(modificationDateString.length > 0)
+      [attributedString
+        appendString:
+          [NSString stringWithFormat: @" (%@)", modificationDateString]];
+    }
+  }
+
+// Build the XML value.
+- (void) buildXMLValue: (XMLBuilder *) xml
+  {
+  [xml startElement: @"extension"];
+
+  [xml addElement: @"name" value: self.name];
+  [xml addElement: @"displayname" value: self.displayName];
+  [xml addElement: @"developer" value: self.authorName];
+  [xml addElement: @"url" value: self.developerWebSite];
+  
+  [xml addElement: @"installdate" day: self.modificationDate];
+  
+  if(!self.loaded)
+    [xml addElement: @"not loaded"];
+    
+  else if(self.enabled)
+    [xml addElement: @"enabled"];
+    
+  else 
+    [xml addElement: @"disabled"];
+
+  [xml endElement: @"extension"];
+  }
+  
 @end

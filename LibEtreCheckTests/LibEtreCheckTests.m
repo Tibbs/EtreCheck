@@ -87,18 +87,23 @@
   
   if(ephemeralCount > 0)
     {
-    NSLog(
-      @"Still have %lu ephemeral tasks", (unsigned long)ephemeralCount);
-    
     for(LaunchdLoadedTask * task in [launchd ephemeralTasks])
       {
-      NSLog(@"Found %@ task %@", task.domain, task.label);
-      
+      if(task.label.length > 0)
+        NSLog(@"Found %@ task %@", task.domain, task.label);
+      else
+        {
+        NSLog(@"Found %@ task %@", task.domain, task.label);
+        }
+        
       if(task.path.length > 0)
         NSLog(@"    %@", task.path);
         
       NSLog(@"    %@", task.executable);
       }
+      
+    NSLog(
+      @"Still have %lu ephemeral tasks", (unsigned long)ephemeralCount);
     }
   }
 

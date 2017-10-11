@@ -190,6 +190,13 @@
     myExecutable = [program retain];
     }
     
+  // I should have an executabel at this point. If I don't, try to pull it
+  // from the label.
+  if(self.executable.length == 0)
+    myExecutable = 
+      [[[NSWorkspace sharedWorkspace] 
+        absolutePathForAppBundleWithIdentifier: self.label] retain];
+    
   if(self.executable.length)
   
     // OK, I've found the executable, but it could be some script 

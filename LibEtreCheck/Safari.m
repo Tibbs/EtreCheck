@@ -131,7 +131,7 @@
           extension.path = path;
           extension.name = displayName;
           extension.identifier = identifier;
-          extension.developerName = @"Mac App Store";
+          extension.authorName = @"Mac App Store";
           
           [self.extensions 
             setObject: extension forKey: extension.identifier];

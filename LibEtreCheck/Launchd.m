@@ -282,10 +282,10 @@
 
     if(success)
       {
+      // Labels can have spaces.
       success = 
         [scanner 
-          scanUpToCharactersFromSet: 
-            [NSCharacterSet whitespaceAndNewlineCharacterSet] 
+          scanUpToCharactersFromSet: [NSCharacterSet newlineCharacterSet] 
           intoString: & label];
   
       if(success && ![PID isEqualToString: @"PID"])

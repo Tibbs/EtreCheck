@@ -3,14 +3,14 @@
  ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "PrintableItem.h"
 
 #define kExtensionNotLoaded @"notloaded"
 #define kExtensionDisabled @"disabled"
 #define kExtensionEnabled @"enabled"
 
 // Wrapper around a Safari extension.
-@interface SafariExtension : NSObject
+@interface SafariExtension : PrintableItem
   {
   // Source path.
   NSString * myPath;
@@ -29,9 +29,6 @@
   
   // Enabled status.
   BOOL myEnabled;
-  
-  // Developer name.
-  NSString * myDeveloperName;
   
   // Developer web site.
   NSString * myDeveloperWebSite;
@@ -54,9 +51,6 @@
 
 // Enabled status.
 @property (assign) BOOL enabled;
-
-// Developer name.
-@property (retain, nullable) NSString * developerName;
 
 // Developer web site.
 @property (retain, nullable) NSString * developerWebSite;

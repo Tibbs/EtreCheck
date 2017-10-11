@@ -440,8 +440,8 @@
   NSMutableDictionary * info = 
     [self.launchd.tasksByPath objectForKey: path];
   
-  if([self checkForAdware: path info: info])
-    return YES;
+  //if([self checkForAdware: path info: info])
+  //  return YES;
     
   if(info)
     [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
@@ -541,5 +541,5 @@
     
   return UUID;
   }
-  
+    
 @end

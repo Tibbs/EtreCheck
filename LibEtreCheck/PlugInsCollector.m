@@ -48,8 +48,6 @@
       {
       NSDictionary * plugin = [bundles objectForKey: filename];
 
-      NSString * path = [plugin objectForKey: @"path"];
-      
       NSString * name = [filename stringByDeletingPathExtension];
 
       NSString * version =
@@ -100,9 +98,6 @@
       else if([name isEqualToString: @"Flash Player-10.6"])
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
-      else if([[Model model] checkForAdware: path info: nil])
-        [self.result
-          appendAttributedString: [self getAdwareLink: plugin]];
       else
         [self.result
           appendAttributedString: [self getSupportLink: plugin]];

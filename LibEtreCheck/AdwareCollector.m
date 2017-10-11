@@ -15,6 +15,8 @@
 #import "LaunchdFile.h"
 #import "Launchd.h"
 #import "EtreCheckConstants.h"
+#import "Safari.h"
+#import "SafariExtension.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -177,9 +179,7 @@
   
   [self collectSafariExtensionAdware];
   
-  [self printLaunchdAdwareFiles];
-  
-  [self printSafariExtensionAdwareFiles];
+  [self printAdwareFiles];
   }
   
 // Collect launchd adware.
@@ -216,7 +216,7 @@
     adware = true;
     
   // Check for a known adware file.
-  else if([self isAdwareMatch: file])
+  else if([self isAdwareMatch: [file.path lastPathComponent]])
     adware = true;
     
   // Check for a known adware pattern of matching files.
@@ -316,10 +316,8 @@
   }
 
 // Is this an adware match file?
-- (bool) isAdwareMatch: (LaunchdFile *) file
+- (bool) isAdwareMatch: (NSString *) name
   {
-  NSString * name = [file.path lastPathComponent];
-  
   // Check full matches.
   for(NSString * match in [[Model model] blacklistFiles])
     if([name isEqualToString: match])
@@ -417,8 +415,84 @@
 // Collect Safari extension adware.
 - (void) collectSafariExtensionAdware
   {
+  Safari * safari = [[Model model] safari];
+  
+  for(NSString * path in safari.extensions)
+    {
+    SafariExtension * extension = [safari.extensions objectForKey: path];
+    
+    bool adware = false;
+    
+    if([self isAdwareMatch: extension.name])
+      adware = true;
+      
+    if([self isAdwareMatch: extension.displayName])
+      adware = true;
+      
+    if(adware)
+      [self.safariExtensionAdwareFiles addObject: extension];
+    }
   }
 
+// Print adware files.
+- (void) printAdwareFiles
+  {
+  int adwareCount = 0;
+  
+  for(LaunchdFile * launchdFile in self.launchdAdwareFiles)
+    {
+    if(adwareCount++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+      
+    // Print the file.
+    [self.result appendAttributedString: launchdFile.attributedStringValue];
+
+    if(launchdFile.executable.length > 0)
+      {
+      [self.result appendString: @"\n        "];
+      [self.result 
+        appendString: [Utilities cleanPath: launchdFile.executable]];
+      }
+    
+    [self.result appendString: @"\n"];
+    }
+    
+  for(SafariExtension * extension in self.safariExtensionAdwareFiles)
+    {
+    if(adwareCount++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+
+    // Print the extension.
+    [self.result appendAttributedString: extension.attributedStringValue];
+    [self.result appendString: @"\n"];
+    }
+    
+  if(adwareCount > 0)
+    {
+    NSString * message = 
+      ECLocalizedPluralString(adwareCount, @"adware file");
+
+    [self.result appendString: @"    "];
+    [self.result
+      appendString: message
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+
+    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
+
+    if(removeLink)
+      {
+      [self.result appendAttributedString: removeLink];
+      [self.result appendString: @"\n"];
+      }
+    
+    [self.result appendCR];
+    }
+  }
+  
 - (void) foo
   {
   if([[Model model] adwareFound])

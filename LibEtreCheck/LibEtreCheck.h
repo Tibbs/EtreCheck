@@ -25,4 +25,3 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 #import <LibEtreCheck/NSDictionary+Etresoft.h>
 #import <LibEtreCheck/Checker.h>
 #import <LibEtreCheck/XMLBuilder.h>
-#import <LibEtreCheck/LaunchdTask.h>

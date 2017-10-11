@@ -3,10 +3,10 @@
  ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "PrintableItem.h"
 
 // A wrapper around a launchd task.
-@interface LaunchdTask : NSObject
+@interface LaunchdTask : PrintableItem
   {
   // Path to the config script.
   NSString * myPath;
