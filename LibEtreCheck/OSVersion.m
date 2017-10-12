@@ -17,6 +17,12 @@
 // The OS minor version.
 @synthesize minor = myMinor;
 
+// The OS build.
+@synthesize build = myBuild;
+
+// The full version.
+@synthesize version = myVersion;
+
 // Return the singeton.
 + (nonnull OSVersion *) shared
   {
@@ -63,6 +69,15 @@
   return self;
   }
   
+// Destructor.
+- (void) dealloc
+  {
+  [myBuild release];
+  [myVersion release];
+  
+  [super dealloc];
+  }
+  
 // Set the OS version.
 - (void) setOSVersion
   {
@@ -75,18 +90,25 @@
 
   if([sw_vers execute: @"/usr/bin/sw_vers" arguments: args])
     {
-    NSString * version =
+    NSString * data =
       [[NSString alloc]
         initWithData: sw_vers.standardOutput
         encoding: NSUTF8StringEncoding];
       
-    if(version.length >= 3)
+    myBuild = 
+      [data 
+        stringByTrimmingCharactersInSet: 
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    [myBuild retain];
+    
+    if(self.build.length >= 3)
       {
       NSString * major = 
-        [version substringWithRange: NSMakeRange(0, 2)];
+        [self.build substringWithRange: NSMakeRange(0, 2)];
       
       NSString * minor = 
-        [version substringWithRange: NSMakeRange(2, 1)];
+        [self.build substringWithRange: NSMakeRange(2, 1)];
                 
       [self willChangeValueForKey: @"major"];
       [self willChangeValueForKey: @"minor"];
@@ -97,14 +119,21 @@
             
       myMinor = [minor characterAtIndex: 0] - 'A';
 
+      if(self.minor > 0)
+        myVersion = 
+          [[NSString alloc] 
+            initWithFormat: @"10.%d.%d", self.major, self.minor];
+      else
+        myVersion = 
+          [[NSString alloc] 
+            initWithFormat: @"10.%d", self.major];
+        
       [self didChangeValueForKey: @"minor"];
       [self didChangeValueForKey: @"major"];        
       }
-      
-    [version release];
     }
     
   [sw_vers release];
   }
-  
+    
 @end

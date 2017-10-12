@@ -10,6 +10,8 @@
   {
   int myMajor;
   int myMinor;
+  NSString * myBuild;
+  NSString * myVersion;
   }
   
 // Return the singeton.
@@ -20,5 +22,11 @@
 
 // The OS minor version.
 @property (readonly) int minor;
+
+// The build version.
+@property (readonly, nullable) NSString * build;
+
+// The full version.
+@property (readonly, nullable) NSString * version;
 
 @end

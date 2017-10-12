@@ -12,6 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -100,7 +101,7 @@
   // See if /etc/sudoers has been modified.
   if(attributes)
     {
-    int version = [[Model model] majorOSVersion];
+    int version = [[OSVersion shared] major];
     unsigned long long expectedSize = attributes.fileSize;
     
     switch(version)
@@ -224,7 +225,7 @@
   {
   NSMutableArray * otherModificiations = [NSMutableArray array];
   
-  if([[Model model] majorOSVersion] >= kElCapitan)
+  if([[OSVersion shared] major] >= kElCapitan)
     {
     NSString * status = [self checkRootlessStatus];
   

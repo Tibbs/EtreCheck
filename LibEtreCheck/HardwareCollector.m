@@ -17,6 +17,7 @@
 #import "NumberFormatter.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -1040,7 +1041,7 @@
 // Collect iCloud information.
 - (void) collectiCloud
   {
-  int version = [[Model model] majorOSVersion];
+  int version = [[OSVersion shared] major];
 
   if(version < kElCapitan)
     return;

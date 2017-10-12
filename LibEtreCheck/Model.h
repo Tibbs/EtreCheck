@@ -30,12 +30,6 @@
 // A singleton to keep track of system information.
 @interface Model : NSObject
   {
-  int myMajorOSVersion;
-  int myMinorOSVersion;
-  
-  NSString * myOSBuild;
-  NSString * myOSVersion;
-  
   NSString * myProblem;
   NSAttributedString * myProblemDescription;
   
@@ -83,9 +77,7 @@
   
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
-  bool myVerifiedSystemVersion;
   
-  NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
   
@@ -100,12 +92,6 @@
   XMLBuilder * myXMLBuilder;
   XMLBuilder * myXMLHeader;
   }
-
-// Keep track of the OS version.
-@property (assign) int majorOSVersion;
-@property (assign) int minorOSVersion;
-@property (retain) NSString * OSBuild;
-@property (retain) NSString * OSVersion;
 
 // The problem and description (if any).
 @property (retain) NSString * problem;
@@ -210,12 +196,6 @@
 // Do I have a verified EtreCheck version?
 @property (assign) bool verifiedEtreCheckVersion;
 
-// Do I have a verified System version?
-@property (assign) bool verifiedSystemVersion;
-
-// Apple software.
-@property (retain) NSDictionary * appleSoftware;
-
 // Apple launchd files.
 @property (retain) NSDictionary * appleLaunchd;
 
@@ -270,12 +250,6 @@
 
 // Handle a task that takes too long to complete.
 - (void) taskTerminated: (NSString *) program arguments: (NSArray *) args;
-
-// Get the expected Apple signature for an executable.
-- (NSString *) expectedAppleSignature: (NSString *) path;
-
-// Is this a known Apple executable?
-- (BOOL) isKnownAppleExecutable: (NSString *) path;
 
 // Is this a known Apple executable but not a shell script?
 - (BOOL) isKnownAppleNonShellExecutable: (NSString *) path;

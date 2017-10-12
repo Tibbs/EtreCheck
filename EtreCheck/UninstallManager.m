@@ -40,9 +40,6 @@
   if(![[Model model] verifiedEtreCheckVersion])
     return [self reportUnverifiedEtreCheckVersion];
 
-  if(![[Model model] verifiedSystemVersion])
-    return [self reportUnverifiedSystemVersion];
-
   if(![[Model model] backupExists])
     return [self warnBackup];
     
@@ -175,31 +172,6 @@
   [alert
     setInformativeText:
       NSLocalizedString(@"unverifiedetrecheckversion", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
-
-  [alert runModal];
-
-  [alert release];
-
-  return NO;
-  }
-
-// Tell the user that the system version is unverified.
-- (BOOL) reportUnverifiedSystemVersion
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText:
-      NSLocalizedString(@"Unverified macOS version!", NULL)];
-    
-  [alert setAlertStyle: NSWarningAlertStyle];
-
-  [alert
-    setInformativeText:
-      NSLocalizedString(@"unverifiedsystemversion", NULL)];
 
   // This is the rightmost, first, default button.
   [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];

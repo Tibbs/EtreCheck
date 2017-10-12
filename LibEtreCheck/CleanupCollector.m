@@ -20,6 +20,7 @@
 #import "Safari.h"
 #import "SafariExtension.h"
 #import "UserNotification.h"
+#import "OSVersion.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -55,9 +56,7 @@
 // Collection notification SPAM.
 - (void) collectNotificationSPAM
   {
-  int version = [[Model model] majorOSVersion];
-
-  if(version < kMountainLion)
+  if([[OSVersion shared] major] < kMountainLion)
     return;
     
   NSMutableDictionary * notifications = [self collectNotifications];

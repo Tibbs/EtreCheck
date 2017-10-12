@@ -12,6 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 // Gatekeeper settings.
 typedef enum
@@ -42,7 +43,7 @@ GatekeeperSetting;
 - (void) performCollect
   {
   // Only check gatekeeper on Mountain Lion or later.
-  if([[Model model] majorOSVersion] < kMountainLion)
+  if([[OSVersion shared] major] < kMountainLion)
     return;
     
   [self.result appendAttributedString: [self buildTitle]];

@@ -19,10 +19,6 @@
 
 @implementation Model
 
-@synthesize majorOSVersion = myMajorOSVersion;
-@synthesize minorOSVersion = myMinorOSVersion;
-@synthesize OSBuild = myOSBuild;
-@synthesize OSVersion = myOSVersion;
 @synthesize problem = myProblem;
 @synthesize problemDescription = myProblemDescription;
 @synthesize volumes = myVolumes;
@@ -56,8 +52,6 @@
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
-@synthesize verifiedSystemVersion = myVerifiedSystemVersion;
-@synthesize appleSoftware = myAppleSoftware;
 @synthesize appleLaunchd = myAppleLaunchd;
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize legitimateStrings = myLegitimateStrings;
@@ -133,7 +127,6 @@
   [myGPUErrors release];
   [myPhysicalVolumes release];
   [myComputerName release];
-  [myAppleSoftware release];
   [myAppleLaunchd release];
   [myLegitimateStrings release];
   [myBlacklistSuffixes release];
@@ -155,8 +148,6 @@
   self.applications = nil;
   self.machineIcon = nil;
   self.processes = nil;
-  self.OSVersion = nil;
-  self.OSBuild = nil;
   self.problem = nil;
   self.problemDescription = nil;
   
@@ -344,25 +335,6 @@
     }
     
   [self.terminatedTasks addObject: command];
-  }
-
-// Get the expected Apple signature for an executable.
-- (NSString *) expectedAppleSignature: (NSString *) path
-  {
-  return [[self appleSoftware] objectForKey: path];
-  }
-
-// Is this a known Apple executable
-- (BOOL) isKnownAppleExecutable: (NSString *) path
-  {
-  if([path length])
-    {
-    path = [Utilities resolveBundlePath: path];
-  
-    return [[self appleSoftware] objectForKey: path] != nil;
-    }
-    
-  return NO;
   }
 
 // Is this a known Apple executable but not a shell script?

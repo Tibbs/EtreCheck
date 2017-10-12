@@ -14,6 +14,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -100,7 +101,7 @@
 - (void) printMachInitFiles
   {
   // Deprecated in 10.3, still in use by Apple in 10.6.
-  if([[Model model] majorOSVersion] == kSnowLeopard)
+  if([[OSVersion shared] major] == kSnowLeopard)
     return;
 
   NSArray * machInitFiles = [Utilities checkMachInit: @"/etc/mach_init.d"];

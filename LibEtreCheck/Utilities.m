@@ -17,6 +17,7 @@
 #import "LocalizedString.h"
 #import <sqlite3.h>
 #import <unistd.h>
+#import "OSVersion.h"
 
 // Assorted utilities.
 @implementation Utilities
@@ -539,9 +540,7 @@
   else if([path hasPrefix: @"https://"])
     path = [url substringFromIndex: 8];
   
-  int version = [[Model model] majorOSVersion];
-  
-  if(version <= kSnowLeopard)
+  if([[OSVersion shared] major] <= kSnowLeopard)
     return [@"http://" stringByAppendingString: path];
     
   return [@"https://" stringByAppendingString: path];
@@ -775,11 +774,11 @@
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple"];
   
-  switch([[Model model] majorOSVersion])
+  switch([[OSVersion shared] major])
     {
     // What a mess.
     case kMavericks:
-      if([[Model model] minorOSVersion] < 5)
+      if([[OSVersion shared] minor] < 5)
         break;
     case kYosemite:
       [args addObject: @"--no-strict"];
@@ -840,7 +839,7 @@
 // Is this an SIP executable?
 + (BOOL) isSIP: (NSString *) path
   {
-  if([[Model model] majorOSVersion] < kElCapitan)
+  if([[OSVersion shared] major] < kElCapitan)
     return NO;
     
   if([path hasPrefix: @"/usr/libexec/"])
@@ -887,11 +886,11 @@
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple generic"];
   
-  switch([[Model model] majorOSVersion])
+  switch([[OSVersion shared] major])
     {
     // What a mess.
     case kMavericks:
-      if([[Model model] minorOSVersion] < 5)
+      if([[OSVersion shared] minor] < 5)
         break;
     case kYosemite:
       [args addObject: @"--no-strict"];

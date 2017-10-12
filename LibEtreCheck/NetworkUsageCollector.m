@@ -14,6 +14,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -43,9 +44,7 @@
 // Perform the collection.
 - (void) performCollect
   {
-  int version = [[Model model] majorOSVersion];
-
-  if(version >= kSierra)
+  if([[OSVersion shared] major] >= kSierra)
     {
     // Collect the average memory usage usage for all processes (5 times).
     NSArray * processes = [self collectNetwork];

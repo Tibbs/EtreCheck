@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "OSVersion.h"
 
 @implementation Collector
 
@@ -239,9 +240,7 @@
     if(found)
       {
       if(age)
-        *age =
-          ([[Model model] majorOSVersion] -
-            majorVersion);
+        *age = ([[OSVersion shared] major] - majorVersion);
         
       NSString * minorVersion = nil;
       
@@ -278,7 +277,7 @@
     if(found && (majorVersion > 3))
       {
       if(age)
-        *age = ([[Model model] majorOSVersion] - majorVersion);
+        *age = ([[OSVersion shared] major] - majorVersion);
         
       NSString * minorVersion = nil;
       
@@ -288,7 +287,7 @@
             [NSCharacterSet
               characterSetWithCharactersInString:
                 @"ABCDEFGHIKLMNOPQRSTUVWXYZ"]
-              intoString:& minorVersion];
+              intoString: & minorVersion];
         
       if(found)
         return
@@ -317,9 +316,7 @@
     if(found)
       {
       if(age)
-        *age =
-          ([[Model model] majorOSVersion] -
-            majorVersion);
+        *age = ([[OSVersion shared] major] - majorVersion);
       
       return [NSString stringWithFormat: @"SDK 10.%d", majorVersion - 4];
       }

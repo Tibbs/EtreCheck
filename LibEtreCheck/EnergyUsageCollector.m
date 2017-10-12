@@ -12,6 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -41,9 +42,7 @@
 // Perform the collection.
 - (void) performCollect
   {
-  int version = [[Model model] majorOSVersion];
-
-  if(version >= kMavericks)
+  if([[OSVersion shared] major] >= kMavericks)
     {
     // Collect the average energy usage usage for all processes (5 times).
     NSMutableDictionary * avgEnergy = [self collectAverageEnergy];

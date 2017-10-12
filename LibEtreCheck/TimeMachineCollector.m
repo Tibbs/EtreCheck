@@ -15,6 +15,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
+#import "OSVersion.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -61,7 +62,7 @@
   {
   [self.result appendAttributedString: [self buildTitle]];
 
-  if([[Model model] majorOSVersion] < kMountainLion)
+  if([[OSVersion shared] major] < kMountainLion)
     {
     [self.model addElement: @"osversiontooold" boolValue: YES];
     

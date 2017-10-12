@@ -15,6 +15,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
+#import "OSVersion.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -72,7 +73,6 @@
   // Load the software signatures and expected launchd files. Even if no
   // data was found, we will assume 10.12.6 just to keep the output clean 
   // and still print a failure message next.
-  [self loadAppleSoftware];
   [self loadAppleLaunchd];
   
   if(!dataFound)
@@ -91,58 +91,6 @@
     }
   }
 
-// Load Apple software.
-- (void) loadAppleSoftware
-  {
-  NSString * softwarePath =
-    [[NSBundle mainBundle]
-      pathForResource: @"appleSoftware" ofType: @"plist"];
-    
-  NSData * plistData = [NSData dataWithContentsOfFile: softwarePath];
-  
-  if(plistData)
-    {
-    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
-  
-    if(plist)
-      {
-      int version = [[Model model] majorOSVersion];
-      
-      switch(version)
-        {
-        case kSnowLeopard:
-          [self loadAppleSoftware: [plist objectForKey: @"10.6"]];
-          break;
-        case kLion:
-          [self loadAppleSoftware: [plist objectForKey: @"10.7"]];
-          break;
-        case kMountainLion:
-          [self loadAppleSoftware: [plist objectForKey: @"10.8"]];
-          break;
-        case kMavericks:
-          [self loadAppleSoftware: [plist objectForKey: @"10.9"]];
-          break;
-        case kYosemite:
-          [self loadAppleSoftware: [plist objectForKey: @"10.10"]];
-          break;
-        case kElCapitan:
-          [self loadAppleSoftware: [plist objectForKey: @"10.11"]];
-          break;
-        default:
-          [self loadAppleSoftware: [plist objectForKey: @"10.12"]];
-          break;
-        }
-      }
-    }
-  }
-
-// Load apple software for a specific OS version.
-- (void) loadAppleSoftware: (NSDictionary *) software
-  {
-  if(software)
-    [[Model model] setAppleSoftware: software];
-  }
-
 // Load Apple launchd files.
 - (void) loadAppleLaunchd
   {
@@ -158,9 +106,7 @@
   
     if(plist)
       {
-      int version = [[Model model] majorOSVersion];
-      
-      switch(version)
+      switch([[OSVersion shared] major])
         {
         case kSnowLeopard:
           [self loadAppleLaunchd: [plist objectForKey: @"10.6"]];
@@ -223,20 +169,14 @@
   NSString * version = [item objectForKey: @"os_version"];
   NSString * uptime = [item objectForKey: @"uptime"];
 
-  if(![self parseOSVersion: version])
-    return NO;
-  
-  if(![self parseOSBuild: version])
-    return NO;
-
   NSString * OSName = nil;
   
   NSString * marketingName = 
     [self fallbackMarketingName: version name: & OSName];
   
   [self.model addElement: @"name" value: OSName];
-  [self.model addElement: @"version" value: [[Model model] OSVersion]];
-  [self.model addElement: @"build" value: [[Model model] OSBuild]];
+  [self.model addElement: @"version" value: [[OSVersion shared] version]];
+  [self.model addElement: @"build" value: [[OSVersion shared] build]];
   
   int days = 0;
   int hours = 0;
@@ -300,13 +240,13 @@
         [NSString
           stringWithFormat:
             @"http://support-sp.apple.com/sp/product?edid=10.%d&lang=%@",
-            [[Model model] majorOSVersion] - 4,
+            [[OSVersion shared] major] - 4,
             language]];
   
   NSString * marketingName = [Utilities askAppleForMarketingName: url];
   NSString * OSName = nil;
   
-  if([marketingName length] && ([[Model model] majorOSVersion] >= kLion))
+  if([marketingName length] && ([[OSVersion shared] major] >= kLion))
     {
     marketingName =
       [marketingName
@@ -328,7 +268,7 @@
   NSString * name = nil;
   int offset = 5;
   
-  switch([[Model model] majorOSVersion])
+  switch([[OSVersion shared] major])
     {
     case kSnowLeopard:
       name = @"Snow Leopard";
@@ -378,136 +318,6 @@
         @"%@ %@", *OSName, [version substringFromIndex: offset]];
   
   return fallbackMarketingName;
-  }
-
-// Parse the OS version.
-- (BOOL) parseOSVersion: (NSString *) profilerVersion
-  {
-  BOOL result = NO;
-  
-  if([profilerVersion length] > 0)
-    {
-    NSScanner * scanner = 
-      [[NSScanner alloc] initWithString: profilerVersion];
-    
-    [scanner scanUpToString: @"(" intoString: NULL];
-    [scanner scanString: @"(" intoString: NULL];
-    
-    NSString * buildVersion = nil;
-      
-    bool found = [scanner scanUpToString: @")" intoString: & buildVersion];
-      
-    if(found)
-      found = [self parseBuildVersion: buildVersion];
-    
-    [scanner release];
-    
-    if(found)
-      result = YES;
-    }
-    
-  // Sometimes this doesn't work in extreme cases. Keep trying.
-  if(!result)
-    {
-    NSArray * args = @[@"-buildVersion"];
-    
-    SubProcess * subProcess = [[SubProcess alloc] init];
-    
-    if([subProcess execute: @"/usr/bin/sw_vers" arguments: args])
-      {
-      NSString * buildVersion = 
-        [[NSString alloc] 
-          initWithData: subProcess.standardOutput 
-          encoding: NSUTF8StringEncoding];
-       
-      if([buildVersion length] > 0)
-        result = [self parseBuildVersion: buildVersion];
-        
-      [buildVersion release];
-      }
-      
-    [subProcess release];
-    }
-    
-  // If I have a system version, set the verification flag.
-  if(result)
-    [[Model model] setVerifiedSystemVersion: YES];
-    
-  // Otherwise, just pick Sierra but keep the flag off.
-  else
-    {
-    [[Model model] setMajorOSVersion: 16];
-    [[Model model] setMinorOSVersion: 6];
-    }
-    
-  return result;
-  }
-
-// Parse a build version.
-- (bool) parseBuildVersion: (NSString *) buildVersion
-  {
-  NSScanner * scanner = [[NSScanner alloc] initWithString: buildVersion];
-    
-  int majorVersion = 0;
-  
-  bool found = [scanner scanInt: & majorVersion];
-  
-  if(found)
-    {
-    [[Model model] setMajorOSVersion: majorVersion];
-    
-    NSString * minorVersion = nil;
-    
-    found = [scanner scanUpToString: @")" intoString: & minorVersion];
-    
-    if(found)
-      {
-      unichar ch;
-      
-      [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
-      
-      [[Model model] setMinorOSVersion: ch - 'A'];
-      }
-    }
-    
-  [scanner release];
-  
-  return found;
-  }
-
-// Parse the OS build.
-- (BOOL) parseOSBuild: (NSString *) profilerVersion
-  {
-  if(profilerVersion)
-    {
-    NSScanner * scanner = [NSScanner scannerWithString: profilerVersion];
-    
-    [scanner scanUpToString: @"10." intoString: NULL];
-
-    NSString * version = nil;
-    
-    bool found = [scanner scanUpToString: @" (" intoString: & version];
-    
-    if(found)
-      {
-      [[Model model] setOSVersion: version];
-      
-      [scanner scanString: @"(" intoString: NULL];
-      
-      NSString * build = nil;
-      
-      found = [scanner scanUpToString: @")" intoString: & build];
-      
-      if(found)
-        {
-        [[Model model] setOSBuild: build];
-        
-        return YES;
-        }
-      }
-    }
-    
-  return NO;
   }
 
 // Parse system uptime.

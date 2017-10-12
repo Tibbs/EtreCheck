@@ -100,7 +100,6 @@
 "oldetrecheckversion" = "Votre version d’EtreCheck est obsolète. Cette opération nécessite une version récente d’EtreCheck.";
 "Unverified EtreCheck version!" = "Version d’EtreCheck non vérifiée !";
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version récente d’EtreCheck. Si vous utilisez un pare-feu, veuillez svp autoriser l’accès aux serveurs EtreCheck.";
-"unverifiedsystemversion" = "Impossible de vérifier votre version de macOS. Cette opération nécessite une version de macOS vérifiée.";
 "donateurl" = "etrecheck.com/donate_fr.php?invoice=%@";
 "Remove" = "Enlever";
 "Report" = "Envoyer";

@@ -12,6 +12,7 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "OSVersion.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -168,7 +169,7 @@
     ECLocalizedString(
       @"https://www.java.com/en/download/installed.jsp");
   
-  if([[Model model] majorOSVersion] < 11)
+  if([[OSVersion shared] major] < 11)
     url = @"https://support.apple.com/kb/dl1572";
 
   [string appendString: @" "];
