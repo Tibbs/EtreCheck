@@ -422,8 +422,8 @@
   {
   int adwareCount = 0;
   
-  adwareCount += [self printAdwareLaunchdFiles];
-  adwareCount += [self printAdwareSafariExtensions: adwareCount];
+  adwareCount = [self printAdwareLaunchdFiles];
+  adwareCount = [self printAdwareSafariExtensions: adwareCount];
   
   if(adwareCount > 0)
     {

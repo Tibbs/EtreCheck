@@ -312,8 +312,8 @@
   {
   int count = 0;
   
-  count += [self printOrphanLaunchdFiles];
-  count += [self printOrphanSafariExtensions: count];
+  count = [self printOrphanLaunchdFiles];
+  count = [self printOrphanSafariExtensions: count];
   
   if(count > 0)
     {
@@ -390,6 +390,8 @@
     {
     if(count++ == 0)
       [self.result appendAttributedString: [self buildTitle]];
+    else
+      [self.result appendCR];
       
     NSDictionary * notifications = 
       [[[Model model] notificationSPAMs] objectForKey: bundleID];
@@ -416,8 +418,6 @@
       
     [self.result appendString: @"\n"];
     }
-    
-  [self.result appendCR];
   }
   
 // Export cleanup items.

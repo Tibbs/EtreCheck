@@ -71,7 +71,7 @@
   if([file.signature isEqualToString: kSignatureValid])
     return;
   
-  // TODO: Add a safetey rating.
+  // TODO: Add a safety rating.
   
   [[[[Model model] launchd] unsignedFiles] addObject: file];
   }
@@ -116,6 +116,8 @@
 
     [self.result appendString: @"\n"];
     }
+    
+  [self.result appendCR];
   }
   
 // Export unsigned files.
