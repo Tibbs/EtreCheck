@@ -308,7 +308,7 @@
   [xml addElement: @"installdate" day: self.modificationDate];
   
   if(!self.loaded)
-    [xml addElement: @"not loaded"];
+    [xml addElement: @"notloaded"];
     
   else if(self.enabled)
     [xml addElement: @"enabled"];
