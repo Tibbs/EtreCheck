@@ -390,8 +390,6 @@
     [self.result appendAttributedString: problemDescription];
     [self.result appendString: @"\n"];
     }
-    
-  [self.result appendString: @"\n"];
   }
 
 // Get the elapsed time as a number of seconds.
