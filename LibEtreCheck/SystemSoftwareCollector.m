@@ -70,11 +70,6 @@
     
   [subProcess release];
     
-  // Load the software signatures and expected launchd files. Even if no
-  // data was found, we will assume 10.12.6 just to keep the output clean 
-  // and still print a failure message next.
-  [self loadAppleLaunchd];
-  
   if(!dataFound)
     {
     [self.result
@@ -88,78 +83,6 @@
         }];
         
     [self.result appendCR];
-    }
-  }
-
-// Load Apple launchd files.
-- (void) loadAppleLaunchd
-  {
-  NSString * launchdPath =
-    [[NSBundle mainBundle]
-      pathForResource: @"appleLaunchd" ofType: @"plist"];
-    
-  NSData * plistData = [NSData dataWithContentsOfFile: launchdPath];
-  
-  if(plistData)
-    {
-    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
-  
-    if(plist)
-      {
-      switch([[OSVersion shared] major])
-        {
-        case kSnowLeopard:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.6"]];
-          break;
-        case kLion:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.7"]];
-          break;
-        case kMountainLion:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.8"]];
-          break;
-        case kMavericks:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.9"]];
-          break;
-        case kYosemite:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.10"]];
-          break;
-        case kElCapitan:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
-          break;
-        case kSierra:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.12"]];
-          break;
-        case kHighSierra:
-        default:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.13"]];
-          break;
-        }
-      }
-    }
-  }
-
-// Load apple launchd files for a specific OS version.
-- (void) loadAppleLaunchd: (NSDictionary *) launchdFiles
-  {
-  if(launchdFiles)
-    {
-    [[Model model] setAppleLaunchd: launchdFiles];
-    
-    NSMutableDictionary * appleLaunchdByLabel = [NSMutableDictionary new];
-    
-    for(NSString * path in launchdFiles)
-      {
-      NSDictionary * info = [launchdFiles objectForKey: path];
-      
-      NSString * label = [info objectForKey: kLabel];
-      
-      if([label length] > 0)
-        [appleLaunchdByLabel setObject: info forKey: label];
-      }
-      
-    [[Model model] setAppleLaunchdByLabel: appleLaunchdByLabel];
-    
-    [appleLaunchdByLabel release];
     }
   }
 

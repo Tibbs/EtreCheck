@@ -47,15 +47,15 @@
   
   NSLog(
     @"Found %lu tasks", 
-    (unsigned long)[[launchd tasksByPath] count]);
+    (unsigned long)[[launchd filesByPath] count]);
   
   NSArray * paths = 
-    [[[launchd tasksByPath] allKeys] 
+    [[[launchd filesByPath] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   for(NSString * path in paths)
     {
-    LaunchdFile * file = [[launchd tasksByPath] objectForKey: path];
+    LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
       
     NSString * validity =
       file.configScriptValid

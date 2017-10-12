@@ -52,8 +52,6 @@
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
-@synthesize appleLaunchd = myAppleLaunchd;
-@synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize legitimateStrings = myLegitimateStrings;
 @synthesize sip = mySIP;
 @synthesize cleanupRequired = myCleanupRequired;
@@ -127,7 +125,6 @@
   [myGPUErrors release];
   [myPhysicalVolumes release];
   [myComputerName release];
-  [myAppleLaunchd release];
   [myLegitimateStrings release];
   [myBlacklistSuffixes release];
   [myBlacklistMatches release];
@@ -136,7 +133,6 @@
   [myWhitelistPrefixes release];
   [myAdwareExtensions release];
   
-  self.appleLaunchdByLabel = nil;
   self.terminatedTasks = nil;
   self.processes = nil;
   self.launchd = nil;

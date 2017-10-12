@@ -78,9 +78,6 @@
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
   
-  NSDictionary * myAppleLaunchd;
-  NSDictionary * myAppleLaunchdByLabel;
-  
   NSMutableSet * myLegitimateStrings;
   
   bool mySIP;
@@ -195,12 +192,6 @@
 
 // Do I have a verified EtreCheck version?
 @property (assign) bool verifiedEtreCheckVersion;
-
-// Apple launchd files.
-@property (retain) NSDictionary * appleLaunchd;
-
-// Apple launchd files by label.
-@property (retain) NSDictionary * appleLaunchdByLabel;
 
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;

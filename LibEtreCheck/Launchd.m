@@ -10,6 +10,7 @@
 #import "SubProcess.h"
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
+#import "NSDictionary+Etresoft.h"
 #import <ServiceManagement/ServiceManagement.h>
 
 // A wrapper around all things launchd.
@@ -38,6 +39,9 @@
 // Only load once.
 @synthesize loaded = myLoaded;
 
+// Apple launchd file.
+@synthesize appleFiles = myAppleFiles;
+
 // Constructor.
 - (instancetype) init
   {
@@ -51,6 +55,7 @@
     myAdwareFiles = [NSMutableSet new];
     myUnsignedFiles = [NSMutableSet new];
     myEphemeralTasks = [NSMutableSet new];
+    myAppleFiles = [NSMutableDictionary new];
     }
     
   return self;
@@ -65,6 +70,7 @@
   [myAdwareFiles release];
   [myUnsignedFiles release];
   [myEphemeralTasks release];
+  [myAppleFiles release];
   
   [super dealloc];
   }
@@ -85,6 +91,9 @@
   
   // Reconcile all the data.
   [self reconcileTasks];
+  
+  // Load Apple files.
+  [self loadAppleFiles];
   }
   
 // Load all "truth" files. Later, I will compare with reality.
@@ -417,4 +426,58 @@
     }
   }
   
+// Load Apple launchd files.
+- (void) loadAppleFiles
+  {
+  NSString * launchdPath =
+    [[NSBundle mainBundle]
+      pathForResource: @"appleLaunchd" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: launchdPath];
+  
+  if(plistData)
+    {
+    NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
+  
+    if(plist)
+      {
+      switch([[OSVersion shared] major])
+        {
+        case kSnowLeopard:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.6"]];
+          break;
+        case kLion:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.7"]];
+          break;
+        case kMountainLion:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.8"]];
+          break;
+        case kMavericks:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.9"]];
+          break;
+        case kYosemite:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.10"]];
+          break;
+        case kElCapitan:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
+          break;
+        case kSierra:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.12"]];
+          break;
+        case kHighSierra:
+        default:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.13"]];
+          break;
+        }
+      }
+    }
+  }
+
+// Load apple launchd files for a specific OS version.
+- (void) loadAppleLaunchd: (NSDictionary *) launchdFiles
+  {
+  if(launchdFiles != nil)
+    [self.appleFiles addEntriesFromDictionary: launchdFiles];
+  }
+
 @end

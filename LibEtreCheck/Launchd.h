@@ -30,6 +30,9 @@
   
   // Only load once.
   BOOL myLoaded;
+  
+  // Apple launchd file.
+  NSMutableDictionary * myAppleFiles;
   }
   
 // Launchd files keyed by config file path. 
@@ -54,6 +57,9 @@
 
 // Only load once.
 @property (readonly) BOOL loaded;
+
+// Apple launchd file.
+@property (readonly, nonnull) NSMutableDictionary * appleFiles;
 
 // Load all entries.
 - (void) load;
