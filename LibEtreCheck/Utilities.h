@@ -200,9 +200,6 @@
 // Indent a block of text.
 + (NSString *) indent: (NSString *) text by: (NSString *) indent;
 
-// Purge notification SPAM.
-+ (BOOL) purgeNotificationSPAM: (NSArray *) note_ids;
-
 // Find a machine icon.
 + (NSImage *) findMachineIcon: (NSString *) code;
 

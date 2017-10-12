@@ -150,7 +150,7 @@
   NSString * spammer = nil;
   
   // Keep track of the notifications to remove.
-  NSMutableArray * note_ids = [NSMutableArray new];
+  NSMutableArray * notifications = [NSMutableArray new];
   
   // Kepp track of the notifications to keep.
   NSMutableArray * notificationsToKeep = [NSMutableArray new];
@@ -158,42 +158,34 @@
   for(NSDictionary * notification in self.notificationsToRemove)
     {
     // Should I remove this one?
-    BOOL remove = [[notification objectForKey: kRemove] boolValue];
-    
-    if(remove)
+    if([[notification objectForKey: kRemove] boolValue])
       {
-      // Add this notification ID to the list to remove.
-      NSNumber * noteID = [notification objectForKey: kNotificationNoteID];
-      
-      if(noteID != nil)
-        {
-        // Save the spammer.
-        spammer = [notification objectForKey: kNotificationBundleID];
+      UserNotification * userNotification = 
+        [notification objectForKey: kNotificationUserNotification];
         
-        [note_ids addObject: noteID];
-        
-        // Suggest a restart at the end.
-        self.notificationsRemoved = YES;
-        }
+      [notifications addObject: userNotification];
+
+      // Suggest a restart at the end.
+      self.notificationsRemoved = YES;
       }
     else
       [notificationsToKeep addObject: notification];
     }
 
   // Remove the notifications.
-  [Utilities purgeNotificationSPAM: note_ids];
+  [Actions purgeUserNotifications: notifications];
 
   // Now remove the notifications from the model in case the user clicks
   // again.
-  NSMutableDictionary * modelNotifications =
+  NSMutableArray * modelNotifications =
     [[[Model model] notificationSPAMs] objectForKey: spammer];
     
-  for(NSNumber * note_id in note_ids)
-    [modelNotifications removeObjectForKey: note_id];
+  for(UserNotification * notification in modelNotifications)
+    [modelNotifications removeObject: notification];
     
   // Setup the table for the notifications that the user wanted to keep.
   [myNotificationsToRemove release];
-  [note_ids release];
+  [notifications release];
   
   myNotificationsToRemove = notificationsToKeep;
   

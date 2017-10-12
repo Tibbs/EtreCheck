@@ -475,11 +475,19 @@
   
     [self.model addElement: @"name" value: bundleID];
     
-    NSDictionary * notifications = 
+    NSArray * notifications = 
       [[[Model model] notificationSPAMs] objectForKey: bundleID];
       
-    [self.model 
-      addElement: @"count" unsignedIntegerValue: notifications.count];
+    [self.model startElement: @"notifications"];
+    
+    for(UserNotification * notification in notifications)
+      {
+      [self.model addElement: @"identifier" number: notification.noteID];
+      [self.model 
+        addElement: @"text" value: notification.notification.title];
+      }
+      
+    [self.model endElement: @"notifications"];
   
     [self.model endElement: @"spammer"];
     }

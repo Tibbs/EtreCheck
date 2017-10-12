@@ -415,7 +415,6 @@
         [self.orphanFiles addObject: file];
       }
     }
-    
   }
   
 @end

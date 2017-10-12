@@ -119,6 +119,24 @@
   [super dealloc];
   }
   
+// Re-query a launchd task.
+- (void) requery
+  {
+  [myPID release];
+  [myLastExitCode release];
+
+  myPID = nil;
+  myLastExitCode = nil;
+  
+  NSData * data = 
+    [LaunchdLoadedTask loadDataWithLabel: self.label inDomain: self.domain];
+  
+  [self parseData: data];
+  [self getStatus];
+  }
+  
+#pragma mark - Private methods
+
 // Parse a dictionary.
 - (void) parseDictionary: (NSDictionary *) dict 
   {
@@ -144,6 +162,14 @@
   
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+  
+  if([plist hasPrefix: @"Could not find service "])
+    {
+    self.status = kStatusNotLoaded;
+    return;
+    }
+    
+  self.status = kStatusLoaded;
   
   // Split lines by new lines.
   NSArray * lines = [plist componentsSeparatedByString: @"\n"];
@@ -284,20 +310,9 @@
   return data;
   }
 
-// Re-query a launchd task.
-- (void) requery
-  {
-  NSData * data = 
-    [LaunchdLoadedTask loadDataWithLabel: self.label inDomain: self.domain];
-  
-  [self parseData: data];
-  }
-  
-// Get thes status.
+// Get the status.
 - (void) getStatus
   {
-  self.status = kStatusLoaded;
-  
   if(self.PID.length > 0)
     {
     NSNumber * pid = 

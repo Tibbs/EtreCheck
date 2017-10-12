@@ -14,6 +14,7 @@
 #import "LocalizedString.h"
 #import "XMLBuilder.h"
 #import "NSDate+Etresoft.h"
+#import <ServiceManagement/ServiceManagement.h>
 
 // A wrapper around a launchd task.
 @interface LaunchdTask ()
@@ -40,6 +41,9 @@
   
 // The executable's signature.
 @synthesize signature = mySignature;
+
+// Is the file loaded?
+@dynamic loaded;
 
 // Get the status.
 - (NSString *) status
@@ -72,6 +76,12 @@
   return myStatus;
   }
 
+// Is the file loaded?
+- (BOOL) loaded
+  {
+  return self.loadedTasks.count > 0;
+  }
+  
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path
   {
@@ -105,6 +115,60 @@
   [super dealloc];
   }
     
+// Load a launchd task.
+- (void) load
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"load", @"-wF", self.path, nil];
+    
+  [launchctl execute: @"/bin/launchctl" arguments: arguments];
+    
+  [arguments release];
+  [launchctl release];
+  }
+
+// Unload a launchd task.
+- (void) unload
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"unload", @"-wF", self.path, nil];
+    
+  [launchctl execute: @"/bin/launchctl" arguments: arguments];
+    
+  [arguments release];
+  [launchctl release];
+  }
+
+// Requery the file.
+- (void) requery
+  {
+  NSMutableSet * unloadedTasks = [NSMutableSet new];
+  
+  for(LaunchdLoadedTask * task in self.loadedTasks)
+    {
+    [task requery];
+  
+    if([task.status isEqualToString: kStatusNotLoaded])
+      [unloadedTasks addObject: task];
+    }
+    
+  for(LaunchdLoadedTask * task in unloadedTasks)
+    [self.loadedTasks removeObject: task];
+    
+  [unloadedTasks release];
+  
+  [myStatus release];
+  myStatus = nil;
+  
+  [self findNewTasks];
+  }
+  
+#pragma mark - Private methods
+
 // Parse from a path.
 - (void) parseFromPath: (nonnull NSString *) path 
   {
@@ -154,34 +218,6 @@
         [Utilities crcFile: self.executable]];
   }
   
-// Load a launchd task.
-- (void) load
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"load", @"-wF", self.path, nil];
-    
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-  }
-
-// Unload a launchd task.
-- (void) unload
-  {
-  SubProcess * launchctl = [[SubProcess alloc] init];
-  
-  NSArray * arguments = 
-    [[NSArray alloc] initWithObjects: @"unload", @"-wF", self.path, nil];
-    
-  [launchctl execute: @"/bin/launchctl" arguments: arguments];
-    
-  [arguments release];
-  [launchctl release];
-  }
-
 // Get the modification date.
 - (void) getModificationDate
   {
@@ -198,6 +234,228 @@
       }
   }
   
+// Find new tasks for this file.
+- (void) findNewTasks
+  {
+  if([[OSVersion shared] major] >= kYosemite)
+    [self findNewLaunchdTasks];
+  else
+    [self findNewServiceManagementTasks];
+  }
+  
+// Find new load all entries.
+- (void) findNewLaunchdTasks
+  {
+  [self findNewSystemLaunchdTasks];
+  [self findNewUserLaunchdTasks];
+  [self findNewGUILaunchdTasks];
+  }
+  
+// Load all system domain tasks.
+- (void) findNewSystemLaunchdTasks
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  NSString * target = @"system/";
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"print", target, nil];
+    
+  [target release];
+  
+  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
+    if(launchctl.standardOutput.length > 0)
+      [self 
+        findNewLaunchdTasksInData: launchctl.standardOutput 
+        domain: kLaunchdSystemDomain];
+      
+  [arguments release];
+  [launchctl release];
+  }
+
+// Load all user domain tasks.
+- (void) findNewUserLaunchdTasks
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  uid_t uid = getuid();
+    
+  NSString * target = [[NSString alloc] initWithFormat: @"user/%d/", uid];
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"print", target, nil];
+    
+  [target release];
+  
+  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
+    if(launchctl.standardOutput.length > 0)
+      [self 
+        findNewLaunchdTasksInData: launchctl.standardOutput 
+        domain: kLaunchdUserDomain];
+      
+  [arguments release];
+  [launchctl release];
+  }
+
+// Load all gui domain tasks.
+- (void) findNewGUILaunchdTasks
+  {
+  SubProcess * launchctl = [[SubProcess alloc] init];
+  
+  uid_t uid = getuid();
+    
+  NSString * target = [[NSString alloc] initWithFormat: @"gui/%d/", uid];
+  
+  NSArray * arguments = 
+    [[NSArray alloc] initWithObjects: @"print", target, nil];
+    
+  [target release];
+  
+  if([launchctl execute: @"/bin/launchctl" arguments: arguments])
+    if(launchctl.standardOutput.length > 0)
+      [self 
+        findNewLaunchdTasksInData: launchctl.standardOutput 
+        domain: kLaunchdGUIDomain];
+      
+  [arguments release];
+  [launchctl release];
+  }
+
+// Parse a launchctl output.
+- (void) findNewLaunchdTasksInData: (NSData *) data 
+  domain: (NSString *) domain
+  {
+  NSString * plist = 
+    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+  
+  // Split lines by new lines.
+  NSArray * lines = [plist componentsSeparatedByString: @"\n"];
+  
+  // Am I parsing services now?
+  bool parsingServices = false;
+  
+  for(NSString * line in lines)
+    {
+    // If I am parsing services, look for the end indicator.
+    if(parsingServices)
+      {
+      // An argument could be a bare "}". Do a string check with whitespace.
+      if([line isEqualToString: @"	}"])
+        break;        
+    
+      [self parseLine: line domain: domain];
+      }
+      
+    else if([line isEqualToString: @"	services = {"])
+      parsingServices = true;
+    }
+    
+  [plist release];
+  }
+  
+// Parse a line from a launchd listing.
+- (void) parseLine: (NSString *) line domain: (NSString *) domain
+  {
+  NSString * trimmedLine =
+    [line
+      stringByTrimmingCharactersInSet:
+        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+  NSScanner * scanner = [[NSScanner alloc] initWithString: trimmedLine];
+  
+  // Yes. These must all be strings. Apple likes to be clever.
+  NSString * PID = nil;
+  NSString * lastExitCode = nil;
+  NSString * label = nil;
+  
+  BOOL success = 
+    [scanner 
+      scanUpToCharactersFromSet: 
+        [NSCharacterSet whitespaceAndNewlineCharacterSet] 
+      intoString: & PID];
+  
+  if(success)
+    {
+    success = 
+      [scanner 
+        scanUpToCharactersFromSet: 
+          [NSCharacterSet whitespaceAndNewlineCharacterSet] 
+        intoString: & lastExitCode];
+
+    if(success)
+      {
+      // Labels can have spaces.
+      success = 
+        [scanner 
+          scanUpToCharactersFromSet: [NSCharacterSet newlineCharacterSet] 
+          intoString: & label];
+  
+      if(success && ![PID isEqualToString: @"PID"])
+        if([label hasPrefix: self.label])
+          [self loadNewTaskWithLabel: label domain: domain];
+      }
+    }
+    
+  [scanner release];
+  }
+  
+// Load a task. Just do my best.
+- (void) loadNewTaskWithLabel: (NSString *) label 
+  domain: (NSString *) domain
+  {
+  LaunchdLoadedTask * task = 
+    [[LaunchdLoadedTask alloc] initWithLabel: label inDomain: domain];
+   
+  if(task != nil)
+    [self.loadedTasks addObject: task];
+    
+  [task release];
+  }
+  
+// Find new Service Management jobs.
+- (void) findNewServiceManagementTasks
+  {
+  if(& SMCopyAllJobDictionaries != NULL)
+    {
+    CFArrayRef systemJobs = 
+      SMCopyAllJobDictionaries(kSMDomainSystemLaunchd);
+    
+    for(NSDictionary * dict in (NSArray *)systemJobs)
+      {
+      LaunchdLoadedTask * task = 
+        [[LaunchdLoadedTask alloc] 
+          initWithDictionary: dict inDomain: kLaunchdSystemDomain];
+      
+      if(task != nil)
+        if([task.label hasPrefix: self.label])
+          [self.loadedTasks addObject: task];
+      
+      [task release];
+      }
+
+    if(systemJobs != NULL)
+      CFRelease(systemJobs);
+      
+    CFArrayRef userJobs = SMCopyAllJobDictionaries(kSMDomainUserLaunchd);
+    
+    for(NSDictionary * dict in (NSArray *)userJobs)
+      {
+      LaunchdLoadedTask * task = 
+        [[LaunchdLoadedTask alloc] 
+          initWithDictionary: dict inDomain: kLaunchdUserDomain];
+      
+      if(task != nil)
+        if([task.label hasPrefix: self.label])
+          [self.loadedTasks addObject: task];
+      
+      [task release];
+      }
+      
+    if(userJobs != NULL)
+      CFRelease(userJobs);
+    }
+  }
+
 #pragma mark - Context
 
 // Find the context based on the path.

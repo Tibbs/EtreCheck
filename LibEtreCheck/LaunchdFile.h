@@ -45,6 +45,9 @@
 // The executable's signature.
 @property (retain, nullable) NSString * signature;
 
+// Is the file loaded?
+@property (readonly) BOOL loaded;
+
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;
 
@@ -53,5 +56,8 @@
 
 // Unload a launchd task.
 - (void) unload;
+
+// Requery the file.
+- (void) requery;
 
 @end

@@ -26,7 +26,7 @@
 		A542792F1F8D4D64009E7D29 /* PrintableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A542792E1F8D4D64009E7D29 /* PrintableItem.m */; };
 		A54279331F8E6F8D009E7D29 /* SystemLaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */; };
 		A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */; };
-		A54279371F8EA7BD009E7D29 /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279351F8EA7BD009E7D29 /* UserNotification.h */; };
+		A54279371F8EA7BD009E7D29 /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279351F8EA7BD009E7D29 /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A54279381F8EA7BD009E7D29 /* UserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A54279361F8EA7BD009E7D29 /* UserNotification.m */; };
 		A54279391F8EC898009E7D29 /* PrintableItem.h in Headers */ = {isa = PBXBuildFile; fileRef = A542792D1F8D4BCD009E7D29 /* PrintableItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };

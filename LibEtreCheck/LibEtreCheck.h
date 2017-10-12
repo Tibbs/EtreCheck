@@ -26,6 +26,7 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 #import <LibEtreCheck/LaunchdFile.h>
 #import <LibEtreCheck/Safari.h>
 #import <LibEtreCheck/SafariExtension.h>
+#import <LibEtreCheck/UserNotification.h>
 #import <LibEtreCheck/EtreCheckConstants.h>
 #import <LibEtreCheck/NSMutableAttributedString+Etresoft.h>
 #import <LibEtreCheck/NSDictionary+Etresoft.h>
