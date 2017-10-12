@@ -13,8 +13,17 @@
 // Wrapper around Safari informatino.
 @implementation Safari
 
+// Extensions keyed by identifier.
 @synthesize extensions = myExtensions;
+
+// Extensions keyed by name.
 @synthesize extensionsByName = myExtensionsByName;
+
+// Extensions identified as adware.
+@synthesize adwareExtensions = myAdwareExtensions;
+
+// Extensions that are not loaded.
+@synthesize orphanExtensions = myOrphanExtensions;
 
 // Constructor.
 - (id) init
@@ -25,6 +34,8 @@
     {
     myExtensions = [NSMutableDictionary new];
     myExtensionsByName = [NSMutableDictionary new];
+    myAdwareExtensions = [NSMutableSet new];
+    myOrphanExtensions = [NSMutableSet new];
     }
     
   return self;
@@ -35,6 +46,8 @@
   {
   [myExtensionsByName release];
   [myExtensions release];
+  [myAdwareExtensions release];
+  [myOrphanExtensions release];
   
   [super dealloc];
   }

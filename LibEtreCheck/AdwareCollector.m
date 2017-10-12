@@ -32,12 +32,6 @@
 // Collect information about adware.
 @implementation AdwareCollector
 
-// Launcd adware files.
-@synthesize launchdAdwareFiles = myLaunchdAdwareFiles;
-
-// Safari extension adware files.
-@synthesize safariExtensionAdwareFiles = mySafariExtensionAdwareFiles;
-
 // Constructor.
 - (id) init
   {
@@ -47,23 +41,11 @@
     {
     [self loadSignatures];
     [self buildDatabases];
-    
-    myLaunchdAdwareFiles = [NSMutableArray new];
-    mySafariExtensionAdwareFiles = [NSMutableArray new];
     }
     
   return self;
   }
 
-// Destructor.
-- (void) dealloc
-  {
-  [myLaunchdAdwareFiles release];
-  [mySafariExtensionAdwareFiles release];
-  
-  [super dealloc];
-  }
-  
 // Load signatures from an obfuscated list of signatures.
 - (void) loadSignatures
   {
@@ -135,7 +117,7 @@
       [[Model model] appendToWhitelistPrefixes: signatures];
 
     if([key isEqualToString: kAdwareExtensionsKey])
-      [[Model model] setAdwareExtensions: signatures];
+      [[Model model] appendToAdwareExtensions: signatures];
       
     else if([key isEqualToString: kBlacklistKey])
       [[Model model] appendToBlacklist: signatures];
@@ -179,7 +161,8 @@
   
   [self collectSafariExtensionAdware];
   
-  [self printAdwareFiles];
+  [self printAdware];
+  [self exportAdware];
   }
   
 // Collect launchd adware.
@@ -189,9 +172,9 @@
   
   // I will have already filtered out launchd files specific to this 
   // context.
-  for(NSString * path in [launchd tasksByPath])
+  for(NSString * path in [launchd filesByPath])
     {
-    LaunchdFile * file = [[launchd tasksByPath] objectForKey: path];
+    LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
     
     if(file != nil)
       [self checkAdware: file];
@@ -224,7 +207,7 @@
     adware = true;
   
   if(adware)
-    [self.launchdAdwareFiles addObject: file];
+    [[[[Model model] launchd] adwareFiles] addObject: file];
   }
 
 // Is this an adware suffix file?
@@ -351,7 +334,7 @@
       
   Launchd * launchd = [[Model model] launchd];
 
-  for(NSString * path in [launchd tasksByPath])
+  for(NSString * path in [launchd filesByPath])
     {
     NSString * trioPrefix = nil;
     NSString * trioType = [self checkAdwareTrio: path prefix: & prefix];
@@ -430,43 +413,18 @@
       adware = true;
       
     if(adware)
-      [self.safariExtensionAdwareFiles addObject: extension];
+      [[[[Model model] safari] adwareExtensions] addObject: extension];
     }
   }
 
-// Print adware files.
-- (void) printAdwareFiles
+// Print adware.
+- (void) printAdware
   {
   int adwareCount = 0;
   
-  for(LaunchdFile * launchdFile in self.launchdAdwareFiles)
-    {
-    if(adwareCount++ == 0)
-      [self.result appendAttributedString: [self buildTitle]];
-      
-    // Print the file.
-    [self.result appendAttributedString: launchdFile.attributedStringValue];
-
-    if(launchdFile.executable.length > 0)
-      {
-      [self.result appendString: @"\n        "];
-      [self.result 
-        appendString: [Utilities cleanPath: launchdFile.executable]];
-      }
-    
-    [self.result appendString: @"\n"];
-    }
-    
-  for(SafariExtension * extension in self.safariExtensionAdwareFiles)
-    {
-    if(adwareCount++ == 0)
-      [self.result appendAttributedString: [self buildTitle]];
-
-    // Print the extension.
-    [self.result appendAttributedString: extension.attributedStringValue];
-    [self.result appendString: @"\n"];
-    }
-    
+  adwareCount += [self printAdwareLaunchdFiles];
+  adwareCount += [self printAdwareSafariExtensions: adwareCount];
+  
   if(adwareCount > 0)
     {
     NSString * message = 
@@ -493,106 +451,89 @@
     }
   }
   
-- (void) foo
+// Print adware files.
+- (int) printAdwareLaunchdFiles
   {
-  if([[Model model] adwareFound])
+  int adwareCount = 0;
+  
+  for(LaunchdFile * launchdFile in [[Model model] launchd].adwareFiles)
     {
-    NSMutableArray * possibleAdwareFiles = [NSMutableArray array];
-    
-    // Add the known adware.
-    for(NSString * adwareFile in [[Model model] adwareFiles])
+    if(adwareCount++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+      
+    // Print the file.
+    [self.result appendAttributedString: launchdFile.attributedStringValue];
+
+    if(launchdFile.executable.length > 0)
       {
-      NSDictionary * possibleAdware =
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            adwareFile, @"key",
-            @"adwarefile", @"type",
-            @"", @"executable",
-            nil];
-        
-      [possibleAdwareFiles addObject: possibleAdware];
-      }
-      
-    NSArray * sortedAdwareFiles =
-      [possibleAdwareFiles
-        sortedArrayUsingComparator:
-          ^NSComparisonResult(id obj1, id obj2)
-            {
-            NSString * key1 = [obj1 objectForKey: @"key"];
-            NSString * key2 = [obj2 objectForKey: @"key"];
-
-            return [key1 compare: key2];
-            }];
-
-
-    if([sortedAdwareFiles count] == 0)
-      return;
-      
-    [self.result appendAttributedString: [self buildTitle]];
-    
-    __block int adwareCount = 0;
-    
-    [sortedAdwareFiles
-      enumerateObjectsUsingBlock:
-        ^(id obj, NSUInteger idx, BOOL * stop)
-          {
-          NSString * name = [obj objectForKey: @"key"];
-          NSString * executable = [obj objectForKey: @"executable"];
-          
-          NSString * extra =
-            ([executable length] > 0)
-              ? [NSString stringWithFormat: @"\n    \t%@", executable]
-              : @"";
-            
-          ++adwareCount;
-          [self.result appendString: @"    "];
-              
-          NSString * prettyPath = [Utilities prettyPath: name];
-          
-          [self.result
-            appendString: prettyPath
-            attributes:
-              @{
-                NSFontAttributeName : [[Utilities shared] boldFont],
-                NSForegroundColorAttributeName : [[Utilities shared] red],
-              }];
-            
-          if([extra length])
-            [self.result
-              appendString: extra
-              attributes:
-                @{
-                  NSFontAttributeName : [[Utilities shared] boldFont],
-                  NSForegroundColorAttributeName : [[Utilities shared] red],
-                }];
-            
-          [self.result appendString: @"\n"];
-          
-          [self.model addElement: @"adwarefile" value: prettyPath];
-          }];
-      
-    NSString * message = 
-      ECLocalizedPluralString(adwareCount, @"adware file");
-
-    [self.result appendString: @"    "];
-    [self.result
-      appendString: message
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-        }];
-    
-    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
-
-    if(removeLink)
-      {
-      [self.result appendAttributedString: removeLink];
-      [self.result appendString: @"\n"];
+      [self.result appendString: @"\n        "];
+      [self.result 
+        appendString: [Utilities cleanPath: launchdFile.executable]];
       }
     
-    [self.result appendCR];
+    [self.result appendString: @"\n"];
     }
+    
+  return adwareCount;
+  }
+  
+// Print adware files.
+- (int) printAdwareSafariExtensions: (int) adwareCount
+  {    
+  Safari * safari = [[Model model] safari];
+  
+  for(SafariExtension * extension in safari.adwareExtensions)
+    {
+    if(adwareCount++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+
+    // Print the extension.
+    [self.result appendAttributedString: extension.attributedStringValue];
+    [self.result appendString: @"\n"];
+    }
+        
+  return adwareCount;
+  }
+
+// Export adware.
+- (void) exportAdware
+  {
+  [self exportAdwareLaunchdFiles];
+  [self exportAdwareSafariExtensions];
+  }
+
+// Print adware files.
+- (void) exportAdwareLaunchdFiles
+  {
+  if([[Model model] launchd].adwareFiles.count == 0)
+    return;
+    
+  [self.model startElement: @"launchdfiles"];
+  
+  for(LaunchdFile * launchdFile in [[Model model] launchd].adwareFiles)
+
+    // Export the XML.
+    [self.model addFragment: launchdFile.xml];
+
+  [self.model endElement: @"launchdfiles"];
+  }
+  
+// Print adware files.
+- (void) exportAdwareSafariExtensions
+  {    
+  Safari * safari = [[Model model] safari];
+  
+  if(safari.adwareExtensions.count == 0)
+    return;
+    
+  [self.model startElement: @"safariextensions"];
+
+  for(SafariExtension * extension in safari.adwareExtensions)
+
+    // Export the XML.
+    [self.model addFragment: extension.xml];
+
+  [self.model endElement: @"safariextensions"];
   }
 
 @end

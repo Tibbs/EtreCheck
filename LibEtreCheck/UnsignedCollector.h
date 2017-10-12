@@ -8,7 +8,5 @@
 
 // Collect information about unsigned files.
 @interface UnsignedCollector : Collector
-  {
-  }
 
 @end

@@ -42,11 +42,11 @@
   {
   NSMutableArray * files = [NSMutableArray new];
   
-  for(NSString * path in [[[Model model] launchd] tasksByPath])
+  for(NSString * path in [[[Model model] launchd] filesByPath])
     if([path hasPrefix: directory])
       {
       LaunchdFile * file = 
-        [[[[Model model] launchd] tasksByPath] objectForKey: path];
+        [[[[Model model] launchd] filesByPath] objectForKey: path];
       
       if(file != nil)
         [files addObject: file];

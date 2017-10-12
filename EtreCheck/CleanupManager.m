@@ -47,21 +47,16 @@
   
   NSMutableDictionary * filesToRemove = [NSMutableDictionary new];
   
-  for(NSString * path in [[Model model] orphanLaunchdFiles])
+  for(LaunchdFile * file in [[[Model model] launchd] orphanFiles])
     {
-    NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
-
-    if(info != nil)
-      {
-      NSMutableDictionary * item = [NSMutableDictionary new];
-      
-      [item setObject: path forKey: kPath];
-      [item setObject: info forKey: kLaunchdTask];
-      
-      [filesToRemove setObject: item forKey: path];
-      
-      [item release];
-      }
+    NSMutableDictionary * item = [NSMutableDictionary new];
+    
+    [item setObject: file.path forKey: kPath];
+    [item setObject: file forKey: kLaunchdFile];
+    
+    [filesToRemove setObject: item forKey: file.path];
+    
+    [item release];
     }
     
   NSArray * orphanFiles =

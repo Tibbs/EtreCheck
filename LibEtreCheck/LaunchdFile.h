@@ -22,6 +22,12 @@
   
   // The launchd context. (apple, system, user)
   NSString * myContext;
+  
+  // Loaded tasks.
+  NSMutableArray * myLoadedTasks;
+  
+  // The executable's signature.
+  NSString * mySignature;
   }
 
 // The config script contents.
@@ -35,6 +41,9 @@
 
 // Loaded tasks.
 @property (readonly, nonnull) NSMutableArray * loadedTasks;
+
+// The executable's signature.
+@property (retain, nullable) NSString * signature;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

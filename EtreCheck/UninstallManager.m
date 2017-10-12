@@ -111,27 +111,28 @@
   if(![self canRemoveFiles])
     return;
   
-  NSMutableArray * launchdTasksToUnload = [NSMutableArray new];
-  NSMutableArray * filesToDelete = [NSMutableArray new];
+  NSMutableArray * launchdFiles = [NSMutableArray new];
+  NSMutableArray * safariExtensions = [NSMutableArray new];
 
   for(NSDictionary * item in items)
     {
-    NSString * path = [item objectForKey: kPath];
+    LaunchdFile * file = [item objectForKey: kLaunchdFile];
     
-    NSDictionary * info = [item objectForKey: kLaunchdTask];
+    if(file != nil)
+      [launchdFiles addObject: file];
+      
+    SafariExtension * extension = [item objectForKey: kSafariExtension];
     
-    if(info != nil)
-      [launchdTasksToUnload addObject: info];
-    else if(path != nil)
-      [filesToDelete addObject: path];
+    if(extension != nil) 
+      [safariExtensions addObject: extension];
     }
   
   [self reportFiles];
-  [Utilities uninstallLaunchdTasks: launchdTasksToUnload];
-  [Utilities deleteFiles: filesToDelete];
+  //[Utilities uninstallLaunchdTasks: launchdFiles];
+  //[Utilities deleteFiles: safariExtensions];
   
-  [launchdTasksToUnload release];
-  [filesToDelete release];
+  [launchdFiles release];
+  [safariExtensions release];
   
   [self verifyRemoveFiles: items];
   }
@@ -300,7 +301,16 @@
         
         [filesRemoved addObject: path];
         
-        [[[Model model] launchdFiles] removeObjectForKey: path];
+        LaunchdFile * file = [item objectForKey: kLaunchdFile];
+        
+        if(file != nil)
+          [[[[Model model] launchd] adwareFiles] removeObject: file];
+          
+        SafariExtension * extension = [item objectForKey: kSafariExtension];
+        
+        if(extension != nil)
+          [[[[Model model] safari] adwareExtensions] 
+            removeObject: extension];
         }
       }
     }
@@ -320,7 +330,7 @@
 // Report the files.
 - (void) reportFiles
   {
-  NSMutableString * json = [NSMutableString string];
+  /* NSMutableString * json = [NSMutableString string];
   
   [json appendString: @"{\"action\":\"addtoblacklist\","];
   [json appendString: @"\"files\":["];
@@ -333,7 +343,7 @@
     
     if([path length])
       {
-      NSDictionary * info = [item objectForKey: kLaunchdTask];
+      NSDictionary * info = [item objectForKey: kLaunchdFile];
       
       NSArray * command =
         [path length] > 0
@@ -390,7 +400,7 @@
       ^{
         [request send: json];
         [request release];
-      });
+      }); */
   }
 
 // Suggest a restart.
@@ -418,7 +428,7 @@
 
   if(result == NSAlertFirstButtonReturn)
     {
-    if(![Utilities restart])
+    if(![Actions restart])
       [self restartFailed];
     }
   }

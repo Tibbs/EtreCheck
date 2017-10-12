@@ -126,18 +126,20 @@
   
   NSMutableDictionary * filesToRemove = [NSMutableDictionary new];
   
-  for(NSString * path in [[Model model] adwareLaunchdFiles])
+  for(LaunchdFile * file in [[[Model model] launchd] adwareFiles])
     {
-    NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
-
-    if(info != nil)
+    // Double-check to make sure the file is still there.
+    BOOL exists = 
+      [[NSFileManager defaultManager] fileExistsAtPath: file.path];
+      
+    if(exists)
       {
       NSMutableDictionary * item = [NSMutableDictionary new];
       
-      [item setObject: path forKey: kPath];
-      [item setObject: info forKey: kLaunchdTask];
+      [item setObject: file.path forKey: kPath];
+      [item setObject: file forKey: kLaunchdFile];
       
-      [filesToRemove setObject: item forKey: path];
+      [filesToRemove setObject: item forKey: file.path];
       
       [item setObject: [NSNumber numberWithBool: YES] forKey: kRemove];
         
@@ -145,27 +147,25 @@
       }
     }
     
-  for(NSString * path in [[Model model] adwareFiles])
+  NSSet * adwareExtensions = [[[Model model] safari] adwareExtensions];
+  
+  for(SafariExtension * extension in adwareExtensions)
     {
-    if([filesToRemove objectForKey: path] == nil)
+    // Double-check to make sure the file is still there.
+    BOOL exists = 
+      [[NSFileManager defaultManager] fileExistsAtPath: extension.path];
+    
+    if(exists)
       {
-      // Double-check to make sure the file is still there.
-      BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
+      NSMutableDictionary * item = [NSMutableDictionary new];
       
-      if(exists)
-        {
-        NSString * pathToRemove = [Utilities makeURLPath: path];
-        
-        NSMutableDictionary * item = [NSMutableDictionary new];
-        
-        [item setObject: pathToRemove forKey: kPath];
-        
-        [filesToRemove setObject: item forKey: path];
-        
-        [item setObject: [NSNumber numberWithBool: YES] forKey: kRemove];
-        
-        [item release];
-        }
+      [item setObject: extension.path forKey: kPath];
+      
+      [filesToRemove setObject: item forKey: extension.path];
+      
+      [item setObject: [NSNumber numberWithBool: YES] forKey: kRemove];
+      
+      [item release];
       }
     }
   
@@ -263,7 +263,7 @@
 // Contact Etresoft to add to whitelist.
 - (IBAction) report: (id) sender
   {
-  NSString * description = [self.whitelistDescription string];
+  /* NSString * description = [self.whitelistDescription string];
   
   if([description length] < 10)
     {
@@ -286,7 +286,7 @@
     if(!path)
       continue;
       
-    NSDictionary * info = [item objectForKey: kLaunchdTask];
+    NSDictionary * info = [item objectForKey: kLaunchdFile];
     
     NSArray * command =
       [path length] > 0
@@ -361,7 +361,7 @@
       ^{
         [request send: json];
         [request release];
-      });
+      }); */
   }
 
 // Require a description for reporting.
@@ -566,7 +566,7 @@
   NSString * path = [item objectForKey: kPath];
   NSString * name = [path lastPathComponent];
   
-  NSDictionary * info = [item objectForKey: kLaunchdTask];
+  NSDictionary * info = [item objectForKey: kLaunchdFile];
     
   NSString * signature = [info objectForKey: kSignature];
 

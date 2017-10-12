@@ -15,6 +15,11 @@
 #import "XMLBuilder.h"
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
+#import "Launchd.h"
+#import "LaunchdFile.h"
+#import "Safari.h"
+#import "SafariExtension.h"
+#import "UserNotification.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -39,113 +44,12 @@
   {
   [self collectNotificationSPAM];
   
-  BOOL hasMissingExecutables = [self printMissingExecutables];
+  [self collectOrphanLaunchdFiles];
   
-  [self printNotificationSPAM: !hasMissingExecutables];
-  }
-
-// Print any missing executables.
-- (BOOL) printMissingExecutables
-  {
-  NSDictionary * orphanLaunchdFiles = [[Model model] orphanLaunchdFiles];
+  [self collectOrphanSafariExtensions];
   
-  if(self.simulating && ([orphanLaunchdFiles count] == 0))
-    orphanLaunchdFiles = 
-      [NSDictionary
-        dictionaryWithObject: 
-          [NSDictionary 
-            dictionaryWithObjectsAndKeys:
-              [NSArray 
-                arrayWithObject: @"/Library/Application Support/nothing"], 
-              kCommand,
-              kExecutableMissing, kSignature,
-              nil] 
-        forKey: @"/Library/LaunchAgents/SimulatedMissingExe.plist"];
-    
-  if([orphanLaunchdFiles count] > 0)
-    {
-    [self.model startElement: @"missingexecutables"];
-    
-    [self.result appendAttributedString: [self buildTitle]];
-    
-    NSArray * sortedUnknownLaunchdFiles =
-      [[orphanLaunchdFiles allKeys]
-        sortedArrayUsingSelector: @selector(compare:)];
-      
-    [sortedUnknownLaunchdFiles
-      enumerateObjectsUsingBlock:
-        ^(id obj, NSUInteger idx, BOOL * stop)
-          {
-          NSDictionary * info = [orphanLaunchdFiles objectForKey: obj];
-          
-          NSString * path = [Utilities prettyPath: obj];
-          NSString * executablePath = 
-            [Utilities formatExecutable: [info objectForKey: kCommand]];
-                    
-          [self.result
-            appendString:
-              [NSString stringWithFormat: @"    %@", path]];
-
-          NSString * signature = [info objectForKey: kSignature];
-          
-          [self.result
-            appendString:
-              [NSString
-                stringWithFormat: @"\n        %@\n", executablePath]];
-
-          [self.model startElement: @"missingexecutable"];
-          
-          [self.model addElement: @"path" value: path];
-          [self.model addElement: @"executable" value: executablePath];
-          
-          [self.model endElement: @"missingexecutable"];
-          
-          // Report a missing executable.
-          if([signature isEqualToString: kExecutableMissing])
-            {
-            [self.result
-              appendString: 
-                ECLocalizedString(@"        Executable not found!\n")
-              attributes:
-                @{
-                  NSForegroundColorAttributeName : [[Utilities shared] red],
-                  NSFontAttributeName : [[Utilities shared] boldFont]
-                }];
-            }
-          }];
-      
-    NSString * message =
-      ECLocalizedPluralString([orphanLaunchdFiles count], @"orphan file");
-
-    [self.result appendString: @"    "];
-    
-    [self.result
-      appendString: message
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-    
-    NSAttributedString * cleanupLink =
-      [self generateRemoveOrphanFilesLink: @"files"];
-
-    if(cleanupLink)
-      {
-      [self.result appendAttributedString: cleanupLink];
-      [self.result appendString: @"\n"];
-      }
-    
-    [self.result appendCR];
-    
-    [[Model model] setCleanupRequired: YES];
-    
-    [self.model endElement: @"missingexecutables"];
-    
-    return YES;
-    }
-    
-  return NO;
+  [self printCleanup];
+  [self exportCleanup];
   }
 
 // Collection notification SPAM.
@@ -156,12 +60,76 @@
   if(version < kMountainLion)
     return;
     
+  NSMutableDictionary * notifications = [self collectNotifications];
+  
+  if(self.simulating)
+    {
+    NSMutableArray * simulatedNotifications = [NSMutableArray new];
+    
+    for(int i = 2; i <= 5; ++i)
+      {
+      UserNotification * notification = 
+        [[UserNotification alloc] 
+          initWithBundleID: @"com.spammer.simulated" 
+          noteID: [NSNumber numberWithInt: i]];
+          
+      [simulatedNotifications addObject: notification];
+      
+      [notification release];
+      }
+      
+    [notifications 
+      setObject: simulatedNotifications forKey: @"com.spammer.simulated"];
+    }
+  
+  [self checkForSPAM: notifications];
+  }
+  
+// Check for SPAM notifications.
+- (void) checkForSPAM: (NSMutableDictionary *) notifications
+  {
+  for(NSString * bundleID in notifications)
+    {
+    NSMutableArray * appNotifications =
+      [notifications objectForKey: bundleID];
+      
+    if(appNotifications.count < 4)
+      continue;
+      
+    [appNotifications
+      sortUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+        {
+        UserNotification * notification1 = obj1;
+        UserNotification * notification2 = obj2;
+        
+        if(notification1.noteID == nil)
+          return NSOrderedDescending;
+          
+        return [notification1.noteID compare: notification2.noteID];
+        }];
+      
+    NSInteger firstNoteID =
+      [[[appNotifications firstObject] noteID] integerValue];
+    
+    NSInteger lastNoteID =
+      [[[appNotifications lastObject] noteID] integerValue];
+      
+    if((lastNoteID - firstNoteID) == (appNotifications.count - 1))
+      [[[Model model] notificationSPAMs]  
+        setObject: appNotifications forKey:bundleID];
+    }
+  }
+  
+// Collect all notifications.
+- (NSMutableDictionary *) collectNotifications
+  {
   char user_dir[1024];
   
   size_t size = confstr(_CS_DARWIN_USER_DIR, user_dir, 1024);
   
   if(size >= 1023)
-    return;
+    return nil;
   
   NSString * path =
     [[NSString stringWithUTF8String: user_dir]
@@ -173,7 +141,7 @@
   int result = sqlite3_open(path.fileSystemRepresentation, & handle);
   
   if(result != SQLITE_OK)
-    return;
+    return nil;
     
   sqlite3_stmt * query;
     
@@ -186,6 +154,8 @@
     
   bool done = (result != SQLITE_OK);
   
+  NSMutableDictionary * notifications = [NSMutableDictionary dictionary];
+  
   while(!done)
     {
     result = sqlite3_step(query);
@@ -193,7 +163,8 @@
     switch(result)
       {
       case SQLITE_ROW:
-        [self collectionNotificationSPAMRow: query];
+        [self 
+          parseSPAMNotificationsRow: query notifications: notifications];
         break;
       case SQLITE_DONE:
         done = YES;
@@ -207,10 +178,13 @@
   sqlite3_finalize(query);
 
   sqlite3_close(handle);
+  
+  return notifications;
   }
 
 // Collect a notification.
-- (void) collectionNotificationSPAMRow: (sqlite3_stmt *) query
+- (void) parseSPAMNotificationsRow: (sqlite3_stmt *) query
+  notifications: (NSMutableDictionary *) notifications
   {
   NSNumber * note_id = (NSNumber *)[self load: query column: 0];
   NSString * bundle_id = (NSString *)[self load: query column: 1];
@@ -229,28 +203,26 @@
   if(![userNotification respondsToSelector: @selector(deliveryDate)])
     return;
     
-  NSDictionary * notification =
-    [NSDictionary
-      dictionaryWithObjectsAndKeys:
-        note_id, kNotificationNoteID,
-        bundle_id, kNotificationBundleID,
-        userNotification, kNotificationUserNotification,
-        nil];
+  UserNotification * notification = 
+    [[UserNotification alloc] initWithBundleID: bundle_id noteID: note_id];
+  
+  notification.notification = userNotification;
+  
+  NSMutableArray * appNotifications = 
+    [notifications objectForKey: bundle_id];
     
-  NSMutableDictionary * notifications =
-    [[[Model model] notificationSPAMs] objectForKey: bundle_id];
-    
-  if(notifications == nil)
+  if(appNotifications == nil)
     {
-    notifications = [NSMutableDictionary new];
+    appNotifications = [NSMutableArray new];
     
-    [[[Model model] notificationSPAMs]
-      setObject: notifications forKey: bundle_id];
-      
-    [notifications release];
+    [notifications setObject: appNotifications forKey: bundle_id];
+    
+    [appNotifications release];
     }
-    
-  [notifications setObject: notification forKey: note_id];
+  
+  [appNotifications addObject: notification];
+  
+  [notification release];
   }
 
 // Load a single column's data.
@@ -295,110 +267,225 @@
   return nil;
   }
 
-// Print notification SPAM.
-- (void) printNotificationSPAM: (BOOL) printTitle
+// Collect orphan launchd files.
+- (void) collectOrphanLaunchdFiles
   {
-  if(self.simulating)
-    [[[Model model] notificationSPAMs]
-      setObject: 
-        [NSArray 
-          arrayWithObjects: 
-          [NSDictionary 
-            dictionaryWithObject: @2 forKey: kNotificationNoteID],
-          [NSDictionary 
-            dictionaryWithObject: @3 forKey: kNotificationNoteID],
-          [NSDictionary 
-            dictionaryWithObject: @4 forKey: kNotificationNoteID],
-          [NSDictionary 
-            dictionaryWithObject: @5 forKey: kNotificationNoteID],
-          nil]
-      forKey: @"com.spammer.simulated"];
-    
-  for(NSString * spammer in [[Model model] notificationSPAMs])
+  Launchd * launchd = [[Model model] launchd];
+  
+  // I will have already filtered out launchd files specific to this 
+  // context.
+  for(NSString * path in [launchd filesByPath])
     {
-    NSMutableArray * notifications =
-      [NSMutableArray
-        arrayWithArray:
-          [[[[Model model] notificationSPAMs] objectForKey: spammer] 
-            allObjects]];
-      
-    NSUInteger count = [notifications count];
+    LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
     
-    if(count < 3)
-      continue;
-      
-    [self.model startElement: @"notificationspam"];
-    
-    [self.model startElement: @"spammer"];
-    
-    [self.model addElement: @"name" value: spammer];
-    [self.model addElement: @"count" unsignedIntegerValue: count];
-    
-    [self.model endElement: @"spammer"];
-    
-    [notifications
-      sortUsingComparator:
-        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
-        {
-        NSDictionary * notification1 = obj1;
-        NSDictionary * notification2 = obj2;
-        
-        NSNumber * noteID1 =
-          [notification1 objectForKey: kNotificationNoteID];
-          
-        NSNumber * noteID2 =
-          [notification2 objectForKey: kNotificationNoteID];
-        
-        if(noteID2 == nil)
-          return NSOrderedDescending;
-          
-        return [noteID1 compare: noteID2];
-        }];
-      
-    NSInteger firstNoteID =
-      [[[notifications firstObject]
-        objectForKey: kNotificationNoteID] integerValue];
-    
-    NSInteger lastNoteID =
-      [[[notifications lastObject]
-        objectForKey: kNotificationNoteID] integerValue];
-      
-    if((lastNoteID - firstNoteID) == (count - 1))
-      {
-      if(printTitle)
-        {
-        [self.result appendAttributedString: [self buildTitle]];
-        printTitle = NO;
-        }
-        
-      NSString * message =
-        ECLocalizedPluralString(count, @"SPAM notification");
-
-      [self.result appendString: @"    "];
-      
-      [self.result
-        appendString:
-          [NSString stringWithFormat: @"%@ - %@", spammer, message]
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-      
-      NSAttributedString * cleanupLink =
-        [self generateRemoveNotificationSpamLink: spammer];
-
-      if(cleanupLink)
-        {
-        [self.result appendAttributedString: cleanupLink];
-        [self.result appendString: @"\n"];
-        }
-      
-      [self.result appendCR];
-      
-      [self.model endElement: @"notificationspam"];
-      }
+    if(file != nil)
+      [self checkOrphanFile: file];
     }
+  }
+  
+// Collect the orphan status of a launchd file.
+- (void) checkOrphanFile: (LaunchdFile *) file 
+  {
+  if(file.executable.length > 0)
+    if([[NSFileManager defaultManager] fileExistsAtPath: file.executable])
+      return;
+      
+  [[[[Model model] launchd] orphanFiles] addObject: file];
+  }
+
+// Collect orphan Safari extensions.
+- (void) collectOrphanSafariExtensions
+  {
+  Safari * safari = [[Model model] safari];
+  
+  for(NSString * path in safari.extensions)
+    {
+    SafariExtension * extension = [safari.extensions objectForKey: path];
+    
+    if(!extension.loaded)
+      [[[[Model model] safari] orphanExtensions] addObject: extension];
+    }
+  }
+  
+// Print any cleanup items.
+- (void) printCleanup
+  {
+  int count = 0;
+  
+  count += [self printOrphanLaunchdFiles];
+  count += [self printOrphanSafariExtensions: count];
+  
+  if(count > 0)
+    {
+    NSString * message = ECLocalizedPluralString(count, @"orphan file");
+
+    [self.result appendString: @"    "];
+    [self.result
+      appendString: message
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+
+    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
+
+    if(removeLink)
+      {
+      [self.result appendAttributedString: removeLink];
+      [self.result appendString: @"\n"];
+      }
+    
+    [self.result appendCR];
+    }
+    
+  [self printNotificationSPAM: count];
+  }
+
+- (int) printOrphanLaunchdFiles
+  {
+  int count = 0;
+  
+  for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
+    {
+    if(count++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+      
+    // Print the file.
+    [self.result appendAttributedString: launchdFile.attributedStringValue];
+
+    if(launchdFile.executable.length > 0)
+      {
+      [self.result appendString: @"\n        "];
+      [self.result 
+        appendString: [Utilities cleanPath: launchdFile.executable]];
+      }
+    
+    [self.result appendString: @"\n"];
+    }
+    
+  return count;
+  }
+  
+- (int) printOrphanSafariExtensions: (int) count
+  {
+  Safari * safari = [[Model model] safari];
+  
+  for(SafariExtension * extension in safari.orphanExtensions)
+    {
+    if(count++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+
+    // Print the extension.
+    [self.result appendAttributedString: extension.attributedStringValue];
+    [self.result appendString: @"\n"];
+    }
+        
+  return count;
+  }
+  
+- (void) printNotificationSPAM: (int) count
+  {
+  for(NSString * bundleID in [[Model model] notificationSPAMs])
+    {
+    if(count++ == 0)
+      [self.result appendAttributedString: [self buildTitle]];
+      
+    NSDictionary * notifications = 
+      [[[Model model] notificationSPAMs] objectForKey: bundleID];
+      
+    NSString * message =
+      ECLocalizedPluralString(notifications.count, @"SPAM notification");
+
+    [self.result appendString: @"    "];
+    
+    [self.result
+      appendString:
+        [NSString stringWithFormat: @"%@ - %@", bundleID, message]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+    NSAttributedString * cleanupLink =
+      [self generateRemoveNotificationSpamLink: bundleID];
+
+    if(cleanupLink)
+      [self.result appendAttributedString: cleanupLink];
+      
+    [self.result appendString: @"\n"];
+    }
+    
+  [self.result appendCR];
+  }
+  
+// Export cleanup items.
+- (void) exportCleanup
+  {
+  [self exportOrphanLaunchdFiles];
+  [self exportOrphanSafariExtensions];
+  [self exportNotificationSPAM];
+  }
+  
+// Export orphan launchd files.
+- (void) exportOrphanLaunchdFiles
+  {
+  if([[Model model] launchd].orphanFiles.count == 0)
+    return;
+    
+  [self.model startElement: @"launchdfiles"];
+  
+  for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
+
+    // Export the XML.
+    [self.model addFragment: launchdFile.xml];
+
+  [self.model endElement: @"launchdfiles"];
+  }
+  
+// Export orphan safari extensions.
+- (void) exportOrphanSafariExtensions
+  {
+  Safari * safari = [[Model model] safari];
+  
+  if(safari.orphanExtensions.count == 0)
+    return;
+    
+  [self.model startElement: @"safariextensions"];
+
+  for(SafariExtension * extension in safari.orphanExtensions)
+
+    // Export the XML.
+    [self.model addFragment: extension.xml];
+
+  [self.model endElement: @"safariextensions"];
+  }
+
+// Export notification spam.
+- (void) exportNotificationSPAM
+  {
+  if([[[Model model] notificationSPAMs] count] == 0)
+    return;
+    
+  [self.model startElement: @"notificationspam"];
+  
+  for(NSString * bundleID in [[Model model] notificationSPAMs])
+    {
+    [self.model startElement: @"spammer"];
+  
+    [self.model addElement: @"name" value: bundleID];
+    
+    NSDictionary * notifications = 
+      [[[Model model] notificationSPAMs] objectForKey: bundleID];
+      
+    [self.model 
+      addElement: @"count" unsignedIntegerValue: notifications.count];
+  
+    [self.model endElement: @"spammer"];
+    }
+    
+  [self.model endElement: @"notificationspam"];
   }
 
 // Generate a "Clean up" link for orphan files.

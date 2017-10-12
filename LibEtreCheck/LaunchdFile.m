@@ -38,6 +38,9 @@
 // Loaded tasks.
 @synthesize loadedTasks = myLoadedTasks;
   
+// The executable's signature.
+@synthesize signature = mySignature;
+
 // Get the status.
 - (NSString *) status
   {
@@ -97,6 +100,7 @@
   [myContext release];
   [myPlist release];
   [myLoadedTasks release];
+  [mySignature release];
   
   [super dealloc];
   }
@@ -122,20 +126,18 @@
   if(self.executable.length == 0)
     return @"? ? ?";
     
-  NSString * signature = nil;
-  
   if([self.label hasPrefix: @"com.apple."])
-    signature = [Utilities checkAppleExecutable: self.executable];
+    self.signature = [Utilities checkAppleExecutable: self.executable];
   else  
-    signature = [Utilities checkExecutable: self.executable];
+    self.signature = [Utilities checkExecutable: self.executable];
   
-  if([signature length] > 0)
+  if([self.signature length] > 0)
     {
-    if([signature isEqualToString: kSignatureApple])
+    if([self.signature isEqualToString: kSignatureApple])
       return @"Apple, Inc.";
       
     // If I have a valid executable, query the actual developer.
-    if([signature isEqualToString: kSignatureValid])
+    if([self.signature isEqualToString: kSignatureValid])
       {
       NSString * developer = [Utilities queryDeveloper: self.executable];
       

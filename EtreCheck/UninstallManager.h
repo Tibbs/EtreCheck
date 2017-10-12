@@ -6,7 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define kLaunchdTask @"launchdtask"
+#define kLaunchdFile @"launchdfile"
+#define kSafariExtension @"safariextension"
 #define kFileDeleted @"filedeleted"
 
 @interface UninstallManager : NSObject

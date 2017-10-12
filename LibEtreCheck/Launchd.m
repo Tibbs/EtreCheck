@@ -15,13 +15,22 @@
 // A wrapper around all things launchd.
 @implementation Launchd
 
-// Launchd tasks keyed by config file path. 
+// Launchd files keyed by config file path. 
 // Values are task objects since they are guaranteed to be unique.
-@synthesize tasksByPath = myTasksByPath;
+@synthesize filesByPath = myFilesByPath;
 
-/// Launchd tasks keyed by label. 
+/// Launchd files keyed by label. 
 // Values are NSMutableArrays since they might not be unique.
-@synthesize tasksByLabel = myTasksByLabel;
+@synthesize filesByLabel = myFilesByLabel;
+
+// Set of launchd files with missing executables.
+@synthesize orphanFiles = myOrphanFiles;
+
+// Set of launchd files identified as adware.
+@synthesize adwareFiles = myAdwareFiles;
+
+// Files lacking a signature.
+@synthesize unsignedFiles = myUnsignedFiles;
 
 // Array of loaded launchd tasks.
 @synthesize ephemeralTasks = myEphemeralTasks;
@@ -36,9 +45,12 @@
   
   if(self != nil)
     {
-    myTasksByPath = [NSMutableDictionary new];
-    myTasksByLabel = [NSMutableDictionary new];
-    myEphemeralTasks = [NSMutableArray new];
+    myFilesByPath = [NSMutableDictionary new];
+    myFilesByLabel = [NSMutableDictionary new];
+    myOrphanFiles = [NSMutableSet new];
+    myAdwareFiles = [NSMutableSet new];
+    myUnsignedFiles = [NSMutableSet new];
+    myEphemeralTasks = [NSMutableSet new];
     }
     
   return self;
@@ -47,8 +59,11 @@
 // Destructor.
 - (void) dealloc
   {
-  [myTasksByPath release];
-  [myTasksByLabel release];
+  [myFilesByPath release];
+  [myFilesByLabel release];
+  [myOrphanFiles release];
+  [myAdwareFiles release];
+  [myUnsignedFiles release];
   [myEphemeralTasks release];
   
   [super dealloc];
@@ -124,10 +139,10 @@
     LaunchdFile * file = [[LaunchdFile alloc] initWithPath: safePath];
   
     if(file != nil)
-      [self.tasksByPath setObject: file forKey: safePath];
+      [self.filesByPath setObject: file forKey: safePath];
       
     if(file.label.length > 0)
-      [self.tasksByLabel setObject: file forKey: file.label];
+      [self.filesByLabel setObject: file forKey: file.label];
   
     [file release];
     }
@@ -353,28 +368,29 @@
 // Reconcile all the tasks.
 - (void) reconcileTasks
   {
-  NSMutableArray * orphanTasks = [NSMutableArray new];
+  NSMutableSet * orphanTasks = [NSMutableSet new];
   
   for(LaunchdLoadedTask * task in self.ephemeralTasks)
     {
     if(task.path.length > 0)
       {
-      LaunchdFile * truth = [self.tasksByPath objectForKey: task.path];
+      LaunchdFile * truthFile = [self.filesByPath objectForKey: task.path];
       
-      if(truth != nil)
+      if(truthFile != nil)
         {
-        [truth.loadedTasks addObject: task];
+        [truthFile.loadedTasks addObject: task];
         
         continue;
         }
       }
       
     // Labels could have a UUID tacked onto the end. 
-    LaunchdFile * truth = [self.tasksByLabel objectForKey: task.baseLabel];
+    LaunchdFile * truthFile = 
+      [self.filesByLabel objectForKey: task.baseLabel];
     
-    if(truth != nil)
+    if(truthFile != nil)
       {
-      [truth.loadedTasks addObject: task];
+      [truthFile.loadedTasks addObject: task];
       
       continue;
       }
@@ -382,9 +398,24 @@
     [orphanTasks addObject: task];
     }
     
-  [self.ephemeralTasks setArray: orphanTasks];
+  [self.ephemeralTasks setSet: orphanTasks];
     
   [orphanTasks release];
+  
+  for(NSString * path in self.filesByPath)
+    {
+    LaunchdFile * file = [self.filesByPath  objectForKey: path];
+    
+    if(file.executable.length > 0)
+      {
+      BOOL exists =
+        [[NSFileManager defaultManager] fileExistsAtPath: file.executable];
+        
+      if(!exists)
+        [self.orphanFiles addObject: file];
+      }
+    }
+    
   }
   
 @end

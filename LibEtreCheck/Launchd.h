@@ -8,31 +8,49 @@
 // A wrapper around all things launchd.
 @interface Launchd : NSObject
   {
-  // Launchd tasks keyed by config file path. 
+  // Launchd files keyed by config file path. 
   // Values are task objects since they are guaranteed to be unique.
-  NSMutableDictionary * myTasksByPath;
+  NSMutableDictionary * myFilessByPath;
   
-  // Launchd tasks keyed by label. 
+  // Launchd files keyed by label. 
   // Values are NSMutableArrays since they might not be unique.
-  NSMutableDictionary * myTasksByLabel;
+  NSMutableDictionary * myFilesByLabel;
 
-  // Array of loaded launchd tasks.
-  NSMutableArray * myEphemeralTasks;
+  // Set of launchd files with missing executables.
+  NSMutableSet * myOrphanFiles;
+  
+  // Files identified as adware.
+  NSMutableSet * myAdwareFiles;
+  
+  // Files lacking a signature.
+  NSMutableSet * myUnsignedFiles;
+  
+  // Set of loaded launchd tasks.
+  NSMutableSet * myEphemeralTasks;
   
   // Only load once.
   BOOL myLoaded;
   }
   
-// Launchd tasks keyed by config file path. 
+// Launchd files keyed by config file path. 
 // Values are task objects since they are guaranteed to be unique.
-@property (readonly, nonnull) NSMutableDictionary * tasksByPath;
+@property (readonly, nonnull) NSMutableDictionary * filesByPath;
 
-// Launchd tasks keyed by label. 
+// Launchd files keyed by label. 
 // Values are NSMutableArrays since they might not be unique.
-@property (readonly, nonnull) NSMutableDictionary * tasksByLabel;
+@property (readonly, nonnull) NSMutableDictionary * filesByLabel;
 
-// Array of loaded launchd tasks.
-@property (readonly, nonnull) NSMutableArray * ephemeralTasks;
+// Set of launchd files with missing executables.
+@property (readonly, nonnull) NSMutableSet * orphanFiles;
+
+// Set of launchd files identified as adware.
+@property (readonly, nonnull) NSMutableSet * adwareFiles;
+
+// Files lacking a signature.
+@property (readonly, nonnull) NSMutableSet * unsignedFiles;
+
+// Set of loaded launchd tasks.
+@property (readonly, nonnull) NSMutableSet * ephemeralTasks;
 
 // Only load once.
 @property (readonly) BOOL loaded;

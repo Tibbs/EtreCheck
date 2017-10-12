@@ -32,55 +32,70 @@
   {
   int myMajorOSVersion;
   int myMinorOSVersion;
+  
   NSString * myOSBuild;
   NSString * myOSVersion;
+  
   NSString * myProblem;
   NSAttributedString * myProblemDescription;
+  
   NSMutableDictionary * myVolumes;
   NSMutableSet * myPhysicalVolumes;
   NSMutableDictionary * myDiskErrors;
-  NSNumber * myGPUErrors;
+
   NSArray * myLogEntries;
+
   NSDictionary * myApplications;
+
   int myPhysicalRAM;
+
   NSImage * myMachineIcon;
+
   NSString * myModel;
+
   NSString * mySerialCode;
+
   NSMutableDictionary * myDiagnosticEvents;
+
   Launchd * myLaunchd;
+
   Safari * mySafari;
+
   NSMutableSet * myProcesses;
+
   NSString * myComputerName;
   NSString * myHostName;
-  bool myAdwareFound;
-  bool myUnsignedFound;
-  NSMutableDictionary * myAdwareFiles;
-  NSArray * myAdwareExtensions;
+  
+  NSMutableSet * myAdwareExtensions;
   NSMutableSet * myWhitelistFiles;
   NSMutableSet * myWhitelistPrefixes;
   NSMutableSet * myBlacklistFiles;
   NSMutableSet * myBlacklistSuffixes;
   NSMutableSet * myBlacklistMatches;
+  
   NSMutableArray * myTerminatedTasks;
-  NSMutableSet * mySeriousProblems;
+
   bool myBackupExists;
   
   bool myIgnoreKnownAppleFailures;
   bool myShowSignatureFailures;
   bool myHideAppleTasks;
+  
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
   bool myVerifiedSystemVersion;
+  
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
-  NSMutableArray * myUnknownFiles;
+  
   NSMutableSet * myLegitimateStrings;
+  
   bool mySIP;
-  bool myCleanupRequired;
-  NSMutableDictionary * myPathsForUUIDs;
+
   NSMutableDictionary * myNotificationSPAMs;
-  bool myUseWhitelist;
+
+  NSMutableDictionary * myPathsForUUIDs;
   
   XMLBuilder * myXMLBuilder;
   XMLBuilder * myXMLHeader;
@@ -150,20 +165,11 @@
 // Did I find any unsigned files?
 @property (readonly) bool unsignedFound;
 
-// Adware files, whether launchd-based or not.
-@property (readonly) NSMutableDictionary * adwareFiles;
-
-// Adware launchd files.
-@property (readonly) NSDictionary * adwareLaunchdFiles;
-
-// Orphan launchd files.
-@property (readonly) NSDictionary * orphanLaunchdFiles;
-
-// Potential adware files.
-@property (retain) NSMutableDictionary * potentialAdwareTrioFiles;
+// Is clean up required?
+@property (assign) bool cleanupRequired;
 
 // Adware extensions.
-@property (retain) NSArray * adwareExtensions;
+@property (readonly) NSMutableSet * adwareExtensions;
 
 // Whitelist files.
 @property (readonly) NSMutableSet * whitelistFiles;
@@ -180,23 +186,11 @@
 // Blacklist matches.
 @property (readonly) NSMutableSet * blacklistMatches;
 
-// Did I find any unknown files?
-@property (readonly) bool unknownFilesFound;
-
-// Unknown launchd files.
-@property (readonly) NSDictionary * unknownLaunchdFiles;
-
-// Unknown files.
-@property (readonly) NSMutableArray * unknownFiles;
-
 // Strings of potentially legitimate files.
 @property (readonly) NSMutableSet * legitimateStrings;
 
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;
-
-// What serious problems were found?
-@property (retain) NSMutableSet * seriousProblems;
 
 // Do I have a Time Machine backup?
 @property (assign) bool backupExists;
@@ -231,17 +225,11 @@
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
 
-// Is clean up required?
-@property (assign) bool cleanupRequired;
-
-// Map paths to UUIDs for privacy.
-@property (readonly) NSMutableDictionary * pathsForUUIDs;
-
 // Notification SPAM.
 @property (readonly) NSMutableDictionary * notificationSPAMs;
 
-// Should I use the whitelist or show unsigned files?
-@property (readonly) bool useWhitelist;
+// Map paths to UUIDs for privacy.
+@property (readonly) NSMutableDictionary * pathsForUUIDs;
 
 // XML output.
 @property (readonly) XMLBuilder * xml;
@@ -262,6 +250,9 @@
 // Create an open URL for a file.
 - (NSAttributedString *) getOpenURLFor: (NSString *) path;
 
+// Add to the adware extensions list.
+- (void) appendToAdwareExtensions: (NSArray *) names;
+
 // Add files to the whitelist.
 - (void) appendToWhitelist: (NSArray *) names;
 
@@ -276,15 +267,6 @@
 
 // Set the blacklist matches.
 - (void) appendToBlacklistMatches: (NSArray *) names;
-
-// Is this file known?
-- (bool) isKnownFile: (NSString *) name path: (NSString *) path;
-
-// Is this file in the whitelist?
-- (bool) isWhitelistFile: (NSString *) name;
-
-// What kind of adware is this?
-- (NSString *) adwareType: (NSString *) path;
 
 // Handle a task that takes too long to complete.
 - (void) taskTerminated: (NSString *) program arguments: (NSArray *) args;

@@ -733,7 +733,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [alert release];
 
   if(result == NSAlertFirstButtonReturn)
-    [Utilities enableGatekeeper];
+    [Actions enableGatekeeper];
   }
 
 // Check for a new version.

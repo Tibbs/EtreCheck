@@ -279,8 +279,12 @@
     }
     
   if(arguments.count > 0)
+    {
     myArguments = 
       [arguments subarrayWithRange: NSMakeRange(1, arguments.count - 1)];
+    
+    [myArguments retain];
+    }
   }
   
 // Try to find the "true" executable, not some script interpreter.

@@ -229,7 +229,7 @@
 
   if(result == NSAlertFirstButtonReturn)
     {
-    if(![Utilities restart])
+    if(![Actions restart])
       [self restartFailed];
     }
   }

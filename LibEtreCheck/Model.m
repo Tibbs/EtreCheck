@@ -41,8 +41,6 @@
 @synthesize processes = myProcesses;
 @synthesize adwareFound = myAdwareFound;
 @synthesize unsignedFound = myUnsignedFound;
-@synthesize adwareFiles = myAdwareFiles;
-@synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
 @synthesize whitelistPrefixes = myWhitelistPrefixes;
@@ -51,9 +49,7 @@
 @synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
-@dynamic unknownFilesFound;
 @synthesize terminatedTasks = myTerminatedTasks;
-@synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize showSignatureFailures = myShowSignatureFailures;
@@ -64,109 +60,13 @@
 @synthesize appleSoftware = myAppleSoftware;
 @synthesize appleLaunchd = myAppleLaunchd;
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
-@synthesize unknownFiles = myUnknownFiles;
 @synthesize legitimateStrings = myLegitimateStrings;
 @synthesize sip = mySIP;
 @synthesize cleanupRequired = myCleanupRequired;
-@synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize notificationSPAMs = myNotificationSPAMs;
-@synthesize useWhitelist = myUseWhitelist;
+@synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
-
-- (NSDictionary *) adwareLaunchdFiles
-  {
-  NSMutableDictionary * files = [NSMutableDictionary dictionary];
-  
-  for(NSString * path in self.launchd.tasksByPath)
-    {
-    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
-    
-    if([[info objectForKey: kAdware] boolValue])
-      [files setObject: info forKey: path];
-    }
-    
-  return [[files copy] autorelease];
-  }
-
-- (bool) adwareFound
-  {
-  if([self.adwareLaunchdFiles count] > 0)
-    return YES;
-    
-  if([self.adwareFiles count] > 0)
-    return YES;
-
-  return NO;
-  }
-
-- (bool) unsignedFound
-  {
-  if([self.unknownLaunchdFiles count] > 0)
-    return YES;
-
-  if([self.unknownFiles count] > 0)
-    return YES;
-
-  return NO;
-  }
-
-- (NSDictionary *) orphanLaunchdFiles
-  {
-  NSMutableDictionary * files = [NSMutableDictionary dictionary];
-  
-  for(NSString * path in self.launchd.tasksByPath)
-    {
-    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
-    
-    // Skip Apple files.
-    if([[info objectForKey: kApple] boolValue])
-      continue;
-      
-    // Check for a missing executable.
-    NSString * signature = [info objectForKey: kSignature];
-    
-    if([signature isEqualToString: kExecutableMissing])
-      [files setObject: info forKey: path];
-    }
-    
-  return [[files copy] autorelease];
-  }
-
-- (NSDictionary *) unknownLaunchdFiles
-  {
-  NSMutableDictionary * files = [NSMutableDictionary dictionary];
-  
-  for(NSString * path in self.launchd.tasksByPath)
-    {
-    NSDictionary * info = [self.launchd.tasksByPath objectForKey: path];
-    
-    if([[info objectForKey: kUnknown] boolValue])
-      {
-      // Check for a valid executable.
-      NSString * signature = [info objectForKey: kSignature];
-      
-      if([signature isEqualToString: kSignatureApple])
-        continue;
-
-      if([signature isEqualToString: kSignatureValid])
-        continue;
-
-      // This will be handled by the new clean up option.
-      if([signature isEqualToString: kExecutableMissing])
-        continue;
-        
-      [files setObject: info forKey: path];
-      }
-    }
-    
-  return [[files copy] autorelease];
-  }
-
-- (bool) unknownFilesFound
-  {
-  return [self.unknownFiles count] > 0;
-  }
   
 // Return the singeton of shared values.
 + (Model *) model
@@ -192,7 +92,6 @@
   if(self)
     {
     myLegitimateStrings = [NSMutableSet new];
-    myUnknownFiles = [NSMutableArray new];
     myLaunchd = [Launchd new];
     myVolumes = [NSMutableDictionary new];
     myPhysicalVolumes = [NSMutableSet new];
@@ -200,21 +99,19 @@
     myDiagnosticEvents = [NSMutableDictionary new];
     myLaunchd = [Launchd new];
     mySafari = [Safari new];
-    myAdwareFiles = [NSMutableDictionary new];
     myProcesses = [NSMutableSet new];
-    myPotentialAdwareTrioFiles = [NSMutableDictionary new];
     myTerminatedTasks = [NSMutableArray new];
-    mySeriousProblems = [NSMutableSet new];
     myIgnoreKnownAppleFailures = YES;
     myShowSignatureFailures = NO;
     myHideAppleTasks = YES;
+    myAdwareExtensions = [NSMutableSet new];
     myWhitelistFiles = [NSMutableSet new];
     myWhitelistPrefixes = [NSMutableSet new];
     myBlacklistFiles = [NSMutableSet new];
     myBlacklistSuffixes = [NSMutableSet new];
     myBlacklistMatches = [NSMutableSet new];
-    myPathsForUUIDs = [NSMutableDictionary new];
     myNotificationSPAMs = [NSMutableDictionary new];
+    myPathsForUUIDs = [NSMutableDictionary new];
     myXMLBuilder = [XMLBuilder new];
     myXMLHeader = [XMLBuilder new];
     }
@@ -227,8 +124,8 @@
   {
   [myXMLHeader release];
   [myXMLBuilder release];
-  [myNotificationSPAMs release];
   [myPathsForUUIDs release];
+  [myNotificationSPAMs release];
   [mySerialCode release];
   [myModel release];
   [myLogEntries release];
@@ -238,20 +135,16 @@
   [myComputerName release];
   [myAppleSoftware release];
   [myAppleLaunchd release];
-  [myAdwareExtensions release];
   [myLegitimateStrings release];
-  [myUnknownFiles release];
-  [myAdwareFiles release];
   [myBlacklistSuffixes release];
   [myBlacklistMatches release];
   [myBlacklistFiles release];
   [myWhitelistFiles release];
   [myWhitelistPrefixes release];
+  [myAdwareExtensions release];
   
   self.appleLaunchdByLabel = nil;
-  self.seriousProblems = nil;
   self.terminatedTasks = nil;
-  self.potentialAdwareTrioFiles = nil;
   self.processes = nil;
   self.launchd = nil;
   self.diagnosticEvents = nil;
@@ -401,6 +294,12 @@
   return [urlString autorelease];
   }
 
+// Add to the adware extensions list.
+- (void) appendToAdwareExtensions: (NSArray *) names
+  {
+  [self.adwareExtensions addObjectsFromArray: names];
+  }
+  
 // Add files to the whitelist.
 - (void) appendToWhitelist: (NSArray *) names;
   {
@@ -429,46 +328,6 @@
 - (void) appendToBlacklistMatches: (NSArray *) names
   {
   [self.blacklistMatches addObjectsFromArray: names];
-  }
-
-// Is this file known?
-- (bool) isKnownFile: (NSString *) name path: (NSString *) path
-  {
-  if([self isWhitelistFile: name])
-    return YES;
-    
-  NSMutableDictionary * info = 
-    [self.launchd.tasksByPath objectForKey: path];
-  
-  //if([self checkForAdware: path info: info])
-  //  return YES;
-    
-  if(info)
-    [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
-
-  return NO;
-  }
-
-// Is this file in the whitelist?
-- (bool) isWhitelistFile: (NSString *) name
-  {
-  if(!self.useWhitelist)
-    return NO;
-    
-  if([self.whitelistFiles containsObject: name])
-    return YES;
-    
-  for(NSString * whitelistPrefix in self.whitelistPrefixes)
-    if([name hasPrefix: whitelistPrefix])
-      return YES;
-      
-  return NO;
-  }
-
-// What kind of adware is this?
-- (NSString *) adwareType: (NSString *) path
-  {
-  return [self.adwareFiles objectForKey: path];
   }
 
 // Handle a task that takes too long to complete.
