@@ -17,6 +17,7 @@
 #import "EtreCheckConstants.h"
 #import "Safari.h"
 #import "SafariExtension.h"
+#import "Adware.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -49,8 +50,10 @@
 // Load signatures from an obfuscated list of signatures.
 - (void) loadSignatures
   {
+  NSBundle * bundle = [NSBundle bundleForClass: [self class]];
+
   NSString * signaturePath =
-    [[NSBundle mainBundle] pathForResource: @"adware" ofType: @"plist"];
+    [bundle pathForResource: @"adware" ofType: @"plist"];
     
   NSData * partialData = [NSData dataWithContentsOfFile: signaturePath];
   
@@ -108,25 +111,27 @@
 // Add signatures that match a given key.
 - (void) addSignatures: (NSArray *) signatures forKey: (NSString *) key
   {
+  Adware * adware = [[Model model] adware];
+
   if(signatures)
     {
     if([key isEqualToString: kWhitelistKey])
-      [[Model model] appendToWhitelist: signatures];
+      [adware appendToWhitelist: signatures];
 
     else if([key isEqualToString: kWhitelistPrefixKey])
-      [[Model model] appendToWhitelistPrefixes: signatures];
+      [adware appendToWhitelistPrefixes: signatures];
 
     if([key isEqualToString: kAdwareExtensionsKey])
-      [[Model model] appendToAdwareExtensions: signatures];
+      [adware appendToAdwareExtensions: signatures];
       
     else if([key isEqualToString: kBlacklistKey])
-      [[Model model] appendToBlacklist: signatures];
+      [adware appendToBlacklist: signatures];
       
     else if([key isEqualToString: kBlacklistSuffixKey])
-      [[Model model] appendToBlacklistSuffixes: signatures];
+      [adware appendToBlacklistSuffixes: signatures];
 
     else if([key isEqualToString: kBlacklistMatchKey])
-      [[Model model] appendToBlacklistMatches: signatures];
+      [adware appendToBlacklistMatches: signatures];
     }
   }
 
@@ -145,12 +150,14 @@
 // Build additional internal databases.
 - (void) buildDatabases
   {
-  for(NSString * file in [[Model model] whitelistFiles])
+  Adware * adware = [[Model model] adware];
+
+  for(NSString * file in [adware whitelistFiles])
     {
     NSString * prefix = [Utilities bundleName: file];
     
     if([prefix length] > 0)
-      [[[Model model] legitimateStrings] addObject: prefix];
+      [[adware legitimateStrings] addObject: prefix];
     }
   }
 
@@ -213,7 +220,7 @@
 // Is this an adware suffix file?
 - (bool) isAdwareSuffix: (LaunchdFile *) file
   {
-  for(NSString * suffix in [[Model model] blacklistSuffixes])
+  for(NSString * suffix in [[[Model model] adware] blacklistSuffixes])
     if([file.path hasSuffix: suffix])
       return true;
     
@@ -302,12 +309,12 @@
 - (bool) isAdwareMatch: (NSString *) name
   {
   // Check full matches.
-  for(NSString * match in [[Model model] blacklistFiles])
+  for(NSString * match in [[[Model model] adware] blacklistFiles])
     if([name isEqualToString: match])
       return true;
     
   // Check partial matches.
-  for(NSString * match in [[Model model] blacklistMatches])
+  for(NSString * match in [[[Model model] adware] blacklistMatches])
     {
     NSRange range = [name rangeOfString: match];
     

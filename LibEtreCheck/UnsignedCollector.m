@@ -86,6 +86,9 @@
   
   for(LaunchdFile * launchdFile in [[[Model model] launchd] unsignedFiles])
     {
+    if([self hideFile: launchdFile])
+      continue;
+      
     // Print the file.
     [self.result appendAttributedString: launchdFile.attributedStringValue];
 
@@ -118,6 +121,25 @@
     }
     
   [self.result appendCR];
+  }
+  
+// Should this file be hidden?
+- (BOOL) hideFile: (LaunchdFile *) file
+  {
+  Launchd * launchd = [[Model model] launchd];
+  
+  NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
+  
+  if(appleFile != nil)
+    {
+    NSString * expectedSignature = [appleFile objectForKey: kSignature];
+    
+    if(expectedSignature != nil)
+      if([file.signature isEqualToString: expectedSignature])
+        return [[Model model] ignoreKnownAppleFailures];
+    }
+    
+  return NO;
   }
   
 // Export unsigned files.

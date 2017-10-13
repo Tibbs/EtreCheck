@@ -17,6 +17,8 @@
 #import "SafariExtensionsCollector.h"
 #import "AdwareCollector.h"
 #import "EtreCheckConstants.h"
+#import "Adware.h"
+#import "UnsignedCollector.h"
 
 @interface LibEtreCheckTests : XCTestCase
 
@@ -164,7 +166,7 @@
   {
   Model * model = [Model model];
   
-  [model simulateAdware];
+  [[model adware] simulate];
   
   LaunchDaemonsCollector * launchdCollector = 
     [LaunchDaemonsCollector new];
@@ -186,6 +188,43 @@
   NSLog(@"Output: %@", result.string);
   }
   
+- (void) testUnsignedCollector 
+  {
+  [[Model model] setIgnoreKnownAppleFailures: true];
+  
+  SystemLaunchDaemonsCollector * systemDaemons = 
+    [SystemLaunchDaemonsCollector new];
+  
+  [systemDaemons collect];
+  
+  SystemLaunchAgentsCollector * systemAgents = 
+    [SystemLaunchAgentsCollector new];
+  
+  [systemAgents collect];
+
+  LaunchDaemonsCollector * daemons = 
+    [LaunchDaemonsCollector new];
+  
+  [daemons collect];
+  
+  LaunchAgentsCollector * agents = 
+    [LaunchAgentsCollector new];
+  
+  [agents collect];
+
+  UserLaunchAgentsCollector * userAgents = 
+    [UserLaunchAgentsCollector new];
+  
+  [userAgents collect];
+
+  UnsignedCollector * collector = 
+    [UnsignedCollector new];
+  
+  [collector collect];
+
+  NSLog(@"%@", collector.result.string);
+  }
+
 - (void) testPerformanceExample 
   {
   // This is an example of a performance test case.

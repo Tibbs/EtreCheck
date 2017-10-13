@@ -26,6 +26,7 @@
 @class XMLBuilder;
 @class Launchd;
 @class Safari;
+@class Adware;
 
 // A singleton to keep track of system information.
 @interface Model : NSObject
@@ -52,20 +53,13 @@
   NSMutableDictionary * myDiagnosticEvents;
 
   Launchd * myLaunchd;
-
   Safari * mySafari;
+  Adware * myAdware;
 
   NSMutableSet * myProcesses;
 
   NSString * myComputerName;
   NSString * myHostName;
-  
-  NSMutableSet * myAdwareExtensions;
-  NSMutableSet * myWhitelistFiles;
-  NSMutableSet * myWhitelistPrefixes;
-  NSMutableSet * myBlacklistFiles;
-  NSMutableSet * myBlacklistSuffixes;
-  NSMutableSet * myBlacklistMatches;
   
   NSMutableArray * myTerminatedTasks;
 
@@ -77,8 +71,6 @@
   
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
-  
-  NSMutableSet * myLegitimateStrings;
   
   bool mySIP;
 
@@ -128,10 +120,13 @@
 @property (retain) NSMutableDictionary * diagnosticEvents;
 
 // All launchd data.
-@property (retain) Launchd * launchd;
+@property (readonly) Launchd * launchd;
 
 // All Safari data.
-@property (retain) Safari * safari;
+@property (readonly) Safari * safari;
+
+// All adware data.
+@property (readonly) Adware * adware;
 
 // All processes.
 @property (retain) NSMutableSet * processes;
@@ -150,27 +145,6 @@
 
 // Is clean up required?
 @property (assign) bool cleanupRequired;
-
-// Adware extensions.
-@property (readonly) NSMutableSet * adwareExtensions;
-
-// Whitelist files.
-@property (readonly) NSMutableSet * whitelistFiles;
-
-// Whitelist prefixes.
-@property (readonly) NSMutableSet * whitelistPrefixes;
-
-// Blacklist files.
-@property (readonly) NSMutableSet * blacklistFiles;
-
-// Blacklist suffixes.
-@property (readonly) NSMutableSet * blacklistSuffixes;
-
-// Blacklist matches.
-@property (readonly) NSMutableSet * blacklistMatches;
-
-// Strings of potentially legitimate files.
-@property (readonly) NSMutableSet * legitimateStrings;
 
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;
@@ -221,31 +195,10 @@
 // Create an open URL for a file.
 - (NSAttributedString *) getOpenURLFor: (NSString *) path;
 
-// Add to the adware extensions list.
-- (void) appendToAdwareExtensions: (NSArray *) names;
-
-// Add files to the whitelist.
-- (void) appendToWhitelist: (NSArray *) names;
-
-// Add files to the whitelist prefixes.
-- (void) appendToWhitelistPrefixes: (NSArray *) names;
-
-// Add files to the blacklist.
-- (void) appendToBlacklist: (NSArray *) names;
-
-// Set the blacklist suffixes.
-- (void) appendToBlacklistSuffixes: (NSArray *) names;
-
-// Set the blacklist matches.
-- (void) appendToBlacklistMatches: (NSArray *) names;
-
 // Handle a task that takes too long to complete.
 - (void) taskTerminated: (NSString *) program arguments: (NSArray *) args;
 
 // Is this a known Apple executable but not a shell script?
 - (BOOL) isKnownAppleNonShellExecutable: (NSString *) path;
-
-// Simulate adware.
-- (void) simulateAdware;
 
 @end

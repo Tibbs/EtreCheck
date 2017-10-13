@@ -429,9 +429,10 @@
 // Load Apple launchd files.
 - (void) loadAppleFiles
   {
+  NSBundle * bundle = [NSBundle bundleForClass: [self class]];
+
   NSString * launchdPath =
-    [[NSBundle mainBundle]
-      pathForResource: @"appleLaunchd" ofType: @"plist"];
+    [bundle pathForResource: @"appleLaunchd" ofType: @"plist"];
     
   NSData * plistData = [NSData dataWithContentsOfFile: launchdPath];
   

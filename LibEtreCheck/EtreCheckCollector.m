@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "Model.h"
+#import "Adware.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 
@@ -320,7 +321,9 @@
     [self.result appendString: @"\n"];
     }
     
-  if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
+  Adware * adware = [[Model model] adware];
+  
+  if([[adware whitelistFiles] count] < kMinimumWhitelistSize)
     {
     [self.result
       appendString:

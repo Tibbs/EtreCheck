@@ -29,6 +29,10 @@
 		A54279371F8EA7BD009E7D29 /* UserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279351F8EA7BD009E7D29 /* UserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A54279381F8EA7BD009E7D29 /* UserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A54279361F8EA7BD009E7D29 /* UserNotification.m */; };
 		A54279391F8EC898009E7D29 /* PrintableItem.h in Headers */ = {isa = PBXBuildFile; fileRef = A542792D1F8D4BCD009E7D29 /* PrintableItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A542793C1F903EAE009E7D29 /* Adware.h in Headers */ = {isa = PBXBuildFile; fileRef = A542793A1F903EAE009E7D29 /* Adware.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A542793D1F903EAE009E7D29 /* Adware.m in Sources */ = {isa = PBXBuildFile; fileRef = A542793B1F903EAE009E7D29 /* Adware.m */; };
+		A542793F1F904709009E7D29 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A542793E1F904709009E7D29 /* appleLaunchd.plist */; };
+		A54279411F904728009E7D29 /* adware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A54279401F904728009E7D29 /* adware.plist */; };
 		A589CD271F71644500D66592 /* LibEtreCheck.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A589CD1E1F71644500D66592 /* LibEtreCheck.framework */; };
 		A589CD2E1F71644500D66592 /* LibEtreCheckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A589CD2D1F71644500D66592 /* LibEtreCheckTests.m */; };
 		A589CD301F71644500D66592 /* LibEtreCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = A589CD201F71644500D66592 /* LibEtreCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -250,6 +254,10 @@
 		A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemLaunchdCollector.m; sourceTree = "<group>"; };
 		A54279351F8EA7BD009E7D29 /* UserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNotification.h; sourceTree = "<group>"; };
 		A54279361F8EA7BD009E7D29 /* UserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserNotification.m; sourceTree = "<group>"; };
+		A542793A1F903EAE009E7D29 /* Adware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Adware.h; sourceTree = "<group>"; };
+		A542793B1F903EAE009E7D29 /* Adware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Adware.m; sourceTree = "<group>"; };
+		A542793E1F904709009E7D29 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
+		A54279401F904728009E7D29 /* adware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adware.plist; sourceTree = "<group>"; };
 		A549C6751C75198700283F7F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A55BC16D15BF987D00D42EF1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A55BC17015BF987D00D42EF1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -583,6 +591,8 @@
 				A503BFAB1F83DF9B00473A24 /* Actions.h */,
 				A503BFAC1F83DF9B00473A24 /* Actions.m */,
 				A589CD211F71644500D66592 /* Info.plist */,
+				A542793E1F904709009E7D29 /* appleLaunchd.plist */,
+				A54279401F904728009E7D29 /* adware.plist */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
 				A5F65E6C1F806FDB0062FA87 /* Localizable.strings */,
@@ -628,6 +638,8 @@
 				A5E742C51F8BF91900DA94CE /* Safari.m */,
 				A54279351F8EA7BD009E7D29 /* UserNotification.h */,
 				A54279361F8EA7BD009E7D29 /* UserNotification.m */,
+				A542793A1F903EAE009E7D29 /* Adware.h */,
+				A542793B1F903EAE009E7D29 /* Adware.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
 			);
@@ -643,6 +655,7 @@
 			files = (
 				A589CDAC1F71749E00D66592 /* SystemLaunchAgentsCollector.h in Headers */,
 				A589CD9C1F71748700D66592 /* XMLBuilder.h in Headers */,
+				A542793C1F903EAE009E7D29 /* Adware.h in Headers */,
 				A589CDAD1F71749E00D66592 /* SystemLaunchDaemonsCollector.h in Headers */,
 				A589CDBF1F7174FD00D66592 /* DiagnosticsCollector.h in Headers */,
 				A589CD6A1F7165AC00D66592 /* NSObject+Etresoft.h in Headers */,
@@ -799,7 +812,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,
+				A542793F1F904709009E7D29 /* appleLaunchd.plist in Resources */,
 				A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */,
+				A54279411F904728009E7D29 /* adware.plist in Resources */,
 				A503BF8C1F829CEF00473A24 /* System.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -825,6 +840,7 @@
 				A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */,
 				A589CD861F71690900D66592 /* NumberFormatter.m in Sources */,
 				A589CD501F7164C900D66592 /* InternetPlugInsCollector.m in Sources */,
+				A542793D1F903EAE009E7D29 /* Adware.m in Sources */,
 				A589CD531F7164C900D66592 /* UserAudioPlugInsCollector.m in Sources */,
 				A589CD441F7164C900D66592 /* ConfigurationCollector.m in Sources */,
 				A589CD431F7164C900D66592 /* ThunderboltCollector.m in Sources */,

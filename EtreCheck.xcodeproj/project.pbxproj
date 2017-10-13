@@ -36,7 +36,6 @@
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
 		A55EE7F31DB9C2810088C1F5 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */; };
 		A565A39B1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */; };
-		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* cleanuphelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* cleanuphelp.rtf */; };
 		A5716E161C4C5A6E00297727 /* AdwareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* AdwareManager.m */; };
 		A58792C01F36544600BB7DBB /* unsignedhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A58792BD1F36544600BB7DBB /* unsignedhelp.rtf */; };
@@ -125,7 +124,6 @@
 		A54B87341A1D4F1900F25213 /* HelpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpManager.m; sourceTree = "<group>"; };
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
 		A54B87371A1D4FED00F25213 /* DetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailManager.m; sourceTree = "<group>"; };
-		A54DA5711A3117E100F09B19 /* adware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adware.plist; sourceTree = "<group>"; };
 		A54DF6571BD70A3C00753E87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/TOU.rtf; sourceTree = "<group>"; };
 		A54DF6581BD70A3C00753E87 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/TOU.rtf; sourceTree = "<group>"; };
 		A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbarItem.h; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 		A55EE7F21DB9C2810088C1F5 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcurl.4.dylib; sourceTree = "<group>"; };
 		A565A3991EDF6B4E0053264A /* NotificationSPAMCleanupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSPAMCleanupManager.h; sourceTree = "<group>"; };
 		A565A39A1EDF6B4E0053264A /* NotificationSPAMCleanupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationSPAMCleanupManager.m; sourceTree = "<group>"; };
-		A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
 		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
 		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/cleanuphelp.rtf; sourceTree = "<group>"; };
 		A5716E131C4C5A6E00297727 /* AdwareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdwareManager.h; sourceTree = "<group>"; };
@@ -330,9 +327,7 @@
 				A518C4641C4814740094D7CC /* Help */,
 				A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */,
 				A55BC17515BF987D00D42EF1 /* EtreCheck-Info.plist */,
-				A54DA5711A3117E100F09B19 /* adware.plist */,
 				A59429411D2AD97B003E594D /* appleSoftware.plist */,
-				A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
 				A503BFA01F82BB5800473A24 /* Status.strings */,
 				A55BC17615BF987D00D42EF1 /* InfoPlist.strings */,
@@ -462,7 +457,6 @@
 				A503BFA31F82BB5800473A24 /* Status.strings in Resources */,
 				A5E9E2C01A2522A600309185 /* Help.strings in Resources */,
 				A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */,
-				A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */,
 				A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */,
 				A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */,
 			);

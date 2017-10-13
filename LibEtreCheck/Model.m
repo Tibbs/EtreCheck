@@ -16,6 +16,7 @@
 #import "Launchd.h"
 #import "LaunchdFile.h"
 #import "Safari.h"
+#import "Adware.h"
 
 @implementation Model
 
@@ -37,12 +38,6 @@
 @synthesize processes = myProcesses;
 @synthesize adwareFound = myAdwareFound;
 @synthesize unsignedFound = myUnsignedFound;
-@synthesize adwareExtensions = myAdwareExtensions;
-@synthesize whitelistFiles = myWhitelistFiles;
-@synthesize whitelistPrefixes = myWhitelistPrefixes;
-@synthesize blacklistFiles = myBlacklistFiles;
-@synthesize blacklistMatches = myBlacklistMatches;
-@synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
 @synthesize terminatedTasks = myTerminatedTasks;
@@ -52,7 +47,6 @@
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
-@synthesize legitimateStrings = myLegitimateStrings;
 @synthesize sip = mySIP;
 @synthesize cleanupRequired = myCleanupRequired;
 @synthesize notificationSPAMs = myNotificationSPAMs;
@@ -83,7 +77,6 @@
   
   if(self)
     {
-    myLegitimateStrings = [NSMutableSet new];
     myLaunchd = [Launchd new];
     myVolumes = [NSMutableDictionary new];
     myPhysicalVolumes = [NSMutableSet new];
@@ -91,17 +84,12 @@
     myDiagnosticEvents = [NSMutableDictionary new];
     myLaunchd = [Launchd new];
     mySafari = [Safari new];
+    myAdware = [Adware new];
     myProcesses = [NSMutableSet new];
     myTerminatedTasks = [NSMutableArray new];
     myIgnoreKnownAppleFailures = YES;
     myShowSignatureFailures = NO;
     myHideAppleTasks = YES;
-    myAdwareExtensions = [NSMutableSet new];
-    myWhitelistFiles = [NSMutableSet new];
-    myWhitelistPrefixes = [NSMutableSet new];
-    myBlacklistFiles = [NSMutableSet new];
-    myBlacklistSuffixes = [NSMutableSet new];
-    myBlacklistMatches = [NSMutableSet new];
     myNotificationSPAMs = [NSMutableDictionary new];
     myPathsForUUIDs = [NSMutableDictionary new];
     myXMLBuilder = [XMLBuilder new];
@@ -125,20 +113,13 @@
   [myGPUErrors release];
   [myPhysicalVolumes release];
   [myComputerName release];
-  [myLegitimateStrings release];
-  [myBlacklistSuffixes release];
-  [myBlacklistMatches release];
-  [myBlacklistFiles release];
-  [myWhitelistFiles release];
-  [myWhitelistPrefixes release];
-  [myAdwareExtensions release];
+  [myLaunchd release];
+  [mySafari release];
+  [myAdware release];
   
   self.terminatedTasks = nil;
   self.processes = nil;
-  self.launchd = nil;
   self.diagnosticEvents = nil;
-  self.launchd = nil;
-  self.safari = nil;
   self.diskErrors = nil;
   self.volumes = nil;
   self.applications = nil;
@@ -281,42 +262,6 @@
   return [urlString autorelease];
   }
 
-// Add to the adware extensions list.
-- (void) appendToAdwareExtensions: (NSArray *) names
-  {
-  [self.adwareExtensions addObjectsFromArray: names];
-  }
-  
-// Add files to the whitelist.
-- (void) appendToWhitelist: (NSArray *) names;
-  {
-  [self.whitelistFiles addObjectsFromArray: names];
-  }
-  
-// Add files to the whitelist prefixes.
-- (void) appendToWhitelistPrefixes: (NSArray *) names;
-  {
-  [self.whitelistPrefixes addObjectsFromArray: names];
-  }
-  
-// Add files to the blacklist.
-- (void) appendToBlacklist: (NSArray *) names
-  {
-  [self.blacklistFiles addObjectsFromArray: names];
-  }
-
-// Set the blacklist suffixes.
-- (void) appendToBlacklistSuffixes: (NSArray *) names
-  {
-  [self.blacklistSuffixes addObjectsFromArray: names];
-  }
-
-// Set the blacklist matches.
-- (void) appendToBlacklistMatches: (NSArray *) names
-  {
-  [self.blacklistMatches addObjectsFromArray: names];
-  }
-
 // Handle a task that takes too long to complete.
 - (void) taskTerminated: (NSString *) program arguments: (NSArray *) args
   {
@@ -350,15 +295,6 @@
   return NO;
   }
 
-// Simulate adware.
-- (void) simulateAdware
-  {
-  [self.whitelistFiles removeObject: @"com.oracle.java.Java-Updater.plist"];
-  [self.whitelistFiles removeObject: @"com.google.keystone.agent.plist"];
-  [self.blacklistFiles addObject: @"com.google.keystone.agent.plist"];
-  [self.blacklistMatches addObject: @"ASCPowerTools2"];
-  }
-  
 // Associate a path with a UUID to hide it.
 - (NSString *) createUUIDForPath: (NSString *) path
   {

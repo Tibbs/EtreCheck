@@ -195,6 +195,8 @@
   else  
     self.signature = [Utilities checkExecutable: self.executable];
   
+  NSString * executableType = @"?";
+  
   if([self.signature length] > 0)
     {
     if([self.signature isEqualToString: kSignatureApple])
@@ -208,12 +210,15 @@
       if(developer.length > 0)
         return developer;
       }
+    else if([self.signature isEqualToString: kShell])
+      executableType = ECLocalizedString(@"Shell Script");
     }
    
   return 
     [NSString 
       stringWithFormat: 
-        @"? %@ %@", 
+        @"%@ %@ %@", 
+        executableType,
         [Utilities crcFile: self.path],
         [Utilities crcFile: self.executable]];
   }

@@ -806,31 +806,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
           
+          Adware * adware = [[Model model] adware];
+
           if([whitelist respondsToSelector: @selector(addObject:)])
-            [[Model model] appendToWhitelist: whitelist];
+            [adware appendToWhitelist: whitelist];
 
           NSArray * whitelistPrefixes =
             [attributes objectForKey: @"whitelist_prefixes"];
           
           if([whitelist respondsToSelector: @selector(addObject:)])
-            [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
+            [adware appendToWhitelistPrefixes: whitelistPrefixes];
 
           NSArray * blacklist = [attributes objectForKey: @"blacklist"];
           
           if([blacklist respondsToSelector: @selector(addObject:)])
-            [[Model model] appendToBlacklist: blacklist];
+            [adware appendToBlacklist: blacklist];
 
           NSArray * blacklistSuffix =
             [attributes objectForKey: @"blacklist_suffix"];
           
           if([blacklist respondsToSelector: @selector(addObject:)])
-            [[Model model] appendToBlacklistSuffixes: blacklistSuffix];
+            [adware appendToBlacklistSuffixes: blacklistSuffix];
 
           NSArray * blacklistMatch =
             [attributes objectForKey: @"blacklist_match"];
           
           if([blacklist respondsToSelector: @selector(addObject:)])
-            [[Model model] appendToBlacklistMatches: blacklistMatch];
+            [adware appendToBlacklistMatches: blacklistMatch];
           }
       }
     
