@@ -739,6 +739,7 @@
 				A589CD1A1F71644500D66592 /* Frameworks */,
 				A589CD1B1F71644500D66592 /* Headers */,
 				A589CD1C1F71644500D66592 /* Resources */,
+				A54279421F904B94009E7D29 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -827,6 +828,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A54279421F904B94009E7D29 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SIZE=$(/usr/bin/gzip --stdout \"$SRCROOT/LibEtreCheck/adware.plist\" | /usr/bin/wc -c)\nSHORT=`expr $SIZE - 3`\n/usr/bin/gzip --stdout \"$SRCROOT/LibEtreCheck/adware.plist\" | tail -c $SHORT > \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/adware.plist\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A589CD191F71644500D66592 /* Sources */ = {

@@ -364,7 +364,6 @@
 			buildPhases = (
 				A55BC16515BF987D00D42EF1 /* Sources */,
 				A55BC16615BF987D00D42EF1 /* Frameworks */,
-				A54DA58D1A314C8C00F09B19 /* ShellScript */,
 				A55BC16715BF987D00D42EF1 /* Resources */,
 				A5C9E07F1DBDD1C10099288B /* CopyFiles */,
 				A54A9EDA1DC05B9700F92CA3 /* Embed Frameworks */,
@@ -470,22 +469,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A54DA58D1A314C8C00F09B19 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "SIZE=$(/usr/bin/gzip --stdout \"$SRCROOT/EtreCheck/adware.plist\" | /usr/bin/wc -c)\nSHORT=`expr $SIZE - 3`\n/usr/bin/gzip --stdout \"$SRCROOT/EtreCheck/adware.plist\" | tail -c $SHORT > \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/adware.plist\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A55BC16515BF987D00D42EF1 /* Sources */ = {

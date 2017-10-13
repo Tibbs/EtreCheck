@@ -35,6 +35,7 @@
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize launchd = myLaunchd;
 @synthesize safari = mySafari;
+@synthesize adware = myAdware;
 @synthesize processes = myProcesses;
 @synthesize adwareFound = myAdwareFound;
 @synthesize unsignedFound = myUnsignedFound;
