@@ -37,8 +37,6 @@
   NSTextView * logView;
   NSAttributedString * myDisplayStatus;
   NSMutableAttributedString * log;
-  double myNextProgressIncrement;
-  NSTimer * myProgressTimer;
   SlideshowView * myMachineIcon;
   SlideshowView * myApplicationIcon;
   NSMutableArray * myApplicationIcons;
@@ -127,8 +125,6 @@
 @property (retain) IBOutlet NSTextView * logView;
 @property (retain) NSAttributedString * displayStatus;
 @property (retain) NSMutableAttributedString * log;
-@property (assign) double nextProgressIncrement;
-@property (retain) NSTimer * progressTimer;
 @property (retain) IBOutlet SlideshowView * machineIcon;
 @property (retain) IBOutlet SlideshowView * applicationIcon;
 @property (retain) IBOutlet NSMutableArray * applicationIcons;

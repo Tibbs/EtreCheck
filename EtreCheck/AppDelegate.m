@@ -49,8 +49,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize logView;
 @synthesize displayStatus = myDisplayStatus;
 @synthesize log;
-@synthesize nextProgressIncrement = myNextProgressIncrement;
-@synthesize progressTimer = myProgressTimer;
 @synthesize machineIcon = myMachineIcon;
 @synthesize applicationIcon = myApplicationIcon;
 @synthesize applicationIcons = myApplicationIcons;
@@ -248,7 +246,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   self.logView = nil;
   self.displayStatus = nil;
   self.log = nil;
-  self.progressTimer = nil;
   self.machineIcon = nil;
   self.applicationIcon = nil;
   self.applicationIcons = nil;
@@ -1253,12 +1250,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
     ^{
-      [self runAnimations];
-    });
-
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-    ^{
       [self collectInfo];
     });
     
@@ -1299,31 +1290,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.dockProgress setMinValue: 0];
   [self.dockProgress setMaxValue: 100];
 
-  self.progressTimer =
-    [NSTimer
-      scheduledTimerWithTimeInterval: .3
-      target: self
-      selector: @selector(fireProgressTimer:)
-      userInfo: nil
-      repeats: YES];
+  [self.progress startAnimation: self];
+  [self.spinner startAnimation: self];
   }
 
-// Progress timer.
-- (void) fireProgressTimer: (NSTimer *) timer
-  {
-  double current = [self.progress doubleValue];
-  
-  current = current + 0.5;
-    
-  if(current > self.nextProgressIncrement)
-    return;
-    
-  [self updateProgress: current];
-  
-  if(current >= 100)
-    [timer invalidate];
-  }
-  
 // Cancel the report.
 - (IBAction) cancel: (id) sender
   {
@@ -1342,25 +1312,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   return YES;
   }
 
-// Fire up the animations.
-- (void) runAnimations
-  {
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      [self.progress startAnimation: self];
-      [self.spinner startAnimation: self];
-    });
-
-  [self runMachineAnimation];
-  
-  [self runApplicationIconAnimation];
-  
-  [self runAgentsAndDaemonsAnimation];
-  
-  dispatch_semaphore_signal(self.animationsComplete);
-  }
-
 // Run the machine animation.
 - (void) runMachineAnimation
   {
@@ -1373,11 +1324,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   tm.tv_sec = 0;
   tm.tv_nsec = (long)(NSEC_PER_SEC * .5);
   
-  for(NSImage * icon in machineIcons)
+  for(NSString * name in machineIcons)
     {
     nanosleep(& tm, NULL);
     
+    NSString * resourceDirectory =
+      @"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/";
+    
+    NSString * path = 
+      [resourceDirectory stringByAppendingPathComponent: name];
+    
+    NSImage * icon = [[NSImage alloc] initWithContentsOfFile: path];
+    
     [self showMachineIcon: icon];
+    
+    [icon release];
     }
   
   nanosleep(& tm, NULL);
@@ -1393,37 +1354,24 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Find some interesting machine icons.
 - (NSArray *) findMachineIcons
   {
-  NSArray * machines =
+  return
     @[
-      @"MacBookPro7,1",
-      @"MacBookPro8,2",
-      @"MacBookPro8,3",
-      @"iMac13,1",
-      @"iMac13,2",
-      @"MacBookPro10,2",
-      @"MacBookPro11,2",
-      @"Macmini1,1",
-      @"Macmini4,1",
-      @"Macmini5,1",
-      @"MacBook5,2",
-      @"MacBook8,1",
-      @"MacPro2,1",
-      @"MacPro6,1",
-      @"MacBookAir3,1",
-      @"MacBookAir3,2" 
+      @"com.apple.macbookpro-13-unibody.icns",
+      @"com.apple.macbookpro-15-unibody.icns",
+      @"com.apple.macbookpro-17-unibody.icns",
+      @"com.apple.imac-unibody-21-no-optical.icns",
+      @"com.apple.imac-unibody-27-no-optical.icns",
+      @"com.apple.macbookpro-13-retina-display.icns",
+      @"com.apple.macbookpro-15-retina-display.icns",
+      @"com.apple.macmini.icns",
+      @"com.apple.macmini-unibody.icns",
+      @"com.apple.macmini-unibody-no-optical.icns",
+      @"com.apple.macbook-white.icns",
+      @"com.apple.macpro.icns",
+      @"com.apple.macpro-cylinder.icns",
+      @"com.apple.macbookair-11-unibody.icns",
+      @"com.apple.macbookair-13-unibody.icns" 
     ];
-    
-  NSMutableArray * machineIcons = [NSMutableArray array];
-  
-  for(NSString * code in machines)
-    {
-    NSImage * machineIcon = [Utilities findMachineIcon: code];
-  
-    if(machineIcon)
-      [machineIcons addObject: machineIcon];
-    }
-    
-  return machineIcons;
   }
 
 // Run the applications animation.
@@ -1497,6 +1445,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self animateDemon: demonEndFrame];
       [self animateDemon: demonStartFrame agent: agentEndFrame];
       [self animateAgent: agentStartFrame];
+      
+      dispatch_semaphore_signal(self.animationsComplete);
     });
   }
 
@@ -1555,6 +1505,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the collection.
 - (void) collectInfo
   {
+  [self updateCollectionStatus:
+    NSLocalizedString(@"Starting up", NULL)];
+    
   Checker * checker = [Checker new];
   
   checker.startSection = 
@@ -1563,17 +1516,45 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self setStatus: sectionName];
       
       if([sectionName isEqualToString: @"hardware"])   
+        {
         [self updateCollectionStatus:
           NSLocalizedString(@"Checking hardware", NULL)];
-      else if([sectionName isEqualToString: @"safariextensions"])   
+          
+        dispatch_async(
+          dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+          ^{
+            [self runMachineAnimation];
+          });
+        }
+      else if([sectionName isEqualToString: @"systemsoftware"])   
+        {
         [self updateCollectionStatus:
           NSLocalizedString(@"Checking software", NULL)];
-      else if([sectionName isEqualToString: @"timemachine"])   
+
+        dispatch_async(
+          dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+          ^{
+            [self runApplicationIconAnimation];
+          });
+        }
+      else if([sectionName isEqualToString: @"systemlaunchagents"])   
+        {
         [self updateCollectionStatus:
-          NSLocalizedString(@"Checking system configuration", NULL)];
-      else if([sectionName isEqualToString: @"cpu"])   
-        [self updateCollectionStatus:
-          NSLocalizedString(@"Checking performance", NULL)];
+          NSLocalizedString(@"Checking daemons and agents", NULL)];
+
+        // Stop the application animation.
+        dispatch_sync(
+          dispatch_get_main_queue(),
+          ^{
+            [self.applicationIcons removeAllObjects];
+          });
+
+        dispatch_async(
+          dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+          ^{
+            [self runAgentsAndDaemonsAnimation];
+          });
+        }
       };
   
   checker.progress = 
@@ -1655,32 +1636,29 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   }
   
 // Set the progress.
-- (void) setCurrentProgress: (double) value
+- (void) setCurrentProgress: (double) amount
   {
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      self.nextProgressIncrement = value;
+      double current = [self.progress doubleValue];
+      
+      // Try to make Snow Leopard update.
+      //if(((current + amount) - [self.progress doubleValue]) > 1)
+      //  [self.progress setNeedsDisplay: YES];
+
+      // Snow Leopard doesn't like animations with CA layers.
+      // Beat it with a rubber hose.
+      //[self.progress setHidden: YES];
+      [[self.progress animator] setDoubleValue: amount];
+      //[self.progress setHidden: NO];
+      //[self.progress startAnimation: self];
+      
+      [self.dockProgress setDoubleValue: amount];
+      [[[NSApplication sharedApplication] dockTile] display];
     });
   }
   
-- (void) updateProgress: (double) amount
-  {
-  // Try to make Snow Leopard update.
-  if((self.nextProgressIncrement - [self.progress doubleValue]) > 1)
-    [self.progress setNeedsDisplay: YES];
-
-  // Snow Leopard doesn't like animations with CA layers.
-  // Beat it with a rubber hose.
-  [self.progress setHidden: YES];
-  [self.progress setDoubleValue: amount];
-  [self.progress setHidden: NO];
-  [self.progress startAnimation: self];
-  
-  [self.dockProgress setDoubleValue: amount];
-  [[[NSApplication sharedApplication] dockTile] display];
-  }
-
 // Show an application icon.
 - (void) showApplicationIcon: (NSImage *) icon
   {
@@ -1748,8 +1726,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show the output pane.
 - (void) displayOutput
   {
-  [self.progressTimer invalidate];
-  
   [self.dockProgress removeFromSuperview];
   [[[NSApplication sharedApplication] dockTile] display];
 

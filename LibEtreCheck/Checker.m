@@ -86,7 +86,7 @@
   myResults = [NSMutableDictionary new];
   myCompleted = [NSMutableDictionary new];
   
-  int collectorCount = 39;
+  int collectorCount = 40;
   double increment = 100.0/collectorCount;
   
   // These are all special.
@@ -102,7 +102,7 @@
   [self 
     performCollections: 
       @[
-        [[SystemSoftwareCollector new] autorelease],
+        hardwareCollector,
         applicationsCollector
       ]
     increment: increment];
@@ -118,7 +118,6 @@
   [self 
     performCollections: 
       @[
-        hardwareCollector,
         [[LogCollector new] autorelease],
         [[DiskCollector new] autorelease],
         [[VideoCollector new] autorelease],
@@ -137,15 +136,29 @@
   [self 
     performCollections: 
       @[
+        [[SystemSoftwareCollector new] autorelease],
+        [[ConfigurationCollector new] autorelease],
+        [[TimeMachineCollector new] autorelease],
+        [[FontsCollector new] autorelease],
+        [[InstallCollector new] autorelease],
+        [[DiagnosticsCollector new] autorelease],
+        [[GatekeeperCollector new] autorelease],
         [[SafariExtensionsCollector new] autorelease],
         [[KernelExtensionCollector new] autorelease],
-        [[PreferencePanesCollector new] autorelease],
-        [[StartupItemsCollector new] autorelease],
+        [[CPUUsageCollector new] autorelease]
+      ]
+    increment: increment];
+  
+  [self 
+    performCollections: 
+      @[
         [[SystemLaunchAgentsCollector new] autorelease],
         [[SystemLaunchDaemonsCollector new] autorelease],
         [[LaunchAgentsCollector new] autorelease],
         [[LaunchDaemonsCollector new] autorelease],
         [[UserLaunchAgentsCollector new] autorelease],
+        [[PreferencePanesCollector new] autorelease],
+        [[StartupItemsCollector new] autorelease],
         [[LoginItemsCollector new] autorelease],
         [[InternetPlugInsCollector new] autorelease],
         [[UserInternetPlugInsCollector new] autorelease],
@@ -153,6 +166,16 @@
         [[UserAudioPlugInsCollector new] autorelease],
         [[ITunesPlugInsCollector new] autorelease],
         [[UserITunesPlugInsCollector new] autorelease],
+        [[MemoryUsageCollector new] autorelease],
+        [[NetworkUsageCollector new] autorelease],
+        [[EnergyUsageCollector new] autorelease],
+        [[VirtualMemoryCollector new] autorelease]
+      ]
+    increment: increment];
+
+  [self 
+    performCollections: 
+      @[
         adwareCollector,
         [[UnsignedCollector new] autorelease],
         [[CleanupCollector new] autorelease],
@@ -160,29 +183,6 @@
       ]
     increment: increment];
 
-  [self 
-    performCollections: 
-      @[
-        [[TimeMachineCollector new] autorelease],
-        [[ConfigurationCollector new] autorelease],
-        [[FontsCollector new] autorelease],
-        [[InstallCollector new] autorelease],
-        [[DiagnosticsCollector new] autorelease],
-        [[GatekeeperCollector new] autorelease]
-      ]
-    increment: increment];
-
-  [self 
-    performCollections: 
-      @[
-        [[CPUUsageCollector new] autorelease],
-        [[MemoryUsageCollector new] autorelease],
-        [[NetworkUsageCollector new] autorelease],
-        [[EnergyUsageCollector new] autorelease],
-        [[VirtualMemoryCollector new] autorelease]
-      ]
-    increment: increment];
-  
   [self performCollections: @[etrecheckCollector] increment: increment];
 
   NSAttributedString * report = [self collectResults];

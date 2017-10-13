@@ -200,7 +200,4 @@
 // Indent a block of text.
 + (NSString *) indent: (NSString *) text by: (NSString *) indent;
 
-// Find a machine icon.
-+ (NSImage *) findMachineIcon: (NSString *) code;
-
 @end

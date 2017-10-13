@@ -1620,16 +1620,4 @@
   return indented;
   }
   
-// Find a machine icon.
-+ (NSImage *) findMachineIcon: (NSString *) code
-  {
-  // Load the machine image.
-  NSString * iconPath = ECLocalizedStringFromTable(code, @"machineIcons");
-  
-  if(!iconPath)
-    return nil;
-
-  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
-  }
-
 @end
