@@ -746,7 +746,7 @@
 // Verify the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path
   {
-  if(![path length])
+  if(!path.length)
     return kExecutableMissing;
     
   if(![[NSFileManager defaultManager] fileExistsAtPath: path])
@@ -866,7 +866,7 @@
 // Check the signature of an executable.
 + (NSString *) checkExecutable: (NSString *) path;
   {
-  if([path length] == 0)
+  if(path.length == 0)
     return kExecutableMissing;
     
   if(![[NSFileManager defaultManager] fileExistsAtPath: path])

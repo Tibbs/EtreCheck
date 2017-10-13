@@ -19,6 +19,7 @@
 #import "EtreCheckConstants.h"
 #import "Adware.h"
 #import "UnsignedCollector.h"
+#import "CleanupCollector.h"
 
 @interface LibEtreCheckTests : XCTestCase
 
@@ -219,6 +220,47 @@
 
   UnsignedCollector * collector = 
     [UnsignedCollector new];
+  
+  [collector collect];
+
+  NSLog(@"%@", collector.result.string);
+  }
+
+- (void) testCleanupCollector 
+  {
+  [[Model model] setIgnoreKnownAppleFailures: true];
+  
+  SystemLaunchDaemonsCollector * systemDaemons = 
+    [SystemLaunchDaemonsCollector new];
+  
+  [systemDaemons collect];
+  
+  SystemLaunchAgentsCollector * systemAgents = 
+    [SystemLaunchAgentsCollector new];
+  
+  [systemAgents collect];
+
+  LaunchDaemonsCollector * daemons = 
+    [LaunchDaemonsCollector new];
+  
+  [daemons collect];
+  
+  LaunchAgentsCollector * agents = 
+    [LaunchAgentsCollector new];
+  
+  [agents collect];
+
+  UserLaunchAgentsCollector * userAgents = 
+    [UserLaunchAgentsCollector new];
+  
+  [userAgents collect];
+
+  SafariExtensionsCollector * safari = 
+    [SafariExtensionsCollector new];
+  
+  [safari collect];
+  
+  CleanupCollector * collector = [CleanupCollector new];
   
   [collector collect];
 

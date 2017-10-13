@@ -186,10 +186,6 @@
 // Collect the signature of a launchd item.
 - (NSString *) checkSignature
   {
-  // I need an executable for this.
-  if(self.executable.length == 0)
-    return @"? ? ?";
-    
   if([self.label hasPrefix: @"com.apple."])
     self.signature = [Utilities checkAppleExecutable: self.executable];
   else  

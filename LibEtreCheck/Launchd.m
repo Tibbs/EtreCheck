@@ -141,6 +141,9 @@
 // Add a task at a path.
 - (void) addFileAtPath: (NSString *) path 
   {
+  if([path hasSuffix: @"/.DS_Store"])
+    return;
+    
   NSString * safePath = [path stringByAbbreviatingWithTildeInPath];
   
   if(safePath.length > 0)

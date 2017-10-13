@@ -45,7 +45,7 @@
   {
   [self collectNotificationSPAM];
   
-  [self collectOrphanLaunchdFiles];
+  // Orphan launchd files have already been collected.
   
   [self collectOrphanSafariExtensions];
   
@@ -266,32 +266,6 @@
   return nil;
   }
 
-// Collect orphan launchd files.
-- (void) collectOrphanLaunchdFiles
-  {
-  Launchd * launchd = [[Model model] launchd];
-  
-  // I will have already filtered out launchd files specific to this 
-  // context.
-  for(NSString * path in [launchd filesByPath])
-    {
-    LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
-    
-    if(file != nil)
-      [self checkOrphanFile: file];
-    }
-  }
-  
-// Collect the orphan status of a launchd file.
-- (void) checkOrphanFile: (LaunchdFile *) file 
-  {
-  if(file.executable.length > 0)
-    if([[NSFileManager defaultManager] fileExistsAtPath: file.executable])
-      return;
-      
-  [[[[Model model] launchd] orphanFiles] addObject: file];
-  }
-
 // Collect orphan Safari extensions.
 - (void) collectOrphanSafariExtensions
   {
@@ -347,6 +321,9 @@
   
   for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
     {
+    if([self hideFile: launchdFile])
+      continue;
+      
     if(count++ == 0)
       [self.result appendAttributedString: [self buildTitle]];
       
@@ -366,6 +343,24 @@
   return count;
   }
   
+// Should this file be hidden?
+- (BOOL) hideFile: (LaunchdFile *) file
+  {
+  Launchd * launchd = [[Model model] launchd];
+  
+  NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
+  
+  if(appleFile != nil)
+    {
+    NSString * expectedSignature = [appleFile objectForKey: kSignature];
+    
+    if([expectedSignature isEqualToString: kExecutableMissing])
+      return [[Model model] ignoreKnownAppleFailures];
+    }
+    
+  return NO;
+  }
+
 - (int) printOrphanSafariExtensions: (int) count
   {
   Safari * safari = [[Model model] safari];
@@ -433,14 +428,26 @@
   if([[Model model] launchd].orphanFiles.count == 0)
     return;
     
-  [self.model startElement: @"launchdfiles"];
+  bool started = false;
   
   for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
+    {
+    if([self hideFile: launchdFile])
+      continue;
 
+    if(!started)
+      {
+      [self.model startElement: @"launchdfiles"];
+  
+      started = true;
+      }
+      
     // Export the XML.
     [self.model addFragment: launchdFile.xml];
-
-  [self.model endElement: @"launchdfiles"];
+    }
+    
+  if(started)
+    [self.model endElement: @"launchdfiles"];
   }
   
 // Export orphan safari extensions.
