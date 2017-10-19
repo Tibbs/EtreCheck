@@ -178,6 +178,7 @@
 "Recovery" = "Restauration";
 "running" = "en marche";
 "Runtime: %@\n" = "Temps d’exécution : %@\n";
+"Safari extension: " = "Extension de Safari : ";
 "Self test - failed" = "Auto-examen - échec";
 "Shell Script" = "Script du shell";
 "Show signature failures: Enabled\n" = "La vérification des signatures numériques : Engagée";

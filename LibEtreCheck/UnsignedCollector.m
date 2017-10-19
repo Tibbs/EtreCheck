@@ -90,7 +90,9 @@
       continue;
       
     // Print the file.
-    [self.result appendAttributedString: launchdFile.attributedStringValue];
+    [self.result appendString: @"    "];
+    [self.result appendString: launchdFile.path];
+    [self.result appendString: @" "];
 
     if([launchdFile.status isEqualToString: kStatusNotLoaded])
       {

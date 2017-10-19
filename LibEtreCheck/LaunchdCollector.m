@@ -77,7 +77,8 @@
     [self.model addFragment: file.xml];
     }
 
-  [self.result appendCR];
+  if(count > 0)
+    [self.result appendCR];
   }
 
 @end

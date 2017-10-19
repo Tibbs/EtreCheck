@@ -328,7 +328,8 @@
       [self.result appendAttributedString: [self buildTitle]];
       
     // Print the file.
-    [self.result appendAttributedString: launchdFile.attributedStringValue];
+    [self.result appendString: launchdFile.path];
+    [self.result appendString: @" "];
 
     if(launchdFile.executable.length > 0)
       {
@@ -371,7 +372,9 @@
       [self.result appendAttributedString: [self buildTitle]];
 
     // Print the extension.
-    [self.result appendAttributedString: extension.attributedStringValue];
+    [self.result appendString: @"    "];
+    [self.result appendString: ECLocalizedString(@"Safari extension: ")];
+    [self.result appendString: extension.displayName];
     [self.result appendString: @"\n"];
     }
         
