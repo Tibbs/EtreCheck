@@ -122,7 +122,7 @@
       if(self.minor > 0)
         myVersion = 
           [[NSString alloc] 
-            initWithFormat: @"10.%d.%d", self.major, self.minor];
+            initWithFormat: @"10.%d.%d", self.major - 4, self.minor];
       else
         myVersion = 
           [[NSString alloc] 

@@ -20,8 +20,8 @@
   // The attributed string value.
   NSMutableAttributedString * myAttributedStringValue;
   
-  // The XML content.
-  XMLBuilder * myXML;
+  // The XML builder.
+  XMLBuilder * myXMLBuilder;
   }
   
 // The modification date for this item.
@@ -36,5 +36,8 @@
 
 // The XML value.
 @property (readonly, nonnull) XMLBuilderElement * xml;
+
+// The XML builder.
+@property (readonly, nonnull) XMLBuilder * xmlBuilder;
 
 @end

@@ -21,6 +21,9 @@
 // The XML value.
 @dynamic xml;
 
+// The XML builder.
+@synthesize xmlBuilder = myXMLBuilder;
+
 // The attributed string value.
 - (NSMutableAttributedString * ) attributedStringValue
   {
@@ -37,14 +40,13 @@
 // The XML value.
 - (XMLBuilderElement * ) xml
   {
-  if(myXML == nil)
-    {
-    myXML = [XMLBuilder new];
+  if(myXMLBuilder == nil)    
+    myXMLBuilder = [XMLBuilder new];
 
-    [self buildXMLValue: myXML];
-    }
+  if([[[self.xmlBuilder root] children] count] == 0)
+    [self buildXMLValue: myXMLBuilder];
     
-  return [myXML root];
+  return [self.xmlBuilder root];
   }
 
 // Destructor.
@@ -54,7 +56,7 @@
   self.authorName = nil;
   
   [myAttributedStringValue release];
-  [myXML release];
+  [myXMLBuilder release];
   
   [super dealloc];
   }
