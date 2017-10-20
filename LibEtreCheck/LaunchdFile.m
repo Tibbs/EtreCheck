@@ -42,6 +42,12 @@
 // The executable's signature.
 @synthesize signature = mySignature;
 
+// The plist CRC.
+@synthesize plistCRC = myPlistCRC;
+
+// The executable CRC.
+@synthesize executableCRC = myExecutableCRC;
+
 // Is the file loaded?
 @dynamic loaded;
 
@@ -180,11 +186,11 @@
     
   myConfigScriptValid = (self.label.length > 0);
     
-  self.authorName = [self checkSignature];
+  [self checkSignature];
   }
 
 // Collect the signature of a launchd item.
-- (NSString *) checkSignature
+- (void) checkSignature
   {
   if([self.label hasPrefix: @"com.apple."])
     self.signature = [Utilities checkAppleExecutable: self.executable];
@@ -196,7 +202,10 @@
   if([self.signature length] > 0)
     {
     if([self.signature isEqualToString: kSignatureApple])
-      return @"Apple, Inc.";
+      {
+      self.authorName = @"Apple, Inc.";
+      return;
+      }
       
     // If I have a valid executable, query the actual developer.
     if([self.signature isEqualToString: kSignatureValid])
@@ -204,19 +213,18 @@
       NSString * developer = [Utilities queryDeveloper: self.executable];
       
       if(developer.length > 0)
-        return developer;
+        {
+        self.authorName = developer;
+        return;
+        }
       }
     else if([self.signature isEqualToString: kShell])
       executableType = ECLocalizedString(@"Shell Script");
     }
    
-  return 
-    [NSString 
-      stringWithFormat: 
-        @"%@ %@ %@", 
-        executableType,
-        [Utilities crcFile: self.path],
-        [Utilities crcFile: self.executable]];
+  self.authorName = executableType;
+  self.plistCRC = [Utilities crcFile: self.path];
+  self.executableCRC = [Utilities crcFile: self.executable];
   }
   
 // Get the modification date.
@@ -518,11 +526,20 @@
 
   [attributedString appendString: @" "];
 
+  NSMutableString * signature = [NSMutableString new];
+  
+  [signature appendString: self.authorName];
+  
+  if((self.plistCRC != nil) && (self.executableCRC != nil))
+    [signature appendFormat: @" %@ %@", self.plistCRC, self.executableCRC];
+    
   [attributedString 
     appendString: 
       [NSString 
         stringWithFormat: 
-          @"(%@ - %@)", self.authorName, modificationDateString]];
+          @"(%@ - %@)", signature, modificationDateString]];
+          
+  [signature release];
   }
 
 // Append a lookup link.
@@ -597,6 +614,9 @@
   [xml addElement: @"valid" boolValue: self.configScriptValid];
   
   [xml addElement: @"author" value: self.authorName];
+    
+  [xml addElement: @"plistcrc" value: self.plistCRC];
+  [xml addElement: @"executablecrc" value: self.executableCRC];
     
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];

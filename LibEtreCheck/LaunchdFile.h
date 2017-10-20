@@ -28,6 +28,12 @@
   
   // The executable's signature.
   NSString * mySignature;
+  
+  // The plist CRC.
+  NSString * myPlistCRC;
+  
+  // The executable CRC.
+  NSString * myExecutableCRC;
   }
 
 // The config script contents.
@@ -44,6 +50,12 @@
 
 // The executable's signature.
 @property (retain, nullable) NSString * signature;
+
+// The plist CRC.
+@property (retain, nullable) NSString * plistCRC;
+
+// The executable CRC.
+@property (retain, nullable) NSString * executableCRC;
 
 // Is the file loaded?
 @property (readonly) BOOL loaded;
