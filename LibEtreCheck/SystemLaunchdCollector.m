@@ -129,12 +129,12 @@
   {
   if(count > 0)
     {
-    [self.model startElement: @"appletasks"];
+    [self.model startElement: @"applelaunchdfile"];
     
     [self.model addElement: @"status" value: status];
     [self.model addElement: @"count" unsignedIntegerValue: count];
     
-    [self.model endElement: @"appletasks"];
+    [self.model endElement: @"applelaunchdfile"];
     }
   }
 

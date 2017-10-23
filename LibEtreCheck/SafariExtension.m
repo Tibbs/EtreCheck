@@ -308,13 +308,13 @@
   [xml addElement: @"installdate" day: self.modificationDate];
   
   if(!self.loaded)
-    [xml addElement: @"notloaded"];
+    [xml addElement: @"status" value: @"notloaded"];
     
   else if(self.enabled)
-    [xml addElement: @"enabled"];
+    [xml addElement: @"status" value: @"enabled"];
     
   else 
-    [xml addElement: @"disabled"];
+    [xml addElement: @"status" value: @"disabled"];
 
   [xml endElement: @"extension"];
   }

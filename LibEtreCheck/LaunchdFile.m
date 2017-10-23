@@ -592,7 +592,7 @@
 // Build the XML value.
 - (void) buildXMLValue: (XMLBuilder *) xml
   {
-  [xml startElement: @"file"];
+  [xml startElement: @"launchdfile"];
   
   [xml addElement: @"status" value: self.status];
   [xml addElement: @"path" value: self.path];
@@ -621,7 +621,7 @@
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];
 
-  [xml endElement: @"file"];
+  [xml endElement: @"launchdfile"];
   }
 
 @end
