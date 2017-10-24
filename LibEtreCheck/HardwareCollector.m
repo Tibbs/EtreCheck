@@ -935,7 +935,15 @@
     
   if(cycleCount && [health length])
     {
+    BOOL flagged = NO;
+    
     if([health isEqualToString: @"Poor"])
+      flagged = YES;
+      
+    if([health isEqualToString: @"Check Battery"])
+      flagged = YES;
+      
+    if(flagged)
       [self.result
         appendString:
           [NSString
@@ -960,6 +968,11 @@
     [self.model addElement: @"batteryhealth" value: health];
     
     [self.model addElement: @"batterycyclecount" number: cycleCount];
+    
+    [self.model 
+      addElement: @"batterypercent" 
+      intValue: cycleCount.intValue * 100 / [self getLifetimeCycles]];
+      
     //[self.model addElement: @"batteryserialnumber" value: serialNumber];
     
     if(serialNumberInvalid)
@@ -977,6 +990,54 @@
     }
   }
 
+// Get the number of lifetime batter cycles for this machine.
+- (int) getLifetimeCycles
+  {
+  int cycles = 1000;
+  
+  NSString * model = [[Model model] model];
+  
+  if([model hasPrefix: @"MacBookPro"])
+    {
+    if([model compare: @"MacBookPro5,1"] == NSOrderedSame)
+      {
+      BOOL oldModel = 
+        [self.EnglishMarketingName 
+          isEqualToString: @"MacBook Pro (15-inch Late 2008)"];
+      
+      if(oldModel)
+        cycles = 500;
+      }
+    else if([model compare: @"MacBookPro5,1"] == NSOrderedDescending)
+      cycles = 300;
+    }
+  else if([model hasPrefix: @"MacBookAir"])
+    {
+    if([model compare: @"MacBookAir2,1"] == NSOrderedSame)
+      {
+      BOOL newModel = 
+        [self.EnglishMarketingName 
+          isEqualToString: @"MacBook Air (Mid 2009)"];
+      
+      if(newModel)
+        cycles = 500;
+      else
+        cycles = 300;
+      }
+    else if([model compare: @"MacBookAir2,1"] == NSOrderedDescending)
+      cycles = 300;
+    }
+  else if([model hasPrefix: @"MacBook"])
+    {
+    if([model compare: @"MacBook5,1"] == NSOrderedSame)
+      cycles = 500;
+    else if([model compare: @"MacBook6,1"] == NSOrderedDescending)
+      cycles = 300;
+    }
+    
+  return cycles;
+  }
+  
 // Collect network information.
 - (void) collectNetwork
   {
