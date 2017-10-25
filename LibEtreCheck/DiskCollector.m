@@ -376,7 +376,7 @@
   NSString * cleanName = 
     [volumeName length] > 0 ? [Utilities cleanPath: volumeName] : @"";
     
-  [self.model addElement: @"name" value: cleanName];
+  [self.model addElement: @"name" value: volumeName];
   [self.model addElement: @"device" value: volumeDevice];
   [self.model addElement: @"filesystem" value: fileSystem];
   [self.model addElement: @"mountpoint" value: volumeMountPoint];

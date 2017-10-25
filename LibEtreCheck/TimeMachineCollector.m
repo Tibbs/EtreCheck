@@ -318,7 +318,7 @@
       NSString * kind = [destinationInfo objectForKey: @"Kind"];
       NSString * name = [destinationInfo objectForKey: @"Name"];
       NSNumber * lastDestination =
-        [destination objectForKey: @"LastDestination"];
+        [destinationInfo objectForKey: @"LastDestination"];
       
       if(kind.length == 0)
         kind = ECLocalizedString(@"Unknown");
@@ -649,6 +649,7 @@
 
   [self.model addElement: @"name" value: safeName];
   [self.model addElement: @"type" value: kind];
+  [self.model addElement: @"lastused" boolValue: last.boolValue];
   
   if([last boolValue])
     [self.model addElement: @"lastused" boolValue: [last boolValue]];
