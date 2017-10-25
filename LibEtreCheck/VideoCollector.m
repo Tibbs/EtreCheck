@@ -65,12 +65,19 @@
     [self.model startElement: @"gpu"];
     
     NSString * name = [info objectForKey: @"sppci_model"];
+    NSString * bus = [info objectForKey: @"sppci_bus"];
     
     if(![name length])
       name = ECLocalizedString(@"Unknown");
       
     [self.model addElement: @"name" value: name];
+    [self.model addElement: @"bus" value: bus];
     
+    NSString * type = ECLocalizedString(@"Discrete");
+    
+    if([bus isEqualToString: @"spdisplays_builtin"])
+      type = ECLocalizedString(@"Integrated");
+      
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
     if([vramAmount length] == 0)
@@ -91,8 +98,9 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@%@%@\n",
+            @"    %@ (%@) %@%@\n",
             name ? name : @"",
+            type,
             [vram length] ? @" - " : @"",
             vram]];
       

@@ -119,6 +119,7 @@
 "CPU overheating" = "CPU en train de surchauffer";
 "Crash" = "Écrasement";
 "Description:\n" = "Description :\n";
+"Discrete" = "Distinct";
 "disabled" = "désactivée";
 "Display" = "Écran";
 "EFI" = "EFI";
@@ -141,6 +142,7 @@
 "Ignore expected failures in Apple tasks: Disabled\n" = "Ignorer les échecs attendus dans les tâches Apple : Désactivé\n";
 "Input     " = "Entrée    ";
 "installed %@" = "installé %@";
+"Integrated" = "Intégré";
 "invalid?" = "invalide ?";
 "KB" = "Ko";
 "Kernel" = "Noyau";
