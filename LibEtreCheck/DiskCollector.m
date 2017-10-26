@@ -218,13 +218,14 @@
       NSString * info =
         [NSString
           stringWithFormat:
-            @"(%@%@)",
+            @"(%@%@ - %@)",
             medium
               ? ECLocalizedStringFromTable(medium, @"System")
               : @"",
             ([medium isEqualToString: @"Solid State"] && [TRIM length])
               ? TRIMString
-              : @""];
+              : @"",
+            type];
         
       if([diskDevice length] == 0)
         diskDevice = @"";
@@ -232,6 +233,7 @@
       [self.model addElement: @"model" value: diskName];
       [self.model addElement: @"device" value: diskDevice];
       [self.model addElement: @"size" valueWithUnits: diskSize];
+      [self.model addElement: @"bus" value: type];
       //[self.model addElement: @"UUID" value: UUID];
 
       if([diskSize length] > 0)
