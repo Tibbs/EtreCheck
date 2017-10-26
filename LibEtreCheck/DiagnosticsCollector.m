@@ -61,6 +61,8 @@
       if(!hasOutput)
         [self.result appendAttributedString: [self buildTitle]];
         
+      [self.model addElement: @"insufficientpermissions" boolValue: YES];
+
       [self.result appendString: @"\n"];
       [self.result
         appendString:
