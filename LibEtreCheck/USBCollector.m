@@ -143,11 +143,11 @@
   
   if([disks count] > 0)
     {
-    [self.model startElement: @"disks"];
+    [self.model startElement: @"drives"];
     
     for(NSDictionary * disk in disks)
       {
-      [self.model startElement: @"disk"];
+      [self.model startElement: @"drive"];
       
       NSString * diskName = [disk objectForKey: @"_name"];
       NSString * diskDevice = [disk objectForKey: @"bsd_name"];
@@ -157,6 +157,7 @@
       [self.model addElement: @"name" value: diskName];
       [self.model addElement: @"device" value: diskDevice];
       [self.model addElement: @"size" valueWithUnits: diskSize];
+      [self.model addElement: @"bus" value: @"USB"];
       [self.model addElement: @"UUID" value: UUID];
 
       if([diskDevice length] == 0)
@@ -185,10 +186,10 @@
       
       dataFound = YES;
       
-      [self.model endElement: @"disk"];
+      [self.model endElement: @"drive"];
       }
     
-    [self.model endElement: @"disks"];
+    [self.model endElement: @"drives"];
     }
     
   return dataFound;
@@ -199,7 +200,10 @@
   {
   NSArray * volumes = [disk objectForKey: @"volumes"];
   
-  if(volumes && [volumes count])
+  if(volumes.count > 0)
+    {
+    [self.model startElement: @"volumes"];
+    
     for(NSDictionary * volume in volumes)
       {
       [self.model startElement: @"volume"];
@@ -208,6 +212,9 @@
 
       [self.model endElement: @"volume"];
       }
+      
+    [self.model endElement: @"volumes"];
+    }
   }
 
 @end
