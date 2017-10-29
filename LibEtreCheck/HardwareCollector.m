@@ -999,7 +999,7 @@
   
   if([model hasPrefix: @"MacBookPro"])
     {
-    if([model compare: @"MacBookPro5,1"] == NSOrderedSame)
+    if([model isEqualToString: @"MacBookPro5,1"])
       {
       BOOL oldModel = 
         [self.EnglishMarketingName 
@@ -1008,12 +1008,12 @@
       if(oldModel)
         cycles = 500;
       }
-    else if([model compare: @"MacBookPro5,1"] == NSOrderedDescending)
+    else if([model isLessThan: @"MacBookPro5,1"])
       cycles = 300;
     }
   else if([model hasPrefix: @"MacBookAir"])
     {
-    if([model compare: @"MacBookAir2,1"] == NSOrderedSame)
+    if([model isEqualToString: @"MacBookAir2,1"])
       {
       BOOL newModel = 
         [self.EnglishMarketingName 
@@ -1024,14 +1024,14 @@
       else
         cycles = 300;
       }
-    else if([model compare: @"MacBookAir2,1"] == NSOrderedDescending)
+    else if([model isLessThan: @"MacBookAir2,1"])
       cycles = 300;
     }
   else if([model hasPrefix: @"MacBook"])
     {
-    if([model compare: @"MacBook5,1"] == NSOrderedSame)
+    if([model isEqualToString: @"MacBook5,1"])
       cycles = 500;
-    else if([model compare: @"MacBook6,1"] == NSOrderedDescending)
+    else if([model isLessThan: @"MacBook6,1"])
       cycles = 300;
     }
     
