@@ -190,12 +190,12 @@
         
       for(NSDictionary * container in containers)
         {
-        NSString * physicalDevice =
-          [container objectForKey: @"DesignatedPhysicalStore"];
-
+        NSArray * physicalStores =
+          [container objectForKey: @"PhysicalStores"];
+          
         NSArray * volumes = [container objectForKey: @"Volumes"];
         
-        if([volumes count] > 0)
+        if(volumes.count > 0)
           for(NSMutableDictionary * volume in volumes)
             {
             NSString * device = [volume objectForKey: @"DeviceIdentifier"];
@@ -207,17 +207,25 @@
                 
               if(virtualVolume != nil)
                 {
-                NSDictionary * physicalDrive =
-                  [volume objectForKey: @"physical_drive"];
+                NSMutableArray * physicalDrives =
+                  [volume objectForKey: @"physical_drives"];
                 
-                if(physicalDrive == nil)
+                if(physicalDrives == nil)
+                  {
+                  physicalDrives = [NSMutableArray new];
+                  
+                  for(NSDictionary * physicalStore in physicalStores)
+                    {
+                    NSString * physicalDevice = [physicalStore objectForKey: @"DeviceIdentifier"];
+                    
+                    if(physicalDevice.length > 0)
+                      [physicalDrives addObject: physicalDevice];
+                    }
+
                   [virtualVolume
-                    setObject:
-                      [NSDictionary
-                        dictionaryWithObjectsAndKeys:
-                          physicalDevice, @"device_name", nil]
-                    forKey: @"physical_drive"];
-                
+                    setObject: physicalDrives forKey: @"physical_drives"];
+                  }
+                  
                 NSNumber * encryption = [volume objectForKey: @"Encryption"];
                 NSNumber * locked = [volume objectForKey: @"Locked"];
             
@@ -299,14 +307,21 @@
       printEncryptionInformationForVolume: volume
       indent: indent];
 
-  NSDictionary * physicalDrive = [volume objectForKey: @"physical_drive"];
-  
-  if([physicalDrive respondsToSelector: @selector(objectForKey:)])
-    [self
-      printPhysicalDriveInformation: physicalDrive
-      volume: volume
-      indent: indent];
+  NSArray * physicalDrives = [volume objectForKey: @"physical_drives"];
+
+  if(physicalDrives.count > 0)
+    {
+    [self.model startElement: @"physicaldisks"];
+    
+    for(NSString * physicalDevice in physicalDrives)
+      [self
+        printPhysicalDriveInformation: physicalDevice
+        volume: volume
+        indent: indent];
       
+    [self.model endElement: @"physicaldisks"];
+    }
+    
   [self.model endElement: @"volume"];
   }
 
@@ -510,16 +525,15 @@
   }
 
 // Print APFS physicalDrive information about a volume.
-- (void) printPhysicalDriveInformation: (NSDictionary *) physicalDrive
+- (void) printPhysicalDriveInformation: (NSString *) physicalDevice
   volume: (NSDictionary *) volume indent: (NSString *) indent
   {
   [self.model startElement: @"physicaldisk"];
   
-  NSString * name = [physicalDrive objectForKey: @"device_name"];
   NSString * volumeSize = [self volumeSize: volume];
   NSString * volumeFree = [self volumeFreeSpace: volume];
   
-  [self.model addElement: @"name" value: name];
+  [self.model addElement: @"device" value: physicalDevice];
   [self.model addElement: @"size" valueWithUnits: volumeSize];
   [self.model addElement: @"free" valueWithUnits: volumeFree];
 
@@ -530,7 +544,7 @@
           @"%@%@ %@ %@ %@",
           indent,
           ECLocalizedString(@"Physical disk:"),
-          name,
+          physicalDevice,
           volumeSize,
           volumeFree]];
           
