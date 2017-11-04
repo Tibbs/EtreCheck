@@ -16,6 +16,7 @@
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
+#import "Volume.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -53,6 +54,7 @@
   [excludedPaths release];
   [destinations release];
   [formatter release];
+  [volumes release];
   
   [super dealloc];
   }
@@ -99,6 +101,21 @@
   [self collectInformation];
   }
 
+// Build a mapping of volumeUUIDs to volumes.
+- (void) buildVolumeMap
+  {
+  volumes = [NSMutableDictionary new];
+  
+  for(NSString * device in [[Model model] storageDevices])
+    {
+    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    
+    if([volume respondsToSelector: @selector(isVolume)])
+      if(volume.UUID.length > 0)
+        [volumes setObject: volume forKey: volume.UUID];
+    }
+  }
+  
 // Collect Time Machine information now that I know I should be able to
 // find something.
 - (void) collectInformation
@@ -155,13 +172,10 @@
     [excludedVolumeUUIDs addObject: UUID];
     
     // Get the path for this volume too.
-    NSDictionary * volume =
-      [[[Model model] volumes] objectForKey: UUID];
+    Volume * volume = [volumes objectForKey: UUID];
     
-    NSString * mountPoint = [volume objectForKey: @"mount_point"];
-    
-    if(mountPoint)
-      [excludedPaths addObject: mountPoint];
+    if(volume.mountpoint.length > 0)
+      [excludedPaths addObject: volume.mountpoint];
     }
     
   // Excluded volumes could be referenced via bookmarks.
@@ -340,46 +354,32 @@
 // Print a volume being backed up.
 - (void) printBackedupVolume: (NSString *) UUID
   {
-  NSDictionary * volume =
-    [[[Model model] volumes] objectForKey: UUID];
+  Volume * volume = [volumes objectForKey: UUID];
   
-  if(volume.count == 0)
-    return;
-    
-  NSString * mountPoint = [volume objectForKey: @"mount_point"];
-  
-  // See if this volume is excluded. If so, skip it.
-  if(mountPoint.length > 0)
-    if([excludedPaths containsObject: mountPoint])
-      return;
+  if(volume != nil)
+    {
+    // See if this volume is excluded. If so, skip it.
+    if(volume.mountpoint.length > 0)
+      if([excludedPaths containsObject: volume.mountpoint])
+        return;
 
-  if([excludedVolumeUUIDs containsObject: UUID])
-    return;
-  
-  [self printVolume: volume];
+    if([excludedVolumeUUIDs containsObject: UUID])
+      return;
+    
+    [self printVolume: volume];
+    }
   }
 
 // Print the volume.
-- (void) printVolume: (NSDictionary *) volume
+- (void) printVolume: (Volume *) volume
   {
-  NSString * name = [volume objectForKey: @"_name"];
-
-  NSString * volumeName = [Utilities cleanPath: name];
+  NSString * volumeName = [Utilities cleanPath: volume.name];
   
   NSString * diskSize = ECLocalizedString(@"Unknown");
 
-  if(!name)
-    name = ECLocalizedString(@"Unknown");
-
-  NSNumber * size = [volume objectForKey: @"size_in_bytes"];
-  NSNumber * freespace = [volume objectForKey: @"free_space_in_bytes"];
-
-  unsigned long long used =
-    [size unsignedLongLongValue] - [freespace unsignedLongLongValue];
+  unsigned long long used = volume.size - volume.freeSpace;
   
-  if(size != nil)
-    diskSize =
-      [formatter stringFromByteCount: [size unsignedLongLongValue]];
+  diskSize = [formatter stringFromByteCount: volume.size];
     
   NSString * spaceRequired = [formatter stringFromByteCount: used];
     
@@ -392,16 +392,13 @@
           volumeName, diskSize, spaceRequired]];
 
   [self.model startElement: @"volume"];
-  [self.model addElement: @"name" value: name]; 
-  [self.model addElement: @"size" valueWithUnits: diskSize];
-  [self.model addElement: @"used" valueWithUnits: spaceRequired];
+  [self.model addElement: @"name" value: volume.name]; 
+  [self.model addElement: @"size" unsignedIntegerValue: volume.size];
+  [self.model addElement: @"used" unsignedIntegerValue: used];
   [self.model endElement: @"volume"];
 
-  if(size != nil)
-    {
-    minimumBackupSize += used;
-    maximumBackupSize += [size unsignedLongLongValue];
-    }
+  minimumBackupSize += used;
+  maximumBackupSize += volume.size;
   }
 
 // Is this volume a destination volume?

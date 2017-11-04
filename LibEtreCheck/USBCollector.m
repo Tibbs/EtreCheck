@@ -10,6 +10,10 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "Drive.h"
+#import "Model.h"
+#import "Volume.h"
+#import "LocalizedString.h"
 
 // Collect information about USB devices.
 @implementation USBCollector
@@ -106,8 +110,6 @@
     indent = [NSString stringWithFormat: @"%@    ", indent];
     }
   
-  [self collectSMARTStatus: device indent: indent];
-  
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
   
@@ -129,91 +131,75 @@
   
   else
   
-    // Print all volumes on the device.
-    [self printUSBController: device indent: indent];
+    // Print a USB drive.
+    [self printUSBDrive: device indent: indent];
   }
 
-// Print disks attached to a single Serial ATA controller.
-- (BOOL) printUSBController: (NSDictionary *) controller
+// Print a USB drive.
+- (void) printUSBDrive: (NSDictionary *) device
   indent: (NSString *) indent
   {
-  BOOL dataFound = NO;
+  NSArray * media = [device objectForKey: @"Media"];
   
-  NSDictionary * disks = [controller objectForKey: @"Media"];
-  
-  if([disks count] > 0)
+  if(media.count > 0)
     {
+    NSString * name = [device objectForKey: @"_name"];
+    NSString * manufacturer = [device objectForKey: @"manufacturer"];
+    NSString * serial = [device objectForKey: @"serial_num"];
+    NSString * speed = [device objectForKey: @"device_speed"];
+      
+    NSMutableString * model = [NSMutableString new];
+    
+    if(manufacturer.length > 0)
+      [model appendString: manufacturer];
+    
+    if(name.length > 0)
+      {
+      if(model.length > 0)
+        [model appendString: @" "];
+        
+      [model appendString: name];  
+      }
+      
     [self.model startElement: @"drives"];
     
-    for(NSDictionary * disk in disks)
+    for(NSDictionary * item in media)
       {
-      [self.model startElement: @"drive"];
-      
-      NSString * diskName = [disk objectForKey: @"_name"];
-      NSString * diskDevice = [disk objectForKey: @"bsd_name"];
-      NSString * diskSize = [disk objectForKey: @"size"];
-      NSString * UUID = [disk objectForKey: @"volume_uuid"];
-      
-      [self.model addElement: @"name" value: diskName];
-      [self.model addElement: @"device" value: diskDevice];
-      [self.model addElement: @"size" valueWithUnits: diskSize];
-      [self.model addElement: @"bus" value: @"USB"];
-      [self.model addElement: @"UUID" value: UUID];
+      NSString * device = [item objectForKey: @"bsd_name"];
 
-      if([diskDevice length] == 0)
-        diskDevice = @"";
-        
-      if(!diskSize)
-        diskSize = @"";
-      else
-        diskSize =
-          [NSString
-            stringWithFormat: @": (%@)", [Utilities translateSize: diskSize]];
-        
-      if(UUID)
-        [self.volumes setObject: disk forKey: UUID];
-        
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"%@%@ %@%@\n",
-              indent, diskName ? diskName : @"-", diskDevice, diskSize]];
+      [self.model addElement: @"device" value: device];
       
-      [self
-        printDiskVolumes: disk
-        indent: [indent stringByAppendingString: @"    "]];
+      Drive * drive = [[[Model model] storageDevices] objectForKey: device];
       
-      dataFound = YES;
-      
-      [self.model endElement: @"drive"];
+      if([drive respondsToSelector: @selector(isDrive)])
+        {
+        drive.name = name;
+        
+        drive.bus = @"USB";
+        drive.model = model;
+        drive.serial = serial;  
+        drive.busSpeed = ECLocalizedStringFromTable(speed, @"System");    
+
+        NSArray * volumes = [item objectForKey: @"volumes"];
+        
+        if([volumes respondsToSelector: @selector(isEqualToArray:)])
+          for(NSDictionary * volumeItem in volumes)
+            {
+            NSString * volumeDevice = 
+              [volumeItem objectForKey: @"bsd_name"];
+            
+            if(volumeDevice.length > 0)
+              {
+              Volume * volume = 
+                [[[Model model] storageDevices] objectForKey: volumeDevice];
+              
+              [volume addPhysicalDevice: device];
+              }
+            }
+        }
       }
     
     [self.model endElement: @"drives"];
-    }
-    
-  return dataFound;
-  }
-
-// Print the volumes on a disk.
-- (void) printDiskVolumes: (NSDictionary *) disk indent: (NSString *) indent
-  {
-  NSArray * volumes = [disk objectForKey: @"volumes"];
-  
-  if(volumes.count > 0)
-    {
-    [self.model startElement: @"volumes"];
-    
-    for(NSDictionary * volume in volumes)
-      {
-      [self.model startElement: @"volume"];
-      
-      [self printVolume: volume indent: indent];
-
-      [self.model endElement: @"volume"];
-      }
-      
-    [self.model endElement: @"volumes"];
     }
   }
 

@@ -12,11 +12,6 @@
 "Yes" = "Oui";
 "No" = "Non";
 
-// medium values
-// system_profiler -xml SPNVMeDataType spsata_medium_type
-// system_profiler -xml SPSerialATADataType spsata_medium_type
-"Solid State" = "SSD";
-
 // File system values
 // system_profiler -xml SPNVMeDataType file_system
 // system_profiler -xml SPSerialATADataType file_system
@@ -28,5 +23,12 @@
 "Fair" = "À remplacer bientôt";
 "Poor" = "À remplacer de suite";
 
+// USB Speed
+// system_profiler -xml SPUSBReporter device_speed
+"low_speed" = "1.5 Mbit/s";
+"full_speed" = "12 Mbit/s";
+"high_speed" = "480 Mbit/s";
+"super_speed" = "5 Gbit/s";
+"super_speed_plus" = "10 Gbit/s+";
 
 

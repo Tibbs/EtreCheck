@@ -13,22 +13,28 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "Drive.h"
+#import "Volume.h"
+#import "NSDictionary+Etresoft.h"
+#import "NumberFormatter.h"
+#import "StorageDevice.h"
+#import "NSString+Etresoft.h"
 
-// Some keys for an internal dictionary.
-#define kDiskType @"volumetype"
-#define kDiskStatus @"volumestatus"
-#define kAttributes @"attributes"
+#define kSerialATA @"serialata"
+#define kNVMe @"nvme"
+
+// Object that represents a top-level drive.
+
+@interface Drive ()
+
+// Build the attributedString value.
+- (void) buildAttributedStringValue: 
+  (NSMutableAttributedString *) attributedString;
+
+@end
 
 // Collect information about disks.
 @implementation DiskCollector
-
-@dynamic volumes;
-
-// Provide easy access to volumes.
-- (NSMutableDictionary *) volumes
-  {
-  return [[Model model] volumes];
-  }
 
 // Constructor.
 - (id) init
@@ -45,38 +51,177 @@
 // Perform the collection.
 - (void) performCollect
   {
-  BOOL dataFound = [self collectSerialATA];
+  // First collect devices.
+  [self collectDevices];
+    
+  // Get more infromation for internal (and Thunderbolt) SerialATA drives.
+  [self collect: kSerialATA];
+    
+  // Get more information for internal (and Thunderbolt) NVMExpress drives.
+  [self collect: kNVMe];
   
-  if([self collectNVMExpress: dataFound])
-    dataFound = YES;
+  // Get Core Storage information.
+  [self collectCoreStorage];
   
-  // There should always be data found.
-  if(!dataFound)
+  // Get APFS information.
+  [self collectAPFS];
+  
+  // Collect RAIDs.
+  [self collectRAIDs];
+  }
+  
+#pragma mark - Collect devices
+
+// Collect all disk devices.
+- (BOOL) collectDevices
+  {
+  NSArray * args =
+    @[
+      @"/dev",
+      @"-name",
+      @"disk*"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL dataFound = NO;
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    [self.result appendAttributedString: [self buildTitle]];
-
-    [self.result
-      appendString:
-        ECLocalizedString(@"    Disk information not found!\n")
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] red]
-        }];
-
-    [self.result appendCR];
+    NSArray * devices = [Utilities formatLines: subProcess.standardOutput];
+    
+    // Carefully sort the devices.
+    NSArray * sortedDevices = 
+      [devices 
+        sortedArrayUsingComparator:
+          ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+            {
+            NSString * device1 = 
+              [[obj1 lastPathComponent] substringFromIndex: 4];
+              
+            NSString * device2 = 
+              [[obj2 lastPathComponent] substringFromIndex: 4];
+            
+            NSArray * parts1 = [device1 componentsSeparatedByString: @"s"];
+            NSArray * parts2 = [device2 componentsSeparatedByString: @"s"];
+            
+            NSString * disk1 = [parts1 firstObject];
+            NSString * disk2 = [parts2 firstObject];
+            
+            if([disk1 isEqualToString: disk2])
+              {
+              if((parts1.count > 1) && (parts2.count > 1))
+                {
+                NSString * partition1 = [parts1 objectAtIndex: 1];
+                NSString * partition2 = [parts2 objectAtIndex: 1];
+                
+                return [partition1 compare: partition2];
+                }
+              }
+              
+            return [disk1 compare: disk2];
+            }];
+    
+    // Collect each device.
+    for(NSString * device in sortedDevices)
+      if([self collectDevice: device])
+        dataFound = YES;
     }
+    
+  [subProcess release];
+  
+  return dataFound;
+  }
+  
+// Collect a single device.
+- (BOOL) collectDevice: (NSString *) device
+  {
+  NSArray * args =
+    @[
+      @"info",
+      @"-plist",
+      device
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL dataFound = NO;
+  
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
+    {
+    NSDictionary * plist =
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
+  
+    if(plist.count > 0)
+      {
+      // Separate items by virtual or physical. Anything virtual will be
+      // considered a volume.
+      NSString * type = [plist objectForKey: @"VirtualOrPhysical"];
+      
+      if([type isEqualToString: @"Physical"])
+        {
+        if([self collectPhysicalDrive: plist])
+          dataFound = YES;
+        }
+      else if([self collectVolume: plist])
+        dataFound = YES;
+      }
+    }
+    
+  [subProcess release];
+  
+  return dataFound;
   }
 
-// Perform the collection for old Serial ATA controllers.
-- (BOOL) collectSerialATA
+// Collect a physical drive.
+- (BOOL) collectPhysicalDrive: (NSDictionary *) plist
   {
+  Drive * drive = [[Drive alloc] initWithDiskUtilInfo: plist];
+  
   BOOL dataFound = NO;
+  
+  if(drive != nil)
+    {
+    [[[Model model] storageDevices] 
+      setObject: drive forKey: drive.identifier];
+    
+    dataFound = YES;
+    }
+  
+  [drive release];
+  
+  return dataFound;
+  }
+
+// Collect a volume.
+- (BOOL) collectVolume: (NSDictionary *) plist
+  {
+  Volume * volume = [[Volume alloc] initWithDiskUtilInfo: plist];
+  
+  BOOL dataFound = NO;
+  
+  if(volume != nil)
+    {
+    [[[Model model] storageDevices] 
+      setObject: volume forKey: volume.identifier];
       
+    dataFound = YES;
+    }
+    
+  [volume release];
+  
+  return dataFound;
+  }
+  
+#pragma mark - Collect more information for physical drives
+
+// Collect all devices attached to a given controller.
+- (void) collect: (NSString *) type
+  {
   NSArray * args =
     @[
       @"-xml",
-      @"SPSerialATADataType"
+      [self key: @"system_profiler" type: type]
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -95,528 +240,411 @@
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      if(controllers.count > 0)
-        {
-        [self.model startElement: @"controllers"];
-        
-        for(NSDictionary * controller in controllers)
-          if([self shouldPrintController: controller])
-            {
-            BOOL printed =
-              [self 
-                printController: controller 
-                type: @"SerialATA" 
-                dataFound: dataFound];
-              
-            if(printed)
-              dataFound = YES;
-            }
-
-        [self.model endElement: @"controllers"];
-        }
+      // Collect all controllers.
+      for(NSDictionary * controller in controllers)
+        [self collectController: controller type: type];
       }
     }
 
   [subProcess release];
-  
-  return dataFound;
   }
 
-// Perform the collection for new NVM controllers.
-- (BOOL) collectNVMExpress: (BOOL) dataFound
+// Collect drives attached to a single controller.
+- (void) collectController: (NSDictionary *) controller
+  type: (NSString *) type
+  {
+  NSDictionary * items = [controller objectForKey: @"_items"];
+
+  // Get the bus, port description, and speed for this controller.
+  NSString * bus = 
+    [controller objectForKey: [self key: @"vendor" type: type]];
+
+  NSString * description =
+    [controller objectForKey: [self key: @"portdescription" type: type]];
+
+  NSString * speed = 
+    [controller 
+      objectForKey: [self key: @"negotiatedlinkspeed" type: type]];
+      
+  if(speed.length == 0)
+    speed = [controller objectForKey: [self key: @"portspeed" type: type]];
+
+  // This is just text.
+  if(speed.length == 0)
+    {
+    NSString * linkspeed = 
+      [controller 
+        objectForKey: [self key: @"linkspeed" type: type]];
+
+    NSString * linkwidth = 
+      [controller 
+        objectForKey: [self key: @"linkwidth" type: type]];
+        
+    speed = [NSString stringWithFormat: @"%@ %@", linkspeed, linkwidth];
+    }
+  
+  for(NSDictionary * item in items)
+    {
+    NSString * device = [item objectForKey: @"bsd_name"];
+
+    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    
+    if([drive respondsToSelector: @selector(isDrive)])
+      {
+      // If this is an exernal drive, override the bus information.
+      if(!drive.internal)
+        drive.bus = bus;
+    
+      // Add controller information that might be missing.
+      drive.busVersion = description;
+      drive.busSpeed = speed;
+      drive.type = type;
+      
+      drive.name = [item objectForKey: @"_name"];
+      
+      drive.model = [[item objectForKey: @"device_model"] trim];
+      drive.revision = [[item objectForKey: @"device_revision"] trim];
+      drive.serial = [[item objectForKey: @"device_serial"] trim];
+      
+      NSString * TRIM = 
+        [item objectForKey: [self key: @"trim_support" type: type]];
+        
+      drive.TRIM = [TRIM isEqualToString: @"Yes"];
+      
+      NSArray * volumes = [item objectForKey: @"volumes"];
+      
+      for(NSDictionary * volumeItem in volumes)
+        {
+        NSString * volumeDevice = [volumeItem objectForKey: @"bsd_name"];
+        
+        if(volumeDevice.length > 0)
+          {
+          Volume * volume = 
+            [[[Model model] storageDevices] objectForKey: volumeDevice];
+            
+          if([volume respondsToSelector: @selector(isVolume)])
+            [volume addPhysicalDevice: device];
+          }
+        }
+      }
+    }
+  }
+    
+#pragma mark - Collect Core Storage information
+
+// Collect core storage information.
+- (void) collectCoreStorage
   {
   NSArray * args =
     @[
       @"-xml",
-      @"SPNVMeDataType"
+      @"SPStorageDataType"
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
-  
+  //subProcess.debugStandardOutput =
+  //  [NSData dataWithContentsOfFile: @"/tmp/SPStorageDataType.xml"];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if(plist.count > 0)
       {
-      NSDictionary * controllers =
+      NSArray * items =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      if(controllers.count > 0)
-        {
-        [self.model startElement: @"controllers"];
-        
-        for(NSDictionary * controller in controllers)
-          if([self shouldPrintController: controller])
-            {
-            BOOL printed =
-              [self 
-                printController: controller 
-                type: @"NVMExpress" 
-                dataFound: dataFound];
-            
-            if(printed)
-              dataFound = YES;
-            }
+      for(NSDictionary * item in items)
+        [self collectCoreStorageVolume: item];
+      }
+    }
+    
+  [subProcess release];
+  
+  // Now get a diskutil cs list to check for encryption progress.
+  [self collectCoreStorageList];
+  }
+  
+// Collect core storage information for a single volume.
+- (void) collectCoreStorageVolume: (NSDictionary *) item
+  {
+  NSString * device = [item objectForKey: @"bsd_name"];
 
-        [self.model endElement: @"controllers"];
+  Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+  
+  if([volume respondsToSelector: @selector(isVolume)])
+    {
+    // Determine if the volume is encrypted and, if so, what type of
+    // encryption is used.
+    NSDictionary * logicalVolume = 
+      [item objectForKey: @"com.apple.corestorage.lv"];
+    
+    NSString * encrypted = 
+      [logicalVolume objectForKey: @"com.apple.corestorage.lv.encrypted"];
+        
+    volume.encrypted = [encrypted isEqualToString: @"yes"];
+    
+    if(volume.encrypted)
+      volume.encryptionStatus = @"Encrypted";
+    
+    // Now look for any physical volumes.
+    NSArray * physicalVolumes = 
+      [item objectForKey: @"com.apple.corestorage.pv"];
+      
+    for(NSDictionary * item in physicalVolumes)
+      {
+      NSString * physicalDevice = [item objectForKey: @"_name"];
+      
+      if(physicalDevice.length > 0)
+        [volume addPhysicalDevice: physicalDevice];
+      }
+    }
+  }
+  
+// Get a diskutil cs list to check for encryption progress.
+- (void) collectCoreStorageList
+  {
+  NSArray * args =
+    @[
+      @"cs",
+      @"list"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
+    [self parseCoreStorageList: subProcess.standardOutput];
+    
+  [subProcess release];
+  }
+  
+// Parse output from a diskutil cs list command.
+- (void) parseCoreStorageList: (NSData *) output
+  {
+  NSArray * lines = [Utilities formatLines: output];
+  
+  NSString * device = nil;
+  NSString * status = nil;
+  
+  for(NSString * line in lines)
+    {
+    NSString * trimmedLine = 
+      [line 
+        stringByTrimmingCharactersInSet: 
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          
+    // Save the current conversion status.
+    if([trimmedLine hasPrefix: @"Conversion Status:"])
+      {
+      NSString * value = [trimmedLine substringFromIndex: 18];
+      
+      value = 
+        [value 
+          stringByTrimmingCharactersInSet: 
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([value isEqualToString: @"Converting (backward)"])
+        status = @"Decrypting";
+      else if([value isEqualToString: @"Converting (forward)"])
+        status = @"Encrypting";
+      else
+        status = nil;
+      }
+      
+    // Save the current device.
+    else if([trimmedLine hasPrefix: @"Disk:"])
+      {
+      NSString * value = [trimmedLine substringFromIndex: 5];
+      
+      device = 
+        [value 
+          stringByTrimmingCharactersInSet: 
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      }
+      
+    // If I have a conversion progress, assign it to the current device
+    // and include the current status.
+    else if([trimmedLine hasPrefix: @"Conversion Progress:"])
+      {
+      NSString * value = [trimmedLine substringFromIndex: 20];
+      
+      value = 
+        [value 
+          stringByTrimmingCharactersInSet: 
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([value hasSuffix: @"%"])
+        value = [value substringToIndex: value.length - 1];
+        
+      int progress =
+        [[[NumberFormatter sharedNumberFormatter] 
+          convertFromString: value] intValue];
+          
+      if((progress > 0) && (device.length > 0) && (status.length > 0))
+        {
+        Volume * volume = 
+          [[[Model model] storageDevices] objectForKey: device];
+          
+        volume.encryptionStatus = status;
+        volume.encryptionProgress = progress;
         }
       }
     }
-
-  return dataFound;
   }
+  
+#pragma mark - Collect APFS information
 
-// Should this controller be printed here?
-- (BOOL) shouldPrintController: (NSDictionary *) controller
+// Collect APFS information.
+- (void) collectAPFS
   {
-  NSString * name = [controller objectForKey: @"_name"];
+  NSArray * args =
+    @[
+      @"apfs",
+      @"list",
+      @"-plist"
+    ];
   
-  if([name hasPrefix: @"Thunderbolt"])
-    return NO;
-    
-  return YES;
-  }
-
-// Print disks attached to a single NVMExpress controller.
-- (BOOL) printController: (NSDictionary *) controller
-  type: (NSString *) type dataFound: (BOOL) dataFound
-  {
-  [self.model startElement: @"controller"];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [self.model addElement: @"interfacetype" value: type];
-
-  NSDictionary * disks = [controller objectForKey: @"_items"];
-  
-  if(disks.count > 0)
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     {
-    [self.model startElement: @"drives"];
-    
-    for(NSDictionary * disk in disks)
+    NSDictionary * plist =
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
+  
+    if(plist.count > 0)
       {
-      [self.model startElement: @"drive"];
-      
-      NSString * diskName = [disk objectForKey: @"_name"];
-      NSString * diskDevice = [disk objectForKey: @"bsd_name"];
-      NSString * diskSize = [disk objectForKey: @"size"];
-      NSString * UUID = [disk objectForKey: @"volume_uuid"];
-      NSString * medium = [disk objectForKey: @"spsata_medium_type"];
-      NSString * TRIM = [disk objectForKey: @"spsata_trim_support"];
-      
-      if([TRIM length] == 0)
-        TRIM = [disk objectForKey: @"spnvme_trim_support"];
+      NSArray * containers = [plist objectForKey: @"Containers"];
         
-      NSString * TRIMString =
-        [NSString
-          stringWithFormat: 
-            @" - TRIM: %@", 
-            ECLocalizedStringFromTable(TRIM, @"System")];
-      
-      NSString * info =
-        [NSString
-          stringWithFormat:
-            @"(%@%@ - %@)",
-            medium
-              ? ECLocalizedStringFromTable(medium, @"System")
-              : @"",
-            ([medium isEqualToString: @"Solid State"] && [TRIM length])
-              ? TRIMString
-              : @"",
-            type];
+      for(NSDictionary * container in containers)
+        {
+        NSString * containerReference = 
+          [container objectForKey: @"ContainerReference"];
         
-      if([diskDevice length] == 0)
-        diskDevice = @"";
+        if(containerReference.length > 0)
+          {
+          StorageDevice * storageDevice = 
+            [[[Model model] storageDevices] 
+              objectForKey: containerReference];
+          
+          // This must be a container.
+          storageDevice.type = kAPFSContainerVolume;
+          }
+          
+        NSArray * volumes = [container objectForKey: @"Volumes"];
         
-      [self.model addElement: @"model" value: diskName];
-      [self.model addElement: @"device" value: diskDevice];
-      [self.model addElement: @"size" valueWithUnits: diskSize];
-      [self.model addElement: @"bus" value: type];
-      //[self.model addElement: @"UUID" value: UUID];
-
-      if([diskSize length] > 0)
-        diskSize =
-          [NSString
-            stringWithFormat: 
-              @": (%@)", [Utilities translateSize: diskSize]];
-      else
-        diskSize = @"";
-
-      if([UUID length] > 0)
-         [self.volumes setObject: disk forKey: UUID];
+        NSArray * physicalStores = 
+          [container objectForKey: @"PhysicalStores"];
         
-      if(!dataFound)
-        [self.result appendAttributedString: [self buildTitle]];
-        
-      [self.model addElement: @"type" value: medium];
-      
-      if([medium isEqualToString: @"Solid State"])
-        [self.model 
-          addElement: @"TRIM" boolValue: [TRIM isEqualToString: @"Yes"]];
-
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"    %@ %@%@ %@\n",
-              diskName ? diskName : @"-", diskDevice, diskSize, info]];
-      
-      [self collectSMARTStatus: disk indent: @"    "];
-      
-      [self printDiskVolumes: disk];
-      
-      [self.result appendCR];
-      
-      dataFound = YES;
-      
-      [self.model endElement: @"drive"];
+        for(NSDictionary * item in volumes)
+          {
+          NSString * device = [item objectForKey: @"DeviceIdentifier"];
+          
+          Volume * volume = 
+            [[[Model model] storageDevices] objectForKey: device];
+          
+          // Get the encryption direction and progress.
+          volume.encrypted = [[item objectForKey: @"Encryption"] boolValue];
+          volume.encryptionStatus = 
+            [item objectForKey: @"CryptoMigrationDirection"];
+            
+          volume.encryptionProgress = 
+            [[item objectForKey: @"CryptoMigrationProgressPercent"] 
+              intValue];
+          
+          if(volume.encrypted && (volume.encryptionStatus == nil))
+            volume.encryptionStatus = @"Encrypted";
+            
+          // See if there is an APFS role.
+          NSArray * roles = [item objectForKey: @"Roles"];
+          
+          if(roles.count == 1)
+            {
+            NSString * role = [roles firstObject];
+            
+            if([role isEqualToString: @"Preboot"])
+              volume.type = kPrebootVolume;
+            else if([role isEqualToString: @"Recovery"])
+              volume.type = kRecoveryVolume;
+            else if([role isEqualToString: @"VM"])
+              volume.type = kVMVolume;
+            }
+            
+          // Now add phyiscal devices.
+          for(NSDictionary * physicalStore in physicalStores)
+            {
+            NSString * physicalDevice = 
+              [physicalStore objectForKey: @"DeviceIdentifier"];
+              
+            if(physicalDevice.length > 0)
+              [volume addPhysicalDevice: physicalDevice];
+            }
+            
+          // If I don't already have a type, and I have multiple physical 
+          // volumes, this must be a Fusion disk.
+          if((volume.type == nil) && (physicalStores.count > 1))
+            volume.type = kFusionVolume;
+          }
+        }
       }
-
-    [self.model endElement: @"drives"];
     }
     
-  [self.model endElement: @"controller"];
-
-  return dataFound;
+  [subProcess release];
   }
-
-// Print the volumes on a disk.
-- (void) printDiskVolumes: (NSDictionary *) disk
-  {
-  NSArray * volumes = [disk objectForKey: @"volumes"];
   
-  if([volumes count] > 0)
+#pragma mark - Collect RAID information
+
+// Collect RAID information.
+- (void) collectRAIDs
+  {
+  NSMutableSet * RAIDSets = [NSMutableSet new];
+  NSMutableDictionary * RAIDDevices = [NSMutableDictionary new];
+  
+  for(NSString * device in [[Model model] storageDevices])
     {
-    [self.model startElement: @"volumes"];
+    StorageDevice * storageDevice = 
+      [[[Model model] storageDevices] objectForKey: device];
     
-    for(NSDictionary * volume in volumes)
+    if(storageDevice != nil)
       {
-      [self.model startElement: @"volume"];
+      if(storageDevice.RAIDSetUUID.length > 0)
+        [RAIDDevices 
+          setObject: storageDevice forKey: storageDevice.RAIDSetUUID];
       
-      [self printVolume: volume indent: @"        "];
-      
-      [self.model endElement: @"volume"];
+      if(storageDevice.RAIDSetMembers.count > 0)
+        [RAIDSets addObject: storageDevice];
       }
+    }
+    
+  for(Volume * volume in RAIDSets)
+    if([volume respondsToSelector: @selector(isVolume)])
+      for(NSString * UUID in volume.RAIDSetMembers)
+        {
+        StorageDevice * storageDevice = [RAIDDevices objectForKey: UUID];
+        
+        if(storageDevice != nil)
+          [volume addPhysicalDevice: storageDevice.identifier];
+        }
+  }
+
+#pragma mark - Utility methods
+
+// Convenience method to get a protocol key.
+- (NSString *) key: (NSString *) key type: (NSString *) type 
+  {
+  if([key isEqualToString: @"system_profiler"])
+    {
+    if([type isEqualToString: kSerialATA])
+      return @"SPSerialATADataType";
       
-    [self.model endElement: @"volumes"];
-    }
-  }
-
-// Get the SMART status for this disk.
-- (void) collectSMARTStatus: (NSDictionary *) disk
-  indent: (NSString *) indent
-  {
-  NSString * smart_status = [disk objectForKey: @"smart_status"];
-
-  if(!smart_status)
-    return;
-    
-  if(self.simulating)
-    smart_status = @"Simulated";
-    
-  bool smart_not_supported =
-    [smart_status isEqualToString: @"Not Supported"];
-  
-  bool smart_verified =
-    [smart_status isEqualToString: @"Verified"];
-
-  if(!smart_not_supported && !smart_verified)
-    {
-    [self.model addElement: @"smartstatus" value: smart_status];
-  
-    [self.result
-      appendString:
-        [NSString
-          stringWithFormat:
-            ECLocalizedString(@"%@S.M.A.R.T. Status: %@\n"),
-            indent, smart_status]
-      attributes:
-        [NSDictionary
-          dictionaryWithObjectsAndKeys:
-            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    return @"SPNVMeDataType";
     }
     
-  NSString * device = [disk objectForKey: @"bsd_name"];
-  
-  NSMutableAttributedString * urlString =
-    [[NSMutableAttributedString alloc] initWithString: @""];
+  if([type isEqualToString: kSerialATA])
+    return [@"spsata_" stringByAppendingString: key];
     
-  if(!smart_not_supported)
-    {
-    [urlString
-      appendString:
-        [NSString stringWithFormat:
-          ECLocalizedString(@"%@[Show SMART report]"), indent]
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] blue],
-          NSLinkAttributeName :
-            [NSString stringWithFormat: @"etrecheck://smart/%@", device]
-        }];
-
-    [self.result appendAttributedString: urlString];
-    [self.result appendString: @"\n"];
-    }
-    
-  [urlString release];
+  return [@"spnvme_" stringByAppendingString: key];
   }
   
-// Print information about a volume.
-- (void) printVolume: (NSDictionary *) volume indent: (NSString *) indent
-  {
-  NSString * volumeName = [volume objectForKey: @"_name"];
-  NSString * volumeMountPoint = [volume objectForKey: @"mount_point"];
-  NSString * volumeDevice = [volume objectForKey: @"bsd_name"];
-  NSString * volumeSize = [self volumeSize: volume];
-  NSString * volumeFree = [self volumeFreeSpace: volume];
-  NSString * UUID = [volume objectForKey: @"volume_uuid"];
-  NSString * fileSystem = [volume objectForKey: @"file_system"];
-    
-  NSString * cleanName = 
-    [volumeName length] > 0 ? [Utilities cleanPath: volumeName] : @"";
-    
-  [self.model addElement: @"name" value: volumeName];
-  [self.model addElement: @"device" value: volumeDevice];
-  [self.model addElement: @"filesystem" value: fileSystem];
-  [self.model addElement: @"mountpoint" value: volumeMountPoint];
-  
-  if(!volumeMountPoint)
-    volumeMountPoint = ECLocalizedString(@"<not mounted>");
-    
-  if(UUID)
-    {
-    //[self.model addElement: @"UUID" value: UUID];
-    
-    [self.volumes setObject: volume forKey: UUID];
-    }
-    
-  [self.model addElement: @"size" valueWithUnits: volumeSize];
-  [self.model addElement: @"free" valueWithUnits: volumeFree];
-
-  NSDictionary * stats = [self volumeStats: volume];
-
-  NSDictionary * attributes = [stats objectForKey: kAttributes];
-  
-  NSNumber * errorCount =
-    [[[Model model] diskErrors] objectForKey: volumeDevice];
-
-  if(self.simulating)
-    errorCount = [NSNumber numberWithInt: 4];
-    
-  NSString * errors = [self errorsFor: errorCount];
-  
-  if([errors length])
-    {
-    attributes =
-      @{
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSFontAttributeName : [[Utilities shared] boldFont]
-      };
-
-    [self.model addElement: @"errors" number: errorCount];
-    }
-    
-  NSString * status =
-    [[stats objectForKey: kDiskStatus] stringByAppendingString: errors];
-
-  NSString * volumeInfo = nil;
-  
-  NSString * fileSystemName = @"";
-  
-  if([fileSystem length] > 0)
-    fileSystemName = 
-      [NSString 
-        stringWithFormat: 
-          @" - %@", 
-          ECLocalizedStringFromTable(fileSystem, @"System")];
-    
-  if([fileSystemName length] > 0)
-    {
-    volumeInfo =
-      [NSString
-        stringWithFormat:
-          ECLocalizedString(@"%@%@ (%@%@) %@ %@: %@ %@%@\n"),
-          indent,
-          cleanName,
-          volumeDevice,
-          fileSystemName,
-          volumeMountPoint,
-          [stats objectForKey: kDiskType],
-          [volumeSize length] > 0
-            ? volumeSize 
-            : @"",
-          [volumeFree length] > 0
-            ? [NSString
-                stringWithFormat:
-                ECLocalizedString(@"(%@ free)"), volumeFree] 
-            : @"",
-          status];
-      
-    [[[Model model] physicalVolumes] addObject: volumeDevice];
-    }
-  else
-    volumeInfo =
-      [NSString
-        stringWithFormat:
-          ECLocalizedString(@"%@(%@) %@ %@: %@%@\n"),
-          indent,
-          volumeDevice,
-          volumeMountPoint,
-          [stats objectForKey: kDiskType],
-          volumeSize,
-          status];
-    
-  if(attributes)
-    [self.result appendString: volumeInfo attributes: attributes];
-  else
-    [self.result appendString: volumeInfo];
-  }
-
-// Get the size of a volume.
-- (NSString *) volumeSize: (NSDictionary *) volume
-  {
-  NSString * size = nil;
-  
-  NSNumber * sizeInBytes =
-    [volume objectForKey: @"size_in_bytes"];
-  
-  if(sizeInBytes != nil)
-    {
-    ByteCountFormatter * formatter = [ByteCountFormatter new];
-    
-    size =
-      [formatter
-        stringFromByteCount: [sizeInBytes unsignedLongLongValue]];
-      
-    [formatter release];
-    }
-
-  if(!size)
-    size = [volume objectForKey: @"size"];
-
-  if(!size)
-    size = ECLocalizedString(@"Size unknown");
-    
-  return size;
-  }
-
-// Get the free space on the volume.
-- (NSString *) volumeFreeSpace: (NSDictionary *) volume
-  {
-  NSString * volumeFree = nil;
-  
-  NSNumber * freeSpaceInBytes =
-    [volume objectForKey: @"free_space_in_bytes"];
-  
-  if(freeSpaceInBytes != nil)
-    {
-    ByteCountFormatter * formatter = [ByteCountFormatter new];
-    
-    volumeFree =
-      [formatter
-        stringFromByteCount: [freeSpaceInBytes unsignedLongLongValue]];
-      
-    [formatter release];
-    }
-
-  if(!volumeFree)
-    volumeFree = [volume objectForKey: @"free_space"];
-
-  if(!volumeFree)
-    volumeFree = @"";
-    
-  return volumeFree;
-  }
-
-// Get more information about a volume.
-- (NSDictionary *) volumeStats: (NSDictionary *) volume
-  {
-  NSString * name = [volume objectForKey: @"_name"];
-  NSString * mountPoint = [volume objectForKey: @"mount_point"];
-  NSString * iocontent = [volume objectForKey: @"iocontent"];
-  unsigned long long free =
-    [[volume objectForKey: @"free_space_in_bytes"] unsignedLongLongValue];
-  NSString * filesystem = [volume objectForKey: @"file_system"];
-  
-  if(self.simulating)
-    free = 12;
-    
-  NSString * type = @"";
-  NSString * status = @"";
-  NSDictionary * attributes = @{};
-  
-  if([mountPoint isEqualToString: @"/"])
-    {
-    type = ECLocalizedString(@"Startup");
-
-    unsigned long long GB = 1024 * 1024 * 1024;
-
-    if(free < (GB * 15))
-      status = ECLocalizedString(@" (Low!)");
-    }
-  
-  else if([name isEqualToString: @"Recovery HD"])
-    type = ECLocalizedString(@"Recovery");
-    
-  else if([name isEqualToString: @"EFI"])
-    type = ECLocalizedString(@"EFI");
-    
-  else if([name isEqualToString: @"KernelCoreDump"])
-    type = ECLocalizedString(@"KernelCoreDump");
-
-  else if([filesystem length] == 0)
-    {
-    if([iocontent hasPrefix: @"Apple_"])
-      type = [iocontent substringFromIndex: 6];
-    
-    if([type isEqualToString: @"APFS"])
-      type = ECLocalizedString(@"APFS Container");
-    else if([type isEqualToString: @"CoreStorage"])
-      type = ECLocalizedString(@"CoreStorage Container");
-    }
-
-  if([mountPoint length] == 0)
-    attributes =
-      @{
-        NSForegroundColorAttributeName : [[Utilities shared] gray]
-      };
-    
-  [self.model addElement: @"type" value: type];
-
-  if([type length] > 0)
-    type = [NSString stringWithFormat: @" [%@]", type];
-    
-  if([status length] && ![attributes count])
-    attributes =
-      @{
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSFontAttributeName : [[Utilities shared] boldFont]
-      };
-
-  return
-    @{
-      kDiskType : type,
-      kDiskStatus : status,
-      kAttributes : attributes
-    };
-  }
-
-// Get more information about a device.
-- (NSString *) errorsFor: (NSNumber *) errors
-  {
-  int errorCount = [errors intValue];
-  
-  if(errorCount)
-    return
-      [NSString
-        stringWithFormat:
-          ECLocalizedString(@" - %@ Drive failure!"),
-          ECLocalizedPluralString(errorCount, @"error")];
-
-  return @"";
-  }
-
 @end

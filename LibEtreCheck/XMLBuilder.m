@@ -1348,6 +1348,41 @@
     }
   }
   
+// Add an array of XML values.
+- (void) addArray: (NSString *) name values: (NSArray *) values
+  {
+  if(values.count > 0)
+    {
+    [self startElement: name];
+  
+    for(id<XMLValue> value in values)
+      [self addFragment: value.xml];
+      
+    [self endElement: name];
+    }
+  }
+  
+// Add a dictionary of XML values.
+- (void) addDictionary: (NSString *) name values: (NSDictionary *) values
+  {
+  if(values.count > 0)
+    {
+    NSArray * sortedKeys = 
+      [[values allKeys] sortedArrayUsingSelector: @selector(compare:)];
+      
+    [self startElement: name];
+  
+    for(NSObject * key in sortedKeys)
+      {
+      id<XMLValue> value = [values objectForKey: key];
+      
+      [self addFragment: value.xml];
+      }
+      
+    [self endElement: name];
+    }
+  }
+  
 // MARK: Validation
 
 // Validate a name.

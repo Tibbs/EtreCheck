@@ -1,10 +1,11 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
  ** Copyright (c) 2015-2017. All rights reserved.
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "XMLValue.h"
 
 @class XMLBuilderElement;
 
@@ -228,4 +229,11 @@
 // Add a fragment from another XMLBuilder.
 - (void) addFragment: (XMLBuilderElement *) xml;
 
+// Add an array of XML values.
+- (void) addArray: (NSString *) name values: (NSArray *) values;
+
+// Add a dictionary of XML values.
+- (void) addDictionary: (NSString *) name values: (NSDictionary *) values;
+
 @end
+

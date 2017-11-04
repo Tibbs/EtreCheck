@@ -34,9 +34,7 @@
   NSString * myProblem;
   NSAttributedString * myProblemDescription;
   
-  NSMutableDictionary * myVolumes;
-  NSMutableSet * myPhysicalVolumes;
-  NSMutableDictionary * myDiskErrors;
+  NSMutableDictionary * myStorageDevices;
 
   NSArray * myLogEntries;
 
@@ -86,14 +84,8 @@
 @property (retain) NSString * problem;
 @property (retain) NSAttributedString * problemDescription;
 
-// Keep track of system volumes.
-@property (retain) NSMutableDictionary * volumes;
-
-// Keep track of physical volumes.
-@property (retain) NSMutableSet * physicalVolumes;
-
-// Keep track of disk errors.
-@property (retain) NSMutableDictionary * diskErrors;
+// Keep track of storage devices.
+@property (retain) NSMutableDictionary * storageDevices;
 
 // Keep track of gpu errors.
 @property (retain) NSNumber * gpuErrors;

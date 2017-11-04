@@ -30,7 +30,6 @@
 #import "SystemLaunchAgentsCollector.h"
 #import "SystemLaunchDaemonsCollector.h"
 #import "SystemSoftwareCollector.h"
-#import "ThunderboltCollector.h"
 #import "TimeMachineCollector.h"
 #import "USBCollector.h"
 #import "UserAudioPlugInsCollector.h"
@@ -123,7 +122,6 @@
         [[VideoCollector new] autorelease],
         [[USBCollector new] autorelease],
         [[FirewireCollector new] autorelease],
-        [[ThunderboltCollector new] autorelease],
         [[VirtualVolumeCollector new] autorelease]
       ]
     increment: increment];
@@ -242,8 +240,6 @@
   [result appendAttributedString: [self getResult: @"usb"]];
   [result
     appendAttributedString: [self getResult: @"firewire"]];
-  [result
-    appendAttributedString: [self getResult: @"thunderbolt"]];
   [result appendAttributedString: [self getResult: @"virtualvolume"]];
   [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];
@@ -307,7 +303,6 @@
   [[[Model model] xml] addFragment: [self getXML: @"disk"]];
   [[[Model model] xml] addFragment: [self getXML: @"usb"]];
   [[[Model model] xml] addFragment: [self getXML: @"firewire"]];
-  [[[Model model] xml] addFragment: [self getXML: @"thunderbolt"]];
   [[[Model model] xml] addFragment: [self getXML: @"virtualvolume"]];
   [[[Model model] xml] addFragment: [self getXML: @"systemsoftware"]];
   [[[Model model] xml] addFragment: [self getXML: @"configurationfiles"]];

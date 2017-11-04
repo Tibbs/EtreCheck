@@ -42,4 +42,13 @@
   return [[self copy] autorelease];
   }
 
+// Remove leading and trailing whitespace.
+- (nonnull NSString *) trim
+  {
+  return
+    [self
+      stringByTrimmingCharactersInSet:
+        NSCharacterSet.whitespaceAndNewlineCharacterSet];
+  }
+  
 @end

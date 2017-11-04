@@ -11,6 +11,9 @@
 // Collect information about Time Machine.
 @interface TimeMachineCollector : Collector
   {
+  // Build a mapping of volumeUUIDs to volumes.
+  NSMutableDictionary * volumes;
+  
   // An OS-independent byte count formatter.
   ByteCountFormatter * formatter;
 

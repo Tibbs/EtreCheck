@@ -14,4 +14,7 @@
 // Remove quotes, if present, from a string.
 @property (readonly, nonnull) NSString * stringByRemovingQuotes;
 
+// Remove leading and trailing whitespace.
+@property (readonly, nonnull) NSString * trim;
+
 @end

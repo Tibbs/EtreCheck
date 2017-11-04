@@ -22,9 +22,7 @@
 
 @synthesize problem = myProblem;
 @synthesize problemDescription = myProblemDescription;
-@synthesize volumes = myVolumes;
-@synthesize physicalVolumes = myPhysicalVolumes;
-@synthesize diskErrors = myDiskErrors;
+@synthesize storageDevices = myStorageDevices;
 @synthesize gpuErrors = myGPUErrors;
 @synthesize logEntries = myLogEntries;
 @synthesize applications = myApplications;
@@ -79,9 +77,7 @@
   if(self)
     {
     myLaunchd = [Launchd new];
-    myVolumes = [NSMutableDictionary new];
-    myPhysicalVolumes = [NSMutableSet new];
-    myDiskErrors = [NSMutableDictionary new];
+    myStorageDevices = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
     myLaunchd = [Launchd new];
     mySafari = [Safari new];
@@ -112,7 +108,7 @@
   [myLogEntries release];
   [myHostName release];
   [myGPUErrors release];
-  [myPhysicalVolumes release];
+  [myStorageDevices release];
   [myComputerName release];
   [myLaunchd release];
   [mySafari release];
@@ -121,8 +117,6 @@
   self.terminatedTasks = nil;
   self.processes = nil;
   self.diagnosticEvents = nil;
-  self.diskErrors = nil;
-  self.volumes = nil;
   self.applications = nil;
   self.machineIcon = nil;
   self.processes = nil;

@@ -8,11 +8,5 @@
 
 // Collect information about virtual volumes.
 @interface VirtualVolumeCollector : DiskCollector
-  {
-  NSMutableDictionary * myVirtualVolumes;
-  }
   
-// Keep track of virtual volumes.
-@property (readonly) NSMutableDictionary * virtualVolumes;
-
 @end

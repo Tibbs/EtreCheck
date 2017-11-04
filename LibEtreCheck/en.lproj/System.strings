@@ -19,3 +19,11 @@
 "Good" = "Normal";
 "Fair" = "Replace Soon";
 "Poor" = "Replace Now";
+
+// USB Speed
+// system_profiler -xml SPUSBReporter device_speed
+"low_speed" = "1.5 Mbit/s";
+"full_speed" = "12 Mbit/s";
+"high_speed" = "480 Mbit/s";
+"super_speed" = "5 Gbit/s";
+"super_speed_plus" = "10 Gbit/s+";

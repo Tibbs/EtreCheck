@@ -4,12 +4,14 @@
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "XMLBuilder.h"
+#import "XMLValue.h"
+#import "AttributedStringValue.h"
 
-@class XMLBuilder;
 @class XMLBuilderElement;
 
 // Any kind of item that can be printed in an EtreCheck report.
-@interface PrintableItem : NSObject
+@interface PrintableItem : NSObject <XMLValue, AttributedStringValue>
   {
   // The modification date for this item.
   NSDate * myModificationDate;
@@ -29,13 +31,6 @@
 
 // The author name for this item.
 @property (retain, nullable) NSString * authorName;
-
-// The attributed string value.
-@property (readonly, nonnull) 
-  NSMutableAttributedString * attributedStringValue;
-
-// The XML value.
-@property (readonly, nonnull) XMLBuilderElement * xml;
 
 // The XML builder.
 @property (readonly, nonnull) XMLBuilder * xmlBuilder;

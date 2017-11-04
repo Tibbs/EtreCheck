@@ -10,6 +10,9 @@
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
+#import "Model.h"
+#import "Drive.h"
+#import "Volume.h"
 
 // Collect information about Firewire devices.
 @implementation FirewireCollector
@@ -116,19 +119,8 @@
             
     indent = [NSString stringWithFormat: @"%@    ", indent];
     }
-  
-  [self collectSMARTStatus: device indent: indent];
-  
+
   // There could be more devices.
-  [self printMoreDevices: device indent: indent found: found];
-
-  [self.model endElement: @"node"];
-  }
-
-// Print more devices.
-- (void) printMoreDevices: (NSDictionary *) device
-  indent: (NSString *) indent found: (bool *) found
-  {
   NSDictionary * devices = [device objectForKey: @"_items"];
   
   if(!devices)
@@ -136,10 +128,53 @@
     
   if(devices)
     for(NSDictionary * device in devices)
-      [self printFirewireDevice: device indent: indent found: found];
+      {
+      NSString * deviceIdentifier = [device objectForKey: @"bsd_name"];
+      
+      if(deviceIdentifier.length > 0)
+        {
+        Drive * drive = 
+          [[[Model model] storageDevices] objectForKey: deviceIdentifier];
+          
+        drive.bus = @"FireWire";
+        drive.busSpeed = connected_speed;
+        
+        NSMutableString * model = [NSMutableString new];
+        
+        [model appendString: manufacturer];
+        
+        if(![name hasPrefix: manufacturer])
+          {
+          [model appendString: @" "];
+          [model appendString: name];
+          }
+          
+        drive.model = model;
+        
+        NSArray * volumes = [device objectForKey: @"volumes"];
+        
+        if([volumes respondsToSelector: @selector(isEqualToArray:)])
+          for(NSDictionary * volumeItem in volumes)
+            {
+            NSString * volumeDevice = 
+              [volumeItem objectForKey: @"bsd_name"];
+            
+            if(volumeDevice.length > 0)
+              {
+              Volume * volume = 
+                [[[Model model] storageDevices] objectForKey: volumeDevice];
+              
+              [volume addPhysicalDevice: device];
+              }
+            }
 
-  // Print all volumes on the device.
-  [self printDiskVolumes: device];
+        [model release];
+        }
+        
+      [self printFirewireDevice: device indent: indent found: found];
+      }
+
+  [self.model endElement: @"node"];
   }
 
 @end

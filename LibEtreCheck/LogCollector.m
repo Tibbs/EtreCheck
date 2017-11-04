@@ -12,6 +12,7 @@
 #import "SubProcess.h"
 #import "DiagnosticsCollector.h"
 #import "LocalizedString.h"
+#import "StorageDevice.h"
 
 // Collect information from log files.
 @implementation LogCollector
@@ -126,20 +127,10 @@
         
         if(disk)
           {
-          NSNumber * errorCount =
-            [[[Model model] diskErrors]
-              objectForKey: disk];
+          StorageDevice * device = 
+            [[[Model model] storageDevices] objectForKey: disk];
             
-          if(errorCount == nil)
-            errorCount = [NSNumber numberWithUnsignedInteger: 0];
-            
-          errorCount =
-            [NSNumber
-              numberWithUnsignedInteger:
-                [errorCount unsignedIntegerValue] + 1];
-            
-          [[[Model model] diskErrors]
-            setObject: errorCount forKey: disk];
+          [device.errors addObject: line];
           }
         }
     }
