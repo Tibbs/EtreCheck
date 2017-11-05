@@ -97,6 +97,9 @@
     return;
     }
   
+  // Build a volume map.
+  [self buildVolumeMap];
+  
   // Now I can continue.
   [self collectInformation];
   }

@@ -997,42 +997,61 @@
   
   NSString * model = [[Model model] model];
   
-  if([model hasPrefix: @"MacBookPro"])
+  NSArray * parts = [model componentsSeparatedByString: @","];
+  
+  if(parts.count == 2)
     {
-    if([model isEqualToString: @"MacBookPro5,1"])
+    NSString * majorString = [parts firstObject];
+    
+    if([model hasPrefix: @"MacBookPro"])
+      majorString = [majorString substringFromIndex: 10];
+    else if([model hasPrefix: @"MacBookAir"])
+      majorString = [majorString substringFromIndex: 10];
+    else if([model hasPrefix: @"MacBook"])
+      majorString = [majorString substringFromIndex: 7];
+
+    int major = 
+      [[[NumberFormatter sharedNumberFormatter] 
+        convertFromString: majorString] 
+          intValue];
+
+    if([model hasPrefix: @"MacBookPro"])
       {
-      BOOL oldModel = 
-        [self.EnglishMarketingName 
-          isEqualToString: @"MacBook Pro (15-inch Late 2008)"];
-      
-      if(oldModel)
-        cycles = 500;
-      }
-    else if([model isLessThan: @"MacBookPro5,1"])
-      cycles = 300;
-    }
-  else if([model hasPrefix: @"MacBookAir"])
-    {
-    if([model isEqualToString: @"MacBookAir2,1"])
-      {
-      BOOL newModel = 
-        [self.EnglishMarketingName 
-          isEqualToString: @"MacBook Air (Mid 2009)"];
-      
-      if(newModel)
-        cycles = 500;
-      else
+      if([model isEqualToString: @"MacBookPro5,1"])
+        {
+        BOOL oldModel = 
+          [self.EnglishMarketingName 
+            isEqualToString: @"MacBook Pro (15-inch Late 2008)"];
+        
+        if(oldModel)
+          cycles = 500;
+        }
+      else if(major < 5)
         cycles = 300;
       }
-    else if([model isLessThan: @"MacBookAir2,1"])
-      cycles = 300;
-    }
-  else if([model hasPrefix: @"MacBook"])
-    {
-    if([model isEqualToString: @"MacBook5,1"])
-      cycles = 500;
-    else if([model isLessThan: @"MacBook6,1"])
-      cycles = 300;
+    else if([model hasPrefix: @"MacBookAir"])
+      {
+      if([model isEqualToString: @"MacBookAir2,1"])
+        {
+        BOOL newModel = 
+          [self.EnglishMarketingName 
+            isEqualToString: @"MacBook Air (Mid 2009)"];
+        
+        if(newModel)
+          cycles = 500;
+        else
+          cycles = 300;
+        }
+      else if(major < 2)
+        cycles = 300;
+      }
+    else if([model hasPrefix: @"MacBook"])
+      {
+      if([model isEqualToString: @"MacBook5,1"])
+        cycles = 500;
+      else if(major < 6)
+        cycles = 300;
+      }
     }
     
   return cycles;
