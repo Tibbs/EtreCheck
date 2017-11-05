@@ -323,7 +323,7 @@
             [[[Model model] storageDevices] objectForKey: volumeDevice];
             
           if([volume respondsToSelector: @selector(isVolume)])
-            [volume addPhysicalDevice: device];
+            [volume addContainingDevice: device];
           }
         }
       }
@@ -398,7 +398,7 @@
       NSString * physicalDevice = [item objectForKey: @"_name"];
       
       if(physicalDevice.length > 0)
-        [volume addPhysicalDevice: physicalDevice];
+        [volume addContainingDevice: physicalDevice];
       }
     }
   }
@@ -578,7 +578,7 @@
               [physicalStore objectForKey: @"DeviceIdentifier"];
               
             if(physicalDevice.length > 0)
-              [volume addPhysicalDevice: physicalDevice];
+              [volume addContainingDevice: physicalDevice];
             }
             
           // If I don't already have a type, and I have multiple physical 
@@ -624,7 +624,7 @@
         StorageDevice * storageDevice = [RAIDDevices objectForKey: UUID];
         
         if(storageDevice != nil)
-          [volume addPhysicalDevice: storageDevice.identifier];
+          [volume addContainingDevice: storageDevice.identifier];
         }
   }
 

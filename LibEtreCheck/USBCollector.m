@@ -193,7 +193,7 @@
               Volume * volume = 
                 [[[Model model] storageDevices] objectForKey: volumeDevice];
               
-              [volume addPhysicalDevice: device];
+              [volume addContainingDevice: device];
               }
             }
         }

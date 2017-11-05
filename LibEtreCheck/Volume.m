@@ -43,12 +43,12 @@
 
 // A volume has one or more physical drives.
 // Use device identifier only to avoid cicular references.
-@dynamic physicalDevices;
+@dynamic containingDevices;
 
-// Get physical devices.
-- (NSSet *) physicalDevices
+// Get containing devices.
+- (NSSet *) containingDevices
   {
-  return myPhysicalDevices;
+  return myContainingDevices;
   }
 
 // Constructor with output from diskutil info -plist.
@@ -59,7 +59,7 @@
   
   if(self != nil)
     {
-    myPhysicalDevices = [NSMutableSet new];
+    myContainingDevices = [NSMutableSet new];
     
     self.UUID = [[plist objectForKey: @"VolumeUUID"] retain];
     self.filesystem = [[plist objectForKey: @"FilesystemName"] retain];
@@ -97,7 +97,7 @@
 // Destructor.
 - (void) dealloc
   {
-  [myPhysicalDevices release];
+  [myContainingDevices release];
   
   self.UUID = nil;
   self.filesystem = nil;
@@ -115,16 +115,9 @@
     
 // Add a physical device reference, de-referencing any virtual devices or
 // volumes.
-- (void) addPhysicalDevice: (nonnull NSString *) device
+- (void) addContainingDevice: (nonnull NSString *) device
   {
-  Volume * volume = [[[Model model] storageDevices] objectForKey: device];
-  
-  if([volume respondsToSelector: @selector(isVolume)])
-    for(NSString * physicalDevice in volume.physicalDevices)
-      [self addPhysicalDevice: physicalDevice];
-    
-  else if([volume respondsToSelector: @selector(isDrive)])
-    [myPhysicalDevices addObject: device];
+  [myContainingDevices addObject: device];
   }
   
 // Build the attributedString value.
@@ -202,8 +195,8 @@
   else
     [attributedString appendString: volumeInfo];
 
-  if(self.physicalDevices.count > 0)
-    for(NSString * device in self.physicalDevices)
+  if(self.containingDevices.count > 0)
+    for(NSString * device in self.containingDevices)
       {
       Drive * drive = [[[Model model] storageDevices] objectForKey: device];
       
@@ -236,17 +229,20 @@
   [xml addElement: @"name" value: self.name];
   [xml addElement: @"filesystem" value: self.filesystem];
   [xml addElement: @"mountpoint" value: self.mountpoint];  
-  [xml addElement: @"free" unsignedIntegerValue: self.freeSpace];
+  [xml 
+    addElement: @"free" 
+    valueWithUnits: 
+      [myByteCountFormatter stringFromByteCount: self.freeSpace]];
   [xml addElement: @"UUID" value: self.UUID];
   
-  if(self.physicalDevices.count > 0)
+  if(self.containingDevices.count > 0)
     {
-    [xml startElement: @"physicaldevices"];
+    [xml startElement: @"containers"];
     
-    for(NSString * device in self.physicalDevices)
+    for(NSString * device in self.containingDevices)
       [xml addElement: @"device" value: device];
       
-    [xml endElement: @"physicaldevices"];
+    [xml endElement: @"containers"];
     }
   
   [xml endElement: @"volume"];

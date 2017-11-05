@@ -81,9 +81,11 @@
   {
   // This class should never be directly instatiated, so omit the top
   // level element.
-  [xml addElement: @"identifier" value: self.identifier];
+  [xml addElement: @"device" value: self.identifier];
   [xml addElement: @"name" value: self.name];
-  [xml addElement: @"size" unsignedIntegerValue: self.size];
+  [xml 
+    addElement: @"size" 
+    valueWithUnits: [myByteCountFormatter stringFromByteCount: self.size]];
   [xml addElement: @"type" value: self.type];
 
   // I can't use XMLBuilder addArray:values: because values here are just

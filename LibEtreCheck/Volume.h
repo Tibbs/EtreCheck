@@ -45,9 +45,9 @@
   // Is this volume read-only?
   BOOL myReadOnly;
   
-  // A volume has one or more physical drives.
+  // A volume has one or more containing devices.
   // Use device identifier only to avoid cicular references.
-  NSMutableSet * myPhysicalDevices;
+  NSMutableSet * myContainingDevices;
   }
   
 // The UUID.
@@ -77,9 +77,9 @@
 // Is this volume read-only?
 @property (assign) BOOL readOnly;
 
-// A volume has one or more physical drives.
+// A volume has one or more containing drives.
 // Use device identifier only to avoid cicular references.
-@property (retain, readonly, nonnull)  NSSet * physicalDevices;
+@property (retain, readonly, nonnull)  NSSet * containingDevices;
 
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
@@ -88,8 +88,8 @@
 // Class inspection.
 - (BOOL) isVolume;
 
-// Add a physical device reference, de-referencing any virtual devices or
+// Add a containing device reference, de-referencing any virtual devices or
 // volumes.
-- (void) addPhysicalDevice: (nonnull NSString *) device;
+- (void) addContainingDevice: (nonnull NSString *) device;
 
 @end
