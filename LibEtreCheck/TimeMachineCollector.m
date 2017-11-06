@@ -396,8 +396,21 @@
 
   [self.model startElement: @"volume"];
   [self.model addElement: @"name" value: volume.name]; 
-  [self.model addElement: @"size" unsignedIntegerValue: volume.size];
-  [self.model addElement: @"used" unsignedIntegerValue: used];
+
+  [self.model 
+    addElement: @"size" 
+    valueWithUnits: 
+      [formatter stringFromByteCount: volume.size]];
+  
+  [self.model 
+    addElement: @"free" 
+    valueWithUnits: 
+      [formatter stringFromByteCount: volume.freeSpace]];
+  [self.model 
+    addElement: @"used" 
+    valueWithUnits: 
+      [formatter stringFromByteCount: used]];
+
   [self.model endElement: @"volume"];
 
   minimumBackupSize += used;
