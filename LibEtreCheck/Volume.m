@@ -61,10 +61,15 @@
     {
     myContainingDevices = [NSMutableSet new];
     
-    self.UUID = [[plist objectForKey: @"VolumeUUID"] retain];
-    self.filesystem = [[plist objectForKey: @"FilesystemName"] retain];
-    self.mountpoint = [[plist objectForKey: @"MountPoint"] retain];
+    self.UUID = [plist objectForKey: @"VolumeUUID"];
+    self.filesystem = [plist objectForKey: @"FilesystemName"];
+    self.mountpoint = [plist objectForKey: @"MountPoint"];
     
+    NSString * volumeName = [plist objectForKey: @"VolumeName"];
+    
+    if(volumeName.length > 0)
+      self.name = volumeName;
+      
     NSNumber * freeSpace = [plist objectForKey: @"FreeSpace"];
     
     if([freeSpace respondsToSelector: @selector(unsignedIntegerValue)])
@@ -226,7 +231,6 @@
   
   [super buildXMLValue: xml];
   
-  [xml addElement: @"name" value: self.name];
   [xml addElement: @"filesystem" value: self.filesystem];
   [xml addElement: @"mountpoint" value: self.mountpoint];  
   [xml 

@@ -165,6 +165,7 @@
   [xml addElement: @"revision" value: self.revision];
   [xml addElement: @"serial" value: self.serial];
   [xml addElement: @"bus" value: self.bus];
+  [xml addElement: @"internal" boolValue: self.internal];
   [xml addElement: @"busspeed" value: self.busSpeed];
   [xml addElement: @"solidstate" boolValue: self.solidState];
   [xml addElement: @"smartstatus" value: self.SMARTStatus];
