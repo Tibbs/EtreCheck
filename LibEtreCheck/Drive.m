@@ -169,7 +169,9 @@
   [xml addElement: @"busspeed" value: self.busSpeed];
   [xml addElement: @"solidstate" boolValue: self.solidState];
   [xml addElement: @"smartstatus" value: self.SMARTStatus];
-  [xml addElement: @"TRIM" boolValue: self.TRIM];
+  
+  if(self.solidState)
+    [xml addElement: @"TRIM" boolValue: self.TRIM];
     
   [xml addArray: @"volumes" values: self.volumes];
     
