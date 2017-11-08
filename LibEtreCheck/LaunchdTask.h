@@ -22,6 +22,10 @@
   
   // The overall status.
   NSString * myStatus;
+
+  // The last exit code.
+  // Modern launchctl uses strings.
+  NSString * myLastExitCode;  
   }
 
 // Path to the config script.
@@ -38,6 +42,9 @@
 
 // Over all status.
 @property (strong, nonnull) NSString * status;
+
+// The last exit code. Sometimes, these are strings in Apple-land.
+@property (strong, nullable) NSString * lastExitCode;
 
 // Format a status value.
 + (nonnull NSAttributedString *) formatStatus: (nonnull NSString *) status;

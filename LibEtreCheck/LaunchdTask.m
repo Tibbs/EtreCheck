@@ -28,6 +28,9 @@
 // Overall status.
 @synthesize status = myStatus;
 
+// The last exit code.
+@synthesize lastExitCode = myLastExitCode;
+
 // Append the file status.
 + (NSAttributedString *) formatStatus: (NSString *) status
   {
@@ -112,6 +115,7 @@
   [myExecutable release];
   [myArguments release];
   [myStatus release];
+  [myLastExitCode release];
   
   [super dealloc];
   }

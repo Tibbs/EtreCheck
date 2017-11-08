@@ -20,10 +20,6 @@
   // Modern launchctl uses strings.
   NSString * myPID;
   
-  // The last exit code.
-  // Modern launchctl uses strings.
-  NSString * myLastExitCode;
-  
   // There can be multiple tasks per service identifier. Such tasks
   // have a UUID appended to the label. Try to remove that.
   NSString * baseLabel;
@@ -34,9 +30,6 @@
   
 // The process ID. Sometimes, these are strings in Apple-land.
 @property (readonly, nullable) NSString * PID;
-
-// The last exit code. Sometimes, these are strings in Apple-land.
-@property (readonly, nullable) NSString * lastExitCode;
 
 // There can be multiple tasks per service identifier. Such tasks
 // have a UUID appended to the label. Try to remove that.

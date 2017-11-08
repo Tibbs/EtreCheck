@@ -82,6 +82,28 @@
   return myStatus;
   }
 
+// Get the last exit code.
+- (NSString *) lastExitCode
+  {
+  if(myLastExitCode == nil)
+    {
+    if(self.loadedTasks.count > 0)
+      {
+      NSMutableSet * exitCodes = [NSMutableSet new];
+      
+      for(LaunchdLoadedTask * task in self.loadedTasks)
+        [exitCodes addObject: task.lastExitCode];
+        
+      myLastExitCode = 
+        [[[exitCodes allObjects] componentsJoinedByString: @","] retain];
+      
+      [exitCodes release];
+      }
+    }
+    
+  return myLastExitCode;
+  }
+  
 // Is the file loaded?
 - (BOOL) loaded
   {
@@ -512,8 +534,12 @@
   {
   [attributedString appendString: @"    "];
   
-  [attributedString 
-    appendAttributedString: [LaunchdTask formatStatus: self.status]];
+  // People freak out over the word "failed".
+  if([self.status  isEqualToString: kStatusFailed])
+    [attributedString appendString: self.lastExitCode];
+  else
+    [attributedString 
+      appendAttributedString: [LaunchdTask formatStatus: self.status]];
   
   [attributedString appendString: @"    "];
   }
@@ -595,6 +621,7 @@
   [xml startElement: @"launchdfile"];
   
   [xml addElement: @"status" value: self.status];
+  [xml addElement: @"lastexitcode" value: self.lastExitCode];
   [xml addElement: @"path" value: self.path];
   [xml addElement: @"label" value: self.label];
   

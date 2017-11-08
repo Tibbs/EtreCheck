@@ -27,9 +27,6 @@
 // The process ID.
 @synthesize PID = myPID;
 
-// The last exit code.
-@synthesize lastExitCode = myLastExitCode;
-
 // There can be multiple tasks per service identifier. Such tasks
 // have a UUID appended to the label. Try to remove that.
 @synthesize baseLabel = myBaseLabel;
@@ -114,7 +111,6 @@
   {
   [myDomain release];
   [myPID release];
-  [myLastExitCode release];
   
   [super dealloc];
   }
