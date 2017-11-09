@@ -92,7 +92,8 @@
       NSMutableSet * exitCodes = [NSMutableSet new];
       
       for(LaunchdLoadedTask * task in self.loadedTasks)
-        [exitCodes addObject: task.lastExitCode];
+        if(task.lastExitCode.length > 0)
+          [exitCodes addObject: task.lastExitCode];
         
       myLastExitCode = 
         [[[exitCodes allObjects] componentsJoinedByString: @","] retain];

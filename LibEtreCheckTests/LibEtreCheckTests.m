@@ -20,6 +20,7 @@
 #import "Adware.h"
 #import "UnsignedCollector.h"
 #import "CleanupCollector.h"
+#import "HardwareCollector.h"
 
 @interface LibEtreCheckTests : XCTestCase
 
@@ -265,6 +266,16 @@
   [collector collect];
 
   NSLog(@"%@", collector.result.string);
+  }
+
+- (void) testHardwareCollector 
+  {
+  HardwareCollector * collector = [HardwareCollector new];
+  
+  [collector collect];
+  
+  NSLog(@"%@", collector.result.string);
+  NSLog(@"%@", collector.model.XML);
   }
 
 - (void) testPerformanceExample 

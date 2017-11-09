@@ -1128,7 +1128,8 @@
     
   int count = 0;
     
-  NSString * pendingFiles = nil;
+  NSString * pendingFileCount = nil;
+  NSMutableDictionary * pendingFiles = [NSMutableDictionary new];
   
   NSArray * args =
     @[
@@ -1141,6 +1142,11 @@
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
+    NSString * currentDirectory = nil;
+    NSString * currentFile = nil;
+    NSString * action = nil;
+    NSString * progress = nil;
+    
     for(NSString * line in lines)
       {
       NSString * trimmedLine =
@@ -1148,17 +1154,69 @@
           stringByTrimmingCharactersInSet:
             [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
-      if([trimmedLine hasPrefix: @"r:"])
-        {
-        NSRange range = [trimmedLine rangeOfString: @" doc bt:"];
+      if([trimmedLine hasPrefix: @"Under "])
+        currentDirectory = [trimmedLine substringFromIndex: 6];
         
-        if(range.location != NSNotFound)
+      else if([trimmedLine hasPrefix: @"r:"])
+        {
+        if(currentDirectory.length > 0)
+          {
+          currentFile = [self readFileName: trimmedLine];
           ++count;
+
+          NSMutableDictionary * directory = 
+            [pendingFiles objectForKey: currentDirectory];
+          
+          if(directory == nil)
+            {
+            directory = [NSMutableDictionary new];
+            [pendingFiles setObject: directory forKey: currentDirectory];
+            [directory release];
+            }          
+            
+          NSMutableDictionary * file = [NSMutableDictionary new];
+          
+          [file setObject: currentFile forKey: @"name"];
+          
+          [directory setObject: file forKey: currentFile];
+          
+          [file release];
+          }
         }
+        
+      else if([trimmedLine hasPrefix: @"> upload{"])
+        action = @"uploading";
+
+      else if([trimmedLine hasPrefix: @"> downloader{"])
+        action = @"downloading";
+      
+      if(action.length > 0)
+        if((currentDirectory.length > 0) && (currentFile.length > 0))
+          {
+          progress = [self readProgress: action line: trimmedLine];
+          
+          NSMutableDictionary * directory = 
+            [pendingFiles objectForKey: currentDirectory];
+            
+          NSMutableDictionary * file = 
+            [directory objectForKey: currentFile];
+            
+          NSString * name = [file objectForKey: @"name"];
+          
+          if(name.length > 0)
+            {
+            [file setObject: action forKey: @"action"];
+            [file setObject: progress forKey: @"percentage"];
+            }
+            
+          currentDirectory = nil;
+          currentFile = nil;
+          action = nil;
+          }
       }
       
     if(count > 0)
-      pendingFiles = ECLocalizedPluralString(count, @"pending file");
+      pendingFileCount = ECLocalizedPluralString(count, @"pending file");
     }
     
   [subProcess release];
@@ -1227,29 +1285,119 @@
   if(self.simulating)
     {
     count = 34;
-    pendingFiles = @"34 simulated pending files";
+    pendingFileCount = @"34 simulated pending files";
     }
     
-  if([pendingFiles length] > 0)
+  if(pendingFileCount.length > 0)
     {
     [self.result
       appendString: ECLocalizedString(@"    iCloud Status: ")];
       
-    [self.model addElement: @"icloudpendingfiles" intValue: count];
-    
     if(count >= 10)
       [self.result
-        appendString: pendingFiles
+        appendString: pendingFileCount
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
             NSFontAttributeName : [[Utilities shared] boldFont]
           }];
     else
-      [self.result appendString: pendingFiles];
+      [self.result appendString: pendingFileCount];
       
     [self.result appendString: @"\n"];
     }
+    
+  if(pendingFiles.count > 0)
+    {
+    [self.model startElement: @"icloudpendingfiles"];
+    
+    for(NSString * directoryName in pendingFiles)
+      {
+      NSDictionary * directory = [pendingFiles objectForKey: directoryName];
+      
+      if(directory.count > 0)
+        {
+        [self.model startElement: @"directory"];
+        
+        [self.model addElement: @"name" value: directoryName];
+        
+        for(NSString * fileName in directory)
+          {
+          NSDictionary * file = [directory objectForKey: fileName];
+          
+          NSString * action = [file objectForKey: @"action"];
+          NSString * percentage = [file objectForKey: @"percentage"];
+
+          [self.model startElement: @"file"];
+
+          [self.model addElement: @"name" value: fileName];
+          [self.model addElement: @"action" value: action];
+          [self.model addElement: @"percentage" value: percentage];
+          
+          [self.model endElement: @"file"];
+          }
+          
+        [self.model endElement: @"directory"];
+        }
+      }
+      
+    [self.model endElement: @"icloudpendingfiles"];
+    }
+    
+  [pendingFiles release];
   }
 
+// Read a file name from an iCloud status line.
+- (NSString *) readFileName: (NSString *) line
+  {
+  NSRange range = [line rangeOfString: @" sz:"];
+  
+  if(range.location != NSNotFound)
+    {
+    NSString * data = [line substringFromIndex: range.location + 8];
+    
+    NSRange nRange = [data rangeOfString: @" n:\""];
+    NSRange sigRange = [data rangeOfString: @" sig:"];
+    
+    if((nRange.location != NSNotFound) && (sigRange.location != NSNotFound))
+      if((sigRange.location - 2) > (nRange.location + 4))
+        {
+        NSRange nameRange = 
+            NSMakeRange(
+              nRange.location + 4, 
+              sigRange.location - 1 - nRange.location - 4);
+              
+        return [data substringWithRange: nameRange];
+        }
+    }
+      
+  return nil;
+  }
+  
+// Read a progress from an iCloud status line.
+- (NSString *) readProgress: (NSString *) action line: (NSString *) line
+  {
+  NSString * percentage = nil;
+    
+  NSString * match = [[NSString alloc] initWithFormat: @" %@:", action];
+  
+  NSRange range = [line rangeOfString: match];
+  
+  if(range.location != NSNotFound)
+    {
+    NSScanner * scanner = 
+      [[NSScanner alloc] 
+        initWithString: 
+          [line substringFromIndex: range.location + match.length]];
+    
+    [scanner scanUpToString: @"%" intoString: & percentage];
+      
+    [scanner release];
+    }
+    
+  [match release];
+  
+  return percentage;
+  }
+  
 @end
