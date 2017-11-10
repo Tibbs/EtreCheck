@@ -92,22 +92,7 @@
 // Reveal a file in the Finder.
 + (void) revealFile: (NSString *) file
   {
-  // See if the file is a directory.
-  BOOL isDirectory = NO;
-  
-  BOOL exists = 
-    [[NSFileManager defaultManager] 
-      fileExistsAtPath: file isDirectory: & isDirectory];
-  
-  if(!exists)
-    return;
-    
-  // If the file is a directory, just open it.
-  if(isDirectory)
-    [[NSWorkspace sharedWorkspace] openFile: file];
-    
-  // Otherwise, open the parent and select the file.
-  else
+  if([[NSFileManager defaultManager] fileExistsAtPath: file])
     {
     NSURL * url = [[NSURL alloc] initFileURLWithPath: file];
     
