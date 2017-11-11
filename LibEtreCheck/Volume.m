@@ -239,6 +239,16 @@
       [myByteCountFormatter stringFromByteCount: self.freeSpace]];
   [xml addElement: @"UUID" value: self.UUID];
   
+  if(self.encrypted)
+    {
+    [xml startElement: @"encryption"];
+    
+    [xml addElement: @"status" value: self.encryptionStatus];
+    [xml addElement: @"progress" intValue: self.encryptionProgress];
+    
+    [xml endElement: @"encryption"];
+    }
+    
   if(self.containingDevices.count > 0)
     {
     [xml startElement: @"containers"];
