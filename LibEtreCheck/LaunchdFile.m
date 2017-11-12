@@ -625,6 +625,7 @@
   [xml addElement: @"lastexitcode" value: self.lastExitCode];
   [xml addElement: @"path" value: self.path];
   [xml addElement: @"label" value: self.label];
+  [xml addElement: @"filename" value: [self.path lastPathComponent]];
   
   if(self.executable.length > 0)
     [xml addElement: @"executable" value: self.executable];

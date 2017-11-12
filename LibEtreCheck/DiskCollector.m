@@ -387,7 +387,7 @@
     volume.encrypted = [encrypted isEqualToString: @"yes"];
     
     if(volume.encrypted)
-      volume.encryptionStatus = @"Encrypted";
+      volume.encryptionStatus = @"encrypted";
     
     // Now look for any physical volumes.
     NSArray * physicalVolumes = 
@@ -446,9 +446,9 @@
             [NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
       if([value isEqualToString: @"Converting (backward)"])
-        status = @"Decrypting";
+        status = @"decrypting";
       else if([value isEqualToString: @"Converting (forward)"])
-        status = @"Encrypting";
+        status = @"encrypting";
       else
         status = nil;
       }
@@ -547,14 +547,15 @@
           // Get the encryption direction and progress.
           volume.encrypted = [[item objectForKey: @"Encryption"] boolValue];
           volume.encryptionStatus = 
-            [item objectForKey: @"CryptoMigrationDirection"];
+            [[item objectForKey: @"CryptoMigrationDirection"] 
+              lowercaseString];
             
           volume.encryptionProgress = 
             [[item objectForKey: @"CryptoMigrationProgressPercent"] 
               intValue];
           
           if(volume.encrypted && (volume.encryptionStatus == nil))
-            volume.encryptionStatus = @"Encrypted";
+            volume.encryptionStatus = @"encrypted";
             
           // See if there is an APFS role.
           NSArray * roles = [item objectForKey: @"Roles"];

@@ -404,6 +404,7 @@
       
       // Save the path too.
       [bundle setValue: [self extensionDirectory: path] forKey: @"path"];
+      [bundle setValue: [path lastPathComponent] forKey: @"filename"];
       
       return bundle;
       }
@@ -620,7 +621,8 @@
   
   NSString * cleanPath = [Utilities cleanPath: directory];
   
-  [extensionsXML addElement: @"path" value: cleanPath];
+  [extensionsXML addElement: @"cleanpath" value: cleanPath];
+  [extensionsXML addElement: @"path" value: directory];
     
   [extensionsXML startElement: @"extensions"];
 
@@ -691,11 +693,11 @@
 
   NSColor * color = [[Utilities shared] blue];
 
-  NSString * status = ECLocalizedString(@"loaded");
+  NSString * status = @"loaded";
   
   if([self.unloadedExtensions objectForKey: label])
     {
-    status = ECLocalizedString(@"not loaded");
+    status = @"notloaded";
     color = [[Utilities shared] gray];
 
     if([self ignoreUnloadedExtension: label])
@@ -742,6 +744,8 @@
           [[Utilities shared] boldFont], NSFontAttributeName,
           nil]];
 
+  NSString * filename = [bundle objectForKey: @"filename"];
+  
   // Fix the version to get past ASC spam filters.
   version =
     [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
@@ -749,6 +753,7 @@
   [xmlBuilder startElement: @"extension"];
   
   [xmlBuilder addElement: @"bundleid" value: label];
+  [xmlBuilder addElement: @"filename" value: filename];
   [xmlBuilder addElement: @"status" value: status];
   [xmlBuilder addElement: @"version" value: version];
   [xmlBuilder addElement: @"osversion" value: OSVersion];  
@@ -765,7 +770,7 @@
   [formattedOutput
     appendString:
       [NSString
-        stringWithFormat: @"%@ (%@)", label, versionString]];
+        stringWithFormat: @"%@ (%@ - %@)", filename, label, versionString]];
         
   [versionString release];
     
