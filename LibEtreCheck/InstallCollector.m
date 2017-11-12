@@ -32,52 +32,93 @@
   {
   NSArray * installs = [self collectInstalls];
   
-  int printCount = 0;
-  
   if([installs count])
     {
     NSDate * then =
       [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 30];
   
+    // I always want to print these critical Apple installs.
+    NSSet * criticalAppleInstalls =
+      [[NSSet alloc] 
+        initWithObjects:
+          @"XProtectPlistConfigData",
+          @"MRTConfigData",
+          @"MRT Configuration Data",
+          @"Gatekeeper Configuration Data",
+          @"EFI Allow List",
+          nil];
+    
+    // Only print the most recent install for each item.
+    NSMutableDictionary * installsByName = [NSMutableDictionary new];
+    NSMutableArray * installsToPrint = [NSMutableArray new];
+    
     for(NSDictionary * install in installs)
       {
       NSString * name = [install objectForKey: @"_name"];
       NSDate * date = [install objectForKey: @"install_date"];
-      NSString * version = [install objectForKey: @"install_version"];
       NSString * source = [install objectForKey: @"package_source"];
       
+      // Any 3rd party installationsn in the last 30 days.
       if([source isEqualToString: @"package_source_other"])
+        {
         if([then compare: date] == NSOrderedAscending)
+          [installsToPrint addObject: install];
+        }
+        
+      // The last critical Apple installation.
+      else if([criticalAppleInstalls containsObject: name])
+        {
+        // Get the current install that matches the name.
+        NSDictionary * currentInstall = 
+          [installsByName objectForKey: name];
+        
+        if(currentInstall != nil)
           {
-          if(printCount == 0)
-            [self.result appendAttributedString: [self buildTitle]];
-    
-          NSString * installDate =
-            [Utilities installDateAsString: date];
-
-          [self.model startElement: @"package"];
-          
-          [self.model addElement: @"name" value: name];
-          [self.model addElement: @"version" value: version];
-          [self.model addElement: @"installdate" day: date];
-          
-          [self.model endElement: @"package"];
-          
-          [self.result
-            appendString:
-              [NSString
-                stringWithFormat:
-                  ECLocalizedString(@"    %@: %@ (%@)\n"),
-                  name,
-                  version,
-                  installDate]];
+          NSDate * currentDate = 
+            [currentInstall objectForKey: @"install_date"];
             
-          ++printCount;
+          // If I have an older install, remove it.
+          if([currentDate compare: date] == NSOrderedAscending)
+            [installsToPrint removeObject: currentInstall];
           }
+          
+        [installsToPrint addObject: install];
+        [installsByName setObject: install forKey: name];
+        }
       }
-      
-    if(printCount > 0)
+         
+    if(installsToPrint.count > 0)
       {
+      [self.result appendAttributedString: [self buildTitle]];
+
+      for(NSDictionary * install in installsToPrint)
+        {
+        NSString * name = [install objectForKey: @"_name"];
+        NSDate * date = [install objectForKey: @"install_date"];
+        NSString * version = [install objectForKey: @"install_version"];
+
+        NSString * installDate =
+          [Utilities installDateAsString: date];
+
+        [self.model startElement: @"package"];
+        
+        [self.model addElement: @"name" value: name];
+        [self.model addElement: @"version" value: version];
+        [self.model addElement: @"installdate" day: date];
+        
+        [self.model endElement: @"package"];
+        
+        [self.result
+          appendString:
+            [NSString
+              stringWithFormat:
+                ECLocalizedString(@"    %@: %@ (%@)\n"),
+                name,
+                version,
+                installDate]];
+          
+        }
+        
       [self.result appendString: @"\n"];
       
       [self.result
