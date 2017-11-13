@@ -104,7 +104,7 @@
         
         [self.model addElement: @"name" value: name];
         [self.model addElement: @"version" value: version];
-        [self.model addElement: @"installdate" day: date];
+        [self.model addElement: @"installdate" date: date];
         
         [self.model endElement: @"package"];
         

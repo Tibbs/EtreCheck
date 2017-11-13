@@ -529,7 +529,7 @@
     {
     NSDate * modificationDate = [self modificationDate: path];
     
-    [self.model addElement: @"installdate" day: modificationDate];
+    [self.model addElement: @"installdate" date: modificationDate];
 
     if(modificationDate)
       modificationDateString =

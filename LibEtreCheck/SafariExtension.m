@@ -305,7 +305,7 @@
   [xml addElement: @"developer" value: self.authorName];
   [xml addElement: @"url" value: self.developerWebSite];
   
-  [xml addElement: @"installdate" day: self.modificationDate];
+  [xml addElement: @"installdate" date: self.modificationDate];
   
   if(!self.loaded)
     [xml addElement: @"status" value: @"notloaded"];

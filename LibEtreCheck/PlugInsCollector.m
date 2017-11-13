@@ -78,7 +78,7 @@
       
       [self.model addElement: @"name" value: name];
       [self.model addElement: @"version" value: version];
-      [self.model addElement: @"installdate" day: modificationDate];
+      [self.model addElement: @"installdate" date: modificationDate];
       
       [self.model endElement: @"plugin"];
       
