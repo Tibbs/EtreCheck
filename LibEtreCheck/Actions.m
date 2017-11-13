@@ -92,9 +92,11 @@
 // Reveal a file in the Finder.
 + (void) revealFile: (NSString *) file
   {
-  if([[NSFileManager defaultManager] fileExistsAtPath: file])
+  NSString * path = [file stringByExpandingTildeInPath];
+  
+  if([[NSFileManager defaultManager] fileExistsAtPath: path])
     {
-    NSURL * url = [[NSURL alloc] initFileURLWithPath: file];
+    NSURL * url = [[NSURL alloc] initFileURLWithPath: path];
     
     NSArray * urls = [[NSArray alloc] initWithObjects: url, nil];
     
@@ -109,7 +111,9 @@
 // Open a file in the default app.
 + (void) openFile: (NSString *) file
   {
-  [[NSWorkspace sharedWorkspace] openFile: file];
+  NSString * path = [file stringByExpandingTildeInPath];
+
+  [[NSWorkspace sharedWorkspace] openFile: path];
   }
   
 // Open a URL in the default web browser.
