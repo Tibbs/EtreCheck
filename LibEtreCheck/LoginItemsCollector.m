@@ -378,7 +378,30 @@
         }
       }
 
-    [self.loginItems addObjectsFromArray: [loginItems allValues]];
+    // Avoid adding any login item from an external drive if there is
+    // already one on an internal drive.
+    NSMutableDictionary * bestLoginItems = [NSMutableDictionary new];
+    
+    for(NSString * path in loginItems)
+      {
+      NSDictionary * loginItem = [loginItems objectForKey: path];
+      
+      NSString * name = [loginItem objectForKey: @"name"];
+      
+      NSDictionary * currentLoginItem = [bestLoginItems objectForKey: name];
+      
+      if(currentLoginItem == nil)
+        [bestLoginItems setObject: loginItem forKey: name];
+      else
+        {
+        NSString * currentPath = [currentLoginItem objectForKey: @"path"];
+        
+        if([currentPath hasPrefix: @"/Volumes/"])
+          [bestLoginItems setObject: loginItem forKey: name];
+        }
+      }
+      
+    [self.loginItems addObjectsFromArray: [bestLoginItems allValues]];
     
     [loginItems release];
     }
