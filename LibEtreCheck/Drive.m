@@ -9,6 +9,7 @@
 #import "ByteCountFormatter.h"
 #import "LocalizedString.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "Model.h"
 
 // Object that represents a top-level drive.
 @implementation Drive
@@ -43,18 +44,6 @@
 // If SSD, is TRIM enabled?
 @synthesize TRIM = myTRIM;
 
-// A drive has 0 or more volumes indexed by device id.
-@synthesize volumes = myVolumes;
-
-// Get volumes.
-- (NSMutableArray *) volumes
-  {
-  if(myVolumes == nil)
-    myVolumes = [NSMutableArray new];
-    
-  return myVolumes;
-  }
-  
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist
@@ -83,7 +72,6 @@
   self.busVersion = nil;
   self.busSpeed = nil;
   self.SMARTStatus = nil;
-  [myVolumes release];
   [myErrors release];
   
   [super dealloc];
@@ -147,10 +135,19 @@
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
               
   // Don't forget the volumes.
-  for(Volume * volume in self.volumes)
+  NSArray * volumeDevices = 
+    [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
+
+  for(NSString * device in volumeDevices)
     {
-    [attributedString appendString: @"    "];
-    [attributedString appendAttributedString: volume.attributedStringValue];
+    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    
+    if([volume respondsToSelector: @selector(isVolume)])
+      {
+      [attributedString appendString: @"    "];
+      [attributedString 
+        appendAttributedString: volume.attributedStringValue];
+      }
     }
   }
   
@@ -172,8 +169,6 @@
   
   if(self.solidState)
     [xml addElement: @"TRIM" boolValue: self.TRIM];
-    
-  [xml addArray: @"volumes" values: self.volumes];
     
   [xml endElement: @"drive"];
   }

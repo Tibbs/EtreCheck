@@ -37,9 +37,6 @@
   
   // If SSD, is TRIM enabled?
   BOOL myTRIM;
-  
-  // A drive has 0 or more volumes.
-  NSMutableArray * myVolumes;
   }
   
 // The drive model.
@@ -72,9 +69,6 @@
 // If SSD, is TRIM enabled?
 @property (assign) BOOL TRIM;
 
-// A drive has 0 or more volumes indexed by device id.
-@property (retain, readonly, nonnull) NSMutableArray * volumes;
-  
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist;

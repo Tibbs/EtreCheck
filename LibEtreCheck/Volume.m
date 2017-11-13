@@ -123,6 +123,12 @@
 - (void) addContainingDevice: (nonnull NSString *) device
   {
   [myContainingDevices addObject: device];
+  
+  StorageDevice * storageDevice = 
+    [[[Model model] storageDevices] objectForKey: device];
+    
+  if(storageDevice != nil)
+    [storageDevice.volumes addObject: self.identifier];
   }
   
 // Build the attributedString value.
@@ -222,6 +228,22 @@
                 [self byteCountString: drive.size]]];
         }
       }
+      
+  // Don't forget the volumes.
+  NSArray * volumeDevices = 
+    [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
+
+  for(NSString * device in volumeDevices)
+    {
+    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    
+    if([volume respondsToSelector: @selector(isVolume)])
+      {
+      [attributedString appendString: @"    "];
+      [attributedString 
+        appendAttributedString: volume.attributedStringValue];
+      }
+    }
   }
   
 // Build the XML value.

@@ -30,6 +30,19 @@
 // RAID set members.
 @synthesize RAIDSetMembers = myRAIDSetMembers;
 
+// A drive has 0 or more volumes indexed by device id.
+// Use device identifier only to avoid cicular references.
+@synthesize volumes = myVolumes;
+
+// Get volumes.
+- (NSMutableSet *) volumes
+  {
+  if(myVolumes == nil)
+    myVolumes = [NSMutableSet new];
+    
+  return myVolumes;
+  }
+  
 // Get errors.
 - (NSMutableArray *) errors
   {
@@ -72,6 +85,7 @@
   [myIdentifier release];
   [myName release];
   [myType release];
+  [myVolumes release];
   
   [super dealloc];
   }
@@ -87,6 +101,20 @@
     addElement: @"size" 
     valueWithUnits: [myByteCountFormatter stringFromByteCount: self.size]];
   [xml addElement: @"type" value: self.type];
+    
+  // Don't forget the volumes.
+  NSArray * volumeDevices = 
+    [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
+
+  if(volumeDevices.count > 0)
+    {
+    [xml startElement: @"volumes"];
+    
+    for(NSString * device in volumeDevices)
+      [xml addElement: @"device" value: device];
+    
+    [xml endElement: @"volumes"];
+    }
 
   // I can't use XMLBuilder addArray:values: because values here are just
   // NSString.
@@ -112,4 +140,40 @@
   return @"";
   }
   
+// Sort an array of storage device identifiers.
++ (nonnull NSArray *) sortDeviceIdenifiers: (nonnull NSArray *) devices
+  {
+  // Carefully sort the devices.
+  return
+    [devices 
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+          {
+          NSString * device1 = 
+            [[obj1 lastPathComponent] substringFromIndex: 4];
+            
+          NSString * device2 = 
+            [[obj2 lastPathComponent] substringFromIndex: 4];
+          
+          NSArray * parts1 = [device1 componentsSeparatedByString: @"s"];
+          NSArray * parts2 = [device2 componentsSeparatedByString: @"s"];
+          
+          NSString * disk1 = [parts1 firstObject];
+          NSString * disk2 = [parts2 firstObject];
+          
+          if([disk1 isEqualToString: disk2])
+            {
+            if((parts1.count > 1) && (parts2.count > 1))
+              {
+              NSString * partition1 = [parts1 objectAtIndex: 1];
+              NSString * partition2 = [parts2 objectAtIndex: 1];
+              
+              return [partition1 compare: partition2];
+              }
+            }
+            
+          return [disk1 compare: disk2];
+          }];
+  }
+
 @end

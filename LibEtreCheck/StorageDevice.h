@@ -30,7 +30,10 @@
   NSArray * myRAIDSetMembers;
   
   // A byte count formatter.
-  ByteCountFormatter * myByteCountFormatter;
+  ByteCountFormatter * myByteCountFormatter;  
+  
+  // A volume has 0 or more volumes.
+  NSMutableSet * myVolumes;
   }
 
 // The /dev/* device identifier.
@@ -54,6 +57,10 @@
 // RAID set members.
 @property (retain, nullable) NSArray * RAIDSetMembers;
 
+// A device has 0 or more volumes indexed by device id.
+// Use device identifier only to avoid cicular references.
+@property (retain, readonly, nonnull) NSMutableSet * volumes;
+
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist;
@@ -61,4 +68,7 @@
 // Format a number into a byte count string.
 - (nonnull NSString *) byteCountString: (NSUInteger) value;
 
+// Sort an array of storage device identifiers.
++ (nonnull NSArray *) sortDeviceIdenifiers: (nonnull NSArray *) devices;
+  
 @end

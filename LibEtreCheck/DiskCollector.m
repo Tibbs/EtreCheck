@@ -91,36 +91,7 @@
     NSArray * devices = [Utilities formatLines: subProcess.standardOutput];
     
     // Carefully sort the devices.
-    NSArray * sortedDevices = 
-      [devices 
-        sortedArrayUsingComparator:
-          ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
-            {
-            NSString * device1 = 
-              [[obj1 lastPathComponent] substringFromIndex: 4];
-              
-            NSString * device2 = 
-              [[obj2 lastPathComponent] substringFromIndex: 4];
-            
-            NSArray * parts1 = [device1 componentsSeparatedByString: @"s"];
-            NSArray * parts2 = [device2 componentsSeparatedByString: @"s"];
-            
-            NSString * disk1 = [parts1 firstObject];
-            NSString * disk2 = [parts2 firstObject];
-            
-            if([disk1 isEqualToString: disk2])
-              {
-              if((parts1.count > 1) && (parts2.count > 1))
-                {
-                NSString * partition1 = [parts1 objectAtIndex: 1];
-                NSString * partition2 = [parts2 objectAtIndex: 1];
-                
-                return [partition1 compare: partition2];
-                }
-              }
-              
-            return [disk1 compare: disk2];
-            }];
+    NSArray * sortedDevices = [StorageDevice sortDeviceIdenifiers: devices];
     
     // Collect each device.
     for(NSString * device in sortedDevices)
