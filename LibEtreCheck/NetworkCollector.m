@@ -72,9 +72,7 @@
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
-      [NSArray readPropertyListData: [NSData dataWithContentsOfFile: @"/Users/jdaniel/Desktop/EtreCheck4/EtreCheck/iCloudDrivePending/proxies.xml"]];
-    //NSArray * plist =
-    //  [NSArray readPropertyListData: subProcess.standardOutput];
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
