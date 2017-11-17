@@ -44,6 +44,12 @@
 "%d interface (plural rule: zero)" = "no interfaces\n";
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
+"%d IPv4 address (plural rule: zero)" = "No IPv4 addresses";
+"%d IPv4 address (plural rule: one)" = "One IPv4 address";
+"%d IPv4 address (plural rule: other)" = "%d IPv4 addresses";
+"%d IPv6 address (plural rule: zero)" = "No IPv6 addresses";
+"%d IPv6 address (plural rule: one)" = "One IPv6 address";
+"%d IPv6 address (plural rule: other)" = "%d IPv6 addresses";
 "%d orphan file (plural rule: zero)" = "";
 "%d orphan file (plural rule: one)" = "One orphan file found.";
 "%d orphan file (plural rule: other)" = "%d orphan files found.";

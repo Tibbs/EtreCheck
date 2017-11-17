@@ -17,7 +17,8 @@
 "kernelextensions" = "Kernel Extensions:";
 "loginitems" = "User Login Items:";
 "memory" = "Top Processes by Memory:";
-"network" = "Top Processes by Network Use:";
+"network" = "Network Information:";
+"networkusage" = "Top Processes by Network Use:";
 "energy" = "Top Processes by Energy Use:";
 "preferencepanes" = "3rd Party Preference Panes:";
 "safariextensions" = "Safari Extensions:";

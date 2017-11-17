@@ -1404,6 +1404,8 @@
       continue;
     if(((*ch >= 'A') && (*ch <= 'Z')) || ((*ch >= 'a') && (*ch <= 'z')))
       continue;
+    if((*ch >= '0') && (*ch <= '9'))
+      continue;
     if((*ch >= L'\u00C0') && (*ch <= L'\u00D6'))
       continue;
     if((*ch == L'\u00D8') || ((*ch >= L'\u00D9') && (*ch <= L'\u00F6')))

@@ -54,11 +54,12 @@
 "    Handoff/Airdrop2: %@\n" = "    Handoff/Airdrop2 : %@\n";
 "    iCloud Quota: %@ available" = "    Quota iCloud : %@ disponible";
 "    iCloud Status: " = "    Bilan iCloud : ";
+"    Interface %@: %@\n" = "Interface %@ : %@\n";
 "    Launchd job status not available.\n" = "État du travail de ​​Launchd pas disponible.\n";
 "    Mobile backups: " = "    Sauvegardes mobiles : ";
 "    None\n" = "    Aucun\n";
 "    Operating system information not found!\n" = "    Information du système d’exploitation non trouvé !\n";
-"    Proxy: %@\n" = "    Proxy : %@\n";
+"    Proxies: %@\n" = "    Passerelles : %@\n";
 "    Skip System Files: " = "    Ignorer les fichiers du système : ";
 "    Time Machine not configured!\n\n" = "    Time Machine n’est pas configuré !\n\n";
 "    Volumes being backed up:\n" = "    Disques sauvegardés :\n";
@@ -224,6 +225,12 @@
 "%d interface (plural rule: zero)" = "aucune interface\n";
 "%d interface (plural rule: one)" = "";
 "%d interface (plural rule: other)" = "%d interfaces\n";
+"%d IPv4 address (plural rule: zero)" = "Aucune adresse IPv4";
+"%d IPv4 address (plural rule: one)" = "Une adresse IPv4";
+"%d IPv4 address (plural rule: other)" = "%d adresses IPv4";
+"%d IPv6 address (plural rule: zero)" = "Aucune adresse IPv6";
+"%d IPv6 address (plural rule: one)" = "Une adresse IPv6";
+"%d IPv6 address (plural rule: other)" = "%d adresses IPv6";
 "%d orphan file (plural rule: zero)" = "";
 "%d orphan file (plural rule: one)" = "Un fichier orphelin trouvé.";
 "%d orphan file (plural rule: other)" = "%d fichiers orphelins trouvés.";

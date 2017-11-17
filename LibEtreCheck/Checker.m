@@ -15,6 +15,7 @@
 #import "FontsCollector.h"
 #import "GatekeeperCollector.h"
 #import "HardwareCollector.h"
+#import "NetworkCollector.h"
 #import "ITunesPlugInsCollector.h"
 #import "InternetPlugInsCollector.h"
 #import "KernelExtensionCollector.h"
@@ -85,7 +86,7 @@
   myResults = [NSMutableDictionary new];
   myCompleted = [NSMutableDictionary new];
   
-  int collectorCount = 40;
+  int collectorCount = 41;
   double increment = 100.0/collectorCount;
   
   // These are all special.
@@ -134,6 +135,7 @@
   [self 
     performCollections: 
       @[
+        [[NetworkCollector new] autorelease],
         [[SystemSoftwareCollector new] autorelease],
         [[ConfigurationCollector new] autorelease],
         [[TimeMachineCollector new] autorelease],
@@ -241,6 +243,7 @@
   [result
     appendAttributedString: [self getResult: @"firewire"]];
   [result appendAttributedString: [self getResult: @"virtualvolume"]];
+  [result appendAttributedString: [self getResult: @"network"]];
   [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];
   [result appendAttributedString: [self getResult: @"gatekeeper"]];
@@ -268,7 +271,7 @@
   [result appendAttributedString: [self getResult: @"timemachine"]];
   [result appendAttributedString: [self getResult: @"cpu"]];
   [result appendAttributedString: [self getResult: @"memory"]];
-  [result appendAttributedString: [self getResult: @"network"]];
+  [result appendAttributedString: [self getResult: @"networkusage"]];
   [result appendAttributedString: [self getResult: @"energy"]];
   [result appendAttributedString: [self getResult: @"vm"]];
   [result appendAttributedString: [self getResult: @"install"]];
@@ -282,7 +285,7 @@
 // Return an individual result.
 - (NSAttributedString *) getResult: (NSString *) key
   {
-  return [[self.completed objectForKey: key] result];
+  return [(Collector *)[self.completed objectForKey: key] result];
   }
 
 // Return an individual XML fragment.
@@ -304,6 +307,7 @@
   [[[Model model] xml] addFragment: [self getXML: @"usb"]];
   [[[Model model] xml] addFragment: [self getXML: @"firewire"]];
   [[[Model model] xml] addFragment: [self getXML: @"virtualvolume"]];
+  [[[Model model] xml] addFragment: [self getXML: @"network"]];
   [[[Model model] xml] addFragment: [self getXML: @"systemsoftware"]];
   [[[Model model] xml] addFragment: [self getXML: @"configurationfiles"]];
   [[[Model model] xml] addFragment: [self getXML: @"gatekeeper"]];
@@ -331,7 +335,7 @@
   [[[Model model] xml] addFragment: [self getXML: @"timemachine"]];
   [[[Model model] xml] addFragment: [self getXML: @"cpu"]];
   [[[Model model] xml] addFragment: [self getXML: @"memory"]];
-  [[[Model model] xml] addFragment: [self getXML: @"network"]];
+  [[[Model model] xml] addFragment: [self getXML: @"networkusage"]];
   [[[Model model] xml] addFragment: [self getXML: @"energy"]];
   [[[Model model] xml] addFragment: [self getXML: @"vm"]];
   [[[Model model] xml] addFragment: [self getXML: @"install"]];

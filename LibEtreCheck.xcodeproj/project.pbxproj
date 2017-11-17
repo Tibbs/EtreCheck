@@ -172,6 +172,18 @@
 		A5E742C71F8BF91900DA94CE /* Safari.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C51F8BF91900DA94CE /* Safari.m */; };
 		A5E742CA1F8BFA9100DA94CE /* SafariExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = A5E742C81F8BFA9100DA94CE /* SafariExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5E742CB1F8BFA9100DA94CE /* SafariExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E742C91F8BFA9100DA94CE /* SafariExtension.m */; };
+		A5F2C00D1FBD24B1003646DF /* UbiquityContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C00B1FBD24B1003646DF /* UbiquityContainer.h */; };
+		A5F2C00E1FBD24B1003646DF /* UbiquityContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C00C1FBD24B1003646DF /* UbiquityContainer.m */; };
+		A5F2C0111FBD2535003646DF /* UbiquityContainerDirectory.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C00F1FBD2535003646DF /* UbiquityContainerDirectory.h */; };
+		A5F2C0121FBD2535003646DF /* UbiquityContainerDirectory.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C0101FBD2535003646DF /* UbiquityContainerDirectory.m */; };
+		A5F2C0151FBD2E4D003646DF /* UbiquityFile.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C0131FBD2E4D003646DF /* UbiquityFile.h */; };
+		A5F2C0161FBD2E4D003646DF /* UbiquityFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C0141FBD2E4D003646DF /* UbiquityFile.m */; };
+		A5F2C0191FBD36A4003646DF /* NetworkCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C0171FBD36A4003646DF /* NetworkCollector.h */; };
+		A5F2C01A1FBD36A4003646DF /* NetworkCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C0181FBD36A4003646DF /* NetworkCollector.m */; };
+		A5F2C01F1FBE295F003646DF /* NetworkInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C01D1FBE295F003646DF /* NetworkInterface.h */; };
+		A5F2C0201FBE295F003646DF /* NetworkInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C01E1FBE295F003646DF /* NetworkInterface.m */; };
+		A5F2C0231FBE2E2A003646DF /* NetworkProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F2C0211FBE2E2A003646DF /* NetworkProxy.h */; };
+		A5F2C0241FBE2E2A003646DF /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C0221FBE2E2A003646DF /* NetworkProxy.m */; };
 		A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */; };
 		A5F65E5C1F7F20290062FA87 /* EtreCheckCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */; };
 		A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */; };
@@ -347,6 +359,18 @@
 		A5E742C91F8BFA9100DA94CE /* SafariExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SafariExtension.m; sourceTree = "<group>"; };
 		A5E765E71A03A9BD00BC994C /* VirtualVolumeCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualVolumeCollector.h; sourceTree = "<group>"; };
 		A5E765E81A03A9BD00BC994C /* VirtualVolumeCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualVolumeCollector.m; sourceTree = "<group>"; };
+		A5F2C00B1FBD24B1003646DF /* UbiquityContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityContainer.h; sourceTree = "<group>"; };
+		A5F2C00C1FBD24B1003646DF /* UbiquityContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityContainer.m; sourceTree = "<group>"; };
+		A5F2C00F1FBD2535003646DF /* UbiquityContainerDirectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityContainerDirectory.h; sourceTree = "<group>"; };
+		A5F2C0101FBD2535003646DF /* UbiquityContainerDirectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityContainerDirectory.m; sourceTree = "<group>"; };
+		A5F2C0131FBD2E4D003646DF /* UbiquityFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UbiquityFile.h; sourceTree = "<group>"; };
+		A5F2C0141FBD2E4D003646DF /* UbiquityFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UbiquityFile.m; sourceTree = "<group>"; };
+		A5F2C0171FBD36A4003646DF /* NetworkCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkCollector.h; sourceTree = "<group>"; };
+		A5F2C0181FBD36A4003646DF /* NetworkCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkCollector.m; sourceTree = "<group>"; };
+		A5F2C01D1FBE295F003646DF /* NetworkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkInterface.h; sourceTree = "<group>"; };
+		A5F2C01E1FBE295F003646DF /* NetworkInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkInterface.m; sourceTree = "<group>"; };
+		A5F2C0211FBE2E2A003646DF /* NetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkProxy.h; sourceTree = "<group>"; };
+		A5F2C0221FBE2E2A003646DF /* NetworkProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkProxy.m; sourceTree = "<group>"; };
 		A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
 		A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckCollector.h; sourceTree = "<group>"; };
 		A5F65E6B1F806FDB0062FA87 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -431,6 +455,8 @@
 				A5C292DF19A02B2700464E86 /* Collector.m */,
 				A5C292F019A13D0800464E86 /* HardwareCollector.h */,
 				A5C292F119A13D0800464E86 /* HardwareCollector.m */,
+				A5F2C0171FBD36A4003646DF /* NetworkCollector.h */,
+				A5F2C0181FBD36A4003646DF /* NetworkCollector.m */,
 				A5C292F319A2214E00464E86 /* VideoCollector.h */,
 				A5C292F419A2214E00464E86 /* VideoCollector.m */,
 				A5C292F619A2220400464E86 /* SystemSoftwareCollector.h */,
@@ -648,6 +674,16 @@
 				A5E742C91F8BFA9100DA94CE /* SafariExtension.m */,
 				A5E742C41F8BF91900DA94CE /* Safari.h */,
 				A5E742C51F8BF91900DA94CE /* Safari.m */,
+				A5F2C0211FBE2E2A003646DF /* NetworkProxy.h */,
+				A5F2C0221FBE2E2A003646DF /* NetworkProxy.m */,
+				A5F2C01D1FBE295F003646DF /* NetworkInterface.h */,
+				A5F2C01E1FBE295F003646DF /* NetworkInterface.m */,
+				A5F2C0131FBD2E4D003646DF /* UbiquityFile.h */,
+				A5F2C0141FBD2E4D003646DF /* UbiquityFile.m */,
+				A5F2C00F1FBD2535003646DF /* UbiquityContainerDirectory.h */,
+				A5F2C0101FBD2535003646DF /* UbiquityContainerDirectory.m */,
+				A5F2C00B1FBD24B1003646DF /* UbiquityContainer.h */,
+				A5F2C00C1FBD24B1003646DF /* UbiquityContainer.m */,
 				A54279351F8EA7BD009E7D29 /* UserNotification.h */,
 				A54279361F8EA7BD009E7D29 /* UserNotification.m */,
 				A542793A1F903EAE009E7D29 /* Adware.h */,
@@ -675,11 +711,15 @@
 				A589CD9C1F71748700D66592 /* XMLBuilder.h in Headers */,
 				A542793C1F903EAE009E7D29 /* Adware.h in Headers */,
 				A589CDAD1F71749E00D66592 /* SystemLaunchDaemonsCollector.h in Headers */,
+				A5F2C0231FBE2E2A003646DF /* NetworkProxy.h in Headers */,
+				A5F2C0111FBD2535003646DF /* UbiquityContainerDirectory.h in Headers */,
 				A589CDBF1F7174FD00D66592 /* DiagnosticsCollector.h in Headers */,
 				A589CD6A1F7165AC00D66592 /* NSObject+Etresoft.h in Headers */,
 				A503BF9A1F82AD8D00473A24 /* LocalizedString.h in Headers */,
+				A5F2C00D1FBD24B1003646DF /* UbiquityContainer.h in Headers */,
 				A589CDB51F7174B900D66592 /* AudioPlugInsCollector.h in Headers */,
 				A589CDA01F71749E00D66592 /* VideoCollector.h in Headers */,
+				A5F2C0151FBD2E4D003646DF /* UbiquityFile.h in Headers */,
 				A589CDB11F7174B900D66592 /* LoginItemsCollector.h in Headers */,
 				A589CDB71F7174B900D66592 /* ITunesPlugInsCollector.h in Headers */,
 				A589CD921F71745300D66592 /* NSDictionary+Etresoft.h in Headers */,
@@ -709,8 +749,10 @@
 				A589CDBB1F7174F200D66592 /* FontsCollector.h in Headers */,
 				A503BFAD1F83DF9B00473A24 /* Actions.h in Headers */,
 				A5E742C11F89972800DA94CE /* LaunchdCollector.h in Headers */,
+				A5F2C0191FBD36A4003646DF /* NetworkCollector.h in Headers */,
 				A589CDC01F7174FD00D66592 /* LogCollector.h in Headers */,
 				A589CDA71F71749E00D66592 /* ConfigurationCollector.h in Headers */,
+				A5F2C01F1FBE295F003646DF /* NetworkInterface.h in Headers */,
 				A589CD971F71747400D66592 /* CRC32.h in Headers */,
 				A589CD961F71746A00D66592 /* NumberFormatter.h in Headers */,
 				A589CDB91F7174B900D66592 /* SafariExtensionsCollector.h in Headers */,
@@ -876,11 +918,14 @@
 				A589CD5C1F7164C900D66592 /* CPUUsageCollector.m in Sources */,
 				A589CD4D1F7164C900D66592 /* UserLaunchAgentsCollector.m in Sources */,
 				A5E742C21F89972800DA94CE /* LaunchdCollector.m in Sources */,
+				A5F2C0201FBE295F003646DF /* NetworkInterface.m in Sources */,
 				A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */,
 				A589CD861F71690900D66592 /* NumberFormatter.m in Sources */,
 				A589CD501F7164C900D66592 /* InternetPlugInsCollector.m in Sources */,
 				A542793D1F903EAE009E7D29 /* Adware.m in Sources */,
+				A5F2C01A1FBD36A4003646DF /* NetworkCollector.m in Sources */,
 				A589CD531F7164C900D66592 /* UserAudioPlugInsCollector.m in Sources */,
+				A5F2C0161FBD2E4D003646DF /* UbiquityFile.m in Sources */,
 				A589CD441F7164C900D66592 /* ConfigurationCollector.m in Sources */,
 				A589CD7C1F7168E900D66592 /* NSAttributedString+Etresoft.m in Sources */,
 				A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */,
@@ -899,6 +944,7 @@
 				A5E742CB1F8BFA9100DA94CE /* SafariExtension.m in Sources */,
 				A589CD591F7164C900D66592 /* ApplicationsCollector.m in Sources */,
 				A589CD7E1F7168E900D66592 /* NSObject+Etresoft.m in Sources */,
+				A5F2C0121FBD2535003646DF /* UbiquityContainerDirectory.m in Sources */,
 				A589CD571F7164C900D66592 /* PreferencePanesCollector.m in Sources */,
 				A589CD8A1F71694200D66592 /* TTTLocalizedPluralString.m in Sources */,
 				A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */,
@@ -927,6 +973,7 @@
 				A589CD401F7164C900D66592 /* DiskCollector.m in Sources */,
 				A589CD411F7164C900D66592 /* USBCollector.m in Sources */,
 				A589CD5B1F7164C900D66592 /* ProcessesCollector.m in Sources */,
+				A5F2C00E1FBD24B1003646DF /* UbiquityContainer.m in Sources */,
 				A589CD881F71692900D66592 /* DiagnosticEvent.m in Sources */,
 				A589CD3C1F7164C900D66592 /* HardwareCollector.m in Sources */,
 				A589CD841F7168EF00D66592 /* Utilities.m in Sources */,
@@ -948,6 +995,7 @@
 				A589CD5E1F7164C900D66592 /* NetworkUsageCollector.m in Sources */,
 				A589CD3E1F7164C900D66592 /* SystemSoftwareCollector.m in Sources */,
 				A57A3A861FA6B65F001DBE47 /* Drive.m in Sources */,
+				A5F2C0241FBE2E2A003646DF /* NetworkProxy.m in Sources */,
 				A589CD471F7164C900D66592 /* StartupItemsCollector.m in Sources */,
 				A589CD4F1F7164C900D66592 /* PlugInsCollector.m in Sources */,
 			);

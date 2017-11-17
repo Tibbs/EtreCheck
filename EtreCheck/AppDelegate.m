@@ -1641,7 +1641,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      double current = [self.progress doubleValue];
+      //double current = [self.progress doubleValue];
       
       // Try to make Snow Leopard update.
       //if(((current + amount) - [self.progress doubleValue]) > 1)

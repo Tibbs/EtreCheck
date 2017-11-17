@@ -24,7 +24,7 @@
 // Constructor.
 - (id) init
   {
-  self = [super initWithName: @"network"];
+  self = [super initWithName: @"networkusage"];
   
   if(self != nil)
     {
