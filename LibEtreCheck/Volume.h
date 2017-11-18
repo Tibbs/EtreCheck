@@ -48,6 +48,10 @@
   // A volume has one or more containing devices.
   // Use device identifier only to avoid cicular references.
   NSMutableSet * myContainingDevices;
+  
+  // Keep track of how many times a volume is printed so that printing only
+  // happens once.
+  int myPrintCount;
   }
   
 // The UUID.
@@ -80,6 +84,10 @@
 // A volume has one or more containing drives.
 // Use device identifier only to avoid cicular references.
 @property (retain, readonly, nonnull)  NSSet * containingDevices;
+
+// Keep track of how many times a volume is printed so that printing only
+// happens once.
+@property (assign) int printCount;
 
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 

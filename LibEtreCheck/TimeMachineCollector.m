@@ -376,7 +376,7 @@
 // Print the volume.
 - (void) printVolume: (Volume *) volume
   {
-  NSString * volumeName = [Utilities cleanPath: volume.name];
+  NSString * volumeName = [Utilities cleanName: volume.name];
   
   NSString * diskSize = ECLocalizedString(@"Unknown");
 
@@ -650,7 +650,7 @@
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
 
-  NSString * safeName = [Utilities cleanPath: name];
+  NSString * safeName = [Utilities cleanName: name];
   
   if([safeName length] == 0)
     safeName = name;

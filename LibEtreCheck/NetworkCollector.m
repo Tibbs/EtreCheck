@@ -239,7 +239,7 @@
 
   for(NetworkInterface * interface in self.interfaces)
     {
-    [interface buildAttributedStringValue: self.result];
+    [self.result appendAttributedString: interface.attributedStringValue];
     
     hasData = YES;
     }

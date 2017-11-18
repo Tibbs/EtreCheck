@@ -71,3 +71,17 @@
 "usedram" = "Used RAM";
 "filecache" = "Cached files";
 "swapused" = "Swap Used";
+
+"efivolume" = "EFI";
+"corestoragevolume" = "Core Storage Container";
+"raidmembervolume" = "RAID Member";
+"raidsetvolume" = "RAID Set";
+"fusionvolume" = "Fusion Drive";
+"apfscontainervolume" = "APFS Container";
+"prebootvolume" = "APFS Preboot";
+"recovery" = "Recovery";
+"vm" = "APFS VM";
+
+"serialata" = "Serial ATA";
+"nvme" = "NVM Express";
+

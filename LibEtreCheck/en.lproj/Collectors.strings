@@ -46,4 +46,4 @@
 "hiddenapps" = "Other Apps:";
 "etrecheckdeletedfiles" = "Files deleted by EtreCheck:";
 "install" = "Software installs (last 30 days):";
-"virtualvolume" = "Virtual disks:";
+"virtualvolume" = "Other Volumes:";

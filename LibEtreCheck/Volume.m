@@ -51,6 +51,21 @@
   return myContainingDevices;
   }
 
+// If I change the indent, I'll need to rebuild the output.
+- (void) setIndent: (int) indent
+  {
+  if(myIndent != indent)
+    {
+    [self willChangeValueForKey: @"indent"];
+    
+    myIndent = indent;
+    
+    self.attributedStringValue = nil;
+    
+    [self didChangeValueForKey: @"indent"];
+    }
+  }
+  
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist
@@ -136,7 +151,7 @@
   (NSMutableAttributedString *) attributedString
   {
   NSString * cleanName = 
-    [self.name length] > 0 ? [Utilities cleanPath: self.name] : @"";
+    [self.name length] > 0 ? [Utilities cleanName: self.name] : @"";
     
   NSString * volumeMountPoint = self.mountpoint;
   
@@ -154,16 +169,34 @@
           @" - %@", 
           ECLocalizedStringFromTable(self.filesystem, @"System")];
     
-  NSString * volumeSize = [self byteCountString: self.size];
-  NSString * volumeFree = [self byteCountString: self.freeSpace];
+  NSString * volumeType = @"";
   
-  if(fileSystemName.length > 0)
-    {
-    NSString * status = @"";
+  if(self.type.length > 0)
+    volumeType = 
+      [NSString stringWithFormat: @"[%@]", ECLocalizedString(self.type)];
+      
+  NSString * volumeSize = @"";
+  NSString * volumeFree = @"";
+  
+  if(self.size > 0)
+    volumeSize = [self byteCountString: self.size];
+  
+  NSString * status = @"";
     
+  if(self.mountpoint.length > 0)
+    {
+    volumeFree = 
+      [NSString 
+        stringWithFormat: 
+          ECLocalizedString(@"(%@ free)"), 
+          [self byteCountString: self.freeSpace]];
+          
     if(self.freeSpace < (1024 * 1024 * 1024 * 15L))
       status = ECLocalizedString(@" (Low!)");
-
+    }
+    
+  if(fileSystemName.length > 0)
+    {
     volumeInfo =
       [NSString
         stringWithFormat:
@@ -172,13 +205,9 @@
           self.identifier,
           fileSystemName,
           volumeMountPoint,
-          self.type,
+          volumeType,
           [self byteCountString: self.size],
-          volumeFree.length > 0
-            ? [NSString
-                stringWithFormat:
-                ECLocalizedString(@"(%@ free)"), volumeFree] 
-            : @"",
+          volumeFree,
           status];
     }
   else
@@ -186,7 +215,7 @@
       [NSString
         stringWithFormat:
           ECLocalizedString(@"(%@) %@ %@: %@\n"),
-          self.identifier, volumeMountPoint, self.type, volumeSize];
+          self.identifier, volumeMountPoint, volumeType, volumeSize];
     
   if(self.errors.count > 0)
     [attributedString 
@@ -196,7 +225,7 @@
           NSForegroundColorAttributeName : [[Utilities shared] red],
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
-  if(self.mountpoint.length == 0)
+  else if(self.mountpoint.length == 0)
     [attributedString 
       appendString: volumeInfo 
       attributes:    
@@ -206,29 +235,6 @@
   else
     [attributedString appendString: volumeInfo];
 
-  if(self.containingDevices.count > 0)
-    for(NSString * device in self.containingDevices)
-      {
-      Drive * drive = [[[Model model] storageDevices] objectForKey: device];
-      
-      if([drive respondsToSelector: @selector(isDrive)])
-        {
-        NSString * driveName =
-          self.name.length > 0
-            ? self.name
-            : @"";
-            
-        [attributedString
-          appendString:
-            [NSString
-              stringWithFormat:
-                @"    %@ %@%@\n",
-                driveName, 
-                drive.identifier, 
-                [self byteCountString: drive.size]]];
-        }
-      }
-      
   // Don't forget the volumes.
   NSArray * volumeDevices = 
     [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
@@ -239,11 +245,14 @@
     
     if([volume respondsToSelector: @selector(isVolume)])
       {
-      [attributedString appendString: @"    "];
+      volume.indent = self.indent + 1;
+      
       [attributedString 
         appendAttributedString: volume.attributedStringValue];
       }
     }
+    
+  self.printCount = self.printCount + 1;
   }
   
 // Build the XML value.

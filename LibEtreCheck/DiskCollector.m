@@ -68,6 +68,24 @@
   
   // Collect RAIDs.
   [self collectRAIDs];
+
+  // There should always be data found.
+  [self.result appendAttributedString: [self buildTitle]];
+
+  [self printDrives];
+  [self exportDrives];
+  
+  if([[[Model model] storageDevices] count] == 0)
+    [self.result
+      appendString:
+        ECLocalizedString(@"    Drive information not found!\n")
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red]
+        }];
+
+  [self.result appendCR];
   }
   
 #pragma mark - Collect devices
@@ -598,6 +616,46 @@
         if(storageDevice != nil)
           [volume addContainingDevice: storageDevice.identifier];
         }
+  }
+
+#pragma mark - Output
+
+// Print all drives found.
+- (void) printDrives
+  {
+  // Get a sorted list of devices.
+  NSArray * storageDevices = 
+    [[[[Model model] storageDevices] allKeys] 
+      sortedArrayUsingSelector: @selector(compare:)];
+  
+  // Now export all drives matching this type.
+  for(NSString * device in storageDevices)
+    {
+    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    
+    drive.indent = 1;
+    
+    if([drive respondsToSelector: @selector(isDrive)])
+      [self.result appendAttributedString: drive.attributedStringValue];
+    }
+  }
+  
+// Export all drives found to XML.
+- (void) exportDrives
+  {
+  // Get a sorted list of devices.
+  NSArray * storageDevices = 
+    [[[[Model model] storageDevices] allKeys] 
+      sortedArrayUsingSelector: @selector(compare:)];
+  
+  // Now export all drives matching this type.
+  for(NSString * device in storageDevices)
+    {
+    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    
+    if([drive respondsToSelector: @selector(isDrive)])
+      [drive buildXMLValue: self.model];
+    }
   }
 
 #pragma mark - Utility methods

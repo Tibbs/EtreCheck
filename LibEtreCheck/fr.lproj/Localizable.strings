@@ -50,7 +50,7 @@
 "    Auto backup: " = "    Sauvegarde automatique : ";
 "    Battery: Health = %@ - Cycle count = %@\n" = "    Batterie : Santé = %@ - Nombre de cycles = %@\n";
 "    Destinations:\n" = "    Destinations :\n";
-"    Disk information not found!\n" = "    Informations des disques non trouvés !\n";
+"    Drive information not found!\n" = "    Informations des disques non trouvés !\n";
 "    Handoff/Airdrop2: %@\n" = "    Handoff/Airdrop2 : %@\n";
 "    iCloud Quota: %@ available" = "    Quota iCloud : %@ disponible";
 "    iCloud Status: " = "    Bilan iCloud : ";
@@ -131,6 +131,7 @@
 "Encrypted:" = "Crypté :";
 "EtreCheck version: %@ (%@)\nReport generated %@\n" = "EtreCheck version : %@ (%@)\nRapport créé le %@\n";
 "Excellent\n%@\n" = "Excellent\n%@\n";
+"External" = "Externe";
 "failed" = "échec";
 "Failed to read adware signatures!" = "Échec de lire les signatures numériques adware !";
 "GB" = "Go";
@@ -144,6 +145,7 @@
 "Input     " = "Entrée    ";
 "installed %@" = "installé %@";
 "Integrated" = "Intégré";
+"Internal" = "Interne";
 "invalid?" = "invalide ?";
 "KB" = "Ko";
 "Kernel" = "Noyau";
@@ -252,3 +254,17 @@
 "usedram" = "RAM utilisé";
 "filecache" = "Fichiers en cache";
 "swapused" = "Fichier d’échange utilisé";
+
+"efivolume" = "EFI";
+"corestoragevolume" = "Conteneur Core Storage";
+"raidmembervolume" = "Membre du RAID";
+"raidsetvolume" = "Matrice RAID";
+"fusionvolume" = "Fusion Drive";
+"apfscontainervolume" = "Conteneur APFS";
+"prebootvolume" = "APFS Preboot";
+"recovery" = "Récupération";
+"vm" = "APFS VM";
+
+"serialata" = "Serial ATA";
+"nvme" = "NVM Express";
+

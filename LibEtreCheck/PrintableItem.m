@@ -5,6 +5,7 @@
 
 #import "PrintableItem.h"
 #import "XMLBuilder.h"
+#import "NSMutableAttributedString+Etresoft.h"
 
 // Any kind of item that can be printed in an EtreCheck report.
 @implementation PrintableItem
@@ -24,6 +25,9 @@
 // The XML builder.
 @synthesize xmlBuilder = myXMLBuilder;
 
+// The attributed string indent value.
+@synthesize indent = myIndent;
+
 // The attributed string value.
 - (NSMutableAttributedString * ) attributedStringValue
   {
@@ -31,12 +35,31 @@
     {
     myAttributedStringValue = [NSMutableAttributedString new];
     
+    for(int i = 0; i < self.indent; ++i)
+      [myAttributedStringValue appendString: @"    "];
+      
     [self buildAttributedStringValue: myAttributedStringValue];
     }
     
   return myAttributedStringValue;
   }
-  
+
+// Set the attributed string value.
+- (void) setAttributedStringValue: 
+  (NSMutableAttributedString *) attributedStringValue
+  {
+  if(myAttributedStringValue != attributedStringValue)
+    {
+    [self willChangeValueForKey: @""];
+    
+    [myAttributedStringValue release];
+    
+    myAttributedStringValue = [attributedStringValue retain];
+    
+    [self didChangeValueForKey: @""];
+    }
+  }
+    
 // The XML value.
 - (XMLBuilderElement * ) xml
   {

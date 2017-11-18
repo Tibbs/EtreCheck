@@ -85,6 +85,9 @@
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data;
 
+// Redact a name.
++ (NSString *) cleanName: (NSString *) name;
+
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path;
 

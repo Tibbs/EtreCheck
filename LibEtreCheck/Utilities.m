@@ -245,6 +245,33 @@
   return result;
   }
 
+// Redact a name.
++ (NSString *) cleanName: (NSString *) name
+  {
+  if([name isEqualToString: @"Macintosh HD"])
+    return name;
+    
+  if([name isEqualToString: @"Recovery HD"])
+    return name;
+
+  if([name isEqualToString: @"Flash Player"])
+    return name;
+
+  if(name.length > 3)
+    return 
+      [NSString 
+        stringWithFormat: 
+          @"%@%@%@", 
+          [name substringToIndex: 1], 
+          [@"*" 
+            stringByPaddingToLength: name.length - 2 
+            withString: @"*" 
+            startingAtIndex: 0],
+          [name substringFromIndex: name.length - 1]];
+    
+  return name;
+  }
+  
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path
   {

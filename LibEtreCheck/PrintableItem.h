@@ -24,6 +24,9 @@
   
   // The XML builder.
   XMLBuilder * myXMLBuilder;
+  
+  // The attributed string indent value.
+  int myIndent;
   }
   
 // The modification date for this item.
@@ -34,5 +37,8 @@
 
 // The XML builder.
 @property (readonly, nonnull) XMLBuilder * xmlBuilder;
+
+// The attributed string indent value.
+@property (assign) int indent;
 
 @end

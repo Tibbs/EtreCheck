@@ -239,10 +239,10 @@
   [result appendAttributedString: [self getResult: @"hardware"]];
   [result appendAttributedString: [self getResult: @"video"]];
   [result appendAttributedString: [self getResult: @"disk"]];
+  [result appendAttributedString: [self getResult: @"virtualvolume"]];
   [result appendAttributedString: [self getResult: @"usb"]];
   [result
     appendAttributedString: [self getResult: @"firewire"]];
-  [result appendAttributedString: [self getResult: @"virtualvolume"]];
   [result appendAttributedString: [self getResult: @"network"]];
   [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];

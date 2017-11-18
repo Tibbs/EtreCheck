@@ -13,7 +13,7 @@
   (nonnull NSMutableAttributedString *) attributedString;
 
 // The attributed string value.
-@property (readonly, nonnull) 
+@property (retain, nullable) 
   NSMutableAttributedString * attributedStringValue;
 
 @end

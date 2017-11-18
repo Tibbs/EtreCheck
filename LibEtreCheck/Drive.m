@@ -115,7 +115,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"%@ %@%@ %@\n",
+          @"%@ %@ %@ %@\n",
           driveName, 
           self.identifier, 
           [self byteCountString: self.size], 
@@ -134,6 +134,24 @@
             dictionaryWithObjectsAndKeys:
               [NSColor redColor], NSForegroundColorAttributeName, nil]];
               
+  NSMutableString * indent = [NSMutableString new];
+  
+  for(int i = 0; i < self.indent; ++i)
+    [indent appendString: @"    "];
+    
+  [attributedString
+    appendString:
+      [NSString
+        stringWithFormat:
+          @"%@%@ %@ %@ %@\n",
+          indent,
+          self.internal
+            ? ECLocalizedString(@"Internal")
+            : ECLocalizedString(@"External"), 
+          self.bus, 
+          self.busSpeed,
+          ECLocalizedString(self.type)]];
+
   // Don't forget the volumes.
   NSArray * volumeDevices = 
     [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
@@ -144,7 +162,8 @@
     
     if([volume respondsToSelector: @selector(isVolume)])
       {
-      [attributedString appendString: @"    "];
+      volume.indent = self.indent + 1;
+      
       [attributedString 
         appendAttributedString: volume.attributedStringValue];
       }

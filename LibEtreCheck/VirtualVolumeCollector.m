@@ -38,61 +38,12 @@
   // There should always be data found.
   [self.result appendAttributedString: [self buildTitle]];
 
-  [self printDrives];
-  [self exportDrives];
-  
   [self printVolumes];
   [self exportVolumes];
-
-  if([[[Model model] storageDevices] count] == 0)
-    [self.result
-      appendString:
-        ECLocalizedString(@"    Disk information not found!\n")
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] red]
-        }];
 
   [self.result appendCR];
   }
   
-// Print all drives found.
-- (void) printDrives
-  {
-  // Get a sorted list of devices.
-  NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
-  
-  // Now export all drives matching this type.
-  for(NSString * device in storageDevices)
-    {
-    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
-    
-    if([drive respondsToSelector: @selector(isDrive)])
-      [drive buildAttributedStringValue: self.result];
-    }
-  }
-  
-// Export all drives found to XML.
-- (void) exportDrives
-  {
-  // Get a sorted list of devices.
-  NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
-  
-  // Now export all drives matching this type.
-  for(NSString * device in storageDevices)
-    {
-    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
-    
-    if([drive respondsToSelector: @selector(isDrive)])
-      [drive buildXMLValue: self.model];
-    }
-  }
-
 // Print all volumes found.
 - (void) printVolumes
   {
@@ -107,7 +58,12 @@
     Volume * volume = [[[Model model] storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
-      [volume buildAttributedStringValue: self.result];
+      if(volume.printCount < 1)
+        {
+        volume.indent = 1;
+      
+        [self.result appendAttributedString: volume.attributedStringValue];
+        }
     }
   }
   
