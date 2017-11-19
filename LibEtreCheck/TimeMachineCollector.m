@@ -376,7 +376,7 @@
 // Print the volume.
 - (void) printVolume: (Volume *) volume
   {
-  NSString * volumeName = [Utilities cleanName: volume.name];
+  NSString * cleanName = [Utilities cleanName: volume.name];
   
   NSString * diskSize = ECLocalizedString(@"Unknown");
 
@@ -392,10 +392,11 @@
         stringWithFormat:
           ECLocalizedString(
             @"        %@: Disk size: %@ - Disk used: %@\n"),
-          volumeName, diskSize, spaceRequired]];
+          cleanName, diskSize, spaceRequired]];
 
   [self.model startElement: @"volume"];
   [self.model addElement: @"name" value: volume.name]; 
+  [self.model addElement: @"cleanname" value: cleanName]; 
 
   [self.model 
     addElement: @"size" 
@@ -650,17 +651,15 @@
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
 
-  NSString * safeName = [Utilities cleanName: name];
+  NSString * cleanName = [Utilities cleanName: name];
   
-  if([safeName length] == 0)
-    safeName = name;
-    
   NSString * lastused = @"";
 
   if([last integerValue] == 1)
     lastused = ECLocalizedString(@"(Last used)");
 
-  [self.model addElement: @"name" value: safeName];
+  [self.model addElement: @"name" value: name];
+  [self.model addElement: @"cleanname" value: cleanName];
   [self.model addElement: @"type" value: kind];
   [self.model addElement: @"lastused" boolValue: last.boolValue];
   
@@ -671,7 +670,7 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"        %@ [%@] %@\n", safeName, kind, lastused]];
+          @"        %@ [%@] %@\n", cleanName, kind, lastused]];
   }
 
 // Print the total size of the backup.

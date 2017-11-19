@@ -6,6 +6,7 @@
 #import "StorageDevice.h"
 #import "XMLBuilder.h"
 #import "ByteCountFormatter.h"
+#import "Utilities.h"
 
 @implementation StorageDevice
 
@@ -93,10 +94,14 @@
 // Build the XML value.
 - (void) buildXMLValue: (XMLBuilder *) xml
   {
+  NSString * cleanName = 
+    [self.name length] > 0 ? [Utilities cleanName: self.name] : @"";
+
   // This class should never be directly instatiated, so omit the top
   // level element.
   [xml addElement: @"device" value: self.identifier];
   [xml addElement: @"name" value: self.name];
+  [xml addElement: @"cleanname" value: cleanName];
   [xml 
     addElement: @"size" 
     valueWithUnits: [myByteCountFormatter stringFromByteCount: self.size]];

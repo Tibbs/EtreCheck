@@ -257,6 +257,9 @@
   if([name isEqualToString: @"Flash Player"])
     return name;
 
+  if([name isEqualToString: @"Disk Image"])
+    return name;
+
   if(name.length > 3)
     return 
       [NSString 
