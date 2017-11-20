@@ -563,7 +563,7 @@
   
   [self.model addElement: @"date" date: event.date];
   [self.model addElement: @"name" value: event.name];
-  [self.model addElement: @"type" value: [self getEventType: event.type]];
+  [self.model addElement: @"type" intValue: event.type];
 
   switch(event.type)
     {

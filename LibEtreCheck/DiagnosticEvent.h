@@ -9,7 +9,7 @@
 // Try to extract events from log files and various types of system reports.
 typedef enum EventType
   {
-  kUnknown,
+  kUnknown = 0,
   kCrash,
   kCPU,
   kHang,
