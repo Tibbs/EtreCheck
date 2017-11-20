@@ -99,6 +99,13 @@
   
   [self.model addElement: @"name" value: OSName];
   [self.model addElement: @"version" value: [[OSVersion shared] version]];
+  
+  [self.model 
+    addElement: @"majorversion" intValue: [[OSVersion shared] major] - 4];
+  
+  [self.model 
+    addElement: @"minorversion" intValue: [[OSVersion shared] minor]];
+  
   [self.model addElement: @"build" value: [[OSVersion shared] build]];
   
   int days = 0;
