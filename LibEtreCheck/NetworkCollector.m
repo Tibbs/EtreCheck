@@ -337,7 +337,17 @@
   int version = [[OSVersion shared] major];
 
   if(version >= kSierra)
-    [self.model addElement: @"icloudfree" longlongValue: self.iCloudFree];
+    {
+    ByteCountFormatter * formatter = [ByteCountFormatter new];
+        
+    // Apple uses 1024 for this one.
+    formatter.k1000 = 1024.0;
+        
+    NSString * iCloudFree = 
+      [formatter stringFromByteCount: self.iCloudFree];
+
+    [self.model addElement: @"icloudfree" valueWithUnits: iCloudFree];
+    }
   }
 
 @end
