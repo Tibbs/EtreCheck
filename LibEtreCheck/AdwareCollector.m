@@ -40,7 +40,8 @@
   
   if(self != nil)
     {
-    [self loadSignatures];
+    [self loadAdwareSignatures];
+    [self loadWhitelistSignatures];
     [self buildDatabases];
     }
     
@@ -48,7 +49,7 @@
   }
 
 // Load signatures from an obfuscated list of signatures.
-- (void) loadSignatures
+- (void) loadAdwareSignatures
   {
   NSBundle * bundle = [NSBundle bundleForClass: [self class]];
 
@@ -82,14 +83,6 @@
     if(plist != nil)
       {
       [self
-        addSignatures: [plist objectForKey: kWhitelistKey]
-          forKey: kWhitelistKey];
-      
-      [self
-        addSignatures: [plist objectForKey: kWhitelistPrefixKey]
-          forKey: kWhitelistPrefixKey];
-
-      [self
         addSignatures: [plist objectForKey: kAdwareExtensionsKey]
           forKey: kAdwareExtensionsKey];
       
@@ -105,6 +98,30 @@
         addSignatures: [plist objectForKey: @"blacklist_match"]
         forKey: kBlacklistMatchKey];
       }
+    }
+  }
+
+// Load signatures from a list of whitelist signatures.
+- (void) loadWhitelistSignatures
+  {
+  NSBundle * bundle = [NSBundle bundleForClass: [self class]];
+
+  NSString * signaturePath =
+    [bundle pathForResource: @"whitelist" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: signaturePath];
+  
+  NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
+  
+  if(plist != nil)
+    {
+    [self
+      addSignatures: [plist objectForKey: kWhitelistKey]
+        forKey: kWhitelistKey];
+    
+    [self
+      addSignatures: [plist objectForKey: kWhitelistPrefixKey]
+        forKey: kWhitelistPrefixKey];
     }
   }
 

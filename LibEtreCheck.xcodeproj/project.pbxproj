@@ -23,6 +23,7 @@
 		A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */; };
 		A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */; };
 		A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */; };
+		A529E83B1FC35AC40020EF49 /* whitelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = A529E83A1FC35AC40020EF49 /* whitelist.plist */; };
 		A542792F1F8D4D64009E7D29 /* PrintableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A542792E1F8D4D64009E7D29 /* PrintableItem.m */; };
 		A54279331F8E6F8D009E7D29 /* SystemLaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */; };
 		A54279341F8E6F8D009E7D29 /* SystemLaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A54279321F8E6F8D009E7D29 /* SystemLaunchdCollector.m */; };
@@ -260,6 +261,7 @@
 		A5257D3E19AC10E3003084C8 /* Checker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Checker.h; path = ../LibEtreCheck/Checker.h; sourceTree = "<group>"; };
 		A5257D3F19AC10E3003084C8 /* Checker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Checker.m; path = ../LibEtreCheck/Checker.m; sourceTree = "<group>"; };
 		A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		A529E83A1FC35AC40020EF49 /* whitelist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = whitelist.plist; sourceTree = "<group>"; };
 		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLBuilder.h; path = ../LibEtreCheck/XMLBuilder.h; sourceTree = "<group>"; };
 		A53822391D5FF27200484388 /* XMLBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XMLBuilder.m; path = ../LibEtreCheck/XMLBuilder.m; sourceTree = "<group>"; };
 		A53EA3751C6FCF0200F270B0 /* NSDate+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Etresoft.h"; sourceTree = "<group>"; };
@@ -631,6 +633,7 @@
 				A589CD211F71644500D66592 /* Info.plist */,
 				A542793E1F904709009E7D29 /* appleLaunchd.plist */,
 				A54279401F904728009E7D29 /* adware.plist */,
+				A529E83A1FC35AC40020EF49 /* whitelist.plist */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
 				A5F65E6C1F806FDB0062FA87 /* Localizable.strings */,
@@ -876,6 +879,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A529E83B1FC35AC40020EF49 /* whitelist.plist in Resources */,
 				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,
 				A542793F1F904709009E7D29 /* appleLaunchd.plist in Resources */,
 				A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */,

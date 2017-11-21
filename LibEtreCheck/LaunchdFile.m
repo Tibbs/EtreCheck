@@ -51,6 +51,9 @@
 // Is the file loaded?
 @dynamic loaded;
 
+// The safety score.
+@synthesize safetyScore = mySafetyScore;
+
 // Get the status.
 - (NSString *) status
   {
@@ -121,6 +124,9 @@
     if(self != nil)
       {
       myLoadedTasks = [NSMutableArray new];
+      
+      // Start off with a safety score of 10. Adware will lose that.
+      mySafetyScore = 10;
       
       [self parseFromPath: path];
 
@@ -209,9 +215,28 @@
     
   myConfigScriptValid = (self.label.length > 0);
     
+  [self calculateSafetyScore];
+    
   [self checkSignature];
   }
 
+// Calculate a safety score.
+- (void) calculateSafetyScore
+  {
+  // If the config script is valid, award 10 points.
+  if(self.configScriptValid)
+    {
+    self.safetyScore = self.safetyScore + 10;
+    
+    // If the label matches the file name, award another 10 points.
+    NSString * baseName = 
+      [[self.path lastPathComponent] stringByDeletingPathExtension];
+      
+    if([baseName isEqualToString: self.label])
+      self.safetyScore = self.safetyScore + 10;
+    }
+  }
+  
 // Collect the signature of a launchd item.
 - (void) checkSignature
   {
@@ -227,6 +252,7 @@
     if([self.signature isEqualToString: kSignatureApple])
       {
       self.authorName = @"Apple, Inc.";
+      self.safetyScore = 100;
       return;
       }
       
@@ -238,6 +264,7 @@
       if(developer.length > 0)
         {
         self.authorName = developer;
+        self.safetyScore = 100;
         return;
         }
       }
@@ -650,6 +677,8 @@
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];
 
+  [xml addElement: @"safety" intValue: self.safetyScore];
+  
   [xml endElement: @"launchdfile"];
   }
 

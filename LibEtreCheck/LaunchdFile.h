@@ -34,6 +34,9 @@
   
   // The executable CRC.
   NSString * myExecutableCRC;
+  
+  // The safety scrore.
+  int mySafetyScore;
   }
 
 // The config script contents.
@@ -59,6 +62,9 @@
 
 // Is the file loaded?
 @property (readonly) BOOL loaded;
+
+// The safety scrore.
+@property (assign) int safetyScore;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;
