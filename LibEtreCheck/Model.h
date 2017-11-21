@@ -45,6 +45,9 @@
   NSImage * myMachineIcon;
 
   NSString * myModel;
+  NSString * myModelType;
+  int myModelMajorVersion;
+  int myModelMinorVersion;
 
   NSString * mySerialCode;
 
@@ -104,6 +107,15 @@
 
 // The model code.
 @property (retain) NSString * model;
+
+// The model type.
+@property (readonly) NSString * modelType;
+
+// The model major version.
+@property (readonly) int modelMajorVersion;
+
+// The model minor version.
+@property (readonly) int modelMinorVersion;
 
 // The serial number code for Apple lookups.
 @property (retain) NSString * serialCode;

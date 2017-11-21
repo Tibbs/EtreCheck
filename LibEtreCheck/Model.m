@@ -29,6 +29,9 @@
 @synthesize physicalRAM = myPhysicalRAM;
 @synthesize machineIcon = myMachineIcon;
 @synthesize model = myModel;
+@synthesize modelType = myModelType;
+@synthesize modelMajorVersion = myModelMajorVersion;
+@synthesize modelMinorVersion = myModelMinorVersion;
 @synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize launchd = myLaunchd;
@@ -69,6 +72,29 @@
   return model;
   }
 
+// Get the model.
+- (NSString *) model
+  {
+  return myModel;
+  }
+  
+// Set the model.
+- (void) setModel: (NSString *) model
+  {
+  if(![myModel isEqualToString: model])
+    {
+    [self willChangeValueForKey: @"model"];
+    
+    [myModel release];
+    
+    myModel = [model retain];
+    
+    [self didChangeValueForKey: @"model"];
+    
+    [self parseModel];
+    }
+  }
+  
 // Constructor.
 - (id) init
   {
@@ -300,5 +326,35 @@
     
   return UUID;
   }
-    
+   
+// Parse the model code into parts.
+- (void) parseModel
+  {
+  NSScanner * scanner = [[NSScanner alloc] initWithString: self.model];
+  
+  [self willChangeValueForKey: @"modelType"];
+  
+  [scanner 
+    scanUpToCharactersFromSet: [NSCharacterSet decimalDigitCharacterSet] 
+    intoString: & myModelType];
+  
+  [self didChangeValueForKey: @"modelType"];
+  
+  [self willChangeValueForKey: @"modelMajorVersion"];
+  
+  [scanner scanInt: & myModelMajorVersion];
+  
+  [self didChangeValueForKey: @"modelMajorVersion"];
+  
+  [scanner scanString: @"," intoString: NULL];
+
+  [self willChangeValueForKey: @"modelMinorVersion"];
+  
+  [scanner scanInt: & myModelMinorVersion];
+  
+  [self didChangeValueForKey: @"modelMinorVersion"];
+
+  [scanner release];
+  }
+  
 @end

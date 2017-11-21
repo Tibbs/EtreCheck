@@ -9,14 +9,32 @@
 // Collect hardware information.
 @interface HardwareCollector : Collector
   {
+  // Machine properties.
   NSDictionary * myProperties;
+  
+  // Machine icon.
   NSImage * myMachineIcon;
+  
+  // A generic document icon in case a machine image lookup fails.
   NSImage * myGenericDocumentIcon;
+  
+  // The Apple Marketing name.
   NSString * myMarketingName;
+  
+  // English version of Apple Marketing name for the technical 
+  // specifications fallback.
   NSString * myEnglishMarketingName;
+  
+  // The CPU code.
   NSString * myCPUCode;
+  
+  // Does the machine support handoff?
   BOOL mySupportsHandoff;
+  
+  // Does the machine support instant hotspot?
   BOOL mySupportsInstantHotspot;
+  
+  // Does the machine support low energy?
   BOOL mySupportsLowEnergy;
   }
 
@@ -32,8 +50,8 @@
 // The Apple Marketing name.
 @property (retain) NSString * marketingName;
 
-// English version of Apple Marketing name for the technical specifications
-// fallback.
+// English version of Apple Marketing name for the technical 
+// specifications fallback.
 @property (retain) NSString * EnglishMarketingName;
 
 // The CPU code.
@@ -42,10 +60,10 @@
 // Does the machine support handoff?
 @property (assign) BOOL supportsHandoff;
 
-// Does the machien support instant hotspot?
+// Does the machine support instant hotspot?
 @property (assign) BOOL supportsInstantHotspot;
 
-// Does the machien support low energy?
+// Does the machine support low energy?
 @property (assign) BOOL supportsLowEnergy;
 
 @end
