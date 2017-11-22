@@ -20,6 +20,15 @@
 // Collect system software information.
 @implementation SystemSoftwareCollector
 
+// System load 15 minutes ago.
+@synthesize load15 = myLoad15;
+
+// System load 5 minutes ago.
+@synthesize load5 = myLoad5;
+
+// System load 1 minute ago.
+@synthesize load1 = myLoad1;
+
 // Constructor.
 - (id) init
   {
@@ -32,8 +41,25 @@
   return self;
   }
 
+// Destructor.
+- (void) dealloc
+  {
+  [myLoad15 release];
+  [myLoad5 release];
+  [myLoad1 release];
+  
+  [super dealloc];
+  }
+  
 // Perform the collection.
 - (void) performCollect
+  {
+  [self collectLoadAverages];
+  [self collectSoftware];
+  }
+  
+// Collect software.
+- (void) collectSoftware
   {
   [self.result appendAttributedString: [self buildTitle]];
   
@@ -86,6 +112,36 @@
     }
   }
 
+// Collect load averages information.
+- (void) collectLoadAverages
+  {
+  NSArray * args = @[@"vm.loadavg"];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      if([line hasPrefix: @"vm.loadavg:"])
+        if(line.length > 12)
+          {
+          NSString * description = [line substringFromIndex: 12];
+          NSArray * parts = [description componentsSeparatedByString: @" "];
+          
+          if(parts.count >= 5)
+            {
+            myLoad15 = [[parts objectAtIndex: 1] retain];
+            myLoad5 = [[parts objectAtIndex: 2] retain];
+            myLoad1 = [[parts objectAtIndex: 3] retain];
+            }
+          }
+    }
+    
+  [subProcess release];
+  }
+
 // Print a system software item.
 - (BOOL) printSystemSoftware: (NSDictionary *) item
   {
@@ -108,6 +164,24 @@
   
   [self.model addElement: @"build" value: [[OSVersion shared] build]];
   
+  if(self.load15.length > 0)
+    if(self.load5.length > 0)
+      if(self.load1.length > 0)
+        {
+        [self.model addElement: @"load15" value: self.load15];
+        [self.model addElement: @"load5" value: self.load5];
+        [self.model addElement: @"load1" value: self.load1];
+
+        [self.result
+          appendString:
+            [NSString
+              stringWithFormat:
+                ECLocalizedString(@"loadavg"),
+                self.load15,
+                self.load5,
+                self.load1]];
+        }
+
   int days = 0;
   int hours = 0;
 

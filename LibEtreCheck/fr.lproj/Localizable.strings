@@ -6,25 +6,26 @@
   Copyright (c) 2013 Etresoft. All rights reserved.
 */
 
-"info" = "ⓘ";
-"ascsearch" = "https://communities.apple.com/fr/search.jspa?";
-"excellentperformance" = "Excellente";
-"goodperformance" = "Satisfaisante";
-"belowaverageperformance" = "Inférieure à la moyenne";
-"poorperformance" = "Médiocre";
-"downloadetrecheck" = "Télécharger EtreCheck chez ";
-"gatekeeperneedslion" = "    Informations Gatekeeper requièrent OS X 10.7.5 \"Lion\" ou ultérieur.\n\n";
-"machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
-"oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/French.lproj/XSMachineAttributes.plist";
-"insufficientram" = "Manque de mémoire !";
-"installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
-"machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
-"loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
-"startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
-"timemachineneedsmountainlion" = "    Les informations Time Machine requièrent OS X 10.8 «Mountain Lion» ou ultérieur.\n\n";
-"timemachineinformationnotavailable" = "    Informations Time Machine non disponibles\n\n";
-"addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.\n";
+"addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
+"ascsearch" = "https://communities.apple.com/fr/search.jspa?";
+"belowaverageperformance" = "Inférieure à la moyenne";
+"downloadetrecheck" = "Télécharger EtreCheck chez ";
+"excellentperformance" = "Excellente";
+"gatekeeperneedslion" = "    Informations Gatekeeper requièrent OS X 10.7.5 \"Lion\" ou ultérieur.\n\n";
+"goodperformance" = "Satisfaisante";
+"info" = "ⓘ";
+"installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
+"insufficientram" = "Manque de mémoire !";
+"loadavg" = "    Charge moyenne: %@ (il y a 15 min) %@ il y a 5 min) %@ (il y a 1 min)\n";
+"loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
+"machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
+"machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
+"oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/French.lproj/XSMachineAttributes.plist";
+"poorperformance" = "Médiocre";
+"startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
+"timemachineinformationnotavailable" = "    Informations Time Machine non disponibles\n\n";
+"timemachineneedsmountainlion" = "    Les informations Time Machine requièrent OS X 10.8 «Mountain Lion» ou ultérieur.\n\n";
 
 
 "            Backup size %@ > (Disk size %@ X 3)" = "            Taille de la sauvegarde %@ > (Taille du disque %@ X 3)";

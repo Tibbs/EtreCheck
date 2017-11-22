@@ -6,25 +6,26 @@
   Copyright (c) 2013 Etresoft. All rights reserved.
 */
 
-"info" = "ⓘ";
-"ascsearch" = "https://discussions.apple.com/search.jspa?";
-"excellentperformance" = "Excellent";
-"goodperformance" = "Good";
-"belowaverageperformance" = "Below Average";
-"poorperformance" = "Poor";
-"downloadetrecheck" = "Download EtreCheck from ";
-"gatekeeperneedslion" = "    Gatekeeper information requires OS X 10.7.5 \"Lion\" or later.\n\n";
-"machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
-"oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
-"insufficientram" = "Insufficient RAM!";
-"installsincomplete" = "    Install information may not be complete.\n";
-"machinitdeprecated" = "    Mach Init items are deprecated\n";
-"loginhookdeprecated" = "    Login hooks are deprecated\n";
-"startupitemsdeprecated" = "    Startup items no longer function in OS X Yosemite or later\n";
-"timemachineneedsmountainlion" = "    Time Machine information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
-"timemachineinformationnotavailable" = "    Time Machine information is not available\n\n";
-"addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "/Library/Logs/DiagnosticReports permissions" = "    Standard users cannot read /Library/Logs/DiagnosticReports.\n    Run as an administrator account to see more information.\n";
+"addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
+"ascsearch" = "https://discussions.apple.com/search.jspa?";
+"belowaverageperformance" = "Below Average";
+"downloadetrecheck" = "Download EtreCheck from ";
+"excellentperformance" = "Excellent";
+"gatekeeperneedslion" = "    Gatekeeper information requires OS X 10.7.5 \"Lion\" or later.\n\n";
+"goodperformance" = "Good";
+"info" = "ⓘ";
+"installsincomplete" = "    Install information may not be complete.\n";
+"insufficientram" = "Insufficient RAM!";
+"loadavg" = "    Load average: %@ (15 min ago) %@ (5 min ago) %@ (1 min ago)\n";
+"loginhookdeprecated" = "    Login hooks are deprecated\n";
+"machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
+"machinitdeprecated" = "    Mach Init items are deprecated\n";
+"oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
+"poorperformance" = "Poor";
+"startupitemsdeprecated" = "    Startup items no longer function in OS X Yosemite or later\n";
+"timemachineinformationnotavailable" = "    Time Machine information is not available\n\n";
+"timemachineneedsmountainlion" = "    Time Machine information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
 
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
