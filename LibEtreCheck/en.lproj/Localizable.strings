@@ -17,7 +17,7 @@
 "info" = "ⓘ";
 "installsincomplete" = "    Install information may not be complete.\n";
 "insufficientram" = "Insufficient RAM!";
-"loadavg" = "    Load average: %@ (15 min ago) %@ (5 min ago) %@ (1 min ago)\n";
+"loadavg" = "    Load average: %@ (1 min ago) %@ (5 min ago) %@ (15 min ago)\n";
 "loginhookdeprecated" = "    Login hooks are deprecated\n";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
 "machinitdeprecated" = "    Mach Init items are deprecated\n";

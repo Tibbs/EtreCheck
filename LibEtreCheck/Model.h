@@ -99,6 +99,9 @@
 // Keep track of applications.
 @property (retain) NSDictionary * applications;
 
+// How many cores do I have?
+@property (assign) int coreCount;
+
 // I will need the RAM amount (in GB) for later.
 @property (assign) int physicalRAM;
 

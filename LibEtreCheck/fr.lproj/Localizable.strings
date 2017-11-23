@@ -17,7 +17,7 @@
 "info" = "ⓘ";
 "installsincomplete" = "    La liste des installations peut ne pas être complète.\n";
 "insufficientram" = "Manque de mémoire !";
-"loadavg" = "    Charge moyenne: %@ (il y a 15 min) %@ il y a 5 min) %@ (il y a 1 min)\n";
+"loadavg" = "    Charge moyenne: %@ (il y a 1 min) %@ il y a 5 min) %@ (il y a 15 min)\n";
 "loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
 "machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
