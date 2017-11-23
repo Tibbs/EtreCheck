@@ -230,6 +230,8 @@
   else if([self isAdwareTrio: file])
     adware = true;
   
+  file.adware = adware;
+  
   if(adware)
     [[[[Model model] launchd] adwareFiles] addObject: file];
   }

@@ -54,6 +54,9 @@
 // The safety score.
 @synthesize safetyScore = mySafetyScore;
 
+// Adware.
+@synthesize adware = myAdware;
+
 // Get the status.
 - (NSString *) status
   {

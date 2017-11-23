@@ -37,6 +37,9 @@
   
   // The safety scrore.
   int mySafetyScore;
+  
+  // Adware.
+  BOOL myAdware;
   }
 
 // The config script contents.
@@ -65,6 +68,9 @@
 
 // The safety scrore.
 @property (assign) int safetyScore;
+
+// Adware.
+@property (assign) BOOL adware;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

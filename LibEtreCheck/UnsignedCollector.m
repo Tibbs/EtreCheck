@@ -135,6 +135,10 @@
   if([file.signature isEqualToString: kSignatureValid])
     return;
   
+  // If it is already adware, skip it here.
+  if(file.adware)
+    return;
+    
   [[[[Model model] launchd] unsignedFiles] addObject: file];
   }
   
