@@ -33,6 +33,9 @@
   
   // Apple launchd file.
   NSMutableDictionary * myAppleFiles;
+  
+  // Launchd files indexed by identifier.
+  NSMutableDictionary * myLaunchdFileLookup;
   }
   
 // Launchd files keyed by config file path. 
@@ -60,6 +63,9 @@
 
 // Apple launchd file.
 @property (readonly, nonnull) NSMutableDictionary * appleFiles;
+
+// Launchd files indexed by identifier.
+@property (readonly, nonnull) NSMutableDictionary * launchdFileLookup;
 
 // Load all entries.
 - (void) load;

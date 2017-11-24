@@ -40,6 +40,9 @@
   
   // Adware.
   BOOL myAdware;
+  
+  // I will need a unique, XML-safe identifier for each launchd file.
+  NSString * myIdentifier;
   }
 
 // The config script contents.
@@ -71,6 +74,9 @@
 
 // Adware.
 @property (assign) BOOL adware;
+
+// I will need a unique, XML-safe identifier for each launchd file.
+@property (retain, nonnull) NSString * identifier;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

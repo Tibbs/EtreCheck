@@ -42,6 +42,9 @@
 // Apple launchd file.
 @synthesize appleFiles = myAppleFiles;
 
+// Launchd files indexed by identifier.
+@synthesize launchdFileLookup = myLaunchdFileLookup;
+
 // Constructor.
 - (instancetype) init
   {
@@ -56,6 +59,7 @@
     myUnsignedFiles = [NSMutableSet new];
     myEphemeralTasks = [NSMutableSet new];
     myAppleFiles = [NSMutableDictionary new];
+    myLaunchdFileLookup = [NSMutableDictionary new];
     }
     
   return self;
@@ -71,6 +75,7 @@
   [myUnsignedFiles release];
   [myEphemeralTasks release];
   [myAppleFiles release];
+  [myLaunchdFileLookup release];
   
   [super dealloc];
   }
@@ -94,6 +99,15 @@
   
   // Load Apple files.
   [self loadAppleFiles];
+  
+  // Build the lookup table.
+  for(NSString * path in self.filesByPath)
+    {
+    LaunchdFile * file = [self.filesByPath objectForKey: path];
+    
+    if(file != nil)
+      [self.launchdFileLookup setObject: file forKey: file.identifier];
+    }
   }
   
 // Load all "truth" files. Later, I will compare with reality.

@@ -57,6 +57,23 @@
 // Adware.
 @synthesize adware = myAdware;
 
+// I will need a unique, XML-safe identifier for each launchd file.
+@synthesize identifier = myIdentifier;
+
+// Return a unique number.
++ (int) uniqueIdentifier
+  {
+  static int counter = 0;
+  
+  dispatch_sync(
+    dispatch_get_main_queue(), 
+    ^{
+      ++counter;
+    });
+    
+  return counter;
+  }
+  
 // Get the status.
 - (NSString *) status
   {
@@ -131,6 +148,10 @@
       // Start off with a safety score of 10. Adware will lose that.
       mySafetyScore = 10;
       
+      myIdentifier = 
+        [[NSString alloc] 
+          initWithFormat: @"launchd%d", [LaunchdFile uniqueIdentifier]];
+      
       [self parseFromPath: path];
 
       [self getModificationDate];
@@ -149,6 +170,7 @@
   [myPlist release];
   [myLoadedTasks release];
   [mySignature release];
+  [myIdentifier release];
   
   [super dealloc];
   }
@@ -651,6 +673,7 @@
   {
   [xml startElement: @"launchdfile"];
   
+  [xml addElement: @"identifier" value: self.identifier];
   [xml addElement: @"status" value: self.status];
   [xml addElement: @"lastexitcode" value: self.lastExitCode];
   [xml addElement: @"path" value: self.path];
