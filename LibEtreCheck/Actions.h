@@ -7,6 +7,9 @@
 
 @class LaunchdFile;
 
+typedef void (^LaunchdCompletion)(LaunchdFile * _Nonnull file);
+typedef void (^TrashCompletion)(NSArray * _Nonnull trashedFiles);
+
 @interface Actions : NSObject
 
 // Turn on Gatekeeper.
@@ -29,15 +32,18 @@
 + (nullable NSArray *) uninstall: (nonnull NSArray *) files;
 
 // Load a launchd file.
-+ (void) load: (nonnull LaunchdFile *) file;
++ (void) load: (nonnull LaunchdFile *) file 
+  completion: (nonnull LaunchdCompletion) completion;
 
 // Unload a launchd file.
-+ (void) unload: (nonnull LaunchdFile *) file;
++ (void) unload: (nonnull LaunchdFile *) file 
+  completion: (nonnull LaunchdCompletion) completion;
 
 // Purge user notifications.
 + (void) purgeUserNotifications: (nonnull NSArray *) notifications;
 
 // Trash files.
-+ (nullable NSArray *) trashFiles: (nonnull NSArray *) files;
++ (void) trashFiles: (nonnull NSArray *) files 
+  completion: (nonnull TrashCompletion) completion;
 
 @end

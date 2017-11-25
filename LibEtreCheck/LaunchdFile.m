@@ -157,6 +157,8 @@
       [self getModificationDate];
       
       [self findContext];  
+
+      [self findNewTasks];
       }
     }
     
