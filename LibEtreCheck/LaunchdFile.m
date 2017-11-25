@@ -155,10 +155,13 @@
       [self parseFromPath: path];
 
       [self getModificationDate];
-      
-      [self findContext];  
+        
+      if(myConfigScriptValid)
+        {
+        [self findContext];  
 
-      [self findNewTasks];
+        [self findNewTasks];
+        }
       }
     }
     
@@ -442,6 +445,11 @@
 // Parse a line from a launchd listing.
 - (void) parseLine: (NSString *) line domain: (NSString *) domain
   {
+  if(self.label == nil)
+    {
+    NSLog(@"stop here");
+    }
+    
   NSString * trimmedLine =
     [line
       stringByTrimmingCharactersInSet:
