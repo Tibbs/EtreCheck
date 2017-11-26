@@ -90,4 +90,7 @@
 // Requery the file.
 - (void) requery;
 
+// Is this a launchd file?
+- (BOOL) isLaunchdFile;
+
 @end

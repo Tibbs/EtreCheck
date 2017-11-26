@@ -232,6 +232,12 @@
   [self findNewTasks];
   }
   
+// Is this a launchd file?
+- (BOOL) isLaunchdFile
+  {
+  return YES;
+  }
+  
 #pragma mark - Private methods
 
 // Parse from a path.

@@ -14,16 +14,6 @@
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
 
-// Gatekeeper settings.
-typedef enum
-  {
-  kSettingUnknown,
-  kDisabled,
-  kDeveloperID,
-  kMacAppStore
-  }
-GatekeeperSetting;
-    
 // Collect Gatekeeper status.
 @implementation GatekeeperCollector
 
@@ -42,20 +32,15 @@ GatekeeperSetting;
 // Perform the collection.
 - (void) performCollect
   {
-  // Only check gatekeeper on Mountain Lion or later.
-  if([[OSVersion shared] major] < kMountainLion)
-    return;
-    
   [self.result appendAttributedString: [self buildTitle]];
 
-  bool gatekeeperExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/sbin/spctl"];
+  GatekeeperSetting setting = [self collectGatekeeperSetting];
   
-  if(!gatekeeperExists)
+  if(setting == kNoGatekeeper)
     {
     [self.result
       appendString:
-        ECLocalizedString(@"gatekeeperneedslion")
+        ECLocalizedString(@"gatekeeperneedsmountainlion")
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -64,8 +49,6 @@ GatekeeperSetting;
     return;
     }
 
-  GatekeeperSetting setting = [self collectGatekeeperSetting];
-  
   [self printGatekeeperSetting: setting];
 
   [self.result appendCR];
@@ -74,6 +57,16 @@ GatekeeperSetting;
 // Collect the Gatekeeper setting.
 - (GatekeeperSetting) collectGatekeeperSetting
   {
+  // Only check gatekeeper on Mountain Lion or later.
+  if([[OSVersion shared] major] < kMountainLion)
+    return kNoGatekeeper;
+    
+  bool gatekeeperExists =
+    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/sbin/spctl"];
+  
+  if(!gatekeeperExists)
+    return kNoGatekeeper;
+
   NSArray * args =
     @[
       @"--status",

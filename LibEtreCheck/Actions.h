@@ -7,15 +7,20 @@
 
 @class LaunchdFile;
 
-typedef void (^LaunchdCompletion)(LaunchdFile * _Nonnull file);
-typedef void (^TrashCompletion)(NSArray * _Nonnull trashedFiles);
+typedef void (^GatekeeperCompletion)(BOOL success);
+typedef void (^LaunchdCompletion)(NSArray * _Nonnull files);
+typedef void (^CleanupCompletion)(NSArray * _Nonnull cleanedUpFiles);
+
+typedef void (^RemoveAdwareCompletion)(
+  NSArray * _Nonnull removedAdwareFiles);
 
 @interface Actions : NSObject
 
 // Turn on Gatekeeper.
-+ (void) enableGatekeeper;
++ (void) enableGatekeeper: (nonnull GatekeeperCompletion) completion;
 
 // Restart the machine.
+// Return false if the restart fails. No way to notify success.
 + (BOOL) restart;
 
 // Reveal a file in the Finder.
@@ -26,10 +31,6 @@ typedef void (^TrashCompletion)(NSArray * _Nonnull trashedFiles);
 
 // Open a URL in the default web browser.
 + (void) openURL: (nonnull NSURL *) url;
-
-// Uninstall launchd files.
-// Returns files that were successfully uninstalled.
-+ (nullable NSArray *) uninstall: (nonnull NSArray *) files;
 
 // Load a launchd file.
 + (void) load: (nonnull LaunchdFile *) file 
@@ -42,8 +43,12 @@ typedef void (^TrashCompletion)(NSArray * _Nonnull trashedFiles);
 // Purge user notifications.
 + (void) purgeUserNotifications: (nonnull NSArray *) notifications;
 
-// Trash files.
-+ (void) trashFiles: (nonnull NSArray *) files 
-  completion: (nonnull TrashCompletion) completion;
+// Clean up files.
++ (void) cleanupFiles: (nonnull NSArray *) files 
+  completion: (nonnull CleanupCompletion) completion;
+
+// Remove adware.
++ (void) removeAdwareFiles: (nonnull NSArray *) files 
+  completion: (nonnull RemoveAdwareCompletion) completion;
 
 @end

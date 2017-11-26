@@ -10,30 +10,51 @@
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import "NumberFormatter.h"
+#import "GatekeeperCollector.h"
 #import <Carbon/Carbon.h>
 #import "LaunchdFile.h"
 #import "LaunchdTask.h"
 #import "LaunchdLoadedTask.h"
+#import "SafariExtension.h"
 #import <sqlite3.h>
 #import "UserNotification.h"
 
 @implementation Actions
 
 // Turn on Gatekeeper.
-+ (void) enableGatekeeper
++ (void) enableGatekeeper: (nonnull GatekeeperCompletion) completion
   {
-  NSMutableString * command =
-    [NSMutableString stringWithString: @"/usr/sbin/spctl --master-enable"];
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      NSString * command = @"/usr/sbin/spctl --master-enable";
 
-  NSArray * statements =
-    [NSArray arrayWithObject:
-      [NSString
-        stringWithFormat:
-          @"do shell script(\"%@\") with administrator privileges",
-          command]];
-    
-  // Execute the statements.
-  [self executeAppleScriptStatements: statements];
+      NSString * appleScriptCommand = 
+        [[NSString alloc] 
+          initWithFormat: 
+            @"do shell script(\"%@\") with administrator privileges",
+            command];
+            
+      NSArray * statements = 
+        [[NSArray alloc] initWithObjects: appleScriptCommand, nil];
+        
+      // Execute the statements.
+      [self executeAppleScriptStatements: statements];
+      
+      [statements release];
+      [appleScriptCommand release];
+      
+      GatekeeperCollector * collector = [GatekeeperCollector new];
+      
+      GatekeeperSetting setting = [collector collectGatekeeperSetting];
+      
+      [collector release];
+      
+      BOOL result = (setting == kDeveloperID);
+      
+      if(completion != nil)
+        completion(result);
+      });
   }
 
 // Restart the machine.
@@ -124,79 +145,26 @@
   [[NSWorkspace sharedWorkspace] openURL: url];
   }
   
-// Uninstall launchd files.
-+ (nullable NSArray *) uninstall: (nonnull NSArray *) files
-  {
-  if(files.count > 0)
-    {
-    NSMutableSet * filesToUninstall = 
-      [[NSMutableSet alloc] initWithArray: files];
-  
-    NSArray * uninstalledUserFiles = 
-      [self uninstallUserFiles: filesToUninstall];
-      
-    for(LaunchdFile * file in uninstalledUserFiles)
-      [filesToUninstall removeObject: file];
-      
-    NSArray * filesUninstalled =
-      [self uninstallSystemFiles: filesToUninstall];
-      
-    [filesToUninstall release];
-    
-    return filesUninstalled;
-    }
-    
-  return nil;
-  }
-
 // Load a launchd file.
 + (void) load: (nonnull LaunchdFile *) file
   completion: (nonnull LaunchdCompletion) completion
   {
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
-    ^{  
-      NSSet * files = [[NSSet alloc] initWithObjects: file, nil];
-      
-      if([file.path hasPrefix: @"/System/Library/"])
-        [self loadSystemFiles: files];
-      
-      else if([file.path hasPrefix: @"/Library/"])
-        [self loadSystemFiles: files];
-      
-      else if([file.path hasPrefix: @"/Library/"])
-        [self loadUserFiles: files];
-      
-      [files release];
-      
-      if(completion != nil)
-        completion(file);
-    });
+  NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
+  
+  [self loadFiles: files completion: completion];
+  
+  [files release];
   }
 
 // Unload a launchd file.
 + (void) unload: (nonnull LaunchdFile *) file
   completion: (nonnull LaunchdCompletion) completion
   {
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
-    ^{  
-      NSSet * files = [[NSSet alloc] initWithObjects: file, nil];
-      
-      if([file.path hasPrefix: @"/System/Library/"])
-        [self unloadSystemFiles: files];
-      
-      else if([file.path hasPrefix: @"/Library/"])
-        [self unloadSystemFiles: files];
-      
-      else if([file.path hasPrefix: @"/Library/"])
-        [self unloadUserFiles: files];
-      
-      [files release];
-      
-      if(completion != nil)
-        completion(file);
-    });
+  NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
+  
+  [self unloadFiles: files completion: completion];
+  
+  [files release];
   }
 
 // Purge user notifications.
@@ -291,307 +259,132 @@
   sqlite3_close(handle);
   }
 
-// Trash files.
-// There is no difference between privileged and unprivileged modes. The
-// Finder handles that.
-+ (void) trashFiles: (nonnull NSArray *) files
-  completion: (nonnull TrashCompletion) completion
+// Clean up files.
++ (void) cleanupFiles: (nonnull NSArray *) files 
+  completion: (nonnull CleanupCompletion) completion
+  {
+  NSMutableArray * filesToDelete = [NSMutableArray new];
+  
+  for(id item in files)
+    {
+    if([item respondsToSelector: @selector(isLaunchdFile)])
+      {
+      LaunchdFile * file = (LaunchdFile *)item;
+      
+      [filesToDelete addObject: file.path];
+      }
+    else if([item respondsToSelector: @selector(isSafariExtension)])
+      {
+      SafariExtension * extension = (SafariExtension *)item;
+      
+      [filesToDelete addObject: extension.path];
+      }
+    }
+    
+  [self trashFiles: filesToDelete reason: @"cleanup"];
+  
+  if(completion != nil)
+    completion(files);
+    
+  [filesToDelete release];
+  }
+
+// Remove adware.
++ (void) removeAdwareFiles: (nonnull NSArray *) files 
+  completion: (nonnull RemoveAdwareCompletion) completion
+  {
+  NSMutableArray * filesToDelete = [NSMutableArray new];
+  
+  NSMutableArray * systemFiles = [NSMutableArray new];
+  NSMutableArray * userFiles = [NSMutableArray new];
+  
+  for(id item in files)
+    {
+    if([item respondsToSelector: @selector(isLaunchdFile)])
+      {
+      LaunchdFile * file = (LaunchdFile *)item;
+      
+      if([file.path hasPrefix: @"/System/Library/"])
+        [systemFiles addObject: file];
+      
+      else if([file.path hasPrefix: @"/Library/"])
+        [systemFiles addObject: file];
+      
+      else if([file.path hasPrefix: @"/Library/"])
+        [userFiles addObject: file];
+        
+      [filesToDelete addObject: file.path];
+      }
+    else if([item respondsToSelector: @selector(isSafariExtension)])
+      {
+      SafariExtension * extension = (SafariExtension *)item;
+      
+      [filesToDelete addObject: extension.path];
+      }
+    }
+    
+  if(systemFiles.count > 0)
+    [self unloadSystemFiles: systemFiles];
+  
+  if(userFiles.count > 0)
+    [self unloadUserFiles: systemFiles];
+
+  [self trashFiles: filesToDelete reason: @"adware"];
+  
+  if(completion != nil)
+    completion(files);
+    
+  [systemFiles release];
+  [userFiles release];
+
+  [filesToDelete release];
+  }
+  
+#pragma mark - Private methods
+
+#pragma mark - Load
+
+// Load launchd files.
++ (void) loadFiles: (nonnull NSArray *) files
+  completion: (nonnull LaunchdCompletion) completion
   {
   dispatch_async(
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
     ^{  
-      NSMutableArray * appleScriptStatements = [NSMutableArray new];
+      NSMutableArray * systemFiles = [NSMutableArray new];
+      NSMutableArray * userFiles = [NSMutableArray new];
       
-      // Build the statements I will need.
-      [appleScriptStatements
-        addObjectsFromArray: [self buildTrashStatements: files]];
-      
-      // Execute the statements. 
-      [self executeAppleScriptStatements: appleScriptStatements];
-      
-      [appleScriptStatements release];
-      
-      NSMutableArray * trashedFiles = [NSMutableArray array];
-      
-      if(trashedFiles.count > 0)
+      for(LaunchdFile * file in files)
         {
-        for(NSString * path in files)
-          if(![[NSFileManager defaultManager] fileExistsAtPath: path])
-            [trashedFiles addObject: path];
-            
-        [self recordTrashedFiles: trashedFiles];
+        if([file.path hasPrefix: @"/System/Library/"])
+          [systemFiles addObject: file];
+        
+        else if([file.path hasPrefix: @"/Library/"])
+          [systemFiles addObject: file];
+        
+        else if([file.path hasPrefix: @"/Library/"])
+          [userFiles addObject: file];
         }
         
+      if(systemFiles.count > 0)
+        [self loadSystemFiles: systemFiles];
+      
+      if(userFiles.count > 0)
+        [self loadUserFiles: systemFiles];
+
       if(completion != nil)
-        completion(trashedFiles);
-      });
-  }
-
-#pragma mark - Private methods
-
-// Execute a list of AppleScript statements.
-+ (void) executeAppleScriptStatements: (NSArray *) statements
-  {
-  if([statements count] == 0)
-    return;
-    
-  NSMutableArray * arguments = [NSMutableArray new];
-  
-  for(NSString * statement in statements)
-    if([statement length])
-      {
-      [arguments addObject: @"-e"];
-      [arguments addObject: statement];
-      }
-    
-  if([arguments count] > 0)
-    {
-    NSLog(@"Executing AppleScript: %@", arguments);
-    
-    SubProcess * subProcess = [[SubProcess alloc] init];
-
-    [subProcess execute: @"/usr/bin/osascript" arguments: arguments];
-
-    [subProcess release];
-    }
-    
-  [arguments release];
-  }
-
-// Uninstall user files.
-// Returns files that were successfully uninstalled.
-+ (NSArray *) uninstallUserFiles: (NSMutableSet *) filesToUninstall
-  {
-  NSSet * userFiles = [self findUserFiles: filesToUninstall];
-  
-  if(userFiles.count > 0)
-    {
-    NSSet * unloadedUserFiles = [self unloadUserFiles: userFiles];
-  
-    if(unloadedUserFiles.count > 0)
-      return [self trashFiles: [unloadedUserFiles allObjects]];
-    }
-    
-  return nil;
-  }
-  
-// Uninstall system files.
-// Returns files that were successfully uninstalled.
-+ (NSArray *) uninstallSystemFiles: (NSMutableSet *) filesToUninstall
-  {
-  if(filesToUninstall.count > 0)
-    {
-    NSSet * unloadedSystemFiles = 
-      [self unloadSystemFiles: filesToUninstall];
-  
-    if(unloadedSystemFiles.count > 0)
-      return [self trashFiles: [unloadedSystemFiles allObjects]];
-    }
-    
-  return nil;
-  }
-
-// Find all files that appear to be in the user context and will not need
-// administrator privileges.
-+ (NSSet *) findUserFiles: (NSSet *) files
-  {
-  NSMutableSet * userFiles = [NSMutableSet set];
-  
-  for(LaunchdFile * file in files)
-    if([file.context isEqualToString: kLaunchdUserContext])
-      [userFiles addObject: files];
-      
-  return userFiles;
-  }
-  
-// Load user files.
-// Returns all files successfully loaded.
-+ (NSSet *) loadUserFiles: (NSSet *) files
-  {
-  NSMutableSet * unloadedFiles = [NSMutableSet new];
-  
-  for(LaunchdFile * file in files)
-    if(!file.loaded)
-      [unloadedFiles addObject: file];
-      
-  [self loadLaunchdFilesInUserSpace: [unloadedFiles allObjects]];
-  
-  NSMutableSet * loadedFiles = [NSMutableSet set];
-  
-  for(LaunchdFile * file in unloadedFiles)
-    {
-    if(!file.loaded)
-      [file requery];
-    
-    if(file.loaded)
-      [loadedFiles addObject: file];
-    }
+        completion(files);
         
-  [unloadedFiles release];
-
-  return loadedFiles;
+      [systemFiles release];
+      [userFiles release];
+    });
   }
 
-// Unload user files.
-// Returns all files successfully unloaded.
-+ (NSSet *) unloadUserFiles: (NSSet *) files
-  {
-  NSMutableSet * loadedFiles = [NSMutableSet new];
-  
-  for(LaunchdFile * file in files)
-    if(file.loaded)
-      [loadedFiles addObject: file];
-      
-  [self unloadLaunchdFilesInUserSpace: [loadedFiles allObjects]];
-  [self killLaunchdFilesInUserSpace: [loadedFiles allObjects]];
-  
-  NSMutableSet * unloadedFiles = [NSMutableSet set];
-  
-  for(LaunchdFile * file in loadedFiles)
-    {
-    if(file.loaded)
-      [file requery];
-    
-    if(!file.loaded)
-      [unloadedFiles addObject: file];
-    }
-        
-  [loadedFiles release];
-
-  return unloadedFiles;
-  }
-  
-// Load launchd files in userspace.
-+ (void) loadLaunchdFilesInUserSpace: (NSArray *) files
-  {
-  NSArray * args = [self buildLoadArguments: files];
-  
-  if([args count] > 2)
-    {
-    SubProcess * load = [[SubProcess alloc] init];
-
-    [load execute: @"/bin/launchctl" arguments: args];
-
-    [load release];
-    }
-  }
-
-// Unload launchd files in userspace.
-+ (void) unloadLaunchdFilesInUserSpace: (NSArray *) files
-  {
-  NSArray * args = [self buildUnloadArguments: files];
-  
-  if([args count] > 2)
-    {
-    SubProcess * unload = [[SubProcess alloc] init];
-
-    [unload execute: @"/bin/launchctl" arguments: args];
-
-    [unload release];
-    }
-  }
-
-// Build an argument list for a load command for a list of launchd files.
-+ (NSArray *) buildLoadArguments: (NSArray *) files
-  {
-  NSMutableArray * arguments = [NSMutableArray array];
-  
-  [arguments addObject: @"load"];
-  [arguments addObject: @"-wF"];
-  
-  for(LaunchdFile * file in files)
-    {
-    // If it is already loaded, don't try to load.
-    if(file.loaded)
-      continue;
-      
-    if(file.path.length > 0)
-      [arguments addObject: file.path];
-    }
-    
-  return arguments;
-  }
-
-// Build an argument list for an unload command for a list of launchd files.
-+ (NSArray *) buildUnloadArguments: (NSArray *) files
-  {
-  NSMutableArray * arguments = [NSMutableArray array];
-  
-  [arguments addObject: @"unload"];
-  [arguments addObject: @"-wF"];
-  
-  for(LaunchdFile * file in files)
-    {
-    // If it isn't already loaded, don't try to unload.
-    if(!file.loaded)
-      continue;
-      
-    if(file.path.length > 0)
-      [arguments addObject: file.path];
-    }
-    
-  return arguments;
-  }
-
-// Kill launchd tasks in userspace.
-+ (void) killLaunchdFilesInUserSpace: (NSArray *) files
-  {
-  NSArray * args = [self buildKillArguments: files];
-  
-  if([args count] > 1)
-    {
-    SubProcess * kill = [[SubProcess alloc] init];
-
-    [kill execute: @"/bin/kill" arguments: args];
-
-    [kill release];
-    }
-  }
-
-// Build an argument list for a kill command for a list of launchd files.
-+ (NSArray *) buildKillArguments: (NSArray *) files
-  {
-  NSMutableArray * arguments = [NSMutableArray array];
-  
-  [arguments addObject: @"-9"];
-
-  NumberFormatter * formatter = [NumberFormatter sharedNumberFormatter];
-  
-  for(LaunchdFile * file in files)
-    for(LaunchdLoadedTask * task in file.loadedTasks)
-      {
-      NSNumber * PID = [formatter convertFromString: task.PID];
-      
-      if(PID.intValue > 0)
-        [arguments addObject: task.PID];
-      }
-    
-  return arguments;
-  }
-
-// Query the status of a process.
-+ (NSString *) ps: (NSNumber *) pid
-  {
-  NSString * line = nil;
-  
-  SubProcess * ps = [[SubProcess alloc] init];
-  
-  if([ps execute: @"/bin/ps" arguments: @[ [pid stringValue] ]])
-    {
-    NSArray * lines = [Utilities formatLines: ps.standardOutput];
-    
-    if([lines count] > 1)
-      line = [lines objectAtIndex: 1];
-    }
-    
-  [ps release];
-  
-  return line;
-  }
+#pragma mark - Load in system space
 
 // Load system files.
 // Returns all files successfully loaded.
-+ (NSSet *) loadSystemFiles: (NSSet *) files
++ (NSSet *) loadSystemFiles: (NSArray *) files
   {
   NSMutableSet * unloadedFiles = [NSMutableSet new];
   
@@ -617,34 +410,6 @@
   return loadedFiles;
   }
 
-// Unload system files.
-// Returns all files successfully unloaded.
-+ (NSSet *) unloadSystemFiles: (NSSet *) files
-  {
-  NSMutableSet * loadedFiles = [NSMutableSet new];
-  
-  for(LaunchdFile * file in files)
-    if(file.loaded)
-      [loadedFiles addObject: file];
-      
-  [self unloadLaunchdFilesInSystemSpace: [loadedFiles allObjects]];
-  
-  NSMutableSet * unloadedFiles = [NSMutableSet set];
-  
-  for(LaunchdFile * file in loadedFiles)
-    {
-    if(file.loaded)
-      [file requery];
-    
-    if(!file.loaded)
-      [unloadedFiles addObject: file];
-    }
-        
-  [loadedFiles release];
-
-  return unloadedFiles;
-  }
-
 // Load launchd files in system space.
 + (void) loadLaunchdFilesInSystemSpace: (NSArray *) files
   {
@@ -653,23 +418,6 @@
   // Build the statements I will need.
   [appleScriptStatements
     addObjectsFromArray: [self buildLoadStatements: files]];
-  
-  // Execute the statements.
-  [self executeAppleScriptStatements: appleScriptStatements];
-  
-  [appleScriptStatements release];
-  }
-
-// Unload launchd files in system space.
-+ (void) unloadLaunchdFilesInSystemSpace: (NSArray *) files
-  {
-  NSMutableArray * appleScriptStatements = [NSMutableArray new];
-  
-  // Build the statements I will need.
-  [appleScriptStatements
-    addObjectsFromArray: [self buildUnloadStatements: files]];
-  [appleScriptStatements
-    addObjectsFromArray: [self buildKillStatement: files]];
   
   // Execute the statements.
   [self executeAppleScriptStatements: appleScriptStatements];
@@ -704,6 +452,157 @@
     }
     
   return statements;
+  }
+
+#pragma mark - Load in user space
+
+// Load user files.
+// Returns all files successfully loaded.
++ (NSSet *) loadUserFiles: (NSArray *) files
+  {
+  NSMutableSet * unloadedFiles = [NSMutableSet new];
+  
+  for(LaunchdFile * file in files)
+    if(!file.loaded)
+      [unloadedFiles addObject: file];
+      
+  [self loadLaunchdFilesInUserSpace: [unloadedFiles allObjects]];
+  
+  NSMutableSet * loadedFiles = [NSMutableSet set];
+  
+  for(LaunchdFile * file in unloadedFiles)
+    {
+    if(!file.loaded)
+      [file requery];
+    
+    if(file.loaded)
+      [loadedFiles addObject: file];
+    }
+        
+  [unloadedFiles release];
+
+  return loadedFiles;
+  }
+
+// Load launchd files in userspace.
++ (void) loadLaunchdFilesInUserSpace: (NSArray *) files
+  {
+  NSArray * args = [self buildLoadArguments: files];
+  
+  if([args count] > 2)
+    {
+    SubProcess * load = [[SubProcess alloc] init];
+
+    [load execute: @"/bin/launchctl" arguments: args];
+
+    [load release];
+    }
+  }
+
+// Build an argument list for a load command for a list of launchd files.
++ (NSArray *) buildLoadArguments: (NSArray *) files
+  {
+  NSMutableArray * arguments = [NSMutableArray array];
+  
+  [arguments addObject: @"load"];
+  [arguments addObject: @"-wF"];
+  
+  for(LaunchdFile * file in files)
+    {
+    // If it is already loaded, don't try to load.
+    if(file.loaded)
+      continue;
+      
+    if(file.path.length > 0)
+      [arguments addObject: file.path];
+    }
+    
+  return arguments;
+  }
+
+#pragma mark - Unload
+
+// Unload launchd files.
++ (void) unloadFiles: (nonnull NSArray *) files
+  completion: (nonnull LaunchdCompletion) completion
+  {
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      NSMutableArray * systemFiles = [NSMutableArray new];
+      NSMutableArray * userFiles = [NSMutableArray new];
+      
+      for(LaunchdFile * file in files)
+        {
+        if([file.path hasPrefix: @"/System/Library/"])
+          [systemFiles addObject: file];
+        
+        else if([file.path hasPrefix: @"/Library/"])
+          [systemFiles addObject: file];
+        
+        else if([file.path hasPrefix: @"/Library/"])
+          [userFiles addObject: file];
+        }
+        
+      if(systemFiles.count > 0)
+        [self unloadSystemFiles: systemFiles];
+      
+      if(userFiles.count > 0)
+        [self unloadUserFiles: systemFiles];
+
+      if(completion != nil)
+        completion(files);
+        
+      [systemFiles release];
+      [userFiles release];
+    });
+  }
+
+#pragma mark - Unload in system space
+
+// Unload system files.
+// Returns all files successfully unloaded.
++ (NSSet *) unloadSystemFiles: (NSArray *) files
+  {
+  NSMutableSet * loadedFiles = [NSMutableSet new];
+  
+  for(LaunchdFile * file in files)
+    if(file.loaded)
+      [loadedFiles addObject: file];
+      
+  [self unloadLaunchdFilesInSystemSpace: [loadedFiles allObjects]];
+  
+  NSMutableSet * unloadedFiles = [NSMutableSet set];
+  
+  for(LaunchdFile * file in loadedFiles)
+    {
+    if(file.loaded)
+      [file requery];
+    
+    if(!file.loaded)
+      [unloadedFiles addObject: file];
+    }
+        
+  [loadedFiles release];
+
+  return unloadedFiles;
+  }
+
+// Unload launchd files in system space.
++ (void) unloadLaunchdFilesInSystemSpace: (NSArray *) files
+  {
+  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  
+  // Build the statements I will need.
+  [appleScriptStatements
+    addObjectsFromArray: [self buildUnloadStatements: files]];
+  [appleScriptStatements
+    addObjectsFromArray: [self buildKillStatement: files]];
+  
+  // Execute the statements.
+  [self executeAppleScriptStatements: appleScriptStatements];
+  
+  [appleScriptStatements release];
   }
 
 // Build one or more AppleScript statements to unload a list of
@@ -763,12 +662,174 @@
   return statements;
   }
 
+#pragma mark - Unload in user space
+
+// Unload user files.
+// Returns all files successfully unloaded.
++ (NSSet *) unloadUserFiles: (NSArray *) files
+  {
+  NSMutableSet * loadedFiles = [NSMutableSet new];
+  
+  for(LaunchdFile * file in files)
+    if(file.loaded)
+      [loadedFiles addObject: file];
+      
+  [self unloadLaunchdFilesInUserSpace: [loadedFiles allObjects]];
+  [self killLaunchdFilesInUserSpace: [loadedFiles allObjects]];
+  
+  NSMutableSet * unloadedFiles = [NSMutableSet set];
+  
+  for(LaunchdFile * file in loadedFiles)
+    {
+    if(file.loaded)
+      [file requery];
+    
+    if(!file.loaded)
+      [unloadedFiles addObject: file];
+    }
+        
+  [loadedFiles release];
+
+  return unloadedFiles;
+  }
+  
+// Unload launchd files in userspace.
++ (void) unloadLaunchdFilesInUserSpace: (NSArray *) files
+  {
+  NSArray * args = [self buildUnloadArguments: files];
+  
+  if([args count] > 2)
+    {
+    SubProcess * unload = [[SubProcess alloc] init];
+
+    [unload execute: @"/bin/launchctl" arguments: args];
+
+    [unload release];
+    }
+  }
+
+// Build an argument list for an unload command for a list of launchd files.
++ (NSArray *) buildUnloadArguments: (NSArray *) files
+  {
+  NSMutableArray * arguments = [NSMutableArray array];
+  
+  [arguments addObject: @"unload"];
+  [arguments addObject: @"-wF"];
+  
+  for(LaunchdFile * file in files)
+    {
+    // If it isn't already loaded, don't try to unload.
+    if(!file.loaded)
+      continue;
+      
+    if(file.path.length > 0)
+      [arguments addObject: file.path];
+    }
+    
+  return arguments;
+  }
+
+// Kill launchd tasks in userspace.
++ (void) killLaunchdFilesInUserSpace: (NSArray *) files
+  {
+  NSArray * args = [self buildKillArguments: files];
+  
+  if([args count] > 1)
+    {
+    SubProcess * kill = [[SubProcess alloc] init];
+
+    [kill execute: @"/bin/kill" arguments: args];
+
+    [kill release];
+    }
+  }
+
+// Build an argument list for a kill command for a list of launchd files.
++ (NSArray *) buildKillArguments: (NSArray *) files
+  {
+  NSMutableArray * arguments = [NSMutableArray array];
+  
+  [arguments addObject: @"-9"];
+
+  NumberFormatter * formatter = [NumberFormatter sharedNumberFormatter];
+  
+  for(LaunchdFile * file in files)
+    for(LaunchdLoadedTask * task in file.loadedTasks)
+      {
+      NSNumber * PID = [formatter convertFromString: task.PID];
+      
+      if(PID.intValue > 0)
+        [arguments addObject: task.PID];
+      }
+    
+  return arguments;
+  }
+
+#pragma mark - Private methods
+
+// Execute a list of AppleScript statements.
++ (void) executeAppleScriptStatements: (NSArray *) statements
+  {
+  if([statements count] == 0)
+    return;
+    
+  NSMutableArray * arguments = [NSMutableArray new];
+  
+  for(NSString * statement in statements)
+    if([statement length])
+      {
+      [arguments addObject: @"-e"];
+      [arguments addObject: statement];
+      }
+    
+  if([arguments count] > 0)
+    {
+    NSLog(@"Executing AppleScript: %@", arguments);
+    
+    SubProcess * subProcess = [[SubProcess alloc] init];
+
+    [subProcess execute: @"/usr/bin/osascript" arguments: arguments];
+
+    [subProcess release];
+    }
+    
+  [arguments release];
+  }
+
+// Trash files.
+// There is no difference between privileged and unprivileged modes. The
+// Finder handles that.
++ (void) trashFiles: (nonnull NSArray *) files reason: (NSString *) reason
+  {
+  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  
+  // Build the statements I will need.
+  [appleScriptStatements
+    addObjectsFromArray: [self buildTrashStatements: files]];
+  
+  // Execute the statements. 
+  [self executeAppleScriptStatements: appleScriptStatements];
+  
+  [appleScriptStatements release];
+  
+  NSMutableArray * trashedFiles = [NSMutableArray array];
+  
+  if(trashedFiles.count > 0)
+    {
+    for(NSString * path in files)
+      if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+        [trashedFiles addObject: path];
+        
+    [self recordTrashedFiles: trashedFiles reason: reason];
+    }
+  }
+
 // Build an AppleScript statement to trash a list of files.
 + (NSArray *) buildTrashStatements: (NSArray *) paths
   {
   NSMutableArray * statements = [NSMutableArray array];
   
-  NSMutableString * source = [NSMutableString string];
+  NSMutableString * source = [NSMutableString new];
   
   [source appendString: @"set posixFiles to {"];
   
@@ -801,11 +862,13 @@
     [statements addObject: @"end tell"];
     }
     
+  [source release];
+  
   return statements;
   }
 
 // Record trashed files in preferences.
-+ (void) recordTrashedFiles: (NSArray *) files
++ (void) recordTrashedFiles: (NSArray *) files reason: (NSString *) reason
   {
   // Save deleted files.
   NSArray * currentDeletedFiles =
@@ -839,6 +902,7 @@
         dictionaryWithObjectsAndKeys:
           now, @"date",
           path, @"file",
+          reason, @"reason",
           nil];
       
     [deletedFiles addObject: entry];

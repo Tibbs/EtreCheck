@@ -74,6 +74,12 @@
   [super dealloc];
   }
   
+// Is this a Safari extension?
+- (BOOL) isSafariExtension
+  {
+  return YES;
+  }
+  
 // Extract a Safari extension from a path.
 + (NSDictionary *) readFromPath: (NSString *) path
   {

@@ -58,4 +58,7 @@
 // Constructor with path to extension.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;
 
+// Is this a Safari extension?
+- (BOOL) isSafariExtension;
+
 @end

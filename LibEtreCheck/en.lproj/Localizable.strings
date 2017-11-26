@@ -12,7 +12,7 @@
 "belowaverageperformance" = "Below Average";
 "downloadetrecheck" = "Download EtreCheck from ";
 "excellentperformance" = "Excellent";
-"gatekeeperneedslion" = "    Gatekeeper information requires OS X 10.7.5 \"Lion\" or later.\n\n";
+"gatekeeperneedsmountainlion" = "    Gatekeeper information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
 "goodperformance" = "Good";
 "info" = "ⓘ";
 "installsincomplete" = "    Install information may not be complete.\n";
