@@ -312,8 +312,8 @@
 		A58B4D131EE0E4FB00415121 /* InstallCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCollector.m; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Etresoft.m"; sourceTree = "<group>"; };
-		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiagnosticEvent.h; path = ../LibEtreCheck/DiagnosticEvent.h; sourceTree = "<group>"; };
-		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiagnosticEvent.m; path = ../LibEtreCheck/DiagnosticEvent.m; sourceTree = "<group>"; };
+		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticEvent.h; sourceTree = "<group>"; };
+		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticEvent.m; sourceTree = "<group>"; };
 		A5C00A2619BFF2D500140404 /* NSAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A5C00A2719BFF2D500140404 /* NSAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Etresoft.m"; sourceTree = "<group>"; };
 		A5C292DE19A02B2700464E86 /* Collector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collector.h; sourceTree = "<group>"; };
@@ -609,8 +609,6 @@
 				A51ED7661DB090B60026833B /* NumberFormatter.m */,
 				A55CBF431ED49CB300A43C84 /* CRC32.h */,
 				A55CBF441ED49CB300A43C84 /* CRC32.m */,
-				A5B659211A16D57800476A76 /* DiagnosticEvent.h */,
-				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
 				A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */,
 				A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */,
 				A503BF981F82AD8D00473A24 /* LocalizedString.h */,
@@ -697,6 +695,8 @@
 				A57A3A901FA6BB7B001DBE47 /* Volume.m */,
 				A57A3A831FA6B65F001DBE47 /* Drive.h */,
 				A57A3A841FA6B65F001DBE47 /* Drive.m */,
+				A5B659211A16D57800476A76 /* DiagnosticEvent.h */,
+				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
 			);
