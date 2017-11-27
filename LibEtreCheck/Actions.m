@@ -271,13 +271,14 @@
       {
       LaunchdFile * file = (LaunchdFile *)item;
       
-      [filesToDelete addObject: file.path];
+      [filesToDelete addObject: [file.path stringByExpandingTildeInPath]];
       }
     else if([item respondsToSelector: @selector(isSafariExtension)])
       {
       SafariExtension * extension = (SafariExtension *)item;
       
-      [filesToDelete addObject: extension.path];
+      [filesToDelete 
+        addObject: [extension.path stringByExpandingTildeInPath]];
       }
     }
     
@@ -310,16 +311,17 @@
       else if([file.path hasPrefix: @"/Library/"])
         [systemFiles addObject: file];
       
-      else if([file.path hasPrefix: @"/Library/"])
+      else if([file.path hasPrefix: @"~/Library/"])
         [userFiles addObject: file];
         
-      [filesToDelete addObject: file.path];
+      [filesToDelete addObject: [file.path stringByExpandingTildeInPath]];
       }
     else if([item respondsToSelector: @selector(isSafariExtension)])
       {
       SafariExtension * extension = (SafariExtension *)item;
       
-      [filesToDelete addObject: extension.path];
+      [filesToDelete 
+        addObject: [extension.path stringByExpandingTildeInPath]];
       }
     }
     
@@ -327,7 +329,7 @@
     [self unloadSystemFiles: systemFiles];
   
   if(userFiles.count > 0)
-    [self unloadUserFiles: systemFiles];
+    [self unloadUserFiles: userFiles];
 
   [self trashFiles: filesToDelete reason: @"adware"];
   
@@ -362,7 +364,7 @@
         else if([file.path hasPrefix: @"/Library/"])
           [systemFiles addObject: file];
         
-        else if([file.path hasPrefix: @"/Library/"])
+        else if([file.path hasPrefix: @"~/Library/"])
           [userFiles addObject: file];
         }
         
@@ -370,7 +372,7 @@
         [self loadSystemFiles: systemFiles];
       
       if(userFiles.count > 0)
-        [self loadUserFiles: systemFiles];
+        [self loadUserFiles: userFiles];
 
       if(completion != nil)
         completion(files);
@@ -514,7 +516,7 @@
       continue;
       
     if(file.path.length > 0)
-      [arguments addObject: file.path];
+      [arguments addObject: [file.path stringByExpandingTildeInPath]];
     }
     
   return arguments;
@@ -540,7 +542,7 @@
         else if([file.path hasPrefix: @"/Library/"])
           [systemFiles addObject: file];
         
-        else if([file.path hasPrefix: @"/Library/"])
+        else if([file.path hasPrefix: @"~/Library/"])
           [userFiles addObject: file];
         }
         
@@ -548,7 +550,7 @@
         [self unloadSystemFiles: systemFiles];
       
       if(userFiles.count > 0)
-        [self unloadUserFiles: systemFiles];
+        [self unloadUserFiles: userFiles];
 
       if(completion != nil)
         completion(files);
@@ -723,7 +725,7 @@
       continue;
       
     if(file.path.length > 0)
-      [arguments addObject: file.path];
+      [arguments addObject: [file.path stringByExpandingTildeInPath]];
     }
     
   return arguments;
@@ -859,6 +861,9 @@
     [statements addObject: @"set locked of f to false"];
     [statements addObject: @"end repeat"];
     [statements addObject: @"move posixFiles to the trash"];
+    [statements addObject: @"end tell"];
+    [statements addObject: @"tell application \"EtreCheck\""];
+    [statements addObject: @"activate"];
     [statements addObject: @"end tell"];
     }
     
