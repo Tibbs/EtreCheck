@@ -22,7 +22,7 @@
   NSString * myDisplayName;
   
   // Identifier.
-  NSString * myIdentifier;
+  NSString * myBundleIdentifier;
   
   // Loaded status.
   BOOL myLoaded;
@@ -32,6 +32,9 @@
   
   // Developer web site.
   NSString * myDeveloperWebSite;
+
+  // I will need a unique, XML-safe identifier for each launchd file.
+  NSString * myIdentifier;
   }
   
 // Source path.
@@ -44,7 +47,7 @@
 @property (retain, nullable) NSString * displayName;
 
 // Identifier.
-@property (retain, nullable) NSString * identifier;
+@property (retain, nullable) NSString * bundleIdentifier;
 
 // Loaded status.
 @property (assign) BOOL loaded;
@@ -54,6 +57,9 @@
 
 // Developer web site.
 @property (retain, nullable) NSString * developerWebSite;
+
+// I will need a unique, XML-safe identifier for each launchd file.
+@property (retain, nonnull) NSString * identifier;
 
 // Constructor with path to extension.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

@@ -89,7 +89,9 @@
       SafariExtension * extension = 
         [[SafariExtension alloc] initWithPath: path];
       
-      [self.extensions setObject: extension forKey: extension.identifier];
+      [self.extensions 
+        setObject: extension forKey: extension.bundleIdentifier];
+      
       [self.extensionsByName setObject: extension forKey: extension.name];
       
       [extension release];
@@ -143,11 +145,11 @@
           
           extension.path = path;
           extension.name = displayName;
-          extension.identifier = identifier;
+          extension.bundleIdentifier = identifier;
           extension.authorName = @"Mac App Store";
           
           [self.extensions 
-            setObject: extension forKey: extension.identifier];
+            setObject: extension forKey: extension.bundleIdentifier];
           
           [self.extensionsByName 
             setObject: extension forKey: extension.name];

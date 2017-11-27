@@ -24,8 +24,8 @@
 // Display name.
 @synthesize displayName = myDisplayName;
 
-// Identifier.
-@synthesize identifier = myIdentifier;
+// Bundle identifier.
+@synthesize bundleIdentifier = myBundleIdentifier;
 
 // Loaded status.
 @synthesize loaded = myLoaded;
@@ -35,6 +35,23 @@
 
 // Developer web site.
 @synthesize developerWebSite = myDeveloperWebSite;
+
+// I will need a unique, XML-safe identifier for each launchd file.
+@synthesize identifier = myIdentifier;
+
+// Return a unique number.
++ (int) uniqueIdentifier
+  {
+  static int counter = 0;
+  
+  dispatch_sync(
+    dispatch_get_main_queue(), 
+    ^{
+      ++counter;
+    });
+    
+  return counter;
+  }
 
 // Constructor with path to extension.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path
@@ -55,6 +72,11 @@
       
       [self parseDictionary: dict];
       
+      myIdentifier = 
+        [[NSString alloc] 
+          initWithFormat: 
+            @"safariextension%d", [SafariExtension uniqueIdentifier]];
+      
       return self;
       }
     }
@@ -68,8 +90,9 @@
   self.path = nil;
   self.name = nil;
   self.displayName = nil;
-  self.identifier = nil;
+  self.bundleIdentifier = nil;
   self.developerWebSite = nil;
+  [myIdentifier release];
   
   [super dealloc];
   }
@@ -196,10 +219,10 @@
   {
   self.displayName = [dict objectForKey: @"CFBundleDisplayName"];
   
-  self.identifier = [dict objectForKey: @"CFBundleIdentifier"];
+  self.bundleIdentifier = [dict objectForKey: @"CFBundleIdentifier"];
   
-  if(self.identifier == nil)
-    self.identifier = self.name;
+  if(self.bundleIdentifier == nil)
+    self.bundleIdentifier = self.name;
     
   self.loaded = NO;
   
@@ -306,6 +329,7 @@
   {
   [xml startElement: @"extension"];
 
+  [xml addElement: @"identifier" value: self.identifier];
   [xml addElement: @"name" value: self.name];
   [xml addElement: @"displayname" value: self.displayName];
   [xml addElement: @"developer" value: self.authorName];
