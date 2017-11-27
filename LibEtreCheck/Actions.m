@@ -786,8 +786,6 @@
     
   if([arguments count] > 0)
     {
-    NSLog(@"Executing AppleScript: %@", arguments);
-    
     SubProcess * subProcess = [[SubProcess alloc] init];
 
     [subProcess execute: @"/usr/bin/osascript" arguments: arguments];
