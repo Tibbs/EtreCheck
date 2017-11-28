@@ -7,6 +7,7 @@
 #import "Collector.h"
 
 @class DiagnosticEvent;
+@class Model;
 
 // Collect diagnostics information.
 @interface DiagnosticsCollector : Collector
@@ -22,6 +23,6 @@
 
 // Parse diagnostic data.
 + (void) parseDiagnosticData: (NSString *) contents
-  event: (DiagnosticEvent *) event;
+  event: (DiagnosticEvent *) event model: (Model *) model;
 
 @end

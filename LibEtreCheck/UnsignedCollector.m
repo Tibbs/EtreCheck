@@ -53,7 +53,7 @@
 // Collect unsigned files. 
 - (void) collectUnsignedFiles
   {
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
   
   // I will have already filtered out launchd files specific to this 
   // context.
@@ -70,7 +70,7 @@
 - (void) calculateSafetyScores
   {
   // Build a list of whitelist prefixes. 
-  NSMutableSet * whitelistFiles = [[[Model model] adware] whitelistFiles];
+  NSMutableSet * whitelistFiles = [[self.model adware] whitelistFiles];
   NSMutableSet * legitimateStrings = [NSMutableSet new];
   
   for(NSString * file in whitelistFiles)
@@ -81,10 +81,10 @@
       [legitimateStrings addObject: prefix];
     }
 
-  for(LaunchdFile * file in [[[Model model] launchd] unsignedFiles])
+  for(LaunchdFile * file in [[self.model launchd] unsignedFiles])
     {
     NSDictionary * appleFile = 
-      [[[[Model model] launchd] appleFiles] objectForKey: file.path];
+      [[[self.model launchd] appleFiles] objectForKey: file.path];
       
     if(appleFile != nil)
       {
@@ -139,18 +139,18 @@
   if(file.adware)
     return;
     
-  [[[[Model model] launchd] unsignedFiles] addObject: file];
+  [[[self.model launchd] unsignedFiles] addObject: file];
   }
   
 // Print unsigned files.
 - (void) printUnsignedFiles
   {
-  if([[Model model] launchd].unsignedFiles.count == 0)
+  if([self.model launchd].unsignedFiles.count == 0)
     return;
     
   [self.result appendAttributedString: [self buildTitle]];
   
-  for(LaunchdFile * launchdFile in [[[Model model] launchd] unsignedFiles])
+  for(LaunchdFile * launchdFile in [[self.model launchd] unsignedFiles])
     {
     if([self hideFile: launchdFile])
       continue;
@@ -182,7 +182,7 @@
       {
       [self.result appendString: @"\n        "];
       [self.result 
-        appendString: [Utilities cleanPath: launchdFile.executable]];
+        appendString: [self cleanPath: launchdFile.executable]];
       }
 
     [self.result appendString: @"\n"];
@@ -194,7 +194,7 @@
 // Should this file be hidden?
 - (BOOL) hideFile: (LaunchdFile *) file
   {
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
   
@@ -204,7 +204,7 @@
     
     if(expectedSignature != nil)
       if([file.signature isEqualToString: expectedSignature])
-        return [[Model model] ignoreKnownAppleFailures];
+        return [self.model ignoreKnownAppleFailures];
     }
     
   return NO;
@@ -213,17 +213,17 @@
 // Export unsigned files.
 - (void) exportUnsignedFiles
   {
-  if([[Model model] launchd].unsignedFiles.count == 0)
+  if([self.model launchd].unsignedFiles.count == 0)
     return;
 
-  [self.model startElement: @"launchdfiles"];
+  [self.xml startElement: @"launchdfiles"];
   
-  for(LaunchdFile * launchdFile in [[[Model model] launchd] unsignedFiles])
+  for(LaunchdFile * launchdFile in [[self.model launchd] unsignedFiles])
 
     // Export the XML.
-    [self.model addFragment: launchdFile.xml];
+    [self.xml addFragment: launchdFile.xml];
   
-  [self.model endElement: @"launchdfiles"];
+  [self.xml endElement: @"launchdfiles"];
   }
 
 // Generate a "disable" link.

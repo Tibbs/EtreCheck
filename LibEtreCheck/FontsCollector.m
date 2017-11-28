@@ -41,14 +41,14 @@
       NSString * name = [font objectForKey: @"_name"];
       NSString * path = [font objectForKey: @"path"];
 
-      NSString * cleanPath = [Utilities cleanPath: path];
+      NSString * cleanPath = [self cleanPath: path];
       
-      [self.model startElement: @"font"];
+      [self.xml startElement: @"font"];
       
-      [self.model addElement: @"name" value: name];
-      [self.model addElement: @"path" value: cleanPath];
+      [self.xml addElement: @"name" value: name];
+      [self.xml addElement: @"path" value: cleanPath];
       
-      [self.model endElement: @"font"];
+      [self.xml endElement: @"font"];
       
       [self.result
         appendString:

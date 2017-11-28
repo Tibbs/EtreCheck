@@ -156,7 +156,7 @@
   switch(setting)
     {
     case kMacAppStore:
-      [self.model 
+      [self.xml 
         addElement: @"status" 
         value: ECLocalizedString(@"Mac App Store")];
       
@@ -167,7 +167,7 @@
               @"    %@\n", ECLocalizedString(@"Mac App Store")]];
       break;
     case kDeveloperID:
-      [self.model 
+      [self.xml 
         addElement: @"status" 
         value: 
           ECLocalizedString(
@@ -182,7 +182,7 @@
                 @"Mac App Store and identified developers")]];
       break;
     case kDisabled:
-      [self.model 
+      [self.xml 
         addElement: @"status" 
         value: ECLocalizedString(@"Anywhere")];
 
@@ -201,7 +201,7 @@
       
     case kSettingUnknown:
     default:
-      [self.model 
+      [self.xml 
         addElement: @"status" 
         value: ECLocalizedString(@"Unknown")];
 

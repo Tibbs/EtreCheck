@@ -279,13 +279,13 @@
     [bytesOutString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
-  [self.model startElement: @"process"];
+  [self.xml startElement: @"process"];
   
-  [self.model addElement: @"inputsize" valueWithUnits: bytesInString];
-  [self.model addElement: @"outputsize" valueWithUnits: bytesOutString];
-  [self.model addElement: @"name" value: processName];
+  [self.xml addElement: @"inputsize" valueWithUnits: bytesInString];
+  [self.xml addElement: @"outputsize" valueWithUnits: bytesOutString];
+  [self.xml addElement: @"name" value: processName];
   
-  [self.model endElement: @"process"];
+  [self.xml endElement: @"process"];
 
   [self.result
     appendString:

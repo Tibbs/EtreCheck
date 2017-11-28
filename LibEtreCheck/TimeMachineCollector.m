@@ -66,7 +66,7 @@
 
   if([[OSVersion shared] major] < kMountainLion)
     {
-    [self.model addElement: @"osversiontooold" boolValue: YES];
+    [self.xml addElement: @"osversiontooold" boolValue: YES];
     
     [self.result
       appendString:
@@ -84,7 +84,7 @@
   
   if(!tmutilExists)
     {
-    [self.model addElement: @"tmutilunavailable" boolValue: YES];
+    [self.xml addElement: @"tmutilunavailable" boolValue: YES];
 
     [self.result
       appendString:
@@ -109,9 +109,9 @@
   {
   volumes = [NSMutableDictionary new];
   
-  for(NSString * device in [[Model model] storageDevices])
+  for(NSString * device in [self.model storageDevices])
     {
-    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    Volume * volume = [[self.model storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
       if(volume.UUID.length > 0)
@@ -149,7 +149,7 @@
 
       [self.result appendCR];
         
-      [[Model model] setBackupExists: YES];
+      [self.model setBackupExists: YES];
       
       return;
       }
@@ -376,7 +376,7 @@
 // Print the volume.
 - (void) printVolume: (Volume *) volume
   {
-  NSString * cleanName = [Utilities cleanName: volume.name];
+  volume.cleanName = [self cleanName: volume.name];
   
   NSString * diskSize = ECLocalizedString(@"Unknown");
 
@@ -392,27 +392,27 @@
         stringWithFormat:
           ECLocalizedString(
             @"        %@: Disk size: %@ - Disk used: %@\n"),
-          cleanName, diskSize, spaceRequired]];
+          volume.cleanName, diskSize, spaceRequired]];
 
-  [self.model startElement: @"volume"];
-  [self.model addElement: @"name" value: volume.name]; 
-  [self.model addElement: @"cleanname" value: cleanName]; 
+  [self.xml startElement: @"volume"];
+  [self.xml addElement: @"name" value: volume.name]; 
+  [self.xml addElement: @"cleanname" value: volume.cleanName]; 
 
-  [self.model 
+  [self.xml 
     addElement: @"size" 
     valueWithUnits: 
       [formatter stringFromByteCount: volume.size]];
   
-  [self.model 
+  [self.xml 
     addElement: @"free" 
     valueWithUnits: 
       [formatter stringFromByteCount: volume.freeSpace]];
-  [self.model 
+  [self.xml 
     addElement: @"used" 
     valueWithUnits: 
       [formatter stringFromByteCount: used]];
 
-  [self.model endElement: @"volume"];
+  [self.xml endElement: @"volume"];
 
   minimumBackupSize += used;
   maximumBackupSize += volume.size;
@@ -457,7 +457,7 @@
   NSNumber * skipSystemFiles =
     [settings objectForKey: @"SkipSystemFiles"];
 
-  [self.model 
+  [self.xml 
     addElement: @"skipsystemfiles" boolValue: [skipSystemFiles boolValue]];
   
   if(skipSystemFiles != nil)
@@ -488,7 +488,7 @@
   NSNumber * mobileBackups =
     [settings objectForKey: @"MobileBackups"];
 
-  [self.model 
+  [self.xml 
     addElement: @"mobilebackups" boolValue: [mobileBackups boolValue]];
   
   if(mobileBackups != nil)
@@ -513,7 +513,7 @@
   NSNumber * autoBackup =
     [settings objectForKey: @"AutoBackup"];
 
-  [self.model addElement: @"autobackup" boolValue: [autoBackup boolValue]];
+  [self.xml addElement: @"autobackup" boolValue: [autoBackup boolValue]];
 
   if(autoBackup != nil)
     {
@@ -574,7 +574,7 @@
   
   if([backedupVolumeUUIDs count])
     {
-    [self.model startElement: @"volumesbeingbackedup"];
+    [self.xml startElement: @"volumesbeingbackedup"];
     
     [self.result
       appendString:
@@ -589,7 +589,7 @@
       [self printBackedupVolume: UUID];
       }
 
-    [self.model endElement: @"volumesbeingbackedup"];
+    [self.xml endElement: @"volumesbeingbackedup"];
     }
   }
 
@@ -601,7 +601,7 @@
 
   bool first = YES;
   
-  [self.model startElement: @"destinations"];
+  [self.xml startElement: @"destinations"];
   
   for(NSString * destinationID in destinations)
     {
@@ -613,13 +613,13 @@
     first = NO;
     }
 
-  [self.model endElement: @"destinations"];
+  [self.xml endElement: @"destinations"];
   }
 
 // Print a Time Machine destination.
 - (void) printDestination: (NSDictionary *) destination
   {
-  [self.model startElement: @"destination"];
+  [self.xml startElement: @"destination"];
   
   // Print the destination description.
   [self printDestinationDescription: destination];
@@ -641,7 +641,7 @@
   // Print an overall analysis of the Time Machine size differential.
   [self printDestinationSizeAnalysis: totalSizeValue];
 
-  [self.model endElement: @"destination"];
+  [self.xml endElement: @"destination"];
   }
 
 // Print the destination description.
@@ -651,20 +651,20 @@
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
 
-  NSString * cleanName = [Utilities cleanName: name];
+  NSString * cleanName = [self cleanName: name];
   
   NSString * lastused = @"";
 
   if([last integerValue] == 1)
     lastused = ECLocalizedString(@"(Last used)");
 
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"cleanname" value: cleanName];
-  [self.model addElement: @"type" value: kind];
-  [self.model addElement: @"lastused" boolValue: last.boolValue];
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"cleanname" value: cleanName];
+  [self.xml addElement: @"type" value: kind];
+  [self.xml addElement: @"lastused" boolValue: last.boolValue];
   
   if([last boolValue])
-    [self.model addElement: @"lastused" boolValue: [last boolValue]];
+    [self.xml addElement: @"lastused" boolValue: [last boolValue]];
   
   [self.result
     appendString:
@@ -679,7 +679,7 @@
   NSString * totalSize =
     [formatter stringFromByteCount: totalSizeValue];
 
-  [self.model addElement: @"size" valueWithUnits: totalSize];
+  [self.xml addElement: @"size" valueWithUnits: totalSize];
   
   [self.result
     appendString:
@@ -694,7 +694,7 @@
   {
   NSNumber * count = [destination objectForKey: kSnapshotcount];
   
-  [self.model addElement: @"count" number: count];
+  [self.xml addElement: @"count" number: count];
   
   [self.result
     appendString:
@@ -707,7 +707,7 @@
 
   if(oldestBackup != nil)
     {
-    [self.model addElement: @"oldestbackup" date: oldestBackup];
+    [self.xml addElement: @"oldestbackup" date: oldestBackup];
     
     [self.result
       appendString:
@@ -725,7 +725,7 @@
     NSDate * then =
       [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 10];
   
-    [self.model addElement: @"lastbackup" date: lastBackup];
+    [self.xml addElement: @"lastbackup" date: lastBackup];
 
     if([lastBackup compare: then] != NSOrderedDescending)
       [self.result

@@ -67,9 +67,9 @@
   
   NSString * currentDate = [Utilities dateAsString: date];
               
-  [self.model addElement: @"version" value: version];
-  [self.model addElement: @"build" value: build];
-  [self.model addElement: @"date" date: date];
+  [self.xml addElement: @"version" value: version];
+  [self.xml addElement: @"build" value: build];
+  [self.xml addElement: @"date" date: date];
 
   [self.result
     appendString:
@@ -101,7 +101,7 @@
   
   NSString * runtime = [self elapsedTime];
   
-  [self.model 
+  [self.xml 
     addElement: @"runtime" 
     value: runtime 
     attributes: 
@@ -143,7 +143,7 @@
     {
     NSString * performance = ECLocalizedString(@"poorperformance");
     
-    [self.model addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: performance];
     
     [self.result
       appendString: performance
@@ -158,7 +158,7 @@
     NSString * performance = 
       ECLocalizedString(@"belowaverageperformance");
     
-    [self.model addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: performance];
     
     [self.result
       appendString: performance
@@ -173,7 +173,7 @@
     NSString * performance = 
       ECLocalizedString(@"goodperformance");
     
-    [self.model addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: performance];
     
     [self.result
       appendString: performance
@@ -187,7 +187,7 @@
     NSString * performance = 
       ECLocalizedString(@"excellentperformance");
     
-    [self.model addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: performance];
     
     [self.result
       appendString: performance
@@ -210,7 +210,7 @@
           [[NSBundle mainBundle]
             pathForResource: @"linkhelp" ofType: @"rtf"]]];
 
-  if([[Model model] adwareFound])
+  if([self.model adwareFound])
     [self.result
       appendRTFData:
         [NSData
@@ -218,7 +218,7 @@
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
     
-  if([[Model model] unsignedFound])
+  if([self.model unsignedFound])
     [self.result
       appendRTFData:
         [NSData
@@ -226,7 +226,7 @@
             [[NSBundle mainBundle]
               pathForResource: @"unsignedhelp" ofType: @"rtf"]]];
 
-  if([[Model model] cleanupRequired])
+  if([self.model cleanupRequired])
     [self.result
       appendRTFData:
         [NSData
@@ -242,7 +242,7 @@
   {
   bool options = NO;
   
-  if([[Model model] showSignatureFailures])
+  if([self.model showSignatureFailures])
     {
     [self.result
       appendString:
@@ -256,7 +256,7 @@
     options = YES;
     }
 
-  if(![[Model model] ignoreKnownAppleFailures])
+  if(![self.model ignoreKnownAppleFailures])
     {
     [self.result
       appendString:
@@ -270,7 +270,7 @@
     options = YES;
     }
 
-  if(![[Model model] hideAppleTasks])
+  if(![self.model hideAppleTasks])
     {
     [self.result
       appendString:
@@ -291,7 +291,7 @@
 // Print errors during EtreCheck itself.
 - (void) printErrors
   {
-  NSArray * terminatedTasks = [[Model model] terminatedTasks];
+  NSArray * terminatedTasks = [self.model terminatedTasks];
   
   if(terminatedTasks.count > 0)
     {
@@ -321,7 +321,7 @@
     [self.result appendString: @"\n"];
     }
     
-  Adware * adware = [[Model model] adware];
+  Adware * adware = [self.model adware];
   
   if([[adware whitelistFiles] count] < kMinimumWhitelistSize)
     {
@@ -371,17 +371,17 @@
         NSFontAttributeName : [[Utilities shared] boldFont]
       }];
   
-  [self.model addElement: @"problem" value: [[Model model] problem]];
+  [self.xml addElement: @"problem" value: [self.model problem]];
 
-  [self.result appendString: [[Model model] problem]];
+  [self.result appendString: [self.model problem]];
   [self.result appendString: @"\n"];
     
   NSAttributedString * problemDescription = 
-    [[Model model] problemDescription];
+    [self.model problemDescription];
   
   if(problemDescription.string.length > 0)
     {
-    [self.model
+    [self.xml
       addElement: @"problemdescription" value: problemDescription.string];
 
     [self.result

@@ -28,7 +28,7 @@
 // Print tasks.
 - (void) printFiles: (NSArray *) files
   {
-  if(![[Model model] hideAppleTasks])
+  if(![self.model hideAppleTasks])
     [super printFiles: files];
   else
     {  
@@ -51,7 +51,7 @@
       [currentTotal release];
 
       // Export the XML.
-      [self.model addFragment: file.xml];
+      [self.xml addFragment: file.xml];
       }
 
     [self printTotals: totals];
@@ -129,12 +129,12 @@
   {
   if(count > 0)
     {
-    [self.model startElement: @"applelaunchdfile"];
+    [self.xml startElement: @"applelaunchdfile"];
     
-    [self.model addElement: @"status" value: status];
-    [self.model addElement: @"count" unsignedIntegerValue: count];
+    [self.xml addElement: @"status" value: status];
+    [self.xml addElement: @"count" unsignedIntegerValue: count];
     
-    [self.model endElement: @"applelaunchdfile"];
+    [self.xml endElement: @"applelaunchdfile"];
     }
   }
 

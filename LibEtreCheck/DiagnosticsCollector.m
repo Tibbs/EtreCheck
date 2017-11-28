@@ -52,7 +52,7 @@
   [self collectPanics];
   [self collectCPU];
   
-  if([[[Model model] diagnosticEvents] count] || insufficientPermissions)
+  if([[self.model diagnosticEvents] count] || insufficientPermissions)
     {
     [self printDiagnostics];
     
@@ -61,7 +61,7 @@
       if(!hasOutput)
         [self.result appendAttributedString: [self buildTitle]];
         
-      [self.model addElement: @"insufficientpermissions" boolValue: YES];
+      [self.xml addElement: @"insufficientpermissions" boolValue: YES];
 
       [self.result appendString: @"\n"];
       [self.result
@@ -147,7 +147,7 @@
       event.name = ECLocalizedString(@"Self test - failed");
       event.details = details;
       
-      [[[Model model] diagnosticEvents]
+      [[self.model diagnosticEvents]
         setObject: event forKey: @"selftest"];
       
       [event release];
@@ -297,7 +297,7 @@
     // Parse the file contents.
     [self parseFileContents: file event: event];
     
-    [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+    [[self.model diagnosticEvents] setObject: event forKey: event.name];
     
     [event release];
     }
@@ -341,7 +341,7 @@
   
   if(name)
     *name =
-      [Utilities cleanPath: [safeParts componentsJoinedByString: @"_"]];
+      [self cleanPath: [safeParts componentsJoinedByString: @"_"]];
   }
 
 // Collect just the first section for a CPU report header.
@@ -353,14 +353,15 @@
   NSString * contents =
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  [DiagnosticsCollector parseDiagnosticData: contents event: event];
+  [DiagnosticsCollector 
+    parseDiagnosticData: contents event: event model: self.model];
   
   [contents release];
   }
 
 // Parse diagnostic data.
 + (void) parseDiagnosticData: (NSString *) contents
-  event: (DiagnosticEvent *) event
+  event: (DiagnosticEvent *) event model: (Model *) model
   {
   if(!event)
     return;
@@ -491,7 +492,7 @@
   else if(event.type == kCPU)
     event.details = result;
   else
-    event.details = [[Model model] logEntriesAround: event.date];
+    event.details = [model logEntriesAround: event.date];
     
   if([path length])
     {
@@ -515,7 +516,7 @@
 // Print crash logs.
 - (void) printDiagnostics
   {
-  NSMutableDictionary * events = [[Model model] diagnosticEvents];
+  NSMutableDictionary * events = [self.model diagnosticEvents];
     
   NSArray * sortedKeys =
     [events
@@ -559,11 +560,11 @@
   if(!hasOutput)
     [self.result appendAttributedString: [self buildTitle]];
   
-  [self.model startElement: @"event"];
+  [self.xml startElement: @"event"];
   
-  [self.model addElement: @"date" date: event.date];
-  [self.model addElement: @"name" value: event.name];
-  [self.model addElement: @"type" intValue: event.type];
+  [self.xml addElement: @"date" date: event.date];
+  [self.xml addElement: @"name" value: event.name];
+  [self.xml addElement: @"type" intValue: event.type];
 
   switch(event.type)
     {
@@ -630,13 +631,13 @@
     if(fileExists)
       {
       NSAttributedString * openURL =
-        [[Model model] getOpenURLFor: event.file];
+        [self.model getOpenURLFor: event.file];
 
       if(openURL != nil)
         {
         [self.result appendString: @" "];
         [self.result appendAttributedString: openURL];
-        [self.model addElement: @"path" value: event.file];
+        [self.xml addElement: @"path" value: event.file];
         }
       }
     else
@@ -651,10 +652,10 @@
     
   if([event.details length])
     {
-    [self.model addElement: @"details" valueAsCDATA: event.details];
+    [self.xml addElement: @"details" valueAsCDATA: event.details];
     
     NSAttributedString * detailsURL =
-      [[Model model] getDetailsURLFor: name];
+      [self.model getDetailsURLFor: name];
 
     if(detailsURL != nil)
       {
@@ -665,7 +666,7 @@
 
   [self.result appendString: @"\n"];
   
-  [self.model addElement: @"information" valueAsCDATA: event.information];
+  [self.xml addElement: @"information" valueAsCDATA: event.information];
   
   if([event.information length] > 0)
     [self.result 
@@ -673,7 +674,7 @@
 
   hasOutput = YES;
   
-  [self.model endElement: @"event"];
+  [self.xml endElement: @"event"];
   }
 
 // Get an event name.

@@ -106,9 +106,9 @@
 
     NSString * name = [process objectForKey: @"command"];
     
-    [self.model startElement: @"process"];
+    [self.xml startElement: @"process"];
     
-    [self.model 
+    [self.xml 
       addElement: @"usage" 
       value: [NSString stringWithFormat: @"%.0lf", cpu]
       attributes: 
@@ -116,10 +116,10 @@
           dictionaryWithObjectsAndKeys: 
             @"%", @"units", @"number", @"type", nil]];
         
-    [self.model addElement: @"name" value: name];
-    [self.model addElement: @"count" intValue: count];
+    [self.xml addElement: @"name" value: name];
+    [self.xml addElement: @"count" intValue: count];
     
-    [self.model endElement: @"process"];
+    [self.xml endElement: @"process"];
     
     NSString * output =
       [NSString

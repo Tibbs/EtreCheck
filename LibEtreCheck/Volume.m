@@ -45,6 +45,9 @@
 // Use device identifier only to avoid cicular references.
 @dynamic containingDevices;
 
+// The data model.
+@synthesize model = myModel;
+
 // Get containing devices.
 - (NSSet *) containingDevices
   {
@@ -123,6 +126,7 @@
   self.filesystem = nil;
   self.encryptionStatus = nil;
   self.mountpoint = nil;
+  self.model = nil;
   
   [super dealloc];
   }
@@ -140,7 +144,7 @@
   [myContainingDevices addObject: device];
   
   StorageDevice * storageDevice = 
-    [[[Model model] storageDevices] objectForKey: device];
+    [[self.model storageDevices] objectForKey: device];
     
   if(storageDevice != nil)
     [storageDevice.volumes addObject: self.identifier];
@@ -150,9 +154,6 @@
 - (void) buildAttributedStringValue: 
   (NSMutableAttributedString *) attributedString
   {
-  NSString * cleanName = 
-    [self.name length] > 0 ? [Utilities cleanName: self.name] : @"";
-    
   NSString * volumeMountPoint = self.mountpoint;
   
   if(volumeMountPoint == nil)
@@ -201,7 +202,7 @@
       [NSString
         stringWithFormat:
           ECLocalizedString(@"%@ (%@%@) %@ %@: %@ %@%@\n"),
-          cleanName,
+          self.cleanName,
           self.identifier,
           fileSystemName,
           volumeMountPoint,
@@ -241,7 +242,7 @@
 
   for(NSString * device in volumeDevices)
     {
-    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    Volume * volume = [[self.model storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
       {

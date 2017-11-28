@@ -85,19 +85,6 @@
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data;
 
-// Redact a name.
-+ (NSString *) cleanName: (NSString *) name;
-
-// Redact any user names in a path.
-+ (NSString *) cleanPath: (NSString *) path;
-
-// Format an exectuable array for printing, redacting any user names in
-// the path.
-+ (NSString *) formatExecutable: (NSArray *) parts;
-
-// Make a path more presentable.
-+ (NSString *) prettyPath: (NSString *) path;
-
 // Uncompress some data.
 + (NSData *) ungzip: (NSData *) gzipData;
 

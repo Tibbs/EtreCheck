@@ -120,13 +120,13 @@
 
   for(NSString * file in machInitFiles)
     {
-    NSString * cleanPath = [Utilities cleanPath: file];
+    NSString * cleanPath = [self cleanPath: file];
     
-    [self.model startElement: @"startupitem"];
+    [self.xml startElement: @"startupitem"];
     
-    [self.model addElement: @"name" value: [cleanPath lastPathComponent]];
-    [self.model addElement: @"path" value: cleanPath];
-    [self.model addElement: @"type" value: @"machinit"];
+    [self.xml addElement: @"name" value: [cleanPath lastPathComponent]];
+    [self.xml addElement: @"path" value: cleanPath];
+    [self.xml addElement: @"type" value: @"machinit"];
     
     [self.result
       appendString: [NSString stringWithFormat: @"    %@\n", cleanPath]
@@ -135,7 +135,7 @@
           NSForegroundColorAttributeName : [[Utilities shared] red],
         }];
         
-    [self.model endElement: @"startupitem"];
+    [self.xml endElement: @"startupitem"];
     }
     
   [self.result
@@ -222,16 +222,16 @@
         }
       }
     
-  NSString * cleanPath = [Utilities cleanPath: path];
+  NSString * cleanPath = [self cleanPath: path];
 
-  [self.model startElement: @"startupitem"];
+  [self.xml startElement: @"startupitem"];
   
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"path" value: cleanPath];
-  [self.model addElement: @"type" value: @"startupitem"];
-  [self.model addElement: @"version" value: version];
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"path" value: cleanPath];
+  [self.xml addElement: @"type" value: @"startupitem"];
+  [self.xml addElement: @"version" value: version];
   
-  [self.model endElement: @"startupitem"];
+  [self.xml endElement: @"startupitem"];
   
   [self.result
     appendString:

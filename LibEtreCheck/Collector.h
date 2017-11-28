@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 
 @class XMLBuilder;
+@class Model;
 
 // Base class for all collector activities. Also has values like current
 // OS version that may be needed by all collectors.
@@ -17,8 +18,9 @@
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
-  XMLBuilder * myModel;
+  XMLBuilder * myXML;
   BOOL mySimulating;
+  Model * myModel;
   }
 
 // Provide easy access to localized collector titles.
@@ -38,7 +40,10 @@
 @property (readonly) bool done;
 
 // An XML model for this collector.
-@property (readonly) XMLBuilder * model;
+@property (readonly) XMLBuilder * xml;
+
+// The data model for this run.
+@property (retain) Model * model;
 
 // Am I simulating?
 @property (assign) BOOL simulating;
@@ -77,5 +82,18 @@
 
 // Generate a "remove adware" link.
 - (NSAttributedString *) generateRemoveAdwareLink;
+
+// Format an exectuable array for printing, redacting any user names in
+// the path.
+- (NSString *) formatExecutable: (NSArray *) parts;
+
+// Make a path more presentable.
+- (NSString *) prettyPath: (NSString *) path;
+
+// Redact a name.
+- (NSString *) cleanName: (NSString *) name;
+
+// Redact any user names in a path.
+- (NSString *) cleanPath: (NSString *) path;
 
 @end

@@ -5,6 +5,7 @@
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "Model.h"
 
 // A callback for section progress.
 typedef void (^SectionCallback)(NSString * sectionName);
@@ -28,6 +29,8 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
   dispatch_block_t myComplete;
   
   double myCurrentProgress;
+  
+  Model * myModel;
   }
 
 @property (retain) NSMutableDictionary * results;
@@ -50,6 +53,9 @@ typedef void (^ApplicationIconCallback)(NSImage * icon);
 
 // The current progress.
 @property (assign) double currentProgress;
+
+// The model for this run.
+@property (retain) Model * model;
 
 // Do the check and return the report.
 - (NSAttributedString *) check;

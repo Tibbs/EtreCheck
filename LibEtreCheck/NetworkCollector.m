@@ -328,10 +328,10 @@
 - (void) exportNetwork
   {
   if(self.interfaces.count > 0)
-    [self.model addArray: @"interfaces" values: self.interfaces];
+    [self.xml addArray: @"interfaces" values: self.interfaces];
     
   if(self.ubiquityContainers.count > 0)
-    [self.model 
+    [self.xml 
       addArray: @"icloudpendingfiles" values: self.ubiquityContainers];
 
   int version = [[OSVersion shared] major];
@@ -346,7 +346,7 @@
     NSString * iCloudFree = 
       [formatter stringFromByteCount: self.iCloudFree];
 
-    [self.model addElement: @"icloudfree" valueWithUnits: iCloudFree];
+    [self.xml addElement: @"icloudfree" valueWithUnits: iCloudFree];
     }
   }
 

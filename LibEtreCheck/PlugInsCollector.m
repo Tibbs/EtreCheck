@@ -35,7 +35,7 @@
         dictionaryWithObject: 
           [NSDictionary 
             dictionaryWithObjectsAndKeys:
-            [Utilities cleanPath: pluginPath], @"path", 
+            [self cleanPath: pluginPath], @"path", 
             @"1.0", @"CFBundleShortVersionString", 
             nil] 
         forKey: name];
@@ -74,13 +74,13 @@
           [NSString stringWithFormat: @" (%@)", modificationDateString];
         }
         
-      [self.model startElement: @"plugin"];
+      [self.xml startElement: @"plugin"];
       
-      [self.model addElement: @"name" value: name];
-      [self.model addElement: @"version" value: version];
-      [self.model addElement: @"installdate" date: modificationDate];
+      [self.xml addElement: @"name" value: name];
+      [self.xml addElement: @"version" value: version];
+      [self.xml addElement: @"installdate" date: modificationDate];
       
-      [self.model endElement: @"plugin"];
+      [self.xml endElement: @"plugin"];
       
       [self.result
         appendString:
@@ -148,7 +148,7 @@
       if(modificationDate != nil)
         [bundle setObject: modificationDate forKey: @"date"];
       
-      [bundle setObject: [Utilities cleanPath: path] forKey: @"path"];
+      [bundle setObject: [self cleanPath: path] forKey: @"path"];
       
       [bundles setObject: bundle forKey: filename];
       }

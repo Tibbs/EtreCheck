@@ -39,7 +39,7 @@
   NSDictionary * applications = [self collectApplications];
   
   // Save the applications.
-  [[Model model] setApplications: applications];
+  [self.model setApplications: applications];
   
   // Organize the applications by their parent directories.
   NSDictionary * parents = [self collectParentDirectories: applications];
@@ -153,7 +153,7 @@
     
     // Make sure to redact any user names in the path.
     NSString * path =
-      [Utilities cleanPath: [application objectForKey: @"path"]];
+      [self cleanPath: [application objectForKey: @"path"]];
 
     NSString * parent = [path stringByDeletingLastPathComponent];
   
@@ -205,7 +205,7 @@
             appendString:
               [NSString
                 stringWithFormat:
-                  @"    %@\n", [Utilities cleanPath: parent]]];
+                  @"    %@\n", [self cleanPath: parent]]];
 
         ++count;
         
@@ -250,7 +250,7 @@
   [output appendAttributedString: supportLink];
   [output appendString: @" "];
   
-  NSAttributedString * detailsLink = [[Model model] getDetailsURLFor: name];
+  NSAttributedString * detailsLink = [self.model getDetailsURLFor: name];
   
   if(detailsLink)
     {
@@ -288,7 +288,7 @@
   {
   NSMutableArray * icons = [NSMutableArray array];
   
-  NSDictionary * applications = [[Model model] applications];
+  NSDictionary * applications = [self.model applications];
   
   for(NSString * name in applications)
     {

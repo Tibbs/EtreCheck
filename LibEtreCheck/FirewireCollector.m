@@ -70,7 +70,7 @@
 - (void) printFirewireDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
-  [self.model startElement: @"node"];
+  [self.xml startElement: @"node"];
 
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"device_manufacturer"];
@@ -78,9 +78,9 @@
   NSString * max_device_speed = [device objectForKey: @"max_device_speed"];
   NSString * connected_speed = [device objectForKey: @"connected_speed"];
   
-  [self.model addElement: @"manufacturer" value: manufacturer];
-  [self.model addElement: @"name" value: name];  
-  [self.model addElement: @"size" value: size];
+  [self.xml addElement: @"manufacturer" value: manufacturer];
+  [self.xml addElement: @"name" value: name];  
+  [self.xml addElement: @"size" value: size];
 
   if(!size)
     size = @"";
@@ -93,8 +93,8 @@
     connected_speed =
       [connected_speed substringToIndex: [connected_speed length] - 6];
 
-  [self.model addElement: @"maxdevicespeed" value: max_device_speed];
-  [self.model addElement: @"connectedspeed" value: connected_speed];
+  [self.xml addElement: @"maxdevicespeed" value: max_device_speed];
+  [self.xml addElement: @"connectedspeed" value: connected_speed];
 
   NSString * speed =
     (max_device_speed && connected_speed)
@@ -134,7 +134,7 @@
       if(deviceIdentifier.length > 0)
         {
         Drive * drive = 
-          [[[Model model] storageDevices] objectForKey: deviceIdentifier];
+          [[self.model storageDevices] objectForKey: deviceIdentifier];
           
         drive.bus = @"FireWire";
         drive.busSpeed = connected_speed;
@@ -162,7 +162,7 @@
             if(volumeDevice.length > 0)
               {
               Volume * volume = 
-                [[[Model model] storageDevices] objectForKey: volumeDevice];
+                [[self.model storageDevices] objectForKey: volumeDevice];
               
               [volume addContainingDevice: deviceIdentifier];
               }
@@ -174,7 +174,7 @@
       [self printFirewireDevice: device indent: indent found: found];
       }
 
-  [self.model endElement: @"node"];
+  [self.xml endElement: @"node"];
   }
 
 @end

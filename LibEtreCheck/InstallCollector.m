@@ -100,13 +100,13 @@
         NSString * installDate =
           [Utilities installDateAsString: date];
 
-        [self.model startElement: @"package"];
+        [self.xml startElement: @"package"];
         
-        [self.model addElement: @"name" value: name];
-        [self.model addElement: @"version" value: version];
-        [self.model addElement: @"installdate" date: date];
+        [self.xml addElement: @"name" value: name];
+        [self.xml addElement: @"version" value: version];
+        [self.xml addElement: @"installdate" date: date];
         
-        [self.model endElement: @"package"];
+        [self.xml endElement: @"package"];
         
         [self.result
           appendString:

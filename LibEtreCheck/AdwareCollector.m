@@ -40,14 +40,26 @@
   
   if(self != nil)
     {
-    [self loadAdwareSignatures];
-    [self loadWhitelistSignatures];
-    [self buildDatabases];
     }
     
   return self;
   }
 
+// Print any adware found.
+- (void) performCollect
+  {
+  [self loadAdwareSignatures];
+  [self loadWhitelistSignatures];
+  [self buildDatabases];
+
+  [self collectLaunchdAdware];
+  
+  [self collectSafariExtensionAdware];
+  
+  [self printAdware];
+  [self exportAdware];
+  }
+  
 // Load signatures from an obfuscated list of signatures.
 - (void) loadAdwareSignatures
   {
@@ -128,7 +140,7 @@
 // Add signatures that match a given key.
 - (void) addSignatures: (NSArray *) signatures forKey: (NSString *) key
   {
-  Adware * adware = [[Model model] adware];
+  Adware * adware = [self.model adware];
 
   if(signatures)
     {
@@ -167,7 +179,7 @@
 // Build additional internal databases.
 - (void) buildDatabases
   {
-  Adware * adware = [[Model model] adware];
+  Adware * adware = [self.model adware];
 
   for(NSString * file in [adware whitelistFiles])
     {
@@ -178,21 +190,10 @@
     }
   }
 
-// Print any adware found.
-- (void) performCollect
-  {
-  [self collectLaunchdAdware];
-  
-  [self collectSafariExtensionAdware];
-  
-  [self printAdware];
-  [self exportAdware];
-  }
-  
 // Collect launchd adware.
 - (void) collectLaunchdAdware
   {
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
   
   // I will have already filtered out launchd files specific to this 
   // context.
@@ -233,13 +234,13 @@
   file.adware = adware;
   
   if(adware)
-    [[[[Model model] launchd] adwareFiles] addObject: file];
+    [[[self.model launchd] adwareFiles] addObject: file];
   }
 
 // Is this an adware suffix file?
 - (bool) isAdwareSuffix: (LaunchdFile *) file
   {
-  for(NSString * suffix in [[[Model model] adware] blacklistSuffixes])
+  for(NSString * suffix in [[self.model adware] blacklistSuffixes])
     if([file.path hasSuffix: suffix])
       return true;
     
@@ -328,12 +329,12 @@
 - (bool) isAdwareMatch: (NSString *) name
   {
   // Check full matches.
-  for(NSString * match in [[[Model model] adware] blacklistFiles])
+  for(NSString * match in [[self.model adware] blacklistFiles])
     if([name isEqualToString: match])
       return true;
     
   // Check partial matches.
-  for(NSString * match in [[[Model model] adware] blacklistMatches])
+  for(NSString * match in [[self.model adware] blacklistMatches])
     {
     NSRange range = [name rangeOfString: match];
     
@@ -358,7 +359,7 @@
   bool hasAgent = [type isEqualToString: kAdwareTrioAgent];
   bool hasHelper = [type isEqualToString: kAdwareTrioHelper];
       
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
 
   for(NSString * path in [launchd filesByPath])
     {
@@ -424,7 +425,7 @@
 // Collect Safari extension adware.
 - (void) collectSafariExtensionAdware
   {
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   for(NSString * path in safari.extensions)
     {
@@ -439,7 +440,7 @@
       adware = true;
       
     if(adware)
-      [[[[Model model] safari] adwareExtensions] addObject: extension];
+      [[[self.model safari] adwareExtensions] addObject: extension];
     }
   }
 
@@ -482,7 +483,7 @@
   {
   int adwareCount = 0;
   
-  for(LaunchdFile * launchdFile in [[Model model] launchd].adwareFiles)
+  for(LaunchdFile * launchdFile in [self.model launchd].adwareFiles)
     {
     if(adwareCount++ == 0)
       [self.result appendAttributedString: [self buildTitle]];
@@ -494,7 +495,7 @@
       {
       [self.result appendString: @"\n        "];
       [self.result 
-        appendString: [Utilities cleanPath: launchdFile.executable]];
+        appendString: [self cleanPath: launchdFile.executable]];
       }
     
     [self.result appendString: @"\n"];
@@ -506,7 +507,7 @@
 // Print adware files.
 - (int) printAdwareSafariExtensions: (int) adwareCount
   {    
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   for(SafariExtension * extension in safari.adwareExtensions)
     {
@@ -531,35 +532,35 @@
 // Print adware files.
 - (void) exportAdwareLaunchdFiles
   {
-  if([[Model model] launchd].adwareFiles.count == 0)
+  if([self.model launchd].adwareFiles.count == 0)
     return;
     
-  [self.model startElement: @"launchdfiles"];
+  [self.xml startElement: @"launchdfiles"];
   
-  for(LaunchdFile * launchdFile in [[Model model] launchd].adwareFiles)
+  for(LaunchdFile * launchdFile in [self.model launchd].adwareFiles)
 
     // Export the XML.
-    [self.model addFragment: launchdFile.xml];
+    [self.xml addFragment: launchdFile.xml];
 
-  [self.model endElement: @"launchdfiles"];
+  [self.xml endElement: @"launchdfiles"];
   }
   
 // Print adware files.
 - (void) exportAdwareSafariExtensions
   {    
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   if(safari.adwareExtensions.count == 0)
     return;
     
-  [self.model startElement: @"safariextensions"];
+  [self.xml startElement: @"safariextensions"];
 
   for(SafariExtension * extension in safari.adwareExtensions)
 
     // Export the XML.
-    [self.model addFragment: extension.xml];
+    [self.xml addFragment: extension.xml];
 
-  [self.model endElement: @"safariextensions"];
+  [self.xml endElement: @"safariextensions"];
   }
 
 @end

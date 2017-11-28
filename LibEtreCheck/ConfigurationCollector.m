@@ -137,7 +137,7 @@
       
     // All the beta testers have an El Capitan file.
     // I guess this is permanently broken.
-    if(!self.simulating && [[Model model] ignoreKnownAppleFailures])
+    if(!self.simulating && [self.model ignoreKnownAppleFailures])
       if((version >= kYosemite) && (attributes.fileSize != expectedSize))
         switch(version)
           {
@@ -157,21 +157,21 @@
 
     if(attributes.fileSize != expectedSize)
       {
-      [self.model startElement: @"unexpectedsudoerssize"];
+      [self.xml startElement: @"unexpectedsudoerssize"];
       
-      [self.model 
+      [self.xml 
         addElement: @"size" 
         unsignedLongLongValue: attributes.fileSize 
         attributes: 
           [NSDictionary dictionaryWithObjectsAndKeys:@"B", @"units", nil]];
 
-      [self.model 
+      [self.xml 
         addElement: @"expectedsize" 
         unsignedLongLongValue: expectedSize 
         attributes: 
           [NSDictionary dictionaryWithObjectsAndKeys:@"B", @"units", nil]];
           
-      [self.model endElement: @"unexpectedsudoerssize"];
+      [self.xml endElement: @"unexpectedsudoerssize"];
           
       [files
         addObject:
@@ -204,7 +204,7 @@
   // See if /etc/sysctl.conf exists.
   if(etcsysctlExists || self.simulating)
     {
-    [self.model addElement: @"etcsysctlconfexists" boolValue: YES];
+    [self.xml addElement: @"etcsysctlconfexists" boolValue: YES];
     
     [files addObject: @"/etc/sysctl.conf"];
     }
@@ -212,7 +212,7 @@
   // See if /etc/launchd.conf exists.
   if(etclaunchdExists || self.simulating)
     {
-    [self.model addElement: @"etclaunchdconfexists" boolValue: YES];
+    [self.xml addElement: @"etclaunchdconfexists" boolValue: YES];
 
     [files addObject: @"/etc/launchd.conf"];
     }
@@ -233,10 +233,10 @@
       status = @"Simulated";
       
     if([status isEqualToString: @"enabled"])
-      [[Model model] setSIP: YES];
+      [self.model setSIP: YES];
     else
       {
-      [self.model addElement: @"SIP" value: status];
+      [self.xml addElement: @"SIP" value: status];
 
       [otherModificiations
         addObject:
@@ -467,8 +467,8 @@
     
   if((count > 10) || corrupt)
     {
-    [self.model addElement: @"hostscount" unsignedIntegerValue: count];
-    [self.model addElement: @"hostscorrupt" boolValue: YES];
+    [self.xml addElement: @"hostscount" unsignedIntegerValue: count];
+    [self.xml addElement: @"hostscorrupt" boolValue: YES];
     
     [self.result
       appendString:
@@ -482,7 +482,7 @@
     }
   else if(count > 0)
     {
-    [self.model addElement: @"hostscount" unsignedIntegerValue: count];
+    [self.xml addElement: @"hostscount" unsignedIntegerValue: count];
 
     [self.result
       appendString:

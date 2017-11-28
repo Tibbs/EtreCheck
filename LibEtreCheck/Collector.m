@@ -19,6 +19,7 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
+@synthesize xml = myXML;
 @synthesize model = myModel;
 @synthesize simulating = mySimulating;
 
@@ -48,9 +49,9 @@
     
     self.title = ECLocalizedStringFromTable(self.name, @"Collectors");
     
-    myModel = [XMLBuilder new];
+    myXML = [XMLBuilder new];
     
-    [self.model startElement: self.name];
+    [self.xml startElement: self.name];
     }
     
   return self;
@@ -59,12 +60,13 @@
 // Destructor.
 - (void) dealloc
   {
-  [myModel release];
+  [myXML release];
   dispatch_release(myComplete);
   [myFormatter release];
   [myResult release];
   [myTitle release];
   [myName release];
+  self.model = nil;
   
   [super dealloc];
   }
@@ -76,7 +78,7 @@
   
   dispatch_semaphore_signal(self.complete);
 
-  [self.model endElement: self.name];  
+  [self.xml endElement: self.name];  
   }
 
 // Simulate the collection.
@@ -406,6 +408,271 @@
       }];
     
   return [urlString autorelease];
+  }
+
+// Format an exectuable array for printing, redacting any user names in
+// the path.
+- (NSString *) formatExecutable: (NSArray *) parts
+  {
+  NSMutableArray * mutableParts = [NSMutableArray array];
+  
+  // Sanitize the whole thing.
+  for(NSString * part in parts)
+    [mutableParts addObject: [self cleanPath: part]];
+    
+  return [mutableParts componentsJoinedByString: @" "];
+  }
+
+// Make a path more presentable.
+- (NSString *) prettyPath: (NSString *) path
+  {
+  NSString * cleanPath = [self cleanPath: path];
+  
+  NSString * name = [cleanPath lastPathComponent];
+  
+  // What are you trying to hide?
+  if([name hasPrefix: @"."])
+    cleanPath =
+      [NSString
+        stringWithFormat:
+          ECLocalizedString(@"%@ (hidden)"), cleanPath];
+
+  // Silly Apple.
+  else if([name hasPrefix: @"com.apple.CSConfigDotMacCert-"])
+    cleanPath = [self sanitizeMobileMe: cleanPath];
+
+  // What are you trying to expose?
+  else if([name hasPrefix: @"com.facebook.videochat."])
+    cleanPath = [self sanitizeFacebook: cleanPath];
+
+  // What are you trying to expose?
+  else if([name hasPrefix: @"com.adobe.ARM."])
+    cleanPath = @"com.adobe.ARM.[...].plist";
+
+  return cleanPath;
+  }
+
+// Redact a name.
+- (NSString *) cleanName: (NSString *) name
+  {
+  if([name isEqualToString: @"Macintosh HD"])
+    return name;
+    
+  if([name isEqualToString: @"Recovery HD"])
+    return name;
+
+  if([name isEqualToString: @"Flash Player"])
+    return name;
+
+  if([name isEqualToString: @"Disk Image"])
+    return name;
+
+  if(name.length > 3)
+    return 
+      [NSString 
+        stringWithFormat: 
+          @"%@%@%@", 
+          [name substringToIndex: 1], 
+          [@"*" 
+            stringByPaddingToLength: name.length - 2 
+            withString: @"*" 
+            startingAtIndex: 0],
+          [name substringFromIndex: name.length - 1]];
+    
+  return name;
+  }
+  
+// Redact any user names in a path.
+- (NSString *) cleanPath: (NSString *) path
+  {
+  NSMutableArray * cleanParts = [NSMutableArray array];
+  
+  // There is no guarantee this is a real path.
+  NSArray * parts =
+    [path
+      componentsSeparatedByCharactersInSet:
+        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  for(NSString * pathPart in parts)
+    [cleanParts addObject: [self cleanString: pathPart]];
+    
+  NSString * cleanedPath = [cleanParts componentsJoinedByString: @" "];
+  
+  return [self cleanString: cleanedPath];
+  }
+
+// Redact any user names in a string.
+- (NSString *) cleanString: (NSString *) string
+  {
+  if([string hasSuffix: @"@me.com"])
+    return
+      [NSString
+        stringWithFormat:
+          @"%@@me.com", ECLocalizedString(@"[redacted]")];
+
+  if([string hasSuffix: @"@mac.com"])
+    return
+      [NSString
+        stringWithFormat:
+          @"%@@mac.com", ECLocalizedString(@"[redacted]")];
+
+  // See if the full user name is in the computer name.
+  NSString * computerName = [self.model computerName];
+  NSString * hostName = [self.model hostName];
+    
+  NSString * username = NSUserName();
+  NSString * fullname = NSFullUserName();
+
+  NSMutableSet * names = [NSMutableSet new];
+  
+  if([username length] > 0)
+    [names addObject: username];
+    
+  if([fullname length] > 0)
+    [names addObject: fullname];
+    
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @" "]];
+  
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @"-"]];
+
+  [names 
+    addObjectsFromArray: [fullname componentsSeparatedByString: @"_"]];
+      
+  if([computerName length] > 0)
+    [names addObject: computerName];
+    
+  if([hostName length] > 0)
+    [names addObject: hostName];
+
+  NSString * redacted = [string stringByAbbreviatingWithTildeInPath];
+
+  for(NSString * name in names)
+    redacted = [self redactName: name from: redacted];
+    
+  [names release];
+  
+  // Go ahead and look for an unredacted and unabbreviated user path.
+  NSRange range = [redacted rangeOfString: @"/Users/"];
+
+  if(range.location != NSNotFound)
+    {
+    NSString * pathPart = 
+      [redacted substringFromIndex: range.location];
+    
+    NSArray * pathParts = [pathPart componentsSeparatedByString: @"/"];
+    
+    redacted = 
+      [self redactName: [pathParts objectAtIndex: 2] from: redacted];
+    }
+    
+  return redacted;
+  }
+
+// Redact any user names in a string.
+- (NSString *) redactName: (NSString *) name from: (NSString *) string
+  {
+  NSRange range = NSMakeRange(NSNotFound, 0);
+
+  if([self shouldRedact: name])
+    range = [string rangeOfString: name];
+  
+  if(range.location == NSNotFound)
+    return string;
+    
+  return
+    [NSString
+      stringWithFormat:
+        @"%@%@%@",
+        [string substringToIndex: range.location],
+        ECLocalizedString(@"[redacted]"),
+        [string substringFromIndex: range.location + range.length]];
+  }
+
+// Is this a redactable user name?
+- (bool) shouldRedact: (NSString *) username
+  {
+  NSString * name = [username lowercaseString];
+  
+  if([name length] < 4)
+    return NO;
+    
+  if([name isEqualToString: @"apple"])
+    return NO;
+    
+  if([name isEqualToString: @"macintosh"])
+    return NO;
+    
+  return YES;
+  }
+
+// Apple used to put the user's name into a file name.
+- (NSString *) sanitizeMobileMe: (NSString *) path
+  {
+  NSString * parent = [path stringByDeletingLastPathComponent];
+  NSString * file = [path lastPathComponent];
+  
+  NSScanner * scanner = [NSScanner scannerWithString: file];
+
+  BOOL found =
+    [scanner
+      scanString: @"com.apple.CSConfigDotMacCert-" intoString: NULL];
+
+  if(!found)
+    return file;
+    
+  found = [scanner scanUpToString: @"@" intoString: NULL];
+
+  if(!found)
+    return file;
+    
+  NSString * domain = nil;
+  
+  found = [scanner scanUpToString: @".com-" intoString: & domain];
+
+  if(!found)
+    return file;
+
+  found = [scanner scanString: @".com-" intoString: NULL];
+
+  if(!found)
+    return file;
+    
+  NSString * suffix = nil;
+
+  found = [scanner scanUpToString: @"\n" intoString: & suffix];
+
+  if(!found)
+    return file;
+    
+  return
+    [parent
+      stringByAppendingPathComponent:
+        [NSString
+          stringWithFormat:
+          @"com.apple.CSConfigDotMacCert-%@%@.com-%@",
+          ECLocalizedString(@"[redacted]"),
+          domain,
+          suffix]];
+  }
+
+// Facebook puts the users name in a filename too.
+- (NSString *) sanitizeFacebook: (NSString *) file
+  {
+  NSScanner * scanner = [NSScanner scannerWithString: file];
+
+  BOOL found =
+    [scanner
+      scanString: @"com.facebook.videochat." intoString: NULL];
+
+  if(!found)
+    return file;
+    
+  [scanner scanUpToString: @".plist" intoString: NULL];
+
+  return
+    ECLocalizedString(@"com.facebook.videochat.[redacted].plist");
   }
 
 @end

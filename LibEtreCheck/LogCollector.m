@@ -128,7 +128,7 @@
         if(disk)
           {
           StorageDevice * device = 
-            [[[Model model] storageDevices] objectForKey: disk];
+            [[self.model storageDevices] objectForKey: disk];
             
           [device.errors addObject: line];
           }
@@ -162,7 +162,7 @@
   if(errorFound)
     {
     NSNumber * errorCount =
-      [[Model model] gpuErrors];
+      [self.model gpuErrors];
       
     if(errorCount == nil)
       errorCount = [NSNumber numberWithUnsignedInteger: 0];
@@ -172,7 +172,7 @@
         numberWithUnsignedInteger:
           [errorCount unsignedIntegerValue] + 1];
       
-    [[Model model] setGpuErrors: errorCount];
+    [self.model setGpuErrors: errorCount];
     }
   }
 
@@ -204,7 +204,7 @@
             
             event.type = kASLLog;
             event.date = logDate;
-            event.details = [Utilities cleanPath: line];
+            event.details = [self cleanPath: line];
             
             [events addObject: event];
             
@@ -218,7 +218,7 @@
         }];
     
     
-  [[Model model] setLogEntries: events];
+  [self.model setLogEntries: events];
   }
 
 // Collect results from the panic log entry.
@@ -248,9 +248,10 @@
   event.file = file;
   event.details = contents;
   
-  [DiagnosticsCollector parseDiagnosticData: contents event: event];
+  [DiagnosticsCollector 
+    parseDiagnosticData: contents event: event model: self.model];
 
-  [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+  [[self.model diagnosticEvents] setObject: event forKey: event.name];
   
   [event release];
   }
@@ -286,7 +287,7 @@
   
   if(name)
     *name =
-      [Utilities cleanPath: [safeParts componentsJoinedByString: @"_"]];
+      [self cleanPath: [safeParts componentsJoinedByString: @"_"]];
   }
 
 // Collect the system log, if accessible.
@@ -330,7 +331,7 @@
             
             event.type = kSystemLog;
             event.date = logDate;
-            event.details = [Utilities cleanPath: line];
+            event.details = [self cleanPath: line];
             
             [events addObject: event];
             
@@ -344,7 +345,7 @@
         }];
     
     
-  [[Model model] setLogEntries: events];
+  [self.model setLogEntries: events];
   }
 
 // Collect results from the ioreg_output_description log entry.
@@ -451,7 +452,7 @@
   event.name =
     [NSString stringWithFormat: @"%d - %@", shutdownCause, shutdownString];
   
-  [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+  [[self.model diagnosticEvents] setObject: event forKey: event.name];
   
   [event release];
   }

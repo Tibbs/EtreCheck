@@ -75,7 +75,7 @@
   [self printDrives];
   [self exportDrives];
   
-  if([[[Model model] storageDevices] count] == 0)
+  if([[self.model storageDevices] count] == 0)
     [self.result
       appendString:
         ECLocalizedString(@"    Drive information not found!\n")
@@ -167,11 +167,15 @@
   {
   Drive * drive = [[Drive alloc] initWithDiskUtilInfo: plist];
   
+  drive.cleanName = [self cleanName: drive.name];
+  
+  drive.dataModel = self.model;
+  
   BOOL dataFound = NO;
   
   if(drive != nil)
     {
-    [[[Model model] storageDevices] 
+    [[self.model storageDevices] 
       setObject: drive forKey: drive.identifier];
     
     dataFound = YES;
@@ -187,11 +191,14 @@
   {
   Volume * volume = [[Volume alloc] initWithDiskUtilInfo: plist];
   
+  volume.model = self.model;
+  volume.cleanName = [self cleanName: volume.name];
+  
   BOOL dataFound = NO;
   
   if(volume != nil)
     {
-    [[[Model model] storageDevices] 
+    [[self.model storageDevices] 
       setObject: volume forKey: volume.identifier];
       
     dataFound = YES;
@@ -276,7 +283,7 @@
     {
     NSString * device = [item objectForKey: @"bsd_name"];
 
-    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    Drive * drive = [[self.model storageDevices] objectForKey: device];
     
     if([drive respondsToSelector: @selector(isDrive)])
       {
@@ -309,7 +316,7 @@
         if(volumeDevice.length > 0)
           {
           Volume * volume = 
-            [[[Model model] storageDevices] objectForKey: volumeDevice];
+            [[self.model storageDevices] objectForKey: volumeDevice];
             
           if([volume respondsToSelector: @selector(isVolume)])
             [volume addContainingDevice: device];
@@ -361,7 +368,7 @@
   {
   NSString * device = [item objectForKey: @"bsd_name"];
 
-  Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+  Volume * volume = [[self.model storageDevices] objectForKey: device];
   
   if([volume respondsToSelector: @selector(isVolume)])
     {
@@ -474,7 +481,7 @@
       if((progress > 0) && (device.length > 0) && (status.length > 0))
         {
         Volume * volume = 
-          [[[Model model] storageDevices] objectForKey: device];
+          [[self.model storageDevices] objectForKey: device];
           
         volume.encryptionStatus = status;
         volume.encryptionProgress = progress;
@@ -514,7 +521,7 @@
         if(containerReference.length > 0)
           {
           StorageDevice * storageDevice = 
-            [[[Model model] storageDevices] 
+            [[self.model storageDevices] 
               objectForKey: containerReference];
           
           // This must be a container.
@@ -531,7 +538,7 @@
           NSString * device = [item objectForKey: @"DeviceIdentifier"];
           
           Volume * volume = 
-            [[[Model model] storageDevices] objectForKey: device];
+            [[self.model storageDevices] objectForKey: device];
           
           // Get the encryption direction and progress.
           volume.encrypted = [[item objectForKey: @"Encryption"] boolValue];
@@ -591,10 +598,10 @@
   NSMutableSet * RAIDSets = [NSMutableSet new];
   NSMutableDictionary * RAIDDevices = [NSMutableDictionary new];
   
-  for(NSString * device in [[Model model] storageDevices])
+  for(NSString * device in [self.model storageDevices])
     {
     StorageDevice * storageDevice = 
-      [[[Model model] storageDevices] objectForKey: device];
+      [[self.model storageDevices] objectForKey: device];
     
     if(storageDevice != nil)
       {
@@ -625,13 +632,13 @@
   {
   // Get a sorted list of devices.
   NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
+    [[[self.model storageDevices] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
     {
-    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    Drive * drive = [[self.model storageDevices] objectForKey: device];
     
     drive.indent = 1;
     
@@ -645,16 +652,16 @@
   {
   // Get a sorted list of devices.
   NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
+    [[[self.model storageDevices] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
     {
-    Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+    Drive * drive = [[self.model storageDevices] objectForKey: device];
     
     if([drive respondsToSelector: @selector(isDrive)])
-      [drive buildXMLValue: self.model];
+      [drive buildXMLValue: self.xml];
     }
   }
 

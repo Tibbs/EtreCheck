@@ -187,9 +187,6 @@
 @property (readonly) XMLBuilder * xml;
 @property (readonly) XMLBuilder * header;
 
-// Return the singeton of shared values.
-+ (Model *) model;
-
 // Return true if there are log entries for a process.
 - (bool) hasLogEntries: (NSString *) name;
 

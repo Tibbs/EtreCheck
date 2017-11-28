@@ -131,13 +131,13 @@
   if([name length] == 0)
     name = ECLocalizedString(@"Unknown");
     
-  [self.model startElement: @"process"];
+  [self.xml startElement: @"process"];
   
-  [self.model addElement: @"size" valueWithUnits: memoryString];
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"count" intValue: count];
+  [self.xml addElement: @"size" valueWithUnits: memoryString];
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"count" intValue: count];
   
-  [self.model endElement: @"process"];
+  [self.xml endElement: @"process"];
 
   NSString * output =
     [NSString
@@ -148,7 +148,7 @@
   double gb = 1024 * 1024 * 1024;
   
   if([name isEqualToString: @"kernel_task"])
-    excessiveRAM = value > ([[Model model] physicalRAM]  * gb * .2);
+    excessiveRAM = value > ([self.model physicalRAM]  * gb * .2);
   else
     excessiveRAM = value > (gb * 2.0);
     

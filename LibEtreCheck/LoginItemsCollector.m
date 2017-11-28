@@ -524,27 +524,27 @@
   if([path length] == 0)
     return NO;
     
-  NSString * safeName = [Utilities cleanPath: name];
+  NSString * safeName = [self cleanPath: name];
   
   if([safeName length] == 0)
     safeName = name;
     
-  NSString * safePath = [Utilities cleanPath: path];
+  NSString * safePath = [self cleanPath: path];
   
   if([safePath length] == 0)
     return NO;
     
   bool isHidden = [hidden boolValue];
   
-  [self.model startElement: @"loginitem"];
+  [self.xml startElement: @"loginitem"];
   
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"type" value: kind];
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"type" value: kind];
   
   if(isHidden)
-    [self.model addElement: @"hidden" boolValue: isHidden];
+    [self.xml addElement: @"hidden" boolValue: isHidden];
   
-  [self.model addElement: @"signature" value: developer];
+  [self.xml addElement: @"signature" value: developer];
   
   NSString * modificationDateString = @"";
   
@@ -552,16 +552,16 @@
     {
     NSDate * modificationDate = [self modificationDate: path];
     
-    [self.model addElement: @"installdate" date: modificationDate];
+    [self.xml addElement: @"installdate" date: modificationDate];
 
     if(modificationDate)
       modificationDateString =
         [Utilities installDateAsString: modificationDate];
     }
 
-  [self.model addElement: @"path" value: path];
+  [self.xml addElement: @"path" value: path];
 
-  [self.model endElement: @"loginitem"];
+  [self.xml endElement: @"loginitem"];
   
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];

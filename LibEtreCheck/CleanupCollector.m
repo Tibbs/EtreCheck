@@ -115,7 +115,7 @@
       [[[appNotifications lastObject] noteID] integerValue];
       
     if((lastNoteID - firstNoteID) == (appNotifications.count - 1))
-      [[[Model model] notificationSPAMs]  
+      [[self.model notificationSPAMs]  
         setObject: appNotifications forKey:bundleID];
     }
   }
@@ -269,14 +269,14 @@
 // Collect orphan Safari extensions.
 - (void) collectOrphanSafariExtensions
   {
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   for(NSString * path in safari.extensions)
     {
     SafariExtension * extension = [safari.extensions objectForKey: path];
     
     if(!extension.loaded)
-      [[[[Model model] safari] orphanExtensions] addObject: extension];
+      [[[self.model safari] orphanExtensions] addObject: extension];
     }
   }
   
@@ -319,7 +319,7 @@
   {
   int count = 0;
   
-  for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
+  for(LaunchdFile * launchdFile in [self.model launchd].orphanFiles)
     {
     if([self hideFile: launchdFile])
       continue;
@@ -335,7 +335,7 @@
       {
       [self.result appendString: @"\n        "];
       [self.result 
-        appendString: [Utilities cleanPath: launchdFile.executable]];
+        appendString: [self cleanPath: launchdFile.executable]];
       }
     
     [self.result appendString: @"\n"];
@@ -347,7 +347,7 @@
 // Should this file be hidden?
 - (BOOL) hideFile: (LaunchdFile *) file
   {
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
   
@@ -356,7 +356,7 @@
     NSString * expectedSignature = [appleFile objectForKey: kSignature];
     
     if([expectedSignature isEqualToString: kExecutableMissing])
-      return [[Model model] ignoreKnownAppleFailures];
+      return [self.model ignoreKnownAppleFailures];
     }
     
   return NO;
@@ -364,7 +364,7 @@
 
 - (int) printOrphanSafariExtensions: (int) count
   {
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   for(SafariExtension * extension in safari.orphanExtensions)
     {
@@ -383,7 +383,7 @@
   
 - (void) printNotificationSPAM: (int) count
   {
-  for(NSString * bundleID in [[Model model] notificationSPAMs])
+  for(NSString * bundleID in [self.model notificationSPAMs])
     {
     if(count++ == 0)
       [self.result appendAttributedString: [self buildTitle]];
@@ -391,7 +391,7 @@
       [self.result appendCR];
       
     NSDictionary * notifications = 
-      [[[Model model] notificationSPAMs] objectForKey: bundleID];
+      [[self.model notificationSPAMs] objectForKey: bundleID];
       
     NSString * message =
       ECLocalizedPluralString(notifications.count, @"SPAM notification");
@@ -428,81 +428,81 @@
 // Export orphan launchd files.
 - (void) exportOrphanLaunchdFiles
   {
-  if([[Model model] launchd].orphanFiles.count == 0)
+  if([self.model launchd].orphanFiles.count == 0)
     return;
     
   bool started = false;
   
-  for(LaunchdFile * launchdFile in [[Model model] launchd].orphanFiles)
+  for(LaunchdFile * launchdFile in [self.model launchd].orphanFiles)
     {
     if([self hideFile: launchdFile])
       continue;
 
     if(!started)
       {
-      [self.model startElement: @"launchdfiles"];
+      [self.xml startElement: @"launchdfiles"];
   
       started = true;
       }
       
     // Export the XML.
-    [self.model addFragment: launchdFile.xml];
+    [self.xml addFragment: launchdFile.xml];
     }
     
   if(started)
-    [self.model endElement: @"launchdfiles"];
+    [self.xml endElement: @"launchdfiles"];
   }
   
 // Export orphan safari extensions.
 - (void) exportOrphanSafariExtensions
   {
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   if(safari.orphanExtensions.count == 0)
     return;
     
-  [self.model startElement: @"safariextensions"];
+  [self.xml startElement: @"safariextensions"];
 
   for(SafariExtension * extension in safari.orphanExtensions)
 
     // Export the XML.
-    [self.model addFragment: extension.xml];
+    [self.xml addFragment: extension.xml];
 
-  [self.model endElement: @"safariextensions"];
+  [self.xml endElement: @"safariextensions"];
   }
 
 // Export notification spam.
 - (void) exportNotificationSPAM
   {
-  if([[[Model model] notificationSPAMs] count] == 0)
+  if([[self.model notificationSPAMs] count] == 0)
     return;
     
-  [self.model startElement: @"notificationspam"];
+  [self.xml startElement: @"notificationspam"];
   
-  for(NSString * bundleID in [[Model model] notificationSPAMs])
+  for(NSString * bundleID in [self.model notificationSPAMs])
     {
-    [self.model startElement: @"spammer"];
+    [self.xml startElement: @"spammer"];
   
-    [self.model addElement: @"name" value: bundleID];
+    [self.xml addElement: @"name" value: bundleID];
     
     NSArray * notifications = 
-      [[[Model model] notificationSPAMs] objectForKey: bundleID];
+      [[self.model notificationSPAMs] objectForKey: bundleID];
       
-    [self.model startElement: @"notifications"];
+    [self.xml startElement: @"notifications"];
     
     for(UserNotification * notification in notifications)
       {
-      [self.model addElement: @"identifier" number: notification.noteID];
-      [self.model 
+      [self.xml addElement: @"identifier" number: notification.noteID];
+      [self.xml 
         addElement: @"text" value: notification.notification.title];
       }
       
-    [self.model endElement: @"notifications"];
+    [self.xml endElement: @"notifications"];
   
-    [self.model endElement: @"spammer"];
+    [self.xml endElement: @"spammer"];
     }
     
-  [self.model endElement: @"notificationspam"];
+  [self.xml endElement: @"notificationspam"];
   }
 
 // Generate a "Clean up" link for orphan files.

@@ -62,7 +62,7 @@
   
   for(NSDictionary * info in infos)
     {
-    [self.model startElement: @"gpu"];
+    [self.xml startElement: @"gpu"];
     
     NSString * name = [info objectForKey: @"sppci_model"];
     NSString * bus = [info objectForKey: @"sppci_bus"];
@@ -70,8 +70,8 @@
     if(![name length])
       name = ECLocalizedString(@"Unknown");
       
-    [self.model addElement: @"name" value: name];
-    [self.model addElement: @"bus" value: bus];
+    [self.xml addElement: @"name" value: name];
+    [self.xml addElement: @"bus" value: bus];
     
     NSString * type = ECLocalizedString(@"Discrete");
     
@@ -85,7 +85,7 @@
 
     NSString * vram = @"";
     
-    [self.model addElement: @"vram" valueWithUnits: vramAmount];
+    [self.xml addElement: @"vram" valueWithUnits: vramAmount];
     
     if(vramAmount)
       vram =
@@ -108,18 +108,18 @@
   
     if(displays.count > 0)
       {
-      [self.model startElement: @"displays"];
+      [self.xml startElement: @"displays"];
       
       for(NSDictionary * display in displays)
         [self printDisplayInfo: display];
       
-      [self.model endElement: @"displays"];
+      [self.xml endElement: @"displays"];
       }
       
-    [self.model endElement: @"gpu"];
+    [self.xml endElement: @"gpu"];
     }
     
-  NSNumber * errors = [[Model model] gpuErrors];
+  NSNumber * errors = [self.model gpuErrors];
     
   int errorCount = [errors intValue];
   
@@ -142,7 +142,7 @@
 // Print information about a display.
 - (void) printDisplayInfo: (NSDictionary *) display
   {
-  [self.model startElement: @"display"];
+  [self.xml startElement: @"display"];
       
   NSString * name = [display objectForKey: @"_name"];
   
@@ -176,10 +176,10 @@
             name ? name : @"Unknown",
             resolution ? resolution : @""]];
       
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"resolution" value: resolution];
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"resolution" value: resolution];
 
-  [self.model endElement: @"display"];
+  [self.xml endElement: @"display"];
   }
 
 @end

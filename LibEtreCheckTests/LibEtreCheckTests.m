@@ -45,7 +45,7 @@
 
 - (void) testLaunchdFunctionality 
   {
-  Launchd * launchd = [[Model model] launchd];
+  Launchd * launchd = [self.model launchd];
   
   [launchd load];
   
@@ -166,7 +166,7 @@
 
 - (void) testAdwareCollector 
   {
-  Model * model = [Model model];
+  Model * model = self.model;
   
   [[model adware] simulate];
   
@@ -192,7 +192,7 @@
   
 - (void) testUnsignedCollector 
   {
-  [[Model model] setIgnoreKnownAppleFailures: true];
+  [self.model setIgnoreKnownAppleFailures: true];
   
   SystemLaunchDaemonsCollector * systemDaemons = 
     [SystemLaunchDaemonsCollector new];
@@ -229,7 +229,7 @@
 
 - (void) testCleanupCollector 
   {
-  [[Model model] setIgnoreKnownAppleFailures: true];
+  [self.model setIgnoreKnownAppleFailures: true];
   
   SystemLaunchDaemonsCollector * systemDaemons = 
     [SystemLaunchDaemonsCollector new];

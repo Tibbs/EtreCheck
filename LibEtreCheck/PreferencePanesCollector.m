@@ -82,9 +82,9 @@
 
   if([support isEqualToString: @"spprefpane_support_3rdParty"])
     {
-    [self.model startElement: @"preferencepane"];
+    [self.xml startElement: @"preferencepane"];
     
-    [self.model addElement: @"name" value: name];
+    [self.xml addElement: @"name" value: name];
     
     [self.result
       appendString: [NSString stringWithFormat: @"    %@ ", name]];
@@ -99,7 +99,7 @@
       
     [self.result appendString: @"\n"];
     
-    [self.model endElement: @"preferencepane"];
+    [self.xml endElement: @"preferencepane"];
 
     return YES;
     }
@@ -112,7 +112,7 @@
   {
   NSDate * modificationDate = [Utilities modificationDate: path];
     
-  [self.model addElement: @"installdate" date: modificationDate];
+  [self.xml addElement: @"installdate" date: modificationDate];
   
   if(modificationDate)
     {

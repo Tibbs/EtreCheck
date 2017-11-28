@@ -44,6 +44,9 @@
 // If SSD, is TRIM enabled?
 @synthesize TRIM = myTRIM;
 
+// The data model.
+@synthesize dataModel = myDataModel;
+
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist
@@ -73,6 +76,7 @@
   self.busSpeed = nil;
   self.SMARTStatus = nil;
   [myErrors release];
+  self.dataModel = nil;
   
   [super dealloc];
   }
@@ -158,7 +162,8 @@
 
   for(NSString * device in volumeDevices)
     {
-    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    Volume * volume = 
+      [[self.dataModel storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
       {

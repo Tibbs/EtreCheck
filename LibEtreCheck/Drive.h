@@ -5,6 +5,8 @@
 
 #import "StorageDevice.h"
 
+@class Model;
+
 // Object that represents a top-level drive.
 @interface Drive : StorageDevice
   {
@@ -37,6 +39,9 @@
   
   // If SSD, is TRIM enabled?
   BOOL myTRIM;
+  
+  // The data model.
+  Model * myDataModel;
   }
   
 // The drive model.
@@ -68,6 +73,9 @@
 
 // If SSD, is TRIM enabled?
 @property (assign) BOOL TRIM;
+
+// The data model.
+@property (retain, nullable) Model * dataModel;
 
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 

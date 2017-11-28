@@ -40,7 +40,7 @@
 // Perform the collection.
 - (void) performCollect
   {
-  Safari * safari = [[Model model] safari];
+  Safari * safari = [self.model safari];
   
   [safari load];
 
@@ -60,7 +60,7 @@
     [self.result appendString: @"\n"];
     
     // Export the XML.
-    [self.model addFragment: extension.xml];
+    [self.xml addFragment: extension.xml];
     }
     
   [self.result appendCR];

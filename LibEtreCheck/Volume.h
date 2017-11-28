@@ -16,6 +16,8 @@
 #define kRecoveryVolume @"recovery" 
 #define kVMVolume @"recovery" 
 
+@class Model;
+
 @interface Volume : StorageDevice
   {
   // The UUID.
@@ -52,6 +54,9 @@
   // Keep track of how many times a volume is printed so that printing only
   // happens once.
   int myPrintCount;
+  
+  // The data model.
+  Model * myModel;
   }
   
 // The UUID.
@@ -88,6 +93,9 @@
 // Keep track of how many times a volume is printed so that printing only
 // happens once.
 @property (assign) int printCount;
+
+// The data model.
+@property (retain, nullable) Model * model;
 
 // Constructor with output from diskutil info -plist.
 - (nullable instancetype) initWithDiskUtilInfo: 

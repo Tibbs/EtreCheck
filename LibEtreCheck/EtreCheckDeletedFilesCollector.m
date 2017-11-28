@@ -81,15 +81,15 @@
       
       if([path length] > 0)
         {
-        NSString * safePath = [Utilities prettyPath: path];
+        NSString * safePath = [self prettyPath: path];
         
-        [self.model startElement: @"deletedfile"];
+        [self.xml startElement: @"deletedfile"];
 
-        [self.model addElement: @"date" date: date];
-        [self.model addElement: @"path" value: safePath];
-        [self.model addElement: @"reason" value: reason];
+        [self.xml addElement: @"date" date: date];
+        [self.xml addElement: @"path" value: safePath];
+        [self.xml addElement: @"reason" value: reason];
 
-        [self.model endElement: @"deletedfile"];
+        [self.xml endElement: @"deletedfile"];
         
         [self.result
           appendString:

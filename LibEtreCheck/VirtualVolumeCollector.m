@@ -49,13 +49,13 @@
   {
   // Get a sorted list of devices.
   NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
+    [[[self.model storageDevices] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
     {
-    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    Volume * volume = [[self.model storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
       if(volume.printCount < 1)
@@ -72,16 +72,16 @@
   {
   // Get a sorted list of devices.
   NSArray * storageDevices = 
-    [[[[Model model] storageDevices] allKeys] 
+    [[[self.model storageDevices] allKeys] 
       sortedArrayUsingSelector: @selector(compare:)];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
     {
-    Volume * volume = [[[Model model] storageDevices] objectForKey: device];
+    Volume * volume = [[self.model storageDevices] objectForKey: device];
     
     if([volume respondsToSelector: @selector(isVolume)])
-      [volume buildXMLValue: self.model];
+      [volume buildXMLValue: self.xml];
     }
   }
 

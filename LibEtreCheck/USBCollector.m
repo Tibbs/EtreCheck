@@ -73,7 +73,7 @@
 - (void) printUSBDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
-  [self.model startElement: @"node"];
+  [self.xml startElement: @"node"];
   
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"manufacturer"];
@@ -82,12 +82,12 @@
   if(!manufacturer)
     manufacturer = [device objectForKey: @"f_manufacturer"];
 
-  manufacturer = [Utilities cleanPath: manufacturer];
-  name = [Utilities cleanPath: name];
+  manufacturer = [self cleanPath: manufacturer];
+  name = [self cleanPath: name];
   
-  [self.model addElement: @"manufacturer" value: manufacturer];
-  [self.model addElement: @"name" value: name];  
-  [self.model addElement: @"size" value: size];
+  [self.xml addElement: @"manufacturer" value: manufacturer];
+  [self.xml addElement: @"name" value: name];  
+  [self.xml addElement: @"size" value: size];
   
   if(!size)
     size = @"";
@@ -113,7 +113,7 @@
   // There could be more devices.
   [self printMoreDevices: device indent: indent found: found];
   
-  [self.model endElement: @"node"];
+  [self.xml endElement: @"node"];
   }
   
 // Print more devices.
@@ -161,15 +161,15 @@
       [model appendString: name];  
       }
       
-    [self.model startElement: @"drives"];
+    [self.xml startElement: @"drives"];
     
     for(NSDictionary * item in media)
       {
       NSString * device = [item objectForKey: @"bsd_name"];
 
-      [self.model addElement: @"device" value: device];
+      [self.xml addElement: @"device" value: device];
       
-      Drive * drive = [[[Model model] storageDevices] objectForKey: device];
+      Drive * drive = [[self.model storageDevices] objectForKey: device];
       
       if([drive respondsToSelector: @selector(isDrive)])
         {
@@ -191,7 +191,7 @@
             if(volumeDevice.length > 0)
               {
               Volume * volume = 
-                [[[Model model] storageDevices] objectForKey: volumeDevice];
+                [[self.model storageDevices] objectForKey: volumeDevice];
               
               [volume addContainingDevice: device];
               }
@@ -199,7 +199,7 @@
         }
       }
     
-    [self.model endElement: @"drives"];
+    [self.xml endElement: @"drives"];
     }
   }
 

@@ -105,16 +105,16 @@
   NSString * marketingName = 
     [self fallbackMarketingName: version name: & OSName];
   
-  [self.model addElement: @"name" value: OSName];
-  [self.model addElement: @"version" value: [[OSVersion shared] version]];
+  [self.xml addElement: @"name" value: OSName];
+  [self.xml addElement: @"version" value: [[OSVersion shared] version]];
   
-  [self.model 
+  [self.xml 
     addElement: @"majorversion" intValue: [[OSVersion shared] major] - 4];
   
-  [self.model 
+  [self.xml 
     addElement: @"minorversion" intValue: [[OSVersion shared] minor]];
   
-  [self.model addElement: @"build" value: [[OSVersion shared] build]];
+  [self.xml addElement: @"build" value: [[OSVersion shared] build]];
   
   int days = 0;
   int hours = 0;
@@ -123,7 +123,7 @@
   
   if(!parsed)
     {
-    [self.model addElement: @"uptime" value: uptime];
+    [self.xml addElement: @"uptime" value: uptime];
     
     [self.result
       appendString:
@@ -142,7 +142,7 @@
   if(uptimeValue == 0)
     uptimeValue += hours;
     
-  [self.model 
+  [self.xml 
     addElement: @"uptime" 
     intValue: uptimeValue
     attributes: 
@@ -300,9 +300,9 @@
     NSString * load5 = [NSString stringWithFormat: @"%0.2f", avg[1]];
     NSString * load15 = [NSString stringWithFormat: @"%0.2f", avg[2]];
     
-    [self.model addElement: @"load1" value: load1];
-    [self.model addElement: @"load5" value: load5];
-    [self.model addElement: @"load15" value: load15];
+    [self.xml addElement: @"load1" value: load1];
+    [self.xml addElement: @"load5" value: load5];
+    [self.xml addElement: @"load15" value: load15];
 
     [self.result
       appendString:

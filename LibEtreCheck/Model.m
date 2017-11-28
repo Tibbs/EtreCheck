@@ -56,22 +56,6 @@
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
   
-// Return the singeton of shared values.
-+ (Model *) model
-  {
-  static Model * model = nil;
-  
-  static dispatch_once_t onceToken;
-  
-  dispatch_once(
-    & onceToken,
-    ^{
-      model = [[Model alloc] init];
-    });
-    
-  return model;
-  }
-
 // Get the model.
 - (NSString *) model
   {
@@ -198,7 +182,7 @@
     event.name = name;
     event.details = result;
       
-    [[[Model model] diagnosticEvents] setObject: event forKey: name];
+    [self.diagnosticEvents setObject: event forKey: name];
     
     [event release];
 
@@ -214,7 +198,7 @@
   NSDate * startDate = [date dateByAddingTimeInterval: -60*5];
   NSDate * endDate = [date dateByAddingTimeInterval: 60*5];
   
-  NSArray * lines = [[Model model] logEntries];
+  NSArray * lines = self.logEntries;
   
   __block NSMutableString * result = [NSMutableString string];
   
@@ -293,7 +277,7 @@
   for(NSString * argument in args)
     {
     [command appendString: @" "];
-    [command appendString: [Utilities cleanPath: argument]];
+    [command appendString: argument];
     }
     
   [self.terminatedTasks addObject: command];

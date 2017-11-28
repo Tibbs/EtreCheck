@@ -307,8 +307,7 @@
   {
   NSMutableDictionary * extensions = [NSMutableDictionary dictionary];
   
-  NSDictionary * applications =
-    [[Model model] applications];
+  NSDictionary * applications = [self.model applications];
   
   for(NSString * name in applications)
     {
@@ -619,7 +618,7 @@
   
   [extensionsXML startElement: @"directory"];
   
-  NSString * cleanPath = [Utilities cleanPath: directory];
+  NSString * cleanPath = [self cleanPath: directory];
   
   [extensionsXML addElement: @"cleanpath" value: cleanPath];
   [extensionsXML addElement: @"path" value: directory];
@@ -669,7 +668,7 @@
   [extensionsXML endElement: @"directory"];
   
   if([extensions count] > 0)
-    [self.model addFragment: extensionsXML.root];
+    [self.xml addFragment: extensionsXML.root];
     
   [extensionsXML release];
   

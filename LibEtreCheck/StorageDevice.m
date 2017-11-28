@@ -16,6 +16,9 @@
 // The volume name.
 @synthesize name = myName;
 
+// The clean name.
+@synthesize cleanName = myCleanName;
+
 // The raw size of the device.
 @synthesize size = mySize;
 
@@ -94,14 +97,11 @@
 // Build the XML value.
 - (void) buildXMLValue: (XMLBuilder *) xml
   {
-  NSString * cleanName = 
-    [self.name length] > 0 ? [Utilities cleanName: self.name] : @"";
-
   // This class should never be directly instatiated, so omit the top
   // level element.
   [xml addElement: @"device" value: self.identifier];
   [xml addElement: @"name" value: self.name];
-  [xml addElement: @"cleanname" value: cleanName];
+  [xml addElement: @"cleanname" value: self.cleanName];
   [xml 
     addElement: @"size" 
     valueWithUnits: [myByteCountFormatter stringFromByteCount: self.size]];

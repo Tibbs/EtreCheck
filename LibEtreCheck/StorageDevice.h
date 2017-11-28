@@ -14,6 +14,9 @@
   // The volume name.
   NSString * myName;
   
+  // The clean name.
+  NSString * myCleanName;
+  
   // The raw size of the device.
   NSUInteger mySize;
   
@@ -41,6 +44,9 @@
 
 // The device name.
 @property (retain, nullable) NSString * name;
+
+// The clean name.
+@property (retain, nonnull) NSString * cleanName;
 
 // The raw size of the device.
 @property (assign) NSUInteger size;

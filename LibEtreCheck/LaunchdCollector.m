@@ -34,7 +34,7 @@
   myAttributes = [NSMutableDictionary new];
   
   // Load all launchd files. No-op after first call.
-  [[[Model model] launchd] load];
+  [[self.model launchd] load];
   }
 
 // Print files in a given directory.
@@ -42,11 +42,11 @@
   {
   NSMutableArray * files = [NSMutableArray new];
   
-  for(NSString * path in [[[Model model] launchd] filesByPath])
+  for(NSString * path in [[self.model launchd] filesByPath])
     if([path hasPrefix: directory])
       {
       LaunchdFile * file = 
-        [[[[Model model] launchd] filesByPath] objectForKey: path];
+        [[[self.model launchd] filesByPath] objectForKey: path];
       
       if(file != nil)
         [files addObject: file];
@@ -74,7 +74,7 @@
     [self.result appendString: @"\n"];
     
     // Export the XML.
-    [self.model addFragment: file.xml];
+    [self.xml addFragment: file.xml];
     }
 
   if(count > 0)

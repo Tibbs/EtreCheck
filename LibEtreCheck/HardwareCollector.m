@@ -43,9 +43,6 @@
   
   if(self != nil)
     {
-    // Do this in the constructor so the data is available before
-    // collection starts.
-    [self loadProperties];    
     }
     
   return self;
@@ -62,6 +59,18 @@
   self.properties = nil;
   
   [super dealloc];
+  }
+
+// Perform the collection.
+- (void) performCollect
+  {
+  [self loadProperties];    
+
+  [self collectBluetooth];
+  [self collectSysctl];
+  [self collectHardware];
+    
+  [self.result appendCR];
   }
 
 // Load machine properties.
@@ -86,24 +95,14 @@
   NSString * hostName = (NSString *)SCDynamicStoreCopyLocalHostName(NULL);
 
   // Load the machine image.
-  [[Model model] setComputerName: computerName];
-  [[Model model] setHostName: hostName];
+  [self.model setComputerName: computerName];
+  [self.model setHostName: hostName];
   
   if(self.machineIcon != nil)
-    [[Model model] setMachineIcon: self.machineIcon];
+    [self.model setMachineIcon: self.machineIcon];
   
   [computerName release];
   [hostName release];
-  }
-
-// Perform the collection.
-- (void) performCollect
-  {
-  [self collectBluetooth];
-  [self collectSysctl];
-  [self collectHardware];
-    
-  [self.result appendCR];
   }
 
 // Collect bluetooth information.
@@ -250,16 +249,16 @@
   NSString * memory = [info objectForKey: @"physical_memory"];
   NSString * serial = [info objectForKey: @"serial_number"];
 
-  [[Model model] setModel: model];
+  [self.model setModel: model];
   
   // Extract the memory.
-  [[Model model]
+  [self.model
     setPhysicalRAM: [self parseMemory: memory]];
 
   if(self.simulating)
     memory = @"2 GB";
     
-  [[Model model] setSerialCode: [serial substringFromIndex: 8]];
+  [self.model setSerialCode: [serial substringFromIndex: 8]];
 
   // Print the human readable machine name, if I can find one.
   [self printHumanReadableMacName: model];
@@ -271,15 +270,15 @@
           ECLocalizedString(@"    %@ - %@: %@\n"),
           name, ECLocalizedString(@"model"), model]];
     
-  [self.model addElement: @"name" value: name];
-  [self.model addElement: @"model" value: model];
-  [self.model addElement: @"modeltype" value: [[Model model] modelType]];
-  [self.model 
+  [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"model" value: model];
+  [self.xml addElement: @"modeltype" value: [self.model modelType]];
+  [self.xml 
     addElement: @"modelmajorversion" 
-    intValue: [[Model model] modelMajorVersion]];
-  [self.model 
+    intValue: [self.model modelMajorVersion]];
+  [self.xml 
     addElement: @"modelminorversion" 
-    intValue: [[Model model] modelMinorVersion]];
+    intValue: [self.model modelMinorVersion]];
   
   NSString * code = @"";
   
@@ -298,11 +297,11 @@
           code,
           core_count]];
     
-  [self.model addElement: @"cpucount" number: cpu_count];
-  [self.model addElement: @"speed" valueWithUnits: speed];
-  [self.model addElement: @"cpu_type" value: cpu_type];      
-  [self.model addElement: @"cpucode" value: self.CPUCode];
-  [self.model addElement: @"corecount" number: core_count];
+  [self.xml addElement: @"cpucount" number: cpu_count];
+  [self.xml addElement: @"speed" valueWithUnits: speed];
+  [self.xml addElement: @"cpu_type" value: cpu_type];      
+  [self.xml addElement: @"cpucode" value: self.CPUCode];
+  [self.xml addElement: @"corecount" number: core_count];
 
   [self printMemory: memory];
   }
@@ -341,7 +340,7 @@
       [NSString
         stringWithFormat: @"    %@ \n", self.marketingName]];
       
-  [self.model addElement: @"marketingname" value: self.marketingName];
+  [self.xml addElement: @"marketingname" value: self.marketingName];
     
   NSString * language = ECLocalizedString(@"en");
 
@@ -357,7 +356,7 @@
           ECLocalizedString(
             @"[Technical Specifications]")]];
 
-  [self.model
+  [self.xml
     addElement: @"technicalspecificationsurl"
     url: [NSURL URLWithString: url]];
 
@@ -373,7 +372,7 @@
           ECLocalizedString(
             @"[User Guide]")]];
     
-  [self.model 
+  [self.xml 
     addElement: @"userguideurl" url: [NSURL URLWithString: url]];
 
   [self.result appendString: @" - "];
@@ -388,7 +387,7 @@
           ECLocalizedString(
             @"[Warranty & Service]")]];
 
-  [self.model
+  [self.xml
     addElement: @"warrantyandserviceurl"
     url: [NSURL URLWithString: url]];
 
@@ -413,7 +412,7 @@
   {
   return
     [Utilities
-      askAppleForMarketingName: [[Model model] serialCode]
+      askAppleForMarketingName: [self.model serialCode]
       language: language
       type: @"product?"];
   }
@@ -423,7 +422,7 @@
   {
   return
     [Utilities
-      AppleSupportSPQueryURL: [[Model model] serialCode]
+      AppleSupportSPQueryURL: [self.model serialCode]
       language: language
       type: @"index?page=cpuspec"];
   }
@@ -433,7 +432,7 @@
   {
   return
     [Utilities
-      AppleSupportSPQueryURL: [[Model model] serialCode]
+      AppleSupportSPQueryURL: [self.model serialCode]
       language: language
       type: @"index?page=cpuuserguides"];
   }
@@ -443,7 +442,7 @@
   {
   return
     [Utilities
-      AppleSupportSPQueryURL: [[Model model] serialCode]
+      AppleSupportSPQueryURL: [self.model serialCode]
       language: language
       type: @"index?page=cpumemory"]; 
   }
@@ -456,7 +455,7 @@
   NSString * url =
     @"https://support.apple.com/%@/mac-desktops/repair/service";
   
-  if([[[Model model] model] hasPrefix: @"MacBook"])
+  if([[self.model model] hasPrefix: @"MacBook"])
     url = @"https://support.apple.com/%@/mac-notebooks/repair/service";
 
   return [NSString stringWithFormat: url, localeCode];
@@ -549,7 +548,7 @@
           : ECLocalizedString(@"Not upgradeable");
     }
     
-  if([[Model model] physicalRAM] < 4)
+  if([self.model physicalRAM] < 4)
     {
     [self.result
       appendString:
@@ -570,13 +569,13 @@
         [NSString
           stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
-  [self.model addElement: @"ram" valueWithUnits: memory];
+  [self.xml addElement: @"ram" valueWithUnits: memory];
   
   NSString * language = ECLocalizedString(@"en");
 
   NSString * url = [self memoryUpgradeURL: language];
   
-  [self.model addElement: @"upgradeable" boolValue: upgradeable];
+  [self.xml addElement: @"upgradeable" boolValue: upgradeable];
   
   if(upgradeable)
     {
@@ -590,7 +589,7 @@
             ECLocalizedString(
               @"[Instructions]\n")]];
       
-    [self.model
+    [self.xml
       addElement: @"memoryupgradeinstructionsurl"
       url: [NSURL URLWithString: url]];
     }
@@ -639,7 +638,7 @@
 // Print memory banks.
 - (void) printMemoryBanks: (NSArray *) banks
   {
-  [self.model startElement: @"memorybanks"];
+  [self.xml startElement: @"memorybanks"];
   
   for(NSDictionary * bank in banks)
     {
@@ -674,18 +673,18 @@
     [self.result appendString: @"\n"];
     [self.result appendString: currentBankInfo];
     
-    [self.model startElement: @"memorybank"];
+    [self.xml startElement: @"memorybank"];
     
-    [self.model addElement: @"identifier" value: currentBankID];
-    [self.model addElement: @"size" valueWithUnits: size];
-    [self.model addElement: @"type" value: type];
-    [self.model addElement: @"speed" valueWithUnits: speed];
-    [self.model addElement: @"status" value: status];
+    [self.xml addElement: @"identifier" value: currentBankID];
+    [self.xml addElement: @"size" valueWithUnits: size];
+    [self.xml addElement: @"type" value: type];
+    [self.xml addElement: @"speed" valueWithUnits: speed];
+    [self.xml addElement: @"status" value: status];
 
-    [self.model endElement: @"memorybank"];
+    [self.xml endElement: @"memorybank"];
     }
 
-  [self.model endElement: @"memorybanks"];
+  [self.xml endElement: @"memorybanks"];
   }
 
 // Print information about bluetooth.
@@ -703,7 +702,7 @@
 // Collect bluetooth information.
 - (NSString *) collectBluetoothInformation
   {
-  [self.model 
+  [self.xml 
     addElement: @"continuity" boolValue: [self supportsContinuity]];
 
   if([self supportsContinuity])
@@ -718,7 +717,7 @@
   if(self.supportsHandoff)
     return YES;
     
-  NSString * model = [[Model model] model];
+  NSString * model = [self.model model];
   
   NSString * specificModel = nil;
   int target = 0;
@@ -834,12 +833,12 @@
           stringWithFormat: 
             ECLocalizedString(@"%@%@: %@\n"), indent, name, modes]];
     
-    [self.model startElement: @"wireless"];
+    [self.xml startElement: @"wireless"];
 
-    [self.model addElement: @"name" value: name];
-    [self.model addElement: @"modes" value: modes];
+    [self.xml addElement: @"name" value: name];
+    [self.xml addElement: @"modes" value: modes];
 
-    [self.model endElement: @"wireless"];
+    [self.xml endElement: @"wireless"];
     }
     
   else if([name length] > 0)
@@ -853,11 +852,11 @@
             name, 
             ECLocalizedString(@"Unknown")]];
 
-    [self.model startElement: @"wireless"];
+    [self.xml startElement: @"wireless"];
 
-    [self.model addElement: @"name" value: name];
+    [self.xml addElement: @"name" value: name];
 
-    [self.model endElement: @"wireless"];
+    [self.xml endElement: @"wireless"];
     }
             
   else
@@ -868,7 +867,7 @@
           stringWithFormat: 
             @"%@%@\n", indent, ECLocalizedString(@"Unknown")]];
 
-    [self.model addElement: @"wireless"];
+    [self.xml addElement: @"wireless"];
     }
   }
 
@@ -970,15 +969,15 @@
               ECLocalizedStringFromTable(health, @"System"), 
               cycleCount]];
       
-    [self.model addElement: @"batteryhealth" value: health];
+    [self.xml addElement: @"batteryhealth" value: health];
     
-    [self.model addElement: @"batterycyclecount" number: cycleCount];
+    [self.xml addElement: @"batterycyclecount" number: cycleCount];
     
-    [self.model 
+    [self.xml 
       addElement: @"batterypercent" 
       intValue: cycleCount.intValue * 100 / [self getLifetimeCycles]];
       
-    //[self.model addElement: @"batteryserialnumber" value: serialNumber];
+    //[self.xml addElement: @"batteryserialnumber" value: serialNumber];
     
     if(serialNumberInvalid)
       [self.result
@@ -1000,9 +999,9 @@
   {
   int cycles = 1000;
   
-  NSString * modelType = [[Model model] modelType];
-  int majorVersion = [[Model model] modelMajorVersion];
-  int minorVersion = [[Model model] modelMinorVersion];
+  NSString * modelType = [self.model modelType];
+  int majorVersion = [self.model modelMajorVersion];
+  int minorVersion = [self.model modelMinorVersion];
   
   if([modelType isEqualToString: @"MacBookPro"])
     {

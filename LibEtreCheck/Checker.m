@@ -65,6 +65,22 @@
 
 @synthesize currentProgress = myCurrentProgress;
 
+// The model for this run.
+@synthesize  model = myModel;
+
+// Constructor.
+- (instancetype) initWithModel: (Model *) model
+  {
+  self = [super init];
+  
+  if(self != nil)
+    {
+    myModel = [model retain];
+    }
+    
+  return self;
+  }
+  
 // Destructor.
 - (void) dealloc
   {
@@ -76,6 +92,8 @@
   [myProgress release];
   [myApplicationIcon release];
   [myComplete release];
+  
+  [myModel release];
   
   [super dealloc];
   }
@@ -89,20 +107,15 @@
   int collectorCount = 41;
   double increment = 100.0/collectorCount;
   
-  // These are all special.
-  EtreCheckCollector * etrecheckCollector = 
-    [[EtreCheckCollector new] autorelease];
-    
-  HardwareCollector * hardwareCollector =
-    [[HardwareCollector new] autorelease];
-
   ApplicationsCollector * applicationsCollector = 
-    [[ApplicationsCollector new] autorelease];
+    [ApplicationsCollector new];
     
+  EtreCheckCollector * etrecheckCollector = [EtreCheckCollector new];
+  
   [self 
     performCollections: 
       @[
-        hardwareCollector,
+        [HardwareCollector new],
         applicationsCollector
       ]
     increment: increment];
@@ -118,72 +131,68 @@
   [self 
     performCollections: 
       @[
-        [[LogCollector new] autorelease],
-        [[DiskCollector new] autorelease],
-        [[VideoCollector new] autorelease],
-        [[USBCollector new] autorelease],
-        [[FirewireCollector new] autorelease],
-        [[VirtualVolumeCollector new] autorelease]
+        [LogCollector new],
+        [DiskCollector new],
+        [VideoCollector new],
+        [USBCollector new],
+        [FirewireCollector new],
+        [VirtualVolumeCollector new]
       ]
     increment: increment];
 
-  // In order to find adware in Safari extensions, the Adware collector has
-  // to be created first, but then the Safari extension collection has to
-  // run fist. Such is life.
-  AdwareCollector * adwareCollector = [[AdwareCollector new] autorelease];
-  
   [self 
     performCollections: 
       @[
-        [[NetworkCollector new] autorelease],
-        [[SystemSoftwareCollector new] autorelease],
-        [[ConfigurationCollector new] autorelease],
-        [[TimeMachineCollector new] autorelease],
-        [[FontsCollector new] autorelease],
-        [[InstallCollector new] autorelease],
-        [[DiagnosticsCollector new] autorelease],
-        [[GatekeeperCollector new] autorelease],
-        [[SafariExtensionsCollector new] autorelease],
-        [[KernelExtensionCollector new] autorelease],
-        [[CPUUsageCollector new] autorelease]
+        [NetworkCollector new],
+        [SystemSoftwareCollector new],
+        [ConfigurationCollector new],
+        [TimeMachineCollector new],
+        [FontsCollector new],
+        [InstallCollector new],
+        [DiagnosticsCollector new],
+        [GatekeeperCollector new],
+        [SafariExtensionsCollector new],
+        [KernelExtensionCollector new],
+        [CPUUsageCollector new]
       ]
     increment: increment];
   
   [self 
     performCollections: 
       @[
-        [[SystemLaunchAgentsCollector new] autorelease],
-        [[SystemLaunchDaemonsCollector new] autorelease],
-        [[LaunchAgentsCollector new] autorelease],
-        [[LaunchDaemonsCollector new] autorelease],
-        [[UserLaunchAgentsCollector new] autorelease],
-        [[PreferencePanesCollector new] autorelease],
-        [[StartupItemsCollector new] autorelease],
-        [[LoginItemsCollector new] autorelease],
-        [[InternetPlugInsCollector new] autorelease],
-        [[UserInternetPlugInsCollector new] autorelease],
-        [[AudioPlugInsCollector new] autorelease],
-        [[UserAudioPlugInsCollector new] autorelease],
-        [[ITunesPlugInsCollector new] autorelease],
-        [[UserITunesPlugInsCollector new] autorelease],
-        [[MemoryUsageCollector new] autorelease],
-        [[NetworkUsageCollector new] autorelease],
-        [[EnergyUsageCollector new] autorelease],
-        [[VirtualMemoryCollector new] autorelease]
+        [SystemLaunchAgentsCollector new],
+        [SystemLaunchDaemonsCollector new],
+        [LaunchAgentsCollector new],
+        [LaunchDaemonsCollector new],
+        [UserLaunchAgentsCollector new],
+        [PreferencePanesCollector new],
+        [StartupItemsCollector new],
+        [LoginItemsCollector new],
+        [InternetPlugInsCollector new],
+        [UserInternetPlugInsCollector new],
+        [AudioPlugInsCollector new],
+        [UserAudioPlugInsCollector new],
+        [ITunesPlugInsCollector new],
+        [UserITunesPlugInsCollector new],
+        [MemoryUsageCollector new],
+        [NetworkUsageCollector new],
+        [EnergyUsageCollector new],
+        [VirtualMemoryCollector new]
       ]
     increment: increment];
 
   [self 
     performCollections: 
       @[
-        adwareCollector,
-        [[UnsignedCollector new] autorelease],
-        [[CleanupCollector new] autorelease],
-        [[EtreCheckDeletedFilesCollector new] autorelease]
+        [AdwareCollector new],
+        [UnsignedCollector new],
+        [CleanupCollector new],
+        [EtreCheckDeletedFilesCollector new]
       ]
     increment: increment];
 
-  [self performCollections: @[etrecheckCollector] increment: increment];
+  [self 
+    performCollections: @[etrecheckCollector] increment: increment];
 
   NSAttributedString * report = [self collectResults];
   
@@ -204,6 +213,8 @@
     
   for(Collector * collector in collectors)
     {
+    collector.model = self.model;
+    
     if(self.progress)
       self.progress(self.currentProgress += increment);    
 
@@ -225,6 +236,8 @@
     
     // Keep a reference to the collector in case it is needed later.
     [self.completed setObject: collector forKey: collector.name];
+    
+    [collector release];
     
     [pool drain];
     }
@@ -291,59 +304,59 @@
 // Return an individual XML fragment.
 - (XMLBuilderElement *) getXML: (NSString *) key
   {
-  return [[[self.completed objectForKey: key] model] root];
+  return [[[self.completed objectForKey: key] xml] root];
   }
 
 // Collect output.
 - (void) collectOutput
   {
-  [[[Model model] xml] startElement: @"etrecheck"];
+  [[self.model xml] startElement: @"etrecheck"];
   
-  [[[Model model] xml] addFragment: [[[Model model] header] root]];
-  [[[Model model] xml] addFragment: [self getXML: @"header"]];
-  [[[Model model] xml] addFragment: [self getXML: @"hardware"]];
-  [[[Model model] xml] addFragment: [self getXML: @"video"]];
-  [[[Model model] xml] addFragment: [self getXML: @"disk"]];
-  [[[Model model] xml] addFragment: [self getXML: @"usb"]];
-  [[[Model model] xml] addFragment: [self getXML: @"firewire"]];
-  [[[Model model] xml] addFragment: [self getXML: @"virtualvolume"]];
-  [[[Model model] xml] addFragment: [self getXML: @"network"]];
-  [[[Model model] xml] addFragment: [self getXML: @"systemsoftware"]];
-  [[[Model model] xml] addFragment: [self getXML: @"configurationfiles"]];
-  [[[Model model] xml] addFragment: [self getXML: @"gatekeeper"]];
-  [[[Model model] xml] addFragment: [self getXML: @"applications"]];
-  [[[Model model] xml] addFragment: [self getXML: @"adware"]];
-  [[[Model model] xml] addFragment: [self getXML: @"unsigned"]];
-  [[[Model model] xml] addFragment: [self getXML: @"cleanup"]];
-  [[[Model model] xml] addFragment: [self getXML: @"kernelextensions"]];
-  [[[Model model] xml] addFragment: [self getXML: @"startupitems"]];
-  [[[Model model] xml] addFragment: [self getXML: @"systemlaunchagents"]];
-  [[[Model model] xml] addFragment: [self getXML: @"systemlaunchdaemons"]];
-  [[[Model model] xml] addFragment: [self getXML: @"launchagents"]];
-  [[[Model model] xml] addFragment: [self getXML: @"launchdaemons"]];
-  [[[Model model] xml] addFragment: [self getXML: @"userlaunchagents"]];
-  [[[Model model] xml] addFragment: [self getXML: @"loginitems"]];
-  [[[Model model] xml] addFragment: [self getXML: @"internetplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"userinternetplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"safariextensions"]];
-  [[[Model model] xml] addFragment: [self getXML: @"audioplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"useraudioplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"itunesplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"useritunesplugins"]];
-  [[[Model model] xml] addFragment: [self getXML: @"preferencepanes"]];
-  [[[Model model] xml] addFragment: [self getXML: @"fonts"]];
-  [[[Model model] xml] addFragment: [self getXML: @"timemachine"]];
-  [[[Model model] xml] addFragment: [self getXML: @"cpu"]];
-  [[[Model model] xml] addFragment: [self getXML: @"memory"]];
-  [[[Model model] xml] addFragment: [self getXML: @"networkusage"]];
-  [[[Model model] xml] addFragment: [self getXML: @"energy"]];
-  [[[Model model] xml] addFragment: [self getXML: @"vm"]];
-  [[[Model model] xml] addFragment: [self getXML: @"install"]];
-  [[[Model model] xml] addFragment: [self getXML: @"diagnostics"]];
-  [[[Model model] xml] 
+  [[self.model xml] addFragment: [[self.model header] root]];
+  [[self.model xml] addFragment: [self getXML: @"header"]];
+  [[self.model xml] addFragment: [self getXML: @"hardware"]];
+  [[self.model xml] addFragment: [self getXML: @"video"]];
+  [[self.model xml] addFragment: [self getXML: @"disk"]];
+  [[self.model xml] addFragment: [self getXML: @"usb"]];
+  [[self.model xml] addFragment: [self getXML: @"firewire"]];
+  [[self.model xml] addFragment: [self getXML: @"virtualvolume"]];
+  [[self.model xml] addFragment: [self getXML: @"network"]];
+  [[self.model xml] addFragment: [self getXML: @"systemsoftware"]];
+  [[self.model xml] addFragment: [self getXML: @"configurationfiles"]];
+  [[self.model xml] addFragment: [self getXML: @"gatekeeper"]];
+  [[self.model xml] addFragment: [self getXML: @"applications"]];
+  [[self.model xml] addFragment: [self getXML: @"adware"]];
+  [[self.model xml] addFragment: [self getXML: @"unsigned"]];
+  [[self.model xml] addFragment: [self getXML: @"cleanup"]];
+  [[self.model xml] addFragment: [self getXML: @"kernelextensions"]];
+  [[self.model xml] addFragment: [self getXML: @"startupitems"]];
+  [[self.model xml] addFragment: [self getXML: @"systemlaunchagents"]];
+  [[self.model xml] addFragment: [self getXML: @"systemlaunchdaemons"]];
+  [[self.model xml] addFragment: [self getXML: @"launchagents"]];
+  [[self.model xml] addFragment: [self getXML: @"launchdaemons"]];
+  [[self.model xml] addFragment: [self getXML: @"userlaunchagents"]];
+  [[self.model xml] addFragment: [self getXML: @"loginitems"]];
+  [[self.model xml] addFragment: [self getXML: @"internetplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"userinternetplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"safariextensions"]];
+  [[self.model xml] addFragment: [self getXML: @"audioplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"useraudioplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"itunesplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"useritunesplugins"]];
+  [[self.model xml] addFragment: [self getXML: @"preferencepanes"]];
+  [[self.model xml] addFragment: [self getXML: @"fonts"]];
+  [[self.model xml] addFragment: [self getXML: @"timemachine"]];
+  [[self.model xml] addFragment: [self getXML: @"cpu"]];
+  [[self.model xml] addFragment: [self getXML: @"memory"]];
+  [[self.model xml] addFragment: [self getXML: @"networkusage"]];
+  [[self.model xml] addFragment: [self getXML: @"energy"]];
+  [[self.model xml] addFragment: [self getXML: @"vm"]];
+  [[self.model xml] addFragment: [self getXML: @"install"]];
+  [[self.model xml] addFragment: [self getXML: @"diagnostics"]];
+  [[self.model xml] 
     addFragment: [self getXML: @"etrecheckdeletedfiles"]]; 
   
-  [[[Model model] xml] endElement: @"etrecheck"];
+  [[self.model xml] endElement: @"etrecheck"];
   }
   
 @end
