@@ -203,7 +203,7 @@
         stringWithFormat:
           @"delete from notifications where note_id in (%@);", arguments];
     
-    result = sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
     
     SQL =
       [NSString
@@ -449,10 +449,10 @@
         stringWithFormat:
           @"do shell script(\"%@\") with administrator privileges",
           command]];
-          
-    [command release];
     }
-    
+  
+  [command release];
+      
   return statements;
   }
 
@@ -629,9 +629,9 @@
         stringWithFormat:
           @"do shell script(\"%@\") with administrator privileges",
           command]];
-          
-    [command release];
     }
+    
+  [command release];
     
   return statements;
   }
@@ -657,9 +657,9 @@
         stringWithFormat:
           @"do shell script(\"%@\") with administrator privileges",
           command]];
-    
-    [command release];
     }
+    
+  [command release];
     
   return statements;
   }

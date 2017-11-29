@@ -176,6 +176,8 @@
   [myLoadedTasks release];
   [mySignature release];
   [myIdentifier release];
+  [myExecutableCRC release];
+  [myPlistCRC release];
   
   [super dealloc];
   }

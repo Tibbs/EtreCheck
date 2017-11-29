@@ -199,6 +199,8 @@
         }
       }
     
+    [model release];
+    
     [self.xml endElement: @"drives"];
     }
   }

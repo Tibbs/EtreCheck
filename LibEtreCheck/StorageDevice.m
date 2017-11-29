@@ -29,7 +29,7 @@
 @synthesize errors = myErrors;
 
 // RAID set UUID.
-@synthesize RAIDSetUUID = myRAIDSetUUDI;
+@synthesize RAIDSetUUID = myRAIDSetUUID;
 
 // RAID set members.
 @synthesize RAIDSetMembers = myRAIDSetMembers;
@@ -90,6 +90,10 @@
   [myName release];
   [myType release];
   [myVolumes release];
+  [myCleanName release];
+  [myErrors release];
+  [myRAIDSetMembers release];
+  [myRAIDSetUUID release];
   
   [super dealloc];
   }

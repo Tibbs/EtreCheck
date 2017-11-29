@@ -403,6 +403,7 @@
       
     [self.loginItems addObjectsFromArray: [bestLoginItems allValues]];
     
+    [bestLoginItems release];
     [loginItems release];
     }
     

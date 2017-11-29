@@ -100,6 +100,8 @@
         stringByTrimmingCharactersInSet: 
           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
+    [data release];
+    
     [myBuild retain];
     
     if(self.build.length >= 3)

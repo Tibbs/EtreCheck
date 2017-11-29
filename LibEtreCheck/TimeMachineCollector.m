@@ -378,11 +378,9 @@
   {
   volume.cleanName = [self cleanName: volume.name];
   
-  NSString * diskSize = ECLocalizedString(@"Unknown");
-
   unsigned long long used = volume.size - volume.freeSpace;
   
-  diskSize = [formatter stringFromByteCount: volume.size];
+  NSString * diskSize = [formatter stringFromByteCount: volume.size];
     
   NSString * spaceRequired = [formatter stringFromByteCount: used];
     

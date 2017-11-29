@@ -623,6 +623,9 @@
         if(storageDevice != nil)
           [volume addContainingDevice: storageDevice.identifier];
         }
+        
+  [RAIDDevices release];
+  [RAIDSets release];
   }
 
 #pragma mark - Output

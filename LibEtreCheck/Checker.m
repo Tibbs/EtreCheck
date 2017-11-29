@@ -107,22 +107,60 @@
   int collectorCount = 41;
   double increment = 100.0/collectorCount;
   
-  ApplicationsCollector * applicationsCollector = 
-    [ApplicationsCollector new];
-    
-  EtreCheckCollector * etrecheckCollector = [EtreCheckCollector new];
+  ApplicationsCollector * applications = [ApplicationsCollector new];
+  EtreCheckCollector * etrecheck = [EtreCheckCollector new];
+  HardwareCollector * hardware = [HardwareCollector new];
+  LogCollector * log = [LogCollector new];
+  DiskCollector * disk = [DiskCollector new];
+  VideoCollector * video = [VideoCollector new];
+  USBCollector * USB = [USBCollector new];
+  FirewireCollector * firewire = [FirewireCollector new];
+  VirtualVolumeCollector * virtualVolume = [VirtualVolumeCollector new];
+  NetworkCollector * network = [NetworkCollector new];
+  SystemSoftwareCollector * systemSoftware = [SystemSoftwareCollector new];
+  ConfigurationCollector * configuration = [ConfigurationCollector new];
+  TimeMachineCollector * timeMachine = [TimeMachineCollector new];
+  FontsCollector * fonts = [FontsCollector new];
+  InstallCollector * install = [InstallCollector new];
+  DiagnosticsCollector * diagnostics = [DiagnosticsCollector new];
+  GatekeeperCollector * gatekeeper = [GatekeeperCollector new];
+  SafariExtensionsCollector * safari = [SafariExtensionsCollector new];
+  KernelExtensionCollector * kernel = [KernelExtensionCollector new];
+  CPUUsageCollector * CPUUsage = [CPUUsageCollector new];
+  SystemLaunchAgentsCollector * sla = [SystemLaunchAgentsCollector new];
+  SystemLaunchDaemonsCollector * sld = [SystemLaunchDaemonsCollector new];
+  LaunchAgentsCollector * la = [LaunchAgentsCollector new];
+  LaunchDaemonsCollector * ld = [LaunchDaemonsCollector new];
+  UserLaunchAgentsCollector * ula = [UserLaunchAgentsCollector new];
+  PreferencePanesCollector * prefPanes = [PreferencePanesCollector new];
+  StartupItemsCollector * startupItems = [StartupItemsCollector new];
+  LoginItemsCollector * loginItems = [LoginItemsCollector new];
+  InternetPlugInsCollector * ipi = [InternetPlugInsCollector new];
+  UserInternetPlugInsCollector * uipi = [UserInternetPlugInsCollector new];
+  AudioPlugInsCollector * api = [AudioPlugInsCollector new];
+  UserAudioPlugInsCollector * uapi = [UserAudioPlugInsCollector new];
+  ITunesPlugInsCollector * iTunespi = [ITunesPlugInsCollector new];
+  UserITunesPlugInsCollector * uiTunespi = [UserITunesPlugInsCollector new];
+  MemoryUsageCollector * memoryUsage = [MemoryUsageCollector new];
+  NetworkUsageCollector * networkUsage = [NetworkUsageCollector new];
+  EnergyUsageCollector * energyUsage = [EnergyUsageCollector new];
+  VirtualMemoryCollector * virtualMemory = [VirtualMemoryCollector new];
+  AdwareCollector * adware = [AdwareCollector new];
+  UnsignedCollector * unsignedFiles = [UnsignedCollector new];
+  CleanupCollector * cleanup = [CleanupCollector new];
+  EtreCheckDeletedFilesCollector * e = [EtreCheckDeletedFilesCollector new];
   
   [self 
     performCollections: 
       @[
-        [HardwareCollector new],
-        applicationsCollector
+        hardware,
+        applications
       ]
     increment: increment];
     
   if(self.applicationIcon != nil)
     {
-    NSArray * icons = [applicationsCollector applicationIcons];
+    NSArray * icons = [applications applicationIcons];
     
     for(NSImage * icon in icons)
       self.applicationIcon(icon);
@@ -131,73 +169,116 @@
   [self 
     performCollections: 
       @[
-        [LogCollector new],
-        [DiskCollector new],
-        [VideoCollector new],
-        [USBCollector new],
-        [FirewireCollector new],
-        [VirtualVolumeCollector new]
+        log,
+        disk,
+        video,
+        USB,
+        firewire,
+        virtualVolume
       ]
     increment: increment];
 
   [self 
     performCollections: 
       @[
-        [NetworkCollector new],
-        [SystemSoftwareCollector new],
-        [ConfigurationCollector new],
-        [TimeMachineCollector new],
-        [FontsCollector new],
-        [InstallCollector new],
-        [DiagnosticsCollector new],
-        [GatekeeperCollector new],
-        [SafariExtensionsCollector new],
-        [KernelExtensionCollector new],
-        [CPUUsageCollector new]
+        network,
+        systemSoftware,
+        configuration,
+        timeMachine,
+        fonts,
+        install,
+        diagnostics,
+        gatekeeper,
+        safari,
+        kernel,
+        CPUUsage
       ]
     increment: increment];
   
   [self 
     performCollections: 
       @[
-        [SystemLaunchAgentsCollector new],
-        [SystemLaunchDaemonsCollector new],
-        [LaunchAgentsCollector new],
-        [LaunchDaemonsCollector new],
-        [UserLaunchAgentsCollector new],
-        [PreferencePanesCollector new],
-        [StartupItemsCollector new],
-        [LoginItemsCollector new],
-        [InternetPlugInsCollector new],
-        [UserInternetPlugInsCollector new],
-        [AudioPlugInsCollector new],
-        [UserAudioPlugInsCollector new],
-        [ITunesPlugInsCollector new],
-        [UserITunesPlugInsCollector new],
-        [MemoryUsageCollector new],
-        [NetworkUsageCollector new],
-        [EnergyUsageCollector new],
-        [VirtualMemoryCollector new]
+        sla,
+        sld,
+        la,
+        ld,
+        ula,
+        prefPanes,
+        startupItems,
+        loginItems,
+        ipi,
+        uipi,
+        api,
+        uapi,
+        iTunespi,
+        uiTunespi,
+        memoryUsage,
+        networkUsage,
+        energyUsage,
+        virtualMemory
       ]
     increment: increment];
 
   [self 
     performCollections: 
       @[
-        [AdwareCollector new],
-        [UnsignedCollector new],
-        [CleanupCollector new],
-        [EtreCheckDeletedFilesCollector new]
+        adware,
+        unsignedFiles,
+        cleanup,
+        e
       ]
     increment: increment];
 
   [self 
-    performCollections: @[etrecheckCollector] increment: increment];
+    performCollections: @[etrecheck] increment: increment];
 
   NSAttributedString * report = [self collectResults];
   
   if(self.complete)
     self.complete();
+
+  [applications release];
+  [etrecheck release];
+  [hardware release];
+  [log release];
+  [disk release];
+  [video release];
+  [USB release];
+  [firewire release];
+  [virtualVolume release];
+  [network release];
+  [systemSoftware release];
+  [configuration release];
+  [timeMachine release];
+  [fonts release];
+  [install release];
+  [diagnostics release];
+  [gatekeeper release];
+  [safari release];
+  [kernel release];
+  [CPUUsage release];
+  [sla release];
+  [sld release];
+  [la release];
+  [ld release];
+  [ula release];
+  [prefPanes release];
+  [startupItems release];
+  [loginItems release];
+  [ipi release];
+  [uipi release];
+  [api release];
+  [uapi release];
+  [iTunespi release];
+  [uiTunespi release];
+  [memoryUsage release];
+  [networkUsage release];
+  [energyUsage release];
+  [virtualMemory release];
+  [adware release];
+  [unsignedFiles release];
+  [cleanup release];
+  [e release];
 
   return report;
   }
@@ -236,9 +317,7 @@
     
     // Keep a reference to the collector in case it is needed later.
     [self.completed setObject: collector forKey: collector.name];
-    
-    [collector release];
-    
+
     [pool drain];
     }
   }

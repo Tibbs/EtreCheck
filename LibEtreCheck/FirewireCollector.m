@@ -141,12 +141,15 @@
         
         NSMutableString * model = [NSMutableString new];
         
-        [model appendString: manufacturer];
-        
-        if(![name hasPrefix: manufacturer])
+        if(manufacturer.length > 0)
           {
-          [model appendString: @" "];
-          [model appendString: name];
+          [model appendString: manufacturer];
+          
+          if(![name hasPrefix: manufacturer])
+            {
+            [model appendString: @" "];
+            [model appendString: name];
+            }
           }
           
         drive.model = model;

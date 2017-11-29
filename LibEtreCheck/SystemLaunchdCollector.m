@@ -48,7 +48,6 @@
       [totals setObject: newTotal forKey: file.status];
       
       [newTotal release];
-      [currentTotal release];
 
       // Export the XML.
       [self.xml addFragment: file.xml];

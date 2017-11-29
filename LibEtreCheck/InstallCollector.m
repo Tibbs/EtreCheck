@@ -86,6 +86,8 @@
         [installsByName setObject: install forKey: name];
         }
       }
+    
+    [installsByName release];
          
     if(installsToPrint.count > 0)
       {
@@ -125,6 +127,9 @@
         appendString: ECLocalizedString(@"installsincomplete")];
       }
       
+    [installsToPrint release];
+    [criticalAppleInstalls release];
+    
     [self.result appendCR];
     }
   }

@@ -156,6 +156,8 @@
           self.busSpeed,
           ECLocalizedString(self.type)]];
 
+  [indent release];
+  
   // Don't forget the volumes.
   NSArray * volumeDevices = 
     [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];

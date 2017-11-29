@@ -175,8 +175,6 @@
 
   long long bytes = 0;
     
-  NSString * iCloudFree = nil;
-  
   NSArray * args =
     @[
       @"quota",
@@ -192,17 +190,7 @@
       {
       NSScanner * scanner = [NSScanner scannerWithString: line];
       
-      if([scanner scanLongLong: & bytes])
-        {
-        ByteCountFormatter * formatter = [ByteCountFormatter new];
-        
-        // Apple uses 1024 for this one.
-        formatter.k1000 = 1024.0;
-        
-        iCloudFree = [formatter stringFromByteCount: bytes];
-          
-        [formatter release];
-        }
+      [scanner scanLongLong: & bytes];
       }
     }
     
@@ -298,6 +286,8 @@
       
   NSString * iCloudFree = [formatter stringFromByteCount: self.iCloudFree];
 
+  [formatter release];
+  
   if([iCloudFree length] > 0)
     {
     [self.result
@@ -346,6 +336,8 @@
     NSString * iCloudFree = 
       [formatter stringFromByteCount: self.iCloudFree];
 
+    [formatter release];
+    
     [self.xml addElement: @"icloudfree" valueWithUnits: iCloudFree];
     }
   }
