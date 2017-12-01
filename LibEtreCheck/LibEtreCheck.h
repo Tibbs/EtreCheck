@@ -35,3 +35,4 @@ FOUNDATION_EXPORT const unsigned char LibEtreCheckVersionString[];
 #import <LibEtreCheck/XMLBuilder.h>
 #import <LibEtreCheck/XMLValue.h>
 #import <LibEtreCheck/AttributedStringValue.h>
+#import <LibEtreCheck/TTTLocalizedPluralString.h>
