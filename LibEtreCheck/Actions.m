@@ -117,8 +117,17 @@
   {
   NSString * path = [file stringByExpandingTildeInPath];
   
-  if([[NSFileManager defaultManager] fileExistsAtPath: path])
+  BOOL isDirectory = NO;
+  
+  BOOL exists = 
+    [[NSFileManager defaultManager] 
+      fileExistsAtPath: path isDirectory: & isDirectory];
+    
+  if(exists)
     {
+    if(!isDirectory)
+      path = [Utilities resolveBundlePath: path];
+    
     NSURL * url = [[NSURL alloc] initFileURLWithPath: path];
     
     NSArray * urls = [[NSArray alloc] initWithObjects: url, nil];

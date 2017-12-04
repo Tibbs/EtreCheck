@@ -954,13 +954,39 @@
 // Resolve a deep app path to the wrapper path.
 + (NSString *) resolveBundlePath: (NSString *) path
   {
+  NSUInteger appLocation = NSNotFound;
+  
   NSRange range = [path rangeOfString: @".app/Contents/MacOS/"];
   
   if(range.location == NSNotFound)
     range = [path rangeOfString: @".app/Contents/Resources/"];
 
   if(range.location != NSNotFound)
-    return [path substringToIndex: range.location + 4];
+    appLocation = range.location + 4;
+    
+  range = [path rangeOfString: @".plugin/"];
+  
+  NSUInteger bundleLocation = NSNotFound;
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 7;
+    
+  range = [path rangeOfString: @".bundle/"];
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 7;
+
+  if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
+    {
+    if(bundleLocation < appLocation)
+      return [path substringToIndex: bundleLocation];
+    else
+      return [path substringToIndex: appLocation];
+    }
+  else if(appLocation != NSNotFound)
+    return [path substringToIndex: appLocation];
+  else if(bundleLocation != NSNotFound)
+    return [path substringToIndex: bundleLocation];
     
   return path;
   }
