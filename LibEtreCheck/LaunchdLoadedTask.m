@@ -16,6 +16,9 @@
 - (void) parseExecutable: (NSString *) program 
   arguments: (NSArray *) arguments;
 
+// Parse a dictionary.
+- (void) parseDictionary: (NSDictionary *) dict;
+
 @end
 
 // A wrapper around a launchd task.
@@ -136,6 +139,8 @@
 // Parse a dictionary.
 - (void) parseDictionary: (NSDictionary *) dict 
   {
+  [super parseDictionary: dict];
+  
   id PID = [dict objectForKey: @"PID"];
   id lastExitCode = [dict objectForKey: @"LastExitStatus"];
   

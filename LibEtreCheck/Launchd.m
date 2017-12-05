@@ -410,6 +410,19 @@
         }
       }
       
+    if(task.label.length > 0)
+      {
+      LaunchdFile * truthFile = 
+        [self.filesByLabel objectForKey: task.label];
+      
+      if(truthFile != nil)
+        {
+        [truthFile.loadedTasks addObject: task];
+        
+        continue;
+        }
+      }
+
     // Labels could have a UUID tacked onto the end. 
     LaunchdFile * truthFile = 
       [self.filesByLabel objectForKey: task.baseLabel];
