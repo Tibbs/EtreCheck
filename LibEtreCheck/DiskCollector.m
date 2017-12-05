@@ -146,8 +146,17 @@
       // Separate items by virtual or physical. Anything virtual will be
       // considered a volume.
       NSString * type = [plist objectForKey: @"VirtualOrPhysical"];
+      NSNumber * wholeDisk = [plist objectForKey: @"WholeDisk"];
+      
+      BOOL drive = NO;
       
       if([type isEqualToString: @"Physical"])
+        drive = YES;
+      
+      if(wholeDisk.boolValue)
+        drive = YES;
+        
+      if(drive)
         {
         if([self collectPhysicalDrive: plist])
           dataFound = YES;
