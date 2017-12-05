@@ -155,6 +155,8 @@
       }
     }
 
+  [self.xml addElement: @"notconfigured" boolValue: YES];
+
   [self.result
     appendString:
       ECLocalizedString(@"    Time Machine not configured!\n\n")
