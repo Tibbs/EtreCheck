@@ -8,8 +8,7 @@
 #import <unistd.h>
 #import <spawn.h>
 #import <sys/select.h>
-
-extern char **environ;
+#import <crt_externs.h>
 
 @implementation SubProcess
 
@@ -182,7 +181,7 @@ extern char **environ;
       path,
       & child_fd_actions,
       NULL,
-      (char * const *)argv, environ);
+      (char * const *)argv, *_NSGetEnviron());
   
   if(error)
     {
@@ -325,7 +324,7 @@ extern char **environ;
         path,
         & child_fd_actions,
         NULL,
-        (char * const *)argv, environ);
+        (char * const *)argv, *_NSGetEnviron());
   
   if(error)
     {

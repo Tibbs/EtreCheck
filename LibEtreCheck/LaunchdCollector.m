@@ -15,24 +15,10 @@
 
 // Collect all sorts of launchd information.
 @implementation LaunchdCollector
-
-// Additional attributes indexed by path.
-@synthesize attributes = myAttributes;
-
-// Destructor.
-- (void) dealloc
-  {
-  [myAttributes release];
-  
-  [super dealloc];
-  }
   
 // Perform the collection.
 - (void) performCollect
   {
-  // Create attributes for these launchd files.
-  myAttributes = [NSMutableDictionary new];
-  
   // Load all launchd files. No-op after first call.
   [[self.model launchd] load];
   }

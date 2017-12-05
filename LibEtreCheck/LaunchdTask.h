@@ -32,16 +32,16 @@
 @property (strong, nullable) NSString * path;
 
 // The launchd label.
-@property (readonly, nullable) NSString * label;
+@property (strong, nullable) NSString * label;
 
 // The executable or script.
-@property (readonly, nullable) NSString * executable;
+@property (strong, nullable) NSString * executable;
 
 // The arguments.
-@property (readonly, nullable) NSArray * arguments;
+@property (strong, nullable) NSArray * arguments;
 
 // Over all status.
-@property (strong, nonnull) NSString * status;
+@property (strong, nullable) NSString * status;
 
 // The last exit code. Sometimes, these are strings in Apple-land.
 @property (strong, nullable) NSString * lastExitCode;

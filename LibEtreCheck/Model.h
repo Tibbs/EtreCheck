@@ -81,6 +81,13 @@
   
   XMLBuilder * myXMLBuilder;
   XMLBuilder * myXMLHeader;
+  
+  // TODO: Clean up.
+  NSNumber * myGPUErrors;
+  bool myAdwareFound;
+  bool myUnsignedFound;
+  bool myCleanupRequired;
+  int myCoreCount;
   }
 
 // The problem and description (if any).

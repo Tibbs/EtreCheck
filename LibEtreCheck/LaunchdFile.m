@@ -80,25 +80,25 @@
   if(myStatus == nil)
     {
     if(self.loadedTasks.count == 0)
-      myStatus = kStatusNotLoaded;
+      myStatus = [kStatusNotLoaded copy];
     else
       {
       for(LaunchdLoadedTask * task in self.loadedTasks)
         {
         if([task.status isEqualToString: kStatusRunning])
-          myStatus = task.status;
+          myStatus = [task.status retain];
           
         else if(myStatus == nil)
           {
           if([task.status isEqualToString: kStatusKilled])
-            myStatus = task.status;
+            myStatus = [task.status retain];
           else if([task.status isEqualToString: kStatusFailed])
-            myStatus = task.status;
+            myStatus = [task.status retain];
           }
         }
         
       if(myStatus == nil)
-        myStatus = kStatusLoaded;
+        myStatus = [kStatusLoaded copy];
       }
     }
     
@@ -171,13 +171,13 @@
 // Destructor.
 - (void) dealloc
   {
-  [myContext release];
-  [myPlist release];
-  [myLoadedTasks release];
-  [mySignature release];
-  [myIdentifier release];
-  [myExecutableCRC release];
-  [myPlistCRC release];
+  self.context = nil;
+  self.plist = nil;
+  self.loadedTasks = nil;
+  self.signature = nil;
+  self.identifier = nil;
+  self.executableCRC = nil;
+  self.plistCRC = nil;
   
   [super dealloc];
   }
@@ -228,8 +228,7 @@
     
   [unloadedTasks release];
   
-  [myStatus release];
-  myStatus = nil;
+  self.status = nil;
   
   [self findNewTasks];
   }
@@ -246,7 +245,7 @@
 - (void) parseFromPath: (nonnull NSString *) path 
   {
   self.path = [path stringByAbbreviatingWithTildeInPath];
-  myPlist = [[NSDictionary readPropertyList: path] retain];
+  self.plist = [NSDictionary readPropertyList: path];
   
   if(self.plist.count > 0)
     [super parseDictionary: self.plist];
@@ -453,11 +452,6 @@
 // Parse a line from a launchd listing.
 - (void) parseLine: (NSString *) line domain: (NSString *) domain
   {
-  if(self.label == nil)
-    {
-    NSLog(@"stop here");
-    }
-    
   NSString * trimmedLine =
     [line
       stringByTrimmingCharactersInSet:
@@ -564,20 +558,20 @@
 - (void) findContext
   {
   if([self.path hasPrefix: @"/System/Library/"])
-    myContext = kLaunchdAppleContext;
+    self.context = kLaunchdAppleContext;
   else if([self.path hasPrefix: @"/Library/"])
-    myContext = kLaunchdSystemContext;
+    self.context = kLaunchdSystemContext;
   else if([self.path hasPrefix: @"~/Library/"])
-    myContext = kLaunchdUserContext;
+    self.context = kLaunchdUserContext;
   else
     {
     NSString * libraryPath = 
       [NSHomeDirectory() stringByAppendingPathComponent: @"Library"];
       
     if([self.path hasPrefix: libraryPath])
-      myContext = kLaunchdUserContext;
+      self.context = kLaunchdUserContext;
     else 
-      myContext = kLaunchdUnknownContext;
+      self.context = kLaunchdUnknownContext;
     }
   }
   

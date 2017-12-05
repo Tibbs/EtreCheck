@@ -37,7 +37,7 @@
   {
   if(myBaseLabel == nil)
     {
-    myBaseLabel = self.label;
+    myBaseLabel = [self.label copy];
     
     if(myBaseLabel.length > 37)
       {
@@ -56,7 +56,10 @@
         UUIDFound = false;
 
       if(UUIDFound)
+        {
+        [myBaseLabel release];
         myBaseLabel = [[self.label substringToIndex: 37] retain];
+        }
       }
     }
     
@@ -109,8 +112,8 @@
 // Destructor.
 - (void) dealloc
   {
-  [myDomain release];
-  [myPID release];
+  self.domain = nil;
+  self.PID = nil;
   
   [super dealloc];
   }
@@ -118,11 +121,8 @@
 // Re-query a launchd task.
 - (void) requery
   {
-  [myPID release];
-  [myLastExitCode release];
-
-  myPID = nil;
-  myLastExitCode = nil;
+  self.PID = nil;
+  self.lastExitCode = nil;
   
   NSData * data = 
     [LaunchdLoadedTask loadDataWithLabel: self.label inDomain: self.domain];
@@ -140,14 +140,14 @@
   id lastExitCode = [dict objectForKey: @"LastExitStatus"];
   
   if([PID respondsToSelector: @selector(stringValue)])
-    myPID = [PID stringValue];
+    self.PID = [PID stringValue];
   else
-    myPID = [PID retain];
+    self.PID = PID;
     
   if([lastExitCode respondsToSelector: @selector(stringValue)])
-    myLastExitCode = [lastExitCode stringValue];
+    self.lastExitCode = [lastExitCode stringValue];
   else
-    myLastExitCode = [lastExitCode retain];
+    self.lastExitCode = lastExitCode;
   }
 
 // Parse a new plist.
@@ -205,10 +205,10 @@
         parsingArguments = true;
 
       else if([key isEqualToString: @"pid"])
-        myPID = [value retain];
+        self.PID = value;
       
       else if([key isEqualToString: @"last exit code"])
-        myLastExitCode = [[self parseLastExitCode: value] retain];
+        self.lastExitCode = [self parseLastExitCode: value];
 
       else if([key isEqualToString: @"path"])
         self.path = [value stringByAbbreviatingWithTildeInPath];

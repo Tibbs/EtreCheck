@@ -10,7 +10,7 @@
   {
   // Launchd files keyed by config file path. 
   // Values are task objects since they are guaranteed to be unique.
-  NSMutableDictionary * myFilessByPath;
+  NSMutableDictionary * myFilesByPath;
   
   // Launchd files keyed by label. 
   // Values are NSMutableArrays since they might not be unique.

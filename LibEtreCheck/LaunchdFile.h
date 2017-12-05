@@ -46,25 +46,25 @@
   }
 
 // The config script contents.
-@property (readonly, nullable) NSDictionary * plist;
+@property (strong, nullable) NSDictionary * plist;
 
 // Is the config script valid?
 @property (readonly) BOOL configScriptValid;
 
 // The launchd context. (apple, system, user)
-@property (readonly, nullable) NSString * context;
+@property (strong, nullable) NSString * context;
 
 // Loaded tasks.
-@property (readonly, nonnull) NSMutableArray * loadedTasks;
+@property (strong, nullable) NSMutableArray * loadedTasks;
 
 // The executable's signature.
-@property (retain, nullable) NSString * signature;
+@property (strong, nullable) NSString * signature;
 
 // The plist CRC.
-@property (retain, nullable) NSString * plistCRC;
+@property (strong, nullable) NSString * plistCRC;
 
 // The executable CRC.
-@property (retain, nullable) NSString * executableCRC;
+@property (strong, nullable) NSString * executableCRC;
 
 // Is the file loaded?
 @property (readonly) BOOL loaded;
@@ -76,7 +76,7 @@
 @property (assign) BOOL adware;
 
 // I will need a unique, XML-safe identifier for each launchd file.
-@property (retain, nonnull) NSString * identifier;
+@property (strong, nullable) NSString * identifier;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

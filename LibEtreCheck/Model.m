@@ -55,6 +55,7 @@
 @synthesize pathsForUUIDs = myPathsForUUIDs;
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
+@synthesize coreCount = myCoreCount;
   
 // Get the model.
 - (NSString *) model

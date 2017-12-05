@@ -22,14 +22,14 @@
   
   // There can be multiple tasks per service identifier. Such tasks
   // have a UUID appended to the label. Try to remove that.
-  NSString * baseLabel;
+  NSString * myBaseLabel;
   }
 
 // The launchd domain. 
-@property (readonly, nullable) NSString * domain;
+@property (strong, nullable) NSString * domain;
   
 // The process ID. Sometimes, these are strings in Apple-land.
-@property (readonly, nullable) NSString * PID;
+@property (strong, nullable) NSString * PID;
 
 // There can be multiple tasks per service identifier. Such tasks
 // have a UUID appended to the label. Try to remove that.

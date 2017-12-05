@@ -110,12 +110,12 @@
 // Destructor.
 - (void) dealloc
   {
-  [myPath release];
-  [myLabel release];
-  [myExecutable release];
-  [myArguments release];
-  [myStatus release];
-  [myLastExitCode release];
+  self.path = nil;
+  self.label = nil;
+  self.executable = nil;
+  self.arguments = nil;
+  self.status = nil;
+  self.lastExitCode = nil;
   
   [super dealloc];
   }
@@ -128,7 +128,7 @@
   NSArray * arguments = [dict objectForKey: @"ProgramArguments"];
   
   if(label.length > 0)
-    myLabel = [label retain];
+    self.label = label;
     
   [self parseExecutable: program arguments: arguments];  
   }
@@ -237,18 +237,14 @@
     
   // There is a program, so just accept it and read the arguments.
   else
-    {
-    [myExecutable release];
-    
-    myExecutable = [program retain];
-    }
+    self.executable = program;
     
   // I should have an executabel at this point. If I don't, try to pull it
   // from the label.
   if(self.executable.length == 0)
-    myExecutable = 
-      [[[NSWorkspace sharedWorkspace] 
-        absolutePathForAppBundleWithIdentifier: self.label] retain];
+    self.executable = 
+      [[NSWorkspace sharedWorkspace] 
+        absolutePathForAppBundleWithIdentifier: self.label];
     
   if(self.executable.length)
   
@@ -263,9 +259,7 @@
   if(arguments.count == 0)
     return;
     
-  [myExecutable release];
-    
-  myExecutable = [[arguments firstObject] retain];
+  self.executable = [arguments firstObject];
   
   [self parseArguments: arguments];
   }
@@ -276,19 +270,11 @@
   // If I don't already appear to have a valid executable, try to get it
   // from the arguments.
   if(![[NSFileManager defaultManager] fileExistsAtPath: self.executable])
-    {
-    [myExecutable release];
-    
-    myExecutable = [[arguments firstObject] retain];
-    }
+    self.executable = [arguments firstObject];
     
   if(arguments.count > 0)
-    {
-    myArguments = 
+    self.arguments = 
       [arguments subarrayWithRange: NSMakeRange(1, arguments.count - 1)];
-    
-    [myArguments retain];
-    }
   }
   
 // Try to find the "true" executable, not some script interpreter.
@@ -319,11 +305,7 @@
     [path stringByAppendingPathComponent: self.executable];
     
   if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
-    {
-    [myExecutable release];
-    
-    myExecutable = [absoluteExecutable retain];
-    };
+    self.executable = absoluteExecutable;
   }
   
 // Resolve a sandbox-exec executable.
@@ -340,8 +322,7 @@
       continue;
     else
       {
-      [myExecutable release];
-      myExecutable = [argument retain];
+      self.executable = argument;
       break;
       }
   }
@@ -405,16 +386,14 @@
           
         if([path length] > 0)
           {
-          [myExecutable release];
-          myExecutable = [path retain];
+          self.executable = path;
           break;
           }
         }
       }
     else
       {
-      [myExecutable release];
-      myExecutable = [argument retain];
+      self.executable = argument;
       break;
       }
     }
@@ -428,10 +407,7 @@
     resolvedExecutable = [resolvedExecutable substringFromIndex: 5];
     
   if(resolvedExecutable.length > 0)
-    {
-    [myExecutable release];
-    myExecutable = [resolvedExecutable retain];
-    }
+    self.executable = resolvedExecutable;
   }
 
 @end

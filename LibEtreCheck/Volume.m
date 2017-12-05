@@ -48,6 +48,8 @@
 // The data model.
 @synthesize model = myModel;
 
+@synthesize printCount = myPrintCount;
+
 // Get containing devices.
 - (NSSet *) containingDevices
   {
@@ -192,7 +194,7 @@
           ECLocalizedString(@"(%@ free)"), 
           [self byteCountString: self.freeSpace]];
           
-    if(self.freeSpace < (1024 * 1024 * 1024 * 15L))
+    if(self.freeSpace < (1024 * 1024 * 1024 * 15UL))
       status = ECLocalizedString(@" (Low!)");
     }
     

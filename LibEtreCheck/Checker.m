@@ -101,6 +101,8 @@
 // Do the check.
 - (NSAttributedString *) check
   {
+  NSAutoreleasePool * pool = [NSAutoreleasePool new];
+    
   myResults = [NSMutableDictionary new];
   myCompleted = [NSMutableDictionary new];
   
@@ -280,6 +282,8 @@
   [cleanup release];
   [e release];
 
+  [pool drain];
+  
   return report;
   }
 

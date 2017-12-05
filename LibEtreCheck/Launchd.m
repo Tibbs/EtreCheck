@@ -430,7 +430,7 @@
   
   for(NSString * path in self.filesByPath)
     {
-    LaunchdFile * file = [self.filesByPath  objectForKey: path];
+    LaunchdFile * file = [self.filesByPath objectForKey: path];
     
     if(file.executable.length > 0)
       {

@@ -8,16 +8,16 @@
 @interface NetworkProxy : PrintableItem
   {
   // The proxy type.
-  NSString * type;
+  NSString * myType;
   
   // The proxy address.
-  NSString * address;
+  NSString * myAddress;
   
   // The proxy port.
-  NSNumber * port;
+  NSNumber * myPort;
   
   // The proxy user.
-  NSString * user;
+  NSString * myUser;
   }
   
 // The proxy type.
