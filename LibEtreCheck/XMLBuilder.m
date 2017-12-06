@@ -194,15 +194,7 @@
   if(self.isCDATA)
     return [self XMLFragmentAsCDATA: self.text];
     
-  // Try to escape it.
-  NSString * escaped = [self XMLFragmentEscaped: self.text];
-  
-  // If I couldn't, or shouldn't, escape it, do a CDATA instead.
-  if(!escaped)
-    return [self XMLFragmentAsCDATA: self.text];
-  
-  // Whether I escaped anything or not, return the escaped version.
-  return escaped;
+  return self.text;
   }
 
 // Emit text as CDATA.
@@ -227,72 +219,6 @@
         @"<![CDATA[%@]]>%@",
         first,
         rest ? [self XMLFragmentAsCDATA: rest] : @""];
-  }
-
-// Escape text.
-- (NSString *) XMLFragmentEscaped: (NSString *) text
-  {
-  // Create a new string.
-  NSMutableString * escaped = [NSMutableString string];
-  
-  NSUInteger length = [text length];
-  
-  // Allocate space for the characters.
-  unichar * characters = (unichar *)malloc(sizeof(unichar) * (length + 1));
-  unichar * end = characters + length;
-  
-  // Extract the characters.
-  [text getCharacters: characters range: NSMakeRange(0, length)];
-  
-  // Keep track of escaping bloat. If it gets too big, bail and do CDATA.
-  NSUInteger bloat = 0;
-  
-  for(unichar * ch = characters; ch < end; ++ch)
-    {
-    switch(*ch)
-      {
-      case '\'':
-        [escaped appendString: @"&apos;"];
-        bloat += 4;
-        break;
-        
-      case '"':
-        [escaped appendString: @"&quot;"];
-        bloat += 4;
-        break;
-
-      case '<':
-        [escaped appendString: @"&lt;"];
-        bloat += 2;
-        break;
-
-      case '>':
-        [escaped appendString: @"&gt;"];
-        bloat += 2;
-        break;
-
-      case '&':
-        [escaped appendString: @"&amp;"];
-        bloat += 3;
-        break;
-
-      default:
-        [escaped appendFormat: @"%C", *ch];
-        break;
-      }
-    
-    // Bail and do CDATA instead.
-    if(bloat > 12)
-      break;
-    }
-    
-  free(characters);
-  
-  // Bail.
-  if(bloat > 12)
-    return nil;
-    
-  return escaped;
   }
 
 @end
