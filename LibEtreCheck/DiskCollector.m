@@ -153,7 +153,9 @@
       if([type isEqualToString: @"Physical"])
         drive = YES;
       
-      if(wholeDisk.boolValue)
+      // WholeDisk could be true and type could be Virtual. I just want
+      // pre-container HFS+ before Core Storage or APFS.
+      if((type == nil) && wholeDisk.boolValue)
         drive = YES;
         
       if(drive)
