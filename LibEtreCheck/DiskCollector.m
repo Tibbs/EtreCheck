@@ -158,6 +158,18 @@
       if((type == nil) && wholeDisk.boolValue)
         drive = YES;
         
+      // Not so fast. Yosemite doesn't have VirtualOrPhysical but does
+      // have Core Storage.
+      BOOL coreStorageLVFUUID = 
+        [[plist objectForKey: @"CoreStorageLVFUUID"] length] > 0;
+      BOOL coreStorageLVGUUID = 
+        [[plist objectForKey: @"CoreStorageLVGUUID"] length] > 0;
+      BOOL coreStorageLVUUID = 
+        [[plist objectForKey: @"CoreStorageLVUUID"] length] > 0;
+      	
+      if(coreStorageLVUUID && coreStorageLVFUUID && coreStorageLVGUUID)
+        drive = NO;  
+
       if(drive)
         {
         if([self collectPhysicalDrive: plist])
@@ -647,7 +659,14 @@
   // Get a sorted list of devices.
   NSArray * storageDevices = 
     [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+          {
+          NSString * device1 = obj1;
+          NSString * device2 = obj2;
+          
+          return [device1 compare: device2 options: NSNumericSearch];
+          }];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
@@ -667,7 +686,14 @@
   // Get a sorted list of devices.
   NSArray * storageDevices = 
     [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+          {
+          NSString * device1 = obj1;
+          NSString * device2 = obj2;
+          
+          return [device1 compare: device2 options: NSNumericSearch];
+          }];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)

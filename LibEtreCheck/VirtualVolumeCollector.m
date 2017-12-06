@@ -50,7 +50,14 @@
   // Get a sorted list of devices.
   NSArray * storageDevices = 
     [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+          {
+          NSString * device1 = obj1;
+          NSString * device2 = obj2;
+          
+          return [device1 compare: device2 options: NSNumericSearch];
+          }];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)
@@ -73,7 +80,14 @@
   // Get a sorted list of devices.
   NSArray * storageDevices = 
     [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingSelector: @selector(compare:)];
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+          {
+          NSString * device1 = obj1;
+          NSString * device2 = obj2;
+          
+          return [device1 compare: device2 options: NSNumericSearch];
+          }];
   
   // Now export all drives matching this type.
   for(NSString * device in storageDevices)

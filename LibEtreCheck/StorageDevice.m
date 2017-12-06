@@ -177,11 +177,12 @@
               NSString * partition1 = [parts1 objectAtIndex: 1];
               NSString * partition2 = [parts2 objectAtIndex: 1];
               
-              return [partition1 compare: partition2];
+              return 
+                [partition1 compare: partition2 options: NSNumericSearch];
               }
             }
             
-          return [disk1 compare: disk2];
+          return [disk1 compare: disk2 options: NSNumericSearch];
           }];
   }
 
