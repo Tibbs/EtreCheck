@@ -311,20 +311,24 @@
 // Resolve a sandbox-exec executable.
 - (void) resolveSandboxExecExecutable
   {
-  for(NSString * argument in self.arguments)
+  for(NSUInteger i = 0; i < self.arguments.count; ++i)
+    {
+    NSString * argument = [self.arguments objectAtIndex: i];
+
     if([argument isEqualToString: @"-f"])
-      continue;
+      ++i;
     else if([argument isEqualToString: @"-n"])
-      continue;
+      ++i;
     else if([argument isEqualToString: @"-p"])
-      continue;
+      ++i;
     else if([argument isEqualToString: @"-D"])
-      continue;
+      ++i;
     else
       {
       self.executable = argument;
       break;
       }
+    }
   }
 
 // Resolve an open executable.

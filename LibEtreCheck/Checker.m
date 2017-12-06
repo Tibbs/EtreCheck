@@ -152,6 +152,8 @@
   CleanupCollector * cleanup = [CleanupCollector new];
   EtreCheckDeletedFilesCollector * e = [EtreCheckDeletedFilesCollector new];
   
+  sla.model = self.model;
+  
   [self 
     performCollections: 
       @[

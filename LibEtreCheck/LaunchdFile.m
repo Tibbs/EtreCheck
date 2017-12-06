@@ -5,6 +5,7 @@
 
 #import "LaunchdFile.h"
 #import "LaunchdLoadedTask.h"
+#import "Launchd.h"
 #import "OSVersion.h"
 #import "SubProcess.h"
 #import "EtreCheckConstants.h"
@@ -59,6 +60,9 @@
 
 // I will need a unique, XML-safe identifier for each launchd file.
 @synthesize identifier = myIdentifier;
+
+// Is this an Apple file?
+@synthesize apple = myApple;
 
 // Return a unique number.
 + (int) uniqueIdentifier
@@ -253,8 +257,6 @@
   myConfigScriptValid = (self.label.length > 0);
     
   [self calculateSafetyScore];
-    
-  [self checkSignature];
   }
 
 // Calculate a safety score.
@@ -275,11 +277,28 @@
   }
   
 // Collect the signature of a launchd item.
-- (void) checkSignature
+- (void) checkSignature: (Launchd *) launchd
   {
-  if([self.label hasPrefix: @"com.apple."])
-    self.signature = [Utilities checkAppleExecutable: self.executable];
-  else  
+  NSDictionary * appleFile = [launchd.appleFiles objectForKey: self.path];
+
+  if(appleFile != nil)
+    {
+     NSString * expectedSignature = [appleFile objectForKey: kSignature];
+  
+    NSString * signature = 
+      [Utilities checkAppleExecutable: self.executable];
+      
+    if(expectedSignature != nil)
+      {
+      if([signature isEqualToString: expectedSignature])
+        {
+        self.apple = YES;
+        self.signature = signature;
+        }
+      }
+    }
+    
+  if(!self.apple)
     self.signature = [Utilities checkExecutable: self.executable];
   
   NSString * executableType = @"?";
@@ -691,6 +710,7 @@
   [xml addElement: @"path" value: self.path];
   [xml addElement: @"label" value: self.label];
   [xml addElement: @"filename" value: [self.path lastPathComponent]];
+  [xml addElement: @"apple" boolValue: self.apple];
   
   if(self.executable.length > 0)
     [xml addElement: @"executable" value: self.executable];

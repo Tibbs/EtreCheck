@@ -5,6 +5,8 @@
 
 #import "LaunchdTask.h"
 
+@class Launchd;
+
 // EtreCheck's context, where a file lives.
 #define kLaunchdAppleContext @"apple"
 #define kLaunchdSystemContext @"system"
@@ -43,6 +45,9 @@
   
   // I will need a unique, XML-safe identifier for each launchd file.
   NSString * myIdentifier;
+  
+  // Is this an Apple file?
+  BOOL myApple;
   }
 
 // The config script contents.
@@ -78,8 +83,14 @@
 // I will need a unique, XML-safe identifier for each launchd file.
 @property (strong, nullable) NSString * identifier;
 
+// Is this an Apple file?
+@property (assign) BOOL apple;
+
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;
+
+// Check the signature.
+- (void) checkSignature: (nonnull Launchd *) launchd;
 
 // Load a launchd task.
 - (void) load;

@@ -521,7 +521,7 @@
     return kShell;
 
   // Get the app path.
-  path = [Utilities resolveBundlePath: path];
+  path = [Utilities resolveAppleSignaturePath: path];
     
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
@@ -549,9 +549,7 @@
       break;
     }
     
-  NSString * appPath = [Utilities resolveBundlePath: path];
-  
-  [args addObject: appPath];
+  [args addObject: path];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -564,7 +562,7 @@
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     result =
-      [Utilities parseSignature: subProcess.standardError forPath: appPath];
+      [Utilities parseSignature: subProcess.standardError forPath: path];
         
     if([result isEqualToString: kSignatureValid])
       result = kSignatureApple;
@@ -639,6 +637,8 @@
   if([Utilities isShellExecutable: path])
     return kShell;
 
+  path = [Utilities resolveSignaturePath: path];
+  
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
@@ -661,9 +661,7 @@
       break;
     }
     
-  NSString * appPath = [Utilities resolveBundlePath: path];
-  
-  [args addObject: appPath];
+  [args addObject: path];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -672,7 +670,7 @@
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     result =
-      [Utilities parseSignature: subProcess.standardError forPath: appPath];
+      [Utilities parseSignature: subProcess.standardError forPath: path];
       
     [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
@@ -685,7 +683,7 @@
   [subProcess release];
   
   if([result isEqualToString: kNotSigned])
-    if([Utilities isShellScript: appPath])
+    if([Utilities isShellScript: path])
       result = kShell;
     
   return result;
@@ -710,7 +708,7 @@
   [args addObject: @"--assess"];
   [args addObject: @"-vv"];
     
-  NSString * appPath = [Utilities resolveBundlePath: path];
+  NSString * appPath = [Utilities resolveSignaturePath: path];
   
   [args addObject: appPath];
 
@@ -976,6 +974,76 @@
   if(range.location != NSNotFound)
     bundleLocation = range.location + 7;
 
+  if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
+    {
+    if(bundleLocation < appLocation)
+      return [path substringToIndex: bundleLocation];
+    else
+      return [path substringToIndex: appLocation];
+    }
+  else if(appLocation != NSNotFound)
+    return [path substringToIndex: appLocation];
+  else if(bundleLocation != NSNotFound)
+    return [path substringToIndex: bundleLocation];
+    
+  return path;
+  }
+
+// Resolve a deep app path to the wrapper path for signature checking.
++ (NSString *) resolveAppleSignaturePath: (NSString *) path
+  {
+  NSUInteger appLocation = NSNotFound;
+  
+  NSRange range = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(range.location == NSNotFound)
+    range = [path rangeOfString: @".app/Contents/Resources/"];
+
+  if(range.location != NSNotFound)
+    appLocation = range.location + 4;
+    
+  range = [path rangeOfString: @".framework/"];
+  
+  NSUInteger bundleLocation = NSNotFound;
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 10;
+    
+  if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
+    {
+    if(bundleLocation < appLocation)
+      return [path substringToIndex: bundleLocation];
+    else
+      return [path substringToIndex: appLocation];
+    }
+  else if(appLocation != NSNotFound)
+    return [path substringToIndex: appLocation];
+  else if(bundleLocation != NSNotFound)
+    return [path substringToIndex: bundleLocation];
+    
+  return path;
+  }
+
+// Resolve a deep app path to the wrapper path for signature checking.
++ (NSString *) resolveSignaturePath: (NSString *) path
+  {
+  NSUInteger appLocation = NSNotFound;
+  
+  NSRange range = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(range.location == NSNotFound)
+    range = [path rangeOfString: @".app/Contents/Resources/"];
+
+  if(range.location != NSNotFound)
+    appLocation = range.location + 4;
+    
+  range = [path rangeOfString: @".plugin/"];
+  
+  NSUInteger bundleLocation = NSNotFound;
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 7;
+    
   if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
     {
     if(bundleLocation < appLocation)

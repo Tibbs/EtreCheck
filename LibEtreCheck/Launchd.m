@@ -88,6 +88,9 @@
     
   myLoaded = YES;
   
+  // Load Apple files.
+  [self loadAppleFiles];
+  
   // Load "truth" files.
   [self loadTruthFiles];
   
@@ -96,9 +99,6 @@
   
   // Reconcile all the data.
   [self reconcileTasks];
-  
-  // Load Apple files.
-  [self loadAppleFiles];
   
   // Build the lookup table.
   for(NSString * path in self.filesByPath)
@@ -164,6 +164,8 @@
     {
     LaunchdFile * file = [[LaunchdFile alloc] initWithPath: safePath];
   
+    [file checkSignature: self];
+    
     if(file != nil)
       [self.filesByPath setObject: file forKey: safePath];
       
