@@ -74,13 +74,11 @@
 // Do the collection.
 - (void) collect
   {
-  NSLog(@"Starting collect: %@", self.name);
   [self performCollect];
   
   dispatch_semaphore_signal(self.complete);
 
   [self.xml endElement: self.name];  
-  NSLog(@"Done collect: %@", self.name);
   }
 
 // Simulate the collection.
