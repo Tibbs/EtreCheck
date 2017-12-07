@@ -1462,4 +1462,12 @@
   return indented;
   }
   
+// Validate the app.
++ (BOOL) validate
+  {
+  NSString * parrot = ECLocalizedString(@"Canary");
+  
+  return [parrot isEqualToString: @"Parrot"];
+  }
+  
 @end

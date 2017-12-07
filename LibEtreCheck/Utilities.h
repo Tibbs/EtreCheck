@@ -190,4 +190,7 @@
 // Indent a block of text.
 + (NSString *) indent: (NSString *) text by: (NSString *) indent;
 
+// Validate the app.
++ (BOOL) validate;
+
 @end

@@ -10,6 +10,7 @@
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "ascsearch" = "https://discussions.apple.com/search.jspa?";
 "belowaverageperformance" = "Below Average";
+"Canary" = "Parrot";
 "downloadetrecheck" = "Download EtreCheck from ";
 "excellentperformance" = "Excellent";
 "gatekeeperneedsmountainlion" = "    Gatekeeper information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
