@@ -158,16 +158,8 @@
       if((type == nil) && wholeDisk.boolValue)
         drive = YES;
         
-      // Not so fast. Yosemite doesn't have VirtualOrPhysical but does
-      // have Core Storage.
-      BOOL coreStorageLVFUUID = 
-        [[plist objectForKey: @"CoreStorageLVFUUID"] length] > 0;
-      BOOL coreStorageLVGUUID = 
-        [[plist objectForKey: @"CoreStorageLVGUUID"] length] > 0;
-      BOOL coreStorageLVUUID = 
-        [[plist objectForKey: @"CoreStorageLVUUID"] length] > 0;
-      	
-      if(coreStorageLVUUID && coreStorageLVFUUID && coreStorageLVGUUID)
+      // Not so fast. If there is a volume indicator, it must be a volume.
+      if([[plist objectForKey: @"VolumeUUID"] length] > 0)
         drive = NO;  
 
       if(drive)
