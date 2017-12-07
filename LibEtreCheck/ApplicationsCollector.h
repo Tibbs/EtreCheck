@@ -8,11 +8,5 @@
 
 // Collect installed applications.
 @interface ApplicationsCollector : Collector
-  {
-  NSImage * genericApplication;
-  }
-
-// Get the application icons.
-- (NSArray *) applicationIcons;
 
 @end

@@ -60,7 +60,6 @@
 @synthesize startSection = myStartSection;
 @synthesize completeSection = myCompleteSection;
 @synthesize progress = myProgress;
-@synthesize applicationIcon = myApplicationIcon;
 @synthesize complete = myComplete;
 
 @synthesize currentProgress = myCurrentProgress;
@@ -90,7 +89,6 @@
   [myStartSection release];
   [myCompleteSection release];
   [myProgress release];
-  [myApplicationIcon release];
   [myComplete release];
   
   [myModel release];
@@ -162,14 +160,6 @@
       ]
     increment: increment];
     
-  if(self.applicationIcon != nil)
-    {
-    NSArray * icons = [applications applicationIcons];
-    
-    for(NSImage * icon in icons)
-      self.applicationIcon(icon);
-    }
-
   [self 
     performCollections: 
       @[
