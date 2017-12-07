@@ -1002,24 +1002,8 @@
   if(range.location != NSNotFound)
     appLocation = range.location + 4;
     
-  range = [path rangeOfString: @".framework/"];
-  
-  NSUInteger bundleLocation = NSNotFound;
-  
-  if(range.location != NSNotFound)
-    bundleLocation = range.location + 10;
-    
-  if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
-    {
-    if(bundleLocation < appLocation)
-      return [path substringToIndex: bundleLocation];
-    else
-      return [path substringToIndex: appLocation];
-    }
   else if(appLocation != NSNotFound)
     return [path substringToIndex: appLocation];
-  else if(bundleLocation != NSNotFound)
-    return [path substringToIndex: bundleLocation];
     
   return path;
   }
