@@ -283,7 +283,7 @@
 
   if(appleFile != nil)
     {
-     NSString * expectedSignature = [appleFile objectForKey: kSignature];
+    NSString * expectedSignature = [appleFile objectForKey: kSignature];
   
     NSString * signature = 
       [Utilities checkAppleExecutable: self.executable];
