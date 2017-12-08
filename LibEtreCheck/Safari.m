@@ -89,12 +89,15 @@
       SafariExtension * extension = 
         [[SafariExtension alloc] initWithPath: path];
       
-      [self.extensions 
-        setObject: extension forKey: extension.bundleIdentifier];
+      if(extension != nil)
+        {
+        [self.extensions 
+          setObject: extension forKey: extension.bundleIdentifier];
       
-      [self.extensionsByName setObject: extension forKey: extension.name];
+        [self.extensionsByName setObject: extension forKey: extension.name];
       
-      [extension release];
+        [extension release];
+        }
       }
     }
     
