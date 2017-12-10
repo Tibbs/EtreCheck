@@ -6,13 +6,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (Etresoft)
-
-// Read from a property list file or data and make sure it is a dictionary.
-+ (NSDictionary *) readPropertyList: (NSString *) path;
-+ (NSDictionary *) readPropertyListData: (NSData *) data;
+@interface NSSet (Etresoft)
 
 // Is this a valid object?
-+ (BOOL) isValid: (NSDictionary *) dictionary;
++ (BOOL) isValid: (NSSet *) set;
 
 @end

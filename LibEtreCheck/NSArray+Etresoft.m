@@ -14,7 +14,7 @@
   {
   NSArray * array = [NSObject readPropertyList: path];
   
-  if([array respondsToSelector: @selector(objectAtIndex:)])
+  if([NSArray isValid: array])
     return array;
     
   return nil;
@@ -24,10 +24,19 @@
   {
   NSArray * array = [NSObject readPropertyListData: data];
   
-  if([array respondsToSelector: @selector(objectAtIndex:)])
+  if([NSArray isValid: array])
     return array;
     
   return nil;
+  }
+
+// Is this a valid object?
++ (BOOL) isValid: (NSArray *) array
+  {
+  if(array != nil)
+    return [array respondsToSelector: @selector(objectAtIndex:)];
+    
+  return NO;
   }
 
 @end

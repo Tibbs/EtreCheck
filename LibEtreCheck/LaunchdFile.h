@@ -104,4 +104,7 @@
 // Is this a launchd file?
 - (BOOL) isLaunchdFile;
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable LaunchdFile *) file;
+
 @end

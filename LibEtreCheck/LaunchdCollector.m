@@ -34,7 +34,7 @@
       LaunchdFile * file = 
         [[[self.model launchd] filesByPath] objectForKey: path];
       
-      if(file != nil)
+      if([LaunchdFile isValid: file])
         [files addObject: file];
       }
       

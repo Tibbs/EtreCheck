@@ -144,15 +144,21 @@
   id PID = [dict objectForKey: @"PID"];
   id lastExitCode = [dict objectForKey: @"LastExitStatus"];
   
-  if([PID respondsToSelector: @selector(stringValue)])
-    self.PID = [PID stringValue];
-  else
-    self.PID = PID;
+  if(PID != nil)
+    {
+    if([PID respondsToSelector: @selector(stringValue)])
+      self.PID = [PID stringValue];
+    else
+      self.PID = PID;
+    }
     
-  if([lastExitCode respondsToSelector: @selector(stringValue)])
-    self.lastExitCode = [lastExitCode stringValue];
-  else
-    self.lastExitCode = lastExitCode;
+  if(lastExitCode != nil)
+    {
+    if([lastExitCode respondsToSelector: @selector(stringValue)])
+      self.lastExitCode = [lastExitCode stringValue];
+    else
+      self.lastExitCode = lastExitCode;
+    }
   }
 
 // Parse a new plist.

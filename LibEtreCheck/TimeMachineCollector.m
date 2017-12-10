@@ -10,13 +10,17 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSMutableDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
-#import "NSDictionary+Etresoft.h"
+#import "NSArray+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
 #import "Volume.h"
+#import "NSDate+Etresoft.h"
+#import "NSNumber+Etresoft.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -113,7 +117,7 @@
     {
     Volume * volume = [[self.model storageDevices] objectForKey: device];
     
-    if([volume respondsToSelector: @selector(isVolume)])
+    if([Volume isValid: volume])
       if(volume.UUID.length > 0)
         [volumes setObject: volume forKey: volume.UUID];
     }
@@ -169,19 +173,24 @@
 // Collect excluded volumes.
 - (void) collectExcludedVolumes: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings])
+    return;
+    
   NSArray * excludedVolumeUUIDsArray =
     [settings objectForKey: @"ExcludedVolumeUUIDs"];
   
-  for(NSString * UUID in excludedVolumeUUIDsArray)
-    {
-    [excludedVolumeUUIDs addObject: UUID];
-    
-    // Get the path for this volume too.
-    Volume * volume = [volumes objectForKey: UUID];
-    
-    if(volume.mountpoint.length > 0)
-      [excludedPaths addObject: volume.mountpoint];
-    }
+  if([NSArray isValid: excludedVolumeUUIDsArray])
+    for(NSString * UUID in excludedVolumeUUIDsArray)
+      {
+      [excludedVolumeUUIDs addObject: UUID];
+      
+      // Get the path for this volume too.
+      Volume * volume = [volumes objectForKey: UUID];
+      
+      if([Volume isValid: volume])
+        if(volume.mountpoint.length > 0)
+          [excludedPaths addObject: volume.mountpoint];
+      }
     
   // Excluded volumes could be referenced via bookmarks.
   [self collectExcludedVolumeBookmarks: settings];
@@ -190,15 +199,24 @@
 // Excluded volumes could be referenced via bookmarks.
 - (void) collectExcludedVolumeBookmarks: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings])
+    return;
+    
   NSArray * excludedVolumes = [settings objectForKey: @"ExcludedVolumes"];
   
-  for(NSData * data in excludedVolumes)
-    {
-    NSURL * url = [self readVolumeBookmark: data];
-    
-    if(url)
-      [excludedPaths addObject: [url path]];
-    }
+  if([NSArray isValid: excludedVolumes])
+    for(NSData * data in excludedVolumes)
+      {
+      NSURL * url = [self readVolumeBookmark: data];
+      
+      if(url != nil)
+        {
+        NSString * path = url.path;
+        
+        if([NSString isValid: path])
+          [excludedPaths addObject: path];
+        }
+      }
   }
 
 // Read a volume bookmark into a URL.
@@ -222,33 +240,48 @@
 // Collect excluded paths.
 - (void) collectExcludedPaths: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings])
+    return;
+    
   NSArray * excluded = [settings objectForKey: @"ExcludeByPath"];
   
-  for(NSString * path in excluded)
-    [excludedPaths addObject: path];
+  if([NSArray isValid: excluded])
+    for(NSString * path in excluded)
+      if([NSString isValid: path])
+        [excludedPaths addObject: path];
   }
 
 // Collect destinations indexed by ID.
 - (void) collectDestinations: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings])
+    return;
+    
   NSArray * destinationsArray =
     [settings objectForKey: @"Destinations"];
   
-  for(NSDictionary * destination in destinationsArray)
-    {
-    NSString * destinationID =
-      [destination objectForKey: @"DestinationID"];
-    
-    NSMutableDictionary * consolidatedDestination =
-      [NSMutableDictionary dictionaryWithDictionary: destination];
-    
-    // Collect destination snapshots.
-    [self collectDestinationSnapshots: consolidatedDestination];
-    
-    // Save the new, consolidated destination.
-    [destinations
-      setObject: consolidatedDestination forKey: destinationID];
-    }
+  if([NSArray isValid: destinationsArray])
+    for(NSDictionary * destination in destinationsArray)
+      {
+      NSString * destinationID =
+        [destination objectForKey: @"DestinationID"];
+      
+      if(![NSString isValid: destinationID])
+        continue;
+        
+      NSMutableDictionary * consolidatedDestination =
+        [NSMutableDictionary dictionaryWithDictionary: destination];
+      
+      if(![NSMutableDictionary isValid: consolidatedDestination])
+        continue;
+        
+      // Collect destination snapshots.
+      [self collectDestinationSnapshots: consolidatedDestination];
+      
+      // Save the new, consolidated destination.
+      [destinations
+        setObject: consolidatedDestination forKey: destinationID];
+      }
     
   // Consolidation destination info between defaults and tmutil.
   [self consolidateDestinationInfo];
@@ -276,8 +309,9 @@
     NSArray * destinationList =
       [destinationinfo objectForKey: @"Destinations"];
     
-    for(NSDictionary * destination in destinationList)
-      [self consolidateDestination: destination];
+    if([NSArray isValid: destinationList])
+      for(NSDictionary * destination in destinationList)
+        [self consolidateDestination: destination];
     }
     
   [subProcess release];
@@ -286,13 +320,16 @@
 // Collect destination snapshots.
 - (void) collectDestinationSnapshots: (NSMutableDictionary *) destination
   {
+  if(![NSMutableDictionary isValid: destination])
+    return;
+    
   NSArray * snapshots = [destination objectForKey: @"SnapshotDates"];
   
   NSNumber * snapshotCount;
   NSDate * oldestBackup = nil;
   NSDate * lastBackup = nil;
   
-  if([snapshots count])
+  if([NSArray isValid: snapshots] && (snapshots.count > 0))
     {
     snapshotCount =
       [NSNumber numberWithUnsignedInteger: [snapshots count]];
@@ -309,29 +346,32 @@
     lastBackup = [destination objectForKey: @"BACKUP_COMPLETED_DATE"];
     }
     
-  if(snapshotCount == nil)
+  if(![NSArray isValid: snapshots])
     snapshotCount = @0;
     
   [destination setObject: snapshotCount forKey: kSnapshotcount];
   
-  if(oldestBackup != nil)
+  if([NSDate isValid: oldestBackup])
     [destination setObject: oldestBackup forKey: kOldestBackup];
     
-  if(lastBackup != nil)
+  if([NSDate isValid: lastBackup])
     [destination setObject: lastBackup forKey: kLastbackup];
   }
 
 // Consolidate a single destination.
 - (void) consolidateDestination: (NSDictionary *) destinationInfo
   {
+  if(![NSDictionary isValid: destinationInfo])
+    return;
+    
   NSString * destinationID = [destinationInfo objectForKey: @"ID"];
   
-  if(destinationID)
+  if([NSString isValid: destinationID])
     {
     NSMutableDictionary * destination =
       [destinations objectForKey: destinationID];
       
-    if(destination)
+    if([NSMutableDictionary isValid: destination])
       {
       // Put these back where they can be easily referenced.
       NSString * kind = [destinationInfo objectForKey: @"Kind"];
@@ -339,19 +379,18 @@
       NSNumber * lastDestination =
         [destinationInfo objectForKey: @"LastDestination"];
       
-      if(kind.length == 0)
+      if(![NSString isValid: kind])
         kind = ECLocalizedString(@"Unknown");
         
-      if(name.length == 0)
+      if(![NSString isValid: name])
         name = destinationID;
         
-      if(lastDestination == nil)
+      if(![NSNumber isValid: lastDestination])
         lastDestination = @0;
         
       [destination setObject: kind forKey: @"Kind"];
       [destination setObject: name forKey: @"Name"];
-      [destination
-        setObject: lastDestination forKey: @"LastDestination"];
+      [destination setObject: lastDestination forKey: @"LastDestination"];
       }
     }
   }
@@ -361,7 +400,7 @@
   {
   Volume * volume = [volumes objectForKey: UUID];
   
-  if(volume != nil)
+  if([Volume isValid: volume])
     {
     // See if this volume is excluded. If so, skip it.
     if(volume.mountpoint.length > 0)
@@ -425,12 +464,17 @@
     {
     NSDictionary * destination = [destinations objectForKey: destinationID];
     
-    NSArray * destinationUUIDs =
-      [destination objectForKey: @"DestinationUUIDs"];
+    if([NSDictionary isValid: destination])
+      {
+      NSArray * destinationUUIDs =
+        [destination objectForKey: @"DestinationUUIDs"];
     
-    for(NSString * destinationUUID in destinationUUIDs)
-      if([UUID isEqualToString: destinationUUID])
-        return YES;
+      if([NSArray isValid: destinationUUIDs])
+        for(NSString * destinationUUID in destinationUUIDs)
+          if([NSString isValid: destinationUUID])
+            if([UUID isEqualToString: destinationUUID])
+              return YES;
+      }
     }
     
   return NO;
@@ -454,98 +498,106 @@
 // Print the skip system files setting.
 - (void) printSkipSystemFilesSetting: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings])
+    return;
+    
   NSNumber * skipSystemFiles =
     [settings objectForKey: @"SkipSystemFiles"];
 
-  [self.xml 
-    addElement: @"skipsystemfiles" boolValue: [skipSystemFiles boolValue]];
+  if(![NSNumber isValid: skipSystemFiles])
+    return;
+    
+  bool skip = [skipSystemFiles boolValue];
+
+  [self.xml addElement: @"skipsystemfiles" boolValue: skip];
   
-  if(skipSystemFiles != nil)
-    {
-    bool skip = [skipSystemFiles boolValue];
+  [self.result
+    appendString: ECLocalizedString(@"    Skip System Files: ")];
 
+  if(!skip)
+    [self.result appendString: ECLocalizedString(@"NO\n")];
+  else
     [self.result
-      appendString: ECLocalizedString(@"    Skip System Files: ")];
-
-    if(!skip)
-      [self.result appendString: ECLocalizedString(@"NO\n")];
-    else
-      [self.result
-        appendString:
-          ECLocalizedString(
-            @"YES - System files not being backed up\n")
-        attributes:
-          [NSDictionary
-            dictionaryWithObjectsAndKeys:
-              [NSColor redColor],
-              NSForegroundColorAttributeName, nil]];
-    }
+      appendString:
+        ECLocalizedString(
+          @"YES - System files not being backed up\n")
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor],
+            NSForegroundColorAttributeName, nil]];
   }
 
 // Print the mobile backup setting.
 - (void) printMobileBackupsSetting: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings]) 
+    return;
+    
   NSNumber * mobileBackups =
     [settings objectForKey: @"MobileBackups"];
 
-  [self.xml 
-    addElement: @"mobilebackups" boolValue: [mobileBackups boolValue]];
-  
-  if(mobileBackups != nil)
-    {
-    bool mobile = [mobileBackups boolValue];
-
-    [self.result
-      appendString: ECLocalizedString(@"    Mobile backups: ")];
-
-    if(mobile)
-      [self.result appendString: ECLocalizedString(@"ON\n")];
-    else
-      [self.result appendString: ECLocalizedString(@"OFF\n")];
-    }
+  if(![NSNumber isValid: mobileBackups])
+    return;
     
-    // TODO: Can I get the size of mobile backups?
-  }
+  bool mobile = [mobileBackups boolValue];
 
+  [self.xml addElement: @"mobilebackups" boolValue: mobile];
+  
+  [self.result
+    appendString: ECLocalizedString(@"    Mobile backups: ")];
+
+  if(mobile)
+    [self.result appendString: ECLocalizedString(@"ON\n")];
+  else
+    [self.result appendString: ECLocalizedString(@"OFF\n")];
+  }
+  
 // Print the autobackup setting.
 - (void) printAutoBackupSettings: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings]) 
+    return;
+    
   NSNumber * autoBackup =
     [settings objectForKey: @"AutoBackup"];
 
-  [self.xml addElement: @"autobackup" boolValue: [autoBackup boolValue]];
+  if(![NSNumber isValid: autoBackup])
+    return;
+    
+  bool backup = [autoBackup boolValue];
 
-  if(autoBackup != nil)
-    {
-    bool backup = [autoBackup boolValue];
+  [self.xml addElement: @"autobackup" boolValue: backup];
 
+  [self.result
+    appendString: ECLocalizedString(@"    Auto backup: ")];
+
+  if(backup)
+    [self.result appendString: ECLocalizedString(@"YES\n")];
+  else
     [self.result
-      appendString: ECLocalizedString(@"    Auto backup: ")];
-
-    if(backup)
-      [self.result appendString: ECLocalizedString(@"YES\n")];
-    else
-      [self.result
-        appendString:
-          ECLocalizedString(@"NO - Auto backup turned off\n")
-        attributes:
-          [NSDictionary
-            dictionaryWithObjectsAndKeys:
-              [NSColor redColor],
-              NSForegroundColorAttributeName, nil]];
-    }
+      appendString:
+        ECLocalizedString(@"NO - Auto backup turned off\n")
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor],
+            NSForegroundColorAttributeName, nil]];
   }
 
 // Print volumes being backed up.
 - (void) printBackedupVolumes: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings]) 
+    return;
+    
   NSMutableSet * backedupVolumeUUIDs = [NSMutableSet set];
   
   // Root always gets backed up.
   // It can be specified directly in settings.
   NSString * root = [settings objectForKey: @"RootVolumeUUID"];
 
-  if(root)
+  if([NSString isValid: root])
     [backedupVolumeUUIDs addObject: root];
 
   // Or it can be in each destination.
@@ -553,24 +605,27 @@
     {
     NSDictionary * destination = [destinations objectForKey: destinationID];
     
-    // Root always gets backed up.
-    root = [destination objectForKey: @"RootVolumeUUID"];
-  
-    if(root)
-      [backedupVolumeUUIDs addObject: root];
+    if([NSDictionary isValid: destination])
+      {
+      // Root always gets backed up.
+      root = [destination objectForKey: @"RootVolumeUUID"];
+    
+      if([NSString isValid: root])
+        [backedupVolumeUUIDs addObject: root];
+      }
     }
     
   // Included volumes get backed up.
   NSArray * includedVolumeUUIDs =
     [settings objectForKey: @"IncludedVolumeUUIDs"];
 
-  if(includedVolumeUUIDs)
+  if([NSArray isValid: includedVolumeUUIDs])
   
     for(NSString * includedVolumeUUID in includedVolumeUUIDs)
-      
-      // Unless they are the destination volume.
-      if(![self isDestinationVolume: includedVolumeUUID])
-        [backedupVolumeUUIDs addObject: includedVolumeUUID];
+      if([NSString isValid: includedVolumeUUID])
+        // Unless they are the destination volume.
+        if(![self isDestinationVolume: includedVolumeUUID])
+          [backedupVolumeUUIDs addObject: includedVolumeUUID];
   
   if([backedupVolumeUUIDs count])
     {
@@ -596,6 +651,9 @@
 // Print Time Machine destinations.
 - (void) printDestinations: (NSDictionary *) settings
   {
+  if(![NSDictionary isValid: settings]) 
+    return;
+    
   [self.result
     appendString: ECLocalizedString(@"    Destinations:\n")];
 
@@ -608,9 +666,14 @@
     if(!first)
       [self.result appendString: @"\n"];
       
-    [self printDestination: [destinations objectForKey: destinationID]];
+    NSDictionary * destination = [destinations objectForKey: destinationID];
     
-    first = NO;
+    if([NSDictionary isValid: destination])
+      {
+      [self printDestination: destination];
+    
+      first = NO;
+      }
     }
 
   [self.xml endElement: @"destinations"];
@@ -619,6 +682,9 @@
 // Print a Time Machine destination.
 - (void) printDestination: (NSDictionary *) destination
   {
+  if(![NSDictionary isValid: destination])
+    return;
+    
   [self.xml startElement: @"destination"];
   
   // Print the destination description.
@@ -628,9 +694,12 @@
   NSNumber * bytesAvailable = [destination objectForKey: @"BytesAvailable"];
   NSNumber * bytesUsed = [destination objectForKey: @"BytesUsed"];
 
-  unsigned long long totalSizeValue =
-    [bytesAvailable unsignedLongLongValue] +
-    [bytesUsed unsignedLongLongValue];
+  unsigned long long totalSizeValue = 0;
+  
+  if([NSNumber isValid: bytesAvailable] && [NSNumber isValid: bytesUsed])
+    totalSizeValue =
+      [bytesAvailable unsignedLongLongValue] +
+      [bytesUsed unsignedLongLongValue];
 
   // Print the total size.
   [self printTotalSize: totalSizeValue];
@@ -647,16 +716,26 @@
 // Print the destination description.
 - (void) printDestinationDescription: (NSDictionary *) destination
   {
+  if(![NSDictionary isValid: destination])
+    return;
+    
   NSString * kind = [destination objectForKey: @"Kind"];
   NSString * name = [destination objectForKey: @"Name"];
   NSNumber * last = [destination objectForKey: @"LastDestination"];
+
+  if(![NSString isValid: name])
+    return;
+    
+  if(![NSString isValid: kind])
+    return;
 
   NSString * cleanName = [self cleanName: name];
   
   NSString * lastused = @"";
 
-  if([last integerValue] == 1)
-    lastused = ECLocalizedString(@"(Last used)");
+  if([NSNumber isValid: last])
+    if([last integerValue] == 1)
+      lastused = ECLocalizedString(@"(Last used)");
 
   [self.xml addElement: @"name" value: name];
   [self.xml addElement: @"cleanname" value: cleanName];
@@ -692,8 +771,14 @@
 // Print information about snapshots.
 - (void) printSnapshotInformation: (NSDictionary *) destination
   {
+  if(![NSDictionary isValid: destination])
+    return;
+    
   NSNumber * count = [destination objectForKey: kSnapshotcount];
   
+  if(![NSNumber isValid: count])
+    return;
+    
   [self.xml addElement: @"count" number: count];
   
   [self.result
@@ -705,7 +790,7 @@
   
   NSDate * oldestBackup = [destination objectForKey: kOldestBackup];
 
-  if(oldestBackup != nil)
+  if([NSDate isValid: oldestBackup])
     {
     [self.xml addElement: @"oldestbackup" date: oldestBackup];
     
@@ -720,7 +805,7 @@
     
   NSDate * lastBackup = [destination objectForKey: kLastbackup];
 
-  if(oldestBackup != nil)
+  if([NSDate isValid: lastBackup] )
     {
     NSDate * then =
       [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 10];

@@ -10,6 +10,8 @@
 #import "Model.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
+#import "NSSet+Etresoft.h"
 #import "SubProcess.h"
 #import "LocalizedString.h"
 
@@ -68,25 +70,29 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if([plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * applications =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([applications count])
-        for(NSDictionary * application in applications)
-          {
-          NSString * name = [application objectForKey: @"_name"];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * applications = [results objectForKey: @"_items"];
           
-          if(!name)
-            name = ECLocalizedString(@"[Unknown]");
+        if([NSArray isValid: applications])
+          for(NSDictionary * application in applications)
+            {
+            NSString * name = [application objectForKey: @"_name"];
+            
+            if(![NSString isValid: name])
+              name = ECLocalizedString(@"[Unknown]");
 
-          NSDictionary * details =
-            [self collectApplicationDetails: application];
-          
-          if(details)
-            [appDetails setObject: details forKey: name];
-          }
+            NSDictionary * details =
+              [self collectApplicationDetails: application];
+            
+            if([NSDictionary isValid: details])
+              [appDetails setObject: details forKey: name];
+            }
+        }
       }
     }
     
@@ -98,9 +104,12 @@
 // Collect details about a single application.
 - (NSDictionary *) collectApplicationDetails: (NSDictionary *) application
   {
+  if(![NSDictionary isValid: application])
+    return nil;
+    
   NSString * path = [application objectForKey: @"path"];
   
-  if(!path)
+  if(![NSString isValid: path])
     path = ECLocalizedString(@"[Unknown]");
     
   // TODO: Grep executable for SMLoginItemSetEnabled
@@ -117,7 +126,7 @@
   NSMutableDictionary * info =
     [NSMutableDictionary dictionaryWithDictionary: application];
   
-  if(plist)
+  if([NSDictionary isValid: plist])
     [info addEntriesFromDictionary: plist];
   
   return info;
@@ -134,20 +143,25 @@
     {
     NSDictionary * application = [applications objectForKey: name];
     
-    // Make sure to redact any user names in the path.
-    NSString * path =
-      [self cleanPath: [application objectForKey: @"path"]];
+    if([NSDictionary isValid: application])
+      {
+      // Make sure to redact any user names in the path.
+      NSString * path = [application objectForKey: @"path"];
+      
+      if([NSString isValid: path])
+        path = [self cleanPath: path];
 
-    NSString * parent = [path stringByDeletingLastPathComponent];
-  
-    NSMutableSet * siblings = [parents objectForKey: parent];
+      NSString * parent = [path stringByDeletingLastPathComponent];
     
-    if(siblings)
-      [siblings addObject: application];
-    else
-      [parents
-        setObject: [NSMutableSet setWithObject: application]
-        forKey: parent];
+      NSMutableSet * siblings = [parents objectForKey: parent];
+      
+      if(siblings)
+        [siblings addObject: application];
+      else
+        [parents
+          setObject: [NSMutableSet setWithObject: application]
+          forKey: parent];
+      }
     }
 
   return parents;
@@ -156,6 +170,9 @@
 // Print application directories.
 - (void) printApplicationDirectories: (NSDictionary *) parents
   {
+  if(![NSDictionary isValid: parents])
+    return;
+    
   // Sort the parents.
   NSArray * sortedParents =
     [[parents allKeys] sortedArrayUsingSelector: @selector(compare:)];
@@ -168,31 +185,34 @@
     // Sort the applications and print each.
     NSSet * applications = [parents objectForKey: parent];
     
-    NSSortDescriptor * descriptor =
-      [[NSSortDescriptor alloc] initWithKey: @"_name" ascending: YES];
-      
-    NSArray * sortedApplications =
-      [applications sortedArrayUsingDescriptors: @[descriptor]];
-      
-    [descriptor release];
-    
-    for(NSDictionary * application in sortedApplications)
+    if([NSSet isValid: applications])
       {
-      NSAttributedString * output = [self applicationDetails: application];
-      
-      if(output)
-        {
-        if(!count)
-          // Make sure the parent path is clean and print it.
-          [self.result
-            appendString:
-              [NSString
-                stringWithFormat:
-                  @"    %@\n", [self cleanPath: parent]]];
-
-        ++count;
+      NSSortDescriptor * descriptor =
+        [[NSSortDescriptor alloc] initWithKey: @"_name" ascending: YES];
         
-        [self.result appendAttributedString: output];
+      NSArray * sortedApplications =
+        [applications sortedArrayUsingDescriptors: @[descriptor]];
+        
+      [descriptor release];
+      
+      for(NSDictionary * application in sortedApplications)
+        {
+        NSAttributedString * output = 
+          [self applicationDetails: application];
+        
+        if(output != nil)
+          {
+          if(!count)
+            // Make sure the parent path is clean and print it.
+            [self.result
+              appendString:
+                [NSString
+                  stringWithFormat: @"    %@\n", [self cleanPath: parent]]];
+
+          ++count;
+          
+          [self.result appendAttributedString: output];
+          }
         }
       }
     }
@@ -201,19 +221,31 @@
 // Return details about an application.
 - (NSAttributedString *) applicationDetails: (NSDictionary *) application
   {
+  NSMutableAttributedString * output =
+    [[NSMutableAttributedString alloc] init];
+    
+  [output autorelease];
+  
+  if(![NSDictionary isValid: application])
+    return output;
+    
   NSString * name = [application objectForKey: @"_name"];
 
+  if(![NSString isValid: name])
+    return output;
+    
   NSAttributedString * supportLink =
     [[[NSAttributedString alloc] initWithString: @""] autorelease];
 
   NSString * bundleID = [application objectForKey: @"CFBundleIdentifier"];
 
-  if(bundleID)
+  if([NSString isValid: bundleID])
     {
     NSString * obtained_from = [application objectForKey: @"obtained_from"];
     
-    if([obtained_from isEqualToString: @"apple"])
-      return nil;
+    if([NSString isValid: obtained_from])
+      if([obtained_from isEqualToString: @"apple"])
+        return nil;
       
     if([bundleID hasPrefix: @"com.apple."])
       return nil;
@@ -221,9 +253,6 @@
     supportLink = [self getSupportURL: name bundleID: bundleID];
     }
    
-  NSMutableAttributedString * output =
-    [[NSMutableAttributedString alloc] init];
-    
   [output
     appendString:
       [NSString
@@ -235,14 +264,14 @@
   
   NSAttributedString * detailsLink = [self.model getDetailsURLFor: name];
   
-  if(detailsLink)
+  if(detailsLink != nil)
     {
     [output appendString: @" "];
     [output appendAttributedString: detailsLink];
     [output appendString: @"\n"];
     }
     
-  return [output autorelease];
+  return output;
   }
 
 // Build a version string.

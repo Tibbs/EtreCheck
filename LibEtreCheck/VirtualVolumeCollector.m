@@ -64,7 +64,7 @@
     {
     Volume * volume = [[self.model storageDevices] objectForKey: device];
     
-    if([volume respondsToSelector: @selector(isVolume)])
+    if([Volume isValid: volume])
       if(volume.printCount < 1)
         {
         volume.indent = 1;
@@ -94,7 +94,7 @@
     {
     Volume * volume = [[self.model storageDevices] objectForKey: device];
     
-    if([volume respondsToSelector: @selector(isVolume)])
+    if([Volume isValid: volume])
       [volume buildXMLValue: self.xml];
     }
   }

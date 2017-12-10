@@ -17,4 +17,7 @@
 // Remove leading and trailing whitespace.
 @property (readonly, nonnull) NSString * trim;
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable NSString *) string;
+
 @end

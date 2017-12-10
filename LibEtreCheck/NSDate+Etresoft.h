@@ -17,4 +17,7 @@
 // Get a calendar.
 + (NSCalendar *) calendar;
 
+// Is this a valid object?
++ (BOOL) isValid: (NSDate *) date;
+
 @end

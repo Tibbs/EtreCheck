@@ -11,6 +11,7 @@
 #import "Adware.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -343,21 +344,25 @@
     
     NSLocale * locale = [NSLocale currentLocale];
   
-    NSString * language =
-      [[locale objectForKey: NSLocaleLanguageCode] lowercaseString];
-
-    if([language isEqualToString: @"fr"])
-      message = @"Échec de chargement des ressources linguistiques"; 
-
-    [self.result
-      appendString: message
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
+    NSString * languageCode = [locale objectForKey: NSLocaleLanguageCode];
     
-    [self.result appendString: @"\n\n"];
+    if([NSString isValid: languageCode])
+      {
+      NSString * language = [languageCode lowercaseString];
+
+      if([language isEqualToString: @"fr"])
+        message = @"Échec de chargement des ressources linguistiques"; 
+
+      [self.result
+        appendString: message
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+      
+      [self.result appendString: @"\n\n"];
+      }
     }
   }
 

@@ -108,4 +108,7 @@
 // volumes.
 - (void) addContainingDevice: (nonnull NSString *) device;
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable Volume *) volume;
+
 @end

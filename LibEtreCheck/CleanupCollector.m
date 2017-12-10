@@ -21,6 +21,9 @@
 #import "SafariExtension.h"
 #import "UserNotification.h"
 #import "OSVersion.h"
+#import "NSArray+Etresoft.h"
+#import "NSString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -91,6 +94,9 @@
     {
     NSMutableArray * appNotifications =
       [notifications objectForKey: bundleID];
+      
+    if(![NSArray isValid: appNotifications])
+      continue;
       
     if(appNotifications.count < 4)
       continue;
@@ -210,11 +216,12 @@
   NSMutableArray * appNotifications = 
     [notifications objectForKey: bundle_id];
     
-  if(appNotifications == nil)
+  if(![NSArray isValid: appNotifications])
     {
     appNotifications = [NSMutableArray new];
     
-    [notifications setObject: appNotifications forKey: bundle_id];
+    if([NSArray isValid: appNotifications])
+      [notifications setObject: appNotifications forKey: bundle_id];
     
     [appNotifications release];
     }
@@ -275,8 +282,9 @@
     {
     SafariExtension * extension = [safari.extensions objectForKey: path];
     
-    if(!extension.loaded)
-      [[[self.model safari] orphanExtensions] addObject: extension];
+    if([SafariExtension isValid: extension])
+      if(!extension.loaded)
+        [[[self.model safari] orphanExtensions] addObject: extension];
     }
   }
   
@@ -351,12 +359,13 @@
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
   
-  if(appleFile != nil)
+  if([NSDictionary isValid: appleFile])
     {
     NSString * expectedSignature = [appleFile objectForKey: kSignature];
     
-    if([expectedSignature isEqualToString: kExecutableMissing])
-      return [self.model ignoreKnownAppleFailures];
+    if([NSString isValid: expectedSignature])
+      if([expectedSignature isEqualToString: kExecutableMissing])
+        return [self.model ignoreKnownAppleFailures];
     }
     
   return NO;
@@ -393,27 +402,30 @@
     NSDictionary * notifications = 
       [[self.model notificationSPAMs] objectForKey: bundleID];
       
-    NSString * message =
-      ECLocalizedPluralString(notifications.count, @"SPAM notification");
+    if([NSDictionary isValid: notifications])
+      {
+      NSString * message =
+        ECLocalizedPluralString(notifications.count, @"SPAM notification");
 
-    [self.result appendString: @"    "];
-    
-    [self.result
-      appendString:
-        [NSString stringWithFormat: @"%@ - %@", bundleID, message]
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-    
-    NSAttributedString * cleanupLink =
-      [self generateRemoveNotificationSpamLink: bundleID];
-
-    if(cleanupLink)
-      [self.result appendAttributedString: cleanupLink];
+      [self.result appendString: @"    "];
       
-    [self.result appendString: @"\n"];
+      [self.result
+        appendString:
+          [NSString stringWithFormat: @"%@ - %@", bundleID, message]
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+      
+      NSAttributedString * cleanupLink =
+        [self generateRemoveNotificationSpamLink: bundleID];
+
+      if(cleanupLink)
+        [self.result appendAttributedString: cleanupLink];
+        
+      [self.result appendString: @"\n"];
+      }
     }
   }
   
@@ -488,17 +500,20 @@
     NSArray * notifications = 
       [[self.model notificationSPAMs] objectForKey: bundleID];
       
-    [self.xml startElement: @"notifications"];
-    
-    for(UserNotification * notification in notifications)
+    if([NSArray isValid: notifications])
       {
-      [self.xml addElement: @"identifier" number: notification.noteID];
-      [self.xml 
-        addElement: @"text" value: notification.notification.title];
+      [self.xml startElement: @"notifications"];
+      
+      for(UserNotification * notification in notifications)
+        {
+        [self.xml addElement: @"identifier" number: notification.noteID];
+        [self.xml 
+          addElement: @"text" value: notification.notification.title];
+        }
+        
+      [self.xml endElement: @"notifications"];
       }
       
-    [self.xml endElement: @"notifications"];
-  
     [self.xml endElement: @"spammer"];
     }
     

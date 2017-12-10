@@ -50,6 +50,7 @@
 #import "EtreCheckDeletedFilesCollector.h"
 #import "EtreCheckCollector.h"
 #import "XMLBuilder.h"
+#import "NSNumber+Etresoft.h"
 
 // Perform the check.
 @implementation Checker
@@ -155,7 +156,14 @@
   [self 
     performCollections: 
       @[
-        hardware,
+        hardware
+      ]
+    increment: increment];
+
+  [self 
+    performCollections: 
+      @[
+        //hardware,
         applications
       ]
     increment: increment];
@@ -285,8 +293,13 @@
   {
   NSDictionary * environment = [[NSProcessInfo processInfo] environment];
   
-  bool simulate =
-    [[environment objectForKey: @"ETRECHECK_SIMULATE"] boolValue];
+  NSNumber * simulateValue = 
+    [environment objectForKey: @"ETRECHECK_SIMULATE"];
+  
+  bool simulate = false;
+  
+  if([NSNumber isValid: simulateValue])
+    simulate = [simulateValue boolValue];
     
   for(Collector * collector in collectors)
     {

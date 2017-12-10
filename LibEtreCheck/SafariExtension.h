@@ -67,4 +67,7 @@
 // Is this a Safari extension?
 - (BOOL) isSafariExtension;
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable SafariExtension *) extension;
+
 @end

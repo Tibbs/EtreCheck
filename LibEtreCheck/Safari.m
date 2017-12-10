@@ -9,6 +9,9 @@
 #import "SubProcess.h"
 #import "SafariExtension.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSArray+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Wrapper around Safari informatino.
 @implementation Safari
@@ -225,32 +228,37 @@
   NSDictionary * settings =
     [NSDictionary readPropertyList: extensionPlistPath];
   
-  if(settings)
+  if([NSDictionary isValid: settings])
     {
     NSArray * installedExtensions =
       [settings objectForKey: @"Installed Extensions"];
     
-    for(NSDictionary * installedExtension in installedExtensions)
-      {
-      if(![installedExtension respondsToSelector: @selector(objectForKey:)])
-        continue;
-        
-      NSNumber * enabled = [installedExtension objectForKey: @"Enabled"];
-      
-      NSString * filename =
-        [installedExtension objectForKey: @"Archive File Name"];
-        
-      NSString * bundleIdentifier =
-        [installedExtension objectForKey: @"Bundle Identifier"];
-        
-      SafariExtension * extension =
-        ([bundleIdentifier length] > 0)
-          ? [self.extensions objectForKey: bundleIdentifier]
-          : [self.extensionsByName objectForKey: filename];
-        
-      extension.loaded = YES;
-      extension.enabled = enabled.boolValue;
-      }
+    if([NSArray isValid: installedExtensions])
+      for(NSDictionary * installedExtension in installedExtensions)
+        if([NSDictionary isValid: installedExtension])
+          {
+          NSNumber * enabled = 
+            [installedExtension objectForKey: @"Enabled"];
+          
+          NSString * filename =
+            [installedExtension objectForKey: @"Archive File Name"];
+            
+          NSString * bundleIdentifier =
+            [installedExtension objectForKey: @"Bundle Identifier"];
+            
+          SafariExtension * extension = nil;
+          
+          if([NSString isValid: bundleIdentifier])
+            extension = [self.extensions objectForKey: bundleIdentifier];
+            
+          else if([NSString isValid: filename])
+            extension = [self.extensionsByName objectForKey: filename];
+            
+          extension.loaded = YES;
+
+          if(![NSNumber isValid: enabled])
+            extension.enabled = enabled.boolValue;
+          }
     }
   }
   

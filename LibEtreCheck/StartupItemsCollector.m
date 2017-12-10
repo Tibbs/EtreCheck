@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "SubProcess.h"
 #import "Model.h"
@@ -57,39 +58,50 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * items = [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if(self.simulating && ([items count] == 0))
-        items = 
-          [NSArray arrayWithObject: 
-            [NSDictionary 
-              dictionaryWithObjectsAndKeys:
-                @"Simulated startup item", @"_name", 
-                @"/Library/StartupItems/SimItem", @"spstartupitem_location", 
-                @"1.0", @"CFBundleShortVersionString",
-                nil]];
+      NSDictionary * results = [plist objectAtIndex: 0];
       
-      if([items count])
+      if([NSDictionary isValid: results])
         {
-        if(!startupItemsFound)
+        NSArray * items = [results objectForKey: @"_items"];
+        
+        if([NSArray isValid: items])
           {
-          [self.result appendAttributedString: [self buildTitle]];
-          startupItemsFound = YES;
-          }
+          if(self.simulating && ([items count] == 0))
+            items = 
+              [NSArray arrayWithObject: 
+                [NSDictionary 
+                  dictionaryWithObjectsAndKeys:
+                    @"Simulated startup item", 
+                    @"_name", 
+                    @"/Library/StartupItems/SimItem", 
+                    @"spstartupitem_location", 
+                    @"1.0", 
+                    @"CFBundleShortVersionString",
+                    nil]];
           
-        for(NSDictionary * item in items)
-          [self printStartupItem: item];
-          
-        [self.result
-          appendString: ECLocalizedString(@"startupitemsdeprecated")
-          attributes:
-            @{
-              NSForegroundColorAttributeName : [[Utilities shared] red],
-            }];
+          if(items.count > 0)
+            {
+            if(!startupItemsFound)
+              {
+              [self.result appendAttributedString: [self buildTitle]];
+              startupItemsFound = YES;
+              }
+              
+            for(NSDictionary * item in items)
+              [self printStartupItem: item];
+              
+            [self.result
+              appendString: ECLocalizedString(@"startupitemsdeprecated")
+              attributes:
+                @{
+                  NSForegroundColorAttributeName : [[Utilities shared] red],
+                }];
 
-        [self.result appendCR];
+            [self.result appendCR];
+            }
+          }
         }
       }
     }
@@ -193,34 +205,45 @@
 // Print a startup item.
 - (void) printStartupItem: (NSDictionary *) item
   {
+  if(![NSDictionary isValid: item])
+    return;
+    
   NSString * name = [item objectForKey: @"_name"];
+  
+  if(![NSString isValid: name])
+    return;
+    
   NSString * path = [item objectForKey: @"spstartupitem_location"];
 
+  if(![NSString isValid: path])
+    return;
+    
   NSString * version = @"";
   
   for(NSString * infoPList in startupBundles)
-    if([infoPList hasPrefix: path])
-      {
-      NSString * appVersion =
-        [item objectForKey: @"CFBundleShortVersionString"];
-
-      int age = 0;
-      
-      NSString * OSVersion = [self getOSVersion: item age: & age];
-        
-      if([appVersion length] || [OSVersion length])
+    if([NSString isValid: infoPList])
+      if([infoPList hasPrefix: path])
         {
-        NSMutableString * compositeVersion = [NSMutableString string];
-        
-        if([appVersion length] > 0)
-          [compositeVersion appendString: appVersion];
-        
-        if([OSVersion length] > 0)
-          [compositeVersion appendFormat: @" - %@", OSVersion];
+        NSString * appVersion =
+          [item objectForKey: @"CFBundleShortVersionString"];
 
-        version = compositeVersion;
+        int age = 0;
+        
+        NSString * OSVersion = [self getOSVersion: item age: & age];
+          
+        if([NSString isValid: appVersion] || [NSString isValid: OSVersion])
+          {
+          NSMutableString * compositeVersion = [NSMutableString string];
+          
+          if([NSString isValid: appVersion])
+            [compositeVersion appendString: appVersion];
+          
+          if([NSString isValid: OSVersion] > 0)
+            [compositeVersion appendFormat: @" - %@", OSVersion];
+
+          version = compositeVersion;
+          }
         }
-      }
     
   NSString * cleanPath = [self cleanPath: path];
 

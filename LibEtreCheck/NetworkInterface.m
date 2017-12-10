@@ -8,6 +8,7 @@
 #import "XMLBuilder.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "LocalizedString.h"
+#import "NSDictionary+Etresoft.h"
 
 @implementation NetworkInterface
 
@@ -39,37 +40,40 @@
 + (instancetype) NetworkInterfaceWithPropertyListDictionary: 
   (NSDictionary *) plist
   {
-  NetworkInterface * interface = [NetworkInterface new];
-  
-  interface.name = [plist objectForKey: @"_name"];
-  interface.interface = [plist objectForKey: @"interface"];
-  
-  interface.IPv4Addresses = 
-    [[plist objectForKey: @"IPv4"] objectForKey: @"Addresses"];
-  interface.IPv6Addresses = 
-    [[plist objectForKey: @"IPv6"] objectForKey: @"Addresses"];
-  
-  NSDictionary * proxies = [plist objectForKey: @"Proxies"];
-  
-  interface.proxyAutoDiscovery = 
-    [[proxies objectForKey: @"ProxyAutoDiscoveryEnable"] 
-      isEqualToString: @"yes"];
-      
-  interface.proxyAutoConfig = 
-    [[proxies objectForKey: @"ProxyAutoConfigEnable"] 
-      isEqualToString: @"yes"];
-
-  interface.proxyAutoConfigURLString = 
-    [proxies objectForKey: @"ProxyAutoConfigURLString"];
-
-  interface.proxies = 
-    [NetworkProxy NetworkProxiesWithPropertyListDictionary: proxies];
-  
-  if((interface.name.length > 0) && (interface.interface.length > 0))
-    return [interface autorelease];
+  if([NSDictionary isValid: plist])
+    {
+    NetworkInterface * interface = [NetworkInterface new];
     
-  [interface release];
-  
+    interface.name = [plist objectForKey: @"_name"];
+    interface.interface = [plist objectForKey: @"interface"];
+    
+    interface.IPv4Addresses = 
+      [[plist objectForKey: @"IPv4"] objectForKey: @"Addresses"];
+    interface.IPv6Addresses = 
+      [[plist objectForKey: @"IPv6"] objectForKey: @"Addresses"];
+    
+    NSDictionary * proxies = [plist objectForKey: @"Proxies"];
+    
+    interface.proxyAutoDiscovery = 
+      [[proxies objectForKey: @"ProxyAutoDiscoveryEnable"] 
+        isEqualToString: @"yes"];
+        
+    interface.proxyAutoConfig = 
+      [[proxies objectForKey: @"ProxyAutoConfigEnable"] 
+        isEqualToString: @"yes"];
+
+    interface.proxyAutoConfigURLString = 
+      [proxies objectForKey: @"ProxyAutoConfigURLString"];
+
+    interface.proxies = 
+      [NetworkProxy NetworkProxiesWithPropertyListDictionary: proxies];
+    
+    if((interface.name.length > 0) && (interface.interface.length > 0))
+      return [interface autorelease];
+      
+    [interface release];
+    }
+    
   return nil;
   }
   

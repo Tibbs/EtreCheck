@@ -8,6 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "Model.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
@@ -43,12 +45,17 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * infos = [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos count])
-        [self printVideoInformation: infos];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * infos = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: infos] && (infos.count > 0))
+          [self printVideoInformation: infos];
+        }
       }
     }
     
@@ -67,7 +74,7 @@
     NSString * name = [info objectForKey: @"sppci_model"];
     NSString * bus = [info objectForKey: @"sppci_bus"];
     
-    if(![name length])
+    if(![NSString isValid: name])
       name = ECLocalizedString(@"Unknown");
       
     [self.xml addElement: @"name" value: name];
@@ -75,12 +82,13 @@
     
     NSString * type = ECLocalizedString(@"Discrete");
     
-    if([bus isEqualToString: @"spdisplays_builtin"])
-      type = ECLocalizedString(@"Integrated");
+    if([NSString isValid: bus])
+      if([bus isEqualToString: @"spdisplays_builtin"])
+        type = ECLocalizedString(@"Integrated");
       
     NSString * vramAmount = [info objectForKey: @"spdisplays_vram"];
 
-    if([vramAmount length] == 0)
+    if(![NSString isValid: vramAmount])
       vramAmount = [info objectForKey: @"_spdisplays_vram"];
 
     NSString * vram = @"";
@@ -106,7 +114,7 @@
       
     NSArray * displays = [info objectForKey: @"spdisplays_ndrvs"];
   
-    if(displays.count > 0)
+    if([NSArray isValid: displays] && (displays.count > 0))
       {
       [self.xml startElement: @"displays"];
       
@@ -146,28 +154,33 @@
       
   NSString * name = [display objectForKey: @"_name"];
   
-  if([name isEqualToString: @"spdisplays_display_connector"])
+  if([NSString isValid: name])
     {
-    NSString * status = [display objectForKey: @"spdisplays_status"];
+    if([name isEqualToString: @"spdisplays_display_connector"])
+      {
+      NSString * status = [display objectForKey: @"spdisplays_status"];
+      
+      if([NSString isValid: status])
+        if([status isEqualToString: @"spdisplays_not_connected"])
+          return;
+      }
     
-    if([status isEqualToString: @"spdisplays_not_connected"])
-      return;
+    if([name isEqualToString: @"spdisplays_display"])
+      name = ECLocalizedString(@"Display");
     }
-    
-  if([name isEqualToString: @"spdisplays_display"])
-    name = ECLocalizedString(@"Display");
     
   NSString * resolution = [display objectForKey: @"spdisplays_resolution"];
 
-  if([resolution hasPrefix: @"spdisplays_"])
-    {
-    NSString * pixels = [display objectForKey: @"_spdisplays_pixels"];
+  if([NSString isValid: resolution])
+    if([resolution hasPrefix: @"spdisplays_"])
+      {
+      NSString * pixels = [display objectForKey: @"_spdisplays_pixels"];
+      
+      if([NSString isValid: pixels])
+        resolution = pixels;
+      }
     
-    if(pixels)
-      resolution = pixels;
-    }
-    
-  if(name || resolution)
+  if([NSString isValid: name] || [NSString isValid: resolution])
     [self.result
       appendString:
         [NSString

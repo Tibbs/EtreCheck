@@ -19,6 +19,7 @@
 #import "NumberFormatter.h"
 #import "StorageDevice.h"
 #import "NSString+Etresoft.h"
+#import "NSNumber+Etresoft.h"
 
 #define kSerialATA @"serialata"
 #define kNVMe @"nvme"
@@ -148,27 +149,32 @@
       NSString * type = [plist objectForKey: @"VirtualOrPhysical"];
       NSNumber * wholeDisk = [plist objectForKey: @"WholeDisk"];
       
-      BOOL drive = NO;
-      
-      if([type isEqualToString: @"Physical"])
-        drive = YES;
-      
-      // WholeDisk could be true and type could be Virtual. I just want
-      // pre-container HFS+ before Core Storage or APFS.
-      if((type == nil) && wholeDisk.boolValue)
-        drive = YES;
-        
-      // Not so fast. If there is a volume indicator, it must be a volume.
-      if([[plist objectForKey: @"VolumeUUID"] length] > 0)
-        drive = NO;  
-
-      if(drive)
+      if([NSString isValid: type] && [NSNumber isValid: wholeDisk])
         {
-        if([self collectPhysicalDrive: plist])
+        BOOL drive = NO;
+        
+        if([type isEqualToString: @"Physical"])
+          drive = YES;
+        
+        // WholeDisk could be true and type could be Virtual. I just want
+        // pre-container HFS+ before Core Storage or APFS.
+        if((type == nil) && wholeDisk.boolValue)
+          drive = YES;
+          
+        // Not so fast. If there is a volume indicator, it must be a volume.
+        NSString * volumeUUID = [plist objectForKey: @"VolumeUUID"];
+        
+        if([NSString isValid: volumeUUID])
+          drive = NO;  
+
+        if(drive)
+          {
+          if([self collectPhysicalDrive: plist])
+            dataFound = YES;
+          }
+        else if([self collectVolume: plist])
           dataFound = YES;
         }
-      else if([self collectVolume: plist])
-        dataFound = YES;
       }
     }
     
@@ -243,17 +249,22 @@
     
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-     NSArray * plist =
+    NSArray * plist =
        [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist] && (plist.count > 0))
       {
-      NSDictionary * controllers =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSDictionary * controllers = [results objectForKey: @"_items"];
         
-      // Collect all controllers.
-      for(NSDictionary * controller in controllers)
-        [self collectController: controller type: type];
+        if([NSDictionary isValid: controllers])
+          // Collect all controllers.
+          for(NSDictionary * controller in controllers)
+            [self collectController: controller type: type];
+        }
       }
     }
 
@@ -266,31 +277,44 @@
   {
   NSDictionary * items = [controller objectForKey: @"_items"];
 
+  if(![NSDictionary isValid: items])
+    return;
+    
   // Get the bus, port description, and speed for this controller.
   NSString * bus = 
     [controller objectForKey: [self key: @"vendor" type: type]];
 
+  if(![NSString isValid: bus])
+    return;
+    
   NSString * description =
     [controller objectForKey: [self key: @"portdescription" type: type]];
 
+  if(![NSString isValid: description])
+    return;
+    
   NSString * speed = 
     [controller 
       objectForKey: [self key: @"negotiatedlinkspeed" type: type]];
       
-  if(speed.length == 0)
+  if(![NSString isValid: speed])
     speed = [controller objectForKey: [self key: @"portspeed" type: type]];
 
   // This is just text.
-  if(speed.length == 0)
+  if(![NSString isValid: speed])
     {
     NSString * linkspeed = 
-      [controller 
-        objectForKey: [self key: @"linkspeed" type: type]];
+      [controller objectForKey: [self key: @"linkspeed" type: type]];
+
+    if(![NSString isValid: linkspeed])
+      return;
 
     NSString * linkwidth = 
-      [controller 
-        objectForKey: [self key: @"linkwidth" type: type]];
+      [controller objectForKey: [self key: @"linkwidth" type: type]];
         
+    if(![NSString isValid: linkwidth])
+      return;
+
     speed = [NSString stringWithFormat: @"%@ %@", linkspeed, linkwidth];
     }
   
@@ -298,9 +322,12 @@
     {
     NSString * device = [item objectForKey: @"bsd_name"];
 
+    if(![NSString isValid: device])
+      continue;
+
     Drive * drive = [[self.model storageDevices] objectForKey: device];
     
-    if([drive respondsToSelector: @selector(isDrive)])
+    if([Drive isValid: drive])
       {
       // If this is an exernal drive, override the bus information.
       if(!drive.internal)
@@ -311,32 +338,52 @@
       drive.busSpeed = speed;
       drive.type = type;
       
-      drive.name = [item objectForKey: @"_name"];
+      NSString * name = [item objectForKey: @"_name"];
       
-      drive.model = [[item objectForKey: @"device_model"] trim];
-      drive.revision = [[item objectForKey: @"device_revision"] trim];
-      drive.serial = [[item objectForKey: @"device_serial"] trim];
+      if(![NSString isValid: name])
+        continue;
+        
+      NSString * model = [item objectForKey: @"device_model"];
+      NSString * revision = [item objectForKey: @"device_revision"];
+      NSString * serial = [item objectForKey: @"device_serial"];
+
+      if(![NSString isValid: model])
+        continue;
+        
+      if(![NSString isValid: revision])
+        continue;
+
+      if(![NSString isValid: serial])
+        continue;
+
+      drive.name = name;
+      
+      drive.model = model.trim;
+      drive.revision = revision.trim;
+      drive.serial = serial.trim;
       
       NSString * TRIM = 
         [item objectForKey: [self key: @"trim_support" type: type]];
         
-      drive.TRIM = [TRIM isEqualToString: @"Yes"];
+      if([NSString isValid: TRIM])
+        drive.TRIM = [TRIM isEqualToString: @"Yes"];
       
       NSArray * volumes = [item objectForKey: @"volumes"];
       
-      for(NSDictionary * volumeItem in volumes)
-        {
-        NSString * volumeDevice = [volumeItem objectForKey: @"bsd_name"];
-        
-        if(volumeDevice.length > 0)
+      if([NSArray isValid: volumes])
+        for(NSDictionary * volumeItem in volumes)
           {
-          Volume * volume = 
-            [[self.model storageDevices] objectForKey: volumeDevice];
-            
-          if([volume respondsToSelector: @selector(isVolume)])
-            [volume addContainingDevice: device];
+          NSString * volumeDevice = [volumeItem objectForKey: @"bsd_name"];
+          
+          if([NSString isValid: volumeDevice])
+            {
+            Volume * volume = 
+              [[self.model storageDevices] objectForKey: volumeDevice];
+              
+            if([Volume isValid: volume])
+              [volume addContainingDevice: device];
+            }
           }
-        }
       }
     }
   }
@@ -362,13 +409,18 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist.count > 0)
+    if([NSArray isValid: plist] && (plist.count > 0))
       {
-      NSArray * items =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      NSDictionary * result = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: result])
+        {
+        NSArray * items = [result objectForKey: @"_items"];
         
-      for(NSDictionary * item in items)
-        [self collectCoreStorageVolume: item];
+        if([NSArray isValid: items])
+          for(NSDictionary * item in items)
+            [self collectCoreStorageVolume: item];
+        }
       }
     }
     
@@ -383,33 +435,41 @@
   {
   NSString * device = [item objectForKey: @"bsd_name"];
 
+  if(![NSString isValid: device])
+    return;
+    
   Volume * volume = [[self.model storageDevices] objectForKey: device];
   
-  if([volume respondsToSelector: @selector(isVolume)])
+  if([Volume isValid: volume])
     {
     // Determine if the volume is encrypted and, if so, what type of
     // encryption is used.
     NSDictionary * logicalVolume = 
       [item objectForKey: @"com.apple.corestorage.lv"];
     
-    NSString * encrypted = 
-      [logicalVolume objectForKey: @"com.apple.corestorage.lv.encrypted"];
-        
-    volume.encrypted = [encrypted isEqualToString: @"yes"];
-    
-    if(volume.encrypted)
-      volume.encryptionStatus = @"encrypted";
-    
-    // Now look for any physical volumes.
-    NSArray * physicalVolumes = 
-      [item objectForKey: @"com.apple.corestorage.pv"];
-      
-    for(NSDictionary * item in physicalVolumes)
+    if([NSDictionary isValid: logicalVolume])
       {
-      NSString * physicalDevice = [item objectForKey: @"_name"];
+      NSString * encrypted = 
+        [logicalVolume objectForKey: @"com.apple.corestorage.lv.encrypted"];
+          
+      if([NSString isValid: encrypted])
+        volume.encrypted = [encrypted isEqualToString: @"yes"];
       
-      if(physicalDevice.length > 0)
-        [volume addContainingDevice: physicalDevice];
+      if(volume.encrypted)
+        volume.encryptionStatus = @"encrypted";
+      
+      // Now look for any physical volumes.
+      NSArray * physicalVolumes = 
+        [item objectForKey: @"com.apple.corestorage.pv"];
+        
+      if([NSArray isValid: physicalVolumes])
+        for(NSDictionary * item in physicalVolumes)
+          {
+          NSString * physicalDevice = [item objectForKey: @"_name"];
+          
+          if([NSString isValid: physicalDevice])
+            [volume addContainingDevice: physicalDevice];
+          }
       }
     }
   }
@@ -498,8 +558,11 @@
         Volume * volume = 
           [[self.model storageDevices] objectForKey: device];
           
-        volume.encryptionStatus = status;
-        volume.encryptionProgress = progress;
+        if([Volume isValid: volume])
+          {
+          volume.encryptionStatus = status;
+          volume.encryptionProgress = progress;
+          }
         }
       }
     }
@@ -528,76 +591,105 @@
       {
       NSArray * containers = [plist objectForKey: @"Containers"];
         
-      for(NSDictionary * container in containers)
-        {
-        NSString * containerReference = 
-          [container objectForKey: @"ContainerReference"];
-        
-        if(containerReference.length > 0)
+      if([NSArray isValid: containers])
+        for(NSDictionary * container in containers)
           {
-          StorageDevice * storageDevice = 
-            [[self.model storageDevices] 
-              objectForKey: containerReference];
+          NSString * containerReference = 
+            [container objectForKey: @"ContainerReference"];
           
-          // This must be a container.
-          storageDevice.type = kAPFSContainerVolume;
-          }
-          
-        NSArray * volumes = [container objectForKey: @"Volumes"];
-        
-        NSArray * physicalStores = 
-          [container objectForKey: @"PhysicalStores"];
-        
-        for(NSDictionary * item in volumes)
-          {
-          NSString * device = [item objectForKey: @"DeviceIdentifier"];
-          
-          Volume * volume = 
-            [[self.model storageDevices] objectForKey: device];
-          
-          // Get the encryption direction and progress.
-          volume.encrypted = [[item objectForKey: @"Encryption"] boolValue];
-          volume.encryptionStatus = 
-            [[item objectForKey: @"CryptoMigrationDirection"] 
-              lowercaseString];
-            
-          volume.encryptionProgress = 
-            [[item objectForKey: @"CryptoMigrationProgressPercent"] 
-              intValue];
-          
-          if(volume.encrypted && (volume.encryptionStatus == nil))
-            volume.encryptionStatus = @"encrypted";
-            
-          // See if there is an APFS role.
-          NSArray * roles = [item objectForKey: @"Roles"];
-          
-          if(roles.count == 1)
+          if([NSString isValid: containerReference])
             {
-            NSString * role = [roles firstObject];
+            StorageDevice * storageDevice = 
+              [[self.model storageDevices] 
+                objectForKey: containerReference];
             
-            if([role isEqualToString: @"Preboot"])
-              volume.type = kPrebootVolume;
-            else if([role isEqualToString: @"Recovery"])
-              volume.type = kRecoveryVolume;
-            else if([role isEqualToString: @"VM"])
-              volume.type = kVMVolume;
+            // This must be a container.
+            storageDevice.type = kAPFSContainerVolume;
             }
             
-          // Now add phyiscal devices.
-          for(NSDictionary * physicalStore in physicalStores)
+          NSArray * volumes = [container objectForKey: @"Volumes"];
+          
+          if([NSArray isValid: volumes])
             {
-            NSString * physicalDevice = 
-              [physicalStore objectForKey: @"DeviceIdentifier"];
-              
-            if(physicalDevice.length > 0)
-              [volume addContainingDevice: physicalDevice];
-            }
+            NSArray * physicalStores = 
+              [container objectForKey: @"PhysicalStores"];
             
-          // If I don't already have a type, and I have multiple physical 
-          // volumes, this must be a Fusion disk.
-          if((volume.type == nil) && (physicalStores.count > 1))
-            volume.type = kFusionVolume;
-          }
+            if([NSArray isValid: physicalStores])
+              for(NSDictionary * item in volumes)
+                {
+                NSString * device = 
+                  [item objectForKey: @"DeviceIdentifier"];
+                
+                if(![NSString isValid: device])
+                  continue;
+                  
+                Volume * volume = 
+                  [[self.model storageDevices] objectForKey: device];
+                
+                if([Volume isValid: volume])
+                  {
+                  // Get the encryption direction and progress.
+                  NSNumber * encryptionValue = 
+                    [item objectForKey: @"Encryption"];
+                  
+                  if([NSNumber isValid: encryptionValue])
+                    volume.encrypted = [encryptionValue boolValue];
+                  
+                  NSString * encryptionStatus =
+                    [item objectForKey: @"CryptoMigrationDirection"];
+                    
+                  if([NSString isValid: encryptionStatus])
+                    volume.encryptionStatus = 
+                      [encryptionStatus lowercaseString];
+                    
+                  NSNumber * encryptionProgress = 
+                    [item 
+                      objectForKey: @"CryptoMigrationProgressPercent"];
+                    
+                  if([NSNumber isValid: encryptionProgress])
+                    volume.encryptionProgress = 
+                      [encryptionProgress intValue];
+                  
+                  if(volume.encrypted && (volume.encryptionStatus == nil))
+                    volume.encryptionStatus = @"encrypted";
+                    
+                  // See if there is an APFS role.
+                  NSArray * roles = [item objectForKey: @"Roles"];
+                  
+                  if([NSArray isValid: roles])
+                    if(roles.count >= 1)
+                      {
+                      NSString * role = [roles firstObject];
+                      
+                      if([NSString isValid: role])
+                        {
+                        if([role isEqualToString: @"Preboot"])
+                          volume.type = kPrebootVolume;
+                        else if([role isEqualToString: @"Recovery"])
+                          volume.type = kRecoveryVolume;
+                        else if([role isEqualToString: @"VM"])
+                          volume.type = kVMVolume;
+                        }
+                      }
+                    
+                  // Now add phyiscal devices.
+                  for(NSDictionary * physicalStore in physicalStores)
+                    {
+                    NSString * physicalDevice = 
+                      [physicalStore objectForKey: @"DeviceIdentifier"];
+                      
+                    if([NSString isValid: physicalDevice])
+                      [volume addContainingDevice: physicalDevice];
+                    }
+                    
+                  // If I don't already have a type, and I have 
+                  // multiple physical volumes, this must be a Fusion 
+                  // drive.
+                  if((volume.type == nil) && (physicalStores.count > 1))
+                    volume.type = kFusionVolume;
+                  }
+                }
+            }
         }
       }
     }
@@ -613,24 +705,27 @@
   NSMutableSet * RAIDSets = [NSMutableSet new];
   NSMutableDictionary * RAIDDevices = [NSMutableDictionary new];
   
-  for(NSString * device in [self.model storageDevices])
-    {
-    StorageDevice * storageDevice = 
-      [[self.model storageDevices] objectForKey: device];
-    
-    if(storageDevice != nil)
+  NSDictionary * devices = [self.model storageDevices];
+  
+  if([NSDictionary isValid: devices])
+    for(NSString * device in devices)
       {
-      if(storageDevice.RAIDSetUUID.length > 0)
-        [RAIDDevices 
-          setObject: storageDevice forKey: storageDevice.RAIDSetUUID];
+      StorageDevice * storageDevice = 
+        [devices objectForKey: device];
       
-      if(storageDevice.RAIDSetMembers.count > 0)
-        [RAIDSets addObject: storageDevice];
+      if(storageDevice != nil)
+        {
+        if(storageDevice.RAIDSetUUID.length > 0)
+          [RAIDDevices 
+            setObject: storageDevice forKey: storageDevice.RAIDSetUUID];
+        
+        if(storageDevice.RAIDSetMembers.count > 0)
+          [RAIDSets addObject: storageDevice];
+        }
       }
-    }
     
   for(Volume * volume in RAIDSets)
-    if([volume respondsToSelector: @selector(isVolume)])
+    if([Volume isValid: volume])
       for(NSString * UUID in volume.RAIDSetMembers)
         {
         StorageDevice * storageDevice = [RAIDDevices objectForKey: UUID];
@@ -648,52 +743,64 @@
 // Print all drives found.
 - (void) printDrives
   {
-  // Get a sorted list of devices.
-  NSArray * storageDevices = 
-    [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingComparator:
-        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
-          {
-          NSString * device1 = obj1;
-          NSString * device2 = obj2;
-          
-          return [device1 compare: device2 options: NSNumericSearch];
-          }];
+  NSDictionary * devices = [self.model storageDevices];
   
-  // Now export all drives matching this type.
-  for(NSString * device in storageDevices)
+  if([NSDictionary isValid: devices])
     {
-    Drive * drive = [[self.model storageDevices] objectForKey: device];
+    // Get a sorted list of devices.
+    NSArray * storageDevices = 
+      [[devices allKeys] 
+        sortedArrayUsingComparator:
+          ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+            {
+            NSString * device1 = obj1;
+            NSString * device2 = obj2;
+            
+            return [device1 compare: device2 options: NSNumericSearch];
+            }];
     
-    drive.indent = 1;
-    
-    if([drive respondsToSelector: @selector(isDrive)])
-      [self.result appendAttributedString: drive.attributedStringValue];
+    // Now export all drives matching this type.
+    for(NSString * device in storageDevices)
+      {
+      Drive * drive = [devices objectForKey: device];
+      
+      if([Drive isValid: drive])
+        {
+        drive.indent = 1;
+        
+        [self.result appendAttributedString: drive.attributedStringValue];
+        }
+      }
     }
   }
   
 // Export all drives found to XML.
 - (void) exportDrives
   {
-  // Get a sorted list of devices.
-  NSArray * storageDevices = 
-    [[[self.model storageDevices] allKeys] 
-      sortedArrayUsingComparator:
-        ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
-          {
-          NSString * device1 = obj1;
-          NSString * device2 = obj2;
-          
-          return [device1 compare: device2 options: NSNumericSearch];
-          }];
+  NSDictionary * devices = [self.model storageDevices];
   
-  // Now export all drives matching this type.
-  for(NSString * device in storageDevices)
+  if([NSDictionary isValid: devices])
     {
-    Drive * drive = [[self.model storageDevices] objectForKey: device];
+    // Get a sorted list of devices.
+    NSArray * storageDevices = 
+      [[devices allKeys] 
+        sortedArrayUsingComparator:
+          ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) 
+            {
+            NSString * device1 = obj1;
+            NSString * device2 = obj2;
+            
+            return [device1 compare: device2 options: NSNumericSearch];
+            }];
     
-    if([drive respondsToSelector: @selector(isDrive)])
-      [drive buildXMLValue: self.xml];
+    // Now export all drives matching this type.
+    for(NSString * device in storageDevices)
+      {
+      Drive * drive = [devices objectForKey: device];
+      
+      if([Drive isValid: drive])
+        [drive buildXMLValue: self.xml];
+      }
     }
   }
 

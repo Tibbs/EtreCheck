@@ -18,6 +18,7 @@
 #import "Safari.h"
 #import "SafariExtension.h"
 #import "Adware.h"
+#import "NSArray+Etresoft.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -94,21 +95,26 @@
   
     if(plist != nil)
       {
-      [self
-        addSignatures: [plist objectForKey: kAdwareExtensionsKey]
-          forKey: kAdwareExtensionsKey];
+      NSArray * adware = [plist objectForKey: kAdwareExtensionsKey];
       
-      [self
-        addSignatures: [plist objectForKey: @"blacklist"]
-        forKey: kBlacklistKey];
+      if([NSArray isValid: adware])
+        [self addSignatures: adware forKey: kAdwareExtensionsKey];
+      
+      NSArray * blacklist = [plist objectForKey: @"blacklist"];
 
-      [self
-        addSignatures: [plist objectForKey: @"blacklist_suffix"]
-        forKey: kBlacklistSuffixKey];
+      if([NSArray isValid: blacklist])
+        [self addSignatures: blacklist forKey: kBlacklistKey];
 
-      [self
-        addSignatures: [plist objectForKey: @"blacklist_match"]
-        forKey: kBlacklistMatchKey];
+      NSArray * blacklist_suffix = 
+        [plist objectForKey: @"blacklist_suffix"];
+
+      if([NSArray isValid: blacklist_suffix])
+        [self addSignatures: blacklist_suffix forKey: kBlacklistSuffixKey];
+
+      NSArray * blacklist_match = [plist objectForKey: @"blacklist_match"];
+
+      if([NSArray isValid: blacklist_match])
+        [self addSignatures: blacklist_match forKey: kBlacklistMatchKey];
       }
     }
   }
@@ -127,13 +133,15 @@
   
   if(plist != nil)
     {
-    [self
-      addSignatures: [plist objectForKey: kWhitelistKey]
-        forKey: kWhitelistKey];
+    NSArray * whitelist = [plist objectForKey: kWhitelistKey];
     
-    [self
-      addSignatures: [plist objectForKey: kWhitelistPrefixKey]
-        forKey: kWhitelistPrefixKey];
+    if([NSArray isValid: whitelist])
+      [self addSignatures: whitelist forKey: kWhitelistKey];
+    
+    NSArray * whitelistPrefix = [plist objectForKey: kWhitelistPrefixKey];
+    
+    if([NSArray isValid: whitelistPrefix])
+      [self addSignatures: whitelistPrefix forKey: kWhitelistPrefixKey];
     }
   }
 
@@ -201,7 +209,7 @@
     {
     LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
     
-    if(file != nil)
+    if([LaunchdFile isValid: file])
       [self checkAdware: file];
     }
   }
@@ -431,16 +439,19 @@
     {
     SafariExtension * extension = [safari.extensions objectForKey: path];
     
-    bool adware = false;
-    
-    if([self isAdwareMatch: extension.name])
-      adware = true;
+    if([SafariExtension isValid: extension])
+      {
+      bool adware = false;
       
-    if([self isAdwareMatch: extension.displayName])
-      adware = true;
-      
-    if(adware)
-      [[[self.model safari] adwareExtensions] addObject: extension];
+      if([self isAdwareMatch: extension.name])
+        adware = true;
+        
+      if([self isAdwareMatch: extension.displayName])
+        adware = true;
+        
+      if(adware)
+        [[[self.model safari] adwareExtensions] addObject: extension];
+      }
     }
   }
 

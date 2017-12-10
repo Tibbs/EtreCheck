@@ -11,6 +11,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
+#import "NSDictionary+Etresoft.h"
 
 // Wrapper around a Safari extension.
 @implementation SafariExtension
@@ -103,6 +104,16 @@
   return YES;
   }
   
++ (BOOL) isValid: (nullable SafariExtension *) extension
+  {
+  if(extension != nil)
+    return [extension respondsToSelector: @selector(isSafariExtension)];
+      
+  return NO;
+  }
+
+#pragma mark - Private methods
+
 // Extract a Safari extension from a path.
 + (NSDictionary *) readFromPath: (NSString *) path
   {
@@ -217,6 +228,9 @@
 // Create an extension dictionary from a plist.
 - (void) parseDictionary: (NSDictionary *) dict
   {
+  if(![NSDictionary isValid: dict])
+    return;
+    
   self.displayName = [dict objectForKey: @"CFBundleDisplayName"];
   
   self.bundleIdentifier = [dict objectForKey: @"CFBundleIdentifier"];

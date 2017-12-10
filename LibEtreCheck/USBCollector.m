@@ -8,6 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "Drive.h"
@@ -49,18 +51,23 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      bool found = NO;
+      NSDictionary * results = [plist objectAtIndex: 0];
       
-      NSDictionary * devices =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      if([NSDictionary isValid: results])
+        {
+        bool found = NO;
         
-      for(NSDictionary * device in devices)
-        [self printUSBDevice: device indent: @"    " found: & found];
+        NSDictionary * devices = [results objectForKey: @"_items"];
+          
+        if([NSDictionary isValid: devices])
+          for(NSDictionary * device in devices)
+            [self printUSBDevice: device indent: @"    " found: & found];
 
-      if(found)
-        [self.result appendCR];
+        if(found)
+          [self.result appendCR];
+        }
       }
     }
   else
@@ -79,20 +86,25 @@
   NSString * manufacturer = [device objectForKey: @"manufacturer"];
   NSString * size = [device objectForKey: @"size"];
 
-  if(!manufacturer)
+  if(![NSString isValid: manufacturer])
     manufacturer = [device objectForKey: @"f_manufacturer"];
 
-  manufacturer = [self cleanPath: manufacturer];
+  if([NSString isValid: manufacturer])
+    manufacturer = [self cleanPath: manufacturer];
+  
   name = [self cleanPath: name];
   
+  if(![NSString isValid: name])
+    return;
+    
   [self.xml addElement: @"manufacturer" value: manufacturer];
   [self.xml addElement: @"name" value: name];  
   [self.xml addElement: @"size" value: size];
   
-  if(!size)
+  if(![NSString isValid: size])
     size = @"";
     
-  if(manufacturer)
+  if([NSString isValid: manufacturer])
     {
     if(!*found)
       {
@@ -122,10 +134,10 @@
   {
   NSDictionary * devices = [device objectForKey: @"_items"];
   
-  if(!devices)
+  if(![NSDictionary isValid: devices])
     devices = [device objectForKey: @"units"];
     
-  if(devices)
+  if([NSDictionary isValid: devices])
     for(NSDictionary * device in devices)
       [self printUSBDevice: device indent: indent found: found];
   
@@ -141,7 +153,7 @@
   {
   NSArray * media = [device objectForKey: @"Media"];
   
-  if(media.count > 0)
+  if([NSArray isValid: media] && (media.count > 0))
     {
     NSString * name = [device objectForKey: @"_name"];
     NSString * manufacturer = [device objectForKey: @"manufacturer"];
@@ -150,10 +162,10 @@
       
     NSMutableString * model = [NSMutableString new];
     
-    if(manufacturer.length > 0)
+    if([NSString isValid: manufacturer])
       [model appendString: manufacturer];
     
-    if(name.length > 0)
+    if([NSString isValid: name])
       {
       if(model.length > 0)
         [model appendString: @" "];
@@ -167,11 +179,14 @@
       {
       NSString * device = [item objectForKey: @"bsd_name"];
 
+      if(![NSString isValid: device])
+        continue;
+        
       [self.xml addElement: @"device" value: device];
       
       Drive * drive = [[self.model storageDevices] objectForKey: device];
       
-      if([drive respondsToSelector: @selector(isDrive)])
+      if([Drive isValid: drive])
         {
         drive.name = name;
         
@@ -182,18 +197,19 @@
 
         NSArray * volumes = [item objectForKey: @"volumes"];
         
-        if([volumes respondsToSelector: @selector(isEqualToArray:)])
+        if([NSArray isValid: volumes])
           for(NSDictionary * volumeItem in volumes)
             {
             NSString * volumeDevice = 
               [volumeItem objectForKey: @"bsd_name"];
             
-            if(volumeDevice.length > 0)
+            if([NSString isValid: volumeDevice])
               {
               Volume * volume = 
                 [[self.model storageDevices] objectForKey: volumeDevice];
               
-              [volume addContainingDevice: device];
+              if([Volume isValid: volume])
+                [volume addContainingDevice: device];
               }
             }
         }

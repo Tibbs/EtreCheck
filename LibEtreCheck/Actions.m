@@ -18,6 +18,8 @@
 #import "SafariExtension.h"
 #import <sqlite3.h>
 #import "UserNotification.h"
+#import "NSArray+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 @implementation Actions
 
@@ -887,6 +889,9 @@
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"deletedfiles"];
     
+  if(![NSArray isValid: currentDeletedFiles])
+    return;
+    
   NSMutableArray * deletedFiles = [NSMutableArray array];
   
   if([currentDeletedFiles count])
@@ -899,8 +904,9 @@
       {
       NSDate * date = [entry objectForKey: @"date"];
       
-      if([then compare: date] == NSOrderedAscending)
-        [deletedFiles addObject: entry];
+      if([NSDate isValid: date])
+        if([then compare: date] == NSOrderedAscending)
+          [deletedFiles addObject: entry];
       }
     }
     

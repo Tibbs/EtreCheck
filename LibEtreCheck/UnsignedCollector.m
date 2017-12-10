@@ -15,6 +15,8 @@
 #import "Launchd.h"
 #import "LaunchdFile.h"
 #import "Adware.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -61,7 +63,7 @@
     {
     LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
     
-    if(file != nil)
+    if([LaunchdFile isValid: file])
       [self checkUnsigned: file];
     }
   }
@@ -86,15 +88,16 @@
     NSDictionary * appleFile = 
       [[[self.model launchd] appleFiles] objectForKey: file.path];
       
-    if(appleFile != nil)
+    if([NSDictionary isValid: appleFile])
       {
       NSString * signature = [appleFile objectForKey: @"signature"];
       
-      if([file.signature isEqualToString: signature])
-        {
-        file.safetyScore = 100;
-        continue;
-        }
+      if([NSString isValid: signature])
+        if([file.signature isEqualToString: signature])
+          {
+          file.safetyScore = 100;
+          continue;
+          }
       }
       
     // If this is a full whitelist match, add 60.
@@ -198,11 +201,11 @@
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
   
-  if(appleFile != nil)
+  if([NSDictionary isValid: appleFile])
     {
     NSString * expectedSignature = [appleFile objectForKey: kSignature];
     
-    if(expectedSignature != nil)
+    if([NSString isValid: expectedSignature])
       if([file.signature isEqualToString: expectedSignature])
         return [self.model ignoreKnownAppleFailures];
     }

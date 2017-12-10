@@ -9,6 +9,9 @@
 #import "Utilities.h"
 #import "SubProcess.h"
 #import "LocalizedString.h"
+#import "NSNumber+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSMutableDictionary+Etresoft.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
@@ -105,17 +108,31 @@
   pid: (NSNumber *) pid
   in: (NSMutableDictionary *) processes
   {
-  if(pid == nil)
+  if(![NSNumber isValid: pid])
+    return;
+    
+  if(![NSDictionary isValid: processes])
     return;
     
   NSMutableDictionary * dict = [processes objectForKey: command];
   
-  if(dict)
+  if([NSMutableDictionary isValid: dict])
     {
-    usage += [[dict objectForKey: @"mem"] doubleValue];
-    cpu += [[dict objectForKey: @"cpu"] doubleValue];
+    NSNumber * processMem = [dict objectForKey: @"mem"];
+    NSNumber * processCPU = [dict objectForKey: @"cpu"];
     
-    int count = [[dict objectForKey: @"count"] intValue] + 1;
+    if([NSNumber isValid: processMem])
+      usage += [processMem doubleValue];
+    
+    if([NSNumber isValid: processCPU])
+      cpu += [processCPU doubleValue];
+    
+    NSNumber * processCount = [dict objectForKey: @"count"];
+    
+    int count = 1;
+    
+    if([NSNumber isValid: processCount])
+      count += [processCount intValue];
     
     [dict setObject: [NSNumber numberWithDouble: usage] forKey: @"mem"];
     [dict setObject: [NSNumber numberWithDouble: cpu] forKey: @"cpu"];
@@ -224,6 +241,12 @@
         NSNumber * value1 = [process1 objectForKey: key];
         NSNumber * value2 = [process2 objectForKey: key];
         
+        if(![NSNumber isValid: value1])
+          value1 = nil;
+          
+        if(![NSNumber isValid: value2])
+          value2 = nil;
+          
         if((value1 == nil) && (value2 != nil))
           return (NSComparisonResult)NSOrderedDescending;
         

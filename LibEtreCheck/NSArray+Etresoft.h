@@ -12,4 +12,7 @@
 + (NSArray *) readPropertyList: (NSString *) path;
 + (NSArray *) readPropertyListData: (NSData *) data;
 
+// Is this a valid object?
++ (BOOL) isValid: (NSArray *) array;
+
 @end

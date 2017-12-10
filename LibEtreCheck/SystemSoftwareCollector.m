@@ -13,6 +13,7 @@
 #import "XMLBuilder.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
 #import "OSVersion.h"
@@ -60,19 +61,24 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * items =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * items = [results objectForKey: @"_items"];
         
-      if([items count])
-        for(NSDictionary * item in items)
-          if([self printSystemSoftware: item])
-            {
-            dataFound = YES;
-            [self.result appendCR];
-            break;
-            }
+        if([NSArray isValid: items])
+          for(NSDictionary * item in items)
+            if([NSDictionary isValid: item])
+              if([self printSystemSoftware: item])
+                {
+                dataFound = YES;
+                [self.result appendCR];
+                break;
+                }
+        }
       }
     }
     
@@ -97,8 +103,17 @@
 // Print a system software item.
 - (BOOL) printSystemSoftware: (NSDictionary *) item
   {
+  if(![NSDictionary isValid: item])
+    return NO;
+    
   NSString * version = [item objectForKey: @"os_version"];
   NSString * uptime = [item objectForKey: @"uptime"];
+
+  if(![NSString isValid: version])
+    return NO;
+    
+  if(![NSString isValid: uptime])
+    return NO;
 
   NSString * OSName = nil;
   

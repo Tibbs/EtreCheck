@@ -13,6 +13,9 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
@@ -89,29 +92,29 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
-  
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
-    {
-    if(![subProcess.standardOutput length])
-      return;
-      
-    NSArray * plist =
-      [NSArray readPropertyListData: subProcess.standardOutput];
+    if(subProcess.standardOutput.length > 0)
+      {      
+      NSArray * plist =
+        [NSArray readPropertyListData: subProcess.standardOutput];
 
-    if(![plist count])
-      return;
-      
-    NSArray * results =
-      [[plist objectAtIndex: 0] objectForKey: @"_items"];
-      
-    if(![results count])
-      return;
-
-    for(NSDictionary * result in results)
-      [self collectDiagnosticResult: result];
-    }
+      if([NSArray isValid: plist])
+        {
+        NSDictionary * info = [plist objectAtIndex: 0];
+        
+        if([NSDictionary isValid: info])
+          {
+          NSArray * results = [info objectForKey: @"_items"];
+            
+          if([NSArray isValid: results])
+            for(NSDictionary * result in results)
+              [self collectDiagnosticResult: result];
+          }
+        }
+      }
     
+  [subProcess release];
+  
   if(self.simulating)
     [self 
       collectDiagnosticResult: 
@@ -125,32 +128,42 @@
 // Collect a single diagnostic result.
 - (void) collectDiagnosticResult: (NSDictionary *) result
   {
-  if(![result respondsToSelector: @selector(objectForKey:)])
+  if(![NSDictionary isValid: result])
     return;
     
   NSString * name = [result objectForKey: @"_name"];
   
+  if(![NSString isValid: name])
+    return;
+    
   if([name isEqualToString: @"spdiags_post_value"])
     {
     NSString * details = [result objectForKey: @"spdiags_result_key"];
+      
+    if(![NSString isValid: details])
+      return;
       
     if(![details isEqualToString: @"spdiags_passed_value"])
       {
       DiagnosticEvent * event = [DiagnosticEvent new];
 
-      NSDate * lastRun =
-        [result objectForKey: @"spdiags_last_run_key"];
-    
-      event.date = lastRun;
-    
-      event.type = kSelfTestFail;
-      event.name = ECLocalizedString(@"Self test - failed");
-      event.details = details;
+      if(event != nil)
+        {
+        NSDate * lastRun =
+          [result objectForKey: @"spdiags_last_run_key"];
       
-      [[self.model diagnosticEvents]
-        setObject: event forKey: @"selftest"];
+        if([NSDate isValid: lastRun])
+          event.date = lastRun;
       
-      [event release];
+        event.type = kSelfTestFail;
+        event.name = ECLocalizedString(@"Self test - failed");
+        event.details = details;
+        
+        [[self.model diagnosticEvents]
+          setObject: event forKey: @"selftest"];
+        
+        [event release];
+        }
       }
     }
   }
@@ -536,19 +549,22 @@
     {
     DiagnosticEvent * event = [events objectForKey: name];
     
-    BOOL since7Days = [then compare: event.date] == NSOrderedAscending;
-  
-    switch(event.type)
+    if(event != nil)
       {
-      case kPanic:
-      case kSelfTestFail:
-      case kShutdown:
-        [self printDiagnosticEvent: event name: name];
-        break;
-        
-      default:
-        if(self.simulating || since7Days)
+      BOOL since7Days = [then compare: event.date] == NSOrderedAscending;
+    
+      switch(event.type)
+        {
+        case kPanic:
+        case kSelfTestFail:
+        case kShutdown:
           [self printDiagnosticEvent: event name: name];
+          break;
+          
+        default:
+          if(self.simulating || since7Days)
+            [self printDiagnosticEvent: event name: name];
+        }
       }
     }
   }

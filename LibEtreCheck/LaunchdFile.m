@@ -11,6 +11,7 @@
 #import "EtreCheckConstants.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "Utilities.h"
 #import "LocalizedString.h"
 #import "XMLBuilder.h"
@@ -243,6 +244,13 @@
   return YES;
   }
   
+// Is this a valid object?
++ (BOOL) isValid: (nullable LaunchdFile *) file
+  {
+  return 
+    (file != nil) && [file respondsToSelector: @selector(isLaunchdFile)];
+  }
+
 #pragma mark - Private methods
 
 // Parse from a path.
@@ -281,20 +289,21 @@
   {
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: self.path];
 
-  if(appleFile != nil)
+  if([NSDictionary isValid: appleFile])
     {
     NSString * expectedSignature = [appleFile objectForKey: kSignature];
   
-    NSString * signature = 
-      [Utilities checkAppleExecutable: self.executable];
-      
-    if(expectedSignature != nil)
+    if([NSString isValid: expectedSignature])
       {
-      if([signature isEqualToString: expectedSignature])
-        {
-        self.apple = YES;
-        self.signature = signature;
-        }
+      NSString * signature = 
+        [Utilities checkAppleExecutable: self.executable];
+        
+      if([NSString isValid: signature])
+        if([signature isEqualToString: expectedSignature])
+          {
+          self.apple = YES;
+          self.signature = signature;
+          }
       }
     }
     

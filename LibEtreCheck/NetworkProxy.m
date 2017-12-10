@@ -6,6 +6,8 @@
 #import "NetworkProxy.h"
 #import "XMLBuilder.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 @implementation NetworkProxy
 
@@ -25,6 +27,9 @@
 + (NSArray *) NetworkProxiesWithPropertyListDictionary: 
   (NSDictionary *) plist
   {
+  if(![NSDictionary isValid: plist])
+    return nil;
+    
   NSMutableArray * proxies = [NSMutableArray array];
   
   NSArray * types = 
@@ -41,19 +46,20 @@
     
     NSString * enabled = [plist objectForKey: enabledKey];
     
-    if([enabled isEqualToString: @"yes"])
-      {
-      NetworkProxy * proxy = [NetworkProxy new];
-      
-      proxy.type = type;
-      proxy.address = [plist objectForKey: proxyKey];
-      proxy.port = [plist objectForKey: portKey];
-      proxy.user = [plist objectForKey: userKey];
-      
-      [proxies addObject: proxy];
-      
-      [proxy release];
-      }
+    if([NSString isValid: enabled])
+      if([enabled isEqualToString: @"yes"])
+        {
+        NetworkProxy * proxy = [NetworkProxy new];
+        
+        proxy.type = type;
+        proxy.address = [plist objectForKey: proxyKey];
+        proxy.port = [plist objectForKey: portKey];
+        proxy.user = [plist objectForKey: userKey];
+        
+        [proxies addObject: proxy];
+        
+        [proxy release];
+        }
     }
     
   [types release];

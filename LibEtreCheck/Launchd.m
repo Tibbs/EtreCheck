@@ -105,7 +105,7 @@
     {
     LaunchdFile * file = [self.filesByPath objectForKey: path];
     
-    if(file != nil)
+    if([LaunchdFile isValid: file])
       [self.launchdFileLookup setObject: file forKey: file.identifier];
     }
   }
@@ -404,7 +404,7 @@
       {
       LaunchdFile * truthFile = [self.filesByPath objectForKey: task.path];
       
-      if(truthFile != nil)
+      if([LaunchdFile isValid: truthFile])
         {
         [truthFile.loadedTasks addObject: task];
         
@@ -417,7 +417,7 @@
       LaunchdFile * truthFile = 
         [self.filesByLabel objectForKey: task.label];
       
-      if(truthFile != nil)
+      if([LaunchdFile isValid: truthFile])
         {
         [truthFile.loadedTasks addObject: task];
         
@@ -429,7 +429,7 @@
     LaunchdFile * truthFile = 
       [self.filesByLabel objectForKey: task.baseLabel];
     
-    if(truthFile != nil)
+    if([LaunchdFile isValid: truthFile])
       {
       [truthFile.loadedTasks addObject: task];
       
@@ -447,14 +447,16 @@
     {
     LaunchdFile * file = [self.filesByPath objectForKey: path];
     
-    if(file.executable.length > 0)
-      {
-      BOOL exists =
-        [[NSFileManager defaultManager] fileExistsAtPath: file.executable];
-        
-      if(!exists)
-        [self.orphanFiles addObject: file];
-      }
+    if([LaunchdFile isValid: file])
+      if(file.executable.length > 0)
+        {
+        BOOL exists =
+          [[NSFileManager defaultManager] 
+            fileExistsAtPath: file.executable];
+          
+        if(!exists)
+          [self.orphanFiles addObject: file];
+        }
     }
   }
   
@@ -472,36 +474,41 @@
     {
     NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
   
-    if(plist)
+    if([NSDictionary isValid: plist])
       {
+      NSDictionary * launchdFiles = nil;
+      
       switch([[OSVersion shared] major])
         {
         case kSnowLeopard:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.6"]];
+          launchdFiles = [plist objectForKey: @"10.6"];
           break;
         case kLion:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.7"]];
+          launchdFiles = [plist objectForKey: @"10.7"];
           break;
         case kMountainLion:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.8"]];
+          launchdFiles = [plist objectForKey: @"10.8"];
           break;
         case kMavericks:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.9"]];
+          launchdFiles = [plist objectForKey: @"10.9"];
           break;
         case kYosemite:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.10"]];
+          launchdFiles = [plist objectForKey: @"10.10"];
           break;
         case kElCapitan:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
+          launchdFiles = [plist objectForKey: @"10.11"];
           break;
         case kSierra:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.12"]];
+          launchdFiles = [plist objectForKey: @"10.12"];
           break;
         case kHighSierra:
         default:
-          [self loadAppleLaunchd: [plist objectForKey: @"10.13"]];
+          launchdFiles = [plist objectForKey: @"10.13"];
           break;
         }
+        
+      if([NSDictionary isValid: launchdFiles])
+        [self loadAppleLaunchd: launchdFiles];
       }
     }
   }

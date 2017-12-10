@@ -18,6 +18,8 @@
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
+#import "NSString+Etresoft.h"
+#import "NSNumber+Etresoft.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -121,37 +123,49 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * infos =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos respondsToSelector: @selector(objectAtIndex:)])
-        if([infos count])
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * infos = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: infos])
           for(NSDictionary * info in infos)
-            {
-            if([info respondsToSelector: @selector(objectForKey:)])
+            if([NSDictionary isValid: info])
               {
               NSDictionary * localInfo =
                 [info objectForKey: @"local_device_title"];
               
-              NSString * generalSupportsHandoff =
-                [localInfo objectForKey: @"general_supports_handoff"];
-              NSString * generalSupportsInstantHotspot =
-                [localInfo
-                  objectForKey: @"general_supports_instantHotspot"];
-              NSString * generalSupportsLowEnergy =
-                [localInfo objectForKey: @"general_supports_lowEnergy"];
+              if([NSDictionary isValid: localInfo])
+                {
+                NSString * generalSupportsHandoff =
+                  [localInfo objectForKey: @"general_supports_handoff"];
+                  
+                NSString * generalSupportsInstantHotspot =
+                  [localInfo
+                    objectForKey: @"general_supports_instantHotspot"];
                 
-              self.supportsHandoff =
-                [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
-              self.supportsInstantHotspot =
-                [generalSupportsInstantHotspot
-                  isEqualToString: @"attrib_Yes"];
-              self.supportsLowEnergy =
-                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];                
+                NSString * generalSupportsLowEnergy =
+                  [localInfo objectForKey: @"general_supports_lowEnergy"];
+                  
+                if([NSString isValid: generalSupportsHandoff])
+                  self.supportsHandoff =
+                    [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
+                
+                if([NSString isValid: generalSupportsInstantHotspot])
+                  self.supportsInstantHotspot =
+                    [generalSupportsInstantHotspot
+                      isEqualToString: @"attrib_Yes"];
+
+                if([NSString isValid: generalSupportsLowEnergy])
+                  self.supportsLowEnergy =
+                    [generalSupportsLowEnergy 
+                      isEqualToString: @"attrib_Yes"];     
+                }
               }
-            }
+        }
       }
     }
     
@@ -213,21 +227,25 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * infos =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos count])
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
         {
-        [self.result appendAttributedString: [self buildTitle]];
-
-        for(NSDictionary * info in infos)
-          [self printMachineInformation: info];
+        NSArray * infos = [results objectForKey: @"_items"];
           
-        [self printBluetoothInformation];
-        [self printWirelessInformation];
-        [self printBatteryInformation];
+        if([NSArray isValid: infos])
+          {
+          [self.result appendAttributedString: [self buildTitle]];
+
+          for(NSDictionary * info in infos)
+            [self printMachineInformation: info];
+            
+          [self printBluetoothInformation];
+          [self printWirelessInformation];
+          [self printBatteryInformation];
+          }
         }
       }
     }
@@ -241,41 +259,59 @@
   NSString * name = [info objectForKey: @"machine_name"];
   NSString * model = [info objectForKey: @"machine_model"];
   NSString * cpu_type = [info objectForKey: @"cpu_type"];
+  
   NSNumber * core_count =
     [info objectForKey: @"number_processors"];
+  
   NSString * speed =
     [info objectForKey: @"current_processor_speed"];
+  
   NSNumber * cpu_count = [info objectForKey: @"packages"];
   NSString * memory = [info objectForKey: @"physical_memory"];
   NSString * serial = [info objectForKey: @"serial_number"];
 
-  [self.model setModel: model];
+  if([NSString isValid: model])
+    [self.model setModel: model];
   
   // Extract the memory.
-  [self.model
-    setPhysicalRAM: [self parseMemory: memory]];
+  if([NSString isValid: memory])
+    [self.model
+      setPhysicalRAM: [self parseMemory: memory]];
 
   if(self.simulating)
     memory = @"2 GB";
     
-  [self.model setSerialCode: [serial substringFromIndex: 8]];
+  if([NSString isValid: serial] && (serial.length >= 8))
+    [self.model setSerialCode: [serial substringFromIndex: 8]];
 
-  // Print the human readable machine name, if I can find one.
-  [self printHumanReadableMacName: model];
+  if([NSString isValid: model])
+    {
+    // Print the human readable machine name, if I can find one.
+    [self printHumanReadableMacName: model];
     
-  [self.result
-    appendString:
-      [NSString
-        stringWithFormat:
-          ECLocalizedString(@"    %@ - %@: %@\n"),
-          name, ECLocalizedString(@"model"), model]];
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            ECLocalizedString(@"    %@ - %@: %@\n"),
+            name, ECLocalizedString(@"model"), model]];
+    }
     
-  [self.xml addElement: @"name" value: name];
-  [self.xml addElement: @"model" value: model];
-  [self.xml addElement: @"modeltype" value: [self.model modelType]];
+  if([NSString isValid: name])
+    [self.xml addElement: @"name" value: name];
+  
+  if([NSString isValid: name])  
+    [self.xml addElement: @"model" value: model];
+  
+  NSString * type = [self.model modelType];
+  
+  if([NSString isValid: type])  
+    [self.xml addElement: @"modeltype" value: type];
+  
   [self.xml 
     addElement: @"modelmajorversion" 
     intValue: [self.model modelMajorVersion]];
+    
   [self.xml 
     addElement: @"modelminorversion" 
     intValue: [self.model modelMinorVersion]];
@@ -284,6 +320,18 @@
   
   if([self.CPUCode length] > 0)
     code = [NSString stringWithFormat: @" (%@)", self.CPUCode];
+    
+  if(![NSNumber isValid: cpu_count])
+    return;
+    
+  if(![NSString isValid: speed])
+    return;
+
+  if(![NSString isValid: cpu_type])
+    return;
+
+  if(![NSNumber isValid: core_count])
+    return;
     
   [self.result
     appendString:
@@ -303,7 +351,8 @@
   [self.xml addElement: @"cpucode" value: self.CPUCode];
   [self.xml addElement: @"corecount" number: core_count];
 
-  [self printMemory: memory];
+  if([NSString isValid: memory])
+    [self printMemory: memory];
   }
 
 // Parse a memory string into an int (in GB).
@@ -331,8 +380,8 @@
   // Get information on my own.
   NSDictionary * machineProperties = [self lookupMachineProperties: code];
   
-  if(machineProperties)
-    if(![self.marketingName length])
+  if([NSDictionary isValid: machineProperties])
+    if(self.marketingName.length == 0)
       self.marketingName = [machineProperties objectForKey: kMachineName];
       
   [self.result
@@ -506,8 +555,9 @@
     [localizedModelInfo objectForKey: @"marketingModel"];
 
   // Older machines.
-  if(!machineName)
-    machineName = [localizedModelInfo objectForKey: @"description"];
+  if(![NSString isValid: machineName])
+    if([NSDictionary isValid: localizedModelInfo])
+      machineName = [localizedModelInfo objectForKey: @"description"];
     
   return machineName;
   }
@@ -530,12 +580,13 @@
   bool upgradeable = NO;
   NSString * upgradeableString = @"";
   
-  if(details)
+  if([NSDictionary isValid: details])
     {
-    NSString * isUpgradeable =
+    NSNumber * isUpgradeable =
       [details objectForKey: @"is_memory_upgradeable"];
     
-    upgradeable = [isUpgradeable boolValue];
+    if([NSNumber isValid: isUpgradeable])  
+      upgradeable = [isUpgradeable boolValue];
     
     if(self.simulating)
       upgradeable = true;
@@ -596,11 +647,11 @@
   else
     [self.result appendString: @"\n"];
     
-  if(details)
+  if([NSDictionary isValid: details])
     {
     NSArray * banks = [details objectForKey: @"_items"];
     
-    if(banks)
+    if([NSArray isValid: banks])
       [self printMemoryBanks: banks];
     }
   }
@@ -648,6 +699,21 @@
     NSString * speed = [bank objectForKey: @"dimm_speed"];
     NSString * status = [bank objectForKey: @"dimm_status"];
     
+    if(![NSString isValid: name])
+      continue;
+      
+    if(![NSString isValid: size])
+      continue;
+
+    if(![NSString isValid: type])
+      continue;
+
+    if(![NSString isValid: speed])
+      continue;
+
+    if(![NSString isValid: status])
+      continue;
+
     NSString * currentBankID = name;
       
     if([size isEqualToString: @"(empty)"])
@@ -788,29 +854,31 @@
       NSArray * infos =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      if([infos count])
-        {
+      if([NSArray isValid: infos])
         for(NSDictionary * info in infos)
-          {
-          NSArray * interfaces =
-            [info objectForKey: @"spairport_airport_interfaces"];
-            
-          NSUInteger count = [interfaces count];
-          
-          if(interfaces)
-            [self.result
-              appendString:
-                [NSString
-                  stringWithFormat:
-                    ECLocalizedString(@"    Wireless: %@"),
-                    ECLocalizedPluralString(count, @"interface")]];
-          
-          for(NSDictionary * interface in interfaces)
-            [self
-              printWirelessInterface: interface
-              indent: count > 1 ? @"        " : @" "];
-          }
-        }
+          if([NSDictionary isValid: info])
+            {
+            NSArray * interfaces =
+              [info objectForKey: @"spairport_airport_interfaces"];
+              
+            if([NSArray isValid: interfaces])
+              {
+              NSUInteger count = [interfaces count];
+              
+              if(interfaces)
+                [self.result
+                  appendString:
+                    [NSString
+                      stringWithFormat:
+                        ECLocalizedString(@"    Wireless: %@"),
+                        ECLocalizedPluralString(count, @"interface")]];
+              
+              for(NSDictionary * interface in interfaces)
+                [self
+                  printWirelessInterface: interface
+                  indent: count > 1 ? @"        " : @" "];
+              }
+            }
       }
     }
     
@@ -825,7 +893,7 @@
   NSString * modes = 
     [interface objectForKey: @"spairport_supported_phymodes"];
 
-  if(([name length] > 0) && ([modes length] > 0))
+  if([NSString isValid: name] && [NSString isValid: modes])
     {
     [self.result
       appendString:
@@ -841,7 +909,7 @@
     [self.xml endElement: @"wireless"];
     }
     
-  else if([name length] > 0)
+  else if([NSString isValid: name])
     {
     [self.result
       appendString:
@@ -887,13 +955,17 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * infos =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos count])
-        [self printBatteryInformation: infos];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * infos = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: infos])
+          [self printBatteryInformation: infos];
+        }
       }
     }
     
@@ -908,31 +980,32 @@
   NSString * serialNumber = @"";
   BOOL serialNumberInvalid = NO;
   
-  for(NSDictionary * info in infos)
-    {
-    NSDictionary * healthInfo =
-      [info objectForKey: @"sppower_battery_health_info"];
-      
-    if(healthInfo)
+  if([NSArray isValid: infos])
+    for(NSDictionary * info in infos)
       {
-      cycleCount =
-        [healthInfo objectForKey: @"sppower_battery_cycle_count"];
-      health = [healthInfo objectForKey: @"sppower_battery_health"];
-      }
+      NSDictionary * healthInfo =
+        [info objectForKey: @"sppower_battery_health_info"];
+        
+      if([NSDictionary isValid: healthInfo])
+        {
+        cycleCount =
+          [healthInfo objectForKey: @"sppower_battery_cycle_count"];
+        health = [healthInfo objectForKey: @"sppower_battery_health"];
+        }
 
-    NSDictionary * modelInfo =
-      [info objectForKey: @"sppower_battery_model_info"];
-      
-    if(modelInfo)
-      {
-      serialNumber =
-        [modelInfo objectForKey: @"sppower_battery_serial_number"];
-      
-      if([serialNumber isEqualToString: @"0123456789ABC"])
-      //if([serialNumber isEqualToString: @"D865033Y2CXF9CPAW"])
-        serialNumberInvalid = YES;
+      NSDictionary * modelInfo =
+        [info objectForKey: @"sppower_battery_model_info"];
+        
+      if([NSDictionary isValid: modelInfo])
+        {
+        serialNumber =
+          [modelInfo objectForKey: @"sppower_battery_serial_number"];
+        
+        if([serialNumber isEqualToString: @"0123456789ABC"])
+        //if([serialNumber isEqualToString: @"D865033Y2CXF9CPAW"])
+          serialNumberInvalid = YES;
+        }
       }
-    }
     
   if(self.simulating)
     health = @"Poor";

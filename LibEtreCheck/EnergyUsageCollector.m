@@ -13,6 +13,9 @@
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -81,22 +84,39 @@
       NSMutableDictionary * averageProcess =
         [averageProcesses objectForKey: pid];
         
-      if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: pid];
-        
-      else if(currentProcess && averageProcess)
+      if([NSDictionary isValid: currentProcess])
         {
-        double totalEnergy =
-          [[averageProcess objectForKey: @"power"] doubleValue] * i;
-        
-        double averageEnergy =
-          [[currentProcess objectForKey: @"power"] doubleValue];
-        
-        averageEnergy = (totalEnergy + averageEnergy) / (double)(i + 1);
-        
-        [averageProcess
-          setObject: [NSNumber numberWithDouble: averageEnergy]
-          forKey: @"power"];
+        if(![NSDictionary isValid: averageProcess])
+          [averageProcesses setObject: currentProcess forKey: pid];
+          
+        else 
+          {
+          NSNumber * averagePower = [averageProcess objectForKey: @"power"];
+          
+          if(![NSNumber isValid: averagePower])
+            continue;
+            
+          double totalEnergy = [averagePower doubleValue] * i;
+          
+          NSNumber * currentPower = [currentProcess objectForKey: @"power"];
+          
+          if(![NSNumber isValid: currentPower])
+            continue;
+            
+          double averageEnergy = [currentPower doubleValue];
+          
+          averageEnergy = (totalEnergy + averageEnergy) / (double)(i + 1);
+          
+          NSNumber * power = 
+            [[NSNumber alloc] initWithDouble: averageEnergy];
+          
+          if(power != nil)
+            {
+            [averageProcess setObject: power forKey: @"power"];
+            
+            [power release];
+            }
+          }
         }
       }
     }
@@ -147,14 +167,18 @@
       
       NSDictionary * process = [self parseTop: line];
 
-      NSString * pid = [process objectForKey: @"pid"];
-      NSString * name = [process objectForKey: @"process"];
-      
-      if([name isEqualToString: @"top"])
-        continue;
+      if([NSDictionary isValid: process])
+        {
+        NSString * name = [process objectForKey: @"process"];
         
-      if((process != nil) && (pid != nil))
-        [processes setObject: process forKey: pid];
+        if([NSString isValid: name] && [name isEqualToString: @"top"])
+          continue;
+          
+        NSString * pid = [process objectForKey: @"pid"];
+
+        if([NSString isValid: pid])
+          [processes setObject: process forKey: pid];
+        }
       }
     }
     
@@ -228,35 +252,46 @@
   
   NSNumber * pid = [process objectForKey: @"pid"];
   
+  if(![NSNumber isValid: pid])
+    return;
+    
   NSDictionary * processByPID = [self.processesByPID objectForKey: pid];
   
-  if(processByPID != nil)
+  if([NSDictionary isValid: processByPID])
     processName = [processByPID objectForKey: @"command"];
     
-  if(processName == nil)
+  if(![NSString isValid: processName])
     processName = [process objectForKey: @"process"];
   
-  if([processName length] == 0)
+  if(![NSString isValid: processName])
     processName = ECLocalizedString(@"Unknown");
     
   if([processName hasPrefix: @"EtreCheck"])
     return;
     
-  double power = [[process objectForKey: @"power"] doubleValue];
-
-  NSString * printString =
-    [NSString
-      stringWithFormat:
-        @"%6.2f", power];
-
-   [self.xml startElement: @"process"];
+  NSNumber * powerValue = [process objectForKey: @"power"];
   
-  [self.xml 
-    addElement: @"amount" 
-    value: [NSString stringWithFormat: @"%.2f", power]
-    attributes: 
-      [NSDictionary dictionaryWithObjectsAndKeys: @"number", @"type", nil]];
+  if(![NSNumber isValid: powerValue])
+    return;
     
+  double power = [powerValue doubleValue];
+
+  NSString * printString = [NSString stringWithFormat: @"%6.2f", power];
+
+  [self.xml startElement: @"process"];
+  
+  NSString * powerString = 
+    [[NSString alloc] initWithFormat: @"%.2f", power];
+ 
+  NSDictionary * attributes =
+    [[NSDictionary alloc] initWithObjectsAndKeys: @"number", @"type", nil];
+    
+  [self.xml 
+    addElement: @"amount" value: powerString attributes: attributes];
+    
+  [attributes release];
+  [powerString release];
+  
   [self.xml addElement: @"name" value: processName];
   
   [self.xml endElement: @"process"];

@@ -7,6 +7,10 @@
 #import "XMLBuilder.h"
 #import "ByteCountFormatter.h"
 #import "Utilities.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSArray+Etresoft.h"
 
 @implementation StorageDevice
 
@@ -60,26 +64,44 @@
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist
   {
-  NSString * device = [plist objectForKey: @"DeviceIdentifier"];
-  
-  if(device.length > 0)
+  if([NSDictionary isValid: plist])
     {
-    self = [super init];
+    NSString * device = [plist objectForKey: @"DeviceIdentifier"];
     
-    if(self != nil)
+    if([NSString isValid: device])
       {
-      myIdentifier = [device retain];
-      myName = [[plist objectForKey: @"MediaName"] retain];
-      mySize = [[plist objectForKey: @"TotalSize"] unsignedIntegerValue];
+      self = [super init];
       
-      myRAIDSetUUID = [[plist objectForKey: @"RAIDSetUUID"] retain];
-      myRAIDSetMembers = [[plist objectForKey: @"RAIDSetMembers"] retain];
-      
-      myByteCountFormatter = [ByteCountFormatter new];
+      if(self != nil)
+        {
+        myIdentifier = [device retain];
+        
+        NSString * mediaName = [plist objectForKey: @"MediaName"];
+        NSNumber * totalSize = [plist objectForKey: @"TotalSize"];
+        
+        if([NSString isValid: mediaName])
+          myName = [mediaName retain];
+        
+        if([NSNumber isValid: totalSize])
+          mySize = [totalSize unsignedIntegerValue];
+        
+        NSString * RAIDSetupUUID = [plist objectForKey: @"RAIDSetUUID"];
+        NSArray * RAIDSetMembers = [plist objectForKey: @"RAIDSetMembers"];
+        
+        if([NSString isValid: RAIDSetupUUID])
+          myRAIDSetUUID = [RAIDSetupUUID retain];
+        
+        if([NSArray isValid: RAIDSetMembers])
+          myRAIDSetMembers = [RAIDSetMembers retain];
+        
+        myByteCountFormatter = [ByteCountFormatter new];
+        
+        return self;
+        }
       }
     }
     
-  return self;
+  return nil;
   }
   
 // Destructor.

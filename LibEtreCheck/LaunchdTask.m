@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "NSArray+Etresoft.h"
 
 // A wrapper around a launchd task.
 @implementation LaunchdTask
@@ -127,9 +128,10 @@
   NSString * program = [dict objectForKey: @"Program"];
   NSArray * arguments = [dict objectForKey: @"ProgramArguments"];
   
-  if(label.length > 0)
+  if([NSString isValid: label])
     self.label = label;
-    
+  
+  // This can handle nulls in both arguments.
   [self parseExecutable: program arguments: arguments];  
   }
   
@@ -232,7 +234,7 @@
   arguments: (NSArray *) arguments
   {
   // If there is no program, try to pull it from the arguments.
-  if(program.length == 0)
+  if(![NSString isValid: program])
     [self parseExecutable: arguments];
     
   // There is a program, so just accept it and read the arguments.
@@ -256,7 +258,7 @@
 // Parse an executable from an arguments array.
 - (void) parseExecutable: (NSArray *) arguments
   {
-  if(arguments.count == 0)
+  if(![NSArray isValid: arguments] || (arguments.count == 0))
     return;
     
   self.executable = [arguments firstObject];

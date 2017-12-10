@@ -12,6 +12,8 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 #define kAvailableRAM @"availableram"
 #define kFreeRAM @"freeram"
@@ -71,9 +73,22 @@
   [self collectvm_stat: vminfo];
   [self collectsysctl: vminfo];
   
-  double totalRAM = [[vminfo objectForKey: kTotalRAM] doubleValue];
-  double freeRAM = [[vminfo objectForKey: kFreeRAM] doubleValue];
-  double fileCache = [[vminfo objectForKey: kFileCache] doubleValue];
+  NSNumber * totalRAMNumber = [vminfo objectForKey: kTotalRAM];
+  NSNumber * freeRAMNumber = [vminfo objectForKey: kFreeRAM];
+  NSNumber * fileCacheNumber = [vminfo objectForKey: kFileCache];
+  
+  double totalRAM = 0;
+  double freeRAM = 0;
+  double fileCache = 0;
+
+  if([NSNumber isValid: totalRAMNumber])
+    totalRAM = [totalRAMNumber doubleValue];
+  
+  if([NSNumber isValid: freeRAMNumber])
+    freeRAM = [freeRAMNumber doubleValue];
+  
+  if([NSNumber isValid: fileCacheNumber])
+    fileCache = [fileCacheNumber doubleValue];
 
   [vminfo
     setObject: [NSNumber numberWithDouble: totalRAM - freeRAM - fileCache]
@@ -142,7 +157,12 @@
 // Print a VM value.
 - (void) printVM: (NSDictionary *) vminfo forKey: (NSString *) key
   {
-  double value = [[vminfo objectForKey: key] doubleValue];
+  NSNumber * number = [vminfo objectForKey: key];
+  
+  double value = 0;
+  
+  if([NSNumber isValid: number])
+    value = [number doubleValue];
   
   NSString * memoryString =
     [formatter stringFromByteCount: (unsigned long long)value];
@@ -167,7 +187,12 @@
   forKey: (NSString *) key
   attributes: (NSDictionary *) attributes
   {
-  double value = [[vminfo objectForKey: key] doubleValue];
+  NSNumber * number = [vminfo objectForKey: key];
+  
+  double value = 0;
+  
+  if([NSNumber isValid: number])
+    value = [number doubleValue];
   
   NSString * memoryString =
     [formatter stringFromByteCount: (unsigned long long)value];
@@ -191,18 +216,28 @@
   {
   NSString * statisticsValue =
     [vm_stats objectForKey: @"Mach Virtual Memory Statistics"];
+    
   NSString * cachedValue = [vm_stats objectForKey: @"File-backed pages"];
-  NSString * freeValue =
-    [vm_stats objectForKey: @"Pages free"];
-  NSString * purgeableValue =
-    [vm_stats objectForKey: @"Pages purgeable"];
+  NSString * freeValue = [vm_stats objectForKey: @"Pages free"];
+  NSString * purgeableValue = [vm_stats objectForKey: @"Pages purgeable"];
 
-  double pageSize = [self parsePageSize: statisticsValue];
+  double pageSize = 0;
+  double cached = 0;
+  double free = 0;
+  double purgeable = 0;
   
-  double cached = [cachedValue doubleValue] * pageSize;
-  double free = [freeValue doubleValue] * pageSize;
-  double purgeable = [purgeableValue doubleValue] * pageSize;
+  if([NSString isValid: statisticsValue])
+    pageSize = [self parsePageSize: statisticsValue];
   
+  if([NSString isValid: cachedValue])
+    cached = [cachedValue doubleValue] * pageSize;
+  
+  if([NSString isValid: freeValue]) 
+    free = [freeValue doubleValue] * pageSize;
+  
+  if([NSString isValid: purgeableValue])
+    purgeable = [purgeableValue doubleValue] * pageSize;
+
   return
     @{
       kFileCache : [NSNumber numberWithDouble: cached + purgeable],

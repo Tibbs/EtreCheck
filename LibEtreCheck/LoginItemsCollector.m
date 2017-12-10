@@ -10,6 +10,10 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -134,9 +138,8 @@
   [defaults release];
 
   NSString * loginHook = [settings objectForKey: @"LoginHook"];
-  NSString * logoutHook = [settings objectForKey: @"LogoutHook"];
   
-  if([loginHook length])
+  if([NSString isValid: loginHook])
     {
     NSDictionary * item =
       [NSDictionary dictionaryWithObjectsAndKeys:
@@ -151,7 +154,9 @@
     ++hooks;
     }
     
-  if([logoutHook length])
+  NSString * logoutHook = [settings objectForKey: @"LogoutHook"];
+
+  if([NSString isValid: logoutHook])
     {
     NSDictionary * item =
       [NSDictionary dictionaryWithObjectsAndKeys:
@@ -386,18 +391,24 @@
       {
       NSDictionary * loginItem = [loginItems objectForKey: path];
       
-      NSString * name = [loginItem objectForKey: @"name"];
-      
-      NSDictionary * currentLoginItem = [bestLoginItems objectForKey: name];
-      
-      if(currentLoginItem == nil)
-        [bestLoginItems setObject: loginItem forKey: name];
-      else
+      if([NSDictionary isValid: loginItem])
         {
-        NSString * currentPath = [currentLoginItem objectForKey: @"path"];
+        NSString * name = [loginItem objectForKey: @"name"];
         
-        if([currentPath hasPrefix: @"/Volumes/"])
+        NSDictionary * currentLoginItem = 
+          [bestLoginItems objectForKey: name];
+        
+        if(![NSDictionary isValid: currentLoginItem])
           [bestLoginItems setObject: loginItem forKey: name];
+
+        else
+          {
+          NSString * currentPath = [currentLoginItem objectForKey: @"path"];
+          
+          if([NSString isValid: currentPath])
+            if([currentPath hasPrefix: @"/Volumes/"])
+              [bestLoginItems setObject: loginItem forKey: name];
+          }
         }
       }
       
@@ -509,33 +520,33 @@
   NSNumber * hidden = [loginItem objectForKey: @"hidden"];
   NSString * developer = [loginItem objectForKey: @"developer"];
   
-  if(![name length])
+  if(![NSString isValid: name])
     name = @"-";
     
-  if(![path length])
+  if(![NSString isValid: path])
     return NO;
     
-  if(![kind length])
+  if(![NSString isValid: kind])
     return NO;
 
   if([kind isEqualToString: @"UNKNOWN"])
     if([path isEqualToString: @"missing value"])
       return NO;
     
-  if([path length] == 0)
-    return NO;
-    
   NSString * safeName = [self cleanPath: name];
   
-  if([safeName length] == 0)
+  if(![NSString isValid: safeName])
     safeName = name;
     
   NSString * safePath = [self cleanPath: path];
   
-  if([safePath length] == 0)
+  if(![NSString isValid: safePath])
     return NO;
     
-  bool isHidden = [hidden boolValue];
+  bool isHidden = NO;
+  
+  if([NSNumber isValid: hidden])
+    [hidden boolValue];
   
   [self.xml startElement: @"loginitem"];
   
@@ -549,17 +560,16 @@
   
   NSString * modificationDateString = @"";
   
-  if([path length] > 0)
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if([NSDate isValid: modificationDate])
     {
-    NSDate * modificationDate = [self modificationDate: path];
-    
     [self.xml addElement: @"installdate" date: modificationDate];
 
-    if(modificationDate)
-      modificationDateString =
-        [Utilities installDateAsString: modificationDate];
+    modificationDateString =
+      [Utilities installDateAsString: modificationDate];
     }
-
+    
   [self.xml addElement: @"path" value: path];
 
   [self.xml endElement: @"loginitem"];
@@ -581,7 +591,7 @@
   if([kind isEqualToString: @"LogoutHook"])
     highlight = YES;
 
-  if([developer length] == 0)
+  if(![NSString isValid: developer])
     {
     NSString * crc = [Utilities crcFile: path];
     
@@ -589,12 +599,12 @@
       developer = [NSString stringWithFormat: @"? %@", crc];
     }
     
-  if([developer length] == 0)
+  if(![NSString isValid: developer])
     developer = ECLocalizedString(@"Unknown");
     
   NSString * appInfo = @"";
   
-  if([modificationDateString length] > 0)
+  if([NSString isValid: modificationDateString])
     appInfo =
       [NSString
         stringWithFormat: @"(%@ - %@)", developer, modificationDateString];

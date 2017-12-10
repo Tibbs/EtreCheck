@@ -15,6 +15,9 @@
 #import "LocalizedString.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
+#import "NSNumber+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -109,12 +112,24 @@
       NSDictionary * process1 = obj1;
       NSDictionary * process2 = obj2;
       
-      NSNumber * bytesIn1 = [process1 objectForKey: @"bytesIn"];
-      NSNumber * bytesOut1 = [process1 objectForKey: @"bytesOut"];
+      NSNumber * bytesIn1 = nil;
+      NSNumber * bytesOut1 = nil;
       
-      NSNumber * bytesIn2 = [process2 objectForKey: @"bytesIn"];
-      NSNumber * bytesOut2 = [process2 objectForKey: @"bytesOut"];
+      NSNumber * bytesIn2 = nil;
+      NSNumber * bytesOut2 = nil;
       
+      if([NSNumber isValid: bytesIn1])
+        bytesIn1 = [process1 objectForKey: @"bytesIn"];
+      
+      if([NSNumber isValid: bytesOut1])
+        bytesOut1 = [process1 objectForKey: @"bytesOut"];
+      
+      if([NSNumber isValid: bytesIn2])
+        bytesIn2 = [process2 objectForKey: @"bytesIn"];
+      
+      if([NSNumber isValid: bytesOut2])
+        bytesOut2 = [process2 objectForKey: @"bytesOut"];
+
       unsigned long long total1 =
         [bytesIn1 unsignedLongLongValue] +
           [bytesOut1 unsignedLongLongValue];
@@ -242,12 +257,18 @@
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {
+  if(![NSDictionary isValid: process])
+    return;
+    
   // Cross-reference the process ID to get a decent process name using
   // "ps" results that are better than names from "nettop".
   NSString * processName = nil;
   
   NSNumber * pid = [process objectForKey: @"pid"];
   
+  if(![NSNumber isValid: pid])
+    return;
+    
   NSDictionary * processByPID = [self.processesByPID objectForKey: pid];
   
   if(processByPID != nil)
@@ -256,14 +277,23 @@
   if(processName == nil)
     processName = [process objectForKey: @"process"];
   
-  if([processName length] == 0)
+  if(![NSString isValid: processName])
     processName = ECLocalizedString(@"Unknown");
     
   if([processName hasPrefix: @"EtreCheck"])
     return;
 
-  double bytesIn = [[process objectForKey: @"bytesIn"] doubleValue];
-  double bytesOut = [[process objectForKey: @"bytesOut"] doubleValue];
+  NSNumber * processBytesIn = [process objectForKey: @"bytesIn"];
+  NSNumber * processBytesOut = [process objectForKey: @"bytesOut"];
+  
+  double bytesIn = 0.0;
+  double bytesOut = 0.0;
+
+  if([NSNumber isValid: processBytesIn])
+    bytesIn = [processBytesIn doubleValue];
+  
+  if([NSNumber isValid: processBytesOut])
+    bytesOut = [processBytesOut doubleValue];
 
   NSString * bytesInString =
     [formatter stringFromByteCount: (unsigned long long)bytesIn];

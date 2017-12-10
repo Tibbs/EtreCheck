@@ -616,7 +616,12 @@
 - (void) addElement: (NSString *) name
   value: (NSString *) value attributes: (NSDictionary *) attributes
   {
-  if([value length] == 0)
+  if([value respondsToSelector: @selector(UTF8String)])
+    {
+    if([value length] == 0)
+      return;
+    }
+  else
     return;
     
   [self startElement: name];  
@@ -646,6 +651,14 @@
 - (void) addElement: (NSString *) name 
   number: (NSNumber *) value attributes: (NSDictionary *) attributes
   {
+  if([value respondsToSelector: @selector(doubleValue)])
+    {
+    if(value == nil)
+      return;
+    }
+  else
+    return;
+
   NSMutableDictionary * fullAttributes =
     [[NSMutableDictionary alloc]
       initWithObjectsAndKeys: @"number", @"type", nil];
@@ -663,6 +676,14 @@
 // of the value and store as a number.
 - (void) addElement: (NSString *) name valueWithUnits: (NSString *) value
   {
+  if([value respondsToSelector: @selector(UTF8String)])
+    {
+    if([value length] == 0)
+      return;
+    }
+  else
+    return;
+    
   NSArray * parts = [value componentsSeparatedByString: @" "];
   
   if([parts count] == 2)
@@ -686,9 +707,14 @@
 - (void) addElement: (NSString *) name 
   valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes
   {
-  if([value length] == 0)
+  if([value respondsToSelector: @selector(UTF8String)])
+    {
+    if([value length] == 0)
+      return;
+    }
+  else
     return;
-    
+        
   [self startElement: name];  
   
   for(NSString * key in attributes)
@@ -1033,6 +1059,14 @@
 // Add a string to the current element's contents.
 - (void) addString: (NSString *) string
   {
+  if([string respondsToSelector: @selector(UTF8String)])
+    {
+    if([string length] == 0)
+      return;
+    }
+  else
+    return;
+    
   // Find the currently open child.
   XMLBuilderElement * openChild = [self.root openChild];
   
@@ -1057,6 +1091,14 @@
 // Add a CDATA string to the current element's contents.
 - (void) addCDATA: (NSString *) string
   {
+  if([string respondsToSelector: @selector(UTF8String)])
+    {
+    if([string length] == 0)
+      return;
+    }
+  else
+    return;
+    
   // Find the currently open child.
   XMLBuilderElement * openChild = [self.root openChild];
   
@@ -1105,10 +1147,14 @@
 // Add an attribute to the current element.
 - (void) addAttribute: (NSString *) name value: (NSString *) value
   {
-  // Require a value.
-  if(value == nil)
+  if([value respondsToSelector: @selector(UTF8String)])
+    {
+    if([value length] == 0)
+      return;
+    }
+  else
     return;
-    
+        
   // Make sure the name is valid.
   if(![self validName: name])
     {
@@ -1277,36 +1323,40 @@
 // Add an array of XML values.
 - (void) addArray: (NSString *) name values: (NSArray *) values
   {
-  if(values.count > 0)
-    {
-    [self startElement: name];
-  
-    for(id<XMLValue> value in values)
-      [self addFragment: value.xml];
+  if(values != nil)
+    if([values respondsToSelector: @selector(isEqualToArray:)])
+      if(values.count > 0)
+        {
+        [self startElement: name];
       
-    [self endElement: name];
-    }
+        for(id<XMLValue> value in values)
+          [self addFragment: value.xml];
+          
+        [self endElement: name];
+        }
   }
   
 // Add a dictionary of XML values.
 - (void) addDictionary: (NSString *) name values: (NSDictionary *) values
   {
-  if(values.count > 0)
-    {
-    NSArray * sortedKeys = 
-      [[values allKeys] sortedArrayUsingSelector: @selector(compare:)];
+  if(values != nil)
+    if([values respondsToSelector: @selector(objectForKey:)])
+      if(values.count > 0)
+        {
+        NSArray * sortedKeys = 
+          [[values allKeys] sortedArrayUsingSelector: @selector(compare:)];
+          
+        [self startElement: name];
       
-    [self startElement: name];
-  
-    for(NSObject * key in sortedKeys)
-      {
-      id<XMLValue> value = [values objectForKey: key];
-      
-      [self addFragment: value.xml];
-      }
-      
-    [self endElement: name];
-    }
+        for(NSObject * key in sortedKeys)
+          {
+          id<XMLValue> value = [values objectForKey: key];
+          
+          [self addFragment: value.xml];
+          }
+          
+        [self endElement: name];
+        }
   }
   
 // MARK: Validation

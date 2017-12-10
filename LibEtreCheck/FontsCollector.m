@@ -11,6 +11,9 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSString+Etresoft.h"
+#import "NSArray+Etresoft.h"
+#import "NSNumber+Etresoft.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -41,6 +44,12 @@
       NSString * name = [font objectForKey: @"_name"];
       NSString * path = [font objectForKey: @"path"];
 
+      if(![NSString isValid: name])
+        continue;
+        
+      if(![NSString isValid: path])
+        continue;
+        
       NSString * cleanPath = [self cleanPath: path];
       
       [self.xml startElement: @"font"];
@@ -84,12 +93,18 @@
       NSArray * fonts =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      if([fonts count])
+      if([NSArray isValid: fonts])
         for(NSDictionary * font in fonts)
           {
           NSString * name = [font objectForKey: @"_name"];
           NSNumber * valid = [font objectForKey: @"valid"];
  
+          if(![NSString isValid: name])
+            continue;
+            
+          if(![NSNumber isValid: valid])
+            continue;
+            
           if(self.simulating && [name hasPrefix: @"Arial"])
             valid = nil;
           

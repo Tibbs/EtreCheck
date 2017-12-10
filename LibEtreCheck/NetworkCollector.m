@@ -9,6 +9,7 @@
 #import "LocalizedString.h"
 #import "OSVersion.h"
 #import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 #import "NetworkInterface.h"
 #import "UbiquityContainer.h"
 #import "UbiquityContainerDirectory.h"
@@ -74,19 +75,24 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * items =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      for(NSDictionary * item in items)
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
         {
-        NetworkInterface * interface = 
-          [NetworkInterface 
-            NetworkInterfaceWithPropertyListDictionary: item];
-            
-        if(interface != nil)
-          [self.interfaces addObject: interface];
+        NSArray * items = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: items])
+          for(NSDictionary * item in items)
+            {
+            NetworkInterface * interface = 
+              [NetworkInterface 
+                NetworkInterfaceWithPropertyListDictionary: item];
+                
+            if(interface != nil)
+              [self.interfaces addObject: interface];
+            }
         }
       }
     }

@@ -84,4 +84,7 @@
 // Class inspection.
 - (BOOL) isDrive;
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable Drive *) drive;
+
 @end

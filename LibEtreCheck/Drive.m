@@ -10,6 +10,9 @@
 #import "LocalizedString.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
+#import "NSString+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 
 // Object that represents a top-level drive.
 @implementation Drive
@@ -55,11 +58,26 @@
   
   if(self != nil)
     {
-    self.model = [plist objectForKey: @"MediaName"];
-    self.bus = [plist objectForKey: @"BusProtocol"];
-    self.solidState = [[plist objectForKey: @"SolidState"] boolValue];
-    self.internal = [[plist objectForKey: @"Internal"] boolValue];
-    self.SMARTStatus = [plist objectForKey: @"SMARTStatus"];
+    NSString * model = [plist objectForKey: @"MediaName"];
+    NSString * bus = [plist objectForKey: @"BusProtocol"];
+    NSNumber * solidState = [plist objectForKey: @"SolidState"];
+    NSNumber * internal = [plist objectForKey: @"Internal"];
+    NSString * SMARTStatus = [plist objectForKey: @"SMARTStatus"];
+
+    if([NSString isValid: model])
+      self.model = model;
+    
+    if([NSString isValid: bus])
+      self.bus = bus;
+    
+    if([NSNumber isValid: solidState])
+      self.solidState = [solidState boolValue];
+    
+    if([NSNumber isValid: internal])
+      self.internal = [internal boolValue];
+      
+    if([NSString isValid: SMARTStatus])
+      self.SMARTStatus = SMARTStatus;
     }
     
   return self;
@@ -158,21 +176,25 @@
 
   [indent release];
   
-  // Don't forget the volumes.
-  NSArray * volumeDevices = 
-    [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
-
-  for(NSString * device in volumeDevices)
+  NSDictionary * devices = [self.dataModel storageDevices];
+  
+  if([NSDictionary isValid: devices])
     {
-    Volume * volume = 
-      [[self.dataModel storageDevices] objectForKey: device];
-    
-    if([volume respondsToSelector: @selector(isVolume)])
+    // Don't forget the volumes.
+    NSArray * volumeDevices = 
+      [StorageDevice sortDeviceIdenifiers: [self.volumes allObjects]];
+
+    for(NSString * device in volumeDevices)
       {
-      volume.indent = self.indent + 1;
+      Volume * volume = [devices objectForKey: device];
       
-      [attributedString 
-        appendAttributedString: volume.attributedStringValue];
+      if([Volume isValid: volume])
+        {
+        volume.indent = self.indent + 1;
+        
+        [attributedString 
+          appendAttributedString: volume.attributedStringValue];
+        }
       }
     }
   }
@@ -197,6 +219,12 @@
     [xml addElement: @"TRIM" boolValue: self.TRIM];
     
   [xml endElement: @"drive"];
+  }
+
+// Is this a valid object?
++ (BOOL) isValid: (nullable Drive *) drive
+  {
+  return (drive != nil) && [drive respondsToSelector: @selector(isDrive)];
   }
 
 @end

@@ -39,19 +39,20 @@
     // I will have already filtered out launchd files specific to this 
     // context.
     for(LaunchdFile * file in files)
-      {
-      NSNumber * currentTotal = [totals objectForKey: file.status];
-    
-      NSNumber * newTotal = 
-        [[NSNumber alloc] initWithInt: currentTotal.intValue + 1];
-        
-      [totals setObject: newTotal forKey: file.status];
+      if([LaunchdFile isValid: file])
+        {
+        NSNumber * currentTotal = [totals objectForKey: file.status];
       
-      [newTotal release];
+        NSNumber * newTotal = 
+          [[NSNumber alloc] initWithInt: currentTotal.intValue + 1];
+          
+        [totals setObject: newTotal forKey: file.status];
+        
+        [newTotal release];
 
-      // Export the XML.
-      [self.xml addFragment: file.xml];
-      }
+        // Export the XML.
+        [self.xml addFragment: file.xml];
+        }
 
     [self printTotals: totals];
     [self exportTotals: totals];

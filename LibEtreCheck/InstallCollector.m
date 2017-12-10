@@ -11,6 +11,10 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSString+Etresoft.h"
+#import "NSDate+Etresoft.h"
+#import "NSSet+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 
 // Collect install information.
 @implementation InstallCollector
@@ -32,7 +36,7 @@
   {
   NSArray * installs = [self collectInstalls];
   
-  if([installs count])
+  if([NSArray isValid: installs] && (installs.count > 0))
     {
     NSDate * then =
       [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 30];
@@ -48,44 +52,75 @@
           @"EFI Allow List",
           nil];
     
+    if(criticalAppleInstalls == nil)
+      return;
+      
     // Only print the most recent install for each item.
     NSMutableDictionary * installsByName = [NSMutableDictionary new];
+
+    if(installsByName == nil)
+      {
+      [criticalAppleInstalls release];
+      
+      return;
+      }
+      
     NSMutableArray * installsToPrint = [NSMutableArray new];
     
-    for(NSDictionary * install in installs)
+    if(installsToPrint == nil)
       {
-      NSString * name = [install objectForKey: @"_name"];
-      NSDate * date = [install objectForKey: @"install_date"];
-      NSString * source = [install objectForKey: @"package_source"];
+      [installsByName release];
+      [criticalAppleInstalls release];
       
-      // Any 3rd party installationsn in the last 30 days.
-      if([source isEqualToString: @"package_source_other"])
+      return;
+      }
+      
+    for(NSDictionary * install in installs)
+      if([NSDictionary isValid: install])
         {
-        if([then compare: date] == NSOrderedAscending)
-          [installsToPrint addObject: install];
-        }
+        NSString * name = [install objectForKey: @"_name"];
+        NSDate * date = [install objectForKey: @"install_date"];
+        NSString * source = [install objectForKey: @"package_source"];
         
-      // The last critical Apple installation.
-      else if([criticalAppleInstalls containsObject: name])
-        {
-        // Get the current install that matches the name.
-        NSDictionary * currentInstall = 
-          [installsByName objectForKey: name];
-        
-        if(currentInstall != nil)
+        if(![NSString isValid: name])
+          continue;
+          
+        if(![NSDate isValid: date])
+          continue;
+          
+        if(![NSString isValid: source])
+          continue;
+          
+        // Any 3rd party installationsn in the last 30 days.
+        if([source isEqualToString: @"package_source_other"])
           {
-          NSDate * currentDate = 
-            [currentInstall objectForKey: @"install_date"];
-            
-          // If I have an older install, remove it.
-          if([currentDate compare: date] == NSOrderedAscending)
-            [installsToPrint removeObject: currentInstall];
+          if([then compare: date] == NSOrderedAscending)
+            [installsToPrint addObject: install];
           }
           
-        [installsToPrint addObject: install];
-        [installsByName setObject: install forKey: name];
+        // The last critical Apple installation.
+        else if([criticalAppleInstalls containsObject: name])
+          {
+          // Get the current install that matches the name.
+          NSDictionary * currentInstall = 
+            [installsByName objectForKey: name];
+          
+          if([NSDictionary isValid: currentInstall])
+            {
+            NSDate * currentDate = 
+              [currentInstall objectForKey: @"install_date"];
+              
+            if([NSDate isValid: currentDate])
+            
+              // If I have an older install, remove it.
+              if([currentDate compare: date] == NSOrderedAscending)
+                [installsToPrint removeObject: currentInstall];
+            }
+            
+          [installsToPrint addObject: install];
+          [installsByName setObject: install forKey: name];
+          }
         }
-      }
     
     [installsByName release];
          
@@ -94,32 +129,42 @@
       [self.result appendAttributedString: [self buildTitle]];
 
       for(NSDictionary * install in installsToPrint)
-        {
-        NSString * name = [install objectForKey: @"_name"];
-        NSDate * date = [install objectForKey: @"install_date"];
-        NSString * version = [install objectForKey: @"install_version"];
+        if([NSDictionary isValid: install])
+          {
+          NSString * name = [install objectForKey: @"_name"];
+          NSDate * date = [install objectForKey: @"install_date"];
+          NSString * version = [install objectForKey: @"install_version"];
 
-        NSString * installDate =
-          [Utilities installDateAsString: date];
-
-        [self.xml startElement: @"package"];
-        
-        [self.xml addElement: @"name" value: name];
-        [self.xml addElement: @"version" value: version];
-        [self.xml addElement: @"installdate" date: date];
-        
-        [self.xml endElement: @"package"];
-        
-        [self.result
-          appendString:
-            [NSString
-              stringWithFormat:
-                ECLocalizedString(@"    %@: %@ (%@)\n"),
-                name,
-                version,
-                installDate]];
+          if(![NSString isValid: name])
+            continue;
+            
+          if(![NSDate isValid: date])
+            continue;
+            
+          if(![NSString isValid: version])
+            continue;
           
-        }
+          NSString * installDate =
+            [Utilities installDateAsString: date];
+
+          [self.xml startElement: @"package"];
+          
+          [self.xml addElement: @"name" value: name];
+          [self.xml addElement: @"version" value: version];
+          [self.xml addElement: @"installdate" date: date];
+          
+          [self.xml endElement: @"package"];
+          
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  ECLocalizedString(@"    %@: %@ (%@)\n"),
+                  name,
+                  version,
+                  installDate]];
+            
+          }
         
       [self.result appendString: @"\n"];
       
@@ -152,14 +197,18 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * items =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([items count])
-        for(NSDictionary * item in items)
-          [installs addObject: item];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * items = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: items])
+          for(NSDictionary * item in items)
+            [installs addObject: item];
+        }
       }
     }
 
@@ -172,13 +221,22 @@
       NSDictionary * install1 = obj1;
       NSDictionary * install2 = obj2;
       
-      NSDate * date1 = [install1 objectForKey: @"install_date"];
-      NSDate * date2 = [install2 objectForKey: @"install_date"];
+      NSDate * date1 = nil;
+      NSDate * date2 = nil;
       
-      if(date2 == nil)
+      if([NSDictionary isValid: install1])
+        date1 = [install1 objectForKey: @"install_date"];
+      
+      if([NSDictionary isValid: install2])
+        date2 = [install2 objectForKey: @"install_date"];
+      
+      if(![NSDate isValid: date2])
         return NSOrderedDescending;
         
-      return [date1 compare: date2];
+      if((date2 != nil) && [NSDate isValid: date1])
+        return [date1 compare: date2];
+        
+      return NSOrderedSame;
       }];
   
   return installs;

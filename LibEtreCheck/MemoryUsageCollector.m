@@ -10,6 +10,9 @@
 #import "Model.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSMutableDictionary+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -54,25 +57,38 @@
       {
       NSMutableDictionary * currentProcess =
         [currentProcesses objectForKey: pid];
+      
       NSMutableDictionary * averageProcess =
         [averageProcesses objectForKey: pid];
         
-      if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: pid];
-        
-      else if(currentProcess && averageProcess)
+      if([NSMutableDictionary isValid: currentProcess])
         {
-        double totalMemory =
-          [[averageProcess objectForKey: @"mem"] doubleValue] * i;
-        
-        double averageMemory =
-          [[currentProcess objectForKey: @"mem"] doubleValue];
-        
-        averageMemory = (totalMemory + averageMemory) / (double)(i + 1);
-        
-        [averageProcess
-          setObject: [NSNumber numberWithDouble: averageMemory]
-          forKey: @"mem"];
+        if(![NSMutableDictionary isValid: averageProcess])
+          [averageProcesses setObject: currentProcess forKey: pid];
+          
+        else 
+          {
+          NSNumber * averageMem = [averageProcess objectForKey: @"mem"];
+          NSNumber * currentMem = [currentProcess objectForKey: @"mem"];
+          
+          if([NSNumber isValid: averageMem])
+            if([NSNumber isValid: currentMem])
+              {
+              double totalMemory = [averageMem doubleValue] * i;
+              
+              double averageMemory = [currentMem doubleValue];
+              
+              averageMemory = 
+                (totalMemory + averageMemory) / (double)(i + 1);
+              
+              NSNumber * memory = 
+                [[NSNumber alloc] initWithDouble: averageMemory];
+              
+              [averageProcess setObject: memory forKey: @"mem"];
+              
+              [memory release];
+              }
+          }
         }
       }
     }
@@ -110,9 +126,19 @@
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {
-  double value = [[process objectForKey: @"mem"] doubleValue];
+  NSNumber * processMem = [process objectForKey: @"mem"];
+  
+  if(![NSNumber isValid: processMem])
+    return;
+    
+  double value = [processMem doubleValue];
 
-  int count = [[process objectForKey: @"count"] intValue];
+  NSNumber * processCount = [process objectForKey: @"count"];
+  
+  if(![NSNumber isValid: processCount])
+    return;
+    
+  int count = [processCount intValue];
   
   NSString * countString =
     (count > 1)
@@ -128,7 +154,7 @@
 
   NSString * name = [process objectForKey: @"command"];
   
-  if([name length] == 0)
+  if(![NSString isValid: name])
     name = ECLocalizedString(@"Unknown");
     
   [self.xml startElement: @"process"];

@@ -10,6 +10,9 @@
 #import "Model.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSMutableArray+Etresoft.h"
+#import "NSMutableDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
@@ -110,25 +113,41 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if([plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * foundExtensions =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      NSMutableDictionary * knownExtensions =
-        [NSMutableDictionary dictionary];
+      NSDictionary * results = [plist objectAtIndex: 0];
       
-      for(NSDictionary * foundExtension in foundExtensions)
+      if([NSDictionary isValid: results])
         {
-        NSString * path = [foundExtension objectForKey: @"spext_path"];
+        NSArray * foundExtensions = [results objectForKey: @"_items"];
         
-        if([path length] > 0)
-          if([[NSFileManager defaultManager] fileExistsAtPath: path])
-            [knownExtensions setObject: foundExtension forKey: path];
-        }
+        NSMutableDictionary * knownExtensions =
+          [NSMutableDictionary dictionary];
       
-      [self checkForAppleExtensions: knownExtensions];
-      [self checkForUnknownExtensions: knownExtensions];
+        if([NSArray isValid: foundExtensions])
+          if([NSDictionary isValid: knownExtensions])
+            {
+            for(NSDictionary * foundExtension in foundExtensions)
+              if([NSDictionary isValid: foundExtension])
+                {
+                NSString * path = 
+                  [foundExtension objectForKey: @"spext_path"];
+                
+                if([NSString isValid: path])
+                  {
+                  BOOL exists = 
+                    [[NSFileManager defaultManager] fileExistsAtPath: path];
+                    
+                  if(exists)
+                    [knownExtensions 
+                      setObject: foundExtension forKey: path];
+                  }
+                }
+            
+            [self checkForAppleExtensions: knownExtensions];
+            [self checkForUnknownExtensions: knownExtensions];
+            }
+        }
       }
     }
     
@@ -138,26 +157,38 @@
 // Check for Apple extensions.
 - (void) checkForAppleExtensions: (NSDictionary *) knownExtensions
   {
+  if(![NSDictionary isValid: knownExtensions])
+    return;
+    
   // Add the Apple tag from any known extensions.
   for(NSString * label in self.extensions)
     {
     NSDictionary * extension = [self.extensions objectForKey: label];
     
-    NSString * path = [extension objectForKey: @"path"];
-    
-    NSDictionary * knownExtension = [knownExtensions objectForKey: path];
-      
-    if(knownExtension)
+    if([NSDictionary isValid: extension])
       {
-      NSString * obtained_from =
-        [knownExtension objectForKey: @"spext_obtained_from"];
+      NSString * path = [extension objectForKey: @"path"];
       
-      if([obtained_from isEqualToString: @"spext_apple"])
+      if([NSString isValid: path])
         {
-        NSMutableDictionary * extension =
-          [self.extensions objectForKey: label];
-        
-        [extension setObject: @"apple" forKey: @"obtained_from"];
+        NSDictionary * knownExtension = 
+          [knownExtensions objectForKey: path];
+          
+        if([NSDictionary isValid: knownExtension])
+          {
+          NSString * obtained_from =
+            [knownExtension objectForKey: @"spext_obtained_from"];
+          
+          if([NSString isValid: obtained_from])
+            if([obtained_from isEqualToString: @"spext_apple"])
+              {
+              NSMutableDictionary * extension =
+                [self.extensions objectForKey: label];
+              
+              if([NSMutableDictionary isValid: extension])
+                [extension setObject: @"apple" forKey: @"obtained_from"];
+              }
+          }
         }
       }
     }
@@ -166,6 +197,9 @@
 // Look for any heretofore unknown extensions.
 - (void) checkForUnknownExtensions: (NSDictionary *) knownExtensions
   {
+  if(![NSDictionary isValid: knownExtensions])
+    return;
+    
   // Collect the paths of all current extensions.
   NSMutableSet * extensionPaths = [NSMutableSet set];
   
@@ -173,34 +207,42 @@
     {
     NSDictionary * extension = [self.extensions objectForKey: label];
     
-    NSString * path = [extension objectForKey: @"path"];
+    if([NSDictionary isValid: extension])
+      {
+      NSString * path = [extension objectForKey: @"path"];
     
-    if(path)
-      [extensionPaths addObject: path];
+      if([NSString isValid: path])
+        [extensionPaths addObject: path];
+      }
     }
     
   for(NSString * name in knownExtensions)
     {
     NSDictionary * knownExtension = [knownExtensions objectForKey: name];
     
+    if(![NSDictionary isValid: knownExtension])
+      continue;
+      
     NSString * path = [knownExtension objectForKey: @"spext_path"];
     
-    // Do I already know about this extension?
-    if([extensionPaths containsObject: path])
-      continue;
+    if([NSString isValid: path])
+      // Do I already know about this extension?
+      if([extensionPaths containsObject: path])
+        continue;
       
     // Add it to the list.
     NSMutableDictionary * bundle = [self parseExtensionBundle: path];
         
-    if(bundle)
+    if([NSMutableDictionary isValid: bundle])
       {
       NSString * identifier = [bundle objectForKey: @"CFBundleIdentifier"];
 
       NSString * obtained_from =
         [knownExtension objectForKey: @"spext_obtained_from"];
         
-      if([obtained_from isEqualToString: @"spext_apple"])
-        [bundle setObject: @"apple" forKey: @"obtained_from"];
+      if([NSString isValid: obtained_from])
+        if([obtained_from isEqualToString: @"spext_apple"])
+          [bundle setObject: @"apple" forKey: @"obtained_from"];
         
       [self.extensions setObject: bundle forKey: identifier];
       }
@@ -307,14 +349,26 @@
   {
   NSMutableDictionary * extensions = [NSMutableDictionary dictionary];
   
+  if(![NSMutableDictionary isValid: extensions])
+    return nil;
+    
   NSDictionary * applications = [self.model applications];
   
+  if(![NSDictionary isValid: applications])
+     return nil;
+     
   for(NSString * name in applications)
     {
     NSDictionary * application = [applications objectForKey: name];
     
-    [extensions
-      addEntriesFromDictionary: [self collectExtensionsIn: application]];
+    if([NSDictionary isValid: applications])
+      {
+      NSDictionary * applicationExtensions = 
+        [self collectExtensionsIn: application];
+        
+      if([NSDictionary isValid: applicationExtensions])
+        [extensions addEntriesFromDictionary: applicationExtensions];
+      }
     }
     
   return extensions;
@@ -323,39 +377,47 @@
 // Collect extensions from a specific application.
 - (NSDictionary *) collectExtensionsIn: (NSDictionary *) application
   {
+  NSDictionary * extensions = @{};
+  
+  if(![NSDictionary isValid: application])
+    return extensions;
+  
   NSString * bundleID = [application objectForKey: @"CFBundleIdentifier"];
 
-  if(bundleID)
+  if([NSString isValid: bundleID])
     {
     NSString * obtained_from = [application objectForKey: @"obtained_from"];
     
-    if([obtained_from isEqualToString: @"apple"])
-      return @{};
-     
-    // The obtained_from indicator isn't quite good enough.
-    if([bundleID hasPrefix: @"com.apple."])
-      return @{};
+    if([NSString isValid: obtained_from])
+      {
+      if([obtained_from isEqualToString: @"apple"])
+        return extensions;
+       
+      // The obtained_from indicator isn't quite good enough.
+      if([bundleID hasPrefix: @"com.apple."])
+        return extensions;
+        
+      NSString * path = [application objectForKey: @"path"];
       
-    NSString * path = [application objectForKey: @"path"];
-    
-    if(![path length])
-      return @{};
+      if(![NSString isValid: path])
+        return extensions;
+        
+      NSArray * args =
+        @[
+          path,
+          @"-iname",
+          @"*.kext"];
       
-    NSArray * args =
-      @[
-        path,
-        @"-iname",
-        @"*.kext"];
-    
-    SubProcess * subProcess = [[SubProcess alloc] init];
-    
-    [subProcess autorelease];
-    
-    if([subProcess execute: @"/usr/bin/find" arguments: args])
-      return [self parseBundles: subProcess.standardOutput];
+      SubProcess * subProcess = [[SubProcess alloc] init];
+      
+      if([subProcess execute: @"/usr/bin/find" arguments: args])
+        extensions = [self parseBundles: subProcess.standardOutput];
+        
+      [subProcess release];
+      }
     }
     
-  return [NSDictionary dictionary];
+  return extensions;
   }
 
 // Return a dictionary of expanded bundle dictionaries found in a directory.
@@ -369,10 +431,13 @@
     {
     NSMutableDictionary * bundle = [self parseExtensionBundle: line];
       
-    NSString * identifier = [bundle objectForKey: @"CFBundleIdentifier"];
+    if([NSMutableDictionary isValid: bundle])
+      {
+      NSString * identifier = [bundle objectForKey: @"CFBundleIdentifier"];
 
-    if(identifier && bundle)
-      [bundles setObject: bundle forKey: identifier];
+      if([NSString isValid: identifier])
+        [bundles setObject: bundle forKey: identifier];
+      }
     }
     
   return bundles;
@@ -384,28 +449,46 @@
   NSString * versionPlist =
     [path stringByAppendingPathComponent: @"Contents/Info.plist"];
 
+  if(![NSString isValid: versionPlist])
+    return nil;
+    
   NSDictionary * plist = [NSDictionary readPropertyList: versionPlist];
 
   // Check for inconsistent path from Apple extensions.
-  if(!plist)
+  if(![NSDictionary isValid: plist])
+    {
     versionPlist = [path stringByAppendingPathComponent: @"Info.plist"];
 
-  plist = [NSDictionary readPropertyList: versionPlist];
-
-  if(plist)
+    if(![NSString isValid: versionPlist])
+      return nil;
+    
+    plist = [NSDictionary readPropertyList: versionPlist];
+    }
+    
+  if([NSDictionary isValid: plist])
     {
     NSString * identifier = [plist objectForKey: @"CFBundleIdentifier"];
     
-    if(identifier)
+    if([NSString isValid: identifier])
       {
       NSMutableDictionary * bundle =
         [NSMutableDictionary dictionaryWithDictionary: plist];
       
-      // Save the path too.
-      [bundle setValue: [self extensionDirectory: path] forKey: @"path"];
-      [bundle setValue: [path lastPathComponent] forKey: @"filename"];
+      if([NSMutableDictionary isValid: bundle])
+        {
+        NSString * extensionDirectory = [self extensionDirectory: path];
+        NSString * name = [path lastPathComponent];
+        
+        if([NSString isValid: extensionDirectory])
+          if([NSString isValid: name])
+            {
+            // Save the path too.
+            [bundle setValue: extensionDirectory forKey: @"path"];
+            [bundle setValue: name forKey: @"filename"];
       
-      return bundle;
+            return bundle;
+            }
+        }
       }
     }
     
@@ -454,25 +537,53 @@
     {
     NSDictionary * bundle = [self.extensions objectForKey: label];
     
-    NSString * path = [bundle objectForKey: @"path"];
-      
-    NSMutableArray * extensions =
-      [self.extensionsByLocation objectForKey: path];
-      
-    if(!extensions)
+    if([NSDictionary isValid: bundle])
       {
-      extensions = [NSMutableArray array];
-      
-      [self.extensionsByLocation setObject: extensions forKey: path];
+      NSString * path = [bundle objectForKey: @"path"];
+        
+      if([NSString isValid: path])
+        {
+        NSMutableArray * extensions =
+          [self.extensionsByLocation objectForKey: path];
+          
+        if(![NSMutableArray isValid: extensions])
+          {
+          extensions = [NSMutableArray array];
+          
+          if([NSMutableArray isValid: extensions])
+            [self.extensionsByLocation setObject: extensions forKey: path];
+          }
+          
+        [extensions addObject: label];
+        }
       }
-      
-    [extensions addObject: label];
     }
   }
 
 // Find loaded extensions.
 - (void) findLoadedExtensions
   {
+  NSMutableDictionary * loadedExtensions = [NSMutableDictionary new];
+  
+  if(loadedExtensions == nil)
+    return;
+    
+  NSMutableDictionary * unexpectedExtensions = 
+    [NSMutableDictionary new];
+  
+  if(unexpectedExtensions == nil)
+    {
+    [loadedExtensions release];
+    
+    return;
+    }
+    
+  self.loadedExtensions = loadedExtensions;
+  self.unexpectedExtensions = unexpectedExtensions;
+
+  [loadedExtensions release];
+  [unexpectedExtensions release];
+  
   NSArray * args = @[ @"-l" ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -481,9 +592,6 @@
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
 
-    self.loadedExtensions = [NSMutableDictionary dictionary];
-    self.unexpectedExtensions = [NSMutableDictionary dictionary];
-    
     for(NSString * line in lines)
       {
       NSString * label = nil;
@@ -491,25 +599,27 @@
 
       [self parseKext: line label: & label version: & version];
 
-      if(label && version)
-        {
-        NSDictionary * bundle = [self.extensions objectForKey: label];
-        
-        if(bundle)
-          [self.loadedExtensions setObject: bundle forKey: label];
-          
-        else
+      if((label != nil) && (version != nil))
+        if([NSString isValid: label] && [NSString isValid: version])
           {
-          bundle =
-            [NSDictionary
-              dictionaryWithObjectsAndKeys:
-                version, @"CFBundleVersion",
-                label, @"CFBundleIdentifier",
-                nil];
+          NSDictionary * bundle = [self.extensions objectForKey: label];
+          
+          if([NSDictionary isValid: bundle])
+            [self.loadedExtensions setObject: bundle forKey: label];
             
-          [self.unexpectedExtensions setObject: bundle forKey: label];
+          else
+            {
+            bundle =
+              [NSDictionary
+                dictionaryWithObjectsAndKeys:
+                  version, @"CFBundleVersion",
+                  label, @"CFBundleIdentifier",
+                  nil];
+              
+            if([NSDictionary isValid: bundle])
+              [self.unexpectedExtensions setObject: bundle forKey: label];
+            }
           }
-        }
       }
     }
     
@@ -519,17 +629,28 @@
 // Find unloaded extensions.
 - (void) findUnloadedExtensions
   {
-  self.unloadedExtensions = [NSMutableDictionary dictionary];
+  NSMutableDictionary * unloadedExtensions = [NSMutableDictionary new];
 
+  if(unloadedExtensions == nil)
+    return;
+    
+  self.unloadedExtensions = unloadedExtensions;
+
+  [unloadedExtensions release];
+  
   // The rest must be unloaded.
   for(NSString * label in self.extensions)
     {
     NSDictionary * loadedBundle =
       [self.loadedExtensions objectForKey: label];
     
-    if(!loadedBundle)
-      [self.unloadedExtensions
-        setObject: [self.extensions objectForKey: label] forKey: label];
+    if(![NSDictionary isValid: loadedBundle])
+      {
+      NSMutableDictionary * bundle = [self.extensions objectForKey: label];
+      
+      if([NSMutableDictionary isValid: bundle])
+        [self.unloadedExtensions setObject: bundle forKey: label];
+      }
     }
   }
 
@@ -614,60 +735,87 @@
 // Format a directory of extensions.
 - (NSArray *) formatExtensionDirectory: (NSString *) directory
   {
+  NSMutableArray * extensions = [NSMutableArray array];
+  
+  if(![NSString isValid: directory])
+    return extensions;
+    
+  NSString * cleanPath = [self cleanPath: directory];
+  
+  if(![NSString isValid: cleanPath])
+    return extensions;
+
   XMLBuilder * extensionsXML = [XMLBuilder new];
   
+  if(extensionsXML == nil)
+    return extensions;    
+
   [extensionsXML startElement: @"directory"];
-  
-  NSString * cleanPath = [self cleanPath: directory];
   
   [extensionsXML addElement: @"cleanpath" value: cleanPath];
   [extensionsXML addElement: @"path" value: directory];
     
   [extensionsXML startElement: @"extensions"];
 
-  NSMutableArray * extensions = [NSMutableArray array];
+  NSArray * directoryExtensions = 
+    [self.extensionsByLocation objectForKey: directory];
   
-  NSArray * sortedExtensions =
-    [[self.extensionsByLocation objectForKey: directory]
-      sortedArrayUsingSelector: @selector(compare:)];
-
-  for(NSString * label in sortedExtensions)
+  if([NSArray isValid: directoryExtensions])
     {
-    NSAttributedString * output = 
-      [self formatExtension: label xmlBuilder: extensionsXML];
-    
-    // Outpt could be nil if this is an Apple extension.
-    if(output)
-      [extensions addObject: output];
+    NSArray * sortedExtensions =
+      [directoryExtensions sortedArrayUsingSelector: @selector(compare:)];
+
+    if([NSArray isValid: sortedExtensions])
+      for(NSString * label in sortedExtensions)
+        {
+        NSAttributedString * output = 
+          [self formatExtension: label xmlBuilder: extensionsXML];
+        
+        // Outpt could be nil if this is an Apple extension.
+        if(output != nil)
+          [extensions addObject: output];
+        }
     }
     
   [extensionsXML endElement: @"extensions"];
 
   // If I found any non-nil extensions, insert a header for the directory.
-  if([extensions count] > 0)
+  if(extensions.count > 0)
     {
     NSMutableAttributedString * string =
       [[NSMutableAttributedString alloc] initWithString: @""];
     
-    // This will add a new line at the end.
-    [extensions addObject: [[string copy] autorelease]];
-    
-    [string
-      appendString:
-        [NSString stringWithFormat: @"        %@", cleanPath]
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-        }];
-    
-    [extensions insertObject: string atIndex: 0];
+    NSMutableAttributedString * newline =
+      [[NSMutableAttributedString alloc] initWithString: @""];
+
+    if((string != nil) && (newline != nil))
+      {
+      // This will add a new line at the end.
+      [extensions addObject: newline];
       
+      NSString * pathline = 
+        [[NSString alloc] initWithFormat: @"        %@", cleanPath];
+        
+      if([NSString isValid: pathline])
+        [string
+          appendString: pathline
+          attributes:
+            @{
+              NSFontAttributeName : [[Utilities shared] boldFont],
+            }];
+      
+      [pathline release];
+      
+      [extensions insertObject: string atIndex: 0];
+      }
+      
+    [newline release];
     [string release];
     }
     
   [extensionsXML endElement: @"directory"];
   
-  if([extensions count] > 0)
+  if(extensions.count > 0)
     [self.xml addFragment: extensionsXML.root];
     
   [extensionsXML release];
@@ -679,10 +827,19 @@
 - (NSAttributedString *) formatExtension: (NSString *) label 
   xmlBuilder: (XMLBuilder *) xmlBuilder
   {
+  if(![NSString isValid: label])
+    return nil;
+    
   NSDictionary * extension = [self.extensions objectForKey: label];
   
+  if(![NSDictionary isValid: extension])
+    return nil;
+    
   NSString * obtained_from = [extension objectForKey: @"obtained_from"];
   
+  if(![NSString isValid: obtained_from])
+    return nil;
+     
   if([obtained_from isEqualToString: @"apple"])
     return nil;
 
@@ -720,22 +877,39 @@
   NSMutableAttributedString * formattedOutput =
     [[NSMutableAttributedString alloc] init];
     
+  [formattedOutput autorelease];
+  
   NSDictionary * bundle = [self.extensions objectForKey: label];
   
+  if(![NSDictionary isValid: bundle])
+    return formattedOutput;
+    
   NSString * version = [bundle objectForKey: @"CFBundleShortVersionString"];
   
-  if([version length] == 0)
+  if(![NSString isValid: version])
     version = [bundle objectForKey: @"CFBundleVersion"];
 
+  if(![NSString isValid: version])
+    return formattedOutput;
+
+  if(![NSString isValid: label])
+    return formattedOutput;
+
+  if(![NSString isValid: status])
+    return formattedOutput;
+
+  if(color == nil)
+    return formattedOutput;
+    
+  if(xmlBuilder == nil)
+    return formattedOutput;
+    
   int age = 0;
   
   NSString * OSVersion = [self getOSVersion: bundle age: & age];
     
   [formattedOutput
-    appendString:
-      [NSString
-        stringWithFormat:
-          @"    [%@]    ", status]
+    appendString: [NSString stringWithFormat: @"    [%@]    ", status]
     attributes:
       [NSDictionary
         dictionaryWithObjectsAndKeys:
@@ -745,6 +919,9 @@
 
   NSString * filename = [bundle objectForKey: @"filename"];
   
+  if(![NSString isValid: filename])
+    return formattedOutput;
+
   // Fix the version to get past ASC spam filters.
   version =
     [version stringByReplacingOccurrencesOfString: @"91" withString: @"**"];
@@ -761,22 +938,28 @@
   
   NSMutableString * versionString = [NSMutableString new];
   
-  [versionString appendString: version];
+  if([NSMutableString isValid: versionString])
+    {
+    [versionString appendString: version];
+    
+    if([NSString isValid: OSVersion])
+      [versionString appendFormat: @" - %@", OSVersion];
+    
+    [formattedOutput
+      appendString:
+        [NSString
+          stringWithFormat: 
+            @"%@ (%@ - %@)", filename, label, versionString]];
+          
+    NSAttributedString * link = [self getSupportLink: bundle];
+    
+    if(link != nil)
+      [formattedOutput appendAttributedString: link];
+    }
   
-  if([OSVersion length] > 0)
-    [versionString appendFormat: @" - %@", OSVersion];
-  
-  [formattedOutput
-    appendString:
-      [NSString
-        stringWithFormat: @"%@ (%@ - %@)", filename, label, versionString]];
-        
   [versionString release];
-    
-  [formattedOutput
-    appendAttributedString: [self getSupportLink: bundle]];
-    
-  return [formattedOutput autorelease];
+      
+  return formattedOutput;
   }
 
 // Append the modification date.

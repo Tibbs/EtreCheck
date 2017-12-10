@@ -52,15 +52,18 @@
     SafariExtension * extension = 
       [safari.extensions objectForKey: identifier];
       
-    if(count++ == 0)
-      [self.result appendAttributedString: [self buildTitle]];
+    if(extension != nil)
+      {
+      if(count++ == 0)
+        [self.result appendAttributedString: [self buildTitle]];
+        
+      // Print the extension.
+      [self.result appendAttributedString: extension.attributedStringValue];
+      [self.result appendString: @"\n"];
       
-    // Print the extension.
-    [self.result appendAttributedString: extension.attributedStringValue];
-    [self.result appendString: @"\n"];
-    
-    // Export the XML.
-    [self.xml addFragment: extension.xml];
+      // Export the XML.
+      [self.xml addFragment: extension.xml];
+      }
     }
     
   [self.result appendCR];

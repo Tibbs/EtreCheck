@@ -11,6 +11,10 @@
 #import "ByteCountFormatter.h"
 #import "Drive.h"
 #import "Model.h"
+#import "NSString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSArray+Etresoft.h"
 
 @implementation Volume
 
@@ -75,44 +79,68 @@
 - (nullable instancetype) initWithDiskUtilInfo: 
   (nullable NSDictionary *) plist
   {
+  if(![NSDictionary isValid: plist])
+    return nil;
+    
   self = [super initWithDiskUtilInfo: plist];
   
   if(self != nil)
     {
     myContainingDevices = [NSMutableSet new];
     
-    self.UUID = [plist objectForKey: @"VolumeUUID"];
-    self.filesystem = [plist objectForKey: @"FilesystemName"];
-    self.mountpoint = [plist objectForKey: @"MountPoint"];
+    NSString * UUID = [plist objectForKey: @"VolumeUUID"];
+    NSString * filesystem = [plist objectForKey: @"FilesystemName"];
+    NSString * mountpoint = [plist objectForKey: @"MountPoint"];
     
+    if([NSString isValid: UUID])
+      self.UUID = UUID;
+    
+    if([NSString isValid: filesystem])
+      self.filesystem = filesystem;
+    
+    if([NSString isValid: mountpoint])
+      self.mountpoint = mountpoint;
+
     NSString * volumeName = [plist objectForKey: @"VolumeName"];
     
-    if(volumeName.length > 0)
+    if([NSString isValid: volumeName])
       self.name = volumeName;
       
     NSNumber * freeSpace = [plist objectForKey: @"FreeSpace"];
     
-    if([freeSpace respondsToSelector: @selector(unsignedIntegerValue)])
+    if([NSNumber isValid: freeSpace])
       self.freeSpace = [freeSpace unsignedIntegerValue];
     
-    self.readOnly = ![[plist objectForKey: @"WritableVolume"] boolValue];
+    NSNumber * writeableVolume = [plist objectForKey: @"WritableVolume"];
+    
+    if([NSNumber isValid: writeableVolume])
+      self.readOnly = ![writeableVolume boolValue];
 
     NSString * content = [plist objectForKey: @"Content"];
     
-    if([content isEqualToString: @"EFI"])
-      self.type = kEFIVolume;
-    else if([content isEqualToString: @"Apple_CoreStorage"])
-      self.type = kCoreStorageVolume;
-    else if([content isEqualToString: @"Apple_Boot"])
-      self.type = kRecoveryVolume;
+    if([NSString isValid: content])
+      {
+      if([content isEqualToString: @"EFI"])
+        self.type = kEFIVolume;
+      else if([content isEqualToString: @"Apple_CoreStorage"])
+        self.type = kCoreStorageVolume;
+      else if([content isEqualToString: @"Apple_Boot"])
+        self.type = kRecoveryVolume;
+      }
       
-    if([[plist objectForKey: @"RAIDSlice"] boolValue])
+    NSNumber * RAIDSlice = [plist objectForKey: @"RAIDSlice"];
+    
+    if([NSNumber isValid: RAIDSlice] && RAIDSlice.boolValue)
       self.type = kRAIDMemberVolume;
 
-    if([[plist objectForKey: @"RAIDSetMembers"] count] > 0)
+    NSArray * RAIDSetMembers = [plist objectForKey: @"RAIDSetMembers"];
+    
+    if([NSArray isValid: RAIDSetMembers] && (RAIDSetMembers.count > 0))
       self.type = kRAIDSetVolume;
       
-    if([[plist objectForKey: @"CoreStoragePVs"] count] > 1)
+    NSArray * coreStoragePVs = [plist objectForKey: @"CoreStoragePVs"];
+    
+    if([NSArray isValid: coreStoragePVs] && (coreStoragePVs.count > 1))
       self.type = kFusionVolume;
     }
     
@@ -246,7 +274,7 @@
     {
     Volume * volume = [[self.model storageDevices] objectForKey: device];
     
-    if([volume respondsToSelector: @selector(isVolume)])
+    if([Volume isValid: volume])
       {
       volume.indent = self.indent + 1;
       
@@ -296,4 +324,11 @@
   [xml endElement: @"volume"];
   }
 
+// Is this a valid object?
++ (BOOL) isValid: (nullable Volume *) volume
+  {
+  return 
+    (volume != nil) && [volume respondsToSelector: @selector(isVolume)];
+  }
+  
 @end

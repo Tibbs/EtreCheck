@@ -61,6 +61,9 @@
     {
     LaunchdFile * file = [[launchd filesByPath] objectForKey: path];
       
+    if(![LaunchdFile isValid: file])
+      continue;
+      
     NSString * validity =
       file.configScriptValid
         ? @""

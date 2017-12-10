@@ -13,6 +13,9 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "OSVersion.h"
+#import "NSString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -20,6 +23,9 @@
 // Parse plugins
 - (void) parsePlugins: (NSString *) path
   {
+  if(![NSString isValid: path])
+    return;
+    
   // Find all the plug-in bundles in the given path.
   NSDictionary * bundles = [self parseFiles: path];
   
@@ -49,6 +55,9 @@
       {
       NSDictionary * plugin = [bundles objectForKey: filename];
 
+      if(![NSDictionary isValid: plugin])
+        continue;
+        
       NSString * name = [filename stringByDeletingPathExtension];
 
       NSString * version =
@@ -65,7 +74,7 @@
       NSDate * modificationDate = [plugin objectForKey: @"date"];
       NSString * modificationDateString = @"";
         
-      if(modificationDate != nil)
+      if([NSDate isValid: modificationDate])
         {
         modificationDateString =
           [Utilities installDateAsString: modificationDate];
@@ -93,12 +102,15 @@
       if([name isEqualToString: @"JavaAppletPlugin"])
         [self.result
           appendAttributedString: [self getJavaSupportLink: plugin]];
+      
       else if([name isEqualToString: @"Flash Player"])
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
+      
       else if([name isEqualToString: @"Flash Player-10.6"])
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
+      
       else
         [self.result
           appendAttributedString: [self getSupportLink: plugin]];

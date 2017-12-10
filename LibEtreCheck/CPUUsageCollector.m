@@ -7,6 +7,9 @@
 #import "CPUUsageCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "XMLBuilder.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSNumber+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -56,22 +59,25 @@
       NSMutableDictionary * averageProcess =
         [averageProcesses objectForKey: pid];
         
-      if(!averageProcess)
-        [averageProcesses setObject: currentProcess forKey: pid];
-        
-      else if(currentProcess && averageProcess)
+      if([NSDictionary isValid: currentProcess])
         {
-        double totalCPU =
-          [[averageProcess objectForKey: @"cpu"] doubleValue] * i;
-        
-        double averageCPU =
-          [[currentProcess objectForKey: @"cpu"] doubleValue];
-        
-        averageCPU = (totalCPU + averageCPU) / (double)(i + 1);
-        
-        [averageProcess
-          setObject: [NSNumber numberWithDouble: averageCPU]
-          forKey: @"cpu"];
+        if(![NSDictionary isValid: averageProcess])
+          [averageProcesses setObject: currentProcess forKey: pid];
+          
+        else 
+          {
+          double totalCPU =
+            [[averageProcess objectForKey: @"cpu"] doubleValue] * i;
+          
+          double averageCPU =
+            [[currentProcess objectForKey: @"cpu"] doubleValue];
+          
+          averageCPU = (totalCPU + averageCPU) / (double)(i + 1);
+          
+          [averageProcess
+            setObject: [NSNumber numberWithDouble: averageCPU]
+            forKey: @"cpu"];
+          }
         }
       }
     }
@@ -88,9 +94,19 @@
   
   for(NSDictionary * process in processes)
     {
-    double cpu = [[process objectForKey: @"cpu"] doubleValue];
+    NSNumber * cpuValue = [process objectForKey: @"cpu"];
+    NSNumber * countValue = [process objectForKey: @"count"];
+    NSString * name = [process objectForKey: @"command"];
+        
+    if(![NSNumber isValid: cpuValue] || ![NSNumber isValid: countValue])
+      continue;
+      
+    if(![NSString isValid: name])
+      continue;
+      
+    double cpu = [cpuValue doubleValue];
 
-    int count = [[process objectForKey: @"count"] intValue];
+    int count = [countValue intValue];
     
     NSString * countString =
       (count > 1)
@@ -104,8 +120,6 @@
       [usageString
         stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
 
-    NSString * name = [process objectForKey: @"command"];
-    
     [self.xml startElement: @"process"];
     
     [self.xml 

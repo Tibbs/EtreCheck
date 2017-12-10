@@ -13,6 +13,8 @@
 #import "Model.h"
 #import "Drive.h"
 #import "Volume.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about Firewire devices.
 @implementation FirewireCollector
@@ -55,11 +57,14 @@
       NSDictionary * devices =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
-      for(NSDictionary * device in devices)
-        [self printFirewireDevice: device indent: @"    " found: & found];
-        
-      if(found)
-        [self.result appendCR];
+      if([NSDictionary isValid: devices])
+        {
+        for(NSDictionary * device in devices)
+          [self printFirewireDevice: device indent: @"    " found: & found];
+          
+        if(found)
+          [self.result appendCR];
+        }
       }
     }
     
@@ -70,19 +75,36 @@
 - (void) printFirewireDevice: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
-  [self.xml startElement: @"node"];
-
   NSString * name = [device objectForKey: @"_name"];
   NSString * manufacturer = [device objectForKey: @"device_manufacturer"];
   NSString * size = [device objectForKey: @"size"];
   NSString * max_device_speed = [device objectForKey: @"max_device_speed"];
   NSString * connected_speed = [device objectForKey: @"connected_speed"];
   
+  if(![NSString isValid: name])
+    return;
+    
+  if(![NSString isValid: manufacturer])
+    return;
+
+  if(![NSString isValid: max_device_speed])
+    return;
+
+  if(![NSString isValid: connected_speed])
+    return;
+
+  NSDictionary * storageDevices = [self.model storageDevices];
+  
+  if(![NSDictionary isValid: storageDevices])
+    return;
+    
+  [self.xml startElement: @"node"];
+
   [self.xml addElement: @"manufacturer" value: manufacturer];
   [self.xml addElement: @"name" value: name];  
   [self.xml addElement: @"size" value: size];
 
-  if(!size)
+  if(![NSString isValid: size])
     size = @"";
     
   if([max_device_speed hasSuffix: @"_speed"])
@@ -123,55 +145,62 @@
   // There could be more devices.
   NSDictionary * devices = [device objectForKey: @"_items"];
   
-  if(!devices)
+  if(![NSDictionary isValid: devices])
     devices = [device objectForKey: @"units"];
     
-  if(devices)
+  if([NSDictionary isValid: devices])
     for(NSDictionary * device in devices)
       {
       NSString * deviceIdentifier = [device objectForKey: @"bsd_name"];
       
-      if(deviceIdentifier.length > 0)
+      if([NSString isValid: deviceIdentifier])
         {
         Drive * drive = 
           [[self.model storageDevices] objectForKey: deviceIdentifier];
           
-        drive.bus = @"FireWire";
-        drive.busSpeed = connected_speed;
-        
-        NSMutableString * model = [NSMutableString new];
-        
-        if(manufacturer.length > 0)
+        if([Drive isValid: drive])
           {
-          [model appendString: manufacturer];
+          drive.bus = @"FireWire";
+          drive.busSpeed = connected_speed;
           
-          if(![name hasPrefix: manufacturer])
-            {
-            [model appendString: @" "];
-            [model appendString: name];
-            }
-          }
+          NSMutableString * model = [NSMutableString new];
           
-        drive.model = model;
-        
-        NSArray * volumes = [device objectForKey: @"volumes"];
-        
-        if([volumes respondsToSelector: @selector(isEqualToArray:)])
-          for(NSDictionary * volumeItem in volumes)
+          if([NSString isValid: model])
             {
-            NSString * volumeDevice = 
-              [volumeItem objectForKey: @"bsd_name"];
-            
-            if(volumeDevice.length > 0)
+            if(manufacturer.length > 0)
               {
-              Volume * volume = 
-                [[self.model storageDevices] objectForKey: volumeDevice];
+              [model appendString: manufacturer];
               
-              [volume addContainingDevice: deviceIdentifier];
+              if(![name hasPrefix: manufacturer])
+                {
+                [model appendString: @" "];
+                [model appendString: name];
+                }
               }
+          
+            drive.model = model;
+            
+            NSArray * volumes = [device objectForKey: @"volumes"];
+            
+            if([NSArray isValid: volumes])
+              for(NSDictionary * volumeItem in volumes)
+                {
+                NSString * volumeDevice = 
+                  [volumeItem objectForKey: @"bsd_name"];
+                
+                if([NSString isValid: volumeDevice])
+                  {
+                  Volume * volume = 
+                    [storageDevices objectForKey: volumeDevice];
+                  
+                  if([Volume isValid: volume])
+                    [volume addContainingDevice: deviceIdentifier];
+                  }
+                }
             }
-
-        [model release];
+            
+          [model release];
+          }
         }
         
       [self printFirewireDevice: device indent: indent found: found];

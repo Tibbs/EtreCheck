@@ -51,4 +51,14 @@
         NSCharacterSet.whitespaceAndNewlineCharacterSet];
   }
   
+// Is this a valid object?
++ (BOOL) isValid: (NSString *) string
+  {
+  if(string != nil)
+    if([string respondsToSelector: @selector(isEqualToString:)])
+      return string.length > 0;
+    
+  return NO;
+  }
+
 @end

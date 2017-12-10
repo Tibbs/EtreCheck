@@ -74,4 +74,13 @@
   return calendar;
   }
 
+// Is this a valid object?
++ (BOOL) isValid: (NSDate *) date
+  {
+  if(date != nil)
+    return [date respondsToSelector: @selector(isEqualToDate:)];
+    
+  return NO;
+  }
+
 @end

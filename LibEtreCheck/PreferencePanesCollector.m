@@ -8,6 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
@@ -43,24 +45,25 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * items =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      NSArray * items = [results objectForKey: @"_items"];
         
-      if([items count])
+      if([NSArray isValid: items])
         {
         [self.result appendAttributedString: [self buildTitle]];
         
         NSUInteger count = 0;
         
         for(NSDictionary * item in items)
-          if([self printPreferencePaneInformation: item])
-            ++count;
+          if([NSDictionary isValid: item])
+            if([self printPreferencePaneInformation: item])
+              ++count;
           
         if(!count)
-          [self.result
-            appendString: ECLocalizedString(@"    None\n")];
+          [self.result appendString: ECLocalizedString(@"    None\n")];
           
         [self.result appendCR];
         }
@@ -74,11 +77,29 @@
 // Return YES if this is a 3rd party preference pane.
 - (bool) printPreferencePaneInformation: (NSDictionary *) item
   {
+  if(![NSDictionary isValid: item])
+    return false;
+    
   NSString * name = [item objectForKey: @"_name"];
+
+  if(![NSString isValid: name])
+    return false;
+
   NSString * support = [item objectForKey: @"spprefpane_support"];
+  
+  if(![NSString isValid: support])
+    return false;
+
   NSString * bundleID =
     [item objectForKey: @"spprefpane_identifier"];
+  
+  if(![NSString isValid: bundleID])
+    return false;
+
   NSString * path = [item objectForKey: @"spprefpane_bundlePath"];
+
+  if(![NSString isValid: path])
+    return false;
 
   if([support isEqualToString: @"spprefpane_support_3rdParty"])
     {
@@ -94,7 +115,7 @@
     
     [self appendModificationDate: path];
     
-    if(supportLink)
+    if(supportLink != nil)
       [self.result appendAttributedString: supportLink];
       
     [self.result appendString: @"\n"];

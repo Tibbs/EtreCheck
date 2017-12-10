@@ -13,6 +13,9 @@
 #import "DiagnosticsCollector.h"
 #import "LocalizedString.h"
 #import "StorageDevice.h"
+#import "NSString+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 // Collect information from log files.
 @implementation LogCollector
@@ -58,30 +61,42 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
 
-    if(![plist count])
-      return;
+    if([NSArray isValid: plist])
+      {      
+      NSDictionary * results = [plist objectAtIndex: 0];
       
-    NSArray * results =
-      [[plist objectAtIndex: 0] objectForKey: @"_items"];
-      
-    if(![results count])
-      return;
-
-    for(NSDictionary * result in results)
-      [self collectLogResults: result];
+      if([NSDictionary isValid: results])
+        {
+        NSArray * items = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: items])
+          for(NSDictionary * item in items)
+            if([NSDictionary isValid: item])
+              [self collectLogResults: item];
+        }
+      }
     }
   }
 
 // Collect results from a log entry.
 - (void) collectLogResults: (NSDictionary *) result
   {
+  if(![NSDictionary isValid: result])
+    return;
+    
   // Currently the only thing I am looking for are I/O errors like this:
   // kernel_log_description / contents
   // 17 Nov 2014 15:39:31 kernel[0]: disk0s2: I/O error.
   NSString * name = [result objectForKey: @"_name"];
   
+  if(![NSString isValid: name])
+    return;
+    
   NSString * content = [result objectForKey: @"contents"];
   
+  if(![NSString isValid: content])
+    return;
+    
   if([name isEqualToString: @"kernel_log_description"])
     [self collectKernelLogContent: content];
   else if([name isEqualToString: @"asl_messages_description"])
@@ -113,6 +128,9 @@
 // 17 Nov 2014 10:06:15 kernel[0]: disk0s2: I/O error.
 - (void) collectIOError: (NSString *) line
   {
+  if(![NSString isValid: line])
+    return;
+    
   NSRange diskRange = [line rangeOfString: @": disk"];
   
   if(diskRange.location != NSNotFound)
@@ -125,12 +143,16 @@
         {
         NSString * disk = [line substringWithRange: diskRange];
         
-        if(disk)
+        if([NSString isValid: disk])
           {
-          StorageDevice * device = 
-            [[self.model storageDevices] objectForKey: disk];
+          NSDictionary * devices = [self.model storageDevices];
+          
+          if([NSDictionary isValid: devices])
+            {
+            StorageDevice * device = [devices objectForKey: disk];
             
-          [device.errors addObject: line];
+            [device.errors addObject: line];
+            }
           }
         }
     }
@@ -224,36 +246,45 @@
 // Collect results from the panic log entry.
 - (void) collectPanicLog: (NSDictionary *) info
   {
+  if(![NSDictionary isValid: info])
+    return;
+    
   NSString * file = [info objectForKey: @"source"];
   
-  if([file length] == 0)
+  if(![NSString isValid: file])
     return;
     
   NSString * sanitizedName = nil;
   
   NSDate * date = [info objectForKey: @"lastModified"];
   
-  if(date == nil)
+  if(![NSDate isValid: date])
     return;
     
   [self parseFileName: file date: & date name: & sanitizedName];
   
   NSString * contents = [info objectForKey: @"contents"];
   
+  if(![NSString isValid: contents])
+    return;
+    
   DiagnosticEvent * event = [DiagnosticEvent new];
   
-  event.name = ECLocalizedString(@"Kernel");
-  event.date = date;
-  event.type = kPanic;
-  event.file = file;
-  event.details = contents;
-  
-  [DiagnosticsCollector 
-    parseDiagnosticData: contents event: event model: self.model];
+  if(event != nil)
+    {
+    event.name = ECLocalizedString(@"Kernel");
+    event.date = date;
+    event.type = kPanic;
+    event.file = file;
+    event.details = contents;
+    
+    [DiagnosticsCollector 
+      parseDiagnosticData: contents event: event model: self.model];
 
-  [[self.model diagnosticEvents] setObject: event forKey: event.name];
-  
-  [event release];
+    [[self.model diagnosticEvents] setObject: event forKey: event.name];
+    
+    [event release];
+    }
   }
 
 // Parse a file name and extract the date and sanitized name.

@@ -14,7 +14,7 @@
   {
   NSDictionary * dictionary = [NSObject readPropertyList: path];
   
-  if([dictionary respondsToSelector: @selector(objectForKey:)])
+  if([NSDictionary isValid: dictionary])
     return dictionary;
     
   return nil;
@@ -24,10 +24,19 @@
   {
   NSDictionary * dictionary = [NSObject readPropertyListData: data];
   
-  if([dictionary respondsToSelector: @selector(objectForKey:)])
+  if([NSDictionary isValid: dictionary])
     return dictionary;
     
   return nil;
+  }
+
+// Is this a valid object?
++ (BOOL) isValid: (NSDictionary *) dictionary
+  {
+  if(dictionary != nil)
+    return [dictionary respondsToSelector: @selector(objectForKey:)];
+    
+  return NO;
   }
 
 @end

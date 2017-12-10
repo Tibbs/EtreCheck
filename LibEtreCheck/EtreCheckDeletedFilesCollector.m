@@ -9,6 +9,9 @@
 #import "Utilities.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "NSArray+Etresoft.h"
+#import "NSDate+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Collect information about EtreCheck deleted files.
 @implementation EtreCheckDeletedFilesCollector
@@ -32,6 +35,13 @@
     [[[NSUserDefaults standardUserDefaults]
       objectForKey: @"deletedfiles"] mutableCopy];
 
+  if(![NSArray isValid: deletedFiles])
+    {
+    [deletedFiles release];
+    
+    return;
+    }
+    
   [deletedFiles
     sortUsingComparator:
       ^(id obj1, id obj2)
@@ -42,13 +52,16 @@
         NSDate * date1 = [file1 objectForKey: @"date"];
         NSDate * date2 = [file2 objectForKey: @"date"];
         
-        if(date1 && date2)
+        BOOL valid1 = [NSDate isValid: date1];
+        BOOL valid2 = [NSDate isValid: date2];
+        
+        if(valid1 && valid2)
           return [date1 compare: date2];
         
-        if(date1)
+        if(valid1)
           return (NSComparisonResult)NSOrderedDescending;
           
-        if(date2)
+        if(valid2)
           return (NSComparisonResult)NSOrderedAscending;
           
         return (NSComparisonResult)NSOrderedSame;
@@ -63,11 +76,14 @@
     {
     NSString * reason = [deletedFile objectForKey: @"reason"];
     
-    if([reason length] == 0)
+    if(![NSString isValid: reason] || (reason.length == 0))
       reason = ECLocalizedString(@"Unknown");
       
     NSDate * date = [deletedFile objectForKey: @"date"];
   
+    if(![NSDate isValid: date])
+      continue;
+      
     if(self.simulating || ([then compare: date] == NSOrderedAscending))
       {
       if(!hasOutput)
@@ -79,7 +95,7 @@
         
       NSString * path = [deletedFile objectForKey: @"file"];
       
-      if([path length] > 0)
+      if([NSString isValid: path])
         {
         NSString * safePath = [self prettyPath: path];
         

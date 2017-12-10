@@ -9,6 +9,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import <CoreServices/CoreServices.h>
 #import "NSDate+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "LaunchdCollector.h"
 #import "SubProcess.h"
@@ -344,18 +345,21 @@
   
   NSString * PATH = [environment objectForKey: @"PATH"];
   
-  NSArray * pathParts = [PATH componentsSeparatedByString: @":"];
-  
-  for(NSString * dir in pathParts)
+  if([NSString isValid: PATH])
     {
-    NSString * searchPath = [dir stringByAppendingPathComponent: path];
+    NSArray * pathParts = [PATH componentsSeparatedByString: @":"];
     
-    attributes =
-      [[NSFileManager defaultManager]
-        attributesOfItemAtPath: searchPath error: NULL];
-    
-    if(attributes)
-      return attributes;
+    for(NSString * dir in pathParts)
+      {
+      NSString * searchPath = [dir stringByAppendingPathComponent: path];
+      
+      attributes =
+        [[NSFileManager defaultManager]
+          attributesOfItemAtPath: searchPath error: NULL];
+      
+      if(attributes)
+        return attributes;
+      }
     }
     
   return nil;
@@ -526,7 +530,7 @@
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
-  if(result)
+  if(result != nil)
     return result;
     
   // If I am hiding Apple tasks, then skip Xcode.
@@ -642,7 +646,7 @@
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
-  if(result)
+  if(result != nil)
     return result;
     
   NSMutableArray * args = [NSMutableArray array];
@@ -1002,7 +1006,7 @@
   if(range.location != NSNotFound)
     appLocation = range.location + 4;
     
-  else if(appLocation != NSNotFound)
+  if(appLocation != NSNotFound)
     return [path substringToIndex: appLocation];
     
   return path;
@@ -1101,7 +1105,7 @@
   NSDateFormatter * dateFormatter =
     [[[Utilities shared] dateFormatters] objectForKey: format];
     
-  if(!dateFormatter)
+  if(dateFormatter != nil)
     {
     dateFormatter = [[NSDateFormatter alloc] init];
     
@@ -1375,7 +1379,7 @@
   NSString * country =
     [[locale objectForKey: NSLocaleCountryCode] lowercaseString];
   
-  if(([language length] == 0) || ([country length] == 0))
+  if((language.length == 0) || (country.length == 0))
     {
     language = @"en";
     country = @"us";

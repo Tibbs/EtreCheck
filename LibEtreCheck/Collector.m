@@ -11,6 +11,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "OSVersion.h"
+#import "NSString+Etresoft.h"
 
 @implementation Collector
 
@@ -193,12 +194,12 @@
   NSString * name = [bundle objectForKey: @"CFBundleName"];
   NSString * bundleID = [bundle objectForKey: @"CFBundleIdentifier"];
 
-  if(bundleID)
+  if([NSString isValid: name] && [NSString isValid: bundleID])
     {
     NSAttributedString * supportLink =
       [self getSupportURL: name bundleID: bundleID];
         
-    if(supportLink)
+    if(supportLink != nil)
       return supportLink;
     }
     
@@ -231,7 +232,7 @@
   {
   NSString * buildVersion = [info objectForKey: @"BuildMachineOSBuild"];
 
-  if(buildVersion)
+  if([NSString isValid: buildVersion])
     {
     NSScanner * scanner = [NSScanner scannerWithString: buildVersion];
     
@@ -268,7 +269,7 @@
   {
   NSString * sdkVersion = [info objectForKey: @"DTSDKBuild"];
 
-  if(sdkVersion)
+  if([NSString isValid: sdkVersion])
     {
     NSScanner * scanner = [NSScanner scannerWithString: sdkVersion];
     
@@ -305,7 +306,7 @@
   {
   NSString * sdkName = [info objectForKey: @"DTSDKName"];
   
-  if(sdkName)
+  if([NSString isValid: sdkName])
     {
     NSScanner * scanner = [NSScanner scannerWithString: sdkName];
     
