@@ -469,6 +469,8 @@
 - (void) dealloc
   {
   [myRoot release];
+  [myDateFormatter release];
+  [myDayFormatter release];
   
   [super dealloc];
   }

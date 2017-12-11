@@ -90,7 +90,6 @@
     myLaunchd = [Launchd new];
     myStorageDevices = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
-    myLaunchd = [Launchd new];
     mySafari = [Safari new];
     myAdware = [Adware new];
     myProcesses = [NSMutableSet new];
@@ -110,29 +109,29 @@
 // Destructor.
 - (void) dealloc
   {
-  [myXMLHeader release];
-  [myXMLBuilder release];
-  [myPathsForUUIDs release];
-  [myNotificationSPAMs release];
-  [mySerialCode release];
-  [myModel release];
-  [myLogEntries release];
-  [myHostName release];
-  [myGPUErrors release];
-  [myStorageDevices release];
-  [myComputerName release];
   [myLaunchd release];
+  [myStorageDevices release];
+  [myDiagnosticEvents release];
   [mySafari release];
   [myAdware release];
+  [myProcesses release];
+  [myTerminatedTasks release];
+  [myNotificationSPAMs release];
+  [myPathsForUUIDs release];
+  [myXMLHeader release];
+  [myXMLBuilder release];
   
-  self.terminatedTasks = nil;
-  self.processes = nil;
-  self.diagnosticEvents = nil;
-  self.applications = nil;
-  self.machineIcon = nil;
-  self.processes = nil;
-  self.problem = nil;
-  self.problemDescription = nil;
+  [myLogEntries release];
+  [myApplications release];
+  [myMachineIcon release];
+  [myModel release];
+  [myModelType release];
+  [mySerialCode release];
+  [myComputerName release];
+  [myHostName release];
+  [myGPUErrors release];
+  [myProblem release];
+  [myProblemDescription release];
   
   [super dealloc];
   }
