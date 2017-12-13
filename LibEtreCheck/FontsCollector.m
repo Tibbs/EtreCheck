@@ -12,7 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "NSString+Etresoft.h"
-#import "NSArray+Etresoft.h"
+#import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 
 // Collect font information.
@@ -88,29 +88,34 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * fonts =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      NSDictionary * results = [plist objectAtIndex: 0];
         
-      if([NSArray isValid: fonts])
-        for(NSDictionary * font in fonts)
-          {
-          NSString * name = [font objectForKey: @"_name"];
-          NSNumber * valid = [font objectForKey: @"valid"];
- 
-          if(![NSString isValid: name])
-            continue;
-            
-          if(![NSNumber isValid: valid])
-            continue;
-            
-          if(self.simulating && [name hasPrefix: @"Arial"])
-            valid = nil;
+      if([NSDictionary isValid: results])
+        {
+        NSArray * fonts = [results objectForKey: @"_items"];
           
-          if(![valid boolValue])
-            [badFonts addObject: font];
-          }
+        if([NSArray isValid: fonts])
+          for(NSDictionary * font in fonts)
+            if([NSDictionary isValid: font])
+              {
+              NSString * name = [font objectForKey: @"_name"];
+              NSNumber * valid = [font objectForKey: @"valid"];
+
+              if(![NSString isValid: name])
+                continue;
+                
+              if(![NSNumber isValid: valid])
+                continue;
+                
+              if(self.simulating && [name hasPrefix: @"Arial"])
+                valid = nil;
+              
+              if(![valid boolValue])
+                [badFonts addObject: font];
+              }
+        }
       }
     }
 

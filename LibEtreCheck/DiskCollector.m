@@ -142,39 +142,36 @@
     NSDictionary * plist =
       [NSDictionary readPropertyListData: subProcess.standardOutput];
   
-    if(plist.count > 0)
+    if([NSDictionary isValid: plist])
       {
       // Separate items by virtual or physical. Anything virtual will be
       // considered a volume.
       NSString * type = [plist objectForKey: @"VirtualOrPhysical"];
       NSNumber * wholeDisk = [plist objectForKey: @"WholeDisk"];
       
-      if([NSString isValid: type] && [NSNumber isValid: wholeDisk])
-        {
-        BOOL drive = NO;
+      BOOL drive = NO;
+      
+      if([NSString isValid: type] && [type isEqualToString: @"Physical"])
+        drive = YES;
+      
+      // WholeDisk could be true and type could be Virtual. I just want
+      // pre-container HFS+ before Core Storage or APFS.
+      if([NSNumber isValid: wholeDisk] && wholeDisk.boolValue)
+        drive = YES;
         
-        if([type isEqualToString: @"Physical"])
-          drive = YES;
-        
-        // WholeDisk could be true and type could be Virtual. I just want
-        // pre-container HFS+ before Core Storage or APFS.
-        if((type == nil) && wholeDisk.boolValue)
-          drive = YES;
-          
-        // Not so fast. If there is a volume indicator, it must be a volume.
-        NSString * volumeUUID = [plist objectForKey: @"VolumeUUID"];
-        
-        if([NSString isValid: volumeUUID])
-          drive = NO;  
+      // Not so fast. If there is a volume indicator, it must be a volume.
+      NSString * volumeUUID = [plist objectForKey: @"VolumeUUID"];
+      
+      if([NSString isValid: volumeUUID])
+        drive = NO;  
 
-        if(drive)
-          {
-          if([self collectPhysicalDrive: plist])
-            dataFound = YES;
-          }
-        else if([self collectVolume: plist])
+      if(drive)
+        {
+        if([self collectPhysicalDrive: plist])
           dataFound = YES;
         }
+      else if([self collectVolume: plist])
+        dataFound = YES;
       }
     }
     
@@ -258,12 +255,13 @@
       
       if([NSDictionary isValid: results])
         {
-        NSDictionary * controllers = [results objectForKey: @"_items"];
+        NSArray * controllers = [results objectForKey: @"_items"];
         
-        if([NSDictionary isValid: controllers])
+        if([NSArray isValid: controllers])
           // Collect all controllers.
           for(NSDictionary * controller in controllers)
-            [self collectController: controller type: type];
+            if([NSDictionary isValid: controller])
+              [self collectController: controller type: type];
         }
       }
     }
@@ -275,9 +273,9 @@
 - (void) collectController: (NSDictionary *) controller
   type: (NSString *) type
   {
-  NSDictionary * items = [controller objectForKey: @"_items"];
+  NSArray * items = [controller objectForKey: @"_items"];
 
-  if(![NSDictionary isValid: items])
+  if(![NSArray isValid: items])
     return;
     
   // Get the bus, port description, and speed for this controller.
@@ -320,6 +318,9 @@
   
   for(NSDictionary * item in items)
     {
+    if(![NSDictionary isValid: item])
+      continue;
+      
     NSString * device = [item objectForKey: @"bsd_name"];
 
     if(![NSString isValid: device])
@@ -372,18 +373,20 @@
       
       if([NSArray isValid: volumes])
         for(NSDictionary * volumeItem in volumes)
-          {
-          NSString * volumeDevice = [volumeItem objectForKey: @"bsd_name"];
-          
-          if([NSString isValid: volumeDevice])
+          if([NSDictionary isValid: volumeItem])
             {
-            Volume * volume = 
-              [[self.model storageDevices] objectForKey: volumeDevice];
-              
-            if([Volume isValid: volume])
-              [volume addContainingDevice: device];
+            NSString * volumeDevice = 
+              [volumeItem objectForKey: @"bsd_name"];
+            
+            if([NSString isValid: volumeDevice])
+              {
+              Volume * volume = 
+                [[self.model storageDevices] objectForKey: volumeDevice];
+                
+              if([Volume isValid: volume])
+                [volume addContainingDevice: device];
+              }
             }
-          }
       }
     }
   }
@@ -419,7 +422,8 @@
         
         if([NSArray isValid: items])
           for(NSDictionary * item in items)
-            [self collectCoreStorageVolume: item];
+            if([NSDictionary isValid: item])
+              [self collectCoreStorageVolume: item];
         }
       }
     }
@@ -594,6 +598,9 @@
       if([NSArray isValid: containers])
         for(NSDictionary * container in containers)
           {
+          if(![NSDictionary isValid: container])
+            continue;
+            
           NSString * containerReference = 
             [container objectForKey: @"ContainerReference"];
           
@@ -617,6 +624,9 @@
             if([NSArray isValid: physicalStores])
               for(NSDictionary * item in volumes)
                 {
+                if(![NSDictionary isValid: item])
+                  continue;
+                  
                 NSString * device = 
                   [item objectForKey: @"DeviceIdentifier"];
                 

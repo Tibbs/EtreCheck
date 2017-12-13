@@ -59,9 +59,9 @@
         {
         bool found = NO;
         
-        NSDictionary * devices = [results objectForKey: @"_items"];
+        NSArray * devices = [results objectForKey: @"_items"];
           
-        if([NSDictionary isValid: devices])
+        if([NSArray isValid: devices])
           for(NSDictionary * device in devices)
             [self printUSBDevice: device indent: @"    " found: & found];
 
@@ -132,15 +132,18 @@
 - (void) printMoreDevices: (NSDictionary *) device
   indent: (NSString *) indent found: (bool *) found
   {
-  NSDictionary * devices = [device objectForKey: @"_items"];
+  NSArray * devices = [device objectForKey: @"_items"];
   
-  if(![NSDictionary isValid: devices])
+  if(![NSArray isValid: devices])
     devices = [device objectForKey: @"units"];
     
-  if([NSDictionary isValid: devices])
+  if([NSArray isValid: devices])
+    {
     for(NSDictionary * device in devices)
-      [self printUSBDevice: device indent: indent found: found];
-  
+      if([NSDictionary isValid: device])
+        [self printUSBDevice: device indent: indent found: found];
+    }
+    
   else
   
     // Print a USB drive.
