@@ -742,9 +742,6 @@
   [self.xml addElement: @"type" value: kind];
   [self.xml addElement: @"lastused" boolValue: last.boolValue];
   
-  if([last boolValue])
-    [self.xml addElement: @"lastused" boolValue: [last boolValue]];
-  
   [self.result
     appendString:
       [NSString
