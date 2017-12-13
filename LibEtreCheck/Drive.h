@@ -7,6 +7,10 @@
 
 @class Model;
 
+#define kSolidStateMechanism @"solidstate"
+#define kMechanicalMechanism @"mechanical"
+#define kDiskImageMechanism @"diskimage"
+
 // Object that represents a top-level drive.
 @interface Drive : StorageDevice
   {
@@ -28,8 +32,8 @@
   // The bus speed.
   NSString * myBusSpeed;
   
-  // Is this an SSD?
-  BOOL mySolidState;
+  // What is the mechanism?
+  NSString * myMechanism;
   
   // Is this an internal drive?
   BOOL myInternal;
@@ -62,8 +66,8 @@
 // The bus speed. 
 @property (retain, nullable) NSString * busSpeed;
 
-// Is this an SSD?
-@property (assign) BOOL solidState;
+// What is the mechanism?
+@property (strong, nullable) NSString * mechanism;
 
 // Is this an internal drive?
 @property (assign) BOOL internal;

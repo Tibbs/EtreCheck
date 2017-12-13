@@ -124,6 +124,7 @@
 "Description:\n" = "Description :\n";
 "Discrete" = "Distinct";
 "disabled" = "désactivée";
+"diskimage" = "Image disque";
 "Display" = "Écran";
 "EFI" = "EFI";
 "Empty" = "Vide";
@@ -183,6 +184,7 @@
 "Process name" = "Nom de l’opération";
 "RAM overheating" = "La mémoire en train de surchauffer";
 "Recovery" = "Restauration";
+"rotational" = "Rotation";
 "running" = "en marche";
 "Runtime: %@\n" = "Temps d’exécution : %@\n";
 "Safari extension: " = "Extension de Safari : ";
@@ -190,6 +192,7 @@
 "Shell Script" = "Script du shell";
 "Show signature failures: Enabled\n" = "La vérification des signatures numériques : Engagée";
 "Size unknown" = "Taille inconnue";
+"solidstate" = "SSD";
 "Startup" = "Démarrage";
 "supported" = "disponible";
 "System Integrity Protection status: %@" = "Statu de la protection de l’intégrité du système : %@";

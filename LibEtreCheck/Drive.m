@@ -35,8 +35,8 @@
 // The bus speed.
 @synthesize busSpeed = myBusSpeed;
 
-// Is this an SSD?
-@synthesize solidState = mySolidState;
+// What is the mechanism?
+@synthesize mechanism = myMechanism;
 
 // Is this an internal drive?
 @synthesize internal = myInternal;
@@ -59,20 +59,30 @@
   if(self != nil)
     {
     NSString * model = [plist objectForKey: @"MediaName"];
-    NSString * bus = [plist objectForKey: @"BusProtocol"];
     NSNumber * solidState = [plist objectForKey: @"SolidState"];
+    NSString * bus = [plist objectForKey: @"BusProtocol"];
     NSNumber * internal = [plist objectForKey: @"Internal"];
     NSString * SMARTStatus = [plist objectForKey: @"SMARTStatus"];
 
     if([NSString isValid: model])
       self.model = model;
     
-    if([NSString isValid: bus])
-      self.bus = bus;
-    
     if([NSNumber isValid: solidState])
-      self.solidState = [solidState boolValue];
-    
+      {
+      if(solidState.boolValue)
+        self.mechanism = kSolidStateMechanism;
+      else
+        self.mechanism = kMechanicalMechanism;
+      }
+      
+    if([NSString isValid: bus])
+      {
+      self.bus = bus;
+      
+      if([bus isEqualToString: @"Disk Image"])
+        self.mechanism = kDiskImageMechanism;
+      }
+      
     if([NSNumber isValid: internal])
       self.internal = [internal boolValue];
       
@@ -114,24 +124,21 @@
       ? self.name
       : @"";
       
-  NSString * TRIMString =
-    [NSString
-      stringWithFormat: 
-        @" - TRIM: %@", 
-        self.TRIM 
-          ? ECLocalizedString(@"Yes") 
-          : ECLocalizedString(@"NO")];
+  NSString * TRIMString = @"";
+  
+  if([self.mechanism isEqualToString: kSolidStateMechanism] && self.TRIM)
+    TRIMString = 
+      [NSString
+        stringWithFormat: 
+          @" - TRIM: %@", 
+          self.TRIM 
+            ? ECLocalizedString(@"Yes") 
+            : ECLocalizedString(@"NO")];
 
   NSString * info =
     [NSString
       stringWithFormat:
-        @"(%@%@)",
-        self.solidState
-          ? ECLocalizedString(@"Solid State")
-          : ECLocalizedString(@"Mechanical"),
-        (self.solidState && self.TRIM)
-          ? TRIMString
-          : @""];
+        @"(%@%@)", ECLocalizedString(self.mechanism), TRIMString];
 
   [attributedString
     appendString:
@@ -212,10 +219,10 @@
   [xml addElement: @"bus" value: self.bus];
   [xml addElement: @"internal" boolValue: self.internal];
   [xml addElement: @"busspeed" value: self.busSpeed];
-  [xml addElement: @"solidstate" boolValue: self.solidState];
+  [xml addElement: @"mechanism" value: self.mechanism];
   [xml addElement: @"smartstatus" value: self.SMARTStatus];
   
-  if(self.solidState)
+  if([self.mechanism isEqualToString: kSolidStateMechanism])
     [xml addElement: @"TRIM" boolValue: self.TRIM];
     
   [xml endElement: @"drive"];

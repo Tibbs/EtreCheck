@@ -11,6 +11,7 @@
 "ascsearch" = "https://discussions.apple.com/search.jspa?";
 "belowaverageperformance" = "Below Average";
 "Canary" = "Parrot";
+"diskimage" = "Disk Image";
 "downloadetrecheck" = "Download EtreCheck from ";
 "excellentperformance" = "Excellent";
 "gatekeeperneedsmountainlion" = "    Gatekeeper information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
@@ -22,8 +23,10 @@
 "loginhookdeprecated" = "    Login hooks are deprecated\n";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/English.lproj/SIMachineAttributes.plist";
 "machinitdeprecated" = "    Mach Init items are deprecated\n";
+"mechanical" = "Mechanical";
 "oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/English.lproj/XSMachineAttributes.plist";
 "poorperformance" = "Poor";
+"solidstate" = "Solid State";
 "startupitemsdeprecated" = "    Startup items no longer function in OS X Yosemite or later\n";
 "timemachineinformationnotavailable" = "    Time Machine information is not available\n\n";
 "timemachineneedsmountainlion" = "    Time Machine information requires OS X 10.8 \"Mountain Lion\" or later.\n\n";
