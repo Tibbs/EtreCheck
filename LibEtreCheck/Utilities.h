@@ -123,14 +123,23 @@
 // Check the signature of an executable.
 + (NSString *) checkExecutable: (NSString *) path;
 
+// Check the signature of a shell script interpreter.
++ (NSString *) checkShellScriptExecutable: (NSString *) path;
+
 // Get the developer of an executable.
 + (NSString *) queryDeveloper: (NSString *) path;
+
+// Get the developer of a shell script.
++ (NSString *) queryShellScriptDeveloper: (NSString *) path;
 
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 
 // Resolve a deep app path to the wrapper path.
 + (NSString *) resolveBundlePath: (NSString *) path;
+
+// Resolve a deep path to a script to the wrapping bundle.
++ (NSString *) resolveBundledScriptPath: (NSString *) path;
 
 // Make a path that is suitable for a URL by appending a / for a directory.
 + (NSString *) makeURLPath: (NSString *) path;

@@ -541,18 +541,8 @@
   
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple"];
+  [args addObject: @"--no-strict"];
   
-  switch([[OSVersion shared] major])
-    {
-    // What a mess.
-    case kMavericks:
-      if([[OSVersion shared] minor] < 5)
-        break;
-    case kYosemite:
-      [args addObject: @"--no-strict"];
-      break;
-    }
-    
   [args addObject: path];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -630,7 +620,7 @@
   }
 
 // Check the signature of an executable.
-+ (NSString *) checkExecutable: (NSString *) path;
++ (NSString *) checkExecutable: (NSString *) path
   {
   if(path.length == 0)
     return kExecutableMissing;
@@ -653,17 +643,7 @@
   
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple generic"];
-  
-  switch([[OSVersion shared] major])
-    {
-    // What a mess.
-    case kMavericks:
-      if([[OSVersion shared] minor] < 5)
-        break;
-    case kYosemite:
-      [args addObject: @"--no-strict"];
-      break;
-    }
+  [args addObject: @"--no-strict"];
     
   [args addObject: path];
 
@@ -693,6 +673,57 @@
   return result;
   }
 
+// Check the signature of a shell script interpreter.
++ (NSString *) checkShellScriptExecutable: (NSString *) path
+  {
+  if(!path.length)
+    return kExecutableMissing;
+    
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return kExecutableMissing;
+      
+  NSString * result = nil;
+    
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"-vv"];
+  [args addObject: @"-R=anchor apple generic"];
+  [args addObject: @"--no-strict"];
+  
+  [args addObject: path];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.timeout = 60;
+  
+  if([subProcess execute: @"/usr/bin/codesign" arguments: args])
+    {
+    result =
+      [Utilities parseSignature: subProcess.standardError forPath: path];
+    }
+  else
+    {
+    NSLog(@"Returning false from /usr/bin/codesign %@", args);
+    result = kCodesignFailed;
+    }
+    
+  [subProcess release];
+  
+  // Return valid signatures.
+  if([result isEqualToString: kSignatureApple])
+    return result;
+
+  if([result isEqualToString: kSignatureValid])
+    return result;
+
+  // The signature is invalid. If it is in an SIP folder, go ahead
+  // and accept it anyway. <sigh>
+  if([Utilities isSIP: path])
+    return kSignatureApple;
+
+  return result;
+  }
+  
 // Get the developer of an executable.
 + (NSString *) queryDeveloper: (NSString *) path
   {
@@ -705,6 +736,41 @@
   if([Utilities isShellExecutable: path])
     return nil;
 
+  NSString * developer = nil;
+
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"--assess"];
+  [args addObject: @"-vv"];
+    
+  NSString * appPath = [Utilities resolveSignaturePath: path];
+  
+  [args addObject: appPath];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.timeout = 60;
+  
+  if([subProcess execute: @"/usr/sbin/spctl" arguments: args])
+    developer =
+      [Utilities parseDeveloper: subProcess.standardError forPath: appPath];
+  else
+    NSLog(@"Returning false from /usr/sbin/spctl %@", args);
+    
+  [subProcess release];
+  
+  return developer;
+  }
+
+// Get the developer of a shell script executable.
++ (NSString *) queryShellScriptDeveloper: (NSString *) path
+  {
+  if([path length] == 0)
+    return nil;
+    
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return nil;
+      
   NSString * developer = nil;
 
   NSMutableArray * args = [NSMutableArray array];
@@ -977,6 +1043,51 @@
   
   if(range.location != NSNotFound)
     bundleLocation = range.location + 7;
+
+  if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
+    {
+    if(bundleLocation < appLocation)
+      return [path substringToIndex: bundleLocation];
+    else
+      return [path substringToIndex: appLocation];
+    }
+  else if(appLocation != NSNotFound)
+    return [path substringToIndex: appLocation];
+  else if(bundleLocation != NSNotFound)
+    return [path substringToIndex: bundleLocation];
+    
+  return path;
+  }
+
+// Resolve a deep path to a script to the wrapping bundle.
++ (NSString *) resolveBundledScriptPath: (NSString *) path
+  {
+  NSUInteger appLocation = NSNotFound;
+  
+  NSRange range = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(range.location == NSNotFound)
+    range = [path rangeOfString: @".app/Contents/Resources/"];
+
+  if(range.location != NSNotFound)
+    appLocation = range.location + 4;
+    
+  range = [path rangeOfString: @".plugin/"];
+  
+  NSUInteger bundleLocation = NSNotFound;
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 7;
+    
+  range = [path rangeOfString: @".bundle/"];
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 7;
+
+  range = [path rangeOfString: @".framework/"];
+  
+  if(range.location != NSNotFound)
+    bundleLocation = range.location + 10;
 
   if((appLocation != NSNotFound) && (bundleLocation != NSNotFound))
     {

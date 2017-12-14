@@ -281,7 +281,11 @@
       
     if([baseName isEqualToString: self.label])
       self.safetyScore = self.safetyScore + 10;
+    else
+      NSLog(@"%@ %@", self.path, @"label mismatch");
     }
+  else
+    NSLog(@"%@ %@", self.path, @"config script invalid");
   }
   
 // Collect the signature of a launchd item.
@@ -291,19 +295,28 @@
 
   if([NSDictionary isValid: appleFile])
     {
-    NSString * expectedSignature = [appleFile objectForKey: kSignature];
-  
-    if([NSString isValid: expectedSignature])
+    NSString * signature = 
+      [Utilities checkAppleExecutable: self.executable];
+      
+    BOOL validSignature = [signature isEqualToString: kSignatureApple];
+    
+    if(!validSignature)
       {
-      NSString * signature = 
-        [Utilities checkAppleExecutable: self.executable];
+      NSString * expectedSignature = [appleFile objectForKey: kSignature];
+  
+      if([NSString isValid: expectedSignature])
+        if([NSString isValid: signature])
+          if([signature isEqualToString: expectedSignature])
+            {
+            validSignature = YES;
+            signature = kSignatureApple;
+            }
+      }
         
-      if([NSString isValid: signature])
-        if([signature isEqualToString: expectedSignature])
-          {
-          self.apple = YES;
-          self.signature = signature;
-          }
+    if(validSignature)
+      {
+      self.apple = YES;
+      self.signature = signature;
       }
     }
     
@@ -320,6 +333,13 @@
       self.safetyScore = 100;
       return;
       }
+      
+    if([self.signature isEqualToString: kShell])
+      if([self checkShellScriptSignature])
+        {
+        self.safetyScore = 100;
+        return;
+        } 
       
     // If I have a valid executable, query the actual developer.
     if([self.signature isEqualToString: kSignatureValid])
@@ -340,6 +360,96 @@
   self.authorName = executableType;
   self.plistCRC = [Utilities crcFile: self.path];
   self.executableCRC = [Utilities crcFile: self.executable];
+  }
+  
+// Try to validate the signature of a shell script.
+- (BOOL) checkShellScriptSignature
+  {
+  // First get the signature of the shell script.
+  NSString * executableSignature = 
+    [Utilities checkShellScriptExecutable: self.executable];
+    
+  if(![NSString isValid: executableSignature])
+    return NO;
+    
+  NSString * executableDeveloper = 
+    [Utilities queryShellScriptDeveloper: self.executable];
+    
+  if(![NSString isValid: executableDeveloper])
+    return NO;
+  
+  bool validSignature = false;
+  NSString * shellScriptDeveloper = nil;
+  
+  // Now go through all arguments. If I can find at least one argument that
+  // is a signed script, then I will accept it if the executable signature
+  // is from Apple or from the same author.
+  for(NSString * argument in self.arguments)
+    {
+    if([[NSFileManager defaultManager] fileExistsAtPath: argument])
+      {
+      NSString * bundlePath = 
+        [Utilities resolveBundledScriptPath: argument];
+        
+      NSString * scriptSignature = 
+        [Utilities checkShellScriptExecutable: bundlePath];
+        
+      // I will accept either one.
+      if([scriptSignature isEqualToString: kSignatureValid])
+        validSignature = true;
+      else if([scriptSignature isEqualToString: kSignatureApple])
+        validSignature = true;
+      else
+        validSignature = false;
+        
+      // If the signature isn't valid, we're done.
+      if(!validSignature)
+        break;
+        
+      // Now get the developer of the script.
+      NSString * scriptDeveloper = 
+        [Utilities queryShellScriptDeveloper: bundlePath];
+        
+      // If I don't have a developer yet.
+      if(shellScriptDeveloper == nil)
+        shellScriptDeveloper = scriptDeveloper;
+        
+      // If my developers are different, bail.
+      else if(![shellScriptDeveloper isEqualToString: scriptDeveloper])
+        validSignature = false;
+        
+      // I could have lost validity if the developer changes.
+      if(!validSignature)
+        break;
+      }
+    }
+    
+  // I will accept any Apple shell script executable.
+  if([executableSignature isEqualToString: kSignatureValid])
+    {
+    if([executableDeveloper isEqualToString: @"Apple, Inc."])
+      {
+      if(validSignature)
+        {
+        self.signature = kSignatureValid;
+        self.authorName = shellScriptDeveloper;
+        return YES;
+        }
+      }
+    
+    // If this is a 3rd party shell script, only accept if the same third
+    // party developed all of it.
+    else if([executableSignature isEqualToString: kSignatureValid])
+      if(validSignature)
+        if([executableDeveloper isEqualToString: shellScriptDeveloper])
+          {
+          self.signature = kSignatureValid;
+          self.authorName = shellScriptDeveloper;
+          return YES;
+          }
+    }
+    
+  return NO;
   }
   
 // Get the modification date.
