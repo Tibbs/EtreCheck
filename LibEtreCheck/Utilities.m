@@ -1666,9 +1666,13 @@
 
         if([Utilities isHidden: currentPath])
           hidden = true;
+          
+        if([Utilities isImmutable: currentPath])
+          accessible = false;
         }
   
-    accessible = [Utilities isAccessible: expandedPath];
+    if(![Utilities isAccessible: expandedPath])
+      accessible = false;
     }
     
   return !hidden && accessible;
@@ -1734,6 +1738,9 @@
   if(exists && isDirectory)
     return true;
     
+  if([Utilities isImmutable: path])
+    return false;
+    
   if(exists)
     {
     int fd = open(path.fileSystemRepresentation, O_RDONLY);
@@ -1751,6 +1758,54 @@
     }
     
   return false;
+  }
+
+// Is a path read-only?
++ (bool) isImmutable: (NSString *) path
+  {
+  bool immutable = false;
+  
+  struct attrlist attrList;
+  
+  attrList.bitmapcount = ATTR_BIT_MAP_COUNT;
+  attrList.reserved = 0;
+  attrList.commonattr = ATTR_CMN_FNDRINFO | ATTR_CMN_FLAGS;
+  attrList.volattr = 0;
+  attrList.dirattr = 0;
+  attrList.fileattr = 0;
+  attrList.forkattr = 0;
+  
+  typedef struct Buffer
+    {
+    u_int32_t length;
+    FileInfo fileInfo;
+    ExtendedFileInfo extendedFileInfo;
+    u_int32_t flags;
+    } Buffer;
+    
+  Buffer buffer;
+  
+  int error = 
+    getattrlist(
+      path.fileSystemRepresentation, 
+      & attrList, 
+      (void *)& buffer, 
+      sizeof(buffer), 
+      0);
+      
+  if(error == 0)
+    {
+    UInt16 FinderFlags = 
+      CFSwapInt16BigToHost(buffer.fileInfo.finderFlags);
+      
+    if(FinderFlags & kNameLocked)
+      immutable = true;
+      
+    if(buffer.flags & (UF_IMMUTABLE | SF_IMMUTABLE))
+      immutable = true;
+    }
+    
+  return immutable;
   }
 
 @end

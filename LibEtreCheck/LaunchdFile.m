@@ -493,6 +493,12 @@
   self.plistCRC = [Utilities crcFile: self.path];
   self.executableCRC = [Utilities crcFile: self.executable];
   
+  [self checkAccessibility];
+  }
+  
+// Check accessibility of a file.
+- (void) checkAccessibility
+  {
   // Check for an inaccessible or hidden plist file.
   self.plistAccessible = [Utilities checkFileAccessibility: self.path];
   
