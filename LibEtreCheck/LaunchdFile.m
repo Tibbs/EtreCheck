@@ -73,9 +73,6 @@
 // Is the executable file accessible?
 @synthesize executableAccessible = myExecutableAccessible;
 
-// Are all other files accessible?
-@synthesize otherFilesAccessible = myOtherFilesAccessible;
-
 // Is this file using globbing?
 @synthesize globbing = myGlobbing;
 
@@ -317,6 +314,8 @@
 // Collect the signature of a launchd item.
 - (void) checkSignature: (Launchd *) launchd
   {
+  bool valid = false;
+  
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: self.path];
 
   if([NSDictionary isValid: appleFile])
@@ -343,6 +342,7 @@
       {
       self.apple = YES;
       self.signature = signature;
+      valid = true;
       }
     }
     
@@ -355,18 +355,20 @@
       {
       self.authorName = @"Apple, Inc.";
       self.safetyScore = 100;
-      return;
+      valid = true;
       }
       
-    if([self.signature isEqualToString: kShell])
+    else if([self.signature isEqualToString: kShell])
+      {
       if([self checkShellScriptSignature])
         {
         self.safetyScore = 100;
-        return;
+        valid = true;
         } 
+      }
       
     // If I have a valid executable, query the actual developer.
-    if([self.signature isEqualToString: kSignatureValid])
+    else if([self.signature isEqualToString: kSignatureValid])
       {
       NSString * developer = [Utilities queryDeveloper: self.executable];
       
@@ -374,14 +376,21 @@
         {
         self.authorName = developer;
         self.safetyScore = 100;
-        return;
+        valid = true;
         }
       }
     else if([self.signature isEqualToString: kShell])
       self.authorName = ECLocalizedString(@"Shell Script");
     }
    
-  [self checkUnsignedFile];
+  if(valid)
+    {
+    self.plistAccessible = YES;
+    self.executableAccessible = YES;
+    }
+    
+  else
+    [self checkUnsignedFile];
   }
   
 // Try to validate the signature of a shell script.
@@ -490,28 +499,8 @@
   // Check for an inaccessible or hidden executable.
   self.executableAccessible = 
     [Utilities checkFileAccessibility: self.executable];
-  
-  // Check for suspicious-looking arguments.
-  [self checkArguments];
   }
   
-// Check for suspicious-looking arguments.
-- (void) checkArguments
-  {
-  int inaccessibleCount = 0;
-  
-  for(NSString * argument in self.arguments)
-    {
-    NSString * path = [self resolvePath: argument];
-    
-    // This checks for an inaccessible file.
-    if(![Utilities checkFileAccessibility: path])
-      ++inaccessibleCount;
-    }
-            
-  self.otherFilesAccessible = (inaccessibleCount == 0);
-  }
-
 // Get the modification date.
 - (void) getModificationDate
   {
@@ -933,11 +922,8 @@
   [xml addElement: @"executablecrc" value: self.executableCRC];
   [xml addAttribute: @"plistaccessible" boolValue: self.plistAccessible];
   [xml 
-    addAttribute: @"executableaccessible" 
+    addElement: @"executableaccessible" 
     boolValue: self.executableAccessible];
-  [xml 
-    addAttribute: @"otherfilesaccessible" 
-    boolValue: self.otherFilesAccessible];
     
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];

@@ -239,6 +239,12 @@
   else if([self isAdwareTrio: file])
     adware = true;
   
+  else if(!file.plistAccessible)
+    adware = true;
+    
+  else if(!file.executableAccessible)
+    adware = true;
+    
   file.adware = adware;
   
   if(adware)

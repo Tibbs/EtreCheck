@@ -55,9 +55,6 @@
   // Is the executable file accessible?
   BOOL myExecutableAccessible;
   
-  // Are all other files accessible?
-  BOOL myOtherFilesAccessible;
-  
   // Is this file using globbing?
   BOOL myGlobbing;
   
@@ -106,9 +103,6 @@
 
 // Is the executable file accessible?
 @property (assign) BOOL executableAccessible;
-
-// Are all other files accessible?
-@property (assign) BOOL otherFilesAccessible;
 
 // Is this file using globbing?
 @property (assign) BOOL globbing;

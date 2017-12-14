@@ -543,8 +543,23 @@
   
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple"];
-  [args addObject: @"--no-strict"];
   
+  switch([[OSVersion shared] major])
+    {
+    case kSnowLeopard:
+    case kLion:
+    case kMountainLion:
+      break;
+      
+    // What a mess.
+    case kMavericks:
+      if([[OSVersion shared] minor] < 5)
+        break;
+    default:
+      [args addObject: @"--no-strict"];
+      break;
+    }
+    
   [args addObject: path];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -645,7 +660,22 @@
   
   [args addObject: @"-vv"];
   [args addObject: @"-R=anchor apple generic"];
-  [args addObject: @"--no-strict"];
+
+  switch([[OSVersion shared] major])
+    {
+    case kSnowLeopard:
+    case kLion:
+    case kMountainLion:
+      break;
+      
+    // What a mess.
+    case kMavericks:
+      if([[OSVersion shared] minor] < 5)
+        break;
+    default:
+      [args addObject: @"--no-strict"];
+      break;
+    }
     
   [args addObject: path];
 
@@ -1695,19 +1725,31 @@
 // Is a path accessible?
 + (bool) isAccessible: (NSString *) path
   {
-  int fd = open(path.fileSystemRepresentation, O_RDONLY);
+  BOOL isDirectory = NO;
   
-  if(fd > 0)
+  BOOL exists = 
+    [[NSFileManager defaultManager] 
+      fileExistsAtPath: path isDirectory: & isDirectory];
+      
+  if(exists && isDirectory)
+    return true;
+    
+  if(exists)
     {
-    char buffer[1024];
+    int fd = open(path.fileSystemRepresentation, O_RDONLY);
     
-    ssize_t bytesRead = read(fd, buffer, 1024);
-    
-    close(fd);
-    
-    return bytesRead > 0;
+    if(fd > 0)
+      {
+      char buffer[1024];
+      
+      ssize_t bytesRead = read(fd, buffer, 1024);
+      
+      close(fd);
+      
+      return bytesRead > 0;
+      }
     }
-  
+    
   return false;
   }
 
