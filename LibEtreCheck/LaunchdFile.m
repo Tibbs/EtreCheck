@@ -16,7 +16,9 @@
 #import "LocalizedString.h"
 #import "XMLBuilder.h"
 #import "NSDate+Etresoft.h"
+#import "NSNumber+Etresoft.h"
 #import <ServiceManagement/ServiceManagement.h>
+#import <glob.h>
 
 // A wrapper around a launchd task.
 @interface LaunchdTask ()
@@ -64,6 +66,21 @@
 
 // Is this an Apple file?
 @synthesize apple = myApple;
+
+// Is the plist file accessible?
+@synthesize plistAccessible = myPlistAccessible;
+
+// Is the executable file accessible?
+@synthesize executableAccessible = myExecutableAccessible;
+
+// Are all other files accessible?
+@synthesize otherFilesAccessible = myOtherFilesAccessible;
+
+// Is this file using globbing?
+@synthesize globbing = myGlobbing;
+
+// Working directory.
+@synthesize workingDirectory = myWorkingDirectory;
 
 // Return a unique number.
 + (int) uniqueIdentifier
@@ -260,7 +277,20 @@
   self.plist = [NSDictionary readPropertyList: path];
   
   if(self.plist.count > 0)
+    {
     [super parseDictionary: self.plist];
+    
+    NSNumber * globbing = [self.plist objectForKey: @"EnableGlobbing"];
+    
+    if([NSNumber isValid: globbing])
+      self.globbing = globbing.boolValue;
+
+    NSString * workingDirectory = 
+      [self.plist objectForKey: @"WorkingDirectory"];
+    
+    if([NSString isValid: workingDirectory])
+      self.workingDirectory = workingDirectory;
+    }
     
   myConfigScriptValid = (self.label.length > 0);
     
@@ -281,11 +311,7 @@
       
     if([baseName isEqualToString: self.label])
       self.safetyScore = self.safetyScore + 10;
-    else
-      NSLog(@"%@ %@", self.path, @"label mismatch");
     }
-  else
-    NSLog(@"%@ %@", self.path, @"config script invalid");
   }
   
 // Collect the signature of a launchd item.
@@ -323,8 +349,6 @@
   if(!self.apple)
     self.signature = [Utilities checkExecutable: self.executable];
   
-  NSString * executableType = @"?";
-  
   if([self.signature length] > 0)
     {
     if([self.signature isEqualToString: kSignatureApple])
@@ -354,12 +378,10 @@
         }
       }
     else if([self.signature isEqualToString: kShell])
-      executableType = ECLocalizedString(@"Shell Script");
+      self.authorName = ECLocalizedString(@"Shell Script");
     }
    
-  self.authorName = executableType;
-  self.plistCRC = [Utilities crcFile: self.path];
-  self.executableCRC = [Utilities crcFile: self.executable];
+  [self checkUnsignedFile];
   }
   
 // Try to validate the signature of a shell script.
@@ -386,10 +408,12 @@
   // is from Apple or from the same author.
   for(NSString * argument in self.arguments)
     {
-    if([[NSFileManager defaultManager] fileExistsAtPath: argument])
+    NSString * path = [self resolvePath: argument];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath: path])
       {
       NSString * bundlePath = 
-        [Utilities resolveBundledScriptPath: argument];
+        [Utilities resolveBundledScriptPath: path];
         
       NSString * scriptSignature = 
         [Utilities checkShellScriptExecutable: bundlePath];
@@ -452,6 +476,42 @@
   return NO;
   }
   
+// Perform more extensive checking on an unsigned file.
+- (void) checkUnsignedFile
+  {
+  self.authorName = @"?";
+  
+  self.plistCRC = [Utilities crcFile: self.path];
+  self.executableCRC = [Utilities crcFile: self.executable];
+  
+  // Check for an inaccessible or hidden plist file.
+  self.plistAccessible = [Utilities checkFileAccessibility: self.path];
+  
+  // Check for an inaccessible or hidden executable.
+  self.executableAccessible = 
+    [Utilities checkFileAccessibility: self.executable];
+  
+  // Check for suspicious-looking arguments.
+  [self checkArguments];
+  }
+  
+// Check for suspicious-looking arguments.
+- (void) checkArguments
+  {
+  int inaccessibleCount = 0;
+  
+  for(NSString * argument in self.arguments)
+    {
+    NSString * path = [self resolvePath: argument];
+    
+    // This checks for an inaccessible file.
+    if(![Utilities checkFileAccessibility: path])
+      ++inaccessibleCount;
+    }
+            
+  self.otherFilesAccessible = (inaccessibleCount == 0);
+  }
+
 // Get the modification date.
 - (void) getModificationDate
   {
@@ -690,6 +750,27 @@
     }
   }
 
+// Resolve a path relative to this plist file.
+- (NSString *) resolvePath: (NSString *) path
+  {
+  if(self.workingDirectory)
+    if(![path hasPrefix: @"/"])
+      path = [self.workingDirectory stringByAppendingPathComponent: path];
+    
+  if(self.globbing)
+    {
+    glob_t g;
+
+    int error = 
+      glob(path.fileSystemRepresentation, GLOB_TILDE | GLOB_ERR, NULL, &g);
+      
+    if(error == 0)
+      path = [NSString stringWithUTF8String: *g.gl_pathv];
+    }
+    
+  return path;
+  }
+  
 #pragma mark - Context
 
 // Find the context based on the path.
@@ -850,6 +931,13 @@
     
   [xml addElement: @"plistcrc" value: self.plistCRC];
   [xml addElement: @"executablecrc" value: self.executableCRC];
+  [xml addAttribute: @"plistaccessible" boolValue: self.plistAccessible];
+  [xml 
+    addAttribute: @"executableaccessible" 
+    boolValue: self.executableAccessible];
+  [xml 
+    addAttribute: @"otherfilesaccessible" 
+    boolValue: self.otherFilesAccessible];
     
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];

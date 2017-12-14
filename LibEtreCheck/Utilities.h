@@ -202,4 +202,10 @@
 // Validate the app.
 + (BOOL) validate;
 
+// Check file accessibility.
+// Return TRUE if the path doesn't look like a path.
+// Return FALSE if the path looks like a path, but isn't ultimately
+// readable or is hidden.
++ (BOOL) checkFileAccessibility: (NSString *) path;
+
 @end

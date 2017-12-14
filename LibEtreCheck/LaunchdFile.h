@@ -48,6 +48,21 @@
   
   // Is this an Apple file?
   BOOL myApple;
+  
+  // Is the plist file accessible?
+  BOOL myPlistAccessible;
+  
+  // Is the executable file accessible?
+  BOOL myExecutableAccessible;
+  
+  // Are all other files accessible?
+  BOOL myOtherFilesAccessible;
+  
+  // Is this file using globbing?
+  BOOL myGlobbing;
+  
+  // Working directory.
+  NSString * myWorkingDirectory;
   }
 
 // The config script contents.
@@ -85,6 +100,21 @@
 
 // Is this an Apple file?
 @property (assign) BOOL apple;
+
+// Is the plist file accessible?
+@property (assign) BOOL plistAccessible;
+
+// Is the executable file accessible?
+@property (assign) BOOL executableAccessible;
+
+// Are all other files accessible?
+@property (assign) BOOL otherFilesAccessible;
+
+// Is this file using globbing?
+@property (assign) BOOL globbing;
+
+// Working directory.
+@property (strong, nullable) NSString * workingDirectory;
 
 // Constructor with path.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

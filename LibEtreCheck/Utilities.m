@@ -19,6 +19,8 @@
 #import <sqlite3.h>
 #import <unistd.h>
 #import "OSVersion.h"
+#import <sys/attr.h>
+#import <sys/stat.h>
 
 // Assorted utilities.
 @implementation Utilities
@@ -1585,4 +1587,128 @@
   return [parrot isEqualToString: @"Parrot"];
   }
   
+// Check file accessibility.
+// Return TRUE if the path doesn't look like a path.
+// Return FALSE if the path looks like a path, but isn't ultimately
+// readable or is hidden.
++ (BOOL) checkFileAccessibility: (NSString *) path
+  {
+  NSString * expandedPath = [path stringByExpandingTildeInPath];
+  
+  // Check if the directory appears to be hidden.
+  NSArray * parts = 
+    [[expandedPath stringByDeletingLastPathComponent] 
+      componentsSeparatedByString: @"/"];
+  
+  int index = 0;
+  bool hidden = false;
+  bool accessible = true;
+  
+  NSString * userLibrary = 
+    [NSHomeDirectory() stringByAppendingPathComponent: @"Library"];
+  
+  if([parts count] > 1)
+    {
+    for(NSString * part in parts)
+      if(index++ > 0)
+        {
+        NSString * currentPath = 
+          [[parts subarrayWithRange: NSMakeRange(0, index)]
+            componentsJoinedByString: @"/"];
+            
+        if([part hasPrefix: @"."])
+          hidden = true;
+          
+        if([currentPath isEqualToString: @"/bin"])
+          continue;
+
+        if([currentPath isEqualToString: @"/sbin"])
+          continue;
+
+        if([currentPath isEqualToString: @"/usr"])
+          continue;
+
+        if([currentPath isEqualToString: @"/Library"])
+          continue;
+          
+        if([currentPath isEqualToString: userLibrary])
+          continue;
+
+        if([Utilities isHidden: currentPath])
+          hidden = true;
+        }
+  
+    accessible = [Utilities isAccessible: expandedPath];
+    }
+    
+  return !hidden && accessible;
+  }
+  
+// Is a path hidden?
++ (bool) isHidden: (NSString *) path
+  {
+  bool hidden = false;
+  
+  struct attrlist attrList;
+  
+  attrList.bitmapcount = ATTR_BIT_MAP_COUNT;
+  attrList.reserved = 0;
+  attrList.commonattr = ATTR_CMN_FNDRINFO | ATTR_CMN_FLAGS;
+  attrList.volattr = 0;
+  attrList.dirattr = 0;
+  attrList.fileattr = 0;
+  attrList.forkattr = 0;
+  
+  typedef struct Buffer
+    {
+    u_int32_t length;
+    FileInfo fileInfo;
+    ExtendedFileInfo extendedFileInfo;
+    u_int32_t flags;
+    } Buffer;
+    
+  Buffer buffer;
+  
+  int error = 
+    getattrlist(
+      path.fileSystemRepresentation, 
+      & attrList, 
+      (void *)& buffer, 
+      sizeof(buffer), 
+      0);
+      
+  if(error == 0)
+    {
+    UInt16 FinderFlags = 
+      CFSwapInt16BigToHost(buffer.fileInfo.finderFlags);
+      
+    if(FinderFlags & kIsInvisible)
+      hidden = true;
+      
+    if(buffer.flags & UF_HIDDEN)
+      hidden = true;
+    }
+    
+  return hidden;
+  }
+  
+// Is a path accessible?
++ (bool) isAccessible: (NSString *) path
+  {
+  int fd = open(path.fileSystemRepresentation, O_RDONLY);
+  
+  if(fd > 0)
+    {
+    char buffer[1024];
+    
+    ssize_t bytesRead = read(fd, buffer, 1024);
+    
+    close(fd);
+    
+    return bytesRead > 0;
+    }
+  
+  return false;
+  }
+
 @end
