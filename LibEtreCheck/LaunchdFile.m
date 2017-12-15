@@ -926,7 +926,7 @@
     
   [xml addElement: @"plistcrc" value: self.plistCRC];
   [xml addElement: @"executablecrc" value: self.executableCRC];
-  [xml addAttribute: @"plistaccessible" boolValue: self.plistAccessible];
+  [xml addElement: @"plistaccessible" boolValue: self.plistAccessible];
   [xml 
     addElement: @"executableaccessible" 
     boolValue: self.executableAccessible];
