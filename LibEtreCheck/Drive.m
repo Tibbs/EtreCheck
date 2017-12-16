@@ -105,6 +105,7 @@
   self.SMARTStatus = nil;
   [myErrors release];
   self.dataModel = nil;
+  self.mechanism = nil;
   
   [super dealloc];
   }

@@ -40,6 +40,9 @@
 // I will need a unique, XML-safe identifier for each launchd file.
 @synthesize identifier = myIdentifier;
 
+// Adware.
+@synthesize adware = myAdware;
+
 // Return a unique number.
 + (int) uniqueIdentifier
   {
@@ -94,6 +97,7 @@
   self.bundleIdentifier = nil;
   self.developerWebSite = nil;
   [myIdentifier release];
+  self.adware = nil;
   
   [super dealloc];
   }
@@ -360,6 +364,8 @@
   else 
     [xml addElement: @"status" value: @"disabled"];
 
+  [xml addElement: @"adware" value: self.adware];
+  
   [xml endElement: @"extension"];
   }
   

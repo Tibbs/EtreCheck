@@ -270,89 +270,44 @@
   sqlite3_close(handle);
   }
 
-// Clean up files.
-+ (void) cleanupFiles: (nonnull NSArray *) files 
-  completion: (nonnull CleanupCompletion) completion
+// Remove a launchd file.
++ (void) removeLaunchdFile: (nonnull LaunchdFile *) file 
+  reason: (nonnull NSString *) reason
+  completion: (nonnull LaunchdCompletion) completion
   {
-  NSMutableArray * filesToDelete = [NSMutableArray new];
+  if([file.path hasPrefix: @"/System/Library/"])
+    [self unloadSystemFiles: [NSArray arrayWithObject: file]];
   
-  for(id item in files)
-    {
-    if([item respondsToSelector: @selector(isLaunchdFile)])
-      {
-      LaunchdFile * file = (LaunchdFile *)item;
-      
-      [filesToDelete addObject: [file.path stringByExpandingTildeInPath]];
-      }
-    else if([item respondsToSelector: @selector(isSafariExtension)])
-      {
-      SafariExtension * extension = (SafariExtension *)item;
-      
-      [filesToDelete 
-        addObject: [extension.path stringByExpandingTildeInPath]];
-      }
-    }
-    
-  [self trashFiles: filesToDelete reason: @"cleanup"];
+  else if([file.path hasPrefix: @"/Library/"])
+    [self unloadSystemFiles: [NSArray arrayWithObject: file]];
   
-  if(completion != nil)
-    completion(files);
-    
-  [filesToDelete release];
-  }
-
-// Remove adware.
-+ (void) removeAdwareFiles: (nonnull NSArray *) files 
-  completion: (nonnull RemoveAdwareCompletion) completion
-  {
-  NSMutableArray * filesToDelete = [NSMutableArray new];
-  
-  NSMutableArray * systemFiles = [NSMutableArray new];
-  NSMutableArray * userFiles = [NSMutableArray new];
-  
-  for(id item in files)
-    {
-    if([item respondsToSelector: @selector(isLaunchdFile)])
-      {
-      LaunchdFile * file = (LaunchdFile *)item;
-      
-      if([file.path hasPrefix: @"/System/Library/"])
-        [systemFiles addObject: file];
-      
-      else if([file.path hasPrefix: @"/Library/"])
-        [systemFiles addObject: file];
-      
-      else if([file.path hasPrefix: @"~/Library/"])
-        [userFiles addObject: file];
+  else if([file.path hasPrefix: @"~/Library/"])
+   [self unloadUserFiles: [NSArray arrayWithObject: file]];
         
-      [filesToDelete addObject: [file.path stringByExpandingTildeInPath]];
-      }
-    else if([item respondsToSelector: @selector(isSafariExtension)])
-      {
-      SafariExtension * extension = (SafariExtension *)item;
-      
-      [filesToDelete 
-        addObject: [extension.path stringByExpandingTildeInPath]];
-      }
-    }
-    
-  if(systemFiles.count > 0)
-    [self unloadSystemFiles: systemFiles];
-  
-  if(userFiles.count > 0)
-    [self unloadUserFiles: userFiles];
-
-  [self trashFiles: filesToDelete reason: @"adware"];
+  [self 
+    trashFiles: 
+      [NSArray arrayWithObject: [file.path stringByExpandingTildeInPath]] 
+    reason: reason];
   
   if(completion != nil)
-    completion(files);
-    
-  [systemFiles release];
-  [userFiles release];
-
-  [filesToDelete release];
+    completion(file);
   }
-  
+
+// Remove a Safari extension.
++ (void) removeSafariExtension: (nonnull SafariExtension *) extension 
+  reason: (nonnull NSString *) reason
+  completion: (nonnull SafariExtensionCompletion) completion
+  {
+  [self 
+    trashFiles: 
+      [NSArray 
+        arrayWithObject: [extension.path stringByExpandingTildeInPath]] 
+    reason: reason];
+
+  if(completion != nil)
+    completion(extension);
+  }
+    
 #pragma mark - Private methods
 
 #pragma mark - Load
@@ -386,7 +341,8 @@
         [self loadUserFiles: userFiles];
 
       if(completion != nil)
-        completion(files);
+        for(LaunchdFile * file in files)
+          completion(file);
         
       [systemFiles release];
       [userFiles release];
@@ -564,7 +520,8 @@
         [self unloadUserFiles: userFiles];
 
       if(completion != nil)
-        completion(files);
+        for(LaunchdFile * file in files)
+          completion(file);
         
       [systemFiles release];
       [userFiles release];

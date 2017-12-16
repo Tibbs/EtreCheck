@@ -203,9 +203,11 @@
 + (BOOL) validate;
 
 // Check file accessibility.
-// Return TRUE if the path doesn't look like a path.
-// Return FALSE if the path looks like a path, but isn't ultimately
-// readable or is hidden.
-+ (BOOL) checkFileAccessibility: (NSString *) path;
+// Returns YES if the file exists, NO otherwise.
+// Sets other attributes as appropriate.
++ (BOOL) checkFile: (NSString *) path 
+  hidden: (BOOL *) hidden 
+  permissions: (BOOL *) permissions
+  locked: (BOOL *) locked;
 
 @end

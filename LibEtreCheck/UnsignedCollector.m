@@ -45,9 +45,6 @@
   {
   [self collectUnsignedFiles];
   
-  // Score unsigned files.
-  [self calculateSafetyScores];
-  
   [self printUnsignedFiles];
   [self exportUnsignedFiles];
   }
@@ -68,11 +65,11 @@
     }
   }
   
-// Calculate safety scores for all unsigned files.
-- (void) calculateSafetyScores
+// Build a database of legitimate prefixes.
+- (void) buildLegitimatePrefixes
   {
   // Build a list of whitelist prefixes. 
-  NSMutableSet * whitelistFiles = [[self.model adware] whitelistFiles];
+  /* NSMutableSet * whitelistFiles = [[self.model adware] whitelistFiles];
   NSMutableSet * legitimateStrings = [NSMutableSet new];
   
   for(NSString * file in whitelistFiles)
@@ -80,53 +77,8 @@
     NSString * prefix = [Utilities bundleName: file];
     
     if(prefix.length > 0)
-      [legitimateStrings addObject: prefix];
-    }
-
-  for(LaunchdFile * file in [[self.model launchd] unsignedFiles])
-    {
-    NSDictionary * appleFile = 
-      [[[self.model launchd] appleFiles] objectForKey: file.path];
-      
-    if([NSDictionary isValid: appleFile])
-      {
-      NSString * signature = [appleFile objectForKey: @"signature"];
-      
-      if([NSString isValid: signature])
-        if([file.signature isEqualToString: signature])
-          {
-          file.safetyScore = 100;
-          continue;
-          }
-      }
-      
-    // If this is a full whitelist match, add 60.
-    if([whitelistFiles containsObject: file.path.lastPathComponent])
-      file.safetyScore = file.safetyScore += 60;
-    
-    // If this is a prefix match only, add 40.
-    else
-      {
-      NSString * prefix = 
-        [Utilities bundleName: file.path.lastPathComponent];
-    
-      if(prefix.length > 0)
-        if([legitimateStrings containsObject: prefix])
-          file.safetyScore = file.safetyScore += 40;
-      }
-    
-    // If there are lots of command-line arguments, decrease the safety
-    // score by 10.
-    int argumentSize = 0;
-      
-    for(NSString * argument in file.arguments)  
-      argumentSize += argument.length;
-      
-    if(argumentSize > 40)
-      file.safetyScore = file.safetyScore -= 20;
-    }
-      
-  [legitimateStrings release];
+      [legitimateStrings addObject: prefix]; 
+    } */
   }
   
 // Check for an unsigned file.

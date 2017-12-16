@@ -1618,10 +1618,10 @@
   }
   
 // Check file accessibility.
-// Return TRUE if the path doesn't look like a path.
-// Return FALSE if the path looks like a path, but isn't ultimately
-// readable or is hidden.
-+ (BOOL) checkFileAccessibility: (NSString *) path
++ (BOOL) checkFile: (NSString *) path 
+  hidden: (BOOL *) hidden 
+  permissions: (BOOL *) permissions
+  locked: (BOOL *) locked
   {
   NSString * expandedPath = [path stringByExpandingTildeInPath];
   
@@ -1631,12 +1631,17 @@
       componentsSeparatedByString: @"/"];
   
   int index = 0;
-  bool hidden = false;
-  bool accessible = true;
+  bool isHidden = false;
+  bool isAccessible = true;
+  bool isLocked = false;
+  BOOL exists = YES;
   
   NSString * userLibrary = 
     [NSHomeDirectory() stringByAppendingPathComponent: @"Library"];
   
+  NSString * userApplicationSupport = 
+    [userLibrary stringByAppendingPathComponent: @"Application Support"];
+
   if([parts count] > 1)
     {
     for(NSString * part in parts)
@@ -1646,9 +1651,6 @@
           [[parts subarrayWithRange: NSMakeRange(0, index)]
             componentsJoinedByString: @"/"];
             
-        if([part hasPrefix: @"."])
-          hidden = true;
-          
         if([currentPath isEqualToString: @"/bin"])
           continue;
 
@@ -1661,21 +1663,88 @@
         if([currentPath isEqualToString: @"/Library"])
           continue;
           
+        if([currentPath isEqualToString: @"/Library/Application Support"])
+          continue;
+
         if([currentPath isEqualToString: userLibrary])
           continue;
 
+        if([currentPath isEqualToString: userApplicationSupport])
+          continue;
+
+        if([part hasPrefix: @"."])
+          isHidden = true;
+          
         if([Utilities isHidden: currentPath])
-          hidden = true;
+          isHidden = true;
           
         if([Utilities isImmutable: currentPath])
-          accessible = false;
+          isLocked = true;
+
+        if(![Utilities isDirectoryAccessible: currentPath])
+          isAccessible = false;
+          
+        if(isHidden || isLocked || !isAccessible)
+          {
+          exists = YES;
+          break;
+          }
+          
+        if(!isHidden && !isLocked && isAccessible)
+          {
+          BOOL currentPathExists =
+            [[NSFileManager defaultManager] fileExistsAtPath: currentPath];
+          
+          if(!currentPathExists)
+            {
+            exists = NO;
+            break;
+            }
+          }
         }
-  
-    if(![Utilities isAccessible: expandedPath])
-      accessible = false;
     }
     
-  return !hidden && accessible;
+  if(!exists)
+    return NO;
+    
+  if([Utilities isHidden: expandedPath])
+    isHidden = true;
+    
+  if([Utilities isImmutable: expandedPath])
+    isLocked = false;
+    
+  BOOL isDirectory = NO;
+  
+  BOOL fileExists = 
+    [[NSFileManager defaultManager] 
+      fileExistsAtPath: expandedPath isDirectory: & isDirectory];
+
+  if(fileExists && isDirectory)
+    {
+    if(![Utilities isDirectoryAccessible: expandedPath])
+      isAccessible = false;
+    }
+  else if(fileExists)
+    {
+    if(![Utilities isFileAccessible: expandedPath])
+      isAccessible = false;
+    }
+  else if(isHidden || isLocked)
+    isAccessible = false;
+    
+  if(isHidden || isLocked || !isAccessible)
+    fileExists = YES;
+
+  if(hidden != NULL)
+    *hidden = isHidden;
+    
+  if(permissions != NULL)
+    *permissions = !isAccessible;
+    
+  if(locked != NULL)
+    *locked = isLocked;
+    
+  return fileExists;
   }
   
 // Is a path hidden?
@@ -1726,38 +1795,42 @@
   return hidden;
   }
   
-// Is a path accessible?
-+ (bool) isAccessible: (NSString *) path
+// Is a directory accessible?
++ (bool) isDirectoryAccessible: (NSString *) path
   {
-  BOOL isDirectory = NO;
+  NSError * error = nil;
   
-  BOOL exists = 
+  NSArray * contents = 
     [[NSFileManager defaultManager] 
-      fileExistsAtPath: path isDirectory: & isDirectory];
+      contentsOfDirectoryAtPath: path error: & error];
       
-  if(exists && isDirectory)
-    return true;
+  if(contents == nil)
+    if(error.code == NSFileReadNoPermissionError)
+      return false;
+      
+  return true;
+  }
+  
+// Is a file accessible?
++ (bool) isFileAccessible: (NSString *) path
+  {
+  int fd = open(path.fileSystemRepresentation, O_RDONLY);
+  
+  if(fd > 0)
+    {
+    char buffer[1024];
     
-  if([Utilities isImmutable: path])
+    ssize_t bytesRead = read(fd, buffer, 1024);
+    
+    close(fd);
+    
+    if(bytesRead >= 0)
+      return true;
+    }
+  else if(errno == EACCES)
     return false;
     
-  if(exists)
-    {
-    int fd = open(path.fileSystemRepresentation, O_RDONLY);
-    
-    if(fd > 0)
-      {
-      char buffer[1024];
-      
-      ssize_t bytesRead = read(fd, buffer, 1024);
-      
-      close(fd);
-      
-      return bytesRead > 0;
-      }
-    }
-    
-  return false;
+  return true;
   }
 
 // Is a path read-only?

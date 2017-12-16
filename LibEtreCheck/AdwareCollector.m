@@ -217,37 +217,23 @@
 // Collect the adware status of a launchd file.
 - (void) checkAdware: (LaunchdFile *) file 
   {
-  bool adware = NO;
-
   // Check for a known adware suffix.
   if([self isAdwareSuffix: file])
-    adware = true;
-    
-  // Check for hidden data.
-  else if([self isHiddenAdware: file])
-    adware = true;
+    file.adware = kAdwareSuffix;
     
   // Check for a known adware pattern.
   else if([self isAdwarePattern: file])
-    adware = true;
+    file.adware = kAdwarePattern;
     
   // Check for a known adware file.
   else if([self isAdwareMatch: [file.path lastPathComponent]])
-    adware = true;
+    file.adware = kAdwareMatch;
     
   // Check for a known adware pattern of matching files.
   else if([self isAdwareTrio: file])
-    adware = true;
+    file.adware = kAdwarePattern;
   
-  else if(!file.plistAccessible)
-    adware = true;
-    
-  else if(!file.executableAccessible)
-    adware = true;
-    
-  file.adware = adware;
-  
-  if(adware)
+  if(file.adware.length > 0)
     [[[self.model launchd] adwareFiles] addObject: file];
   }
 
@@ -447,15 +433,13 @@
     
     if([SafariExtension isValid: extension])
       {
-      bool adware = false;
-      
       if([self isAdwareMatch: extension.name])
-        adware = true;
+        extension.adware = kAdwareMatch;
         
       if([self isAdwareMatch: extension.displayName])
-        adware = true;
-        
-      if(adware)
+        extension.adware = kAdwareMatch;
+
+      if(extension.adware.length > 0)
         [[[self.model safari] adwareExtensions] addObject: extension];
       }
     }

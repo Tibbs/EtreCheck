@@ -6,10 +6,12 @@
 #import <Foundation/Foundation.h>
 
 @class LaunchdFile;
+@class SafariExtension;
 
 typedef void (^GatekeeperCompletion)(BOOL success);
-typedef void (^LaunchdCompletion)(NSArray * _Nonnull files);
-typedef void (^CleanupCompletion)(NSArray * _Nonnull cleanedUpFiles);
+typedef void (^LaunchdCompletion)(LaunchdFile * _Nonnull file);
+typedef 
+  void (^SafariExtensionCompletion)(SafariExtension * _Nonnull extension);
 
 typedef void (^RemoveAdwareCompletion)(
   NSArray * _Nonnull removedAdwareFiles);
@@ -43,12 +45,14 @@ typedef void (^RemoveAdwareCompletion)(
 // Purge user notifications.
 + (void) purgeUserNotifications: (nonnull NSArray *) notifications;
 
-// Clean up files.
-+ (void) cleanupFiles: (nonnull NSArray *) files 
-  completion: (nonnull CleanupCompletion) completion;
+// Remove a launchd file.
++ (void) removeLaunchdFile: (nonnull LaunchdFile *) file 
+  reason: (nonnull NSString *) reason
+  completion: (nonnull LaunchdCompletion) completion;
 
-// Remove adware.
-+ (void) removeAdwareFiles: (nonnull NSArray *) files 
-  completion: (nonnull RemoveAdwareCompletion) completion;
+// Remove a Safari extension.
++ (void) removeSafariExtension: (nonnull SafariExtension *) extension 
+  reason: (nonnull NSString *) reason
+  completion: (nonnull SafariExtensionCompletion) completion;
 
 @end

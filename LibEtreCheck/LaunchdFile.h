@@ -37,23 +37,14 @@
   // The executable CRC.
   NSString * myExecutableCRC;
   
-  // The safety scrore.
-  int mySafetyScore;
-  
   // Adware.
-  BOOL myAdware;
+  NSString * myAdware;
   
   // I will need a unique, XML-safe identifier for each launchd file.
   NSString * myIdentifier;
   
   // Is this an Apple file?
   BOOL myApple;
-  
-  // Is the plist file accessible?
-  BOOL myPlistAccessible;
-  
-  // Is the executable file accessible?
-  BOOL myExecutableAccessible;
   
   // Is this file using globbing?
   BOOL myGlobbing;
@@ -86,23 +77,14 @@
 // Is the file loaded?
 @property (readonly) BOOL loaded;
 
-// The safety scrore.
-@property (assign) int safetyScore;
-
-// Adware.
-@property (assign) BOOL adware;
+// Adware type.
+@property (strong, nullable) NSString * adware;
 
 // I will need a unique, XML-safe identifier for each launchd file.
 @property (strong, nullable) NSString * identifier;
 
 // Is this an Apple file?
 @property (assign) BOOL apple;
-
-// Is the plist file accessible?
-@property (assign) BOOL plistAccessible;
-
-// Is the executable file accessible?
-@property (assign) BOOL executableAccessible;
 
 // Is this file using globbing?
 @property (assign) BOOL globbing;

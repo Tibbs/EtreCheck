@@ -54,4 +54,14 @@
 #define kNotificationBundleID @"bundleid"
 #define kNotificationUserNotification @"notification"
 
+#define kAdwareSuffix @"suffix"
+#define kAdwarePattern @"pattern"
+#define kAdwareMatch @"match"
+#define kAdwarePlistHidden @"plisthidden"
+#define kAdwarePlistPermissions @"plistpermissions"
+#define kAdwarePlistLocked @"plistlocked"
+#define kAdwareExecutableHidden @"executablehidden"
+#define kAdwareExecutablePermissions @"executablepermissions"
+#define kAdwareExecutableLocked @"executablelocked"
+
 #endif /* EtreCheckConstants_h */

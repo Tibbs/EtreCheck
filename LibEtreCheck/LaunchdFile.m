@@ -55,9 +55,6 @@
 // Is the file loaded?
 @dynamic loaded;
 
-// The safety score.
-@synthesize safetyScore = mySafetyScore;
-
 // Adware.
 @synthesize adware = myAdware;
 
@@ -66,12 +63,6 @@
 
 // Is this an Apple file?
 @synthesize apple = myApple;
-
-// Is the plist file accessible?
-@synthesize plistAccessible = myPlistAccessible;
-
-// Is the executable file accessible?
-@synthesize executableAccessible = myExecutableAccessible;
 
 // Is this file using globbing?
 @synthesize globbing = myGlobbing;
@@ -164,9 +155,6 @@
       {
       myLoadedTasks = [NSMutableArray new];
       
-      // Start off with a safety score of 10. Adware will lose that.
-      mySafetyScore = 10;
-      
       myIdentifier = 
         [[NSString alloc] 
           initWithFormat: @"launchd%d", [LaunchdFile uniqueIdentifier]];
@@ -197,6 +185,8 @@
   self.identifier = nil;
   self.executableCRC = nil;
   self.plistCRC = nil;
+  self.adware = nil;
+  self.workingDirectory = nil;
   
   [super dealloc];
   }
@@ -290,25 +280,6 @@
     }
     
   myConfigScriptValid = (self.label.length > 0);
-    
-  [self calculateSafetyScore];
-  }
-
-// Calculate a safety score.
-- (void) calculateSafetyScore
-  {
-  // If the config script is valid, award 10 points.
-  if(self.configScriptValid)
-    {
-    self.safetyScore = self.safetyScore + 10;
-    
-    // If the label matches the file name, award another 10 points.
-    NSString * baseName = 
-      [[self.path lastPathComponent] stringByDeletingPathExtension];
-      
-    if([baseName isEqualToString: self.label])
-      self.safetyScore = self.safetyScore + 10;
-    }
   }
   
 // Collect the signature of a launchd item.
@@ -354,17 +325,13 @@
     if([self.signature isEqualToString: kSignatureApple])
       {
       self.authorName = @"Apple, Inc.";
-      self.safetyScore = 100;
       valid = true;
       }
       
     else if([self.signature isEqualToString: kShell])
       {
       if([self checkShellScriptSignature])
-        {
-        self.safetyScore = 100;
         valid = true;
-        } 
       }
       
     // If I have a valid executable, query the actual developer.
@@ -375,7 +342,6 @@
       if(developer.length > 0)
         {
         self.authorName = developer;
-        self.safetyScore = 100;
         valid = true;
         }
       }
@@ -383,13 +349,7 @@
       self.authorName = ECLocalizedString(@"Shell Script");
     }
    
-  if(valid)
-    {
-    self.plistAccessible = YES;
-    self.executableAccessible = YES;
-    }
-    
-  else
+  if(!valid)
     [self checkUnsignedFile];
   }
   
@@ -499,12 +459,46 @@
 // Check accessibility of a file.
 - (void) checkAccessibility
   {
-  // Check for an inaccessible or hidden plist file.
-  self.plistAccessible = [Utilities checkFileAccessibility: self.path];
+  BOOL hidden = NO;
+  BOOL permissions = NO;
+  BOOL locked = NO;
   
-  // Check for an inaccessible or hidden executable.
-  self.executableAccessible = 
-    [Utilities checkFileAccessibility: self.executable];
+  BOOL exists = 
+    [Utilities 
+      checkFile: self.path 
+      hidden: & hidden 
+      permissions: & permissions 
+      locked: & locked];
+  
+  if(exists)
+    {
+    if(hidden)
+      self.adware = kAdwarePlistHidden;
+    else if(permissions)
+      self.adware = kAdwarePlistPermissions;
+    else if(locked)
+      self.adware = kAdwarePlistLocked;
+    }
+    
+  if(self.adware == nil)
+    {
+    exists = 
+      [Utilities 
+        checkFile: self.executable 
+        hidden: & hidden 
+        permissions: & permissions 
+        locked: & locked];
+    
+    if(exists)
+      {
+      if(hidden)
+        self.adware = kAdwareExecutableHidden;
+      else if(permissions)
+        self.adware = kAdwareExecutablePermissions;
+      else if(locked)
+        self.adware = kAdwareExecutableLocked;
+      }
+    }
   }
   
 // Get the modification date.
@@ -926,16 +920,11 @@
     
   [xml addElement: @"plistcrc" value: self.plistCRC];
   [xml addElement: @"executablecrc" value: self.executableCRC];
-  [xml addElement: @"plistaccessible" boolValue: self.plistAccessible];
-  [xml 
-    addElement: @"executableaccessible" 
-    boolValue: self.executableAccessible];
+  [xml addElement: @"adware" value: self.adware];
     
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];
 
-  [xml addElement: @"safety" intValue: self.safetyScore];
-  
   [xml endElement: @"launchdfile"];
   }
 
