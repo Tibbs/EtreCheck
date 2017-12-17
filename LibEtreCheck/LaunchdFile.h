@@ -37,9 +37,12 @@
   // The executable CRC.
   NSString * myExecutableCRC;
   
-  // Adware.
+  // Adware information.
   NSString * myAdware;
   
+  // Details about this file.
+  NSString * myDetails;
+
   // I will need a unique, XML-safe identifier for each launchd file.
   NSString * myIdentifier;
   
@@ -77,8 +80,11 @@
 // Is the file loaded?
 @property (readonly) BOOL loaded;
 
-// Adware type.
+// Adware information.
 @property (strong, nullable) NSString * adware;
+
+// Details about this file.
+@property (strong, nullable) NSString * details;
 
 // I will need a unique, XML-safe identifier for each launchd file.
 @property (strong, nullable) NSString * identifier;

@@ -36,8 +36,11 @@
   // I will need a unique, XML-safe identifier for each launchd file.
   NSString * myIdentifier;
 
-  // Adware.
+  // Adware information.
   NSString * myAdware;
+  
+  // Details about this file.
+  NSString * myDetails;
   }
   
 // Source path.
@@ -64,8 +67,11 @@
 // I will need a unique, XML-safe identifier for each launchd file.
 @property (retain, nonnull) NSString * identifier;
 
-// Adware type.
+// Adware information.
 @property (strong, nullable) NSString * adware;
+
+// Details about this file.
+@property (strong, nullable) NSString * details;
 
 // Constructor with path to extension.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path;

@@ -55,8 +55,11 @@
 // Is the file loaded?
 @dynamic loaded;
 
-// Adware.
+// Adware information.
 @synthesize adware = myAdware;
+
+// Details about this file.
+@synthesize details = myDetails;
 
 // I will need a unique, XML-safe identifier for each launchd file.
 @synthesize identifier = myIdentifier;
@@ -186,6 +189,7 @@
   self.executableCRC = nil;
   self.plistCRC = nil;
   self.adware = nil;
+  self.details = nil;
   self.workingDirectory = nil;
   
   [super dealloc];
@@ -921,6 +925,7 @@
   [xml addElement: @"plistcrc" value: self.plistCRC];
   [xml addElement: @"executablecrc" value: self.executableCRC];
   [xml addElement: @"adware" value: self.adware];
+  [xml addElement: @"details" value: self.details];
     
   if(self.modificationDate != nil)
     [xml addElement: @"installdate" date: self.modificationDate];

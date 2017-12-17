@@ -17,6 +17,8 @@
 #import "Adware.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import <netinet/in.h>
+#import <netdb.h>
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -28,6 +30,21 @@
 // Collect information about unsigned files.
 @implementation UnsignedCollector
 
+// Track all unique whitelist prefixes.
+@synthesize whitelistPrefixes = myWhitelistPrefixes;
+
+// Prefixes being looked up.
+@synthesize networkPrefixes = myNetworkPrefixes;
+
+// A queue for managing asyncronous tasks.
+@synthesize queue = myQueue;
+
+// A semaphore for waiting for a number of tasks.
+@synthesize pendingTasks = myPendingTasks;
+
+// Am I emitting content already?
+@synthesize emittingContent = myEmittingContent;
+
 // Constructor.
 - (id) init
   {
@@ -35,18 +52,59 @@
   
   if(self != nil)
     {
+    NSString * label = [[NSString alloc] initWithString: @"Unsigned"];
+    
+    myQueue = 
+      dispatch_queue_create(label.UTF8String, DISPATCH_QUEUE_SERIAL);
+    
+    myPendingTasks = dispatch_group_create();
+    
+    myNetworkPrefixes = [NSMutableDictionary new];
     }
     
   return self;
   }
 
+// Destructor.
+- (void) dealloc
+  {
+  [myNetworkPrefixes release];
+  [myWhitelistPrefixes release];
+  dispatch_release(myPendingTasks);
+  dispatch_release(myQueue);
+  
+  [super dealloc];
+  }
+  
 // Print any unsigned files found.
 - (void) performCollect
   {
+  [self buildLegitimatePrefixes];
+  
   [self collectUnsignedFiles];
+  
+  [self waitForDetails];
   
   [self printUnsignedFiles];
   [self exportUnsignedFiles];
+  }
+  
+// Build a database of legitimate prefixes.
+- (void) buildLegitimatePrefixes
+  {
+  // Build a list of whitelist prefixes. 
+  NSMutableSet * whitelistFiles = [[self.model adware] whitelistFiles];
+  NSMutableSet * legitimateStrings = [NSMutableSet new];
+  
+  for(NSString * file in whitelistFiles)
+    {
+    NSString * prefix = [Utilities bundleName: file];
+    
+    if(prefix.length > 0)
+      [legitimateStrings addObject: prefix]; 
+    }
+    
+  myWhitelistPrefixes = [[NSSet alloc] initWithSet: legitimateStrings];
   }
   
 // Collect unsigned files. 
@@ -65,22 +123,6 @@
     }
   }
   
-// Build a database of legitimate prefixes.
-- (void) buildLegitimatePrefixes
-  {
-  // Build a list of whitelist prefixes. 
-  /* NSMutableSet * whitelistFiles = [[self.model adware] whitelistFiles];
-  NSMutableSet * legitimateStrings = [NSMutableSet new];
-  
-  for(NSString * file in whitelistFiles)
-    {
-    NSString * prefix = [Utilities bundleName: file];
-    
-    if(prefix.length > 0)
-      [legitimateStrings addObject: prefix]; 
-    } */
-  }
-  
 // Check for an unsigned file.
 - (void) checkUnsigned: (LaunchdFile *) file
   {
@@ -91,10 +133,108 @@
     return;
   
   // If it is already adware, skip it here.
-  if(file.adware)
+  if(file.adware != nil)
     return;
     
   [[[self.model launchd] unsignedFiles] addObject: file];
+  
+  [self getDetails: file];
+  }
+  
+// Get details about an unsigned file.
+- (void) getDetails: (LaunchdFile *) file
+  {
+  NSString * name = [file.path lastPathComponent];
+  NSString * prefix = [Utilities bundleName: name];
+  
+  if([[[self.model adware] whitelistFiles] containsObject: name])
+    file.details = kUnsignedWhitelist;
+  else if([self.whitelistPrefixes containsObject: prefix])
+    file.details = kUnsignedWhitelistPrefix;
+  else
+    [self lookupDetails: prefix file: file];
+  }
+  
+// Lookup details about an unsigned file.
+- (void) lookupDetails: (NSString *) prefix file: (LaunchdFile *) file
+  {
+  NSArray * parts = [prefix componentsSeparatedByString: @"."];
+  
+  NSString * domainName = 
+    [[[parts reverseObjectEnumerator] allObjects] 
+      componentsJoinedByString: @"."];
+    
+  dispatch_sync(
+    self.queue, 
+    ^{
+      NSMutableSet * files = 
+        [self.networkPrefixes objectForKey: domainName];
+      
+      if(files == nil)
+        {
+        files = [NSMutableSet new];
+        
+        [self.networkPrefixes setObject: files forKey: domainName];
+        
+        [files release];
+        }
+        
+     [files addObject: file];   
+     }); 
+    
+  dispatch_group_async(
+    self.pendingTasks,
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+    ^{
+      struct addrinfo ai_hints;
+
+      bzero(& ai_hints, sizeof(ai_hints));
+      
+      ai_hints.ai_flags = AI_PASSIVE;
+      ai_hints.ai_family = PF_UNSPEC;
+      ai_hints.ai_socktype = SOCK_STREAM;
+
+      struct addrinfo * server_addr = NULL;
+
+      int error = getaddrinfo(
+        [domainName UTF8String],
+        "http",
+        & ai_hints,
+        & server_addr);
+    
+      NSString * result;
+      
+      if(error)
+        result = kUnsignedDNSInvalid;
+      else
+        result = kUnsignedDNSValid;
+        
+      dispatch_sync(
+        self.queue, 
+        ^{
+          if(!self.emittingContent)
+            {
+            NSMutableSet * files = 
+              [self.networkPrefixes objectForKey: domainName];
+              
+            for(LaunchdFile * file in files)
+              file.details = result;
+            }
+        });
+    });
+  }
+  
+// Wait to collect all the details
+- (void) waitForDetails
+  {
+  dispatch_group_wait(
+    self.pendingTasks, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 30));
+    
+  dispatch_sync(
+    self.queue, 
+    ^{
+      self.emittingContent = YES;
+    });
   }
   
 // Print unsigned files.

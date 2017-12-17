@@ -64,4 +64,11 @@
 #define kAdwareExecutablePermissions @"executablepermissions"
 #define kAdwareExecutableLocked @"executablelocked"
 
+#define kUnsignedWhitelist @"whitelist"
+#define kUnsignedWhitelistPrefix @"whitelistprefix"
+#define kUnsignedDNSValid @"dnsvalid"
+#define kUnsignedDNSInvalid @"dnsinvalid"
+#define kUnsignedWebsiteValid @"websitevalid"
+#define kUnsignedWebsiteInvalid @"websiteinvalid"
+
 #endif /* EtreCheckConstants_h */

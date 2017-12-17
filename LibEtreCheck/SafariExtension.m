@@ -40,8 +40,11 @@
 // I will need a unique, XML-safe identifier for each launchd file.
 @synthesize identifier = myIdentifier;
 
-// Adware.
+// Adware information.
 @synthesize adware = myAdware;
+
+// Details about this file.
+@synthesize details = myDetails;
 
 // Return a unique number.
 + (int) uniqueIdentifier
@@ -366,6 +369,7 @@
     [xml addElement: @"status" value: @"disabled"];
 
   [xml addElement: @"adware" value: self.adware];
+  [xml addElement: @"details" value: self.details];
   
   [xml endElement: @"extension"];
   }
