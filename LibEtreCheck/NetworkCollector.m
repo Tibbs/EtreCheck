@@ -294,7 +294,8 @@
   // Apple uses 1024 for this one.
   formatter.k1000 = 1024.0;
       
-  NSString * iCloudFree = [formatter stringFromByteCount: self.iCloudFree];
+  NSString * iCloudFree = 
+    [formatter stringFromByteCount: self.iCloudFree.longLongValue];
 
   [formatter release];
   
@@ -307,7 +308,7 @@
             ECLocalizedString(@"    iCloud Quota: %@ available"),
             iCloudFree]];
       
-    if(self.iCloudFree < 1024 * 1024 * 256)
+    if(self.iCloudFree.longLongValue < 1024 * 1024 * 256)
       [self.result
         appendString: ECLocalizedString(@" (Low!)")
         attributes:
