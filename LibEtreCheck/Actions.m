@@ -282,7 +282,7 @@
     [self unloadSystemFiles: [NSArray arrayWithObject: file]];
   
   else if([file.path hasPrefix: @"~/Library/"])
-   [self unloadUserFiles: [NSArray arrayWithObject: file]];
+    [self unloadUserFiles: [NSArray arrayWithObject: file]];
         
   [self 
     trashFiles: 
