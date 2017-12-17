@@ -260,6 +260,9 @@
   NSString * model = [info objectForKey: @"machine_model"];
   NSString * cpu_type = [info objectForKey: @"cpu_type"];
   
+  if(cpu_type.length == 0)
+    cpu_type = self.CPUCode;
+    
   NSNumber * core_count =
     [info objectForKey: @"number_processors"];
   
@@ -318,7 +321,7 @@
   
   NSString * code = @"";
   
-  if([self.CPUCode length] > 0)
+  if(self.CPUCode.length > 0)
     code = [NSString stringWithFormat: @" (%@)", self.CPUCode];
     
   if(![NSNumber isValid: cpu_count])
@@ -673,13 +676,17 @@
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
-    if(plist && [plist count])
+    if([NSArray isValid: plist])
       {
-      NSArray * infos =
-        [[plist objectAtIndex: 0] objectForKey: @"_items"];
-        
-      if([infos count])
-        return [infos objectAtIndex: 0];
+      NSDictionary * results = [plist objectAtIndex: 0];
+      
+      if([NSDictionary isValid: results])
+        {
+        NSArray * infos = [results objectForKey: @"_items"];
+          
+        if([NSArray isValid: infos])
+          return [infos objectAtIndex: 0];
+        }
       }
     }
     
@@ -693,6 +700,9 @@
   
   for(NSDictionary * bank in banks)
     {
+    if(![NSDictionary isValid: bank])
+      continue;
+      
     NSString * name = [bank objectForKey: @"_name"];
     NSString * size = [bank objectForKey: @"dimm_size"];
     NSString * type = [bank objectForKey: @"dimm_type"];
