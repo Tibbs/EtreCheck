@@ -55,27 +55,16 @@
     if(criticalAppleInstalls == nil)
       return;
       
-    // Only print the most recent install for each item.
-    NSMutableDictionary * installsByName = [NSMutableDictionary new];
-
-    if(installsByName == nil)
-      {
-      [criticalAppleInstalls release];
-      
-      return;
-      }
-      
     NSMutableArray * installsToPrint = [NSMutableArray new];
     
     if(installsToPrint == nil)
       {
-      [installsByName release];
       [criticalAppleInstalls release];
       
       return;
       }
       
-    for(NSDictionary * install in installs)
+    for(NSMutableDictionary * install in installs)
       if([NSDictionary isValid: install])
         {
         NSString * name = [install objectForKey: @"_name"];
@@ -109,31 +98,13 @@
             critical = true;
               
           if(critical)
-            {
-            // Get the current install that matches the name.
-            NSDictionary * currentInstall = 
-              [installsByName objectForKey: name];
+            [install setObject: @YES forKey: @"critical"];
             
-            if([NSDictionary isValid: currentInstall])
-              {
-              NSDate * currentDate = 
-                [currentInstall objectForKey: @"install_date"];
-                
-              if([NSDate isValid: currentDate])
-              
-                // If I have an older install, remove it.
-                if([currentDate compare: date] == NSOrderedAscending)
-                  [installsToPrint removeObject: currentInstall];
-              }
-              
+          if(critical || [then compare: date] == NSOrderedAscending)
             [installsToPrint addObject: install];
-            [installsByName setObject: install forKey: name];
-            }
           }
         }
     
-    [installsByName release];
-         
     [self printInstalls: installsToPrint];
     
     [installsToPrint release];
@@ -171,7 +142,14 @@
           
         if([NSArray isValid: items])
           for(NSDictionary * item in items)
-            [installs addObject: item];
+            {
+            NSMutableDictionary * install = 
+              [[NSMutableDictionary alloc] initWithDictionary: item];
+            
+            [installs addObject: install];
+            
+            [install release];
+            }
         }
       }
     }
@@ -216,14 +194,8 @@
     if([NSDictionary isValid: install])
       {
       NSString * name = [install objectForKey: @"_name"];
-      NSString * version = [install objectForKey: @"install_version"];
-      
-      NSString * key = 
-        [[NSString alloc] initWithFormat: @"%@:%@", name, version];
         
-      [lastInstallsByNameAndVersion setObject: install forKey: key];
-      
-      [key release];
+      [lastInstallsByNameAndVersion setObject: install forKey: name];
       }
       
   NSMutableSet * lastInstalls = 
@@ -259,6 +231,7 @@
         NSDate * date = [install objectForKey: @"install_date"];
         NSString * version = [install objectForKey: @"install_version"];
         NSString * source = [install objectForKey: @"package_source"];
+        NSNumber * critical = [install objectForKey: @"critical"];
 
         if(![NSString isValid: name])
           continue;
@@ -278,6 +251,7 @@
         [self.xml addElement: @"version" value: version];
         [self.xml addElement: @"installdate" date: date];
         [self.xml addElement: @"source" value: source];
+        [self.xml addElement: @"critical" boolValue: critical.boolValue];
         
         [self.xml endElement: @"package"];
         
