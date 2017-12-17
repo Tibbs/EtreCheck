@@ -14,7 +14,7 @@
   NSMutableArray * myUbiquityContainers;
   
   // iCloud free amount.
-  long long myiCloudFree;
+  NSNumber * myiCloudFree;
   }
   
 // Network interfaces.
@@ -24,6 +24,6 @@
 @property (readonly) NSMutableArray * ubiquityContainers;
 
 // iCloud free amount.
-@property (assign) long long iCloudFree;
+@property (assign) NSNumber * iCloudFree;
 
 @end

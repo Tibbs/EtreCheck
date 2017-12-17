@@ -45,6 +45,7 @@
   {
   [myInterfaces release];
   [myUbiquityContainers release];
+  [myiCloudFree release];
   
   [super dealloc];
   }
@@ -179,6 +180,7 @@
   if(version < kSierra)
     return;
 
+  bool configured = false;
   long long bytes = 0;
     
   NSArray * args =
@@ -193,16 +195,18 @@
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
     for(NSString * line in lines)
-      {
-      NSScanner * scanner = [NSScanner scannerWithString: line];
-      
-      [scanner scanLongLong: & bytes];
-      }
+      if([line hasSuffix: @" bytes of quota remaining"])
+        {
+        NSScanner * scanner = [NSScanner scannerWithString: line];
+        
+        configured = [scanner scanLongLong: & bytes];
+        }
     }
     
   [subProcess release];
   
-  self.iCloudFree = bytes;
+  if(configured)
+    self.iCloudFree = [[NSNumber alloc] initWithLongLong: bytes];
   }
   
 // Print network information.
@@ -333,19 +337,20 @@
   int version = [[OSVersion shared] major];
 
   if(version >= kSierra)
-    {
-    ByteCountFormatter * formatter = [ByteCountFormatter new];
-        
-    // Apple uses 1024 for this one.
-    formatter.k1000 = 1024.0;
-        
-    NSString * iCloudFree = 
-      [formatter stringFromByteCount: self.iCloudFree];
+    if(self.iCloudFree != nil)
+      {
+      ByteCountFormatter * formatter = [ByteCountFormatter new];
+          
+      // Apple uses 1024 for this one.
+      formatter.k1000 = 1024.0;
+          
+      NSString * iCloudFree = 
+        [formatter stringFromByteCount: self.iCloudFree.longLongValue];
 
-    [formatter release];
-    
-    [self.xml addElement: @"icloudfree" valueWithUnits: iCloudFree];
-    }
+      [formatter release];
+      
+      [self.xml addElement: @"icloudfree" valueWithUnits: iCloudFree];
+      }
   }
 
 @end
