@@ -352,6 +352,7 @@
   [xml addElement: @"displayname" value: self.displayName];
   [xml addElement: @"developer" value: self.authorName];
   [xml addElement: @"url" value: self.developerWebSite];
+  [xml addElement: @"path" value: self.path];
   
   [xml addElement: @"installdate" date: self.modificationDate];
   
