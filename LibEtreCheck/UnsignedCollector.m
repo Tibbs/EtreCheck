@@ -57,6 +57,8 @@
     myQueue = 
       dispatch_queue_create(label.UTF8String, DISPATCH_QUEUE_SERIAL);
     
+    [label release];
+    
     myPendingTasks = dispatch_group_create();
     
     myNetworkPrefixes = [NSMutableDictionary new];
@@ -105,6 +107,8 @@
     }
     
   myWhitelistPrefixes = [[NSSet alloc] initWithSet: legitimateStrings];
+  
+  [legitimateStrings release];
   }
   
 // Collect unsigned files. 

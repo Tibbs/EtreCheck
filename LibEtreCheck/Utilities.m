@@ -1009,7 +1009,7 @@
       else if([origin isEqualToString: @"Software Signing"])
         return @"Apple, Inc.";
       else if([origin isEqualToString: @"Apple Mac OS Application Signing"])
-        return @"Apple, Inc.";
+        return @"Mac App Store";
       }
     }
       

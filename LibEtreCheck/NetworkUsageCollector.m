@@ -18,6 +18,7 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import "RunningProcess.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -314,6 +315,7 @@
   [self.xml addElement: @"inputsize" valueWithUnits: bytesInString];
   [self.xml addElement: @"outputsize" valueWithUnits: bytesOutString];
   [self.xml addElement: @"name" value: processName];
+  [self.xml addElement: @"PID" number: pid];
   
   [self.xml endElement: @"process"];
 
@@ -325,6 +327,11 @@
           printBytesInString,
           printBytesOutString,
           processName]];
+          
+  RunningProcess * runningProcess = 
+    [self.model.runningProcesses objectForKey: pid];
+    
+  runningProcess.reported = YES;
   }
 
 @end

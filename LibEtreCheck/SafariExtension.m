@@ -101,6 +101,7 @@
   self.developerWebSite = nil;
   [myIdentifier release];
   self.adware = nil;
+  self.details = nil;
   
   [super dealloc];
   }

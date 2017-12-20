@@ -10,6 +10,8 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import "RunningProcess.h"
+#import "Model.h"
 
 // Collect information about CPU usage.
 @implementation CPUUsageCollector
@@ -97,7 +99,10 @@
     NSNumber * cpuValue = [process objectForKey: @"cpu"];
     NSNumber * countValue = [process objectForKey: @"count"];
     NSString * name = [process objectForKey: @"command"];
-        
+    NSNumber * pid = [process objectForKey: @"pid"];
+  
+  if(![NSNumber isValid: pid])
+    return;
     if(![NSNumber isValid: cpuValue] || ![NSNumber isValid: countValue])
       continue;
       
@@ -132,6 +137,7 @@
         
     [self.xml addElement: @"name" value: name];
     [self.xml addElement: @"count" intValue: count];
+    [self.xml addElement: @"PID" number: pid];
     
     [self.xml endElement: @"process"];
     
@@ -150,6 +156,12 @@
     else
       [self.result appendString: output];
           
+
+    RunningProcess * runningProcess = 
+      [self.model.runningProcesses objectForKey: pid];
+      
+    runningProcess.reported = YES;
+
     ++topCount;
           
     if(cpu == 0.0)

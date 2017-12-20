@@ -56,6 +56,7 @@
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
 @synthesize coreCount = myCoreCount;
+@synthesize runningProcesses = myRunningProcesses;
   
 // Get the model.
 - (NSString *) model
@@ -101,6 +102,7 @@
     myPathsForUUIDs = [NSMutableDictionary new];
     myXMLBuilder = [XMLBuilder new];
     myXMLHeader = [XMLBuilder new];
+    myRunningProcesses = [NSMutableDictionary new];
     }
     
   return self;
@@ -132,6 +134,7 @@
   [myGPUErrors release];
   [myProblem release];
   [myProblemDescription release];
+  [myRunningProcesses release];
   
   [super dealloc];
   }

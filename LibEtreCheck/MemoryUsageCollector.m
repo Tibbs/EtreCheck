@@ -13,6 +13,7 @@
 #import "NSMutableDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import "RunningProcess.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -126,6 +127,11 @@
 - (void) printTopProcess: (NSDictionary *) process
   formatter: (ByteCountFormatter *) formatter
   {
+  NSNumber * pid = [process objectForKey: @"pid"];
+  
+  if(![NSNumber isValid: pid])
+    return;
+
   NSNumber * processMem = [process objectForKey: @"mem"];
   
   if(![NSNumber isValid: processMem])
@@ -162,6 +168,7 @@
   [self.xml addElement: @"size" valueWithUnits: memoryString];
   [self.xml addElement: @"name" value: name];
   [self.xml addElement: @"count" intValue: count];
+  [self.xml addElement: @"PID" number: pid];
   
   [self.xml endElement: @"process"];
 
@@ -187,6 +194,11 @@
             [NSColor redColor], NSForegroundColorAttributeName, nil]];      
   else
     [self.result appendString: output];
+
+  RunningProcess * runningProcess = 
+    [self.model.runningProcesses objectForKey: pid];
+    
+  runningProcess.reported = YES;
   }
 
 @end

@@ -16,6 +16,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import "RunningProcess.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -174,9 +175,9 @@
         if([NSString isValid: name] && [name isEqualToString: @"top"])
           continue;
           
-        NSString * pid = [process objectForKey: @"pid"];
+        NSNumber * pid = [process objectForKey: @"pid"];
 
-        if([NSString isValid: pid])
+        if([NSNumber isValid: pid])
           [processes setObject: process forKey: pid];
         }
       }
@@ -293,6 +294,7 @@
   [powerString release];
   
   [self.xml addElement: @"name" value: processName];
+  [self.xml addElement: @"PID" number: pid];
   
   [self.xml endElement: @"process"];
 
@@ -316,6 +318,11 @@
             @"    %@\t%@\n",
             printString,
             processName]];
+            
+  RunningProcess * runningProcess = 
+    [self.model.runningProcesses objectForKey: pid];
+    
+  runningProcess.reported = YES;
   }
 
 @end

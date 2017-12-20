@@ -12,13 +12,97 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSMutableDictionary+Etresoft.h"
+#import "RunningProcess.h"
+#import "NumberFormatter.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
 
+// Collect full paths for running processes.
+- (void) collectRunningProcesses
+  {
+  NSArray * args = @[ @"raxww", @"-o", @"pid, command" ];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/bin/ps" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    bool firstLine = true;
+    
+    for(NSString * line in lines)
+      {
+      if(firstLine)
+        {
+        firstLine = false;
+        continue;
+        }
+        
+      NSScanner * scanner = [[NSScanner alloc] initWithString: line];
+      
+      int PID;
+      
+      if([scanner scanInt: & PID])
+        {
+        NSString * command = nil;
+        
+        BOOL success = 
+          [scanner 
+            scanUpToCharactersFromSet: [NSCharacterSet newlineCharacterSet] 
+            intoString: & command];
+      
+        if(success && (command != nil))
+          {
+          NSNumber * pid = [[NSNumber alloc] initWithInt: PID];
+          
+          RunningProcess * runningProcess = 
+            [self.model.runningProcesses objectForKey: pid];
+            
+          if(runningProcess == nil)
+            {
+            runningProcess = [RunningProcess new];
+            
+            runningProcess.PID = PID;
+            runningProcess.command = command;
+            
+            [self.model.runningProcesses 
+              setObject: runningProcess forKey: pid];
+          
+            [runningProcess release];
+            }
+            
+          [pid release];
+          }
+          
+        [scanner release];
+        }
+      }
+      
+    RunningProcess * runningProcess = 
+      [self.model.runningProcesses objectForKey: @0];
+      
+    if(runningProcess == nil)
+      {
+      runningProcess = [RunningProcess new];
+      
+      runningProcess.PID = 0;
+      runningProcess.command = @"kernel_task";
+      
+      [self.model.runningProcesses setObject: runningProcess forKey: @0];
+      
+      [runningProcess release];
+      }
+    }
+    
+  [subProcess release];
+  }
+
 // Collect running processes.
 - (NSMutableDictionary *) collectProcesses
   {
+  [self collectRunningProcesses];
+  
   NSArray * args = @[ @"-raxcww", @"-o", @"rss, %cpu, pid, command" ];
   
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];

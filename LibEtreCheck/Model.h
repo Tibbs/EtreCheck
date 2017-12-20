@@ -88,6 +88,8 @@
   bool myUnsignedFound;
   bool myCleanupRequired;
   int myCoreCount;
+  
+  NSMutableDictionary * myRunningProcesses;
   }
 
 // The problem and description (if any).
@@ -193,6 +195,9 @@
 // XML output.
 @property (readonly) XMLBuilder * xml;
 @property (readonly) XMLBuilder * header;
+
+// Running processes.
+@property (readonly) NSMutableDictionary * runningProcesses;
 
 // Return true if there are log entries for a process.
 - (bool) hasLogEntries: (NSString *) name;

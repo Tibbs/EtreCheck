@@ -200,7 +200,7 @@
 // Emit text as CDATA.
 - (NSString *) XMLFragmentAsCDATA: (NSString *) text
   {
-  // First see if the text has has the CDATA ending tag. If so, that will
+  // First see if the text has the CDATA ending tag. If so, that will
   // need to be split out.
   NSRange range = [text rangeOfString: @"]]>"];
   
@@ -335,8 +335,8 @@
       [XML appendFormat: @"%@</%@>", [self endingIndent], self.name];
       }
       
-    // I don't have any children, so turn the opening tag into a self-closing
-    // tag.
+    // I don't have any children, so turn the opening tag into a 
+    // self-closing tag.
     else
       [XML appendString: @"/>"];
     }
@@ -1052,6 +1052,52 @@
   [self addElement: name value: [NSString stringWithFormat: @"%s", value]];
   }
 
+// Add a binary element with type attribute.
+- (void) addElement: (NSString *) name 
+  type: (NSString *) type data: (NSData *) data
+  {
+  NSMutableDictionary * attributes =
+    [[NSMutableDictionary alloc]
+      initWithObjectsAndKeys: type, @"type", nil];
+    
+  NSString * value = nil;
+  
+  if([data respondsToSelector: @selector(base64EncodedStringWithOptions:)])
+    value = 
+      [data 
+        base64EncodedStringWithOptions: 
+          NSDataBase64Encoding64CharacterLineLength 
+            | NSDataBase64EncodingEndLineWithLineFeed];
+  
+  else
+    {
+    NSString * oneLine = [data base64Encoding];
+    
+    NSMutableString * multiLine = [NSMutableString new];
+    
+    NSUInteger start = 0;
+    
+    while(true)
+      {      
+      if(oneLine.length <= start)
+        break;
+        
+      NSRange range = NSMakeRange(start, MIN(oneLine.length - start, 64));
+      
+      [multiLine appendString: [oneLine substringWithRange: range]];
+      [multiLine appendString: @"\n"];
+      
+      start += range.length;
+      }
+      
+    value = [multiLine autorelease];
+    }
+    
+  [self addElement: name value: value attributes: attributes];
+  
+  [attributes release];
+  }
+  
 // Add a boolean to the current element's contents.
 - (void) addBool: (BOOL) value
   {

@@ -226,6 +226,10 @@
 // Add an element and value with a convenience function.
 - (void) addElement: (NSString *) name UTF8StringValue: (char *) value;
 
+// Add a binary element with type attribute.
+- (void) addElement: (NSString *) name 
+  type: (NSString *) type data: (NSData *) data;
+
 // Add a fragment from another XMLBuilder.
 - (void) addFragment: (XMLBuilderElement *) xml;
 

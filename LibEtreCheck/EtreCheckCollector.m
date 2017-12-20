@@ -12,6 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "NSString+Etresoft.h"
+#import "RunningProcess.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -126,6 +127,7 @@
   [self printOptions];
   [self printErrors];
   [self printProblem];
+  [self exportContext];
   }
 
 // Print performance.
@@ -400,6 +402,150 @@
     }
   }
 
+// Export the context.
+- (void) exportContext
+  {
+  [self.xml startElement: @"context"];
+  
+  for(NSNumber * pid in self.model.runningProcesses)
+    {
+    RunningProcess * runningProcess = 
+      [self.model.runningProcesses objectForKey: pid];
+      
+    if(runningProcess.reported)
+      {
+      if(runningProcess.path == nil)
+        continue;
+        
+      [self.xml startElement: @"process"];
+      
+      [self.xml addElement: @"PID" intValue: runningProcess.PID];
+      [self.xml addElement: @"path" value: runningProcess.path];
+      
+      if(runningProcess.PID == 0)
+        runningProcess.apple = YES;
+        
+      if([runningProcess.path hasPrefix: @"/System/"])
+        runningProcess.apple = YES;
+      
+      if(!runningProcess.apple)
+        {
+        BOOL isWebKit = 
+          [runningProcess.path 
+            hasPrefix: @"/System/Library/Frameworks/WebKit.framework/"];
+            
+        NSString * bundlePath = 
+          isWebKit
+            ? @"/Applications/Safari.app"
+            : [Utilities getParentBundle: runningProcess.path];
+          
+        NSImage * icon = 
+          [[NSWorkspace sharedWorkspace] iconForFile: bundlePath];
+            
+        [icon setSize: NSMakeSize(32.0, 32.0)];
+        
+        NSData * data = [self iconToData: icon];
+        
+        if(data.length > 800)
+          [self.xml addElement: @"icon" type: @"image/png" data: data];
+        }
+        
+      NSString * source = @"?";
+      
+      if(!runningProcess.apple)
+        {
+        // Now try to get the author.
+        BOOL isXcode = 
+          [runningProcess.path 
+            isEqualToString: 
+              @"/Applications/Xcode.app/Contents/MacOS/Xcode"];
+              
+        if(isXcode)
+          runningProcess.apple = YES;
+            
+        if(!runningProcess.apple)
+          {
+          NSString * signature = 
+            [Utilities checkAppleExecutable: runningProcess.path];
+        
+          if([signature isEqualToString: kSignatureApple])
+            runningProcess.apple = YES;
+          }
+        }
+        
+      if(runningProcess.apple)  
+        source = @"Apple";
+      else
+        source = [Utilities queryDeveloper: runningProcess.path];
+        
+      [self.xml addElement: @"apple" boolValue: runningProcess.apple];
+      [self.xml addElement: @"source" value: source];
+
+      [self.xml endElement: @"process"];      
+      }
+    }
+    
+  // Go ahead and add kernel_task here.
+  [self.xml startElement: @"process"];
+  
+  [self.xml addElement: @"PID" intValue: 0];
+  [self.xml addElement: @"apple" boolValue: YES];
+  [self.xml addElement: @"source" value: @"Apple"];
+  
+  [self.xml endElement: @"process"];
+
+  [self.xml endElement: @"context"];
+  
+  NSImage * machineIcon = [NSImage imageNamed: NSImageNameComputer];
+  
+  [machineIcon setSize: NSMakeSize(512.0, 512.0)];
+  
+  NSData * data = [self iconToData: machineIcon];
+  
+  // Add the machine icon too.
+  [self.xml addElement: @"machineicon" type: @"image/png" data: data];
+  }
+  
+// Convert an icon to a PNG data representation.
+- (NSData *) iconToData: (NSImage *) icon
+  {
+  NSBitmapImageRep * bitmap = 
+    [[NSBitmapImageRep alloc]
+      initWithBitmapDataPlanes: NULL
+      pixelsWide: (int)icon.size.width
+      pixelsHigh: (int)icon.size.height
+      bitsPerSample: 8
+      samplesPerPixel: 4
+      hasAlpha: YES
+      isPlanar: NO
+      colorSpaceName: NSDeviceRGBColorSpace
+      bytesPerRow: 0
+      bitsPerPixel: 0];
+
+  [NSGraphicsContext saveGraphicsState];
+  
+  [NSGraphicsContext 
+    setCurrentContext:
+      [NSGraphicsContext graphicsContextWithBitmapImageRep: bitmap]];    
+
+  [icon 
+    drawAtPoint: NSMakePoint(0, 0)
+    fromRect: NSZeroRect
+    operation: NSCompositeSourceOver
+    fraction: 1.0];
+
+  [NSGraphicsContext restoreGraphicsState];
+  
+  NSData * data = 
+    [bitmap 
+      representationUsingType: NSPNGFileType 
+      properties: @{NSImageCompressionFactor: @1.0}];
+
+  [bitmap release];
+  
+  return data;
+  }
+  
 // Get the elapsed time as a number of seconds.
 - (NSTimeInterval) elapsedSeconds
   {
