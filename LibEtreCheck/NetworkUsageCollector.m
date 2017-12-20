@@ -119,25 +119,30 @@
       NSNumber * bytesIn2 = nil;
       NSNumber * bytesOut2 = nil;
       
-      if([NSNumber isValid: bytesIn1])
+      if([NSDictionary isValid: process1])
+        {
         bytesIn1 = [process1 objectForKey: @"bytesIn"];
-      
-      if([NSNumber isValid: bytesOut1])
         bytesOut1 = [process1 objectForKey: @"bytesOut"];
-      
-      if([NSNumber isValid: bytesIn2])
+        }
+        
+      if([NSDictionary isValid: process2])
+        {
         bytesIn2 = [process2 objectForKey: @"bytesIn"];
-      
-      if([NSNumber isValid: bytesOut2])
         bytesOut2 = [process2 objectForKey: @"bytesOut"];
+        }
+        
+      unsigned long long total1 = 0;
+      unsigned long long total2 = 0;
+      
+      if([NSNumber isValid: bytesIn1] && [NSNumber isValid: bytesOut1])
+        total1 = 
+          [bytesIn1 unsignedLongLongValue] 
+            + [bytesOut1 unsignedLongLongValue];
 
-      unsigned long long total1 =
-        [bytesIn1 unsignedLongLongValue] +
-          [bytesOut1 unsignedLongLongValue];
-
-      unsigned long long total2 =
-        [bytesIn2 unsignedLongLongValue] +
-          [bytesOut2 unsignedLongLongValue];
+      if([NSNumber isValid: bytesIn2] && [NSNumber isValid: bytesOut2])
+        total2 =
+          [bytesIn2 unsignedLongLongValue] 
+            + [bytesOut2 unsignedLongLongValue];
         
       if(total1 > total2)
         return NSOrderedAscending;
