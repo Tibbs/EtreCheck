@@ -74,9 +74,9 @@
             
           [pid release];
           }
-          
-        [scanner release];
         }
+        
+      [scanner release];
       }
       
     RunningProcess * runningProcess = 
