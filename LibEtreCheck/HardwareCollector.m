@@ -590,6 +590,13 @@
     
     if([NSNumber isValid: isUpgradeable])  
       upgradeable = [isUpgradeable boolValue];
+    else
+      {
+      NSString * isUpgradeableString = (NSString *)isUpgradeable;
+      
+      if([NSString isValid: isUpgradeableString])
+        upgradeable = [isUpgradeableString isEqualToString: @"Yes"];
+      }
     
     if(self.simulating)
       upgradeable = true;
