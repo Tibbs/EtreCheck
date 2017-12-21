@@ -165,6 +165,10 @@
       if([NSString isValid: volumeUUID])
         drive = NO;  
 
+      // Hack this for now. disk0 always has to be a disk.
+      if([device isEqualToString: @"disk0"])
+        drive = YES;
+        
       if(drive)
         {
         if([self collectPhysicalDrive: plist])
