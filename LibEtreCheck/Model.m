@@ -57,6 +57,8 @@
 @synthesize header = myXMLHeader;
 @synthesize coreCount = myCoreCount;
 @synthesize runningProcesses = myRunningProcesses;
+@synthesize inputDebugDirectory = myInputDebugDirectory;
+@synthesize outputDebugDirectory = myOutputDebugDirectory;
   
 // Get the model.
 - (NSString *) model
@@ -135,6 +137,8 @@
   [myProblem release];
   [myProblemDescription release];
   [myRunningProcesses release];
+  [myOutputDebugDirectory release];
+  [myInputDebugDirectory release];
   
   [super dealloc];
   }
@@ -303,6 +307,58 @@
   return NO;
   }
 
+// Save debug information to a temporary directory.
+// Return the path to the temporary directory.
+- (NSString *) saveDebugInformation
+  {
+  NSString * temporaryDirectory = NSTemporaryDirectory();
+  NSString * UUID = [NSString UUID];
+  self.outputDebugDirectory = 
+    [temporaryDirectory stringByAppendingPathComponent: UUID];
+
+  [[NSFileManager defaultManager] 
+    createDirectoryAtPath: self.outputDebugDirectory 
+    withIntermediateDirectories: YES 
+    attributes: nil 
+    error: NULL];
+  
+  BOOL isDirectory = NO;
+  
+  BOOL exists = 
+    [[NSFileManager defaultManager] 
+      fileExistsAtPath: self.outputDebugDirectory 
+      isDirectory: & isDirectory];
+    
+  NSLog(@"Saving debug output to %@", self.outputDebugDirectory);
+  
+  if(exists)
+    return self.outputDebugDirectory;
+  
+  NSLog(
+    @"Failed to create output debug directory at %@", 
+    self.outputDebugDirectory);
+    
+  return nil;
+  }
+
+// Load debug information from a directory.
+- (void) loadDebugInformation: (NSString *) directory
+  {
+  self.inputDebugDirectory = directory;
+  }
+  
+// A path for debug input for a given key.
+- (NSString *) debugInputPath: (NSString *) key
+  {
+  return [self.inputDebugDirectory stringByAppendingPathComponent: key];
+  }
+
+// A path for debug input for a given key.
+- (NSString *) debugOutputPath: (NSString *) key
+  {
+  return [self.outputDebugDirectory stringByAppendingPathComponent: key];
+  }
+  
 // Associate a path with a UUID to hide it.
 - (NSString *) createUUIDForPath: (NSString *) path
   {

@@ -126,12 +126,18 @@
 - (NSDictionary *) parseFiles: (NSString *) path
   {
   NSArray * args = 
-    @[ path, @"-iname", @"*.plugin", @"-or", @"-iname", @"*.plugin"];
+    @[path, @"-iname", @"*.plugin", @"-or", @"-iname", @"*.plugin"];
   
   NSMutableDictionary * bundles = [NSMutableDictionary dictionary];
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = 
+    [path stringByReplacingOccurrencesOfString: @"/" withString: @"_"];
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
     NSArray * paths = [Utilities formatLines: subProcess.standardOutput];

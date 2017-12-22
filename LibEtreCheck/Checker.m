@@ -447,4 +447,10 @@
   [[self.model xml] endElement: @"etrecheck"];
   }
   
+// Save debug information.
+- (NSString *) saveDebugInformation
+  {
+  return [self.model saveDebugInformation];
+  }
+  
 @end

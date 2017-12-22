@@ -130,15 +130,20 @@
   {
   NSArray * args = @[@"-l", @"2", @"-stats", @"power,pid,command"];
   
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  subProcess.usePseudoTerminal = YES;
-
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];
   
   bool parsing = false;
   int group = 0;
   
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.usePseudoTerminal = YES;
+
+  NSString * key = @"top_power";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/top" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

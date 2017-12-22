@@ -273,18 +273,19 @@
       @"status",
     ];
   
+  NSString * result = ECLocalizedString(@"missing");
+  
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
-  
+  [subProcess loadDebugOutput: [self.model debugInputPath: @"csrutil"]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: @"csrutil"]];
+
   if([subProcess execute: @"/usr/bin/csrutil" arguments: args])
     {
     NSString * status =
       [[NSString alloc]
         initWithData: subProcess.standardOutput
         encoding: NSUTF8StringEncoding];
-    
-    NSString * result = status;
     
     NSScanner * scanner = [NSScanner scannerWithString: status];
     
@@ -298,11 +299,11 @@
             ECLocalizedString(@"/usr/bin/csrutil returned \"%@\""), status];
     
     [status release];
-    
-    return result;
     }
     
-  return ECLocalizedString(@"missing");
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect the number of changes to /etc/hosts and its status.

@@ -25,6 +25,11 @@
 
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"ps_running";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/bin/ps" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -109,6 +114,11 @@
     
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"ps";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/bin/ps" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -247,6 +257,11 @@
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   subProcess.usePseudoTerminal = YES;
+
+  NSString * key = @"ps_kernel_task";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
 
   if([subProcess execute: @"/usr/bin/top" arguments: args])
     {

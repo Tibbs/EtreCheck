@@ -90,6 +90,9 @@
   int myCoreCount;
   
   NSMutableDictionary * myRunningProcesses;
+  
+  NSString * myOutputDebugDirectory;
+  NSString * myInputDebugDirectory;
   }
 
 // The problem and description (if any).
@@ -199,6 +202,12 @@
 // Running processes.
 @property (readonly) NSMutableDictionary * runningProcesses;
 
+// An output debug directory.
+@property (strong) NSString * outputDebugDirectory;
+
+// An input debug directory.
+@property (strong) NSString * inputDebugDirectory;
+
 // Return true if there are log entries for a process.
 - (bool) hasLogEntries: (NSString *) name;
 
@@ -216,5 +225,18 @@
 
 // Is this a known Apple executable but not a shell script?
 - (BOOL) isKnownAppleNonShellExecutable: (NSString *) path;
+
+// Save debug information to a temporary directory.
+// Return the path to the temporary directory.
+- (NSString *) saveDebugInformation;
+
+// Load debug information from a directory.
+- (void) loadDebugInformation: (NSString *) directory;
+
+// A path for debug input for a given key.
+- (NSString *) debugInputPath: (NSString *) key;
+
+// A path for debug input for a given key.
+- (NSString *) debugOutputPath: (NSString *) key;
 
 @end

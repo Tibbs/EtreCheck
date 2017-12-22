@@ -14,6 +14,7 @@
 #import "NSString+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSDate+Etresoft.h"
+#import "Model.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -240,6 +241,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"loginitems";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/osascript" arguments: args])
     [self collectASLoginItems: subProcess.standardOutput];
     
@@ -251,6 +257,11 @@
   {
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"smloginitems";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   BOOL success =
     [subProcess
       execute:
@@ -434,6 +445,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"sm_loginitems_launchd";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/bin/launchctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

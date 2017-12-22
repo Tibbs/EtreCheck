@@ -57,13 +57,18 @@
   {
   NSMutableDictionary * appDetails = [NSMutableDictionary new];
   
+  NSString * key = @"SPApplicationsDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPApplicationsDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {

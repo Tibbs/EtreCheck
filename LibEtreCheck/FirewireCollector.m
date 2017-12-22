@@ -35,16 +35,18 @@
 // Perform the collection.
 - (void) performCollect
   {
+  NSString * key = @"SPFireWireDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPFireWireDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  //subProcess.debugStandardOutput =
-  //  [NSData dataWithContentsOfFile: @"/tmp/SPFireWireDataType.xml"];
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
 
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {

@@ -48,14 +48,19 @@
   
   BOOL dataFound = NO;
   
+  NSString * key = @"SPSoftwareDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPSoftwareDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

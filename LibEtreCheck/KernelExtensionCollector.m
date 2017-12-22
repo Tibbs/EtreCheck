@@ -100,14 +100,19 @@
 // Collect known extensions.
 - (void) collectKnownExtensions
   {
+  NSString * key = @"SPExtensionsDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPExtensionsDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -252,6 +257,8 @@
 // Collect 3rd party extensions.
 - (NSDictionary *) collectExtensions
   {
+  NSDictionary * result = [NSDictionary dictionary];
+  
   NSArray * args =
     @[
       @"/Library/Extensions",
@@ -260,17 +267,24 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  NSString * key = @"kext_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
-    return [self parseBundles: subProcess.standardOutput];
+    result = [self parseBundles: subProcess.standardOutput];
     
-  return [NSDictionary dictionary];
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect system extensions.
 - (NSDictionary *) collectSystemExtensions
   {
+  NSDictionary * result = [NSDictionary dictionary];
+  
   NSArray * args =
     @[
       @"/System/Library/Extensions",
@@ -279,17 +293,24 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  NSString * key = @"system_kext_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
-    return [self parseBundles: subProcess.standardOutput];
+    result = [self parseBundles: subProcess.standardOutput];
     
-  return [NSDictionary dictionary];
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect application support extensions.
 - (NSDictionary *) collectApplicationSupportExtensions
   {
+  NSDictionary * result = [NSDictionary dictionary];
+  
   NSArray * args =
     @[
       @"/Library/Application Support",
@@ -298,17 +319,24 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  NSString * key = @"app_support_kext_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
-    return [self parseBundles: subProcess.standardOutput];
+    result = [self parseBundles: subProcess.standardOutput];
     
-  return [NSDictionary dictionary];
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect system application support extensions.
 - (NSDictionary *) collectSystemApplicationSupportExtensions
   {
+  NSDictionary * result = [NSDictionary dictionary];
+  
   NSArray * args =
     @[
       @"/System/Library/Application Support",
@@ -317,17 +345,24 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  NSString * key = @"system_app_support_kext_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
-    return [self parseBundles: subProcess.standardOutput];
+    result = [self parseBundles: subProcess.standardOutput];
     
-  return [NSDictionary dictionary];
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect startup item extensions.
 - (NSDictionary *) collectStartupItemExtensions
   {
+  NSDictionary * result = [NSDictionary dictionary];
+  
   NSArray * args =
     @[
       @"/Library/StartupItems",
@@ -336,12 +371,17 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  NSString * key = @"startupitems_kext_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
-    return [self parseBundles: subProcess.standardOutput];
+    result = [self parseBundles: subProcess.standardOutput];
     
-  return [NSDictionary dictionary];
+  [subProcess release];
+  
+  return result;
   }
 
 // Collect application extensions.
@@ -588,6 +628,9 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: @"kextstat"]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: @"kextstat"]];
+
   if([subProcess execute: @"/usr/sbin/kextstat" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

@@ -110,14 +110,19 @@
 // Collect bluetooth information.
 - (void) collectBluetooth
   {
+  NSString * key = @"SPBluetoothDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPBluetoothDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -177,10 +182,15 @@
   {
   NSString * code = nil;
   
-  NSArray * args = @[@"machdep.cpu.brand_string"];
+  NSString * key = @"machdep.cpu.brand_string";
+  
+  NSArray * args = @[key];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -214,14 +224,19 @@
 // Collect hardware information.
 - (void) collectHardware
   {
+  NSString * key = @"SPHardwareDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPHardwareDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -668,15 +683,20 @@
 
 - (NSDictionary *) collectMemoryDetails
   {
+  NSString * key = @"SPMemoryDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPMemoryDataType"
+      key
     ];
+  
+  NSDictionary * result = nil;
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [subProcess autorelease];
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
   
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
@@ -692,12 +712,14 @@
         NSArray * infos = [results objectForKey: @"_items"];
           
         if([NSArray isValid: infos])
-          return [infos objectAtIndex: 0];
+          result = [infos objectAtIndex: 0];
         }
       }
     }
     
-  return nil;
+  [subProcess release];
+    
+  return result;
   }
 
 // Print memory banks.
@@ -853,14 +875,19 @@
 // Print wireless information.
 - (void) printWirelessInformation
   {
+  NSString * key = @"SPAirPortDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPAirPortDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -959,14 +986,19 @@
 // Print battery information.
 - (void) printBatteryInformation
   {
+  NSString * key = @"SPPowerDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPPowerDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

@@ -94,6 +94,8 @@
 // Collect all disk devices.
 - (BOOL) collectDevices
   {
+  BOOL dataFound = NO;
+  
   NSArray * args =
     @[
       @"/dev",
@@ -103,8 +105,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  BOOL dataFound = NO;
+  NSString * key = @"diskdevices";
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
     NSArray * devices = [Utilities formatLines: subProcess.standardOutput];
@@ -126,6 +131,8 @@
 // Collect a single device.
 - (BOOL) collectDevice: (NSString *) device
   {
+  BOOL dataFound = NO;
+  
   NSArray * args =
     @[
       @"info",
@@ -135,8 +142,12 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  BOOL dataFound = NO;
+  NSString * key = 
+    [device stringByReplacingOccurrencesOfString: @"/" withString: @"_"];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     {
     NSDictionary * plist =
@@ -236,17 +247,18 @@
 // Collect all devices attached to a given controller.
 - (void) collect: (NSString *) type
   {
+  NSString * key = [self key: @"system_profiler" type: type];
+  
   NSArray * args =
     @[
       @"-xml",
-      [self key: @"system_profiler" type: type]
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  //subProcess.debugStandardOutput =
-  //  [NSData
-  //    dataWithContentsOfFile: @"/tmp/SPSerialATADataType.xml"];
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
     
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
@@ -400,16 +412,18 @@
 // Collect core storage information.
 - (void) collectCoreStorage
   {
+  NSString * key = @"SPStorageDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPStorageDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  //subProcess.debugStandardOutput =
-  //  [NSData dataWithContentsOfFile: @"/tmp/SPStorageDataType.xml"];
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
 
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
@@ -493,6 +507,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"diskutil_cs_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     [self parseCoreStorageList: subProcess.standardOutput];
     
@@ -590,6 +609,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"diskutil_apfs_list";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
     {
     NSDictionary * plist =

@@ -62,14 +62,19 @@
 // Collect network information.
 - (void) collectNetwork
   {
+  NSString * key = @"SPNetworkDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPNetworkDataType"
+      key    
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =
@@ -122,6 +127,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"brctl_status";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/brctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -189,6 +199,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"brctl_quota";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/brctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

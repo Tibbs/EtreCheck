@@ -102,6 +102,11 @@
   {
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"vm_stat";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/vm_stat" arguments: nil])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -136,6 +141,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"sysctla";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

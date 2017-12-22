@@ -14,6 +14,7 @@
 #import "NSString+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
+#import "Model.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -73,16 +74,21 @@
 // Collect bad fonts.
 - (NSArray *) collectBadFonts
   {
+  NSString * key = @"SPFontsDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPFontsDataType"
+      key
     ];
   
   NSMutableArray * badFonts = [NSMutableArray array];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

@@ -12,14 +12,32 @@
 
 @implementation SubProcess
 
+// Did the task time out?
 @synthesize timedout = myTimedout;
+
+// The task timeout.
 @synthesize timeout = myTimeout;
+  
+// The task result.
 @synthesize result = myResult;
+  
+// Standard output.
 @synthesize standardOutput = myStandardOutput;
+  
+// Standard error.
 @synthesize standardError = myStandardError;
+
+// Does the task need a tty?
 @synthesize usePseudoTerminal = myUsePseudoTerminal;
+
+// Debug data to stuff into standard output.
 @synthesize debugStandardOutput = myDebugStandardOutput;
+
+// Debug data to stuff into standard error.
 @synthesize debugStandardError = myDebugStandardError;
+
+// Path to save debug output.
+@synthesize debugOutputPath = myDebugOutputPath;
 
 // Constructor.
 - (instancetype) init
@@ -44,6 +62,7 @@
   [myDebugStandardError release];
   [myStandardOutput release];
   [myStandardError release];
+  [myDebugOutputPath release];
   
   [super dealloc];
   }
@@ -62,12 +81,63 @@
     return YES;
     }
     
+  BOOL success = NO;
+  
   if(self.usePseudoTerminal)
-    return [self forkpty: program arguments: args];
+    success = [self forkpty: program arguments: args];
+  else
+    success = [self fork: program arguments: args];
+    
+  if(success)
+    if(self.debugOutputPath.length > 0)
+      {
+      NSString * outputPath = 
+        [self.debugOutputPath stringByAppendingPathExtension: @"out"];
+      
+      NSString * errorPath = 
+        [self.debugOutputPath stringByAppendingPathExtension: @"err"];
+        
+      if(self.standardOutput.length > 0)
+        [self.standardOutput writeToFile: outputPath atomically: NO];
 
-  return [self fork: program arguments: args];
+      if(self.standardError.length > 0)
+        [self.standardError writeToFile: errorPath atomically: NO];
+      }
+    
+  return success;
   }
 
+// Load debug information.
+- (void) loadDebugOutput: (NSString *) path
+  {
+  NSString * outputPath = [path stringByAppendingPathExtension: @"out"];
+  NSString * errorPath = [path stringByAppendingPathExtension: @"err"];
+  
+  if([[NSFileManager defaultManager] fileExistsAtPath: outputPath])
+    {
+    NSData * data = [[NSData alloc] initWithContentsOfFile: outputPath];
+    
+    self.debugStandardOutput = data;
+    
+    [data release];
+    }
+
+  if([[NSFileManager defaultManager] fileExistsAtPath: errorPath])
+    {
+    NSData * data = [[NSData alloc] initWithContentsOfFile: errorPath];
+    
+    self.debugStandardError = data;
+    
+    [data release];
+    }
+  }
+  
+// Save debug information.
+- (void) saveDebugOutput: (NSString *) path
+  {
+  self.debugOutputPath = path;
+  }
+  
 // Execute an external program, use a pseudo-terminal, and return the
 // results.
 - (BOOL) forkpty: (NSString *) program arguments: (NSArray *) args

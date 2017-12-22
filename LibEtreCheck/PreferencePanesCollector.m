@@ -13,6 +13,7 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import "Model.h"
 
 // Collect 3rd party preference panes.
 @implementation PreferencePanesCollector
@@ -32,14 +33,19 @@
 // Perform the collection.
 - (void) performCollect
   {
+  NSString * key = @"SPPrefPaneDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPPrefPaneDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

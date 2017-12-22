@@ -301,6 +301,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"tmutil";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/tmutil" arguments: args])
     {
     NSDictionary * destinationinfo  =

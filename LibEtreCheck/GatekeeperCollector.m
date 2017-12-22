@@ -77,6 +77,11 @@
     
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"gatekeeper";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/spctl" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -120,6 +125,11 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"gatekeeper";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   BOOL result =
     [subProcess
       execute: @"/usr/sbin/spctl" arguments: @[@"--test-devid-status"]];

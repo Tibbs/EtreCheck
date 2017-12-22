@@ -15,6 +15,7 @@
 #import "NSDate+Etresoft.h"
 #import "NSSet+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "Model.h"
 
 // Collect install information.
 @implementation InstallCollector
@@ -117,16 +118,21 @@
 // Collect installs.
 - (NSArray *) collectInstalls
   {
+  NSString * key = @"SPInstallHistoryDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPInstallHistoryDataType"
+      key
     ];
   
   NSMutableArray * installs = [NSMutableArray array];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSArray * plist =

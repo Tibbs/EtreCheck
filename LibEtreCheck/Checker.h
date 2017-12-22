@@ -56,4 +56,7 @@ typedef void (^ProgressCallback)(double progress);
 // Collect output.
 - (void) collectOutput;
 
+// Save debug information.
+- (NSString *) saveDebugInformation;
+
 @end

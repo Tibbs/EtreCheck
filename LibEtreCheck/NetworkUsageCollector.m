@@ -78,6 +78,11 @@
     
   SubProcess * subProcess = [[SubProcess alloc] init];
   
+  NSString * key = @"nettop";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
   if([subProcess execute: @"/usr/bin/nettop" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];

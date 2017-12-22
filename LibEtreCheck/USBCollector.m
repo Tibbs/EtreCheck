@@ -35,16 +35,18 @@
 // Perform the collection.
 - (void) performCollect
   {
+  NSString * key = @"SPUSBDataType";
+  
   NSArray * args =
     @[
       @"-xml",
-      @"SPUSBDataType"
+      key
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  //subProcess.debugStandardOutput =
-  //  [NSData dataWithContentsOfFile: @"/tmp/SPUSBDataType.xml"];
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
 
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
