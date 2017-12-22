@@ -90,6 +90,7 @@
   int myCoreCount;
   
   NSMutableDictionary * myRunningProcesses;
+  NSMutableArray * myKernelApps;
   
   NSString * myOutputDebugDirectory;
   NSString * myInputDebugDirectory;
@@ -201,6 +202,9 @@
 
 // Running processes.
 @property (readonly) NSMutableDictionary * runningProcesses;
+
+// Apps with kernel extensions.
+@property (readonly) NSMutableArray * kernelApps;
 
 // An output debug directory.
 @property (strong) NSString * outputDebugDirectory;

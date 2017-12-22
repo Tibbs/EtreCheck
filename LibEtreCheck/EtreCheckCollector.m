@@ -406,7 +406,28 @@
 - (void) exportContext
   {
   [self.xml startElement: @"context"];
+      
+  [self exportRunningProcesses];
   
+  [self exportKernelTask];
+  
+  [self exportKernelApps];
+  
+  [self.xml endElement: @"context"];
+  
+  NSImage * machineIcon = [NSImage imageNamed: NSImageNameComputer];
+  
+  [machineIcon setSize: NSMakeSize(512.0, 512.0)];
+  
+  NSData * data = [self iconToData: machineIcon];
+  
+  // Add the machine icon too.
+  [self.xml addElement: @"machineicon" type: @"image/png" data: data];
+  }
+  
+// Exported running processes.
+- (void) exportRunningProcesses
+  {
   for(NSNumber * pid in self.model.runningProcesses)
     {
     RunningProcess * runningProcess = 
@@ -484,7 +505,11 @@
       [self.xml endElement: @"process"];      
       }
     }
-    
+  }
+  
+// Export the kernel task.
+- (void) exportKernelTask
+  {
   // Go ahead and add kernel_task here.
   [self.xml startElement: @"process"];
   
@@ -493,17 +518,58 @@
   [self.xml addElement: @"source" value: @"Apple"];
   
   [self.xml endElement: @"process"];
+  }
+  
+// Exported apps with kernel extensions.
+- (void) exportKernelApps
+  {
+  if(self.model.kernelApps.count == 0)
+    return;
+    
+  for(NSString * path in self.model.kernelApps)
+    {
+    [self.xml startElement: @"application"];
+    
+    [self.xml addElement: @"path" value: path];
+    [self.xml addElement: @"name" value: [path lastPathComponent]];
+      
+    NSString * bundlePath = [Utilities getParentBundle: path];
+          
+    NSImage * icon = 
+      [[NSWorkspace sharedWorkspace] iconForFile: bundlePath];
+            
+    [icon setSize: NSMakeSize(32.0, 32.0)];
+        
+    NSData * data = [self iconToData: icon];
+    
+    if(data.length > 800)
+      [self.xml addElement: @"icon" type: @"image/png" data: data];
 
-  [self.xml endElement: @"context"];
+    [self.xml endElement: @"application"];      
+    }
+    
+  // Don't forget the generic.
+  [self exportGenericApp];
+  }
+
+// Export a generic app.
+- (void) exportGenericApp
+  {
+  [self.xml startElement: @"application"];
   
-  NSImage * machineIcon = [NSImage imageNamed: NSImageNameComputer];
+  [self.xml addElement: @"path" value: @"nil"];
+  [self.xml addElement: @"name" value: @"nil"];
+    
+  NSImage * icon = [[Utilities shared] genericApplicationIcon];
+          
+  [icon setSize: NSMakeSize(32.0, 32.0)];
+      
+  NSData * data = [self iconToData: icon];
   
-  [machineIcon setSize: NSMakeSize(512.0, 512.0)];
-  
-  NSData * data = [self iconToData: machineIcon];
-  
-  // Add the machine icon too.
-  [self.xml addElement: @"machineicon" type: @"image/png" data: data];
+  if(data.length > 800)
+    [self.xml addElement: @"icon" type: @"image/png" data: data];
+
+  [self.xml endElement: @"application"];      
   }
   
 // Convert an icon to a PNG data representation.

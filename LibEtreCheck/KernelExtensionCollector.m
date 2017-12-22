@@ -399,6 +399,11 @@
      
   for(NSString * name in applications)
     {
+    if([name isEqualToString: @"Ostiarius"])
+      {
+      NSLog(@"stop here");
+      }
+      
     NSDictionary * application = [applications objectForKey: name];
     
     if([NSDictionary isValid: applications])
@@ -454,6 +459,9 @@
         extensions = [self parseBundles: subProcess.standardOutput];
         
       [subProcess release];
+      
+      if(extensions.count > 0)
+        [self.model.kernelApps addObject: path];
       }
     }
     
@@ -797,6 +805,12 @@
   
   [extensionsXML addElement: @"cleanpath" value: cleanPath];
   [extensionsXML addElement: @"path" value: directory];
+  
+  NSString * bundlePath = [Utilities resolveBundlePath: directory];
+  
+  if([bundlePath hasSuffix: @".app"]) 
+    [extensionsXML 
+      addElement: @"name" value: [bundlePath lastPathComponent]];
     
   [extensionsXML startElement: @"extensions"];
 
@@ -880,9 +894,6 @@
     
   NSString * obtained_from = [extension objectForKey: @"obtained_from"];
   
-  if(![NSString isValid: obtained_from])
-    return nil;
-     
   if([obtained_from isEqualToString: @"apple"])
     return nil;
 
