@@ -298,15 +298,9 @@
   NSString * bus = 
     [controller objectForKey: [self key: @"vendor" type: type]];
 
-  if(![NSString isValid: bus])
-    return;
-    
   NSString * description =
     [controller objectForKey: [self key: @"portdescription" type: type]];
 
-  if(![NSString isValid: description])
-    return;
-    
   NSString * speed = 
     [controller 
       objectForKey: [self key: @"negotiatedlinkspeed" type: type]];
@@ -320,16 +314,11 @@
     NSString * linkspeed = 
       [controller objectForKey: [self key: @"linkspeed" type: type]];
 
-    if(![NSString isValid: linkspeed])
-      return;
-
     NSString * linkwidth = 
       [controller objectForKey: [self key: @"linkwidth" type: type]];
         
-    if(![NSString isValid: linkwidth])
-      return;
-
-    speed = [NSString stringWithFormat: @"%@ %@", linkspeed, linkwidth];
+    if([NSString isValid: linkspeed] && [NSString isValid: linkwidth])
+      speed = [NSString stringWithFormat: @"%@ %@", linkspeed, linkwidth];
     }
   
   for(NSDictionary * item in items)
@@ -337,6 +326,23 @@
     if(![NSDictionary isValid: item])
       continue;
       
+    // These speed items are at the controller level for SerialATA and at
+    // the device level for NVMe.
+    NSString * deviceSpeed = speed;
+    
+    // This is just text.
+    if(![NSString isValid: deviceSpeed])
+      {
+      NSString * linkspeed = 
+        [item objectForKey: [self key: @"linkspeed" type: type]];
+
+      NSString * linkwidth = 
+        [item objectForKey: [self key: @"linkwidth" type: type]];
+          
+      deviceSpeed = 
+        [NSString stringWithFormat: @"%@ %@", linkspeed, linkwidth];
+      }
+
     NSString * device = [item objectForKey: @"bsd_name"];
 
     if(![NSString isValid: device])
@@ -352,7 +358,7 @@
     
       // Add controller information that might be missing.
       drive.busVersion = description;
-      drive.busSpeed = speed;
+      drive.busSpeed = deviceSpeed;
       drive.type = type;
       
       NSString * name = [item objectForKey: @"_name"];
