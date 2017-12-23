@@ -14,6 +14,9 @@
   // The path to the process.
   NSString * myPath;
   
+  // The process name.
+  NSString * myName;
+  
   // The process ID.
   int myPID;
   
@@ -29,6 +32,9 @@
 
 // The resolved path.
 @property (readonly) NSString * path;
+
+// The process name.
+@property (readonly) NSString * name;
 
 // The process ID.
 @property (assign) int PID;

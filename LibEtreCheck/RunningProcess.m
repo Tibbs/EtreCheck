@@ -14,6 +14,9 @@
 // The path to the process.
 @synthesize path = myPath;
 
+// The name of the process.
+@synthesize name = myName;
+
 // The process ID.
 @synthesize PID = myPID;
 
@@ -23,13 +26,54 @@
 // Was this app reported on an EtreCheck report?
 @synthesize reported = myReported;
 
-// Get the path.
-- (NSString *) path
+// Set the command.
+- (void) setCommand: (NSString *) command
   {
-  if(myPath == nil)
+  bool change = false;
+  
+  if(command == nil)
+    change = true;
+  else if(![myCommand isEqualToString: command])
+    change = true;
+    
+  if(change)
     {
-    NSString * resolvedPath = 
-      [[self resolveExecutable: self.command] retain];
+    [self willChangeValueForKey: @"command"];
+    
+    [myCommand release];
+    
+    myCommand = [command retain];
+    
+    [self parseCommand: myCommand];
+    
+    [self didChangeValueForKey: @"command"];
+    }
+  }
+  
+// Get the command.
+- (NSString *) command
+  {
+  return myCommand;
+  }
+  
+// Destructor.
+- (void) dealloc
+  {
+  self.command = nil;
+  [myPath release];
+  [myName release];
+  
+  [super dealloc];
+  }
+  
+// Parse the command.
+- (void) parseCommand: (NSString *) command
+  {
+  NSString * resolvedPath = nil;
+  
+  if(command.length > 0)
+    {
+    resolvedPath = [[self resolveExecutable: command] retain];
     
     // If the path doesn't exist, keep looking.
     if(resolvedPath == nil)
@@ -67,21 +111,33 @@
         [current release];
         }
       }
-      
-    if(resolvedPath != nil)
-      myPath = resolvedPath;
     }
     
-  return myPath;
-  }
+  bool change = false;
   
-// Destructor.
-- (void) dealloc
-  {
-  self.command = nil;
-  [myPath release];
-  
-  [super dealloc];
+  if(resolvedPath == nil)
+    change = true;
+  else if(![myPath isEqualToString: resolvedPath])
+    change = true;
+    
+  if(change)
+    {
+    [self willChangeValueForKey: @"path"];
+    
+    [myPath release];
+    
+    myPath = resolvedPath;
+    
+    [self didChangeValueForKey: @"path"];
+
+    [self willChangeValueForKey: @"name"];
+    
+    [myName release];
+    
+    myName = [[myPath lastPathComponent] retain];
+    
+    [self didChangeValueForKey: @"name"];
+    }
   }
   
 // Resolve a relative executable as per launchd.plist man page.
