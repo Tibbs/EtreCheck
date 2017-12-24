@@ -70,7 +70,14 @@
 // Set the model.
 - (void) setModel: (NSString *) model
   {
+  bool change = false;
+  
+  if(model == nil)
+    change = true;
   if(![myModel isEqualToString: model])
+    change = true;
+    
+  if(change)
     {
     [self willChangeValueForKey: @"model"];
     
