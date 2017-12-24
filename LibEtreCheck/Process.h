@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 
 // Encapsulate a running process.
-@interface RunningProcess : NSObject
+@interface Process : NSObject
   {
   // The command being run.
   NSString * myCommand;

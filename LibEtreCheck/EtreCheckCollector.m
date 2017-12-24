@@ -12,7 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "NSString+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -407,7 +407,7 @@
   {
   [self.xml startElement: @"context"];
       
-  [self exportRunningProcesses];
+  [self exportProcesses];
   
   [self exportKernelTask];
   
@@ -426,39 +426,38 @@
   }
   
 // Exported running processes.
-- (void) exportRunningProcesses
+- (void) exportProcesses
   {
   for(NSNumber * pid in self.model.runningProcesses)
     {
-    RunningProcess * runningProcess = 
-      [self.model.runningProcesses objectForKey: pid];
+    Process * process = [self.model.runningProcesses objectForKey: pid];
       
-    if(runningProcess.reported)
+    if(process.reported)
       {
-      if(runningProcess.path == nil)
+      if(process.path == nil)
         continue;
         
       [self.xml startElement: @"process"];
       
-      [self.xml addElement: @"PID" intValue: runningProcess.PID];
-      [self.xml addElement: @"path" value: runningProcess.path];
+      [self.xml addElement: @"PID" intValue: process.PID];
+      [self.xml addElement: @"path" value: process.path];
       
-      if(runningProcess.PID == 0)
-        runningProcess.apple = YES;
+      if(process.PID == 0)
+        process.apple = YES;
         
-      if([runningProcess.path hasPrefix: @"/System/"])
-        runningProcess.apple = YES;
+      if([process.path hasPrefix: @"/System/"])
+        process.apple = YES;
       
-      if(!runningProcess.apple)
+      if(!process.apple)
         {
         BOOL isWebKit = 
-          [runningProcess.path 
+          [process.path 
             hasPrefix: @"/System/Library/Frameworks/WebKit.framework/"];
             
         NSString * bundlePath = 
           isWebKit
             ? @"/Applications/Safari.app"
-            : [Utilities getParentBundle: runningProcess.path];
+            : [Utilities getParentBundle: process.path];
           
         NSImage * icon = 
           [[NSWorkspace sharedWorkspace] iconForFile: bundlePath];
@@ -473,33 +472,33 @@
         
       NSString * source = @"?";
       
-      if(!runningProcess.apple)
+      if(!process.apple)
         {
         // Now try to get the author.
         BOOL isXcode = 
-          [runningProcess.path 
+          [process.path 
             isEqualToString: 
               @"/Applications/Xcode.app/Contents/MacOS/Xcode"];
               
         if(isXcode)
-          runningProcess.apple = YES;
+          process.apple = YES;
             
-        if(!runningProcess.apple)
+        if(!process.apple)
           {
           NSString * signature = 
-            [Utilities checkAppleExecutable: runningProcess.path];
+            [Utilities checkAppleExecutable: process.path];
         
           if([signature isEqualToString: kSignatureApple])
-            runningProcess.apple = YES;
+            process.apple = YES;
           }
         }
         
-      if(runningProcess.apple)  
+      if(process.apple)  
         source = @"Apple";
       else
-        source = [Utilities queryDeveloper: runningProcess.path];
+        source = [Utilities queryDeveloper: process.path];
         
-      [self.xml addElement: @"apple" boolValue: runningProcess.apple];
+      [self.xml addElement: @"apple" boolValue: process.apple];
       [self.xml addElement: @"source" value: source];
 
       [self.xml endElement: @"process"];      

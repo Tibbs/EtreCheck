@@ -16,7 +16,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 
 // Collect information about energy usage.
 @implementation EnergyUsageCollector
@@ -324,7 +324,7 @@
             printString,
             processName]];
             
-  RunningProcess * runningProcess = 
+  Process * runningProcess = 
     [self.model.runningProcesses objectForKey: pid];
     
   runningProcess.reported = YES;

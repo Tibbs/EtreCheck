@@ -12,7 +12,7 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSMutableDictionary+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 #import "NumberFormatter.h"
 
 // Collect information about processes.
@@ -61,20 +61,19 @@
           {
           NSNumber * pid = [[NSNumber alloc] initWithInt: PID];
           
-          RunningProcess * runningProcess = 
+          Process * process = 
             [self.model.runningProcesses objectForKey: pid];
             
-          if(runningProcess == nil)
+          if(process == nil)
             {
-            runningProcess = [RunningProcess new];
+            process = [Process new];
             
-            runningProcess.PID = PID;
-            runningProcess.command = command;
+            process.PID = PID;
+            process.command = command;
             
-            [self.model.runningProcesses 
-              setObject: runningProcess forKey: pid];
+            [self.model.runningProcesses setObject: process forKey: pid];
           
-            [runningProcess release];
+            [process release];
             }
             
           [pid release];
@@ -84,19 +83,18 @@
       [scanner release];
       }
       
-    RunningProcess * runningProcess = 
-      [self.model.runningProcesses objectForKey: @0];
+    Process * process = [self.model.runningProcesses objectForKey: @0];
       
-    if(runningProcess == nil)
+    if(process == nil)
       {
-      runningProcess = [RunningProcess new];
+      process = [Process new];
       
-      runningProcess.PID = 0;
-      runningProcess.command = @"kernel_task";
+      process.PID = 0;
+      process.command = @"kernel_task";
       
-      [self.model.runningProcesses setObject: runningProcess forKey: @0];
+      [self.model.runningProcesses setObject: process forKey: @0];
       
-      [runningProcess release];
+      [process release];
       }
     }
     

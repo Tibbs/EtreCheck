@@ -13,7 +13,7 @@
 #import "NSMutableDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 
 // Collect information about memory usage.
 @implementation MemoryUsageCollector
@@ -195,7 +195,7 @@
   else
     [self.result appendString: output];
 
-  RunningProcess * runningProcess = 
+  Process * runningProcess = 
     [self.model.runningProcesses objectForKey: pid];
     
   runningProcess.reported = YES;

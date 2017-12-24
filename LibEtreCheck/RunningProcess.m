@@ -3,10 +3,10 @@
  ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
-#import "RunningProcess.h"
+#import "Process.h"
 
 // Encapsulate a running process.
-@implementation RunningProcess
+@implementation Process
 
 // The command being run.
 @synthesize command = myCommand;

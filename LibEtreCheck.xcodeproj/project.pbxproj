@@ -173,7 +173,7 @@
 		A5CBDBC41FDC97EE0080D476 /* NSMutableDictionary+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CBDBC21FDC97EE0080D476 /* NSMutableDictionary+Etresoft.m */; };
 		A5CBDBCD1FDC9C380080D476 /* NSMutableArray+Etresoft.h in Headers */ = {isa = PBXBuildFile; fileRef = A5CBDBCB1FDC9C380080D476 /* NSMutableArray+Etresoft.h */; };
 		A5CBDBCE1FDC9C380080D476 /* NSMutableArray+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CBDBCC1FDC9C380080D476 /* NSMutableArray+Etresoft.m */; };
-		A5CC48971FE8AAF5003621CE /* RunningProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = A5CC48951FE8AAF5003621CE /* RunningProcess.h */; };
+		A5CC48971FE8AAF5003621CE /* Process.h in Headers */ = {isa = PBXBuildFile; fileRef = A5CC48951FE8AAF5003621CE /* Process.h */; };
 		A5CC48981FE8AAF5003621CE /* RunningProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CC48961FE8AAF5003621CE /* RunningProcess.m */; };
 		A5DBD9CC1FABC7A3005DD147 /* XMLValue.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F7BA2B1FA8E3FC00F09EE8 /* XMLValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5DBD9CD1FABC7B8005DD147 /* AttributedStringValue.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F7BA2C1FA8E44700F09EE8 /* AttributedStringValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -354,7 +354,7 @@
 		A5CBDBC21FDC97EE0080D476 /* NSMutableDictionary+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+Etresoft.m"; sourceTree = "<group>"; };
 		A5CBDBCB1FDC9C380080D476 /* NSMutableArray+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Etresoft.h"; sourceTree = "<group>"; };
 		A5CBDBCC1FDC9C380080D476 /* NSMutableArray+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Etresoft.m"; sourceTree = "<group>"; };
-		A5CC48951FE8AAF5003621CE /* RunningProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RunningProcess.h; sourceTree = "<group>"; };
+		A5CC48951FE8AAF5003621CE /* Process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Process.h; sourceTree = "<group>"; };
 		A5CC48961FE8AAF5003621CE /* RunningProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RunningProcess.m; sourceTree = "<group>"; };
 		A5CC608C19B4BF52006D7E94 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		A5CF26E61A279DAD002386F0 /* AdwareCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdwareCollector.h; sourceTree = "<group>"; };
@@ -725,7 +725,7 @@
 				A57A3A841FA6B65F001DBE47 /* Drive.m */,
 				A5B659211A16D57800476A76 /* DiagnosticEvent.h */,
 				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
-				A5CC48951FE8AAF5003621CE /* RunningProcess.h */,
+				A5CC48951FE8AAF5003621CE /* Process.h */,
 				A5CC48961FE8AAF5003621CE /* RunningProcess.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
@@ -789,7 +789,7 @@
 				A589CDC01F7174FD00D66592 /* LogCollector.h in Headers */,
 				A589CDA71F71749E00D66592 /* ConfigurationCollector.h in Headers */,
 				A5F2C01F1FBE295F003646DF /* NetworkInterface.h in Headers */,
-				A5CC48971FE8AAF5003621CE /* RunningProcess.h in Headers */,
+				A5CC48971FE8AAF5003621CE /* Process.h in Headers */,
 				A589CD971F71747400D66592 /* CRC32.h in Headers */,
 				A589CD961F71746A00D66592 /* NumberFormatter.h in Headers */,
 				A589CDB91F7174B900D66592 /* SafariExtensionsCollector.h in Headers */,

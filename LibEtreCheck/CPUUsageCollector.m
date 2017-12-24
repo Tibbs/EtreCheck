@@ -10,7 +10,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 #import "Model.h"
 
 // Collect information about CPU usage.
@@ -157,10 +157,9 @@
       [self.result appendString: output];
           
 
-    RunningProcess * runningProcess = 
-      [self.model.runningProcesses objectForKey: pid];
+    Process * process = [self.model.runningProcesses objectForKey: pid];
       
-    runningProcess.reported = YES;
+    process.reported = YES;
 
     ++topCount;
           

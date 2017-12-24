@@ -18,7 +18,7 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSString+Etresoft.h"
-#import "RunningProcess.h"
+#import "Process.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
@@ -338,7 +338,7 @@
           printBytesOutString,
           processName]];
           
-  RunningProcess * runningProcess = 
+  Process * runningProcess = 
     [self.model.runningProcesses objectForKey: pid];
     
   runningProcess.reported = YES;
