@@ -36,6 +36,9 @@
   
   // Does the machine support low energy?
   BOOL mySupportsLowEnergy;
+  
+  // Vintage status.
+  NSString * myVintageStatus;
   }
 
 // Machine properties.
@@ -65,5 +68,8 @@
 
 // Does the machine support low energy?
 @property (assign) BOOL supportsLowEnergy;
+
+// Vintage status.
+@property (strong) NSString * vintageStatus;
 
 @end

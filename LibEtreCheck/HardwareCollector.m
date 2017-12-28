@@ -25,6 +25,9 @@
 #define kMachineIcon @"machineicon"
 #define kMachineName @"machinename"
 
+#define kVintage @"vintage"
+#define kObsolete @"obsolete"
+
 // Collect hardware information.
 @implementation HardwareCollector
 
@@ -37,6 +40,7 @@
 @synthesize supportsHandoff = mySupportsHandoff;
 @synthesize supportsInstantHotspot = mySupportsInstantHotspot;
 @synthesize supportsLowEnergy = mySupportsLowEnergy;
+@synthesize vintageStatus = myVintageStatus;
 
 // Constructor.
 - (id) init
@@ -302,6 +306,8 @@
   if([NSString isValid: serial] && (serial.length >= 8))
     [self.model setSerialCode: [serial substringFromIndex: 8]];
 
+  self.vintageStatus = [self getVintageStatus];
+  
   if([NSString isValid: model])
     {
     // Print the human readable machine name, if I can find one.
@@ -318,9 +324,12 @@
   if([NSString isValid: name])
     [self.xml addElement: @"name" value: name];
   
-  if([NSString isValid: name])  
+  if([NSString isValid: model])  
     [self.xml addElement: @"model" value: model];
   
+  if([NSString isValid: self.vintageStatus])
+    [self.xml addElement: @"vintage" value: self.vintageStatus];
+    
   NSString * type = [self.model modelType];
   
   if([NSString isValid: type])  
@@ -1166,4 +1175,72 @@
   return cycles;
   }
   
+// Get the vintage status of the machine.
+- (NSString *) getVintageStatus
+  {
+  NSString * modelType = [self.model modelType];
+  int majorVersion = [self.model modelMajorVersion];
+  int minorVersion = [self.model modelMinorVersion];
+  
+  if([modelType isEqualToString: @"MacBookPro"])
+    {
+    if(majorVersion < 6)
+      return kObsolete;
+    else if(majorVersion < 8)
+      return kVintage;
+    }
+  else if([modelType isEqualToString: @"MacBookAir"])
+    {
+    if(majorVersion < 5)
+      return kObsolete;
+    else if (majorVersion < 3)
+      return kVintage;
+    }
+  else if([modelType isEqualToString: @"MacBook"])
+    {
+    if(majorVersion < 6)
+      return kObsolete;
+    else if(majorVersion < 8)
+      return kVintage;
+    }
+  else if([modelType isEqualToString: @"iMac"])
+    {
+    if(majorVersion < 11)
+      return kObsolete;
+    else if(majorVersion < 12)
+      return kVintage;
+    }
+  else if([modelType isEqualToString: @"Macmini"])
+    {
+    if(majorVersion < 4)
+      return kObsolete;
+    else if(majorVersion < 6)
+      return kVintage;
+    }
+  else if([modelType isEqualToString: @"MacPro"])
+    {
+    if(majorVersion < 4)
+      return kObsolete;
+    else if(majorVersion < 5)
+      return kVintage;
+    else if((majorVersion == 5) && (minorVersion == 1))
+      {
+      BOOL vintageModel = 
+        [self.EnglishMarketingName isEqualToString: @"Mac Pro (Mid 2010)"];
+      
+      if(vintageModel)
+        return kVintage;
+      }
+    }
+  else if([modelType isEqualToString: @"Xserve"])
+    {
+    if(majorVersion < 3)
+      return kObsolete;
+    else if(majorVersion < 4)
+      return kVintage;
+    }
+        
+  return nil;
+  }
+
 @end
