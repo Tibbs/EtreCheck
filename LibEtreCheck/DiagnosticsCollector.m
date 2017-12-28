@@ -607,6 +607,7 @@
     
     case kShutdown:
       
+      [self.xml addElement: @"code" intValue: event.code];
       if(event.code < 0)
         [self.result
           appendString:
