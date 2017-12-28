@@ -10,7 +10,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSNumber+Etresoft.h"
 #import "NSString+Etresoft.h"
-#import "Process.h"
+#import "ProcessGroup.h"
 #import "Model.h"
 
 // Collect information about CPU usage.
@@ -31,144 +31,70 @@
 // Perform the collection.
 - (void) performCollect
   {
-  // Collect the average CPU usage for all processes (5 times).
-  NSDictionary * avgCPU = [self collectAverageCPU];
-  
-  // Sort the result by average value.
-  NSArray * processesCPU = [self sortProcesses: avgCPU by: @"cpu"];
+  // Take 5 samples for CPU usage.
+  [self sampleProcesses: 5];
   
   // Print the top processes.
-  [self printTopProcesses: processesCPU];
-  
-  [self.result appendCR];
+  [self printTopProcesses: [self sortedProcessesByType: kCPUUsage]];
   }
 
-// Collect the average CPU usage of all processes.
-- (NSDictionary *) collectAverageCPU
+// Print a top process.
+- (BOOL) printTopProcessGroup: (ProcessGroup *) process
   {
-  NSMutableDictionary * averageProcesses = [NSMutableDictionary dictionary];
+  if([process.name isEqualToString: @"ps"])
+    return NO;
+
+  if([process.name isEqualToString: @"top"])
+    return NO;
+    
+  if([process.name isEqualToString: @"EtreCheck"])
+    return NO;
+    
+  NSString * countString =
+    (process.count > 1)
+      ? [NSString stringWithFormat: @"(%lu)", (unsigned long)process.count]
+      : @"";
+
+  NSString * usageString =
+    [NSString stringWithFormat: @"%6.0lf%%", process.cpuUsage];
   
-  for(NSUInteger i = 0; i < 5; ++i)
-    {
-    usleep(500000);
+  NSString * printString =
+    [usageString
+      stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
     
-    NSDictionary * currentProcesses = [self collectProcesses];
-    
-    for(NSString * pid in currentProcesses)
-      {
-      NSMutableDictionary * currentProcess =
-        [currentProcesses objectForKey: pid];
-      NSMutableDictionary * averageProcess =
-        [averageProcesses objectForKey: pid];
-        
-      if([NSDictionary isValid: currentProcess])
-        {
-        if(![NSDictionary isValid: averageProcess])
-          [averageProcesses setObject: currentProcess forKey: pid];
-          
-        else 
-          {
-          double totalCPU =
-            [[averageProcess objectForKey: @"cpu"] doubleValue] * i;
-          
-          double averageCPU =
-            [[currentProcess objectForKey: @"cpu"] doubleValue];
-          
-          averageCPU = (totalCPU + averageCPU) / (double)(i + 1);
-          
-          [averageProcess
-            setObject: [NSNumber numberWithDouble: averageCPU]
-            forKey: @"cpu"];
-          }
-        }
-      }
-    }
+  NSString * output =
+    [NSString
+      stringWithFormat:
+        @"    %@\t%@%@\n", printString, process.name, countString];
+
+  if(process.cpuUsage > 50.0)
+    [self.result
+      appendString: output
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor], NSForegroundColorAttributeName, nil]];      
+  else
+    [self.result appendString: output];
+
+  process.reported = YES;
+
+  [self.xml startElement: @"process"];
   
-  return averageProcesses;
-  }
-
-// Print top processes by CPU.
-- (void) printTopProcesses: (NSArray *) processes
-  {
-  [self.result appendAttributedString: [self buildTitle]];
+  [self.xml addElement: @"name" value: process.name];  
+  [self.xml addElement: @"count" unsignedIntegerValue: process.count];
+  [self.xml addElement: @"path" value: process.path];  
+  [self.xml 
+    addElement: @"usage" 
+    value: [NSString stringWithFormat: @"%.0lf", round(process.cpuUsage)]
+    attributes: 
+      [NSDictionary 
+        dictionaryWithObjectsAndKeys: 
+          @"%", @"units", @"number", @"type", nil]];
   
-  NSUInteger topCount = 0;
+  [self.xml endElement: @"process"];
   
-  for(NSDictionary * process in processes)
-    {
-    NSNumber * cpuValue = [process objectForKey: @"cpu"];
-    NSNumber * countValue = [process objectForKey: @"count"];
-    NSString * name = [process objectForKey: @"command"];
-    NSNumber * pid = [process objectForKey: @"pid"];
-  
-  if(![NSNumber isValid: pid])
-    return;
-    if(![NSNumber isValid: cpuValue] || ![NSNumber isValid: countValue])
-      continue;
-      
-    if(![NSString isValid: name])
-      continue;
-      
-    double cpu = [cpuValue doubleValue];
-
-    int count = [countValue intValue];
-    
-    NSString * countString =
-      (count > 1)
-        ? [NSString stringWithFormat: @"(%d)", count]
-        : @"";
-
-    NSString * usageString =
-      [NSString stringWithFormat: @"%6.0lf%%", cpu];
-    
-    NSString * printString =
-      [usageString
-        stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
-
-    [self.xml startElement: @"process"];
-    
-    [self.xml 
-      addElement: @"usage" 
-      value: [NSString stringWithFormat: @"%.0lf", cpu]
-      attributes: 
-        [NSDictionary 
-          dictionaryWithObjectsAndKeys: 
-            @"%", @"units", @"number", @"type", nil]];
-        
-    [self.xml addElement: @"name" value: name];
-    [self.xml addElement: @"count" intValue: count];
-    [self.xml addElement: @"PID" number: pid];
-    
-    [self.xml endElement: @"process"];
-    
-    NSString * output =
-      [NSString
-        stringWithFormat:
-          @"    %@\t%@%@\n", printString, name, countString];
-      
-    if(cpu > 50.0)
-      [self.result
-        appendString: output
-        attributes:
-          [NSDictionary
-            dictionaryWithObjectsAndKeys:
-              [NSColor redColor], NSForegroundColorAttributeName, nil]];      
-    else
-      [self.result appendString: output];
-          
-
-    Process * process = [self.model.runningProcesses objectForKey: pid];
-      
-    process.reported = YES;
-
-    ++topCount;
-          
-    if(cpu == 0.0)
-      topCount = 10;
-    
-    if(topCount >= 5)
-      break;
-    }
+  return YES;
   }
 
 @end

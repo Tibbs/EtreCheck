@@ -399,11 +399,6 @@
      
   for(NSString * name in applications)
     {
-    if([name isEqualToString: @"Ostiarius"])
-      {
-      NSLog(@"stop here");
-      }
-      
     NSDictionary * application = [applications objectForKey: name];
     
     if([NSDictionary isValid: applications])

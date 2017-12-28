@@ -8,10 +8,5 @@
 
 // Collect information about network usage.
 @interface NetworkUsageCollector : ProcessesCollector
-  {
-  NSDictionary * myProcessesByPID;
-  }
-
-@property (retain) NSDictionary * processesByPID;
 
 @end

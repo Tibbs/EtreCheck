@@ -17,6 +17,8 @@
 #import "LaunchdFile.h"
 #import "Safari.h"
 #import "Adware.h"
+#import "ProcessSnapshot.h"
+#import "ProcessGroup.h"
 
 @implementation Model
 
@@ -56,7 +58,8 @@
 @synthesize xml = myXMLBuilder;
 @synthesize header = myXMLHeader;
 @synthesize coreCount = myCoreCount;
-@synthesize runningProcesses = myRunningProcesses;
+@synthesize processesByPID = myProcessesByPID;
+@synthesize processesByPath = myProcessesByPath;
 @synthesize kernelApps = myKernelApps;
 @synthesize inputDebugDirectory = myInputDebugDirectory;
 @synthesize outputDebugDirectory = myOutputDebugDirectory;
@@ -74,7 +77,7 @@
   
   if(model == nil)
     change = true;
-  if(![myModel isEqualToString: model])
+  else if(![myModel isEqualToString: model])
     change = true;
     
   if(change)
@@ -112,7 +115,8 @@
     myPathsForUUIDs = [NSMutableDictionary new];
     myXMLBuilder = [XMLBuilder new];
     myXMLHeader = [XMLBuilder new];
-    myRunningProcesses = [NSMutableDictionary new];
+    myProcessesByPID = [NSMutableDictionary new];
+    myProcessesByPath = [NSMutableDictionary new];
     myKernelApps = [NSMutableArray new];
     }
     
@@ -145,7 +149,8 @@
   [myGPUErrors release];
   [myProblem release];
   [myProblemDescription release];
-  [myRunningProcesses release];
+  [myProcessesByPID release];
+  [myProcessesByPath release];
   [myKernelApps release];
   [myOutputDebugDirectory release];
   [myInputDebugDirectory release];
@@ -367,6 +372,49 @@
 - (NSString *) debugOutputPath: (NSString *) key
   {
   return [self.outputDebugDirectory stringByAppendingPathComponent: key];
+  }
+  
+// Update running processes.
+- (void) updateProcesses: (ProcessSnapshot *) process updates: (int) types
+  {
+  NSNumber * pid = [[NSNumber alloc] initWithInt: process.PID];
+  
+  Process * currentProcess = [self.processesByPID objectForKey: pid];
+  
+  // If I don't already have this process, add it.
+  if(currentProcess == nil)
+    {
+    currentProcess = process;
+    
+    [self.processesByPID setObject: currentProcess forKey: pid];
+    }
+    
+  // If I do already have this process, update it.
+  else
+    [currentProcess update: process types: types];
+
+  [pid release];
+
+  // Now update the process group.
+  ProcessGroup * processGroup = 
+    [self.processesByPath objectForKey: currentProcess.path];
+    
+  ProcessGroup * newProcessGroup = nil;
+  
+  if(processGroup == nil)
+    {
+    newProcessGroup = 
+      [[ProcessGroup alloc] initWithProcessAttributes: currentProcess];
+    
+    processGroup = newProcessGroup;   
+    
+    [self.processesByPath 
+      setObject: processGroup forKey: currentProcess.path];
+    }
+  else  
+    [processGroup update: currentProcess types: types];
+    
+  [newProcessGroup release];
   }
   
 // Associate a path with a UUID to hide it.

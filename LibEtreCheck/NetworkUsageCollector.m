@@ -18,12 +18,12 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSString+Etresoft.h"
+#import "ProcessSnapshot.h"
 #import "Process.h"
+#import "ProcessGroup.h"
 
 // Collect information about network usage.
 @implementation NetworkUsageCollector
-
-@synthesize processesByPID = myProcessesByPID;
 
 // Constructor.
 - (id) init
@@ -37,31 +37,21 @@
   return self;
   }
 
-// Destructor.
-- (void) dealloc
-  {
-  [myProcessesByPID release];
-  
-  [super dealloc];
-  }
-
 // Perform the collection.
 - (void) performCollect
   {
   if([[OSVersion shared] major] >= kSierra)
     {
-    // Collect the average memory usage usage for all processes (5 times).
-    NSArray * processes = [self collectNetwork];
-    
-    self.processesByPID = [super collectProcesses];
+    // I only need a single sample for network usage.
+    [self sampleProcesses: 1];
     
     // Print the top processes.
-    [self printTopProcesses: processes];
+    [self printTopProcesses: [self sortedProcessesByType: kNetworkUsage]];
     }
   }
 
-// Collect processes' network usage.
-- (NSArray *) collectNetwork
+// Collect running processes.
+- (void) collectProcesses
   {
   NSArray * args =
     @[
@@ -74,8 +64,6 @@
       @"external"
     ];
   
-  NSMutableArray * processes = [NSMutableArray array];
-    
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   NSString * key = @"nettop";
@@ -89,142 +77,45 @@
     
     for(NSString * line in lines)
       {
-      if([line hasPrefix: @"STAT"])
-        continue;
-
-      NSDictionary * process = [self parseNetTop: line];
-
-      if(!process)
-        continue;
+      ProcessSnapshot * process = 
+        [[ProcessSnapshot alloc] initWithNettopLine: line];
+      
+      if(process != nil)
+        [self.model updateProcesses: process updates: kNetworkUsage];
         
-      [processes addObject: process];
+      [process release];
       }
     }
     
   [subProcess release];
-  
-  [self sortProcesses: processes];
-    
-  return processes;
   }
 
-// Sort the processes.
-- (void) sortProcesses: (NSMutableArray *) processes
+// Sort process names by some values measurement.
+- (NSArray *) sortedProcessesByType: (int) type
   {
-  [processes
+  NSMutableArray * sorted = 
+    [[self.model.processesByPID allValues] mutableCopy];
+  
+  [sorted
     sortUsingComparator:
-      ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
-      {
-      NSDictionary * process1 = obj1;
-      NSDictionary * process2 = obj2;
-      
-      NSNumber * bytesIn1 = nil;
-      NSNumber * bytesOut1 = nil;
-      
-      NSNumber * bytesIn2 = nil;
-      NSNumber * bytesOut2 = nil;
-      
-      if([NSDictionary isValid: process1])
+      ^(id obj1, id obj2)
         {
-        bytesIn1 = [process1 objectForKey: @"bytesIn"];
-        bytesOut1 = [process1 objectForKey: @"bytesOut"];
-        }
-        
-      if([NSDictionary isValid: process2])
-        {
-        bytesIn2 = [process2 objectForKey: @"bytesIn"];
-        bytesOut2 = [process2 objectForKey: @"bytesOut"];
-        }
-        
-      unsigned long long total1 = 0;
-      unsigned long long total2 = 0;
-      
-      if([NSNumber isValid: bytesIn1] && [NSNumber isValid: bytesOut1])
-        total1 = 
-          [bytesIn1 unsignedLongLongValue] 
-            + [bytesOut1 unsignedLongLongValue];
+        Process * process1 = (Process *)obj1;
+        Process * process2 = (Process *)obj2;
 
-      if([NSNumber isValid: bytesIn2] && [NSNumber isValid: bytesOut2])
-        total2 =
-          [bytesIn2 unsignedLongLongValue] 
-            + [bytesOut2 unsignedLongLongValue];
-        
-      if(total1 > total2)
-        return NSOrderedAscending;
-      else if(total1 < total2)
-        return NSOrderedDescending;
-        
-      return NSOrderedSame;
-      }];
-  }
+        double value1 = [process1 valueForType: type];
+        double value2 = [process2 valueForType: type];
+            
+        if(value1 < value2)
+          return (NSComparisonResult)NSOrderedDescending;
+          
+        if (value1 > value2)
+          return (NSComparisonResult)NSOrderedAscending;
 
-// Parse a single process.
-- (NSDictionary *) parseNetTop: (NSString *) line
-  {
-  NSScanner * scanner = [NSScanner scannerWithString: line];
+        return (NSComparisonResult)NSOrderedSame;
+        }];
   
-  NSString * time = NULL;
-  
-  BOOL success =
-    [scanner
-      scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
-      intoString: & time];
-    
-  if(!success)
-    return nil;
-    
-  // Skip first line.
-  if([time isEqualToString: @"time"])
-    return nil;
-    
-  NSString * process = NULL;
-  
-  success =
-    [scanner
-      scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
-      intoString: & process];
-    
-  if(!success)
-    return nil;
-    
-  NSRange PIDRange =
-    [process rangeOfString: @"." options: NSBackwardsSearch];
-  
-  NSNumber * pid = [NSNumber numberWithInteger: 0];
-  
-  if(PIDRange.location != NSNotFound)
-    {
-    if(PIDRange.location < [process length])
-      pid =
-        [[NumberFormatter sharedNumberFormatter]
-          convertFromString:
-            [process substringFromIndex: PIDRange.location + 1]];
-    
-    process = [process substringToIndex: PIDRange.location];
-    }
-    
-  long long bytesIn;
-  
-  success = [scanner scanLongLong: & bytesIn];
-
-  if(!success)
-    return nil;
-    
-  long long bytesOut;
-  
-  success = [scanner scanLongLong: & bytesOut];
-  
-  if(!success)
-    return nil;
-    
-  return
-    [NSDictionary
-      dictionaryWithObjectsAndKeys:
-        process, @"process",
-        pid, @"pid",
-        [NSNumber numberWithLongLong: bytesIn], @"bytesIn",
-        [NSNumber numberWithLongLong: bytesOut], @"bytesOut",
-        nil];
+  return [sorted autorelease];
   }
 
 // Print top processes by memory.
@@ -245,13 +136,9 @@
 
   NSUInteger count = 0;
   
-  ByteCountFormatter * formatter = [[ByteCountFormatter alloc] init];
-
-  formatter.k1000 = 1024.0;
-  
-  for(NSDictionary * process in processes)
+  for(Process * process in processes)
     {
-    [self printTopProcess: process formatter: formatter];
+    [self printTopProcess: process];
     
     ++count;
           
@@ -260,57 +147,24 @@
     }
 
   [self.result appendCR];
-  
-  [formatter release];
   }
 
 // Print a top process.
-- (void) printTopProcess: (NSDictionary *) process
-  formatter: (ByteCountFormatter *) formatter
+- (BOOL) printTopProcess: (Process *) process
   {
-  if(![NSDictionary isValid: process])
-    return;
+  if([process.name isEqualToString: @"nettop"])
+    return NO;
     
-  // Cross-reference the process ID to get a decent process name using
-  // "ps" results that are better than names from "nettop".
-  NSString * processName = nil;
-  
-  NSNumber * pid = [process objectForKey: @"pid"];
-  
-  if(![NSNumber isValid: pid])
-    return;
+  if([process.name isEqualToString: @"EtreCheck"])
+    return NO;
     
-  NSDictionary * processByPID = [self.processesByPID objectForKey: pid];
-  
-  if(processByPID != nil)
-    processName = [processByPID objectForKey: @"command"];
-    
-  if(processName == nil)
-    processName = [process objectForKey: @"process"];
-  
-  if(![NSString isValid: processName])
-    processName = ECLocalizedString(@"Unknown");
-    
-  if([processName hasPrefix: @"EtreCheck"])
-    return;
-
-  NSNumber * processBytesIn = [process objectForKey: @"bytesIn"];
-  NSNumber * processBytesOut = [process objectForKey: @"bytesOut"];
-  
-  double bytesIn = 0.0;
-  double bytesOut = 0.0;
-
-  if([NSNumber isValid: processBytesIn])
-    bytesIn = [processBytesIn doubleValue];
-  
-  if([NSNumber isValid: processBytesOut])
-    bytesOut = [processBytesOut doubleValue];
-
   NSString * bytesInString =
-    [formatter stringFromByteCount: (unsigned long long)bytesIn];
+    [self.byteCountFormatter 
+      stringFromByteCount: (unsigned long long)process.networkInputUsage];
 
   NSString * bytesOutString =
-    [formatter stringFromByteCount: (unsigned long long)bytesOut];
+    [self.byteCountFormatter 
+      stringFromByteCount: (unsigned long long)process.networkOutputUsage];
   
   NSString * printBytesInString =
     [bytesInString
@@ -319,29 +173,31 @@
   NSString * printBytesOutString =
     [bytesOutString
       stringByPaddingToLength: 10 withString: @" " startingAtIndex: 0];
-
-  [self.xml startElement: @"process"];
   
-  [self.xml addElement: @"inputsize" valueWithUnits: bytesInString];
-  [self.xml addElement: @"outputsize" valueWithUnits: bytesOutString];
-  [self.xml addElement: @"name" value: processName];
-  [self.xml addElement: @"PID" number: pid];
-  
-  [self.xml endElement: @"process"];
-
   [self.result
     appendString:
       [NSString
         stringWithFormat:
           @"    %@\t%@\t%@\n",
+          process.name,
           printBytesInString,
-          printBytesOutString,
-          processName]];
-          
-  Process * runningProcess = 
-    [self.model.runningProcesses objectForKey: pid];
-    
-  runningProcess.reported = YES;
+          printBytesOutString]];
+
+  ProcessGroup * processGroup = 
+    [self.model.processesByPath objectForKey: process.path];
+  
+  processGroup.reported = YES;
+
+  [self.xml startElement: @"process"];
+  
+  [self.xml addElement: @"name" value: process.name];
+  [self.xml addElement: @"path" value: process.path];  
+  [self.xml addElement: @"inputsize" valueWithUnits: bytesInString];
+  [self.xml addElement: @"outputsize" valueWithUnits: bytesOutString];
+  
+  [self.xml endElement: @"process"];
+  
+  return YES;
   }
 
 @end

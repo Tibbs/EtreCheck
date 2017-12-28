@@ -12,7 +12,7 @@
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
 #import "NSString+Etresoft.h"
-#import "Process.h"
+#import "ProcessGroup.h"
 
 // Collect information about EtreCheck itself.
 @implementation EtreCheckCollector
@@ -428,37 +428,48 @@
 // Exported running processes.
 - (void) exportProcesses
   {
-  for(NSNumber * pid in self.model.runningProcesses)
+  int index = 0;
+  
+  for(NSString * path in self.model.processesByPath)
     {
-    Process * process = [self.model.runningProcesses objectForKey: pid];
+    ProcessGroup * process = 
+      [self.model.processesByPath objectForKey: path];
       
     if(process.reported)
       {
       if(process.path == nil)
         continue;
         
+      NSString * identifier = 
+        [[NSString alloc] initWithFormat: @"process%d", index++];
+      
       [self.xml startElement: @"process"];
       
-      [self.xml addElement: @"PID" intValue: process.PID];
+      [self.xml addElement: @"name" value: process.name];
       [self.xml addElement: @"path" value: process.path];
+      [self.xml addElement: @"identifier" value: identifier];
       
-      if(process.PID == 0)
-        process.apple = YES;
+      [identifier release];
+      
+      BOOL system = NO;
+      
+      if([process.name isEqualToString: @"kernel_task"])
+        system = YES;
         
-      if([process.path hasPrefix: @"/System/"])
-        process.apple = YES;
-      
-      if(!process.apple)
-        {
-        BOOL isWebKit = 
-          [process.path 
-            hasPrefix: @"/System/Library/Frameworks/WebKit.framework/"];
-            
-        NSString * bundlePath = 
-          isWebKit
-            ? @"/Applications/Safari.app"
-            : [Utilities getParentBundle: process.path];
+      BOOL isWebKit = 
+        [process.path 
+          hasPrefix: @"/System/Library/Frameworks/WebKit.framework/"];
           
+      NSString * bundlePath = 
+        isWebKit
+          ? @"/Applications/Safari.app"
+          : [Utilities getParentBundle: process.path];
+          
+      if([bundlePath hasPrefix: @"/System/"])
+        system = YES;
+      
+      if(!system)
+        {
         NSImage * icon = 
           [[NSWorkspace sharedWorkspace] iconForFile: bundlePath];
             
@@ -498,7 +509,7 @@
       else
         source = [Utilities queryDeveloper: process.path];
         
-      [self.xml addElement: @"apple" boolValue: process.apple];
+      [self.xml addElement: @"system" boolValue: system];
       [self.xml addElement: @"source" value: source];
 
       [self.xml endElement: @"process"];      

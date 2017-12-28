@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5027AD31FF30843009DFE09 /* ProcessGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = A5027AD11FF30843009DFE09 /* ProcessGroup.h */; };
+		A5027AD41FF30843009DFE09 /* ProcessGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = A5027AD21FF30843009DFE09 /* ProcessGroup.m */; };
+		A5027AD71FF411F8009DFE09 /* ProcessSnapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = A5027AD51FF411F8009DFE09 /* ProcessSnapshot.h */; };
+		A5027AD81FF411F8009DFE09 /* ProcessSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = A5027AD61FF411F8009DFE09 /* ProcessSnapshot.m */; };
+		A5027ADB1FF415B2009DFE09 /* ProcessAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = A5027AD91FF415B2009DFE09 /* ProcessAttributes.h */; };
+		A5027ADC1FF415B2009DFE09 /* ProcessAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = A5027ADA1FF415B2009DFE09 /* ProcessAttributes.m */; };
 		A503BF851F829BC200473A24 /* Collectors.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF821F829BC200473A24 /* Collectors.strings */; };
 		A503BF8C1F829CEF00473A24 /* System.strings in Resources */ = {isa = PBXBuildFile; fileRef = A503BF8E1F829CEF00473A24 /* System.strings */; };
 		A503BF9A1F82AD8D00473A24 /* LocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = A503BF981F82AD8D00473A24 /* LocalizedString.h */; };
@@ -212,6 +218,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A5027AD11FF30843009DFE09 /* ProcessGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessGroup.h; sourceTree = "<group>"; };
+		A5027AD21FF30843009DFE09 /* ProcessGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessGroup.m; sourceTree = "<group>"; };
+		A5027AD51FF411F8009DFE09 /* ProcessSnapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessSnapshot.h; sourceTree = "<group>"; };
+		A5027AD61FF411F8009DFE09 /* ProcessSnapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessSnapshot.m; sourceTree = "<group>"; };
+		A5027AD91FF415B2009DFE09 /* ProcessAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessAttributes.h; sourceTree = "<group>"; };
+		A5027ADA1FF415B2009DFE09 /* ProcessAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessAttributes.m; sourceTree = "<group>"; };
 		A503BF831F829BC200473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Collectors.strings; sourceTree = "<group>"; };
 		A503BF841F829BC200473A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Collectors.strings; sourceTree = "<group>"; };
 		A503BF8D1F829CEF00473A24 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/System.strings; sourceTree = "<group>"; };
@@ -725,8 +737,14 @@
 				A57A3A841FA6B65F001DBE47 /* Drive.m */,
 				A5B659211A16D57800476A76 /* DiagnosticEvent.h */,
 				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
+				A5027AD91FF415B2009DFE09 /* ProcessAttributes.h */,
+				A5027ADA1FF415B2009DFE09 /* ProcessAttributes.m */,
 				A5CC48951FE8AAF5003621CE /* Process.h */,
 				A5CC48961FE8AAF5003621CE /* Process.m */,
+				A5027AD51FF411F8009DFE09 /* ProcessSnapshot.h */,
+				A5027AD61FF411F8009DFE09 /* ProcessSnapshot.m */,
+				A5027AD11FF30843009DFE09 /* ProcessGroup.h */,
+				A5027AD21FF30843009DFE09 /* ProcessGroup.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
 			);
@@ -764,12 +782,14 @@
 				A589CDAF1F7174B900D66592 /* LaunchDaemonsCollector.h in Headers */,
 				A589CD911F71744F00D66592 /* NSArray+Etresoft.h in Headers */,
 				A589CDB31F7174B900D66592 /* InternetPlugInsCollector.h in Headers */,
+				A5027AD31FF30843009DFE09 /* ProcessGroup.h in Headers */,
 				A589CDA21F71749E00D66592 /* VirtualVolumeCollector.h in Headers */,
 				A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */,
 				A54279391F8EC898009E7D29 /* PrintableItem.h in Headers */,
 				A589CDAA1F71749E00D66592 /* StartupItemsCollector.h in Headers */,
 				A57A3A911FA6BB7B001DBE47 /* Volume.h in Headers */,
 				A589CD951F71746700D66592 /* ByteCountFormatter.h in Headers */,
+				A5027AD71FF411F8009DFE09 /* ProcessSnapshot.h in Headers */,
 				A589CDC41F7174FD00D66592 /* EtreCheckDeletedFilesCollector.h in Headers */,
 				A589CDB01F7174B900D66592 /* UserLaunchAgentsCollector.h in Headers */,
 				A589CDA41F71749E00D66592 /* USBCollector.h in Headers */,
@@ -811,6 +831,7 @@
 				A5E742CA1F8BFA9100DA94CE /* SafariExtension.h in Headers */,
 				A589CDA51F71749E00D66592 /* FirewireCollector.h in Headers */,
 				A5E742C61F8BF91900DA94CE /* Safari.h in Headers */,
+				A5027ADB1FF415B2009DFE09 /* ProcessAttributes.h in Headers */,
 				A589CDC51F71750100D66592 /* Checker.h in Headers */,
 				A589CD991F71747B00D66592 /* SubProcess.h in Headers */,
 				A589CDBE1F7174FD00D66592 /* InstallCollector.h in Headers */,
@@ -965,11 +986,13 @@
 				A5F2C01A1FBD36A4003646DF /* NetworkCollector.m in Sources */,
 				A589CD531F7164C900D66592 /* UserAudioPlugInsCollector.m in Sources */,
 				A5F2C0161FBD2E4D003646DF /* UbiquityFile.m in Sources */,
+				A5027ADC1FF415B2009DFE09 /* ProcessAttributes.m in Sources */,
 				A589CD441F7164C900D66592 /* ConfigurationCollector.m in Sources */,
 				A589CD7C1F7168E900D66592 /* NSAttributedString+Etresoft.m in Sources */,
 				A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */,
 				A589CD3D1F7164C900D66592 /* VideoCollector.m in Sources */,
 				A589CD5F1F7164C900D66592 /* EnergyUsageCollector.m in Sources */,
+				A5027AD81FF411F8009DFE09 /* ProcessSnapshot.m in Sources */,
 				A589CD811F7168E900D66592 /* NSDate+Etresoft.m in Sources */,
 				A589CD891F71692C00D66592 /* SubProcess.m in Sources */,
 				A589CD581F7164C900D66592 /* FontsCollector.m in Sources */,
@@ -1030,6 +1053,7 @@
 				A57A3A8A1FA6B68F001DBE47 /* StorageDevice.m in Sources */,
 				A589CD851F7168EF00D66592 /* XMLBuilder.m in Sources */,
 				A589CD541F7164C900D66592 /* ITunesPlugInsCollector.m in Sources */,
+				A5027AD41FF30843009DFE09 /* ProcessGroup.m in Sources */,
 				A5CBDBC41FDC97EE0080D476 /* NSMutableDictionary+Etresoft.m in Sources */,
 				A589CD601F7164C900D66592 /* VirtualMemoryCollector.m in Sources */,
 				A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */,

@@ -434,6 +434,8 @@
       memValue *= 1024 * 1024 * 1024 * 1024;
     }
     
+  [scanner scanString: @"+" intoString: NULL];
+  
   return memValue;
   }
 

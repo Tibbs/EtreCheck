@@ -4,6 +4,8 @@
  **********************************************************************/
 
 #import "Process.h"
+#import "Utilities.h"
+#import "NumberFormatter.h"
 
 // Encapsulate a running process.
 @implementation Process
@@ -11,61 +13,61 @@
 // The command being run.
 @synthesize command = myCommand;
 
-// The path to the process.
-@synthesize path = myPath;
-
-// The name of the process.
-@synthesize name = myName;
-
 // The process ID.
 @synthesize PID = myPID;
 
-// Is this an Apple app?
-@synthesize apple = myApple;
+// CPU usage sample count.
+@synthesize cpuUsageSampleCount = myCpuUsageSampleCount;
 
-// Was this app reported on an EtreCheck report?
-@synthesize reported = myReported;
-
-// Set the command.
-- (void) setCommand: (NSString *) command
-  {
-  bool change = false;
-  
-  if(command == nil)
-    change = true;
-  else if(![myCommand isEqualToString: command])
-    change = true;
+// Energy usage sample count.
+@synthesize energyUsageSampleCount = myEnergyUsageSampleCount;
     
-  if(change)
-    {
-    [self willChangeValueForKey: @"command"];
-    
-    [myCommand release];
-    
-    myCommand = [command retain];
-    
-    [self parseCommand: myCommand];
-    
-    [self didChangeValueForKey: @"command"];
-    }
-  }
-  
-// Get the command.
-- (NSString *) command
-  {
-  return myCommand;
-  }
-  
 // Destructor.
 - (void) dealloc
   {
   self.command = nil;
-  [myPath release];
-  [myName release];
   
   [super dealloc];
   }
+        
+// Update withnew process attributes.
+- (void) update: (ProcessAttributes *) processAttributes types: (int) types
+  {
+  if(types & kCPUUsage)
+    {
+    double nextSampleCount = self.cpuUsageSampleCount + 1;
+    
+    self.cpuUsage = 
+      (self.cpuUsage * (self.cpuUsageSampleCount / nextSampleCount)) 
+        + (processAttributes.cpuUsage / nextSampleCount);
+
+    ++self.cpuUsageSampleCount;
+    }
+    
+  if(types & kMemoryUsage)
+    self.memoryUsage = processAttributes.memoryUsage;
+    
+  if(types & kEnergyUsage)
+    {
+    double nextSampleCount = self.energyUsageSampleCount + 1;
+    
+    self.energyUsage = 
+      (self.energyUsage * (self.energyUsageSampleCount / nextSampleCount)) 
+        + (processAttributes.energyUsage / nextSampleCount);
+        
+    ++self.energyUsageSampleCount;
+    }
+    
+  // This is an accumulator.
+  if(types & kNetworkUsage)
+    {
+    self.networkInputUsage = processAttributes.networkInputUsage;
+    self.networkOutputUsage = processAttributes.networkOutputUsage;
+    }
+  }
   
+#pragma mark - Private methods
+
 // Parse the command.
 - (void) parseCommand: (NSString *) command
   {
@@ -73,7 +75,9 @@
   
   if(command.length > 0)
     {
-    resolvedPath = [[self resolveExecutable: command] retain];
+    self.command = command;
+    
+    resolvedPath = [self resolveExecutable: command];
     
     // If the path doesn't exist, keep looking.
     if(resolvedPath == nil)
@@ -94,7 +98,7 @@
           
           if(currentPath != nil)
             {
-            resolvedPath = [currentPath retain];
+            resolvedPath = [[currentPath copy] autorelease];
             
             break;
             }
@@ -126,7 +130,7 @@
     
     [myPath release];
     
-    myPath = resolvedPath;
+    myPath = [resolvedPath retain];
     
     [self didChangeValueForKey: @"path"];
 

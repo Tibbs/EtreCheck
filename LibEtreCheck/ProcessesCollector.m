@@ -12,104 +12,55 @@
 #import "NSNumber+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import "NSMutableDictionary+Etresoft.h"
-#import "Process.h"
-#import "NumberFormatter.h"
+#import "ProcessSnapshot.h"
+#import "ProcessGroup.h"
+#import "ByteCountFormatter.h"
+#import "NSMutableAttributedString+Etresoft.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
 
-// Collect full paths for running processes.
-- (void) collectRunningProcesses
+@synthesize byteCountFormatter = myByteCountFormatter;
+
+// Constructor.
+- (id) initWithName: (NSString *) name
   {
-  NSArray * args = @[ @"raxww", @"-o", @"pid, command" ];
-
-  SubProcess * subProcess = [[SubProcess alloc] init];
+  self = [super initWithName: name];
   
-  NSString * key = @"ps_running";
-  
-  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
-  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
-
-  if([subProcess execute: @"/bin/ps" arguments: args])
+  if(self != nil)
     {
-    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
-    
-    bool firstLine = true;
-    
-    for(NSString * line in lines)
-      {
-      if(firstLine)
-        {
-        firstLine = false;
-        continue;
-        }
-        
-      NSScanner * scanner = [[NSScanner alloc] initWithString: line];
-      
-      int PID;
-      
-      if([scanner scanInt: & PID])
-        {
-        NSString * command = nil;
-        
-        BOOL success = 
-          [scanner 
-            scanUpToCharactersFromSet: [NSCharacterSet newlineCharacterSet] 
-            intoString: & command];
-      
-        if(success && (command != nil))
-          {
-          NSNumber * pid = [[NSNumber alloc] initWithInt: PID];
-          
-          Process * process = 
-            [self.model.runningProcesses objectForKey: pid];
-            
-          if(process == nil)
-            {
-            process = [Process new];
-            
-            process.PID = PID;
-            process.command = command;
-            
-            [self.model.runningProcesses setObject: process forKey: pid];
-          
-            [process release];
-            }
-            
-          [pid release];
-          }
-        }
-        
-      [scanner release];
-      }
-      
-    Process * process = [self.model.runningProcesses objectForKey: @0];
-      
-    if(process == nil)
-      {
-      process = [Process new];
-      
-      process.PID = 0;
-      process.command = @"kernel_task";
-      
-      [self.model.runningProcesses setObject: process forKey: @0];
-      
-      [process release];
-      }
+    myByteCountFormatter = [ByteCountFormatter new];
+
+    myByteCountFormatter.k1000 = 1024.0;
     }
     
-  [subProcess release];
+  return self;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myByteCountFormatter release];
+  
+  [super dealloc];
+  }
+
+// Collect the average CPU usage of all processes.
+- (void) sampleProcesses: (int) count
+  {
+  for(NSUInteger i = 0; i < count; ++i)
+    {
+    usleep(500000);
+    
+    [self collectProcesses];   
+    }
   }
 
 // Collect running processes.
-- (NSMutableDictionary *) collectProcesses
+- (void) collectProcesses
   {
-  [self collectRunningProcesses];
+  NSArray * args = @[ @"-raxww", @"-o", @"pid, %cpu, rss, command" ];
   
-  NSArray * args = @[ @"-raxcww", @"-o", @"rss, %cpu, pid, command" ];
-  
-  NSMutableDictionary * processes = [NSMutableDictionary dictionary];
-    
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   NSString * key = @"ps";
@@ -123,134 +74,34 @@
     
     for(NSString * line in lines)
       {
-      if([line hasPrefix: @"STAT"])
-        continue;
-
-      NSNumber * mem = nil;
-      NSNumber * cpu = nil;
-      NSNumber * pid = nil;
-      NSString * command = nil;
-
-      [self
-        parsePs: line mem: & mem cpu: & cpu pid: & pid command: & command];
-
-      if([command length] == 0)
-        command = ECLocalizedString(@"Unknown");
+      ProcessSnapshot * process = 
+        [[ProcessSnapshot alloc] initWithPsLine: line];
+      
+      if(process != nil)
+        [self.model 
+          updateProcesses: process updates: kCPUUsage | kMemoryUsage];
         
-      // Ignore EtreCheck itself.
-      if([command hasPrefix: @"EtreCheck"])
-        continue;
-        
-      double usage = [mem doubleValue] * 1024;
-        
-      [self
-        recordProcess: command
-        memory: usage
-        cpu: [cpu doubleValue]
-        pid: pid
-        in: processes];
+      [process release];
       }
       
     // Don't forget the kernel.
-    [self recordKernelTaskIn: processes];
+    ProcessSnapshot * process = [self getKernelTask];
+
+    if(process != nil)
+      [self.model 
+        updateProcesses: process updates: kCPUUsage | kMemoryUsage];
     }
     
   [subProcess release];
-  
-  return processes;
-  }
-
-// Parse a line from the ps command.
-- (void) parsePs: (NSString *) line
-  mem: (NSNumber **) mem
-  cpu: (NSNumber **) cpu
-  pid: (NSNumber **) pid
-  command: (NSString **) command
-  {
-  NSScanner * scanner = [NSScanner scannerWithString: line];
-
-  double memValue;
-  
-  if(![scanner scanDouble: & memValue])
-    return;
-
-  *mem = [NSNumber numberWithDouble: memValue];
-  
-  double cpuValue;
-
-  if(![scanner scanDouble: & cpuValue])
-    return;
-
-  *cpu = [NSNumber numberWithDouble: cpuValue];
-
-  long long pidValue;
-  
-  if(![scanner scanLongLong: & pidValue])
-    return;
-
-  *pid = [NSNumber numberWithLongLong: pidValue];
-
-  [scanner scanUpToString: @"\n" intoString: command];
   }
 
 // Record process information.
-- (void) recordProcess: (NSString *) command
-  memory: (double) usage
-  cpu: (double) cpu
-  pid: (NSNumber *) pid
-  in: (NSMutableDictionary *) processes
+- (ProcessSnapshot *) getKernelTask
   {
-  if(![NSNumber isValid: pid])
-    return;
-    
-  if(![NSDictionary isValid: processes])
-    return;
-    
-  NSMutableDictionary * dict = [processes objectForKey: command];
+  ProcessSnapshot * kernelTask = nil;
   
-  if([NSMutableDictionary isValid: dict])
-    {
-    NSNumber * processMem = [dict objectForKey: @"mem"];
-    NSNumber * processCPU = [dict objectForKey: @"cpu"];
-    
-    if([NSNumber isValid: processMem])
-      usage += [processMem doubleValue];
-    
-    if([NSNumber isValid: processCPU])
-      cpu += [processCPU doubleValue];
-    
-    NSNumber * processCount = [dict objectForKey: @"count"];
-    
-    int count = 1;
-    
-    if([NSNumber isValid: processCount])
-      count += [processCount intValue];
-    
-    [dict setObject: [NSNumber numberWithDouble: usage] forKey: @"mem"];
-    [dict setObject: [NSNumber numberWithDouble: cpu] forKey: @"cpu"];
-    [dict setObject: [NSNumber numberWithInt: count] forKey: @"count"];
-    [dict setObject: pid forKey: @"pid"];
-    }
-  else
-    {
-    dict =
-      [NSMutableDictionary
-        dictionaryWithObjectsAndKeys:
-          command, @"command",
-          [NSNumber numberWithDouble: usage], @"mem",
-          [NSNumber numberWithDouble: cpu], @"cpu",
-          pid, @"pid",
-          @1, @"count",
-          nil];
-       
-    [processes setObject: dict forKey: pid];
-    }
-  }
-
-// Record process information.
-- (void) recordKernelTaskIn: (NSMutableDictionary *) processes
-  {
-  NSArray * args = @[@"-l", @"2", @"-stats", @"pid,cpu,rsize"];
+  NSArray * args = 
+    @[@"-l", @"2", @"-stats", @"pid,cpu,rsize,power,command"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
@@ -272,88 +123,39 @@
       if(![line hasPrefix: @"0 "])
         continue;
 
-      if(count++ == 0)
-        continue;
-        
-      NSNumber * mem = nil;
-      NSNumber * cpu = nil;
-
-      [self parseTop: line mem: & mem cpu: & cpu];
-
-      [self
-        recordProcess: @"kernel_task"
-        memory: [mem doubleValue]
-        cpu: [cpu doubleValue]
-        pid: [NSNumber numberWithLongLong: 0]
-        in: processes];
+      if(count++ == 1)
+        {
+        kernelTask = [[ProcessSnapshot alloc] initWithTopLine: line];
+        kernelTask.apple = YES;
+        }
       }
     }
     
   [subProcess release];
-  }
-
-// Parse a line from the top command.
-- (void) parseTop: (NSString *) line
-  mem: (NSNumber **) mem
-  cpu: (NSNumber **) cpu
-  {
-  NSScanner * scanner = [NSScanner scannerWithString: line];
-
-  // I am only looking for pid 0, kernel_task and I should have already
-  // checked the line for that prefix.
-  int pid;
   
-  bool found = [scanner scanInt: & pid];
-  
-  if(!found || (pid != 0))
-    return;
-    
-  double cpuValue;
-
-  found = [scanner scanDouble: & cpuValue];
-
-  if(!found)
-    return;
-
-  *cpu = [NSNumber numberWithDouble: cpuValue];
-
-  double memValue = [Utilities scanTopMemory: scanner];
-    
-  *mem = [NSNumber numberWithDouble: memValue];
+  return [kernelTask autorelease];
   }
 
 // Sort process names by some values measurement.
-- (NSArray *) sortProcesses: (NSDictionary *) processes
-  by: (NSString *) key
+- (NSArray *) sortedProcessesByType: (int) type
   {
-  NSMutableArray * sorted = [[processes allValues] mutableCopy];
+  NSMutableArray * sorted = 
+    [[self.model.processesByPath allValues] mutableCopy];
   
   [sorted
     sortUsingComparator:
       ^(id obj1, id obj2)
         {
-        NSDictionary * process1 = (NSDictionary *)obj1;
-        NSDictionary * process2 = (NSDictionary *)obj2;
+        ProcessGroup * process1 = (ProcessGroup *)obj1;
+        ProcessGroup * process2 = (ProcessGroup *)obj2;
 
-        NSNumber * value1 = [process1 objectForKey: key];
-        NSNumber * value2 = [process2 objectForKey: key];
-        
-        if(![NSNumber isValid: value1])
-          value1 = nil;
-          
-        if(![NSNumber isValid: value2])
-          value2 = nil;
-          
-        if((value1 == nil) && (value2 != nil))
-          return (NSComparisonResult)NSOrderedDescending;
-        
-        if((value1 != nil) && (value2 == nil))
-          return (NSComparisonResult)NSOrderedAscending;
-
-        if([value1 doubleValue] < [value2 doubleValue])
+        double value1 = [process1 valueForType: type];
+        double value2 = [process2 valueForType: type];
+            
+        if(value1 < value2)
           return (NSComparisonResult)NSOrderedDescending;
           
-        if ([value1 doubleValue] > [value2 doubleValue])
+        if (value1 > value2)
           return (NSComparisonResult)NSOrderedAscending;
 
         return (NSComparisonResult)NSOrderedSame;
@@ -362,4 +164,29 @@
   return [sorted autorelease];
   }
 
+// Print top processes by memory.
+- (void) printTopProcesses: (NSArray *) processes
+  {
+  [self.result appendAttributedString: [self buildTitle]];
+  
+  NSUInteger count = 0;
+  
+  for(ProcessGroup * process in processes)
+    {
+    if([self printTopProcessGroup: process])
+      ++count;
+          
+    if(count >= 5)
+      break;
+    }
+
+  [self.result appendCR];
+  }
+
+// Print a top process.
+- (BOOL) printTopProcessGroup: (ProcessGroup *) process
+  {
+  return NO;
+  }
+  
 @end

@@ -3,46 +3,37 @@
  ** Copyright (c) 2017. All rights reserved.
  **********************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "ProcessAttributes.h"
 
 // Encapsulate a running process.
-@interface Process : NSObject
+@interface Process : ProcessAttributes
   {
   // The command being run.
   NSString * myCommand;
 
-  // The path to the process.
-  NSString * myPath;
-  
-  // The process name.
-  NSString * myName;
-  
   // The process ID.
   int myPID;
+
+  // CPU usage sample count.
+  int myCpuUsageSampleCount;
   
-  // Is this an Apple app?
-  BOOL myApple;
-  
-  // Was this app reported on an EtreCheck report?
-  BOOL myReported;
+  // Energy usage sample count.
+  int myEnergyUsageSampleCount;
   }
   
 // The command being run.
 @property (strong) NSString * command;
 
-// The resolved path.
-@property (readonly) NSString * path;
-
-// The process name.
-@property (readonly) NSString * name;
-
 // The process ID.
 @property (assign) int PID;
 
-// Is this an Apple app?
-@property (assign) BOOL apple;
+// CPU usage sample count.
+@property (assign) int cpuUsageSampleCount;
 
-// Was this app reported on an EtreCheck report?
-@property (assign) BOOL reported;
+// Energy usage sample count.
+@property (assign) int energyUsageSampleCount;
+
+// Update with new process attributes.
+- (void) update: (ProcessAttributes *) processAttributes types: (int) types;
 
 @end

@@ -27,6 +27,7 @@
 @class Launchd;
 @class Safari;
 @class Adware;
+@class ProcessSnapshot;
 
 // A singleton to keep track of system information.
 @interface Model : NSObject
@@ -89,7 +90,8 @@
   bool myCleanupRequired;
   int myCoreCount;
   
-  NSMutableDictionary * myRunningProcesses;
+  NSMutableDictionary * myProcessesByPID;
+  NSMutableDictionary * myProcessesByPath;
   NSMutableArray * myKernelApps;
   
   NSString * myOutputDebugDirectory;
@@ -200,8 +202,11 @@
 @property (readonly) XMLBuilder * xml;
 @property (readonly) XMLBuilder * header;
 
-// Running processes.
-@property (readonly) NSMutableDictionary * runningProcesses;
+// Processes indexed by PID.
+@property (readonly) NSMutableDictionary * processesByPID;
+
+// Processes indexed by path.
+@property (readonly) NSMutableDictionary * processesByPath;
 
 // Apps with kernel extensions.
 @property (readonly) NSMutableArray * kernelApps;
@@ -242,5 +247,8 @@
 
 // A path for debug input for a given key.
 - (NSString *) debugOutputPath: (NSString *) key;
+
+// Update running processes.
+- (void) updateProcesses: (ProcessSnapshot *) process updates: (int) types;
 
 @end
