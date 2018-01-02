@@ -72,7 +72,9 @@
         [[ProcessSnapshot alloc] initWithTopLine: line];
       
       if(process != nil)
-        [self.model updateProcesses: process updates: kEnergyUsage];
+        [self.model 
+          updateProcesses: process 
+          updates: kCPUUsage | kMemoryUsage | kEnergyUsage];
         
       [process release];
       }
