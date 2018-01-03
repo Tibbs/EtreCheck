@@ -210,4 +210,8 @@
   permissions: (BOOL *) permissions
   locked: (BOOL *) locked;
 
+// Compare versions.
++ (BOOL) isVersion: (NSString *) version1 
+  laterThanVersion: (NSString *) version2;
+
 @end

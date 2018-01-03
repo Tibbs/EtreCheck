@@ -166,6 +166,7 @@
 "NO - Auto backup turned off\n" = "NON - Sauvegarde automatique désactivée\n";
 "None" = "Aucun";
 "Normal" = "Normale";
+"Not installed" = "Pas installé";
 "not loaded" = "désengagé";
 "not supported" = "non disponible";
 "Not upgradeable" = "Pas extensible";

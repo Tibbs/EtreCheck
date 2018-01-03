@@ -1214,6 +1214,9 @@
 // Return an install date with consisten text and format.
 + (NSString *) installDateAsString: (NSDate *) date
   {
+  if(![NSDate isValid: date])
+    return nil;
+    
   NSString * modificationDateString =
     [Utilities dateAsString: date format: @"yyyy-MM-dd"];
     
@@ -1883,4 +1886,47 @@
   return immutable;
   }
 
+// Compare versions.
++ (BOOL) isVersion: (NSString *) version1 
+  laterThanVersion: (NSString *) version2
+  {
+  NSArray * parts1 = [version1 componentsSeparatedByString: @"."];
+  NSArray * parts2 = [version2 componentsSeparatedByString: @"."];
+  
+  NSUInteger index = 0;
+  
+  while(true)
+    {
+    NSString * number1 = nil;
+    NSString * number2 = nil;
+    
+    if(index < parts1.count)
+      number1 = [parts1 objectAtIndex: index];
+
+    if(index < parts2.count)
+      number2 = [parts2 objectAtIndex: index];
+      
+    if((number1 != nil) && (number2 != nil))
+      {
+      NSComparisonResult result = 
+        [number1 
+          compare: number2 
+          options: NSCaseInsensitiveSearch | NSNumericSearch];
+      
+      if(result == NSOrderedDescending)
+        return YES;
+      }
+    else if(number1 != nil)
+      return YES;
+    else if(number2 != nil)
+      return NO;
+    else
+      break;
+        
+    ++index;
+    }
+    
+  return NO;
+  }
+  
 @end
