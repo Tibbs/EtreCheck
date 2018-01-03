@@ -408,6 +408,14 @@
     
     processGroup = newProcessGroup;   
     
+    NSString * key = currentProcess.path;
+    
+    if(key == nil)
+      key = currentProcess.name;
+      
+    if(key == nil)
+      key = @"/bin/sh";
+      
     [self.processesByPath 
       setObject: processGroup forKey: currentProcess.path];
     }

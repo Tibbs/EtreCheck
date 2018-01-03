@@ -283,8 +283,11 @@
     
   if(change)
     {
+    if(resolvedPath == nil)
+      resolvedPath = command;
+      
     self.path = resolvedPath;
-    self.name = [myPath lastPathComponent];
+    self.name = [self.path lastPathComponent];
     }
     
   [resolvedPath release];
