@@ -29,6 +29,7 @@
 		A50C9C101F86CCAC00144335 /* LaunchdFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C0E1F86CCAC00144335 /* LaunchdFile.m */; };
 		A50C9C131F86D28000144335 /* LaunchdLoadedTask.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9C111F86D28000144335 /* LaunchdLoadedTask.h */; };
 		A50C9C141F86D28000144335 /* LaunchdLoadedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9C121F86D28000144335 /* LaunchdLoadedTask.m */; };
+		A51C42761FFDCB5B00DD1134 /* securityUpdateNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = A51C42751FFDCB5B00DD1134 /* securityUpdateNames.plist */; };
 		A529E83B1FC35AC40020EF49 /* whitelist.plist in Resources */ = {isa = PBXBuildFile; fileRef = A529E83A1FC35AC40020EF49 /* whitelist.plist */; };
 		A542792F1F8D4D64009E7D29 /* PrintableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A542792E1F8D4D64009E7D29 /* PrintableItem.m */; };
 		A54279331F8E6F8D009E7D29 /* SystemLaunchdCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A54279311F8E6F8D009E7D29 /* SystemLaunchdCollector.h */; };
@@ -264,6 +265,7 @@
 		A50C9DCA19A4065B00BA6A25 /* InternetPlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternetPlugInsCollector.m; sourceTree = "<group>"; };
 		A51906791D49B092009AA835 /* EtreCheckDeletedFilesCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckDeletedFilesCollector.h; sourceTree = "<group>"; };
 		A519067A1D49B092009AA835 /* EtreCheckDeletedFilesCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckDeletedFilesCollector.m; sourceTree = "<group>"; };
+		A51C42751FFDCB5B00DD1134 /* securityUpdateNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = securityUpdateNames.plist; sourceTree = "<group>"; };
 		A51ED7651DB090B60026833B /* NumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NumberFormatter.h; path = ../LibEtreCheck/NumberFormatter.h; sourceTree = "<group>"; };
 		A51ED7661DB090B60026833B /* NumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NumberFormatter.m; path = ../LibEtreCheck/NumberFormatter.m; sourceTree = "<group>"; };
 		A523580E1EDC7B02008511BA /* NSString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Etresoft.h"; sourceTree = "<group>"; };
@@ -672,6 +674,7 @@
 				A542793E1F904709009E7D29 /* appleLaunchd.plist */,
 				A54279401F904728009E7D29 /* adware.plist */,
 				A529E83A1FC35AC40020EF49 /* whitelist.plist */,
+				A51C42751FFDCB5B00DD1134 /* securityUpdateNames.plist */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
 				A5F65E6C1F806FDB0062FA87 /* Localizable.strings */,
@@ -935,6 +938,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A51C42761FFDCB5B00DD1134 /* securityUpdateNames.plist in Resources */,
 				A529E83B1FC35AC40020EF49 /* whitelist.plist in Resources */,
 				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,
 				A542793F1F904709009E7D29 /* appleLaunchd.plist in Resources */,

@@ -28,6 +28,9 @@
 // Extensions that are not loaded.
 @synthesize orphanExtensions = myOrphanExtensions;
 
+// Counter for unique identifier.
+@synthesize counter = myCounter;
+
 // A queue for unique identifiers.
 @synthesize queue = myQueue;
 

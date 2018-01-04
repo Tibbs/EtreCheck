@@ -63,6 +63,7 @@
   self.marketingName = nil;
   self.machineIcon = nil;
   self.properties = nil;
+  self.vintageStatus = nil;
   
   [super dealloc];
   }

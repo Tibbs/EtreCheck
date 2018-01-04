@@ -23,6 +23,9 @@
   
   // Install items.
   NSMutableArray * myInstalls;
+  
+  // Names of security updates.
+  NSSet * mySecurityUpdateNames;
   }
 
 // Critical Apple installs.
@@ -39,5 +42,8 @@
 
 // Install items.
 @property (readonly) NSMutableArray * installs;
+
+// Names of security updates.
+@property (readonly) NSSet * securityUpdateNames;
 
 @end

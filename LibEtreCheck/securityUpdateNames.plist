@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>names</key>
+	<array>
+    <string>Beveiligingsupdate</string>
+    <string>Security Update</string>
+    <string>Mise à jour de sécurité</string>
+    <string>Sicherheitsupdate</string>
+    <string>Aggiornamento di sicurezza</string>
+    <string>セキュリティアップデート</string>
+    <string>تحديث الأمن</string>
+    <string>Actualització de seguretat</string>
+    <string>Aktualizace zabezpečení</string>
+    <string>Sikkerhedsopdatering</string>
+    <string>Ενημέρωση ασφάλειας</string>
+    <string>Actualización de seguridad</string>
+    <string>Suojauspäivitys</string>
+    <string>עדכון אבטחה</string>
+    <string>Sigurnosno ažuriranje</string>
+    <string>Biztonsági frissítés</string>
+    <string>Pembaruan Keamanan</string>
+    <string>보안 업데이트</string>
+    <string>Kemas Kini Keselamatan</string>
+    <string>Sikkerhetsoppdatering</string>
+    <string>Uaktualnienie zabezpieczeń</string>
+    <string>Atualização de Segurança</string>
+    <string>Actualizare de securitate</string>
+    <string>Обновление системы безопасности</string>
+    <string>Bezpečnostná aktualizácia</string>
+    <string>Säkerhetsuppdatering</string>
+    <string>รายการอัพเดทความปลอดภัย</string>
+    <string>Güvenlik Güncellemesi</string>
+    <string>Оновлення системи безпеки</string>
+    <string>Bản cập nhật bảo mật</string>
+    <string>安全性更新</string>
+	</array>
+</dict>
+</plist>

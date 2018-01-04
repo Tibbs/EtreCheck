@@ -173,7 +173,7 @@
         scanUpToCharactersFromSet: [NSCharacterSet whitespaceCharacterSet]
         intoString: & process];
 
-    if(process)
+    if(valid)
       {
       NSRange PIDRange =
         [process rangeOfString: @"." options: NSBackwardsSearch];

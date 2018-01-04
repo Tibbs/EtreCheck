@@ -45,6 +45,9 @@
 // Launchd files indexed by identifier.
 @synthesize launchdFileLookup = myLaunchdFileLookup;
 
+// Counter for unique identifier.
+@synthesize counter = myCounter;
+
 // A queue for unique identifiers.
 @synthesize queue = myQueue;
 

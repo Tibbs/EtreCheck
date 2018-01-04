@@ -38,6 +38,9 @@
 // Install items.
 @synthesize installs = myInstalls;
 
+// Names of security updates.
+@synthesize securityUpdateNames = mySecurityUpdateNames;
+
 // Constructor.
 - (id) init
   {
@@ -69,6 +72,8 @@
     myPendingCriticalAppleInstalls = [NSMutableDictionary new];
       
     myInstalls = [NSMutableArray new];
+    
+    [self loadSecurityUpdateNames];
     }
     
   return self;
@@ -82,6 +87,7 @@
   [myCriticalAppleInstallNameLookup release];
   [myPendingCriticalAppleInstalls release];
   [myInstalls release];
+  [mySecurityUpdateNames release];
   
   [super dealloc];
   }
@@ -131,9 +137,13 @@
           
           if([self.criticalAppleInstallNames containsObject: name])
             critical = true;
-          else if([name hasPrefix: @"Security Update"])
+          else if([self isSecurityUpdate: name])
+            {
+            [install setObject: @YES forKey: @"security_update"];
+            
             critical = true;
-              
+            }
+            
           if(critical)
             {
             [install setObject: @YES forKey: @"critical"];
@@ -219,6 +229,8 @@
         NSURL * url = [[NSURL alloc] initWithString: metadataURL];
         
         NSData * data = [NSData dataWithContentsOfURL: url];
+        
+        [url release];
         
         NSDictionary * plist = [NSDictionary readPropertyListData: data];
         
@@ -362,6 +374,12 @@
     if([NSDictionary isValid: install])
       {
       NSString * name = [install objectForKey: @"_name"];
+      NSNumber * securityUpdate = 
+        [install objectForKey: @"security_update"];
+
+      // Only keep the last security update.
+      if(securityUpdate.boolValue)
+        name = @"Security Update";
         
       [lastInstallsByNameAndVersion setObject: install forKey: name];
       }
@@ -459,6 +477,40 @@
     
     [self.result appendCR];
     }
+  }
+  
+// Load security update names.
+- (void) loadSecurityUpdateNames
+  {
+  NSBundle * bundle = [NSBundle bundleForClass: [self class]];
+
+  NSString * signaturePath =
+    [bundle pathForResource: @"securityUpdateNames" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: signaturePath];
+  
+  NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
+  
+  if([NSDictionary isValid: plist])
+    {
+    NSArray * names = [plist objectForKey: @"names"];
+    
+    mySecurityUpdateNames = [[NSSet alloc] initWithArray: names];
+    }
+  }
+
+// Is this a security update?
+- (bool) isSecurityUpdate: (NSString *) name
+  {
+  for(NSString * string in self.securityUpdateNames)
+    {
+    NSRange range = [name rangeOfString: string];
+    
+    if(range.location != NSNotFound)
+      return true;
+    }
+    
+  return false;
   }
   
 @end
