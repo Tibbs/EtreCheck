@@ -28,6 +28,9 @@
 // Extensions that are not loaded.
 @synthesize orphanExtensions = myOrphanExtensions;
 
+// A queue for unique identifiers.
+@synthesize queue = myQueue;
+
 // Constructor.
 - (id) init
   {
@@ -39,6 +42,10 @@
     myExtensionsByName = [NSMutableDictionary new];
     myAdwareExtensions = [NSMutableSet new];
     myOrphanExtensions = [NSMutableSet new];
+    
+    NSString * name = @"LaunchdQ";
+    
+    myQueue = dispatch_queue_create(name.UTF8String, DISPATCH_QUEUE_SERIAL);
     }
     
   return self;
@@ -51,6 +58,7 @@
   [myExtensions release];
   [myAdwareExtensions release];
   [myOrphanExtensions release];
+  dispatch_release(myQueue);
   
   [super dealloc];
   }
@@ -94,6 +102,14 @@
       
       if(extension != nil)
         {
+        NSString * identifier = 
+          [[NSString alloc] 
+            initWithFormat: @"safariextension%d", [self uniqueIdentifier]];
+          
+        extension.identifier = identifier;
+        
+        [identifier release];
+
         [self.extensions 
           setObject: extension forKey: extension.bundleIdentifier];
       
@@ -262,4 +278,16 @@
     }
   }
   
+// Return a unique number.
+- (int) uniqueIdentifier
+  {
+  dispatch_sync(
+    self.queue, 
+    ^{
+      ++self.counter;
+    });
+    
+  return self.counter;
+  }
+
 @end

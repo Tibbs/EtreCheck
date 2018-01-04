@@ -36,6 +36,12 @@
   
   // Launchd files indexed by identifier.
   NSMutableDictionary * myLaunchdFileLookup;
+  
+  // Counter for unique identifier.
+  int myCounter;
+  
+  // A queue for unique identifiers.
+  dispatch_queue_t myQueue;
   }
   
 // Launchd files keyed by config file path. 
@@ -66,6 +72,12 @@
 
 // Launchd files indexed by identifier.
 @property (readonly, nonnull) NSMutableDictionary * launchdFileLookup;
+
+// Counter for unique identifier.
+@property (assign) int counter;
+
+// A queue for unique identifiers.
+@property (readonly, nonnull) dispatch_queue_t queue;
 
 // Load all entries.
 - (void) load;

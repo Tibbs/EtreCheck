@@ -73,20 +73,6 @@
 // Working directory.
 @synthesize workingDirectory = myWorkingDirectory;
 
-// Return a unique number.
-+ (int) uniqueIdentifier
-  {
-  static int counter = 0;
-  
-  dispatch_sync(
-    dispatch_get_main_queue(), 
-    ^{
-      ++counter;
-    });
-    
-  return counter;
-  }
-  
 // Get the status.
 - (NSString *) status
   {
@@ -157,10 +143,6 @@
     if(self != nil)
       {
       myLoadedTasks = [NSMutableArray new];
-      
-      myIdentifier = 
-        [[NSString alloc] 
-          initWithFormat: @"launchd%d", [LaunchdFile uniqueIdentifier]];
       
       [self parseFromPath: path];
 

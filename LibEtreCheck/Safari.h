@@ -19,6 +19,12 @@
   
   // Extensions that are not loaded.
   NSMutableSet * myOrphanExtensions;
+  
+  // Counter for unique identifier.
+  int myCounter;
+
+  // A queue for unique identifiers.
+  dispatch_queue_t myQueue;
   }
 
 // Extensions keyed by identifier.
@@ -32,6 +38,12 @@
 
 // Extensions that are not loaded.
 @property (readonly, nonnull) NSMutableSet * orphanExtensions;
+
+// Counter for unique identifier.
+@property (assign) int counter;
+
+// A queue for unique identifiers.
+@property (readonly, nonnull) dispatch_queue_t queue;
 
 // Load safari information.
 - (void) load;

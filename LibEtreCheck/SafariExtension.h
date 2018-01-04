@@ -44,16 +44,16 @@
   }
   
 // Source path.
-@property (retain, nullable) NSString * path;
+@property (strong, nullable) NSString * path;
 
 // Name.
-@property (retain, nullable) NSString * name;
+@property (strong, nullable) NSString * name;
 
 // Display name.
-@property (retain, nullable) NSString * displayName;
+@property (strong, nullable) NSString * displayName;
 
 // Identifier.
-@property (retain, nullable) NSString * bundleIdentifier;
+@property (strong, nullable) NSString * bundleIdentifier;
 
 // Loaded status.
 @property (assign) BOOL loaded;
@@ -62,10 +62,10 @@
 @property (assign) BOOL enabled;
 
 // Developer web site.
-@property (retain, nullable) NSString * developerWebSite;
+@property (strong, nullable) NSString * developerWebSite;
 
 // I will need a unique, XML-safe identifier for each launchd file.
-@property (retain, nonnull) NSString * identifier;
+@property (strong, nullable) NSString * identifier;
 
 // Adware information.
 @property (strong, nullable) NSString * adware;

@@ -45,6 +45,9 @@
 // Launchd files indexed by identifier.
 @synthesize launchdFileLookup = myLaunchdFileLookup;
 
+// A queue for unique identifiers.
+@synthesize queue = myQueue;
+
 // Constructor.
 - (instancetype) init
   {
@@ -60,6 +63,10 @@
     myEphemeralTasks = [NSMutableSet new];
     myAppleFiles = [NSMutableDictionary new];
     myLaunchdFileLookup = [NSMutableDictionary new];
+    
+    NSString * name = @"LaunchdQ";
+    
+    myQueue = dispatch_queue_create(name.UTF8String, DISPATCH_QUEUE_SERIAL);
     }
     
   return self;
@@ -76,6 +83,7 @@
   [myEphemeralTasks release];
   [myAppleFiles release];
   [myLaunchdFileLookup release];
+  dispatch_release(myQueue);
   
   [super dealloc];
   }
@@ -164,14 +172,25 @@
     {
     LaunchdFile * file = [[LaunchdFile alloc] initWithPath: safePath];
   
-    [file checkSignature: self];
-    
     if(file != nil)
-      [self.filesByPath setObject: file forKey: safePath];
+      {
+      NSString * identifier = 
+        [[NSString alloc] 
+          initWithFormat: @"launchd%d", [self uniqueIdentifier]];
+        
+      file.identifier = identifier;
       
-    if(file.label.length > 0)
-      [self.filesByLabel setObject: file forKey: file.label];
-  
+      [identifier release];
+      
+      [file checkSignature: self];
+      
+      if(file != nil)
+        [self.filesByPath setObject: file forKey: safePath];
+        
+      if(file.label.length > 0)
+        [self.filesByLabel setObject: file forKey: file.label];
+      }
+      
     [file release];
     }
   }
@@ -520,4 +539,16 @@
     [self.appleFiles addEntriesFromDictionary: launchdFiles];
   }
 
+// Return a unique number.
+- (int) uniqueIdentifier
+  {
+  dispatch_sync(
+    self.queue, 
+    ^{
+      ++self.counter;
+    });
+    
+  return self.counter;
+  }
+  
 @end

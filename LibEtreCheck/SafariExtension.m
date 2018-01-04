@@ -46,20 +46,6 @@
 // Details about this file.
 @synthesize details = myDetails;
 
-// Return a unique number.
-+ (int) uniqueIdentifier
-  {
-  static int counter = 0;
-  
-  dispatch_sync(
-    dispatch_get_main_queue(), 
-    ^{
-      ++counter;
-    });
-    
-  return counter;
-  }
-
 // Constructor with path to extension.
 - (nullable instancetype) initWithPath: (nonnull NSString *) path
   {
@@ -78,11 +64,6 @@
       [self parseName];
       
       [self parseDictionary: dict];
-      
-      myIdentifier = 
-        [[NSString alloc] 
-          initWithFormat: 
-            @"safariextension%d", [SafariExtension uniqueIdentifier]];
       
       return self;
       }
