@@ -416,8 +416,7 @@
     if(key == nil)
       key = @"/bin/sh";
       
-    [self.processesByPath 
-      setObject: processGroup forKey: currentProcess.path];
+    [self.processesByPath setObject: processGroup forKey: key];
     }
   else  
     [processGroup update: currentProcess types: types];

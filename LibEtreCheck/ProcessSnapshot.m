@@ -94,14 +94,7 @@
         NSString * command = nil;
         
         if([scanner scanUpToString: @"\n" intoString: & command])
-          {
-          @autoreleasepool 
-            {
-            [self parseCommand: command];
-            }
-            
-          success = true;
-          }
+          success = [self parseCommand: command];
         }
       }
     }
@@ -225,7 +218,7 @@
   }
   
 // Parse the command.
-- (void) parseCommand: (NSString *) command
+- (bool) parseCommand: (NSString *) command
   {
   NSString * resolvedPath = nil;
   
@@ -284,13 +277,15 @@
   if(change)
     {
     if(resolvedPath == nil)
-      resolvedPath = command;
+      resolvedPath = [command retain];
       
     self.path = resolvedPath;
     self.name = [self.path lastPathComponent];
     }
     
   [resolvedPath release];
+  
+  return (self.path != nil) && (self.name != nil);
   }
   
 // Resolve a relative executable as per launchd.plist man page.
@@ -315,27 +310,27 @@
   
   resolvedPath = [self resolveExecutable: path relativeTo: @"/usr/bin"];
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
     
   resolvedPath = [self resolveExecutable: path relativeTo: @"/bin"];
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
 
   resolvedPath = [self resolveExecutable: path relativeTo: @"/usr/sbin"];
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
 
   resolvedPath = [self resolveExecutable: path relativeTo: @"/sbin"];
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
     
   resolvedPath = [self resolveExecutable: path relativeTo: @"/usr/libexec"];
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
 
   NSURL * url = 
@@ -345,7 +340,7 @@
   if(url != nil)
     resolvedPath = url.path;
   
-  if(resolvedPath)
+  if(resolvedPath != nil)
     return resolvedPath;
 
   return nil;
