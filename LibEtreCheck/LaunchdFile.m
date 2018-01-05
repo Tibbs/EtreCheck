@@ -888,14 +888,16 @@
   [xml addElement: @"apple" boolValue: self.apple];
   
   if(self.executable.length > 0)
-    [xml addElement: @"executable" value: self.executable];
+    [xml 
+      addElement: @"executable" 
+      value: [Utilities cleanPath: self.executable]];
   
   if(self.arguments.count > 0)
     {
     [xml startElement: @"arguments"];
     
     for(NSString * argument in self.arguments)
-      [xml addElement: @"argument" value: argument];
+      [xml addElement: @"argument" value: [Utilities cleanPath: argument]];
       
     [xml endElement: @"arguments"];
     }
