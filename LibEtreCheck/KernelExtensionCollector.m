@@ -798,8 +798,8 @@
 
   [extensionsXML startElement: @"directory"];
   
-  [extensionsXML addElement: @"cleanpath" value: cleanPath];
   [extensionsXML addElement: @"path" value: directory];
+  [extensionsXML addElement: @"path_safe" value: cleanPath];
   
   NSString * bundlePath = [Utilities resolveBundlePath: directory];
   

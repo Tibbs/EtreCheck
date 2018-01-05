@@ -97,12 +97,13 @@
       
       if([NSString isValid: path])
         {
-        NSString * safePath = [self prettyPath: path];
+        NSString * safePath = [self cleanPath: path];
         
         [self.xml startElement: @"deletedfile"];
 
         [self.xml addElement: @"date" date: date];
-        [self.xml addElement: @"path" value: safePath];
+        [self.xml addElement: @"path" value: path];
+        [self.xml addElement: @"path_safe" value: safePath];
         [self.xml addElement: @"reason" value: reason];
 
         [self.xml endElement: @"deletedfile"];

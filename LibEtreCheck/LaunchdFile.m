@@ -883,15 +883,19 @@
   [xml addElement: @"status" value: self.status];
   [xml addElement: @"lastexitcode" value: self.lastExitCode];
   [xml addElement: @"path" value: self.path];
+  [xml addElement: @"path_safe" value: [Utilities cleanPath: self.path]];
   [xml addElement: @"label" value: self.label];
   [xml addElement: @"filename" value: [self.path lastPathComponent]];
   [xml addElement: @"apple" boolValue: self.apple];
   
   if(self.executable.length > 0)
+    {
+    [xml addElement: @"executable" value: self.executable];
     [xml 
-      addElement: @"executable" 
+      addElement: @"executable_safe" 
       value: [Utilities cleanPath: self.executable]];
-  
+    }
+    
   if(self.arguments.count > 0)
     {
     [xml startElement: @"arguments"];

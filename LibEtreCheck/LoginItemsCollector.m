@@ -567,6 +567,7 @@
   [self.xml startElement: @"loginitem"];
   
   [self.xml addElement: @"name" value: name];
+  [self.xml addElement: @"name_safe" value: safeName];
   [self.xml addElement: @"type" value: kind];
   
   if(isHidden)
@@ -587,6 +588,7 @@
     }
     
   [self.xml addElement: @"path" value: path];
+  [self.xml addElement: @"path_safe" value: safePath];
 
   [self.xml endElement: @"loginitem"];
   

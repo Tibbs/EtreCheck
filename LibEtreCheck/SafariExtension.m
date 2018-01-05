@@ -338,6 +338,7 @@
   [xml addElement: @"developer" value: self.authorName];
   [xml addElement: @"url" value: self.developerWebSite];
   [xml addElement: @"path" value: self.path];
+  [xml addElement: @"path_safe" value: [Utilities cleanPath: self.path]];
   
   [xml addElement: @"installdate" date: self.modificationDate];
   
