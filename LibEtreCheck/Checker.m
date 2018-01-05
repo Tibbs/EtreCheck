@@ -13,7 +13,7 @@
 #import "DiskCollector.h"
 #import "FirewireCollector.h"
 #import "FontsCollector.h"
-#import "GatekeeperCollector.h"
+#import "SecurityCollector.h"
 #import "HardwareCollector.h"
 #import "NetworkCollector.h"
 #import "ITunesPlugInsCollector.h"
@@ -124,7 +124,7 @@
   FontsCollector * fonts = [FontsCollector new];
   InstallCollector * install = [InstallCollector new];
   DiagnosticsCollector * diagnostics = [DiagnosticsCollector new];
-  GatekeeperCollector * gatekeeper = [GatekeeperCollector new];
+  SecurityCollector * security = [SecurityCollector new];
   SafariExtensionsCollector * safari = [SafariExtensionsCollector new];
   KernelExtensionCollector * kernel = [KernelExtensionCollector new];
   CPUUsageCollector * CPUUsage = [CPUUsageCollector new];
@@ -156,14 +156,7 @@
   [self 
     performCollections: 
       @[
-        hardware
-      ]
-    increment: increment];
-
-  [self 
-    performCollections: 
-      @[
-        //hardware,
+        hardware,
         applications
       ]
     increment: increment];
@@ -190,7 +183,7 @@
         fonts,
         install,
         diagnostics,
-        gatekeeper,
+        security,
         safari,
         kernel,
         CPUUsage
@@ -255,7 +248,7 @@
   [fonts release];
   [install release];
   [diagnostics release];
-  [gatekeeper release];
+  [security release];
   [safari release];
   [kernel release];
   [CPUUsage release];
@@ -347,7 +340,7 @@
   [result appendAttributedString: [self getResult: @"network"]];
   [result appendAttributedString: [self getResult: @"systemsoftware"]];
   [result appendAttributedString: [self getResult: @"configurationfiles"]];
-  [result appendAttributedString: [self getResult: @"gatekeeper"]];
+  [result appendAttributedString: [self getResult: @"security"]];
   [result appendAttributedString: [self getResult: @"applications"]];
   [result appendAttributedString: [self getResult: @"adware"]];
   [result appendAttributedString: [self getResult: @"unsigned"]];
@@ -411,7 +404,7 @@
   [[self.model xml] addFragment: [self getXML: @"network"]];
   [[self.model xml] addFragment: [self getXML: @"systemsoftware"]];
   [[self.model xml] addFragment: [self getXML: @"configurationfiles"]];
-  [[self.model xml] addFragment: [self getXML: @"gatekeeper"]];
+  [[self.model xml] addFragment: [self getXML: @"security"]];
   [[self.model xml] addFragment: [self getXML: @"applications"]];
   [[self.model xml] addFragment: [self getXML: @"adware"]];
   [[self.model xml] addFragment: [self getXML: @"unsigned"]];

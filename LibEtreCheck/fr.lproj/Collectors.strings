@@ -12,7 +12,7 @@
 "disk" = "Informations des disques :";
 "firewire" = "Informations Firewire :";
 "fonts" = "Mauvaises polices :";
-"gatekeeper" = "Gatekeeper :";
+"security" = "Sécurité :";
 "hardware" = "Informations matérielles :";
 "kernelextensions" = "Extensions du noyau :";
 "loginitems" = "Éléments Ouverture :";

@@ -1890,8 +1890,11 @@
 + (BOOL) isVersion: (NSString *) version1 
   laterThanVersion: (NSString *) version2
   {
-  NSArray * parts1 = [version1 componentsSeparatedByString: @"."];
-  NSArray * parts2 = [version2 componentsSeparatedByString: @"."];
+  NSCharacterSet * set = 
+    [NSCharacterSet characterSetWithCharactersInString: @".-"];
+    
+  NSArray * parts1 = [version1 componentsSeparatedByCharactersInSet: set];
+  NSArray * parts2 = [version2 componentsSeparatedByCharactersInSet: set];
   
   NSUInteger index = 0;
   

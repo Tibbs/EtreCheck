@@ -11,7 +11,6 @@
   {
   NSArray * myConfigFiles;
   NSArray * myModifiedFiles;
-  NSArray * myModifications;
   }
 
 // Config files that exist, but shouldn't.
@@ -19,8 +18,5 @@
 
 // Config files that are modified.
 @property (retain) NSArray * modifiedFiles;
-
-// Other modifications.
-@property (retain) NSArray * modifications;
 
 @end

@@ -14,14 +14,11 @@
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
 
-#define kRootlessPrefix @"System Integrity Protection status:"
-
 // Collect changes to config files like /etc/sysctl.conf and /etc/hosts.
 @implementation ConfigurationCollector
 
 @synthesize configFiles = myConfigFiles;
 @synthesize modifiedFiles = myModifiedFiles;
-@synthesize modifications = myModifications;
 
 // Constructor.
 - (id) init
@@ -40,7 +37,6 @@
   {
   self.configFiles = nil;
   self.modifiedFiles = nil;
-  self.modifications = nil;
   
   [super dealloc];
   }
@@ -57,11 +53,6 @@
   if([self.modifiedFiles count] > 0)
     haveChanges = YES;
     
-  [self checkOtherModifications];
-  
-  if([self.modifications count] > 0)
-    haveChanges = YES;
-  
   // See if /etc/hosts has any changes or is corrupt.
   bool corrupt = NO;
   
@@ -82,8 +73,6 @@
     // Print changes to /etc/hosts.
     [self printHostsStatus: corrupt count: hostsCount];
     
-    [self printOtherModifications];
-      
     [self.result appendCR];
     }    
   }
@@ -220,92 +209,6 @@
   self.configFiles = files;
   }
 
-// Check for other modifications.
-- (void) checkOtherModifications
-  {
-  NSMutableArray * otherModificiations = [NSMutableArray array];
-  
-  if([[OSVersion shared] major] >= kElCapitan)
-    {
-    NSString * status = [self checkRootlessStatus];
-  
-    if(self.simulating)
-      status = @"Simulated";
-      
-    if([status isEqualToString: @"enabled"])
-      [self.model setSIP: YES];
-    else
-      {
-      [self.xml addElement: @"SIP" value: status];
-
-      [otherModificiations
-        addObject:
-          [[[NSMutableAttributedString alloc]
-            initWithString:
-              [NSString
-                stringWithFormat:
-                  ECLocalizedString(
-                    @"System Integrity Protection status: %@"),
-                  status]
-            attributes:
-              [NSDictionary
-                dictionaryWithObjectsAndKeys:
-                  [NSColor redColor], NSForegroundColorAttributeName, nil]]
-            autorelease]];
-      }
-    }
-    
-  self.modifications = otherModificiations;
-  }
-
-// Check System Integrity Protection.
-- (NSString *) checkRootlessStatus
-  {
-  bool csrutilExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/csrutil"];
-    
-  if(!csrutilExists)
-    return ECLocalizedString(@"/usr/bin/csrutil missing");
-    
-  // Now consolidate destination information.
-  NSArray * args =
-    @[
-      @"status",
-    ];
-  
-  NSString * result = ECLocalizedString(@"missing");
-  
-  SubProcess * subProcess = [[SubProcess alloc] init];
-  
-  [subProcess loadDebugOutput: [self.model debugInputPath: @"csrutil"]];      
-  [subProcess saveDebugOutput: [self.model debugOutputPath: @"csrutil"]];
-
-  if([subProcess execute: @"/usr/bin/csrutil" arguments: args])
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: subProcess.standardOutput
-        encoding: NSUTF8StringEncoding];
-    
-    NSScanner * scanner = [NSScanner scannerWithString: status];
-    
-    if([scanner scanString: kRootlessPrefix intoString: NULL])
-      [scanner scanUpToString: @"." intoString: & result];
-      
-    if(![result length])
-      result =
-        [NSString
-          stringWithFormat:
-            ECLocalizedString(@"/usr/bin/csrutil returned \"%@\""), status];
-    
-    [status release];
-    }
-    
-  [subProcess release];
-  
-  return result;
-  }
-
 // Collect the number of changes to /etc/hosts and its status.
 - (NSUInteger) hostsStatus: (bool *) corrupt
   {
@@ -435,20 +338,6 @@
         [NSString stringWithFormat:
           ECLocalizedString(@"    %@ - File exists but not expected\n"),
           configFile]];
-  }
-
-// Print other modifications.
-- (void) printOtherModifications
-  {
-  // Print existing configFiles.
-  for(NSAttributedString * modification in self.modifications)
-    {
-    [self.result appendString: @"    "];
-    
-    [self.result appendAttributedString: modification];
-    
-    [self.result appendString: @"\n"];
-    }
   }
 
 // Print the status of the hosts file.

@@ -10,7 +10,7 @@
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import "NumberFormatter.h"
-#import "GatekeeperCollector.h"
+#import "SecurityCollector.h"
 #import <Carbon/Carbon.h>
 #import "LaunchdFile.h"
 #import "LaunchdTask.h"
@@ -46,7 +46,7 @@
       [statements release];
       [appleScriptCommand release];
       
-      GatekeeperCollector * collector = [GatekeeperCollector new];
+      SecurityCollector * collector = [SecurityCollector new];
       
       GatekeeperSetting setting = [collector collectGatekeeperSetting];
       

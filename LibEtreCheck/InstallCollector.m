@@ -22,24 +22,8 @@
 // Collect install information.
 @implementation InstallCollector
 
-// Critical Apple installs.
-@synthesize criticalAppleInstalls = myCriticalAppleInstalls;
-
-// Critical Apple install names.
-@synthesize pendingCriticalAppleInstalls = myPendingCriticalAppleInstalls;
-
-// Names of critical Apple installs.
-@synthesize criticalAppleInstallNames = myCriticalAppleInstallNames;
-
-// A lookup table for critical Apple install names from package filenames.
-@synthesize 
-  criticalAppleInstallNameLookup = myCriticalAppleInstallNameLookup;
-
 // Install items.
 @synthesize installs = myInstalls;
-
-// Names of security updates.
-@synthesize securityUpdateNames = mySecurityUpdateNames;
 
 // Constructor.
 - (id) init
@@ -48,32 +32,7 @@
   
   if(self != nil)
     {
-    myCriticalAppleInstallNames = 
-      [[NSSet alloc] 
-        initWithObjects:
-          @"XProtectPlistConfigData", 
-          @"MRTConfigData", 
-          @"MRT Configuration Data",
-          @"Gatekeeper Configuration Data",
-          @"EFI Allow List",
-          nil];
-
-    myCriticalAppleInstallNameLookup =
-      [[NSDictionary alloc] 
-        initWithObjectsAndKeys:
-          @"XProtectPlistConfigData", @"XProtectPlistConfigData",
-          @"MRTConfigData", @"MRTConfigData",
-          @"MRT Configuration Data", @"MRTConfigurationData",
-          @"Gatekeeper Configuration Data", @"GatekeeperConfigData",
-          @"EFI Allow List", @"EFIAllowListAll",
-          nil];
-          
-    myCriticalAppleInstalls = [NSMutableDictionary new];
-    myPendingCriticalAppleInstalls = [NSMutableDictionary new];
-      
     myInstalls = [NSMutableArray new];
-    
-    [self loadSecurityUpdateNames];
     }
     
   return self;
@@ -82,12 +41,7 @@
 // Destructor.
 - (void) dealloc  
   {
-  [myCriticalAppleInstalls release];
-  [myCriticalAppleInstallNames release];
-  [myCriticalAppleInstallNameLookup release];
-  [myPendingCriticalAppleInstalls release];
   [myInstalls release];
-  [mySecurityUpdateNames release];
   
   [super dealloc];
   }
@@ -129,43 +83,16 @@
           if([then compare: date] == NSOrderedAscending)
             [installsToPrint addObject: install];
           }
-          
-        // The last critical Apple installation.
-        else if([source isEqualToString: @"package_source_apple"])
-          {
-          bool critical = false;
-          
-          if([self.criticalAppleInstallNames containsObject: name])
-            critical = true;
-          else if([self isSecurityUpdate: name])
-            {
-            [install setObject: @YES forKey: @"security_update"];
-            
-            critical = true;
-            }
-            
-          if(critical)
-            {
-            [install setObject: @YES forKey: @"critical"];
-            
-            [self.criticalAppleInstalls setObject: install forKey: name];
-            }
-            
-          if(critical || [then compare: date] == NSOrderedAscending)
-            [installsToPrint addObject: install];
-          }
         }
     }
     
-  [self collectCurrentUpdates];
-  
   [self printInstalls: installsToPrint];
     
   [installsToPrint release];
   }
 
 // Collect current updates.
-- (void) collectCurrentUpdates
+/* - (void) collectCurrentUpdates
   {
   if([[OSVersion shared] major] >= kMavericks)
     {
@@ -193,7 +120,7 @@
         }
       }
     }
-  }
+  } 
   
 // Parse update products.
 - (void) parseProducts: (NSDictionary *) products
@@ -289,7 +216,7 @@
         }
       }
     }
-  }
+  } */
 
 // Collect installs.
 - (void) collectInstalls
@@ -374,14 +301,9 @@
     if([NSDictionary isValid: install])
       {
       NSString * name = [install objectForKey: @"_name"];
-      NSNumber * securityUpdate = 
-        [install objectForKey: @"security_update"];
-
-      // Only keep the last security update.
-      if(securityUpdate.boolValue)
-        name = @"Security Update";
         
-      [lastInstallsByNameAndVersion setObject: install forKey: name];
+      if([NSString isValid: name])
+        [lastInstallsByNameAndVersion setObject: install forKey: name];
       }
       
   NSMutableSet * lastInstalls = 
@@ -394,21 +316,7 @@
   
   for(NSDictionary * install in installs)
     if([lastInstalls containsObject: install])
-      {
       [installsToPrint addObject: install];
-      
-      NSString * name = [install objectForKey: @"_name"];
-      NSNumber * critical = [install objectForKey: @"critical"];
-      
-      if([NSString isValid: name] && critical.boolValue)
-        {
-        NSDictionary * pending = 
-          [self.pendingCriticalAppleInstalls objectForKey: name];
-          
-        if(pending != nil)
-          [installsToPrint addObject: pending];
-        }
-      }
       
   [lastInstalls release];
   
@@ -431,9 +339,6 @@
         NSDate * install_date = [install objectForKey: @"install_date"];
         NSDate * post_date = [install objectForKey: @"post_date"];
         NSString * version = [install objectForKey: @"install_version"];
-        NSString * source = [install objectForKey: @"package_source"];
-        NSNumber * critical = [install objectForKey: @"critical"];
-        NSNumber * installed = [install objectForKey: @"installed"];
 
         if(![NSString isValid: name])
           continue;
@@ -444,30 +349,27 @@
         NSString * installDate =
           [Utilities installDateAsString: install_date];
 
-        if(installDate == nil)
-          installDate = ECLocalizedString(@"Not installed");
+        if([NSString isValid: installDate])
+          {          
+          [self.xml startElement: @"package"];
           
-        [self.xml startElement: @"package"];
-        
-        [self.xml addElement: @"name" value: name];
-        [self.xml addElement: @"version" value: version];
-        [self.xml addElement: @"installdate" date: install_date];
-        [self.xml addElement: @"postdate" date: post_date];
-        [self.xml addElement: @"source" value: source];
-        [self.xml addElement: @"critical" boolValue: critical.boolValue];
-        [self.xml addElement: @"installed" boolValue: installed.boolValue];
-        
-        [self.xml endElement: @"package"];
-        
-        // TODO: Add source.
-        [self.result
-          appendString:
-            [NSString
-              stringWithFormat:
-                ECLocalizedString(@"    %@: %@ (%@)\n"),
-                name,
-                version,
-                installDate]];
+          [self.xml addElement: @"name" value: name];
+          [self.xml addElement: @"version" value: version];
+          [self.xml addElement: @"installdate" date: install_date];
+          [self.xml addElement: @"postdate" date: post_date];
+          
+          [self.xml endElement: @"package"];
+          
+          // TODO: Add source.
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  ECLocalizedString(@"    %@: %@ (%@)\n"),
+                  name,
+                  version,
+                  installDate]];
+          }
         }
       
     [self.result appendString: @"\n"];
@@ -479,7 +381,7 @@
     }
   }
   
-// Load security update names.
+/* // Load security update names.
 - (void) loadSecurityUpdateNames
   {
   NSBundle * bundle = [NSBundle bundleForClass: [self class]];
@@ -511,6 +413,6 @@
     }
     
   return false;
-  }
+  } */
   
 @end

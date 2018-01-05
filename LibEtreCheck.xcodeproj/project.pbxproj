@@ -59,7 +59,7 @@
 		A589CD411F7164C900D66592 /* USBCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DB219A2E68C00BA6A25 /* USBCollector.m */; };
 		A589CD421F7164C900D66592 /* FirewireCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DB519A2E69B00BA6A25 /* FirewireCollector.m */; };
 		A589CD441F7164C900D66592 /* ConfigurationCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DBB19A3690F00BA6A25 /* ConfigurationCollector.m */; };
-		A589CD451F7164C900D66592 /* GatekeeperCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DBE19A36CC400BA6A25 /* GatekeeperCollector.m */; };
+		A589CD451F7164C900D66592 /* SecurityCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DBE19A36CC400BA6A25 /* SecurityCollector.m */; };
 		A589CD461F7164C900D66592 /* KernelExtensionCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DC119A36F3D00BA6A25 /* KernelExtensionCollector.m */; };
 		A589CD471F7164C900D66592 /* StartupItemsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */; };
 		A589CD491F7164C900D66592 /* SystemLaunchAgentsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C292E219A039AB00464E86 /* SystemLaunchAgentsCollector.m */; };
@@ -143,7 +143,7 @@
 		A589CDA41F71749E00D66592 /* USBCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DB119A2E68C00BA6A25 /* USBCollector.h */; };
 		A589CDA51F71749E00D66592 /* FirewireCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DB419A2E69B00BA6A25 /* FirewireCollector.h */; };
 		A589CDA71F71749E00D66592 /* ConfigurationCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DBA19A3690F00BA6A25 /* ConfigurationCollector.h */; };
-		A589CDA81F71749E00D66592 /* GatekeeperCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DBD19A36CC400BA6A25 /* GatekeeperCollector.h */; };
+		A589CDA81F71749E00D66592 /* SecurityCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DBD19A36CC400BA6A25 /* SecurityCollector.h */; };
 		A589CDA91F71749E00D66592 /* KernelExtensionCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DC019A36F3D00BA6A25 /* KernelExtensionCollector.h */; };
 		A589CDAA1F71749E00D66592 /* StartupItemsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */; };
 		A589CDAC1F71749E00D66592 /* SystemLaunchAgentsCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */; };
@@ -253,8 +253,8 @@
 		A50C9DB519A2E69B00BA6A25 /* FirewireCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirewireCollector.m; sourceTree = "<group>"; };
 		A50C9DBA19A3690F00BA6A25 /* ConfigurationCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationCollector.h; sourceTree = "<group>"; };
 		A50C9DBB19A3690F00BA6A25 /* ConfigurationCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigurationCollector.m; sourceTree = "<group>"; };
-		A50C9DBD19A36CC400BA6A25 /* GatekeeperCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GatekeeperCollector.h; sourceTree = "<group>"; };
-		A50C9DBE19A36CC400BA6A25 /* GatekeeperCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GatekeeperCollector.m; sourceTree = "<group>"; };
+		A50C9DBD19A36CC400BA6A25 /* SecurityCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityCollector.h; sourceTree = "<group>"; };
+		A50C9DBE19A36CC400BA6A25 /* SecurityCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityCollector.m; sourceTree = "<group>"; };
 		A50C9DC019A36F3D00BA6A25 /* KernelExtensionCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KernelExtensionCollector.h; sourceTree = "<group>"; };
 		A50C9DC119A36F3D00BA6A25 /* KernelExtensionCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KernelExtensionCollector.m; sourceTree = "<group>"; };
 		A50C9DC319A4052000BA6A25 /* LoginItemsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginItemsCollector.h; sourceTree = "<group>"; };
@@ -515,8 +515,8 @@
 				A50C9DB519A2E69B00BA6A25 /* FirewireCollector.m */,
 				A50C9DBA19A3690F00BA6A25 /* ConfigurationCollector.h */,
 				A50C9DBB19A3690F00BA6A25 /* ConfigurationCollector.m */,
-				A50C9DBD19A36CC400BA6A25 /* GatekeeperCollector.h */,
-				A50C9DBE19A36CC400BA6A25 /* GatekeeperCollector.m */,
+				A50C9DBD19A36CC400BA6A25 /* SecurityCollector.h */,
+				A50C9DBE19A36CC400BA6A25 /* SecurityCollector.m */,
 				A50C9DC019A36F3D00BA6A25 /* KernelExtensionCollector.h */,
 				A50C9DC119A36F3D00BA6A25 /* KernelExtensionCollector.m */,
 				A50C9DAB19A2ACB600BA6A25 /* StartupItemsCollector.h */,
@@ -816,7 +816,7 @@
 				A589CD971F71747400D66592 /* CRC32.h in Headers */,
 				A589CD961F71746A00D66592 /* NumberFormatter.h in Headers */,
 				A589CDB91F7174B900D66592 /* SafariExtensionsCollector.h in Headers */,
-				A589CDA81F71749E00D66592 /* GatekeeperCollector.h in Headers */,
+				A589CDA81F71749E00D66592 /* SecurityCollector.h in Headers */,
 				A589CDB61F7174B900D66592 /* UserAudioPlugInsCollector.h in Headers */,
 				A589CD9A1F71748000D66592 /* Model.h in Headers */,
 				A589CD8F1F71743C00D66592 /* NSAttributedString+Etresoft.h in Headers */,
@@ -1020,7 +1020,7 @@
 				A589CD831F7168EF00D66592 /* Model.m in Sources */,
 				A589CD821F7168E900D66592 /* NSString+Etresoft.m in Sources */,
 				A589CD3B1F7164C900D66592 /* Collector.m in Sources */,
-				A589CD451F7164C900D66592 /* GatekeeperCollector.m in Sources */,
+				A589CD451F7164C900D66592 /* SecurityCollector.m in Sources */,
 				A589CD551F7164C900D66592 /* UserITunesPlugInsCollector.m in Sources */,
 				A589CD671F7164C900D66592 /* EtreCheckDeletedFilesCollector.m in Sources */,
 				A5CBDBB41FDC7BF40080D476 /* NSSet+Etresoft.m in Sources */,
