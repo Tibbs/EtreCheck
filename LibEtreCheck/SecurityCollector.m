@@ -101,32 +101,58 @@
 // Collect current versions.
 - (void) collectCurrentVersions
   {
-  if([[OSVersion shared] major] >= kMavericks)
+  NSMutableString * updateCode = [NSMutableString new];
+  
+  switch([[OSVersion shared] major])
     {
-    NSURL * url =
-      [NSURL 
-        URLWithString: 
-          @"https://swscan.apple.com/content/catalogs/others/"
-          "index-10.13-10.12-10.11-10.10-10.9"
-          "-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog.gz"];
+    case kHighSierra:
+      [updateCode appendString: @"-10.13"];
+    case kSierra:
+      [updateCode appendString: @"-10.12"];
+    case kElCapitan:
+      [updateCode appendString: @"-10.11"];
+    case kYosemite:
+      [updateCode appendString: @"-10.10"];
+    case kMavericks:
+      [updateCode appendString: @"-10.9"];
+    case kMountainLion:
+      [updateCode appendString: @"-mountainlion"];
+    default:
+      [updateCode appendString: @"-lion-snowleopard-leopard.merged-1"];
+    }
     
-    NSData * data = [NSData dataWithContentsOfURL: url];
+  NSString * urlString =
+    [[NSString alloc] 
+      initWithFormat: 
+        @"%@%@%@",
+        @"https://swscan.apple.com/content/catalogs/others/index",
+        updateCode,
+        @".sucatalog.gz"];
     
-    NSDictionary * plist = [NSDictionary readPropertyListData: data];
+  [updateCode release];
+  
+  NSURL * url = [[NSURL alloc] initWithString: urlString];
+  
+  [urlString release];
+  
+  NSData * data = [NSData dataWithContentsOfURL: url];
+  
+  NSDictionary * plist = [NSDictionary readPropertyListData: data];
+  
+  if([NSDictionary isValid: plist])
+    {
+    NSNumber * version = [plist objectForKey: @"CatalogVersion"];
     
-    if([NSDictionary isValid: plist])
+    if(version.intValue == 2)
       {
-      NSNumber * version = [plist objectForKey: @"CatalogVersion"];
+      NSDictionary * products = [plist objectForKey: @"Products"];
       
-      if(version.intValue == 2)
-        {
-        NSDictionary * products = [plist objectForKey: @"Products"];
-        
-        if([NSDictionary isValid: products])
-          [self parseProducts: products];
-        }
+      if([NSDictionary isValid: products])
+        [self parseProducts: products];
       }
     }
+  
+  [url release];
   } 
   
 // Parse update products.
