@@ -291,6 +291,11 @@
 // Resolve a relative executable as per launchd.plist man page.
 - (NSString *) resolveExecutable: (NSString *) path
   {
+  NSArray * parts = [path componentsSeparatedByString: @":"];
+  
+  if(parts.count > 1)
+    path = [parts objectAtIndex: 0];
+    
   if([path hasPrefix: @"/"])
     {
     if([[NSFileManager defaultManager] fileExistsAtPath: path])
