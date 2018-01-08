@@ -170,6 +170,9 @@
       if([NSNumber isValid: wholeDisk] && wholeDisk.boolValue)
         drive = YES;
         
+      if([NSString isValid: type] && [type isEqualToString: @"Virtual"])
+        drive = NO;
+
       // Not so fast. If there is a volume indicator, it must be a volume.
       NSString * volumeUUID = [plist objectForKey: @"VolumeUUID"];
       
