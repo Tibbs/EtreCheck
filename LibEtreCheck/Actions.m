@@ -127,8 +127,7 @@
     
   if(exists)
     {
-    if(!isDirectory)
-      path = [Utilities resolveBundlePath: path];
+    path = [Utilities resolveBundlePath: path];
     
     NSURL * url = [[NSURL alloc] initFileURLWithPath: path];
     
@@ -160,137 +159,68 @@
 + (void) load: (nonnull LaunchdFile *) file
   completion: (nonnull LaunchdCompletion) completion
   {
-  NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
-  
-  [self loadFiles: files completion: completion];
-  
-  [files release];
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
+      
+      [self loadFiles: files completion: completion];
+      
+      [files release];
+    });
   }
 
 // Unload a launchd file.
 + (void) unload: (nonnull LaunchdFile *) file
   completion: (nonnull LaunchdCompletion) completion
   {
-  NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
-  
-  [self unloadFiles: files completion: completion];
-  
-  [files release];
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      NSArray * files = [[NSArray alloc] initWithObjects: file, nil];
+      
+      [self unloadFiles: files completion: completion];
+      
+      [files release];
+    });
   }
 
 // Purge user notifications.
 + (void) purgeUserNotifications: (NSArray *) notifications
   {
-  if(notifications.count == 0)
-    return;
-    
-  char user_dir[1024];
-  
-  size_t size = confstr(_CS_DARWIN_USER_DIR, user_dir, 1024);
-  
-  if(size >= 1023)
-    return;
-  
-  NSString * path =
-    [[NSString stringWithUTF8String: user_dir]
-      stringByAppendingPathComponent:
-        @"com.apple.notificationcenter/db/db"];
-  
-  sqlite3 * handle = NULL;
-  
-  int result = sqlite3_open(path.fileSystemRepresentation, & handle);
-  
-  NSMutableArray * note_ids = [NSMutableArray new];
-  
-  for(UserNotification * notification in notifications)
-    [note_ids addObject: notification.noteID];
-    
-  if(result == SQLITE_OK)
-    {
-    NSString * arguments = [note_ids componentsJoinedByString: @","];
-    
-    NSString * SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from notifications where note_id in (%@);", arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-    
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from scheduled_notifications where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from presented_notifications where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from presented_alerts where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from today_summary_notifications where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from tomorrow_summary_notifications where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-
-    SQL =
-      [NSString
-        stringWithFormat:
-          @"delete from notification_source where note_id in (%@);",
-          arguments];
-    
-    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
-    }
-    
-  [note_ids release];
-  
-  sqlite3_close(handle);
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      [self performPurgeUserNotifications: notifications];
+    });
   }
-
+    
 // Remove a launchd file.
 + (void) removeLaunchdFile: (nonnull LaunchdFile *) file 
   reason: (nonnull NSString *) reason
   completion: (nonnull LaunchdCompletion) completion
   {
-  if([file.path hasPrefix: @"/System/Library/"])
-    [self unloadSystemFiles: [NSArray arrayWithObject: file]];
-  
-  else if([file.path hasPrefix: @"/Library/"])
-    [self unloadSystemFiles: [NSArray arrayWithObject: file]];
-  
-  else if([file.path hasPrefix: @"~/Library/"])
-    [self unloadUserFiles: [NSArray arrayWithObject: file]];
-        
-  [self 
-    trashFiles: 
-      [NSArray arrayWithObject: [file.path stringByExpandingTildeInPath]] 
-    reason: reason];
-  
-  if(completion != nil)
-    completion(file);
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      if([file.path hasPrefix: @"/System/Library/"])
+        [self unloadSystemFiles: [NSArray arrayWithObject: file]];
+      
+      else if([file.path hasPrefix: @"/Library/"])
+        [self unloadSystemFiles: [NSArray arrayWithObject: file]];
+      
+      else if([file.path hasPrefix: @"~/Library/"])
+        [self unloadUserFiles: [NSArray arrayWithObject: file]];
+            
+      [self 
+        trashFiles: 
+          [NSArray 
+            arrayWithObject: [file.path stringByExpandingTildeInPath]] 
+        reason: reason];
+      
+      if(completion != nil)
+        completion(file);
+    });
   }
 
 // Remove a Safari extension.
@@ -298,14 +228,18 @@
   reason: (nonnull NSString *) reason
   completion: (nonnull SafariExtensionCompletion) completion
   {
-  [self 
-    trashFiles: 
-      [NSArray 
-        arrayWithObject: [extension.path stringByExpandingTildeInPath]] 
-    reason: reason];
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{  
+      [self 
+        trashFiles: 
+          [NSArray 
+            arrayWithObject: [extension.path stringByExpandingTildeInPath]] 
+        reason: reason];
 
-  if(completion != nil)
-    completion(extension);
+      if(completion != nil)
+        completion(extension);
+    });
   }
     
 #pragma mark - Private methods
@@ -316,37 +250,33 @@
 + (void) loadFiles: (nonnull NSArray *) files
   completion: (nonnull LaunchdCompletion) completion
   {
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
-    ^{  
-      NSMutableArray * systemFiles = [NSMutableArray new];
-      NSMutableArray * userFiles = [NSMutableArray new];
-      
-      for(LaunchdFile * file in files)
-        {
-        if([file.path hasPrefix: @"/System/Library/"])
-          [systemFiles addObject: file];
-        
-        else if([file.path hasPrefix: @"/Library/"])
-          [systemFiles addObject: file];
-        
-        else if([file.path hasPrefix: @"~/Library/"])
-          [userFiles addObject: file];
-        }
-        
-      if(systemFiles.count > 0)
-        [self loadSystemFiles: systemFiles];
-      
-      if(userFiles.count > 0)
-        [self loadUserFiles: userFiles];
+  NSMutableArray * systemFiles = [NSMutableArray new];
+  NSMutableArray * userFiles = [NSMutableArray new];
+  
+  for(LaunchdFile * file in files)
+    {
+    if([file.path hasPrefix: @"/System/Library/"])
+      [systemFiles addObject: file];
+    
+    else if([file.path hasPrefix: @"/Library/"])
+      [systemFiles addObject: file];
+    
+    else if([file.path hasPrefix: @"~/Library/"])
+      [userFiles addObject: file];
+    }
+    
+  if(systemFiles.count > 0)
+    [self loadSystemFiles: systemFiles];
+  
+  if(userFiles.count > 0)
+    [self loadUserFiles: userFiles];
 
-      if(completion != nil)
-        for(LaunchdFile * file in files)
-          completion(file);
-        
-      [systemFiles release];
-      [userFiles release];
-    });
+  if(completion != nil)
+    for(LaunchdFile * file in files)
+      completion(file);
+    
+  [systemFiles release];
+  [userFiles release];
   }
 
 #pragma mark - Load in system space
@@ -495,37 +425,33 @@
 + (void) unloadFiles: (nonnull NSArray *) files
   completion: (nonnull LaunchdCompletion) completion
   {
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
-    ^{  
-      NSMutableArray * systemFiles = [NSMutableArray new];
-      NSMutableArray * userFiles = [NSMutableArray new];
-      
-      for(LaunchdFile * file in files)
-        {
-        if([file.path hasPrefix: @"/System/Library/"])
-          [systemFiles addObject: file];
-        
-        else if([file.path hasPrefix: @"/Library/"])
-          [systemFiles addObject: file];
-        
-        else if([file.path hasPrefix: @"~/Library/"])
-          [userFiles addObject: file];
-        }
-        
-      if(systemFiles.count > 0)
-        [self unloadSystemFiles: systemFiles];
-      
-      if(userFiles.count > 0)
-        [self unloadUserFiles: userFiles];
+  NSMutableArray * systemFiles = [NSMutableArray new];
+  NSMutableArray * userFiles = [NSMutableArray new];
+  
+  for(LaunchdFile * file in files)
+    {
+    if([file.path hasPrefix: @"/System/Library/"])
+      [systemFiles addObject: file];
+    
+    else if([file.path hasPrefix: @"/Library/"])
+      [systemFiles addObject: file];
+    
+    else if([file.path hasPrefix: @"~/Library/"])
+      [userFiles addObject: file];
+    }
+    
+  if(systemFiles.count > 0)
+    [self unloadSystemFiles: systemFiles];
+  
+  if(userFiles.count > 0)
+    [self unloadUserFiles: userFiles];
 
-      if(completion != nil)
-        for(LaunchdFile * file in files)
-          completion(file);
-        
-      [systemFiles release];
-      [userFiles release];
-    });
+  if(completion != nil)
+    for(LaunchdFile * file in files)
+      completion(file);
+    
+  [systemFiles release];
+  [userFiles release];
   }
 
 #pragma mark - Unload in system space
@@ -736,6 +662,98 @@
   }
 
 #pragma mark - Private methods
+
+// Perform a purge of user notifications.
++ (void) performPurgeUserNotifications: (NSArray *) notifications
+  {
+  if(notifications.count == 0)
+    return;
+    
+  char user_dir[1024];
+  
+  size_t size = confstr(_CS_DARWIN_USER_DIR, user_dir, 1024);
+  
+  if(size >= 1023)
+    return;
+  
+  NSString * path =
+    [[NSString stringWithUTF8String: user_dir]
+      stringByAppendingPathComponent:
+        @"com.apple.notificationcenter/db/db"];
+  
+  sqlite3 * handle = NULL;
+  
+  int result = sqlite3_open(path.fileSystemRepresentation, & handle);
+  
+  NSMutableArray * note_ids = [NSMutableArray new];
+  
+  for(UserNotification * notification in notifications)
+    [note_ids addObject: notification.noteID];
+    
+  if(result == SQLITE_OK)
+    {
+    NSString * arguments = [note_ids componentsJoinedByString: @","];
+    
+    NSString * SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from notifications where note_id in (%@);", arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from scheduled_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from presented_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from presented_alerts where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from today_summary_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from tomorrow_summary_notifications where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+
+    SQL =
+      [NSString
+        stringWithFormat:
+          @"delete from notification_source where note_id in (%@);",
+          arguments];
+    
+    sqlite3_exec(handle, SQL.UTF8String, NULL, NULL, NULL);
+    }
+    
+  [note_ids release];
+  
+  sqlite3_close(handle);
+  }
 
 // Execute a list of AppleScript statements.
 + (void) executeAppleScriptStatements: (NSArray *) statements

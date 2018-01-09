@@ -204,7 +204,6 @@
 		A5F2C0241FBE2E2A003646DF /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F2C0221FBE2E2A003646DF /* NetworkProxy.m */; };
 		A5F65E5B1F7F20290062FA87 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F65E591F7F20290062FA87 /* EtreCheckCollector.m */; };
 		A5F65E5C1F7F20290062FA87 /* EtreCheckCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5F65E5A1F7F20290062FA87 /* EtreCheckCollector.h */; };
-		A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A52634EC1D1F7B8F00D21F77 /* ScriptingBridge.framework */; };
 		A5F65E6A1F806FDB0062FA87 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A5F65E6C1F806FDB0062FA87 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
@@ -440,7 +439,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5F65E641F805C2B0062FA87 /* ScriptingBridge.framework in Frameworks */,
 				A589CD8B1F716ABB00D66592 /* Security.framework in Frameworks */,
 				A589CD741F71689B00D66592 /* libsqlite3.tbd in Frameworks */,
 				A589CD731F71688700D66592 /* Carbon.framework in Frameworks */,
