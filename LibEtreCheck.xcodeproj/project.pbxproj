@@ -172,6 +172,7 @@
 		A589CDC31F7174FD00D66592 /* CleanupCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A5716E111C4C5A6E00297727 /* CleanupCollector.h */; };
 		A589CDC41F7174FD00D66592 /* EtreCheckDeletedFilesCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = A51906791D49B092009AA835 /* EtreCheckDeletedFilesCollector.h */; };
 		A589CDC51F71750100D66592 /* Checker.h in Headers */ = {isa = PBXBuildFile; fileRef = A5257D3E19AC10E3003084C8 /* Checker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A5A5F6F920096D6F00E749BD /* wikichip.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5A5F6F820096D6F00E749BD /* wikichip.plist */; };
 		A5CBDBA91FDB3BAC0080D476 /* NSNumber+Etresoft.h in Headers */ = {isa = PBXBuildFile; fileRef = A5CBDBA71FDB3BAC0080D476 /* NSNumber+Etresoft.h */; };
 		A5CBDBAA1FDB3BAC0080D476 /* NSNumber+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5CBDBA81FDB3BAC0080D476 /* NSNumber+Etresoft.m */; };
 		A5CBDBB31FDC7BF40080D476 /* NSSet+Etresoft.h in Headers */ = {isa = PBXBuildFile; fileRef = A5CBDBB11FDC7BF40080D476 /* NSSet+Etresoft.h */; };
@@ -335,6 +336,7 @@
 		A58B4D131EE0E4FB00415121 /* InstallCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstallCollector.m; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Etresoft.m"; sourceTree = "<group>"; };
+		A5A5F6F820096D6F00E749BD /* wikichip.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = wikichip.plist; sourceTree = "<group>"; };
 		A5B659211A16D57800476A76 /* DiagnosticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticEvent.h; sourceTree = "<group>"; };
 		A5B659221A16D57800476A76 /* DiagnosticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticEvent.m; sourceTree = "<group>"; };
 		A5C00A2619BFF2D500140404 /* NSAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Etresoft.h"; sourceTree = "<group>"; };
@@ -672,6 +674,7 @@
 				A542793E1F904709009E7D29 /* appleLaunchd.plist */,
 				A54279401F904728009E7D29 /* adware.plist */,
 				A529E83A1FC35AC40020EF49 /* whitelist.plist */,
+				A5A5F6F820096D6F00E749BD /* wikichip.plist */,
 				A51C42751FFDCB5B00DD1134 /* securityUpdateNames.plist */,
 				A503BF821F829BC200473A24 /* Collectors.strings */,
 				A503BF8E1F829CEF00473A24 /* System.strings */,
@@ -936,6 +939,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5A5F6F920096D6F00E749BD /* wikichip.plist in Resources */,
 				A51C42761FFDCB5B00DD1134 /* securityUpdateNames.plist in Resources */,
 				A529E83B1FC35AC40020EF49 /* whitelist.plist in Resources */,
 				A503BF851F829BC200473A24 /* Collectors.strings in Resources */,

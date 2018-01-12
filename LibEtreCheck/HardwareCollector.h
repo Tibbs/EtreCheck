@@ -39,6 +39,9 @@
   
   // Vintage status.
   NSString * myVintageStatus;
+  
+  // Wikichips.
+  NSSet * myWikiChips;
   }
 
 // Machine properties.
@@ -71,5 +74,8 @@
 
 // Vintage status.
 @property (strong) NSString * vintageStatus;
+
+// Wikichips.
+@property (readonly) NSSet * wikiChips;
 
 @end

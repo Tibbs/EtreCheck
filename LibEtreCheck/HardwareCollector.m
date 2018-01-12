@@ -41,6 +41,7 @@
 @synthesize supportsInstantHotspot = mySupportsInstantHotspot;
 @synthesize supportsLowEnergy = mySupportsLowEnergy;
 @synthesize vintageStatus = myVintageStatus;
+@synthesize wikiChips = myWikiChips;
 
 // Constructor.
 - (id) init
@@ -64,6 +65,7 @@
   self.machineIcon = nil;
   self.properties = nil;
   self.vintageStatus = nil;
+  [myWikiChips release];
   
   [super dealloc];
   }
@@ -71,7 +73,8 @@
 // Perform the collection.
 - (void) performCollect
   {
-  [self loadProperties];    
+  [self loadProperties];  
+  [self loadWikiChips];  
 
   [self collectBluetooth];
   [self collectSysctl];
@@ -110,6 +113,27 @@
   
   [computerName release];
   [hostName release];
+  }
+
+// Load wikichips.
+- (void) loadWikiChips
+  {
+  NSBundle * bundle = [NSBundle bundleForClass: [self class]];
+
+  NSString * signaturePath =
+    [bundle pathForResource: @"wikichip" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: signaturePath];
+  
+  NSDictionary * plist = [NSDictionary readPropertyListData: plistData];
+  
+  if(plist != nil)
+    {
+    NSArray * chips = [plist objectForKey: @"chips"];
+    
+    if([NSArray isValid: chips])
+      myWikiChips = [[NSSet alloc] initWithArray: chips];
+    }
   }
 
 // Collect bluetooth information.
@@ -373,10 +397,18 @@
           code,
           core_count]];
     
+  NSString * wikichip = 
+    [[self.CPUCode lowercaseString]   
+      stringByReplacingOccurrencesOfString: @" " withString: @"_"];
+  
   [self.xml addElement: @"cpucount" number: cpu_count];
   [self.xml addElement: @"speed" valueWithUnits: speed];
   [self.xml addElement: @"cpu_type" value: cpu_type];      
   [self.xml addElement: @"cpucode" value: self.CPUCode];
+  
+  if([self.wikiChips containsObject: wikichip])
+    [self.xml addElement: @"wikichip" value: wikichip];
+  
   [self.xml addElement: @"corecount" number: core_count];
 
   if([NSString isValid: memory])
