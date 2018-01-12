@@ -283,10 +283,12 @@
     // Now check for /Library/*/*.
     NSString * name = [file.executable lastPathComponent];
     NSString * parent = [dirname lastPathComponent];
+    NSString * library = [dirname stringByDeletingLastPathComponent];
     
-    if([name isEqualToString: parent])
-      if([[file.executable pathExtension] length] == 0)
-        return true;
+    if([library isEqualToString: @"/Library"])
+      if([name isEqualToString: parent])
+        if([[file.executable pathExtension] length] == 0)
+          return true;
     }
     
   // Now check arguments.
