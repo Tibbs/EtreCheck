@@ -1253,7 +1253,7 @@
   NSDateFormatter * dateFormatter =
     [[[Utilities shared] dateFormatters] objectForKey: format];
     
-  if(dateFormatter != nil)
+  if(dateFormatter == nil)
     {
     dateFormatter = [[NSDateFormatter alloc] init];
     
