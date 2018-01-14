@@ -67,6 +67,8 @@
     if([NSString isValid: model])
       self.model = model;
     
+    self.mechanism = kUnknownMechanism;
+    
     if([NSNumber isValid: solidState])
       {
       if(solidState.boolValue)

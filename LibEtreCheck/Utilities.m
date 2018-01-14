@@ -1980,6 +1980,12 @@
   if([name isEqualToString: @"Macintosh HD"])
     return name;
     
+  if([name isEqualToString: @"Preboot"])
+    return name;
+
+  if([name isEqualToString: @"Recovery"])
+    return name;
+
   if([name isEqualToString: @"Recovery HD"])
     return name;
 
@@ -1987,6 +1993,9 @@
     return name;
 
   if([name isEqualToString: @"Disk Image"])
+    return name;
+
+  if([name isEqualToString: @"Volumes"])
     return name;
 
   if(name.length > 3)
@@ -2002,6 +2011,23 @@
           [name substringFromIndex: name.length - 1]];
     
   return name;
+  }
+  
+// Redact a mount point.
++ (NSString *) cleanMountPoint: (NSString *) path
+  {
+  NSArray * parts = [path componentsSeparatedByString: @"/"];
+  
+  NSMutableArray * cleanParts = [[NSMutableArray alloc] init];
+  
+  for(NSString * part in parts)
+    [cleanParts addObject: [self cleanName: part]];
+    
+  NSString * cleanPath = [cleanParts componentsJoinedByString: @"/"];
+  
+  [cleanParts release];
+  
+  return cleanPath;
   }
   
 // Redact any user names in a path.

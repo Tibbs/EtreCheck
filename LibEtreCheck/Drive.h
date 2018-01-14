@@ -10,6 +10,7 @@
 #define kSolidStateMechanism @"solidstate"
 #define kMechanicalMechanism @"mechanical"
 #define kDiskImageMechanism @"diskimage"
+#define kUnknownMechanism @"unknown"
 
 // Object that represents a top-level drive.
 @interface Drive : StorageDevice

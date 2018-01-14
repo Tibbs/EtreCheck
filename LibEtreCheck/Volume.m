@@ -295,10 +295,16 @@
   
   [xml addElement: @"filesystem" value: self.filesystem];
   [xml addElement: @"mountpoint" value: self.mountpoint];  
+  
+  NSString * cleanMountPoint = [Utilities cleanMountPoint: self.mountpoint];
+  
+  [xml addElement: @"cleanmountpoint" value: cleanMountPoint];
+  
   [xml 
     addElement: @"free" 
     valueWithUnits: 
       [myByteCountFormatter stringFromByteCount: self.freeSpace]];
+  
   [xml addElement: @"UUID" value: self.UUID];
   
   if(self.encrypted)

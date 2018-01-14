@@ -227,4 +227,7 @@
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path;
 
+// Redact a mount point.
++ (NSString *) cleanMountPoint: (NSString *) path;
+
 @end

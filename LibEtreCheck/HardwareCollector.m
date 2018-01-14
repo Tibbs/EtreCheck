@@ -16,6 +16,9 @@
 #import "XMLBuilder.h"
 #import "NumberFormatter.h"
 #import "LocalizedString.h"
+#import "StorageDevice.h"
+#import "Drive.h"
+#import "Volume.h"
 #import "EtreCheckConstants.h"
 #import "OSVersion.h"
 #import "NSString+Etresoft.h"
@@ -79,6 +82,7 @@
   [self collectBluetooth];
   [self collectSysctl];
   [self collectHardware];
+  [self collectDevices];
     
   [self.result appendCR];
   }
@@ -295,6 +299,166 @@
     }
     
   [subProcess release];
+  }
+
+// Collect all disk devices.
+- (BOOL) collectDevices
+  {
+  BOOL dataFound = NO;
+  
+  NSArray * args =
+    @[
+      @"/dev",
+      @"-name",
+      @"disk*"
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  NSString * key = @"diskdevices";
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    {
+    NSArray * devices = [Utilities formatLines: subProcess.standardOutput];
+    
+    // Carefully sort the devices.
+    NSArray * sortedDevices = [StorageDevice sortDeviceIdenifiers: devices];
+    
+    // Collect each device.
+    for(NSString * device in sortedDevices)
+      if([self collectDevice: device])
+        dataFound = YES;
+    }
+    
+  [subProcess release];
+  
+  return dataFound;
+  }
+  
+// Collect a single device.
+- (BOOL) collectDevice: (NSString *) device
+  {
+  BOOL dataFound = NO;
+  
+  NSArray * args =
+    @[
+      @"info",
+      @"-plist",
+      device
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  NSString * key = 
+    [device stringByReplacingOccurrencesOfString: @"/" withString: @"_"];
+  
+  [subProcess loadDebugOutput: [self.model debugInputPath: key]];      
+  [subProcess saveDebugOutput: [self.model debugOutputPath: key]];
+
+  if([subProcess execute: @"/usr/sbin/diskutil" arguments: args])
+    {
+    NSDictionary * plist =
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
+  
+    if([NSDictionary isValid: plist])
+      {
+      // Separate items by virtual or physical. Anything virtual will be
+      // considered a volume.
+      NSString * type = [plist objectForKey: @"VirtualOrPhysical"];
+      NSNumber * wholeDisk = [plist objectForKey: @"WholeDisk"];
+      
+      BOOL drive = NO;
+      
+      if([NSString isValid: type] && [type isEqualToString: @"Physical"])
+        drive = YES;
+      
+      // WholeDisk could be true and type could be Virtual. I just want
+      // pre-container HFS+ before Core Storage or APFS.
+      if([NSNumber isValid: wholeDisk] && wholeDisk.boolValue)
+        drive = YES;
+        
+      if([NSString isValid: type] && [type isEqualToString: @"Virtual"])
+        drive = NO;
+
+      // Not so fast. If there is a volume indicator, it must be a volume.
+      NSString * volumeUUID = [plist objectForKey: @"VolumeUUID"];
+      
+      if([NSString isValid: volumeUUID])
+        drive = NO;  
+
+      // Same for a disk.
+      NSString * diskUUID = [plist objectForKey: @"DiskUUID"];
+      
+      if([NSString isValid: diskUUID])
+        drive = NO;  
+
+      // Hack this for now. disk0 always has to be a disk.
+      if([device isEqualToString: @"disk0"])
+        drive = YES;
+        
+      if(drive)
+        {
+        if([self collectPhysicalDrive: plist])
+          dataFound = YES;
+        }
+      else if([self collectVolume: plist])
+        dataFound = YES;
+      }
+    }
+    
+  [subProcess release];
+  
+  return dataFound;
+  }
+
+// Collect a physical drive.
+- (BOOL) collectPhysicalDrive: (NSDictionary *) plist
+  {
+  Drive * drive = [[Drive alloc] initWithDiskUtilInfo: plist];
+  
+  drive.cleanName = [self cleanName: drive.name];
+  
+  drive.dataModel = self.model;
+  
+  BOOL dataFound = NO;
+  
+  if(drive != nil)
+    {
+    [[self.model storageDevices] 
+      setObject: drive forKey: drive.identifier];
+    
+    dataFound = YES;
+    }
+  
+  [drive release];
+  
+  return dataFound;
+  }
+
+// Collect a volume.
+- (BOOL) collectVolume: (NSDictionary *) plist
+  {
+  Volume * volume = [[Volume alloc] initWithDiskUtilInfo: plist];
+  
+  volume.model = self.model;
+  volume.cleanName = [self cleanName: volume.name];
+  
+  BOOL dataFound = NO;
+  
+  if(volume != nil)
+    {
+    [[self.model storageDevices] 
+      setObject: volume forKey: volume.identifier];
+      
+    dataFound = YES;
+    }
+    
+  [volume release];
+  
+  return dataFound;
   }
 
 // Print informaiton for the machine.

@@ -165,10 +165,10 @@
     performCollections: 
       @[
         log,
-        disk,
         video,
         USB,
         firewire,
+        disk,
         virtualVolume
       ]
     increment: increment];
