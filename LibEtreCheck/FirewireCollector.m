@@ -85,6 +85,7 @@
   indent: (NSString *) indent found: (bool *) found
   {
   NSString * name = [device objectForKey: @"_name"];
+  NSString * identifier = [device objectForKey: @"bsd_name"];
   NSString * manufacturer = [device objectForKey: @"device_manufacturer"];
   NSString * size = [device objectForKey: @"size"];
   NSString * max_device_speed = [device objectForKey: @"max_device_speed"];
@@ -93,15 +94,6 @@
   if(![NSString isValid: name])
     return;
     
-  if(![NSString isValid: manufacturer])
-    return;
-
-  if(![NSString isValid: max_device_speed])
-    return;
-
-  if(![NSString isValid: connected_speed])
-    return;
-
   NSDictionary * storageDevices = [self.model storageDevices];
   
   if(![NSDictionary isValid: storageDevices])
@@ -127,12 +119,19 @@
   [self.xml addElement: @"maxdevicespeed" value: max_device_speed];
   [self.xml addElement: @"connectedspeed" value: connected_speed];
 
-  NSString * speed =
-    (max_device_speed && connected_speed)
-      ? [NSString
-        stringWithFormat: @"%@ - %@ max", connected_speed, max_device_speed]
-      : @"";
-      
+  NSString * speed = @"";
+  
+  if([NSString isValid: max_device_speed])
+    {
+    if([NSString isValid: connected_speed])
+      speed =
+        [NSString
+          stringWithFormat:
+            @"%@ - %@ max", connected_speed, max_device_speed];
+    else
+      speed = [NSString stringWithFormat: @"%@ max", max_device_speed];
+    }
+    
   if(manufacturer)
     {
     if(!*found)
@@ -152,21 +151,21 @@
     }
 
   // There could be more devices.
-  NSArray * devices = [device objectForKey: @"_items"];
+  NSArray * nodes = [device objectForKey: @"_items"];
   
-  if(![NSArray isValid: devices])
-    devices = [device objectForKey: @"units"];
+  if(![NSArray isValid: nodes])
+    nodes = [device objectForKey: @"units"];
     
-  if([NSArray isValid: devices])
-    for(NSDictionary * device in devices)
-      if([NSDictionary isValid: device])
+  if([NSArray isValid: nodes])
+    for(NSDictionary * node in nodes)
+      if([NSDictionary isValid: node])
         {
-        NSString * deviceIdentifier = [device objectForKey: @"bsd_name"];
+        NSString * driveDevice = [node objectForKey: @"bsd_name"];
         
-        if([NSString isValid: deviceIdentifier])
+        if([NSString isValid: driveDevice])
           {
           Drive * drive = 
-            [[self.model storageDevices] objectForKey: deviceIdentifier];
+            [[self.model storageDevices] objectForKey: driveDevice];
             
           if([Drive isValid: drive])
             {
@@ -189,32 +188,32 @@
                 }
             
               drive.model = model;
-              
-              NSArray * volumes = [device objectForKey: @"volumes"];
-              
-              if([NSArray isValid: volumes])
-                for(NSDictionary * volumeItem in volumes)
-                  {
-                  NSString * volumeDevice = 
-                    [volumeItem objectForKey: @"bsd_name"];
-                  
-                  if([NSString isValid: volumeDevice])
-                    {
-                    Volume * volume = 
-                      [storageDevices objectForKey: volumeDevice];
-                    
-                    if([Volume isValid: volume])
-                      [volume addContainingDevice: deviceIdentifier];
-                    }
-                  }
               }
               
             [model release];
             }
           }
           
-        [self printFirewireDevice: device indent: indent found: found];
+        [self printFirewireDevice: node indent: indent found: found];
         }
+
+  NSArray * volumes = [device objectForKey: @"volumes"];
+
+  if([NSArray isValid: volumes])
+    for(NSDictionary * volumeItem in volumes)
+      {
+      NSString * volumeDevice =
+        [volumeItem objectForKey: @"bsd_name"];
+      
+      if([NSString isValid: volumeDevice])
+        {
+        Volume * volume =
+          [storageDevices objectForKey: volumeDevice];
+        
+        if([Volume isValid: volume])
+          [volume addContainingDevice: identifier];
+        }
+      }
 
   [self.xml endElement: @"node"];
   }

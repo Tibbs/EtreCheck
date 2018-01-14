@@ -182,14 +182,15 @@
     
     for(NSDictionary * item in media)
       {
-      NSString * device = [item objectForKey: @"bsd_name"];
+      NSString * driveDevice = [item objectForKey: @"bsd_name"];
 
-      if(![NSString isValid: device])
+      if(![NSString isValid: driveDevice])
         continue;
         
-      [self.xml addElement: @"device" value: device];
+      [self.xml addElement: @"device" value: driveDevice];
       
-      Drive * drive = [[self.model storageDevices] objectForKey: device];
+      Drive * drive =
+        [[self.model storageDevices] objectForKey: driveDevice];
       
       if([Drive isValid: drive])
         {
@@ -214,7 +215,7 @@
                 [[self.model storageDevices] objectForKey: volumeDevice];
               
               if([Volume isValid: volume])
-                [volume addContainingDevice: device];
+                [volume addContainingDevice: driveDevice];
               }
             }
         }
