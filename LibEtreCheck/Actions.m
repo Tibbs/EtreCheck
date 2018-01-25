@@ -115,7 +115,7 @@
   }
 
 // Reveal a file in the Finder.
-+ (void) revealFile: (NSString *) file
++ (BOOL) revealFile: (NSString *) file
   {
   NSString * path = [file stringByExpandingTildeInPath];
   
@@ -139,6 +139,8 @@
     
     [urls release];
     }
+    
+  return exists;
   }
   
 // Open a file in the default app.

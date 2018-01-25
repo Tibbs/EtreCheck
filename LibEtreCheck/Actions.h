@@ -26,7 +26,8 @@ typedef void (^RemoveAdwareCompletion)(
 + (BOOL) restart;
 
 // Reveal a file in the Finder.
-+ (void) revealFile: (nonnull NSString *) file;
+// Return YES if the file exists or NO otherwise.
++ (BOOL) revealFile: (nonnull NSString *) file;
 
 // Open a file in the default app.
 + (void) openFile: (nonnull NSString *) file;
