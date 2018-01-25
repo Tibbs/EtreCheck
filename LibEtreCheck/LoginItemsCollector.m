@@ -306,6 +306,10 @@
             if([developer length] == 0)
               developer = @"";
               
+            if(name.length == 0)
+              name = 
+                [[path lastPathComponent] stringByDeletingPathExtension];
+              
             NSDictionary * item =
               [NSDictionary dictionaryWithObjectsAndKeys:
                 name, @"name",
@@ -344,10 +348,40 @@
         {
         NSString * value = [trimmedLine substringFromIndex: 5];
         
-        name =
-          [value
-            stringByTrimmingCharactersInSet:
-              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if(name == nil)
+          name =
+            [value
+              stringByTrimmingCharactersInSet:
+                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                
+        if([name isEqualToString: @"(null)"])
+          name = nil;
+        }
+      else if([trimmedLine hasPrefix: @"displayName:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 12];
+        
+        if(name == nil)
+          name =
+            [value
+              stringByTrimmingCharactersInSet:
+                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                
+        if([name isEqualToString: @"(null)"])
+          name = nil;
+        }
+      else if([trimmedLine hasPrefix: @"itemName:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 9];
+        
+        if(name == nil)
+          name =
+            [value
+              stringByTrimmingCharactersInSet:
+                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                
+        if([name isEqualToString: @"(null)"])
+          name = nil;
         }
       else if([trimmedLine hasPrefix: @"identifier:"])
         {
