@@ -355,6 +355,9 @@
 // Should this file be hidden?
 - (BOOL) hideFile: (LaunchdFile *) file
   {
+  if([file.adware isEqualToString: kAdwareExecutablePermissions])
+    return YES;
+    
   Launchd * launchd = [self.model launchd];
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
