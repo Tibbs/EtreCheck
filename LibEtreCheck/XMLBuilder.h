@@ -230,6 +230,10 @@
 - (void) addElement: (NSString *) name 
   type: (NSString *) type data: (NSData *) data;
 
+// Add a binary element with attributes.
+- (void) addElement: (NSString *) name 
+  data: (NSData *) data attributes: (NSDictionary *) attributes;
+
 // Add a fragment from another XMLBuilder.
 - (void) addFragment: (XMLBuilderElement *) xml;
 

@@ -1058,8 +1058,17 @@
   {
   NSMutableDictionary * attributes =
     [[NSMutableDictionary alloc]
-      initWithObjectsAndKeys: type, @"type", nil];
+      initWithObjectsAndKeys: type, @"type", @"base64", @"encoding", nil];
     
+  [self addElement: name data: data attributes: attributes];
+
+  [attributes release];
+  }
+  
+// Add a binary element with attributes.
+- (void) addElement: (NSString *) name 
+  data: (NSData *) data attributes: (NSDictionary *) attributes
+  {
   NSString * value = nil;
   
   if([data respondsToSelector: @selector(base64EncodedStringWithOptions:)])
@@ -1094,8 +1103,6 @@
     }
     
   [self addElement: name value: value attributes: attributes];
-  
-  [attributes release];
   }
   
 // Add a boolean to the current element's contents.
