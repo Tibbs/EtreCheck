@@ -136,6 +136,10 @@
   if([file.signature isEqualToString: kSignatureValid])
     return;
   
+  // This will be in clean up.
+  if([file.signature isEqualToString: kExecutableMissing])
+    return;
+
   // If it is already adware, skip it here.
   if(file.adware != nil)
     return;

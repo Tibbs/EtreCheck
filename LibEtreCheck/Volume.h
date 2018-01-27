@@ -41,6 +41,9 @@
   // Free space.
   NSUInteger myFreeSpace;
 
+  // Used space.
+  NSUInteger myUsedSpace;
+  
   // Is this a shared container?
   BOOL myShared;
   
@@ -79,6 +82,9 @@
 
 // Free space.
 @property (assign) NSUInteger freeSpace;
+
+// Used space.
+@property (assign) NSUInteger usedSpace;
 
 // Is this a shared volume?
 @property (assign) BOOL shared;

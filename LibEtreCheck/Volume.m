@@ -39,6 +39,9 @@
 // Free space.
 @synthesize freeSpace = myFreeSpace;
 
+// Used space.
+@synthesize usedSpace = myUsedSpace;
+
 // Is this a shared volume?
 @synthesize shared = myShared;
 
@@ -305,6 +308,11 @@
     valueWithUnits: 
       [myByteCountFormatter stringFromByteCount: self.freeSpace]];
   
+  [xml 
+    addElement: @"used" 
+    valueWithUnits: 
+      [myByteCountFormatter stringFromByteCount: self.usedSpace]];
+
   [xml addElement: @"UUID" value: self.UUID];
   
   if(self.encrypted)

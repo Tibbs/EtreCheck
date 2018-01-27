@@ -516,6 +516,12 @@
                 
                 if([Volume isValid: volume])
                   {
+                  // Get the APFS size.
+                  NSNumber * size = [item objectForKey: @"CapacityInUse"];
+                  
+                  if([NSNumber isValid: size])
+                    volume.usedSpace = [size unsignedIntegerValue];
+                    
                   // Get the encryption direction and progress.
                   NSNumber * encryptionValue = 
                     [item objectForKey: @"Encryption"];

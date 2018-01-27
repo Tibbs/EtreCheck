@@ -218,8 +218,8 @@
     performCollections: 
       @[
         adware,
-        unsignedFiles,
         cleanup,
+        unsignedFiles,
         e
       ]
     increment: increment];
