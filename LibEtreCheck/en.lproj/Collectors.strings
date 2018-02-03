@@ -8,7 +8,7 @@
 "applications" = "Applications:";
 "configurationfiles" = "Configuration files:";
 "cpu" = "Top Processes by CPU:";
-"diagnostics" = "Diagnostics Events (last 3 days for minor events):";
+"diagnostics" = "Diagnostics Events (last 7 days for minor events):";
 "disk" = "Disk Information:";
 "firewire" = "Firewire Information:";
 "fonts" = "Bad Fonts:";

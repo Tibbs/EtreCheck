@@ -8,7 +8,7 @@
 "applications" = "Applications :";
 "configurationfiles" = "Fichiers de configuration :";
 "cpu" = "Utilisation du processeur par opération :";
-"diagnostics" = "Événements du diagnostic (3 dernier jours si pas grave):";
+"diagnostics" = "Événements du diagnostic (7 dernier jours si pas grave):";
 "disk" = "Informations des disques :";
 "firewire" = "Informations Firewire :";
 "fonts" = "Mauvaises polices :";
