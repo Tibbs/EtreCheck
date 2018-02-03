@@ -359,6 +359,10 @@
   if([file.adware isEqualToString: kAdwareExecutablePermissions])
     return YES;
     
+  // Don't show any Apple files for cleanup.
+  if([file.path hasPrefix: @"/System/"])
+    return YES;
+    
   Launchd * launchd = [self.model launchd];
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
