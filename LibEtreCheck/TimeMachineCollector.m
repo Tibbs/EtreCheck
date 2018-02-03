@@ -451,6 +451,7 @@
     addElement: @"free" 
     valueWithUnits: 
       [formatter stringFromByteCount: volume.freeSpace]];
+      
   [self.xml 
     addElement: @"used" 
     valueWithUnits: 
