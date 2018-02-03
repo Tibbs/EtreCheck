@@ -50,7 +50,8 @@
   
   // Orphan launchd files have already been collected.
   
-  [self collectOrphanSafariExtensions];
+  // Safari extensions are problematic again.
+  //[self collectOrphanSafariExtensions];
   
   [self printCleanup];
   [self exportCleanup];
