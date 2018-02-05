@@ -230,4 +230,7 @@
 // Redact a mount point.
 + (NSString *) cleanMountPoint: (NSString *) path;
 
+// Get the OS version.
++ (NSString *) OSVersion;
+
 @end

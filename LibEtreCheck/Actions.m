@@ -6,7 +6,6 @@
 #import "Actions.h"
 #import "Launchd.h"
 #import "SubProcess.h"
-#import "OSVersion.h"
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import "NumberFormatter.h"

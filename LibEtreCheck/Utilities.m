@@ -2213,4 +2213,10 @@
     ECLocalizedString(@"com.facebook.videochat.[redacted].plist");
   }
 
+// Get the OS version.
++ (NSString *) OSVersion
+  {
+  return [[OSVersion shared] version];
+  }
+  
 @end
