@@ -57,6 +57,24 @@
   return myMinor;
   }
 
+// Get the build.
+- (NSString *) build
+  {
+  if(myBuild == nil)
+    [self setOSVersion];
+    
+  return myBuild;
+  }
+  
+// Get the version.
+- (NSString *) version    
+  {
+  if(myVersion == nil)
+    [self setOSVersion];
+    
+  return myVersion;
+  }
+  
 // Constructor.
 - (instancetype) init
   {
