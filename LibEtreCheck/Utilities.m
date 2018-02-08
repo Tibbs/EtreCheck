@@ -308,7 +308,7 @@
   else if([path hasPrefix: @"https://"])
     path = [url substringFromIndex: 8];
   
-  if([[OSVersion shared] major] <= kSnowLeopard)
+  if([[OSVersion shared] major] <= kMavericks)
     return [@"http://" stringByAppendingString: path];
     
   return [@"https://" stringByAppendingString: path];
