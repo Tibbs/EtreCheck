@@ -638,8 +638,8 @@
   NSTimeInterval interval =
     [current timeIntervalSinceDate: self.startTime];
 
-  NSUInteger minutes = (NSUInteger)interval / 60;
-  NSUInteger seconds = (NSUInteger)interval - (minutes * 60);
+  NSUInteger minutes = (NSUInteger)floor(interval / 60.0);
+  NSUInteger seconds = (NSUInteger)round(interval - (minutes * 60));
   
   return
     [NSString
