@@ -11138,130 +11138,10 @@
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/MacOS/xsanmgr_filebrowser</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/de.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/en.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/es.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/fr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/it.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ja.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/nl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/MacOS/xsanmgr_sharing</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/de.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/en.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/es.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/fr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/it.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ja.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/nl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/copyprivs</key>
@@ -11270,196 +11150,16 @@
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/MacOS/xsanmgr_xsan</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/XsanNotificationEmail.txt.erb</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/Localizable.strings</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/create_xsan_email.rb</key>
       <string>signatureshell</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/dot_clean</key>
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/dotclean_wrapper.sh</key>
       <string>signatureshell</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/migrate_xsan2.3_notifications</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/html/xsanmgr_filebrowser.html</key>
@@ -15875,142 +15575,10 @@
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/MacOS/xsanmgr_filebrowser</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/de.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/en.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/es.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/fr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/id.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/it.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ja.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ms.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/nl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/vi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_filebrowser.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/MacOS/xsanmgr_sharing</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/de.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/en.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/es.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/fr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/id.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/it.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ja.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ms.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/nl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/vi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_sharing.bundle/Contents/copyprivs</key>
@@ -16019,214 +15587,16 @@
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/MacOS/xsanmgr_xsan</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Dutch.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/English.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/French.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/German.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Italian.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Japanese.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/Spanish.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/XsanNotificationEmail.txt.erb</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ar.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ca.lproj/Localizable.strings</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/create_xsan_email.rb</key>
       <string>signatureshell</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/cs.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/da.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/dot_clean</key>
       <string>signatureapple</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/dotclean_wrapper.sh</key>
       <string>signatureshell</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/el.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/fi.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/he.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hr.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/hu.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/id.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/id.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/id.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ko.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/migrate_xsan2.3_notifications</key>
       <string>signatureapple</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ms.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ms.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ms.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/no.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pl.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/pt_PT.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ro.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/ru.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sk.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/sv.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/th.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/tr.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/uk.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/vi.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/vi.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/vi.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_CN.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/GraphMetadata.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/InfoPlist.strings</key>
-      <string>signaturenotvalid</string>
-      <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/Resources/zh_TW.lproj/Localizable.strings</key>
-      <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/bundles/xsanmgr_xsan.bundle/Contents/_CodeSignature/CodeResources</key>
       <string>signaturenotvalid</string>
       <key>/usr/libexec/xsanmgr/html/xsanmgr_filebrowser.html</key>
@@ -17637,6 +17007,8 @@
       <key>/System/Library/PrivateFrameworks/ContactsUI.framework/Versions/A/XPCServices/com.apple.ContactsUI.ContactPickerService.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreChineseEngine.framework/Versions/A/SharedSupport/CIMFindInputCodeTool.app</key>
+      <string>signatureapple</string>
+      <key>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreRAID.framework/Resources/CoreRAIDServer</key>
       <string>signatureapple</string>
@@ -22185,6 +21557,8 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreChineseEngine.framework/Versions/A/SharedSupport/CIMFindInputCodeTool.app</key>
       <string>signatureapple</string>
+      <key>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</key>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Resources/FollowUpUI.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Support/followupd</key>
@@ -22324,9 +21698,9 @@
       <key>/System/Library/PrivateFrameworks/MessagesKit.framework/Versions/A/XPCServices/com.apple.messages.BuddyPictureService.xpc</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/AppleMobileDeviceHelper.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/AppleMobileSync.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/Resources/usbmuxd</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbagent.app</key>
@@ -24807,6 +24181,8 @@
       <string>signatureapple</string>
       <key>/usr/libexec/SafariCloudHistoryPushAgent</key>
       <string>signatureapple</string>
+      <key>/usr/libexec/SafariLaunchAgent</key>
+      <string>signatureapple</string>
       <key>/usr/libexec/SafariNotificationAgent</key>
       <string>signatureapple</string>
       <key>/usr/libexec/SafariPlugInUpdateNotifier</key>
@@ -26862,6 +26238,8 @@
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreChineseEngine.framework/Versions/A/SharedSupport/CIMFindInputCodeTool.app</key>
       <string>signatureapple</string>
+      <key>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</key>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Resources/FollowUpUI.app</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Support/followupd</key>
@@ -27015,9 +26393,9 @@
       <key>/System/Library/PrivateFrameworks/MobileAccessoryUpdater.framework/Support/fud</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/AppleMobileDeviceHelper.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/AppleMobileSync.app</key>
-      <string>signaturenotvalid</string>
+      <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/Resources/usbmuxd</key>
       <string>signatureapple</string>
       <key>/System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbagent.app</key>
@@ -27179,6 +26557,24 @@
       <key>/System/Library/Services/ImageCaptureService.app</key>
       <string>signatureapple</string>
       <key>/System/Library/Services/SummaryService.app</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.History.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.ImageDecoder.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/SafariShared.framework/Versions/A/XPCServices/com.apple.Safari.SearchHelper.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Databases.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Networking.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Plugin.32.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Plugin.64.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc</key>
+      <string>signatureapple</string>
+      <key>/System/Library/StagedFrameworks/Safari/WebKitLegacy.framework/Versions/A/WebKitPluginHost.app</key>
       <string>signatureapple</string>
       <key>/System/Library/UserEventPlugins/BTMMPortInUseAgent.plugin/Contents/Resources/BTMMDisable.app</key>
       <string>signatureapple</string>
@@ -29557,6 +28953,10 @@
       <key>/usr/libexec/PlistBuddy</key>
       <string>signatureapple</string>
       <key>/usr/libexec/SafariCloudHistoryPushAgent</key>
+      <string>signatureapple</string>
+      <key>/usr/libexec/SafariHistoryServiceAgent</key>
+      <string>signatureapple</string>
+      <key>/usr/libexec/SafariLaunchAgent</key>
       <string>signatureapple</string>
       <key>/usr/libexec/SafariNotificationAgent</key>
       <string>signatureapple</string>

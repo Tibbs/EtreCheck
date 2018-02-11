@@ -5862,7 +5862,9 @@
 				<string>/usr/share/wikicompatibilityd/lib/python/xmlrpcServer.py</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>64910579</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.WindowServer.plist</key>
 		<dict>
@@ -6753,7 +6755,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gssd-agent.plist</key>
 		<dict>
@@ -11938,7 +11942,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gamed.plist</key>
 		<dict>
@@ -17320,7 +17326,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gamed.plist</key>
 		<dict>
@@ -19944,6 +19952,17 @@
 			<string>com.apple.FontWorker</string>
 			<key>program</key>
 			<string>/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Support/fontworker</string>
+			<key>programArguments</key>
+			<array/>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.fpsd.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.fpsd</string>
+			<key>program</key>
+			<string>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</string>
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
@@ -23324,7 +23343,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gamed.plist</key>
 		<dict>
@@ -26321,6 +26342,17 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.fpsd.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.fpsd</string>
+			<key>program</key>
+			<string>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</string>
+			<key>programArguments</key>
+			<array/>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.fseventsd.plist</key>
 		<dict>
 			<key>label</key>
@@ -28670,7 +28702,9 @@
 				<string>-sh</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>75aced1c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.xsan.plist</key>
 		<dict>
@@ -30113,7 +30147,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gamed.plist</key>
 		<dict>
@@ -31205,6 +31241,17 @@
 			<array>
 				<string>/System/Library/PrivateFrameworks/BookmarkDAV.framework/Helpers/SafariDAVClient</string>
 			</array>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchAgents/com.apple.SafariLaunchAgent.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.SafariLaunchAgent</string>
+			<key>program</key>
+			<string>/usr/libexec/SafariLaunchAgent</string>
+			<key>programArguments</key>
+			<array/>
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
@@ -33495,6 +33542,17 @@
 			<string>com.apple.FontWorker</string>
 			<key>program</key>
 			<string>/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Support/fontworker</string>
+			<key>programArguments</key>
+			<array/>
+			<key>signature</key>
+			<string>signatureapple</string>
+		</dict>
+		<key>/System/Library/LaunchDaemons/com.apple.fpsd.plist</key>
+		<dict>
+			<key>label</key>
+			<string>com.apple.fpsd</string>
+			<key>program</key>
+			<string>/System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd</string>
 			<key>programArguments</key>
 			<array/>
 			<key>signature</key>
@@ -36022,7 +36080,9 @@
 				<string>-sh</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>75aced1c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.xsan.plist</key>
 		<dict>
@@ -37600,7 +37660,9 @@
 				<string>if [ &quot;$HOME&quot; == &quot;/System&quot; ]; then exit 0; fi; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.imagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.imagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.imagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.apsd-ft.plist&quot; ] ; then launchctl unload -wF -S Aqua ~/Library/LaunchAgents/com.apple.apsd-ft.plist; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.marcoagent.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.marcoagent.plist ; launchctl load -wF /System/Library/LaunchAgents/com.apple.marcoagent.plist ; fi ; if [ -f &quot;$HOME/Library/LaunchAgents/com.apple.FTMonitor.plist&quot; ] ; then launchctl unload -wF ~/Library/LaunchAgents/com.apple.FTMonitor.plist ; fi ;</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>07de8708</string>
 		</dict>
 		<key>/System/Library/LaunchAgents/com.apple.gamed.plist</key>
 		<dict>
@@ -39878,7 +39940,7 @@
 			<key>signature</key>
 			<string>signatureapple</string>
 		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist</key>
+		<key>/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist</key>
 		<dict>
 			<key>label</key>
 			<string>com.apple.installer.cleanupinstaller</string>
@@ -42367,7 +42429,9 @@
 				<string>-sh</string>
 			</array>
 			<key>signature</key>
-			<string>signatureapple</string>
+			<string>signatureshell</string>
+			<key>plist_checksum</key>
+			<string>75aced1c</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.powerd.plist</key>
 		<dict>
@@ -47841,19 +47905,6 @@
 			<array/>
 			<key>signature</key>
 			<string>signatureapple</string>
-		</dict>
-		<key>/System/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist</key>
-		<dict>
-			<key>label</key>
-			<string>com.apple.installer.cleanupinstaller</string>
-			<key>program</key>
-			<string>/macOS Install Data/Locked Files/cleanup_installer</string>
-			<key>programArguments</key>
-			<array>
-				<string>/macOS Install Data/Locked Files/cleanup_installer</string>
-			</array>
-			<key>signature</key>
-			<string>executablemissing</string>
 		</dict>
 		<key>/System/Library/LaunchDaemons/com.apple.jetsamproperties.Mac.plist</key>
 		<dict>

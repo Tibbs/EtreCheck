@@ -2005,6 +2005,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
   
   self.window.status = kReport;
+  
+  [self.window setSharingType: NSWindowSharingNone];
 
   // Beg for money.
   [self checkForDonation];
