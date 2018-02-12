@@ -2016,6 +2016,9 @@
 // Redact a mount point.
 + (NSString *) cleanMountPoint: (NSString *) path
   {
+  if([path isEqualToString: @"/private/var/vm"])
+    return path;
+    
   NSArray * parts = [path componentsSeparatedByString: @"/"];
   
   NSMutableArray * cleanParts = [[NSMutableArray alloc] init];

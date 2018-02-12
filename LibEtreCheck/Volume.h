@@ -14,7 +14,7 @@
 #define kAPFSContainerVolume @"apfscontainervolume" 
 #define kPrebootVolume @"prebootvolume" 
 #define kRecoveryVolume @"recovery" 
-#define kVMVolume @"recovery" 
+#define kVMVolume @"vm" 
 
 @class Model;
 
