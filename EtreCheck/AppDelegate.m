@@ -72,6 +72,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize demonImage = myDemonImage;
 @synthesize agentImage = myAgentImage;
 @synthesize collectionStatus = myCollectionStatus;
+@synthesize collectionStatusLabel = myCollectionStatusLabel;
 @synthesize reportView = myReportView;
 @synthesize animationView = myAnimationView;
 @synthesize startPanel = myStartPanel;
