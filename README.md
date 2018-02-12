@@ -1,5 +1,8 @@
 EtreCheck
 =========
+## EtreCheck 4 will be here soon
+Many people have starred and forked EtreCheck the past few years. Thanks for your interest! But I have to ask, what is your interest? EtreCheck 4 will be released this week. If you weren't already following the activity on the xml_new branch, that is what is being used in EtreCheck 4. The new user interface in EtreCheck 4 is not publicly available. Would anyone be interested in that? Or do people just want to see the low-level stuff? I would sincerely like to know. There are parts of EtreCheck 4 that I could release as open source, such as my ESKit utility framework or my RESTKit local REST server. Please let me know. Thanks.
+
 EtreCheck is an easy-to-use [macOS] app to display important details of your system configuration and allow you to copy that information to the Clipboard. EtreCheck automatically removes any personally identifiable information from the output. EtreCheck does not need super-user privileges to run. It will also never ask for your password. It is signed with my Developer ID issued by Apple so it can be installed on systems protected by Apple's Gatekeeper system. Learn more at [https://etrecheck.com][EtreCheck].
 
 This release incorporates a couple of additional open-source projects.
