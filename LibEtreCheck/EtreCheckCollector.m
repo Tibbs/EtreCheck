@@ -146,7 +146,7 @@
     {
     NSString * performance = ECLocalizedString(@"poorperformance");
     
-    [self.xml addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: @"poorperformance"];
     
     [self.result
       appendString: performance
@@ -161,7 +161,7 @@
     NSString * performance = 
       ECLocalizedString(@"belowaverageperformance");
     
-    [self.xml addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: @"belowaverageperformance"];
     
     [self.result
       appendString: performance
@@ -176,7 +176,7 @@
     NSString * performance = 
       ECLocalizedString(@"goodperformance");
     
-    [self.xml addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: @"goodperformance"];
     
     [self.result
       appendString: performance
@@ -190,7 +190,7 @@
     NSString * performance = 
       ECLocalizedString(@"excellentperformance");
     
-    [self.xml addElement: @"performance" value: performance];
+    [self.xml addElement: @"performance" value: @"excellentperformance"];
     
     [self.result
       appendString: performance

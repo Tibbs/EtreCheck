@@ -326,9 +326,7 @@
   switch(setting)
     {
     case kMacAppStore:
-      [self.xml 
-        addElement: @"status" 
-        value: ECLocalizedString(@"Mac App Store")];
+      [self.xml addElement: @"status" value: @"Mac App Store"];
       
       [self.result
         appendString:
@@ -339,9 +337,7 @@
     case kDeveloperID:
       [self.xml 
         addElement: @"status" 
-        value: 
-          ECLocalizedString(
-            @"Mac App Store and identified developers")];
+        value: @"Mac App Store and identified developers"];
 
       [self.result
         appendString:
@@ -352,9 +348,7 @@
                 @"Mac App Store and identified developers")]];
       break;
     case kDisabled:
-      [self.xml 
-        addElement: @"status" 
-        value: ECLocalizedString(@"Anywhere")];
+      [self.xml addElement: @"status" value: @"Anywhere"];
 
       [self.result
         appendString:
