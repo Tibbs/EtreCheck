@@ -218,13 +218,15 @@
 // Create an extension dictionary from a plist.
 - (void) parseDictionary: (NSDictionary *) dict
   {
+  self.displayName = ECLocalizedString(@"Unknown");
+  
   if(![NSDictionary isValid: dict])
     return;
     
-  self.displayName = [dict objectForKey: @"CFBundleDisplayName"];
+  NSString * name = [dict objectForKey: @"CFBundleDisplayName"];
   
-  if(![NSString isValid: self.displayName])
-    self.displayName = ECLocalizedString(@"Unknown");
+  if([NSString isValid: self.displayName])
+    self.displayName = name;
     
   self.bundleIdentifier = [dict objectForKey: @"CFBundleIdentifier"];
   
@@ -245,7 +247,10 @@
   [self appendStatus: attributedString];
   
   // Print the name.
-  [attributedString appendString: self.displayName];
+  if([NSString isValid: self.displayName])
+    [attributedString appendString: self.displayName];
+  else
+    [attributedString appendString: ECLocalizedString(@"Unknown")];
   
   // Print the signature.
   [self appendSignature: attributedString];
