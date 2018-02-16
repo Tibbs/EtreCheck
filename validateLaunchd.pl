@@ -154,34 +154,34 @@ sub isShellExecutable
   my $name = basename($path);
   
   return 1
-    if $path eq "tclsh";
+    if $name eq "tclsh";
   
   return 1
-    if $path eq "perl";
+    if $name eq "perl";
   
   return 1
-    if $path eq "ruby";
+    if $name eq "ruby";
   
   return 1
-    if $path eq "python";
+    if $name eq "python";
   
   return 1
-    if $path eq "sh";
+    if $name eq "sh";
   
   return 1
-    if $path eq "csh";
+    if $name eq "csh";
   
   return 1
-    if $path eq "bash";
+    if $name eq "bash";
   
   return 1
-    if $path eq "zsh";
+    if $name eq "zsh";
   
   return 1
-    if $path eq "tsh";
+    if $name eq "tsh";
   
   return 1
-    if $path eq "ksh";
+    if $name eq "ksh";
   
   return 0;  
   }
@@ -300,9 +300,6 @@ sub getLaunchdFiles
     $program = trim($programArguments[0])
       if not $program;
       
-    next
-      if not $program;
-
     my $bundle = $program;
       
     my $parent = dirname($program);
@@ -479,13 +476,13 @@ sub getManualAdditions
   push 
     @additions,
     {
-    path => '/System/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist',
+    path => '/Library/LaunchDaemons/com.apple.installer.cleanupinstaller.plist',
     label => 'com.apple.installer.cleanupinstaller',
     program => '/macOS Install Data/Locked Files/cleanup_installer',
     programArguments => ['/macOS Install Data/Locked Files/cleanup_installer'],
     signature => 'executablemissing'
     }
-    if $OSVersion =~ /^10\.(?:12|13)/;
+    if $OSVersion =~ /^10\.12/;
 
   push 
     @additions,

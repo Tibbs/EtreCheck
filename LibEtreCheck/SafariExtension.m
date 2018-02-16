@@ -12,6 +12,7 @@
 #import "EtreCheckConstants.h"
 #import "LocalizedString.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 
 // Wrapper around a Safari extension.
 @implementation SafariExtension
@@ -222,6 +223,9 @@
     
   self.displayName = [dict objectForKey: @"CFBundleDisplayName"];
   
+  if(![NSString isValid: self.displayName])
+    self.displayName = ECLocalizedString(@"Unknown");
+    
   self.bundleIdentifier = [dict objectForKey: @"CFBundleIdentifier"];
   
   if(self.bundleIdentifier == nil)
