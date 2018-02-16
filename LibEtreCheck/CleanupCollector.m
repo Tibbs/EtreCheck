@@ -356,9 +356,6 @@
 // Should this file be hidden?
 - (BOOL) hideFile: (LaunchdFile *) file
   {
-  if([file.adware isEqualToString: kAdwareExecutablePermissions])
-    return YES;
-    
   // Don't show any Apple files for cleanup.
   if([file.path hasPrefix: @"/System/"])
     return YES;

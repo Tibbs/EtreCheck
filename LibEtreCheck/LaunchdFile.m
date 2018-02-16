@@ -468,7 +468,7 @@
     if(hidden)
       self.adware = kAdwarePlistHidden;
     else if(permissions)
-      self.adware = kAdwarePlistPermissions;
+      self.details = kUnsignedPlistPermissions;
     else if(locked)
       self.adware = kAdwarePlistLocked;
     }
@@ -487,7 +487,7 @@
       if(hidden)
         self.adware = kAdwareExecutableHidden;
       else if(permissions)
-        self.adware = kAdwareExecutablePermissions;
+        self.details = kUnsignedExecutablePermissions;
       else if(locked)
         self.adware = kAdwareExecutableLocked;
       }
