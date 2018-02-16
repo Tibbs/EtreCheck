@@ -222,15 +222,15 @@ sub getOSVersion
 sub getLaunchdFiles
   {
   my @systemLaunchDaemons = 
-    `find /System/Library/LaunchDaemons -type f 2> /dev/null`;
+    `find /System/Library/LaunchDaemons -type f -or -type l 2> /dev/null`;
   my @systemLaunchAgents = 
-    `find /System/Library/LaunchAgents -type f 2> /dev/null`;
+    `find /System/Library/LaunchAgents -type f -or -type l 2> /dev/null`;
   my @launchDaemons = 
-    `find /Library/LaunchDaemons -type f 2> /dev/null`;
+    `find /Library/LaunchDaemons -type f -or -type l 2> /dev/null`;
   my @launchAgents = 
-    `find /Library/LaunchAgents -type f 2> /dev/null`;
+    `find /Library/LaunchAgents -type f -or -type l 2> /dev/null`;
   my @userLaunchAgents = 
-    `find ~/Library/LaunchAgents -type f 2> /dev/null`;
+    `find ~/Library/LaunchAgents -type f -or -type l 2> /dev/null`;
 
   my @files = ();
   
@@ -300,6 +300,9 @@ sub getLaunchdFiles
     $program = trim($programArguments[0])
       if not $program;
       
+    next
+      if not $program;
+
     my $bundle = $program;
       
     my $parent = dirname($program);

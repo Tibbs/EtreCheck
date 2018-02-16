@@ -422,43 +422,36 @@
   
   for(LaunchdLoadedTask * task in self.ephemeralTasks)
     {
-    if(task.path.length > 0)
-      {
-      LaunchdFile * truthFile = [self.filesByPath objectForKey: task.path];
-      
-      if([LaunchdFile isValid: truthFile])
-        {
-        [truthFile.loadedTasks addObject: task];
-        
-        continue;
-        }
-      }
-      
-    if(task.label.length > 0)
-      {
-      LaunchdFile * truthFile = 
-        [self.filesByLabel objectForKey: task.label];
-      
-      if([LaunchdFile isValid: truthFile])
-        {
-        [truthFile.loadedTasks addObject: task];
-        
-        continue;
-        }
-      }
-
-    // Labels could have a UUID tacked onto the end. 
-    LaunchdFile * truthFile = 
-      [self.filesByLabel objectForKey: task.baseLabel];
+    LaunchdFile * truthFile = nil;
     
+    if(task.path.length > 0)
+      truthFile = [self.filesByPath objectForKey: task.path];
+      
+    else if(task.label.length > 0)
+      truthFile = [self.filesByLabel objectForKey: task.label];
+    
+    else if(task.baseLabel.length > 0)
+      // Labels could have a UUID tacked onto the end. 
+      truthFile = [self.filesByLabel objectForKey: task.baseLabel];
+      
+    else
+      [orphanTasks addObject: task];
+      
     if([LaunchdFile isValid: truthFile])
       {
       [truthFile.loadedTasks addObject: task];
       
-      continue;
+      if(truthFile.executable.length == 0)
+        truthFile.executable = task.executable;
+        
+      if(truthFile.arguments == nil)
+        truthFile.arguments = task.arguments;
+        
+      if(truthFile.label.length == 0)
+        truthFile.label = task.label;
+        
+      [truthFile checkSignature: self];
       }
-      
-    [orphanTasks addObject: task];
     }
     
   [self.ephemeralTasks setSet: orphanTasks];
