@@ -57,18 +57,15 @@
 #define kAdwareSuffix @"suffix"
 #define kAdwarePattern @"pattern"
 #define kAdwareMatch @"match"
-#define kAdwarePlist @"plist"
 #define kAdwarePlistHidden @"plisthidden"
 #define kAdwarePlistLocked @"plistlocked"
-#define kAdwareExecutable @"executable"
-#define kAdwareExecutableHidden @"executablehidden"
-#define kAdwareExecutableLocked @"executablelocked"
 
 #define kUnsignedWhitelist @"whitelist"
 #define kUnsignedWhitelistPrefix @"whitelistprefix"
 #define kUnsignedDNSInvalid @"dnsinvalid"
-#define kUnsignedWebsiteInvalid @"websiteinvalid"
 #define kUnsignedPlistPermissions @"plistpermissions"
 #define kUnsignedExecutablePermissions @"executablepermissions"
+#define kUnsignedExecutableHidden @"executablehidden"
+#define kUnsignedExecutableLocked @"executablelocked"
 
 #endif /* EtreCheckConstants_h */

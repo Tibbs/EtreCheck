@@ -337,13 +337,6 @@
    
   if(!valid)
     [self checkUnsignedFile];
-    
-  // If I have reconciled and a file now has a valid signature, reset the
-  // adware flag if said flag was only set due to permissions.
-  else if([self.adware hasPrefix: kAdwarePlist])
-    self.adware = nil;
-  else if([self.adware hasPrefix: kAdwareExecutable])
-    self.adware = nil;
   }
   
 // Try to validate the signature of a shell script.
@@ -485,11 +478,11 @@
     if(exists)
       {
       if(hidden)
-        self.adware = kAdwareExecutableHidden;
+        self.details = kUnsignedExecutableHidden;
       else if(permissions)
         self.details = kUnsignedExecutablePermissions;
       else if(locked)
-        self.adware = kAdwareExecutableLocked;
+        self.details = kUnsignedExecutableLocked;
       }
     }
   }
