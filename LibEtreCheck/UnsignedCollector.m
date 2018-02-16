@@ -210,25 +210,19 @@
         & ai_hints,
         & server_addr);
     
-      NSString * result;
-      
-      if(error)
-        result = kUnsignedDNSInvalid;
-      else
-        result = kUnsignedDNSValid;
-        
-      dispatch_sync(
-        self.queue, 
-        ^{
-          if(!self.emittingContent)
-            {
-            NSMutableSet * files = 
-              [self.networkPrefixes objectForKey: domainName];
-              
-            for(LaunchdFile * file in files)
-              file.details = result;
-            }
-        });
+      if(error != 0)
+        dispatch_sync(
+          self.queue, 
+          ^{
+            if(!self.emittingContent)
+              {
+              NSMutableSet * files = 
+                [self.networkPrefixes objectForKey: domainName];
+                
+              for(LaunchdFile * file in files)
+                file.details = kUnsignedDNSInvalid;
+              }
+          });
     });
   }
   
