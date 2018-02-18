@@ -27,22 +27,22 @@ GatekeeperSetting;
   NSString * mySIPStatus;
   
   // Installed XProtect version.
-  NSString * myInstalledXProtectVersion;
+  NSDate * myInstalledXProtectVersion;
   
   // Installed Gatekeeper version.
-  NSString * myInstalledGatekeeperVersion;
+  NSDate * myInstalledGatekeeperVersion;
   
   // Installed MRT version.
-  NSString * myInstalledMRTVersion;
+  NSDate * myInstalledMRTVersion;
 
   // Current XProtect version.
-  NSString * myCurrentXProtectVersion;
+  NSDate * myCurrentXProtectVersion;
   
   // Current Gatekeeper version.
-  NSString * myCurrentGatekeeperVersion;
+  NSDate * myCurrentGatekeeperVersion;
   
   // Current MRT version.
-  NSString * myCurrentMRTVersion;
+  NSDate * myCurrentMRTVersion;
   
   // Are security versions outdated?
   BOOL myOutdated;
@@ -55,22 +55,22 @@ GatekeeperSetting;
 @property (strong, nullable) NSString * SIPStatus;
 
 // Installed XProtect version.
-@property (strong, nullable) NSString * installedXProtectVersion;
+@property (strong, nullable) NSDate * installedXProtectVersion;
 
 // Installed Gatekeeper version.
-@property (strong, nullable) NSString * installedGatekeeperVersion;
+@property (strong, nullable) NSDate * installedGatekeeperVersion;
 
 // Installed MRT version.
-@property (strong, nullable) NSString * installedMRTVersion;
+@property (strong, nullable) NSDate * installedMRTVersion;
 
 // Current XProtect version.
-@property (strong, nullable) NSString * currentXProtectVersion;
+@property (strong, nullable) NSDate * currentXProtectVersion;
 
 // Current Gatekeeper version.
-@property (strong, nullable) NSString * currentGatekeeperVersion;
+@property (strong, nullable) NSDate * currentGatekeeperVersion;
 
 // Current MRT version.
-@property (strong, nullable) NSString * currentMRTVersion;
+@property (strong, nullable) NSDate * currentMRTVersion;
 
 // Are security versions outdated?
 @property (assign) BOOL outdated;

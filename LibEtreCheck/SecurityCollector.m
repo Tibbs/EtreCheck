@@ -16,6 +16,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "NSString+Etresoft.h"
 #import "NSArray+Etresoft.h"
+#import "NSDate+Etresoft.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -179,61 +180,28 @@
       
     if([self.AppleSecurityPackageNames containsObject: key])
       {
-      NSArray * packages = [product objectForKey: @"Packages"];
+      NSDate * postDate = [product objectForKey: @"PostDate"];
 
-      if([NSArray isValid: packages])
-        for(NSDictionary * package in packages)
-          if([NSDictionary isValid: package])
-            {
-            NSString * urlString = [package objectForKey: @"MetadataURL"];
-
-            if(![NSString isValid: urlString])
-              continue;
-              
-            NSURL * url = [[NSURL alloc] initWithString: urlString];
-            
-            NSData * data = [NSData dataWithContentsOfURL: url];
-      
-            [url release];
-      
-            NSString * version = [self parseVersion: data];
-            
-            if([NSString isValid: version])
-              {
-              if([key isEqualToString: @"XProtectPlistConfigData"])
-                {
-                BOOL later = 
-                  [Utilities 
-                    isVersion: version 
-                    laterThanVersion: self.currentXProtectVersion];
-                
-                if((self.currentXProtectVersion == nil) || later)
-                  self.currentXProtectVersion = version;
-                }
-                
-              else if([key isEqualToString: @"MRTConfigData"])
-                {
-                BOOL later = 
-                  [Utilities 
-                    isVersion: version 
-                    laterThanVersion: self.currentMRTVersion];
-                
-                if((self.currentMRTVersion == nil) || later)
-                  self.currentMRTVersion = version;
-                }
-                
-              else if([key isEqualToString: @"GatekeeperConfigData"])
-                {
-                BOOL later = 
-                  [Utilities 
-                    isVersion: version 
-                    laterThanVersion: self.currentGatekeeperVersion];
-                
-                if((self.currentGatekeeperVersion == nil) || later)
-                  self.currentGatekeeperVersion = version;
-                }
-              }
-            }
+      if([NSDate isValid: postDate])
+        {
+        if([key isEqualToString: @"XProtectPlistConfigData"])
+          {
+          if([postDate isLaterThan: self.currentXProtectVersion])
+            self.currentXProtectVersion = postDate;
+          }
+          
+        else if([key isEqualToString: @"MRTConfigData"])
+          {
+          if([postDate isLaterThan: self.currentMRTVersion])
+            self.currentMRTVersion = postDate;
+          }
+          
+        else if([key isEqualToString: @"GatekeeperConfigData"])
+          {
+          if([postDate isLaterThan: self.currentGatekeeperVersion])
+            self.currentGatekeeperVersion = postDate;
+          }
+        }
       }
     }
   } 
@@ -283,26 +251,22 @@
   self.installedXProtectVersion =
     [self 
       collectInstalledVersion: 
-        @"/System/Library/CoreServices/XProtect.bundle/Contents/Info.plist"];
+        @"/System/Library/CoreServices/XProtect.bundle"];
         
   self.installedMRTVersion =
-    [self 
-      collectInstalledVersion: 
-        @"/System/Library/CoreServices/MRT.app/Contents/Info.plist"];
+    [self collectInstalledVersion: @"/System/Library/CoreServices/MRT.app"];
   
   self.installedGatekeeperVersion =
-    [self 
-      collectInstalledVersion: 
-        @"/private/var/db/gkopaque.bundle/Contents/Info.plist"];
+    [self collectInstalledVersion: @"/private/var/db/gkopaque.bundle"];
   }
   
 // Collect an installed version from a plist file.
-- (NSString *) collectInstalledVersion: (NSString *) path
+- (NSDate *) collectInstalledVersion: (NSString *) path
   {
-  NSDictionary * plist = [NSDictionary readPropertyList: path];
+  NSDate * date = [Utilities modificationDate: path];
   
-  if([NSDictionary isValid: plist])
-    return [plist objectForKey: @"CFBundleShortVersionString"];
+  if([NSDate isValid: date])
+    return date;
     
   return nil;
   }
@@ -313,17 +277,16 @@
   [self.xml startElement: @"gatekeeper"];
   
   [self.xml 
-    addElement: @"installedversion" value: self.installedGatekeeperVersion];
+    addElement: @"installedversion" date: self.installedGatekeeperVersion];
   
   [self.xml 
-    addElement: @"currentversion" value: self.currentGatekeeperVersion];
+    addElement: @"currentversion" date: self.currentGatekeeperVersion];
 
-  BOOL later = 
-    [Utilities 
-      isVersion: self.currentGatekeeperVersion 
-      laterThanVersion: self.installedGatekeeperVersion];
+  NSDate * then =
+    [self.currentGatekeeperVersion 
+      dateByAddingTimeInterval: -60 * 60 * 24 * 7];
   
-  if(later)
+  if([then isLaterThan: self.installedGatekeeperVersion])
     self.outdated = YES;
 
   GatekeeperSetting setting = [self collectGatekeeperSetting];
@@ -599,17 +562,16 @@
   [self.xml startElement: @"xprotect"];
   
   [self.xml 
-    addElement: @"installedversion" value: self.installedXProtectVersion];
+    addElement: @"installedversion" date: self.installedXProtectVersion];
   
   [self.xml 
-    addElement: @"currentversion" value: self.currentXProtectVersion];
+    addElement: @"currentversion" date: self.currentXProtectVersion];
   
-  BOOL later = 
-    [Utilities 
-      isVersion: self.currentXProtectVersion 
-      laterThanVersion: self.installedXProtectVersion];
+  NSDate * then =
+    [self.currentXProtectVersion 
+      dateByAddingTimeInterval: -60 * 60 * 24 * 7];
   
-  if(later)
+  if([then isLaterThan: self.installedXProtectVersion])
     self.outdated = YES;
     
   [self.xml endElement: @"xprotect"];
@@ -617,16 +579,15 @@
   [self.xml startElement: @"mrt"];
 
   [self.xml 
-    addElement: @"installedversion" value: self.installedMRTVersion];
+    addElement: @"installedversion" date: self.installedMRTVersion];
   
-  [self.xml addElement: @"currentversion" value: self.currentMRTVersion];
+  [self.xml addElement: @"currentversion" date: self.currentMRTVersion];
 
-  later = 
-    [Utilities 
-      isVersion: self.currentMRTVersion 
-      laterThanVersion: self.installedMRTVersion];
+  then =
+    [self.currentMRTVersion 
+      dateByAddingTimeInterval: -60 * 60 * 24 * 7];
   
-  if(later)
+  if([then isLaterThan: self.installedMRTVersion])
     self.outdated = YES;
 
   [self.xml endElement: @"mrt"];
