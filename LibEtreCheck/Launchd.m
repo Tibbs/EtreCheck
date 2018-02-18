@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2017. All rights reserved.
+ ** Copyright (c) 2017-2018. All rights reserved.
  **********************************************************************/
 
 #import "Launchd.h"
@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "EtreCheckConstants.h"
 #import "NSDictionary+Etresoft.h"
+#import "NSString+Etresoft.h"
 #import <ServiceManagement/ServiceManagement.h>
 
 // A wrapper around all things launchd.
@@ -291,26 +292,31 @@
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  // Split lines by new lines.
-  NSArray * lines = [plist componentsSeparatedByString: @"\n"];
-  
-  // Am I parsing services now?
-  bool parsingServices = false;
-  
-  for(NSString * line in lines)
+  // Make sure this is valid.
+  if([NSString isValid: plist])
     {
-    // If I am parsing services, look for the end indicator.
-    if(parsingServices)
-      {
-      // An argument could be a bare "}". Do a string check with whitespace.
-      if([line isEqualToString: @"	}"])
-        break;        
+    // Split lines by new lines.
+    NSArray * lines = [plist componentsSeparatedByString: @"\n"];
     
-      [self parseLine: line inDomain: domain];
-      }
+    // Am I parsing services now?
+    bool parsingServices = false;
+    
+    for(NSString * line in lines)
+      {
+      // If I am parsing services, look for the end indicator.
+      if(parsingServices)
+        {
+        // An argument could be a bare "}". Do a string check with 
+        // whitespace.
+        if([line isEqualToString: @"	}"])
+          break;        
       
-    else if([line isEqualToString: @"	services = {"])
-      parsingServices = true;
+        [self parseLine: line inDomain: domain];
+        }
+        
+      else if([line isEqualToString: @"	services = {"])
+        parsingServices = true;
+      }
     }
     
   [plist release];

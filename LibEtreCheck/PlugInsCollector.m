@@ -1,7 +1,7 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2018. All rights reserved.
  **********************************************************************/
 
 #import "PlugInsCollector.h"
@@ -245,23 +245,27 @@
     {
     NSString * content =
       [[NSString alloc]
-        initWithData: data encoding:NSUTF8StringEncoding];
+        initWithData: data encoding: NSUTF8StringEncoding];
     
-    NSScanner * scanner = [NSScanner scannerWithString: content];
-  
-    [scanner scanUpToString: @"Macintosh" intoString: NULL];
-    [scanner scanUpToString: @"<td>" intoString: NULL];
-    [scanner scanString: @"<td>" intoString: NULL];
-    [scanner scanUpToString: @"<td>" intoString: NULL];
-    [scanner scanString: @"<td>" intoString: NULL];
+    // Make sure this is valid.
+    if([NSString isValid: content])
+      {
+      NSScanner * scanner = [NSScanner scannerWithString: content];
+    
+      [scanner scanUpToString: @"Macintosh" intoString: NULL];
+      [scanner scanUpToString: @"<td>" intoString: NULL];
+      [scanner scanString: @"<td>" intoString: NULL];
+      [scanner scanUpToString: @"<td>" intoString: NULL];
+      [scanner scanString: @"<td>" intoString: NULL];
 
-    NSString * currentVersion = nil;
-    
-    bool scanned =
-      [scanner scanUpToString: @"</td>" intoString: & currentVersion];
-    
-    if(scanned)
-      version = currentVersion;
+      NSString * currentVersion = nil;
+      
+      bool scanned =
+        [scanner scanUpToString: @"</td>" intoString: & currentVersion];
+      
+      if(scanned)
+        version = currentVersion;
+      }
       
     [content release];
     }

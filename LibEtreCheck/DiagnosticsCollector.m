@@ -1,7 +1,7 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2014-2017. All rights reserved.
+ ** Copyright (c) 2014-2018. All rights reserved.
  **********************************************************************/
 
 #import "DiagnosticsCollector.h"
@@ -371,8 +371,10 @@
   NSString * contents =
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  [DiagnosticsCollector 
-    parseDiagnosticData: contents event: event model: self.model];
+  // Make sure this is valid.
+  if([NSString isValid: contents])
+    [DiagnosticsCollector 
+      parseDiagnosticData: contents event: event model: self.model];
   
   [contents release];
   }
@@ -674,7 +676,7 @@
     
   if([event.details length])
     {
-    [self.xml addElement: @"details" valueAsCDATA: event.details];
+    [self.xml addElement: @"details" safeASCII: event.details];
     
     NSAttributedString * detailsURL =
       [self.model getDetailsURLFor: name];
@@ -688,7 +690,7 @@
 
   [self.result appendString: @"\n"];
   
-  [self.xml addElement: @"information" valueAsCDATA: event.information];
+  [self.xml addElement: @"information" safeASCII: event.information];
   
   if([event.information length] > 0)
     [self.result 

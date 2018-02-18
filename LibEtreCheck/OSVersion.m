@@ -1,12 +1,13 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2017. All rights reserved.
+ ** Copyright (c) 2017-2018. All rights reserved.
  **********************************************************************/
 
 #import "OSVersion.h"
 #import "SubProcess.h"
 #import "NumberFormatter.h"
 #import "EtreCheckConstants.h"
+#import "NSString+Etresoft.h"
 
 // A wrapper around the OS version.
 @implementation OSVersion
@@ -113,44 +114,48 @@
         initWithData: sw_vers.standardOutput
         encoding: NSUTF8StringEncoding];
       
-    myBuild = 
-      [data 
-        stringByTrimmingCharactersInSet: 
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    [data release];
-    
-    [myBuild retain];
-    
-    if(self.build.length >= 3)
+    // Make sure this is valid.
+    if([NSString isValid: data])
       {
-      NSString * major = 
-        [self.build substringWithRange: NSMakeRange(0, 2)];
+      myBuild = 
+        [data 
+          stringByTrimmingCharactersInSet: 
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
-      NSString * minor = 
-        [self.build substringWithRange: NSMakeRange(2, 1)];
-                
-      [self willChangeValueForKey: @"major"];
-      [self willChangeValueForKey: @"minor"];
+      [myBuild retain];
+      
+      if(self.build.length >= 3)
+        {
+        NSString * major = 
+          [self.build substringWithRange: NSMakeRange(0, 2)];
         
-      myMajor = 
-        [[[NumberFormatter sharedNumberFormatter] 
-          convertFromString: major] intValue];
-            
-      myMinor = [minor characterAtIndex: 0] - 'A';
+        NSString * minor = 
+          [self.build substringWithRange: NSMakeRange(2, 1)];
+                  
+        [self willChangeValueForKey: @"major"];
+        [self willChangeValueForKey: @"minor"];
+          
+        myMajor = 
+          [[[NumberFormatter sharedNumberFormatter] 
+            convertFromString: major] intValue];
+              
+        myMinor = [minor characterAtIndex: 0] - 'A';
 
-      if(self.minor > 0)
-        myVersion = 
-          [[NSString alloc] 
-            initWithFormat: @"10.%d.%d", self.major - 4, self.minor];
-      else
-        myVersion = 
-          [[NSString alloc] 
-            initWithFormat: @"10.%d", self.major];
-        
-      [self didChangeValueForKey: @"minor"];
-      [self didChangeValueForKey: @"major"];        
+        if(self.minor > 0)
+          myVersion = 
+            [[NSString alloc] 
+              initWithFormat: @"10.%d.%d", self.major - 4, self.minor];
+        else
+          myVersion = 
+            [[NSString alloc] 
+              initWithFormat: @"10.%d", self.major];
+          
+        [self didChangeValueForKey: @"minor"];
+        [self didChangeValueForKey: @"major"];        
+        }
       }
+      
+    [data release];
     }
     
   [sw_vers release];

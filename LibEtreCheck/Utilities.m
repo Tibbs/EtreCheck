@@ -1,7 +1,7 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2014. All rights reserved.
+ ** Copyright (c) 2014-2018. All rights reserved.
  **********************************************************************/
 
 #import "Utilities.h"
@@ -929,45 +929,49 @@
 + (NSString *) parseSignature: (NSData *) data
   forPath: (NSString *) path
   {
+  NSString * result = kSignatureNotValid;
+    
   NSString * output =
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  NSString * result = kSignatureNotValid;
-  
-  if([output length])
+  // Make sure this is valid.
+  if([NSString isValid: output])
     {
-    NSString * expectedOutput =
-      [NSString
-        stringWithFormat:
-          @"%@: valid on disk\n"
-          "%@: satisfies its Designated Requirement\n"
-          "%@: explicit requirement satisfied\n",
-          path,
-          path,
-          path];
-      
-    if([output isEqualToString: expectedOutput])
-      result = kSignatureValid;
-      
-    else
+    if([output length])
       {
-      expectedOutput =
+      NSString * expectedOutput =
         [NSString
           stringWithFormat:
-            @"%@: code object is not signed", path];
-
-      // The wording has changed slightly on this.
-      if([output hasPrefix: expectedOutput])
-        result = kNotSigned;
-      
+            @"%@: valid on disk\n"
+            "%@: satisfies its Designated Requirement\n"
+            "%@: explicit requirement satisfied\n",
+            path,
+            path,
+            path];
+        
+      if([output isEqualToString: expectedOutput])
+        result = kSignatureValid;
+        
       else
         {
         expectedOutput =
           [NSString
-            stringWithFormat: @"%@: No such file or directory\n", path];
+            stringWithFormat:
+              @"%@: code object is not signed", path];
 
-        if([output isEqualToString: expectedOutput])
-          result = kExecutableMissing;
+        // The wording has changed slightly on this.
+        if([output hasPrefix: expectedOutput])
+          result = kNotSigned;
+        
+        else
+          {
+          expectedOutput =
+            [NSString
+              stringWithFormat: @"%@: No such file or directory\n", path];
+
+          if([output isEqualToString: expectedOutput])
+            result = kExecutableMissing;
+          }
         }
       }
     }

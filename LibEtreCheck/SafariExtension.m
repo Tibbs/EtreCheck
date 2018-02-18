@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2017. All rights reserved.
+ ** Copyright (c) 2017-2018. All rights reserved.
  **********************************************************************/
 
 #import "SafariExtension.h"
@@ -167,28 +167,33 @@
         initWithData: subProcess.standardOutput
         encoding: NSUTF8StringEncoding];
     
-    NSString * infoPlistPath =
-      [infoPlistPathString stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    
-    [infoPlistPathString release];
-  
-    NSData * data = [[NSData alloc] initWithContentsOfFile: infoPlistPath];
-    
-    if(data.length > 0)
+    // Make sure this is valid.
+    if([NSString isValid: infoPlistPathString])
       {
-      NSError * error;
-      NSPropertyListFormat format;
+      NSString * infoPlistPath =
+        [infoPlistPathString stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
-      plist =
-        [NSPropertyListSerialization
-          propertyListWithData: data
-          options: NSPropertyListImmutable
-          format: & format
-          error: & error];
+      NSData * data = 
+        [[NSData alloc] initWithContentsOfFile: infoPlistPath];
+      
+      if(data.length > 0)
+        {
+        NSError * error;
+        NSPropertyListFormat format;
+        
+        plist =
+          [NSPropertyListSerialization
+            propertyListWithData: data
+            options: NSPropertyListImmutable
+            format: & format
+            error: & error];
+        }
+        
+      [data release];
       }
       
-    [data release];
+    [infoPlistPathString release];
     }
     
   [subProcess release];

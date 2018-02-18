@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2015-2017. All rights reserved.
+ ** Copyright (c) 2015-2018. All rights reserved.
  **********************************************************************/
 
 #import "XMLBuilder.h"
@@ -737,6 +737,16 @@
 - (void) addElement: (NSString *) name valueAsCDATA: (NSString *) value
   {
   [self addElement: name valueAsCDATA: value attributes: nil];
+  }
+  
+// Add an element and potentially invalid value converted to plain ASCII.
+- (void) addElement: (NSString *) name safeASCII: (NSString *) value
+  {
+  // Make sure the string is really UTF8.
+  [self 
+    addElement: name 
+    valueAsCDATA: [self validString: value] 
+    attributes: nil];
   }
   
 // Add an element and value with a convenience function.
@@ -1541,6 +1551,72 @@
   free(characters);
 
   return result;
+  }
+
+// Validate a string.
+- (NSString *) validString: (NSString *) string
+  {
+  NSUInteger length = [string length];
+  
+  unichar * characters = (unichar *)malloc(sizeof(unichar) * (length + 1));
+  unichar * end = characters + length;
+  
+  [string getCharacters: characters range: NSMakeRange(0, length)];
+  
+  unichar * output = (unichar *)malloc(sizeof(unichar) * (length + 1));
+  unichar * p = output;
+
+  for(unichar * ch = characters; ch < end; ++ch)
+    {
+    if(((*ch >= 'A') && (*ch <= 'Z')) || ((*ch >= 'a') && (*ch <= 'z')))
+      *p++ = *ch;
+    else if((*ch >= '0') && (*ch <= '9'))
+      *p++ = *ch;
+    else if(*ch == ':' || *ch == '_')
+      *p++ = *ch;
+    else if(*ch == '-' || *ch == '.')
+      *p++ = *ch;
+    else if((*ch >= L'\u00C0') && (*ch <= L'\u00D6'))
+      *p++ = *ch;
+    else if((*ch == L'\u00D8') || ((*ch >= L'\u00D9') && (*ch <= L'\u00F6')))
+      *p++ = *ch;
+    else if((*ch >= L'\u00F8') && (*ch <= L'\u02FF'))
+      *p++ = *ch;
+    else if((*ch >= L'\u0370') && (*ch <= L'\u037D'))
+      *p++ = *ch;
+    else if((*ch >= L'\u037F') && (*ch <= L'\u1FFF'))
+      *p++ = *ch;
+    else if((*ch >= L'\u200C') && (*ch <= L'\u200D'))
+      *p++ = *ch;
+    else if((*ch >= L'\u2070') && (*ch <= L'\u218F'))
+      *p++ = *ch;
+    else if((*ch >= L'\u2C00') && (*ch <= L'\u2FEF'))
+      *p++ = *ch;
+    else if((*ch >= L'\u3001') && (*ch <= L'\uD7FF'))
+      *p++ = *ch;
+    else if((*ch >= L'\uF900') && (*ch <= L'\uFDCF'))
+      *p++ = *ch;
+    else if((*ch >= L'\uFDF0') && (*ch <= L'\uFFFD'))
+      *p++ = *ch;
+    else if((*ch >= L'\u0300') && (*ch <= L'\u036F'))
+      *p++ = *ch;
+    else if((*ch >= L'\u203F') && (*ch <= L'\u2040'))
+      *p++ = *ch;
+    //if((*ch >= L'\U00010000') && (*ch <= L'\U000EFFFF'))
+    //  continue;      
+    }
+
+  free(characters);
+    
+  NSString * valid = 
+    [NSString stringWithCharacters: output length: p - output];
+  
+  free(output);
+  
+  if(valid == nil)
+    return @"";
+    
+  return valid;
   }
 
 @end

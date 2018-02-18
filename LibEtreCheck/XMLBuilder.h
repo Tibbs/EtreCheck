@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2015-2017. All rights reserved.
+ ** Copyright (c) 2015-2018. All rights reserved.
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
@@ -127,6 +127,9 @@
 - (void) addElement: (NSString *) name 
   valueAsCDATA: (NSString *) value attributes: (NSDictionary *) attributes;
 - (void) addElement: (NSString *) name valueAsCDATA: (NSString *) value;
+
+// Add an element and potentially invalid value converted to plain ASCII.
+- (void) addElement: (NSString *) name safeASCII: (NSString *) value;
 
 // Add an element, value, and attributes with a convenience function.
 - (void) addElement: (NSString *) name 

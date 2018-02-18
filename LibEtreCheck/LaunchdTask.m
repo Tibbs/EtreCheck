@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2017. All rights reserved.
+ ** Copyright (c) 2017-2018. All rights reserved.
  **********************************************************************/
 
 #import "LaunchdTask.h"
@@ -141,53 +141,58 @@
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  NSString * program = nil;
-  NSMutableArray * arguments = [NSMutableArray new];
-  
-  // Split lines by new lines.
-  NSArray * lines = [plist componentsSeparatedByString: @"\n"];
-  
-  // Am I parsing arguments now?
-  bool parsingArguments = false;
-  
-  for(NSString * line in lines)
+  // Make sure this is valid.
+  if([NSString isValid: plist])
     {
-    NSArray * parts = [self parseLine: line];
-
-    NSString * key = [parts firstObject];
-    NSString * value = 
-      parts.count == 1
-        ? nil
-        : [parts lastObject];
+    NSString * program = nil;
+    NSMutableArray * arguments = [NSMutableArray new];
     
-    if(key.length == 0)
-      continue;
-      
-    // If I am parsing arguments, look for the end indicator.
-    if(parsingArguments)
+    // Split lines by new lines.
+    NSArray * lines = [plist componentsSeparatedByString: @"\n"];
+    
+    // Am I parsing arguments now?
+    bool parsingArguments = false;
+    
+    for(NSString * line in lines)
       {
-      // An argument could be a bare "}". Do a string check with whitespace.
-      if([line isEqualToString: @"	}"])
-        parsingArguments = false;        
-      else
-        [arguments addObject: key];
+      NSArray * parts = [self parseLine: line];
+
+      NSString * key = [parts firstObject];
+      NSString * value = 
+        parts.count == 1
+          ? nil
+          : [parts lastObject];
+      
+      if(key.length == 0)
+        continue;
+        
+      // If I am parsing arguments, look for the end indicator.
+      if(parsingArguments)
+        {
+        // An argument could be a bare "}". Do a string check with whitespace.
+        if([line isEqualToString: @"	}"])
+          parsingArguments = false;        
+        else
+          [arguments addObject: key];
+        }
+        
+      else if([key isEqualToString: @"program"])
+        {
+        [program release];
+        
+        program = [value retain];
+        }
+        
+      else if([line isEqualToString: @"	arguments = {"])
+        parsingArguments = true;
       }
       
-    else if([key isEqualToString: @"program"])
-      {
-      [program release];
-      
-      program = [value retain];
-      }
-      
-    else if([line isEqualToString: @"	arguments = {"])
-      parsingArguments = true;
+    [self parseExecutable: program arguments: arguments];  
+    
+    [arguments release];
+    [program release];
     }
     
-  [self parseExecutable: program arguments: arguments];  
-
-  [arguments release];
-  [program release];
   [plist release];
   }
   

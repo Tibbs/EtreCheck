@@ -1,6 +1,6 @@
 /***********************************************************************
  ** Etresoft, Inc.
- ** Copyright (c) 2017. All rights reserved.
+ ** Copyright (c) 2017-2018. All rights reserved.
  **********************************************************************/
 
 #import "LaunchdLoadedTask.h"
@@ -170,62 +170,66 @@
   NSString * plist = 
     [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  if([plist hasPrefix: @"Could not find service "])
-    self.status = kStatusNotLoaded;
-  else
+  // Make sure this is valid.
+  if([NSString isValid: plist])
     {
-    self.status = kStatusLoaded;
-    
-    // Split lines by new lines.
-    NSArray * lines = [plist componentsSeparatedByString: @"\n"];
-    
-    bool parsingArguments = false;
-    
-    for(NSString * line in lines)
+    if([plist hasPrefix: @"Could not find service "])
+      self.status = kStatusNotLoaded;
+    else
       {
-      NSArray * parts = [self parseLine: line];
-
-      NSString * key = [parts firstObject];
-      NSString * value = 
-        parts.count == 1
-          ? nil
-          : [parts lastObject];
+      self.status = kStatusLoaded;
       
-      if(key.length == 0)
-        continue;
-        
-      // If I am parsing arguments, look for the end indicator.
-      if(parsingArguments)
+      // Split lines by new lines.
+      NSArray * lines = [plist componentsSeparatedByString: @"\n"];
+      
+      bool parsingArguments = false;
+      
+      for(NSString * line in lines)
         {
-        // An argument could be a bare "}". Do a string check with 
-        // whitespace.
-        if([line isEqualToString: @"	}"])
-          parsingArguments = false;        
-        else
-          [arguments addObject: key];
+        NSArray * parts = [self parseLine: line];
+
+        NSString * key = [parts firstObject];
+        NSString * value = 
+          parts.count == 1
+            ? nil
+            : [parts lastObject];
+        
+        if(key.length == 0)
+          continue;
+          
+        // If I am parsing arguments, look for the end indicator.
+        if(parsingArguments)
+          {
+          // An argument could be a bare "}". Do a string check with 
+          // whitespace.
+          if([line isEqualToString: @"	}"])
+            parsingArguments = false;        
+          else
+            [arguments addObject: key];
+          }
+          
+        else if([key isEqualToString: @"program"])
+          {
+          [program release];
+          
+          program = [value retain];
+          }
+          
+        else if([line isEqualToString: @"	arguments = {"])
+          parsingArguments = true;
+
+        else if([key isEqualToString: @"pid"])
+          self.PID = value;
+        
+        else if([key isEqualToString: @"last exit code"])
+          self.lastExitCode = [self parseLastExitCode: value];
+
+        else if([key isEqualToString: @"path"])
+          self.path = [value stringByAbbreviatingWithTildeInPath];
         }
         
-      else if([key isEqualToString: @"program"])
-        {
-        [program release];
-        
-        program = [value retain];
-        }
-        
-      else if([line isEqualToString: @"	arguments = {"])
-        parsingArguments = true;
-
-      else if([key isEqualToString: @"pid"])
-        self.PID = value;
-      
-      else if([key isEqualToString: @"last exit code"])
-        self.lastExitCode = [self parseLastExitCode: value];
-
-      else if([key isEqualToString: @"path"])
-        self.path = [value stringByAbbreviatingWithTildeInPath];
+      [self parseExecutable: program arguments: arguments];  
       }
-      
-    [self parseExecutable: program arguments: arguments];  
     }
     
   [arguments release];

@@ -1,7 +1,7 @@
 /***********************************************************************
- ** Etresoft
+ ** Etresoft, Inc.
  ** John Daniel
- ** Copyright (c) 2014-2017. All rights reserved.
+ ** Copyright (c) 2014-2018. All rights reserved.
  **********************************************************************/
 
 #import "SecurityCollector.h"
@@ -248,25 +248,30 @@
   // I consolidate everything one day, I'll fix this. But not today.
   
   NSString * xml = 
-    [[NSString alloc] initWithData: data encoding:NSUTF8StringEncoding];
+    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
   
-  NSScanner * scanner = [[NSScanner alloc] initWithString: xml];
-  
-  BOOL success = 
-    [scanner 
-      scanUpToString: @"CFBundleShortVersionString=\"" intoString: NULL];
-      
-  if(success)
+  // Make sure this is valid.
+  if([NSString isValid: xml])
     {
-    success = 
-      [scanner 
-        scanString: @"CFBundleShortVersionString=\"" intoString: NULL];
+    NSScanner * scanner = [[NSScanner alloc] initWithString: xml];
     
+    BOOL success = 
+      [scanner 
+        scanUpToString: @"CFBundleShortVersionString=\"" intoString: NULL];
+        
     if(success)
-      [scanner scanUpToString: @"\"" intoString: & version];
+      {
+      success = 
+        [scanner 
+          scanString: @"CFBundleShortVersionString=\"" intoString: NULL];
+      
+      if(success)
+        [scanner scanUpToString: @"\"" intoString: & version];
+      }
+      
+    [scanner release];
     }
     
-  [scanner release];
   [xml release];
   
   return version;
@@ -565,17 +570,21 @@
         initWithData: subProcess.standardOutput
         encoding: NSUTF8StringEncoding];
     
-    NSScanner * scanner = [NSScanner scannerWithString: status];
-    
-    if([scanner scanString: kRootlessPrefix intoString: NULL])
-      [scanner scanUpToString: @"." intoString: & result];
+    // Make sure this is valid.
+    if([NSString isValid: status])
+      {
+      NSScanner * scanner = [NSScanner scannerWithString: status];
       
-    if(![result length])
-      result =
-        [NSString
-          stringWithFormat:
-            ECLocalizedString(@"/usr/bin/csrutil returned \"%@\""), status];
-    
+      if([scanner scanString: kRootlessPrefix intoString: NULL])
+        [scanner scanUpToString: @"." intoString: & result];
+        
+      if(![result length])
+        result =
+          [NSString
+            stringWithFormat:
+              ECLocalizedString(@"/usr/bin/csrutil returned \"%@\""), status];
+      }
+      
     [status release];
     }
     
