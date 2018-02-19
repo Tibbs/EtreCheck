@@ -130,6 +130,10 @@
 // Check for an unsigned file.
 - (void) checkUnsigned: (LaunchdFile *) file
   {
+  // Go ahead and exempt anything in /System.
+  if([file.path hasPrefix: @"/System/"])
+    return;
+    
   if([file.signature isEqualToString: kSignatureApple])
     return;
     

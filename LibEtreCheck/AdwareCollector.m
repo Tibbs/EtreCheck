@@ -217,6 +217,10 @@
 // Collect the adware status of a launchd file.
 - (void) checkAdware: (LaunchdFile *) file 
   {
+  // Go ahead and exempt anything in /System.
+  if([file.path hasPrefix: @"/System/"])
+    return;
+    
   // Check for a known adware suffix.
   if([self isAdwareSuffix: file])
     file.adware = kAdwareSuffix;
