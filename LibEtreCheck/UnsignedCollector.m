@@ -172,6 +172,9 @@
     [[[parts reverseObjectEnumerator] allObjects] 
       componentsJoinedByString: @"."];
     
+  if(![NSString isValid: domainName]) 
+    return;
+    
   dispatch_sync(
     self.queue, 
     ^{
