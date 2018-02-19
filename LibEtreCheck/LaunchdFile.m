@@ -459,11 +459,11 @@
   if(exists)
     {
     if(hidden)
-      self.adware = kAdwarePlistHidden;
+      self.details = kUnsignedPlistHidden;
     else if(permissions)
       self.details = kUnsignedPlistPermissions;
     else if(locked)
-      self.adware = kAdwarePlistLocked;
+      self.details = kUnsignedPlistLocked;
     }
     
   if(self.adware == nil)
