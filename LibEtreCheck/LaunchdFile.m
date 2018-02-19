@@ -905,9 +905,16 @@
     [xml startElement: @"arguments"];
     
     for(NSString * argument in self.arguments)
-      [xml addElement: @"argument" value: [Utilities cleanPath: argument]];
+      [xml addElement: @"argument" value: argument];
       
     [xml endElement: @"arguments"];
+
+    [xml startElement: @"arguments_safe"];
+    
+    for(NSString * argument in self.arguments)
+      [xml addElement: @"argument" value: [Utilities cleanPath: argument]];
+      
+    [xml endElement: @"arguments_safe"];
     }
     
   [xml addElement: @"valid" boolValue: self.configScriptValid];

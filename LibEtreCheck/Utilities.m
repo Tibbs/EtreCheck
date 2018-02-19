@@ -2059,18 +2059,28 @@
 // Redact any user names in a string.
 + (NSString *) cleanString: (NSString *) string
   {
-  if([string hasSuffix: @"@me.com"])
-    return
-      [NSString
-        stringWithFormat:
-          @"%@@me.com", ECLocalizedString(@"[redacted]")];
-
-  if([string hasSuffix: @"@mac.com"])
-    return
-      [NSString
-        stringWithFormat:
-          @"%@@mac.com", ECLocalizedString(@"[redacted]")];
-
+  // Redact an e-mail.
+  NSRange emailRange = [string rangeOfString: @"@"];
+  
+  if(emailRange.location != NSNotFound)
+    {
+    NSArray * parts = [string componentsSeparatedByString: @"@"];
+    
+    if(parts.count == 2)
+      {
+      NSString * account = [parts objectAtIndex: 0];
+      NSString * domain = [parts objectAtIndex: 1];
+      
+      if((account.length > 0) && (domain.length > 0))
+        return 
+          [NSString
+            stringWithFormat:
+              @"%@@%@", 
+              [self cleanName: account], 
+              [self cleanName: domain]];
+      }
+    }
+    
   NSString * username = NSUserName();
   NSString * fullname = NSFullUserName();
 
