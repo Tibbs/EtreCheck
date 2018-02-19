@@ -270,26 +270,28 @@
     if([file.executable hasSuffix: @".sh"])
       return true;
     
-  // Now check for /Library/*.
-  if([file.executable hasPrefix: @"/Library/"])
-    {
-    NSString * dirname = 
-      [file.executable stringByDeletingLastPathComponent];
-  
-    if([dirname isEqualToString: @"/Library"])
-      if([[file.executable pathExtension] length] == 0)
-        return true;
-        
-    // Now check for /Library/*/*.
-    NSString * name = [file.executable lastPathComponent];
-    NSString * parent = [dirname lastPathComponent];
-    NSString * library = [dirname stringByDeletingLastPathComponent];
+  // Exempt any files with valid signatures from this.
+  if(![file.signature isEqualToString: kSignatureValid])  
+    // Now check for /Library/*.
+    if([file.executable hasPrefix: @"/Library/"])
+      {
+      NSString * dirname = 
+        [file.executable stringByDeletingLastPathComponent];
     
-    if([library isEqualToString: @"/Library"])
-      if([name isEqualToString: parent])
+      if([dirname isEqualToString: @"/Library"])
         if([[file.executable pathExtension] length] == 0)
           return true;
-    }
+          
+      // Now check for /Library/*/*.
+      NSString * name = [file.executable lastPathComponent];
+      NSString * parent = [dirname lastPathComponent];
+      NSString * library = [dirname stringByDeletingLastPathComponent];
+      
+      if([library isEqualToString: @"/Library"])
+        if([name isEqualToString: parent])
+          if([[file.executable pathExtension] length] == 0)
+            return true;
+      }
     
   // Now check arguments.
   if([file.arguments count] >= 5)
@@ -323,6 +325,25 @@
         return true;
       }
 
+  // UUID pattern.
+  for(NSString * argument in file.arguments)
+    if(argument.length == 36)
+      {
+      NSArray * parts = [argument componentsSeparatedByString: @"-"];
+      
+      if(parts.count >= 5)
+        {
+        NSUInteger c1 = [[parts objectAtIndex: 0] length];
+        NSUInteger c2 = [[parts objectAtIndex: 1] length];
+        NSUInteger c3 = [[parts objectAtIndex: 2] length];
+        NSUInteger c4 = [[parts objectAtIndex: 3] length];
+        NSUInteger c5 = [[parts objectAtIndex: 4] length];
+        
+        if((c1 == 8) && (c2 == 4) && (c3 == 4) && (c4 == 4) && (c5 == 12))
+          return true;
+        }
+      }
+    
   // This is good enough for now.
   return false;
   }

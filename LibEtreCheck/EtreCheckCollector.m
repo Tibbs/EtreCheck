@@ -459,7 +459,10 @@
       BOOL isWebKit = 
         [process.path 
           hasPrefix: @"/System/Library/Frameworks/WebKit.framework/"];
-          
+         
+      if([process.path isEqualToString: @"com.apple.WebKit"])
+        isWebKit = YES;
+        
       NSString * bundlePath = 
         isWebKit
           ? @"/Applications/Safari.app"
