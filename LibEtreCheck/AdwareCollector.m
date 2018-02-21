@@ -275,7 +275,12 @@
       return true;
     
   // Exempt any files with valid signatures from this.
-  if(![file.signature isEqualToString: kSignatureValid])  
+  BOOL validSignature = [file.signature isEqualToString: kSignatureValid];
+  
+  if([file.signature isEqualToString: kSignatureApple])
+    validSignature = YES;
+  
+  if(!validSignature)  
     // Now check for /Library/*.
     if([file.executable hasPrefix: @"/Library/"])
       {
@@ -330,24 +335,42 @@
       }
 
   // UUID pattern.
-  for(NSString * argument in file.arguments)
-    if(argument.length == 36)
+  if(file.arguments.count > 1)
+    {
+    BOOL isn = NO;
+  
+    for(NSUInteger i = 0; i < file.arguments.count; ++i)
       {
-      NSArray * parts = [argument componentsSeparatedByString: @"-"];
+      NSString * argument = [file.arguments objectAtIndex: i];
       
-      if(parts.count >= 5)
+      if(isn)
         {
-        NSUInteger c1 = [[parts objectAtIndex: 0] length];
-        NSUInteger c2 = [[parts objectAtIndex: 1] length];
-        NSUInteger c3 = [[parts objectAtIndex: 2] length];
-        NSUInteger c4 = [[parts objectAtIndex: 3] length];
-        NSUInteger c5 = [[parts objectAtIndex: 4] length];
-        
-        if((c1 == 8) && (c2 == 4) && (c3 == 4) && (c4 == 4) && (c5 == 12))
-          return true;
+        if(argument.length == 36)
+          {
+          NSArray * parts = [argument componentsSeparatedByString: @"-"];
+          
+          if(parts.count >= 5)
+            {
+            NSUInteger c1 = [[parts objectAtIndex: 0] length];
+            NSUInteger c2 = [[parts objectAtIndex: 1] length];
+            NSUInteger c3 = [[parts objectAtIndex: 2] length];
+            NSUInteger c4 = [[parts objectAtIndex: 3] length];
+            NSUInteger c5 = [[parts objectAtIndex: 4] length];
+            
+            if((c1 == 8) && (c2 == 4) && (c3 == 4) && (c4 == 4) && (c5 == 12))
+              return true;
+            }
+          }
+          
+        isn = NO;
         }
+        
+      else if([argument isEqualToString: @"-isn"])
+        isn = YES;
       }
+    }
     
+     
   // This is good enough for now.
   return false;
   }
