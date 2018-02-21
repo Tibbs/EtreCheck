@@ -4660,6 +4660,7 @@
     <string>se.ovpn.ovpn-daemon.plist</string>
     <string>sh.proxy.safejumper.plist</string>
     <string>sk.mediaware.mac.numpad.plist</string>
+    <string>sleepwatcher-IamWakeUp.plist</string>
     <string>spellchecker_lu.plist</string>
     <string>squeezeboxServerEND.plist</string>
     <string>squeezeboxServerENDnotifier.plist</string>

@@ -4,6 +4,7 @@ use strict;
 
 use Getopt::Long;
 use DBI;
+use File::Spec;
 
 my $connection;
 my $user;
@@ -15,34 +16,33 @@ GetOptions(
   'password=s' => \$password
   );
 
-my $output = shift;
+my $outputDir = shift;
 
 die usage()
-  if !-f $output;
+  if !-d $outputDir;
 
 my $db = DBI->connect($connection, $user, $password, { RaiseError => 1 });
 
 # Spit out the plist file.
-run($db, $output);
+run(
+  $db, 
+  ['adwareextensions', 'blacklist', 'blacklist_match', 'blacklist_suffix'],
+  File::Spec->join($outputDir, 'adware.plist'));
+
+run(
+  $db, 
+  ['whitelist', 'whitelist_prefix'],
+  File::Spec->join($outputDir, 'whitelist.plist'));
 
 $db->disconnect;
 
 sub run
   {
   my $db = shift;
+  my $categories = shift;
   my $output = shift;
 
-  my $select = $db->prepare("select distinct category from adware order by category") 
-    or die "Can't prepare statement: $DBI::errstr";
- 
-  my $result = $select->execute
-    or die "Can't execute statement: $DBI::errstr";
- 
-  my $rows = $select->fetchall_arrayref({});
-
-  my @categories = map { $_->{category} } @{$rows};
-
-  $select = $db->prepare("select name from adware where category = ? order by name") 
+  my $select = $db->prepare("select name from adware where category = ? order by name") 
     or die "Can't prepare statement: $DBI::errstr";
 
   open(OUT, ">$output")
@@ -53,12 +53,12 @@ sub run
   print OUT qq{<plist version="1.0">\n};
   print OUT qq{<dict>\n};
 
-  foreach my $category (@categories)
+  foreach my $category (@{$categories})
     {
     print OUT "  <key>$category</key>\n";
     print OUT "  <array>\n";
     
-    $result = $select->execute($category)
+    my $result = $select->execute($category)
       or die "Can't execute statement: $DBI::errstr";
  
     while(my $row = $select->fetchrow_hashref())
@@ -86,6 +86,6 @@ Usage: sql2plist.pl <DBI connection> [options...]
     user = Database user 
     password = Database password
 
-Example usage: perl sql2plist.pl --db=dbi:SQLite:adware.db ../EtreCheck/adware.plist
+Example usage: perl sql2plist.pl --db=dbi:SQLite:adware.db ../LibEtreCheck
 EOS
   }
