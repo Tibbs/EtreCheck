@@ -83,6 +83,16 @@
     
   BOOL success = NO;
   
+  struct sigaction sa;
+  
+  sa.sa_handler = SIG_IGN;
+  
+  sigemptyset(& sa.sa_mask);
+  
+  sa.sa_flags = 0;
+  
+  sigaction(SIGCHLD, & sa, 0);
+  
   if(self.usePseudoTerminal)
     success = [self forkpty: program arguments: args];
   else
@@ -321,11 +331,7 @@
   close(master);
 
   free(buffer);
-  
-  while(waitpid(pid, & myResult, 0) == -1)
-    if(errno != EINTR)
-      break;
-    
+      
   posix_spawn_file_actions_destroy(& child_fd_actions);
 
   return !self.timedout;
@@ -495,10 +501,6 @@
   close(errorPipe[0]);
 
   free(buffer);
-  
-  while(waitpid(pid, & myResult, 0) == -1)
-    if(errno != EINTR)
-      break;
   
   posix_spawn_file_actions_destroy(& child_fd_actions);
 
