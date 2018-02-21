@@ -6,7 +6,7 @@
   Copyright (c) 2013 Etresoft. All rights reserved.
 */
 
-"/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.\n";
+"/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Bibliothèque/Logs/DiagnosticReports.\n    Lancer EtreCheck en tant qu’administrateur pour afficher plus d’informations.\n";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "ascsearch" = "https://communities.apple.com/fr/search.jspa?";
 "belowaverageperformance" = "Inférieure à la moyenne";
@@ -22,7 +22,7 @@
 "loginhookdeprecated" = "    Les login hooks sont obsolètes\n";
 "machineattributes" = "/System/Library/PrivateFrameworks/ServerInformation.framework/Versions/A/Resources/French.lproj/SIMachineAttributes.plist";
 "machinitdeprecated" = "    Les éléments Mach Init sont obsolètes\n";
-"oldmachineattributes" = "/System/Library/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/French.lproj/XSMachineAttributes.plist";
+"oldmachineattributes" = "/System/Bibliothèque/PrivateFrameworks/ServerKit.framework/Versions/A/Resources/French.lproj/XSMachineAttributes.plist";
 "poorperformance" = "Médiocre";
 "startupitemsdeprecated" = "    Les éléments de démarrage ne fonctionne plus dans OS X Yosemite ou ultérieur\n";
 "timemachineinformationnotavailable" = "    Informations Time Machine non disponibles\n\n";
@@ -57,10 +57,10 @@
 "    iCloud Quota: %@ available" = "    Quota iCloud : %@ disponible";
 "    iCloud Status: " = "    Bilan iCloud : ";
 "    Interface %@: %@\n" = "Interface %@ : %@\n";
-"    Launchd job status not available.\n" = "État du travail de ​​Launchd pas disponible.\n";
+"    Launchd job status not available.\n" = "État des opérations de ​​launchd non disponible.\n";
 "    Mobile backups: " = "    Sauvegardes mobiles : ";
 "    None\n" = "    Aucun\n";
-"    Operating system information not found!\n" = "    Information du système d’exploitation non trouvé !\n";
+"    Operating system information not found!\n" = "    Informations du système d’exploitation non trouvé !\n";
 "    Proxies: %@\n" = "    Passerelles : %@\n";
 "    Skip System Files: " = "    Ignorer les fichiers du système : ";
 "    Time Machine not configured!\n\n" = "    Time Machine n’est pas configuré !\n\n";
@@ -79,7 +79,7 @@
 " - No signature!" = "Aucune signature !";
 " - Shell script!" = "Script du shell !";
 " (cache only)" = " (seulement en cache)";
-" Cannot contact Adobe" = " Adobe inaccessible";
+" Cannot contact Adobe" = " Adobe injoignable";
 " Missing!" = "non-trouvé !";
 "%@ (hidden)" = "%@ (masqué)";
 "%@%@ (%@%@) %@ %@: %@ %@%@\n" = "%@%@ (%@%@) %@ %@ : %@ %@%@\n";
@@ -128,8 +128,8 @@
 "Empty" = "Vide";
 "en" = "fr";
 "enabled" = "activée";
-"Encrypted" = "Crypté";
-"Encrypted:" = "Crypté :";
+"Encrypted" = "Chiffré";
+"Encrypted:" = "Chiffré :";
 "EtreCheck version: %@ (%@)\nReport generated %@\n" = "EtreCheck version : %@ (%@)\nRapport créé le %@\n";
 "Excellent\n%@\n" = "Excellent\n%@\n";
 "External" = "Externe";
@@ -138,9 +138,9 @@
 "GB" = "Go";
 "GPU failure! - %@\n" = "Échec du GPU ! - @\n";
 "Hang" = "Bloqué";
-"Hard shutdown" = "Arrêt complet non ordonné";
+"Hard shutdown" = "Arrêt intempestif";
 "Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";
-"High CPU use" = "Taux d’usage du CPU élevé";
+"High CPU use" = "Taux d’usage du processeur élevé";
 "https://www.java.com/en/download/installed.jsp" = "https://www.java.com/fr/download/installed.jsp";
 "Ignore expected failures in Apple tasks: Disabled\n" = "Ignorer les échecs attendus dans les tâches Apple : Désactivé\n";
 "Input     " = "Entrée    ";
@@ -164,10 +164,10 @@
 "NO - Auto backup turned off\n" = "NON - Sauvegarde automatique désactivée\n";
 "None" = "Aucun";
 "Normal" = "Normale";
-"Not installed" = "Pas installé";
+"Not installed" = "Non installé";
 "not loaded" = "désengagé";
 "not supported" = "non disponible";
-"Not upgradeable" = "Pas extensible";
+"Not upgradeable" = "Non extensible";
 "OFF\n" = "Désactivé\n";
 "ON\n" = "Activé\n";
 "Outdated!" = "Obsolète !";
@@ -241,21 +241,21 @@
 "%d orphan file (plural rule: one)" = "Un fichier orphelin trouvé.";
 "%d orphan file (plural rule: other)" = "%d fichiers orphelins trouvés.";
 "%d pending file (plural rule: zero)" = "";
-"%d pending file (plural rule: one)" = "Un fichier en attendant";
-"%d pending file (plural rule: other)" = "%d fichiers en attendant";
+"%d pending file (plural rule: one)" = "Un fichier en attente";
+"%d pending file (plural rule: other)" = "%d fichiers en attente";
 "%d pressurekilledcount (plural rule: zero)" = "    aucun opération interrompue par manque de mémoire\n";
 "%d pressurekilledcount (plural rule: one)" = "    un opération interrompue par manque de mémoire\n";
-"%d pressurekilledcount (plural rule: other)" = "    %d opérationss interrompues par manque de mémoire\n";
+"%d pressurekilledcount (plural rule: other)" = "    %d opérations interrompues par manque de mémoire\n";
 "%d SPAM notification (plural rule: zero)" = "";
 "%d SPAM notification (plural rule: one)" = "Une notification pourriel";
 "%d SPAM notification (plural rule: other)" = "%d notifications pourriels";
 "%d unsigned file (plural rule: zero)" = "";
-"%d unsigned file (plural rule: one)" = "un fichier qui manque de signature numérique";
-"%d unsigned file (plural rule: other)" = "%d fichiers qui manque de signature numérique";
+"%d unsigned file (plural rule: one)" = "un fichier auquel manque la signature numérique";
+"%d unsigned file (plural rule: other)" = "%d fichiers auquels manquent la signature numérique";
 
 "availableram" = "RAM disponible";
 "freeram" = "RAM libre";
-"usedram" = "RAM utilisé";
+"usedram" = "RAM utilisée";
 "filecache" = "Fichiers en cache";
 "swapused" = "Fichier d’échange utilisé";
 
