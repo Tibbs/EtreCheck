@@ -1566,6 +1566,8 @@
   unichar * output = (unichar *)malloc(sizeof(unichar) * (length + 1));
   unichar * p = output;
 
+  NSCharacterSet * whitespace = [NSCharacterSet whitespaceCharacterSet];
+  
   for(unichar * ch = characters; ch < end; ++ch)
     {
     if(((*ch >= 'A') && (*ch <= 'Z')) || ((*ch >= 'a') && (*ch <= 'z')))
@@ -1575,6 +1577,8 @@
     else if(*ch == ':' || *ch == '_')
       *p++ = *ch;
     else if(*ch == '-' || *ch == '.')
+      *p++ = *ch;
+    else if([whitespace characterIsMember: *ch])
       *p++ = *ch;
     else if((*ch >= L'\u00C0') && (*ch <= L'\u00D6'))
       *p++ = *ch;
