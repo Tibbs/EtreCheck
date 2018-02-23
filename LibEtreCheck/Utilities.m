@@ -2020,7 +2020,7 @@
 // Redact a mount point.
 + (NSString *) cleanMountPoint: (NSString *) path
   {
-  if([path isEqualToString: @"/private/var/vm"])
+  if([path hasPrefix: @"/private/"])
     return path;
     
   NSArray * parts = [path componentsSeparatedByString: @"/"];
@@ -2040,6 +2040,9 @@
 // Redact any user names in a path.
 + (NSString *) cleanPath: (NSString *) path
   {
+  if([path hasPrefix: @"/Volumes/"])
+    path = [Utilities cleanMountPoint: path];
+    
   NSMutableArray * cleanParts = [NSMutableArray array];
   
   // There is no guarantee this is a real path.
