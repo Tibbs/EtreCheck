@@ -456,7 +456,7 @@
       [subProcess release];
       
       if(extensions.count > 0)
-        [self.model.kernelApps addObject: path];
+        [self.model.apps addObject: path];
       }
     }
     

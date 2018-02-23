@@ -60,7 +60,7 @@
 @synthesize coreCount = myCoreCount;
 @synthesize processesByPID = myProcessesByPID;
 @synthesize processesByPath = myProcessesByPath;
-@synthesize kernelApps = myKernelApps;
+@synthesize apps = myApps;
 @synthesize inputDebugDirectory = myInputDebugDirectory;
 @synthesize outputDebugDirectory = myOutputDebugDirectory;
   
@@ -117,7 +117,7 @@
     myXMLHeader = [XMLBuilder new];
     myProcessesByPID = [NSMutableDictionary new];
     myProcessesByPath = [NSMutableDictionary new];
-    myKernelApps = [NSMutableArray new];
+    myApps = [NSMutableArray new];
     }
     
   return self;
@@ -151,7 +151,7 @@
   [myProblemDescription release];
   [myProcessesByPID release];
   [myProcessesByPath release];
-  [myKernelApps release];
+  [myApps release];
   [myOutputDebugDirectory release];
   [myInputDebugDirectory release];
   

@@ -411,7 +411,7 @@
   
   [self exportKernelTask];
   
-  [self exportKernelApps];
+  [self exportApps];
   
   [self.xml endElement: @"context"];
   
@@ -534,12 +534,12 @@
   }
   
 // Exported apps with kernel extensions.
-- (void) exportKernelApps
+- (void) exportApps
   {
-  if(self.model.kernelApps.count == 0)
+  if(self.model.apps.count == 0)
     return;
     
-  for(NSString * path in self.model.kernelApps)
+  for(NSString * path in self.model.apps)
     {
     [self.xml startElement: @"application"];
     

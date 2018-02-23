@@ -92,7 +92,7 @@
   
   NSMutableDictionary * myProcessesByPID;
   NSMutableDictionary * myProcessesByPath;
-  NSMutableArray * myKernelApps;
+  NSMutableArray * myApps;
   
   NSString * myOutputDebugDirectory;
   NSString * myInputDebugDirectory;
@@ -208,8 +208,8 @@
 // Processes indexed by path.
 @property (readonly) NSMutableDictionary * processesByPath;
 
-// Apps with kernel extensions.
-@property (readonly) NSMutableArray * kernelApps;
+// Apps.
+@property (readonly) NSMutableArray * apps;
 
 // An output debug directory.
 @property (strong) NSString * outputDebugDirectory;

@@ -14,6 +14,7 @@
 #import "NSSet+Etresoft.h"
 #import "SubProcess.h"
 #import "LocalizedString.h"
+#import "XMLBuilder.h"
 
 // Collect installed applications.
 @implementation ApplicationsCollector
@@ -41,15 +42,35 @@
   // Save the applications.
   [self.model setApplications: applications];
   
-  // Organize the applications by their parent directories.
-  NSDictionary * parents = [self collectParentDirectories: applications];
-  
-  // Print all applications and their parent directories.
-  [self printApplicationDirectories: parents];
-  
-  [self.result appendCR];
-  [self.result
-    deleteCharactersInRange: NSMakeRange(0, [self.result length])];
+  for(NSString * name in applications)
+    {
+    NSDictionary * application = [applications objectForKey: name];
+    
+    [self.xml startElement: @"application"];
+    
+    NSNumber * has64BitIntelCode = 
+      [application objectForKey: @"has64BitIntelCode"];
+    
+    NSDate * lastModified = [application objectForKey: @"lastModified"];
+    NSString * source = [application objectForKey: @"obtained_from"];
+    NSString * path = [application objectForKey: @"path"];
+    NSString * version = [application objectForKey: @"version"];
+      
+    if(!has64BitIntelCode.boolValue)
+      [self.model.apps addObject: path];
+
+    [self.xml addElement: @"name" value: name];
+    [self.xml addElement: @"path" value: path];
+    [self.xml addElement: @"path_safe" value: [Utilities cleanPath: path]];
+    [self.xml addElement: @"version" value: version];
+    [self.xml addElement: @"lastmodified" date: lastModified];
+    [self.xml addElement: @"source" value: source];
+    
+    [self.xml 
+      addElement: @"has64bit" boolValue: has64BitIntelCode.boolValue];
+    
+    [self.xml endElement: @"application"];
+    }
   }
 
 // Collect applications.
@@ -135,169 +156,6 @@
     [info addEntriesFromDictionary: plist];
   
   return info;
-  }
-
-// Collect the parent directory of each application and return a dictionary
-// where the keys are the parent directories and the value is an array
-// of contained applications.
-- (NSDictionary *) collectParentDirectories: (NSDictionary *) applications
-  {
-  NSMutableDictionary * parents = [NSMutableDictionary dictionary];
-    
-  for(NSString * name in applications)
-    {
-    NSDictionary * application = [applications objectForKey: name];
-    
-    if([NSDictionary isValid: application])
-      {
-      // Make sure to redact any user names in the path.
-      NSString * path = [application objectForKey: @"path"];
-      
-      if([NSString isValid: path])
-        path = [self cleanPath: path];
-
-      NSString * parent = [path stringByDeletingLastPathComponent];
-    
-      NSMutableSet * siblings = [parents objectForKey: parent];
-      
-      if(siblings)
-        [siblings addObject: application];
-      else
-        [parents
-          setObject: [NSMutableSet setWithObject: application]
-          forKey: parent];
-      }
-    }
-
-  return parents;
-  }
-
-// Print application directories.
-- (void) printApplicationDirectories: (NSDictionary *) parents
-  {
-  if(![NSDictionary isValid: parents])
-    return;
-    
-  // Sort the parents.
-  NSArray * sortedParents =
-    [[parents allKeys] sortedArrayUsingSelector: @selector(compare:)];
-  
-  // Print each parent and its children.
-  for(NSString * parent in sortedParents)
-    {
-    int count = 0;
-    
-    // Sort the applications and print each.
-    NSSet * applications = [parents objectForKey: parent];
-    
-    if([NSSet isValid: applications])
-      {
-      NSSortDescriptor * descriptor =
-        [[NSSortDescriptor alloc] initWithKey: @"_name" ascending: YES];
-        
-      NSArray * sortedApplications =
-        [applications sortedArrayUsingDescriptors: @[descriptor]];
-        
-      [descriptor release];
-      
-      for(NSDictionary * application in sortedApplications)
-        {
-        NSAttributedString * output = 
-          [self applicationDetails: application];
-        
-        if(output != nil)
-          {
-          if(!count)
-            // Make sure the parent path is clean and print it.
-            [self.result
-              appendString:
-                [NSString
-                  stringWithFormat: @"    %@\n", [self cleanPath: parent]]];
-
-          ++count;
-          
-          [self.result appendAttributedString: output];
-          }
-        }
-      }
-    }
-  }
-
-// Return details about an application.
-- (NSAttributedString *) applicationDetails: (NSDictionary *) application
-  {
-  NSMutableAttributedString * output =
-    [[NSMutableAttributedString alloc] init];
-    
-  [output autorelease];
-  
-  if(![NSDictionary isValid: application])
-    return output;
-    
-  NSString * name = [application objectForKey: @"_name"];
-
-  if(![NSString isValid: name])
-    return output;
-    
-  NSAttributedString * supportLink =
-    [[[NSAttributedString alloc] initWithString: @""] autorelease];
-
-  NSString * bundleID = [application objectForKey: @"CFBundleIdentifier"];
-
-  if([NSString isValid: bundleID])
-    {
-    NSString * obtained_from = [application objectForKey: @"obtained_from"];
-    
-    if([NSString isValid: obtained_from])
-      if([obtained_from isEqualToString: @"apple"])
-        return nil;
-      
-    if([bundleID hasPrefix: @"com.apple."])
-      return nil;
-
-    supportLink = [self getSupportURL: name bundleID: bundleID];
-    }
-   
-  [output
-    appendString:
-      [NSString
-        stringWithFormat:
-          @"        %@%@", name, [self formatVersionString: application]]];
-    
-  [output appendAttributedString: supportLink];
-  [output appendString: @" "];
-  
-  NSAttributedString * detailsLink = [self.model getDetailsURLFor: name];
-  
-  if(detailsLink != nil)
-    {
-    [output appendString: @" "];
-    [output appendAttributedString: detailsLink];
-    [output appendString: @"\n"];
-    }
-    
-  return output;
-  }
-
-// Build a version string.
-- (NSString *) formatVersionString: (NSDictionary *) application
-  {
-  int age = 0;
-  
-  NSString * OSVersion = [self getOSVersion: application age: & age];
-
-  NSString * version = [application objectForKey: @"version"];
-
-  if(!version && !OSVersion)
-    return @"";
-    
-  if(!version)
-    version = @"";
-
-  if(!OSVersion)
-    OSVersion = @"";
-    
-  return [NSString stringWithFormat: @": %@%@", version, OSVersion];
   }
 
 @end
