@@ -48,6 +48,9 @@
 // Is this volume read-only?
 @synthesize readOnly = myReadOnly;
 
+// Is this a Time Machine volume?
+@synthesize isTimeMachine = myIsTimeMachine;
+
 // A volume has one or more physical drives.
 // Use device identifier only to avoid cicular references.
 @dynamic containingDevices;
@@ -145,6 +148,21 @@
     
     if([NSArray isValid: coreStoragePVs] && (coreStoragePVs.count > 1))
       self.type = kFusionVolume;
+      
+    if([NSString isValid: self.mountpoint])
+      {
+      NSString * TMPath = 
+        [self.mountpoint 
+          stringByAppendingPathComponent: @"Backups.backupdb"];
+      
+      BOOL isDirectory = NO;
+      
+      BOOL exists = 
+        [[NSFileManager defaultManager] 
+          fileExistsAtPath: TMPath isDirectory: & isDirectory];
+          
+      self.isTimeMachine = exists && isDirectory;
+      }
     }
     
   return self;
@@ -298,6 +316,7 @@
   
   [xml addElement: @"filesystem" value: self.filesystem];
   [xml addElement: @"mountpoint" value: self.mountpoint];  
+  [xml addElement: @"istimemachine" boolValue: self.isTimeMachine];
   
   NSString * cleanMountPoint = [Utilities cleanMountPoint: self.mountpoint];
   

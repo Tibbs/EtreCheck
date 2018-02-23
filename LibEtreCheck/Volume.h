@@ -50,6 +50,9 @@
   // Is this volume read-only?
   BOOL myReadOnly;
   
+  // Is this a Time Machine volume?
+  BOOL myIsTimeMachine;
+  
   // A volume has one or more containing devices.
   // Use device identifier only to avoid cicular references.
   NSMutableSet * myContainingDevices;
@@ -91,6 +94,9 @@
 
 // Is this volume read-only?
 @property (assign) BOOL readOnly;
+
+// Is this a Time Machine volume?
+@property (assign) BOOL isTimeMachine;
 
 // A volume has one or more containing drives.
 // Use device identifier only to avoid cicular references.
