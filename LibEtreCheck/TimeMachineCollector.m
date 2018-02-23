@@ -816,6 +816,9 @@
     [self.xml addElement: @"lastbackup" date: lastBackup];
 
     if([lastBackup compare: then] != NSOrderedDescending)
+      {
+      [self.xml addElement: @"lastbackupold" boolValue: YES];
+      
       [self.result
         appendString:
           [NSString
@@ -827,6 +830,7 @@
             NSForegroundColorAttributeName : [[Utilities shared] red],
             NSFontAttributeName : [[Utilities shared] boldFont]
           }];
+      }
     else
       [self.result
         appendString:
