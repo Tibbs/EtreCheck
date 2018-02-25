@@ -464,6 +464,10 @@
       self.details = kUnsignedPlistPermissions;
     else if(locked)
       self.details = kUnsignedPlistLocked;
+    else if([self.path hasPrefix: @"/var/"])
+      self.details = kUnsignedExecutablePrivate;
+    else if([self.path hasPrefix: @"/private/"])
+      self.details = kUnsignedExecutablePrivate;
     }
     
   if(self.adware == nil)

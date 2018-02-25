@@ -67,5 +67,6 @@
 #define kUnsignedExecutablePermissions @"executablepermissions"
 #define kUnsignedExecutableHidden @"executablehidden"
 #define kUnsignedExecutableLocked @"executablelocked"
+#define kUnsignedExecutablePrivate @"executableprivate"
 
 #endif /* EtreCheckConstants_h */

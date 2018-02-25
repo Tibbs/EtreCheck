@@ -161,8 +161,6 @@
   
   if([[[self.model adware] whitelistFiles] containsObject: name])
     file.details = kUnsignedWhitelist;
-  else if([self.whitelistPrefixes containsObject: prefix])
-    file.details = kUnsignedWhitelistPrefix;
   else
     [self lookupDetails: prefix file: file];
   }
