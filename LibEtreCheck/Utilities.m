@@ -1978,6 +1978,8 @@
       
       if(result == NSOrderedDescending)
         return YES;
+      else if(result == NSOrderedAscending)
+        return NO;
       }
     else if(number1 != nil)
       return YES;
