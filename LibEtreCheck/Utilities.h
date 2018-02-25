@@ -129,6 +129,10 @@
 // Get the developer of an executable.
 + (NSString *) queryDeveloper: (NSString *) path;
 
+// Get the author and team ID of an executable.
++ (void) query: (NSString *) path 
+  author: (NSString **) author team: (NSString **) team;
+
 // Get the developer of a shell script.
 + (NSString *) queryShellScriptDeveloper: (NSString *) path;
 

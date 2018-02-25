@@ -16,6 +16,8 @@
 #import "SubProcess.h"
 #import "XMLBuilder.h"
 #import "LocalizedString.h"
+#import <sqlite3.h>
+#import <unistd.h>
 
 @implementation KernelExtensionCollector
 
@@ -24,6 +26,7 @@
 @synthesize unloadedExtensions = myUnloadedExtensions;
 @synthesize unexpectedExtensions = myUnexpectedExtensions;
 @synthesize extensionsByLocation = myExtensionsByLocation;
+@synthesize blockedTeams = myBlockedTeams;
 
 // Constructor.
 - (id) init
@@ -46,6 +49,7 @@
   self.loadedExtensions = nil;
   self.extensions = nil;
   [myExtensionsByLocation release];
+  [myBlockedTeams release];
   
   [super dealloc];
   }
@@ -519,6 +523,11 @@
       
       if([NSMutableDictionary isValid: bundle])
         {
+        NSString * author = nil;
+        NSString * team = nil;
+        
+        [Utilities query: path author: & author team: & team];
+        
         NSString * extensionDirectory = [self extensionDirectory: path];
         NSString * name = [path lastPathComponent];
         
@@ -526,9 +535,15 @@
           if([NSString isValid: name])
             {
             // Save the path too.
-            [bundle setValue: extensionDirectory forKey: @"path"];
-            [bundle setValue: name forKey: @"filename"];
+            [bundle setObject: extensionDirectory forKey: @"path"];
+            [bundle setObject: name forKey: @"filename"];
+            
+            if([NSString isValid: author])
+              [bundle setObject: author forKey: @"author"];
       
+            if([NSString isValid: team])
+              [bundle setObject: team forKey: @"team"];
+
             return bundle;
             }
         }
@@ -575,6 +590,9 @@
   // The rest must be unloaded.
   [self findUnloadedExtensions];
 
+  // Or maybe blocked.
+  [self findBlockedExtensions];
+  
   // Now organize by path.
   for(NSString * label in self.extensions)
     {
@@ -698,6 +716,139 @@
         [self.unloadedExtensions setObject: bundle forKey: label];
       }
     }
+  }
+
+// Find blocked extensions.
+- (void) findBlockedExtensions
+  {
+  self.blockedTeams = [self findBlockedTeams];
+  
+  // The rest must be unloaded.
+  for(NSString * label in self.unloadedExtensions)
+    {
+    NSMutableDictionary * bundle = 
+      [self.unloadedExtensions objectForKey: label];
+    
+    if([NSMutableDictionary isValid: bundle])
+      {
+      NSString * team = [bundle objectForKey: @"team"];
+      
+      if([NSString isValid: team])
+        {
+        if([self.blockedTeams containsObject: team])
+          [bundle 
+            setObject: [NSNumber numberWithBool: YES] forKey: @"blocked"];
+        }
+      }
+    }
+  }
+
+// Find blocked teams.
+- (NSSet *) findBlockedTeams
+  {
+  NSString * path = @"/var/db/SystemPolicyConfiguration/KextPolicy";
+  
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return nil;
+    
+  sqlite3 * handle = NULL;
+  
+  int result = sqlite3_open(path.fileSystemRepresentation, & handle);
+  
+  if(result != SQLITE_OK)
+    return nil;
+    
+  sqlite3_stmt * query;
+    
+  char * SQL =
+    "select team_id from kext_policy where allowed = 0;";
+    
+//Look at team_id, bundle_id, developer_name
+
+  result =
+    sqlite3_prepare_v2(handle, SQL, -1, & query, NULL);
+    
+  bool done = (result != SQLITE_OK);
+  
+  NSMutableSet * blockedTeams = [NSMutableSet set];
+  
+  while(!done)
+    {
+    result = sqlite3_step(query);
+  
+    switch(result)
+      {
+      case SQLITE_ROW:
+        [self parseBlockedRow: query blockedTeams: blockedTeams];
+        break;
+      case SQLITE_DONE:
+        done = YES;
+        break;
+      default:
+        done = YES;
+        break;
+      }
+    }
+
+  sqlite3_finalize(query);
+
+  sqlite3_close(handle);
+  
+  return blockedTeams;
+  }
+  
+// Collect a notification.
+- (void) parseBlockedRow: (sqlite3_stmt *) query
+  blockedTeams: (NSMutableSet *) blockedTeams
+  {
+  NSString * team_id = (NSString *)[self load: query column: 0];
+  
+  if(![NSString isValid: team_id])
+    return;
+      
+  [blockedTeams addObject: team_id];
+  }
+
+// Load a single column's data.
+- (nullable NSObject *) load: (sqlite3_stmt *) query column: (int) index
+  {
+  int size = sqlite3_column_bytes(query, index);
+  
+  switch(sqlite3_column_type(query, index))
+    {
+    case SQLITE_INTEGER:
+      return
+        [NSNumber
+          numberWithLongLong:
+            sqlite3_column_int64(query, index)];
+      
+    case SQLITE_TEXT:
+      return
+        [[[NSString alloc]
+          initWithBytes: sqlite3_column_text(query, index)
+          length: size
+          encoding: NSUTF8StringEncoding] autorelease];
+
+    case SQLITE_BLOB:
+      {
+      NSData * value =
+        [[NSData alloc]
+          initWithBytes: sqlite3_column_blob(query, index)
+          length: size];
+        
+      NSObject * object =
+        [NSKeyedUnarchiver unarchiveObjectWithData: value];
+      
+      [value release];
+      
+      return object;
+      }
+      
+    default:
+      break;
+    }
+    
+  return nil;
   }
 
 // Parse a single line of kextctl output.
@@ -953,6 +1104,10 @@
   if(xmlBuilder == nil)
     return formattedOutput;
     
+  NSString * author = [bundle objectForKey: @"author"];
+  NSString * team = [bundle objectForKey: @"team"];
+  BOOL blocked = [[bundle objectForKey: @"blocked"] boolValue];
+  
   int age = 0;
   
   NSString * OSVersion = [self getOSVersion: bundle age: & age];
@@ -979,9 +1134,15 @@
   
   [xmlBuilder addElement: @"bundleid" value: label];
   [xmlBuilder addElement: @"filename" value: filename];
-  [xmlBuilder addElement: @"status" value: status];
   [xmlBuilder addElement: @"version" value: version];
   [xmlBuilder addElement: @"osversion" value: OSVersion];  
+  [xmlBuilder addElement: @"author" value: author];
+  [xmlBuilder addElement: @"team" value: team];
+  
+  if(blocked)
+    [xmlBuilder addElement: @"status" value: @"blocked"];
+  else
+    [xmlBuilder addElement: @"status" value: status];
   
   [xmlBuilder endElement: @"extension"];
   
@@ -1027,5 +1188,5 @@
     
   return @"";
   }
-
+  
 @end

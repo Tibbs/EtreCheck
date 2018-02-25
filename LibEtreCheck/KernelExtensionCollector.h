@@ -14,21 +14,25 @@
   NSMutableDictionary * myUnloadedExtensions;
   NSMutableDictionary * myUnexpectedExtensions;
   NSMutableDictionary * myExtensionsByLocation;
+  NSSet * myBlockedTeams;
   }
 
 // All extensions.
-@property (retain) NSMutableDictionary * extensions;
+@property (strong) NSMutableDictionary * extensions;
 
 // Loaded extensions.
-@property (retain) NSMutableDictionary * loadedExtensions;
+@property (strong) NSMutableDictionary * loadedExtensions;
 
 // Unloaded extensions.
-@property (retain) NSMutableDictionary * unloadedExtensions;
+@property (strong) NSMutableDictionary * unloadedExtensions;
 
 // Unexpected extensions.
-@property (retain) NSMutableDictionary * unexpectedExtensions;
+@property (strong) NSMutableDictionary * unexpectedExtensions;
 
 // Extensions organized by directory.
-@property (retain) NSMutableDictionary * extensionsByLocation;
+@property (strong) NSMutableDictionary * extensionsByLocation;
+
+// Blocked extensions.
+@property (strong) NSSet * blockedTeams;
 
 @end

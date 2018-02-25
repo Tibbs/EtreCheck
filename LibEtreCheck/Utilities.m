@@ -796,6 +796,44 @@
   return developer;
   }
 
+// Get the author and team ID of an executable.
++ (void) query: (NSString *) path 
+  author: (NSString **) author team: (NSString **) team
+  {
+  if([path length] == 0)
+    return;
+    
+  if(![[NSFileManager defaultManager] fileExistsAtPath: path])
+    return;
+      
+  if([Utilities isShellExecutable: path])
+    return;
+
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"--assess"];
+  [args addObject: @"-vv"];
+    
+  NSString * appPath = [Utilities resolveSignaturePath: path];
+  
+  [args addObject: appPath];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.timeout = 60;
+  
+  if([subProcess execute: @"/usr/sbin/spctl" arguments: args])
+    [Utilities 
+      parse: subProcess.standardError 
+      path: appPath 
+      author: author 
+      team: team];
+  else
+    NSLog(@"Returning false from /usr/sbin/spctl %@", args);
+    
+  [subProcess release];
+  }
+  
 // Get the developer of a shell script executable.
 + (NSString *) queryShellScriptDeveloper: (NSString *) path
   {
@@ -985,6 +1023,19 @@
 + (NSString *) parseDeveloper: (NSData *) data
   forPath: (NSString *) path
   {
+  NSString * developer = nil;
+  
+  [self parse: data path: path author: & developer team: NULL];
+  
+  return developer;
+  }
+
+// Parse spctl output.
++ (void) parse: (NSData *) data
+  path: (NSString *) path
+  author: (NSString **) author
+  team: (NSString **) team
+  {
   NSArray * lines = [Utilities formatLines: data];
   
   for(NSString * line in lines)
@@ -1000,26 +1051,31 @@
         NSRange endParenRange =
           [developerID rangeOfString: @")" options: NSBackwardsSearch];
           
-        NSRange startParentRange =
+        NSRange startParenRange =
           [developerID rangeOfString: @"(" options: NSBackwardsSearch];
           
         if(endParenRange.location != NSNotFound)
-          if(startParentRange.location != NSNotFound)
-            if((endParenRange.location - startParentRange.location) == 11)
-              return
-                [developerID
-                  substringToIndex: startParentRange.location - 1];
-          
-        return developerID;
+          if(startParenRange.location != NSNotFound)
+            if((endParenRange.location - startParenRange.location) == 11)
+              {
+              if(author)
+                *author =
+                  [developerID
+                    substringToIndex: startParenRange.location - 1];
+              
+              if(team)
+                *team =
+                  [developerID 
+                    substringWithRange: 
+                      NSMakeRange(startParenRange.location + 1, 10)];
+              }
         }
       else if([origin isEqualToString: @"Software Signing"])
-        return @"Apple, Inc.";
+        *author = @"Apple, Inc.";
       else if([origin isEqualToString: @"Apple Mac OS Application Signing"])
-        return @"Mac App Store";
+        *author = @"Mac App Store";
       }
     }
-      
-  return nil;
   }
 
 // Create a temporary directory.
