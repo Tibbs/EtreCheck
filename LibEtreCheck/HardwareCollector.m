@@ -874,6 +874,16 @@
     [self.xml
       addElement: @"memoryupgradeinstructionsurl"
       url: [NSURL URLWithString: url]];
+      
+    int max = [self getMaximumMemory];
+    
+    [self.xml
+      addElement: @"applemaximummemory" 
+      intValue: max 
+      attributes: 
+        [NSDictionary 
+          dictionaryWithObjectsAndKeys: 
+            @"number", @"type", @"GB", @"units", nil]];
     }
   else
     [self.result appendString: @"\n"];
@@ -1340,7 +1350,7 @@
           isEqualToString: @"MacBook Pro (15-inch Late 2008)"];
           
       if(oldModel)
-          cycles = 500;
+        cycles = 500;
       }
     else if(majorVersion < 5)
       cycles = 300;
@@ -1438,6 +1448,105 @@
     }
         
   return nil;
+  }
+
+// Get the maximum memory for this machine.
+- (int) getMaximumMemory
+  {
+  int max = 2;
+  
+  NSString * modelType = [self.model modelType];
+  int majorVersion = [self.model modelMajorVersion];
+  int minorVersion = [self.model modelMinorVersion];
+  int cores = [self.model coreCount];
+  
+  if([modelType isEqualToString: @"MacBookPro"])
+    {
+    if(majorVersion > 5)
+      max = 8;
+    else if(majorVersion == 5)
+      {
+      max = 8;
+      
+      BOOL oldModel = 
+        [self.EnglishMarketingName 
+          isEqualToString: @"MacBook Pro (15-inch Late 2008)"];
+          
+      if(oldModel)
+        max = 4;
+      }
+    else if(majorVersion >= 3)
+      max = 4;
+    else if(majorVersion == 2)
+      max = 3;
+    else 
+      max = 2;
+    }
+  else if([modelType isEqualToString: @"MacBook"])
+    {
+    if(majorVersion >= 3)
+      max = 4;
+    else 
+      max = 2;
+    }
+  else if([modelType isEqualToString: @"Macmini"])
+    {
+    if(majorVersion >= 6)
+      max = 16;
+    if(majorVersion >= 4)
+      max = 8;
+    if(majorVersion >= 3)
+      max = 4;
+    else 
+      max = 2;
+    }
+  else if([modelType isEqualToString: @"iMacPro"])
+    {
+    max = 128;
+    }
+  else if([modelType isEqualToString: @"iMac"])
+    {
+    if(majorVersion >= 18)
+      max = 64;
+    if(majorVersion >= 13)
+      max = 32;
+    if(majorVersion >= 10)
+      max = 16;
+    if(majorVersion >= 9)
+      max = 8;
+    if(majorVersion >= 5)
+      {
+      max = 4;
+
+      if(minorVersion == 2)
+        max = 2;
+      }
+    else 
+      max = 2;
+    }
+  else if([modelType isEqualToString: @"MacPro"])
+    {
+    if(majorVersion >= 6)
+      max = 64;
+    if(majorVersion >= 5)
+      {
+      max = 32;
+      
+      if(cores > 6)
+        max = 64;
+      }
+    if(majorVersion >= 4)
+      {
+      max = 16;
+      
+      if(cores > 4)
+        max = 32;
+      }
+    else 
+      max = 32;
+    }
+        
+  return max;
   }
 
 @end
