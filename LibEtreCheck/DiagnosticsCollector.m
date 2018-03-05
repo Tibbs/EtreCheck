@@ -555,8 +555,7 @@
         }];
     
   NSDate * then =
-    //[[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
-    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7000];
+    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
   
   for(NSString * name in sortedKeys)
     {
