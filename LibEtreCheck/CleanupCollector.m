@@ -360,6 +360,10 @@
   if([file.path hasPrefix: @"/System/"])
     return YES;
     
+  // Don't show adware.
+  if(file.adware.length > 0)
+    return YES;
+    
   Launchd * launchd = [self.model launchd];
   
   NSDictionary * appleFile = [launchd.appleFiles objectForKey: file.path];
