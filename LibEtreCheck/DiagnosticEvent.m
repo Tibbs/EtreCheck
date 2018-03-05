@@ -19,6 +19,7 @@
 @synthesize identifier = myIdentifier;
 @synthesize information = myInformation;
 @synthesize code = myCode;
+@synthesize count = myCount;
 
 // Destructor.
 - (void) dealloc

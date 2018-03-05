@@ -35,6 +35,7 @@ EventType;
   NSString * myIdentifier;
   NSString * myInformation;
   int myCode;
+  int myCount;
   }
 
 @property (assign) EventType type;
@@ -47,5 +48,6 @@ EventType;
 @property (strong) NSString * identifier;
 @property (strong) NSString * information;
 @property (assign) int code;
+@property (assign) int count;
 
 @end

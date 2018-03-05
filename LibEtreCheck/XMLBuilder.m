@@ -1578,6 +1578,22 @@
       *p++ = *ch;
     else if(*ch == '-' || *ch == '.')
       *p++ = *ch;
+    else if(*ch == '~' || *ch == '!' || *ch == '@' || *ch == '#')
+      *p++ = *ch;
+    else if(*ch == '$' || *ch == '%' || *ch == '^' || *ch == '&')
+      *p++ = *ch;
+    else if(*ch == '*' || *ch == '(' || *ch == ')' || *ch == '+')
+      *p++ = *ch;
+    else if(*ch == '=' || *ch == '[' || *ch == ']' || *ch == '?')
+      *p++ = *ch;
+    else if(*ch == '|' || *ch == '\\' || *ch == '{' || *ch == '}')
+      *p++ = *ch;
+    else if(*ch == '"' || *ch == '\'' || *ch == '`')
+      *p++ = *ch;
+    else if(*ch == '/' || *ch == ',' || *ch == ':' || *ch == ';')
+      *p++ = *ch;
+    else if(*ch == '<' || *ch == '>' || *ch == 13 || *ch == 10)
+      *p++ = *ch;
     else if([whitespace characterIsMember: *ch])
       *p++ = *ch;
     else if((*ch >= L'\u00C0') && (*ch <= L'\u00D6'))

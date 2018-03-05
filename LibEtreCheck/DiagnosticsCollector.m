@@ -315,6 +315,11 @@
     // Parse the file contents.
     [self parseFileContents: file event: event];
     
+    DiagnosticEvent * currentEvent = 
+      [[self.model diagnosticEvents] objectForKey: event.name];
+
+    event.count = currentEvent.count + 1;
+
     [[self.model diagnosticEvents] setObject: event forKey: event.name];
     
     [event release];
@@ -550,7 +555,8 @@
         }];
     
   NSDate * then =
-    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
+    //[[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
+    [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7000];
   
   for(NSString * name in sortedKeys)
     {
@@ -588,6 +594,7 @@
   [self.xml addElement: @"date" date: event.date];
   [self.xml addElement: @"name" value: event.name];
   [self.xml addElement: @"type" intValue: event.type];
+  [self.xml addElement: @"count" intValue: event.count];
 
   switch(event.type)
     {
