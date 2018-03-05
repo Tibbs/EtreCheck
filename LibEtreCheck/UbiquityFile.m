@@ -46,7 +46,7 @@
   {
   [xml startElement: @"file"];
     
-  [xml addElement: @"name" value: self.name];
+  [xml addElement: @"name" safeASCII: self.name];
   [xml addElement: @"status" value: self.status];
   [xml addElement: @"progress" doubleValue: self.progress];
   

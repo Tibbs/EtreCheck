@@ -15,4 +15,7 @@
 // Is this a valid object?
 + (BOOL) isValid: (NSArray *) array;
 
+// Return the first 10 values at most.
+- (NSArray *) head;
+
 @end

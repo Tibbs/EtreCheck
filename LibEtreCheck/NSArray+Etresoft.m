@@ -39,4 +39,13 @@
   return NO;
   }
 
+// Return the first 10 values at most.
+- (NSArray *) head
+  {
+  if(self.count > 10)
+    return [self subarrayWithRange: NSMakeRange(0, 10)];
+    
+  return self;
+  }
+  
 @end

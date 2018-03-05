@@ -6,6 +6,7 @@
 #import "UbiquityContainerDirectory.h"
 #import "UbiquityContainer.h"
 #import "XMLBuilder.h"
+#import "NSArray+Etresoft.h"
 
 @implementation UbiquityContainerDirectory
 
@@ -60,10 +61,11 @@
   {
   [xml startElement: @"directory"];
     
-  [xml addElement: @"name" value: self.name];
-  [xml addElement: @"displayname" value: self.displayName];
+  [xml addElement: @"name" safeASCII: self.name];
+  [xml addElement: @"displayname" safeASCII: self.displayName];
+  [xml addElement: @"count" unsignedIntegerValue: self.pendingFiles.count];
   
-  [xml addArray: @"pendingfiles" values: self.pendingFiles];
+  [xml addArray: @"pendingfiles" values: self.pendingFiles.head];
   
   [xml endElement: @"directory"];
   }
