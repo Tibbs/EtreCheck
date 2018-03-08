@@ -118,7 +118,7 @@
 "CoreStorage Container" = "Conteneur CoreStorage";
 "Corrupt filesystem" = "Le système de fichiers est corrompu";
 "CPU overheating" = "CPU en train de surchauffer";
-"Crash" = "Écrasement";
+"Crash" = "Plantage";
 "Description:\n" = "Description :\n";
 "Discrete" = "Distinct";
 "disabled" = "désactivée";
