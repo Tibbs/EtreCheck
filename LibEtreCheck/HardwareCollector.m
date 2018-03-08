@@ -1493,9 +1493,9 @@
     {
     if(majorVersion >= 6)
       max = 16;
-    if(majorVersion >= 4)
+    else if(majorVersion >= 4)
       max = 8;
-    if(majorVersion >= 3)
+    else if(majorVersion >= 3)
       max = 4;
     else 
       max = 2;
@@ -1508,13 +1508,13 @@
     {
     if(majorVersion >= 18)
       max = 64;
-    if(majorVersion >= 13)
+    else if(majorVersion >= 13)
       max = 32;
-    if(majorVersion >= 10)
+    else if(majorVersion >= 10)
       max = 16;
-    if(majorVersion >= 9)
+    else if(majorVersion >= 9)
       max = 8;
-    if(majorVersion >= 5)
+    else if(majorVersion >= 5)
       {
       max = 4;
 
@@ -1528,14 +1528,14 @@
     {
     if(majorVersion >= 6)
       max = 64;
-    if(majorVersion >= 5)
+    else if(majorVersion >= 5)
       {
       max = 32;
       
       if(cores > 6)
         max = 64;
       }
-    if(majorVersion >= 4)
+    else if(majorVersion >= 4)
       {
       max = 16;
       
