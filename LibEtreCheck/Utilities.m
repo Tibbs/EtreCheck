@@ -1951,7 +1951,7 @@
   laterThanVersion: (NSString *) version2
   {
   NSCharacterSet * set = 
-    [NSCharacterSet characterSetWithCharactersInString: @".-"];
+    [NSCharacterSet characterSetWithCharactersInString: @".-ab"];
     
   NSArray * parts1 = [version1 componentsSeparatedByCharactersInSet: set];
   NSArray * parts2 = [version2 componentsSeparatedByCharactersInSet: set];
