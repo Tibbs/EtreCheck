@@ -367,43 +367,6 @@
   return nil;
   }
 
-// Compare versions.
-+ (NSComparisonResult) compareVersion: (NSString *) version1
-  withVersion: (NSString *) version2
-  {
-  NSArray * version1Parts = [version1 componentsSeparatedByString: @"."];
-  NSArray * version2Parts = [version2 componentsSeparatedByString: @"."];
-  
-  int index = 0;
-  
-  while(YES)
-    {
-    if(index >= [version1Parts count])
-      {
-      if(index >= [version2Parts count])
-        break;
-        
-      else
-        return NSOrderedAscending;
-      }
-      
-    if(index >= [version2Parts count])
-      return NSOrderedDescending;
-    
-    NSString * segment1 = [version1Parts objectAtIndex: index];
-    NSString * segment2 = [version2Parts objectAtIndex: index];
-    
-    NSComparisonResult result = [segment1 compare: segment2];
-    
-    if(result != NSOrderedSame)
-      return result;
-      
-    ++index;
-    }
-    
-  return NSOrderedSame;
-  }
-
 // Scan a string from top output.
 + (double) scanTopMemory: (NSScanner *) scanner
   {
@@ -1950,8 +1913,57 @@
 + (BOOL) isVersion: (NSString *) version1 
   laterThanVersion: (NSString *) version2
   {
+  NSCharacterSet * betaSet = 
+    [NSCharacterSet characterSetWithCharactersInString: @"ab"];
+
+  NSRange betaRange1 = [version1 rangeOfCharacterFromSet: betaSet];
+  NSRange betaRange2 = [version2 rangeOfCharacterFromSet: betaSet];
+  
+  NSString * baseVersion1 = version1;
+  NSString * baseVersion2 = version2;
+  
+  if(betaRange1.location != NSNotFound)
+    baseVersion1 = [version1 substringToIndex: betaRange1.location];
+
+  if(betaRange2.location != NSNotFound)
+    baseVersion2 = [version2 substringToIndex: betaRange2.location];
+    
+  NSComparisonResult result = 
+    [Utilities compareVersion: baseVersion1 withVersion: baseVersion2];
+    
+  if(result == NSOrderedSame)
+    {
+    if(betaRange1.location != NSNotFound)
+      {
+      if(betaRange2.location != NSNotFound)
+        {
+        NSString * betaVersion1 = 
+          [version1 substringFromIndex: betaRange1.location + 1];
+
+        NSString * betaVersion2 = 
+          [version2 substringFromIndex: betaRange2.location + 1];
+      
+        result = 
+          [betaVersion1 
+            compare: betaVersion2 
+            options: NSCaseInsensitiveSearch | NSNumericSearch];
+        }
+      else
+        return NO;
+      }
+    else
+      return YES;
+    }
+    
+  return result == NSOrderedDescending;
+  }
+  
+// Compare versions.
++ (NSComparisonResult) compareVersion: (NSString *) version1 
+  withVersion: (NSString *) version2
+  {
   NSCharacterSet * set = 
-    [NSCharacterSet characterSetWithCharactersInString: @".-ab"];
+    [NSCharacterSet characterSetWithCharactersInString: @".-"];
     
   NSArray * parts1 = [version1 componentsSeparatedByCharactersInSet: set];
   NSArray * parts2 = [version2 componentsSeparatedByCharactersInSet: set];
@@ -1977,23 +1989,23 @@
           options: NSCaseInsensitiveSearch | NSNumericSearch];
       
       if(result == NSOrderedDescending)
-        return YES;
+        return result;
       else if(result == NSOrderedAscending)
-        return NO;
+        return result;
       }
     else if(number1 != nil)
-      return YES;
+      return NSOrderedDescending;
     else if(number2 != nil)
-      return NO;
+      return NSOrderedAscending;
     else
       break;
         
     ++index;
     }
     
-  return NO;
+  return NSOrderedSame;
   }
-  
+
 // Format an exectuable array for printing, redacting any user names in
 // the path.
 + (NSString *) formatExecutable: (NSArray *) parts
