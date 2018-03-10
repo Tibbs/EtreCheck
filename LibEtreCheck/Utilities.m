@@ -1951,6 +1951,8 @@
       else
         return NO;
       }
+    else if(betaRange2.location == NSNotFound)
+      return NO;
     else
       return YES;
     }
