@@ -345,9 +345,13 @@
   if(self.interfaces.count > 0)
     [self.xml addArray: @"interfaces" values: self.interfaces];
     
-  if(self.ubiquityContainers.count > 0)
-    [self.xml 
-      addArray: @"icloudpendingfiles" values: self.ubiquityContainers];
+  NSInteger count = 0;
+  
+  for(UbiquityContainer * container in self.ubiquityContainers)
+    count += container.pendingFileCount;
+
+  if(count > 0)
+    [self.xml addElement: @"icloudpendingfiles" integerValue: count];
 
   int version = [[OSVersion shared] major];
 
