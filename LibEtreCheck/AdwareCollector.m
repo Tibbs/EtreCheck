@@ -271,8 +271,14 @@
   {
   // First check for /etc/*.sh files.
   if([file.executable hasPrefix: @"/etc/"])
-    if([file.executable hasSuffix: @".sh"])
-      return true;
+    {
+    NSArray * parts = [file.executable componentsSeparatedByString: @"/"];
+    NSString * execFile = [file.executable lastPathComponent];
+        
+    if(parts.count <= 4)
+      if([execFile hasSuffix: @".sh"])
+        return true;
+    }
     
   // Exempt any files with valid signatures from this.
   BOOL validSignature = [file.signature isEqualToString: kSignatureValid];
