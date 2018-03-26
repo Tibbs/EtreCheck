@@ -1992,6 +1992,7 @@
     <string>com.kerio.workspace.application.plist</string>
     <string>com.kerio.workspace.rendering.plist</string>
     <string>com.kernsafe.initiator.x.plist</string>
+    <string>com.kernsafe.supersan.x.plist</string>
     <string>com.khiltd.profilemenu.plist</string>
     <string>com.kingart-games.bout2.LauncherHelper.plist</string>
     <string>com.kitematic.route.plist</string>

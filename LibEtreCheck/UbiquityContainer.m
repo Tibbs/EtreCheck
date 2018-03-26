@@ -215,18 +215,6 @@
   [xml addElement: @"ubiquityid" value: self.ubiquityID];
   [xml addElement: @"bundleid" value: self.bundleID];
   
-  NSMutableDictionary * directories = [NSMutableDictionary new];
-  
-  for(UbiquityContainerDirectory * directory in self.directories.allValues)
-    {
-    
-    }
-    
-  [xml startElement: @"directories"];
-  [xml endElement: @"directories"];
-  
-  [directories release];
-  
   [xml addArray: @"directories" values: self.directories.allValues];
   
   [xml endElement: @"container"];
