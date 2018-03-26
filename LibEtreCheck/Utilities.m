@@ -2124,15 +2124,15 @@
         [NSCharacterSet whitespaceAndNewlineCharacterSet]];
   
   for(NSString * pathPart in parts)
-    [cleanParts addObject: [self cleanString: pathPart]];
+    [cleanParts addObject: [self cleanPart: pathPart]];
     
   NSString * cleanedPath = [cleanParts componentsJoinedByString: @" "];
   
   return [self cleanString: cleanedPath];
   }
 
-// Redact any user names in a string.
-+ (NSString *) cleanString: (NSString *) string
+// Redact any e-mail addresses or user names in a string.
++ (NSString *) cleanPart: (NSString *) string
   {
   // Redact an e-mail.
   NSRange emailRange = [string rangeOfString: @"@"];
@@ -2155,7 +2155,13 @@
               [self cleanName: domain]];
       }
     }
-    
+  
+  return [Utilities cleanString: string];
+  }
+  
+// Redact any user names in a string.
++ (NSString *) cleanString: (NSString *) string
+  {
   NSString * username = NSUserName();
   NSString * fullname = NSFullUserName();
 
