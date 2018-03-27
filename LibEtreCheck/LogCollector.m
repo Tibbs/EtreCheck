@@ -277,6 +277,7 @@
     event.type = kPanic;
     event.file = file;
     event.details = contents;
+    event.count = 1;
     
     [DiagnosticsCollector 
       parseDiagnosticData: contents event: event model: self.model];
@@ -482,6 +483,7 @@
   event.type = kShutdown;
   event.name =
     [NSString stringWithFormat: @"%d - %@", shutdownCause, shutdownString];
+  event.count = 1;
   
   [[self.model diagnosticEvents] setObject: event forKey: event.name];
   
