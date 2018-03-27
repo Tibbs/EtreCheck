@@ -311,6 +311,7 @@
     event.date = date;
     event.type = type;
     event.file = file;
+    event.count = 1;
     
     // Parse the file contents.
     [self parseFileContents: file event: event];
